@@ -1,0 +1,28 @@
+export const Input = {
+  variants: {
+    base: {
+      field: {
+        bg: "light_grey",
+        borderRadius: "2px",
+        border: "1px",
+        padding: "16px 8px",
+        height: "48px",
+        borderColor: "light_grey",
+        fontSize: ["16px","17px"],
+        lineHeight: ["21px","18.70px"],
+        _focus: {
+          borderColor: "blue",
+        },
+        _invalid: {
+          borderColor: "error",
+        },
+        _hover: {
+          borderColor: "blue",
+        },
+      },
+    },
+  },
+  defaultProps: {
+    variant: "base",
+  },
+}

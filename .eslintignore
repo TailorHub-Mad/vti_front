@@ -1,0 +1,6 @@
+node_modules/
+*.test.js
+next/
+pages/
+stories/
+storybook-static/

@@ -1,0 +1,16 @@
+export const  colors = {
+    blue: "#052E57",
+    yellow: "#F3D30C",
+    pale_yellow: "#FAEFAE",
+    light_blue: "#CCE7FF",
+    violete: "#D0CDE1",
+    rose: "#FFD3D3",
+    black: "#1D1D1A",
+    white: "#FFFFFF",
+    grey: "#C4C4C4",
+    light_grey: "#EBEEF2",
+    error: "#F95C5C",
+    correct: "#277948",
+    alert: "#E98535",
+    start: "#0085FF",
+  }

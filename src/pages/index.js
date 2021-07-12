@@ -1,54 +1,58 @@
-import {
-  Link as ChakraLink,
+import { AddIcon } from "@chakra-ui/icons"
+import { FormController } from "../components/forms/FormItemWrapper/FormController"
+import { LogoFull } from "../components/images/LogoFull/LogoFull"
+import { Page } from "../components/layout/Page/Page"
+
+const {
   Text,
-  Code,
-  List,
-  ListIcon,
-  ListItem,
-} from '@chakra-ui/react'
-import { CheckCircleIcon, LinkIcon } from '@chakra-ui/icons'
-import { Hero } from '../components/Hero'
-import { Container } from '../components/Container'
-import { Main } from '../components/Main'
-import { DarkModeSwitch } from '../components/DarkModeSwitch'
-import { CTA } from '../components/CTA'
-import { Footer } from '../components/Footer'
+  Box,
+  Heading,
+  Center,
+  Input,
+  Button,
+  IconButton,
+} = require("@chakra-ui/react")
 
 const Index = () => (
-  <Container height="100vh">
-    <Hero />
-    <Main>
-      <Text>
-        Example repository of <Code>Next.js</Code> + <Code>chakra-ui</Code>.
-      </Text>
-
-      <List spacing={3} my={0}>
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink
-            isExternal
-            href="https://chakra-ui.com"
-            flexGrow={1}
-            mr={2}
-          >
-            Chakra UI <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink isExternal href="https://nextjs.org" flexGrow={1} mr={2}>
-            Next.js <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-      </List>
-    </Main>
-
-    <DarkModeSwitch />
-    <Footer>
-      <Text>Next ❤️ Chakra</Text>
-    </Footer>
-    <CTA />
-  </Container>
+  <Page>
+    <Center h="100vh">
+      <Box maxWidth="850px">
+        <LogoFull />
+        <FormController
+          label="Hola k ase"
+          error="aquí hay un error"
+          isRequired
+          isInvalid
+        >
+          <Input placeholder="Input de prueba" />
+        </FormController>
+        <Box display="grid" gridGap="8px" margin="32px 0" gridTemplateColumns="auto auto auto auto">
+          <Button isDisabled>Hola que tal</Button>
+          <Button>Hola que tal</Button>
+          <Button variant="secondary">Hola que tal</Button>
+          <Button variant="secondary" isLoading>Hola que tal</Button>
+          <Button variant="primary" isLoading>Hola que tal</Button>
+          <Button variant="secondary" isDisabled>
+            Hola que tal
+          </Button>
+          <Button leftIcon={<AddIcon />}>Hola que tal</Button>
+        </Box>
+        <IconButton variant="icon_only" icon={<AddIcon />} />
+        <Heading margin="32px 0 8px 0">
+          The spectacle before us was indeed sublime.
+        </Heading>
+        <Text casing="uppercase">
+          Apparently we had reached a great height in the atmosphere, for the sky was
+          a dead black, and the stars had ceased to twinkle. By the same illusion
+          which lifts the horizon of the sea to the level of the spectator on a
+          hillside, the sable cloud beneath was dished out, and the car seemed to
+          float in the middle of an immense dark sphere, whose upper half was strewn
+          with silver. Looking down into the dark gulf below, I could see a ruddy
+          light streaming through a rift in the clouds.
+        </Text>
+      </Box>
+    </Center>
+  </Page>
 )
 
 export default Index
