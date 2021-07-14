@@ -1,6 +1,6 @@
 import React from "react"
 import { ChakraProvider, ColorModeProvider } from "@chakra-ui/react"
-import theme from "../src/theme/theme"
+import theme from "../src/theme"
 
 
 

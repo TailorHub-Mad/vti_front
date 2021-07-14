@@ -2,6 +2,7 @@ import { AddIcon } from "@chakra-ui/icons"
 import { FormController } from "../components/forms/FormItemWrapper/FormController"
 import { LogoFull } from "../components/images/LogoFull/LogoFull"
 import { Page } from "../components/layout/Page/Page"
+import { Popup } from "../components/overlay/Popup/Popup"
 
 const {
   Text,
@@ -19,13 +20,24 @@ const Index = () => (
       <Box maxWidth="850px">
         <LogoFull />
         <FormController
-          label="Hola k ase"
-          error="aquí hay un error"
+          label="Nombre de usuario:"
+          error="Esto es un test de error"
           isRequired
           isInvalid
         >
           <Input placeholder="Input de prueba" />
         </FormController>
+        <FormController
+          label="Nombre de usuario:"
+          error="Esto es un test de error"
+          isRequired
+          isInvalid
+          helper="Si necesitas ayuda contacta con nosotros"
+          marginTop="24px"
+        >
+          <Input placeholder="Input de prueba" />
+        </FormController>
+        <Popup isOpen={false} variant="info" />
         <Box display="grid" gridGap="8px" margin="32px 0" gridTemplateColumns="auto auto auto auto">
           <Button isDisabled>Hola que tal</Button>
           <Button>Hola que tal</Button>
