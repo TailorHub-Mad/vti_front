@@ -1,18 +1,12 @@
-import { ChevronRightIcon, CloseIcon, Icon } from "@chakra-ui/icons"
 import { Box, Flex, Text } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React from "react"
 import {
   TABBAR_ADMIN_LINKS,
   TABBAR_USER_LINKS,
 } from "../../../constants/tabbar_links"
-import { MenuMobileIcon } from "../../icons/MenuMobileIcon"
-import { NotificationActiveLineIcon } from "../../icons/NotificationActiveLineIcon"
-import { NotificationLineIcon } from "../../icons/NotificationLineIcon"
-import { SignOutLineIcon } from "../../icons/SignOutLineIcon"
 import { LogoFull } from "../../images/LogoFull/LogoFull"
 import { TabBarFooter } from "../TabBarFooter/TabBarFooter"
 import { TabBarMenu } from "../TabBarMenu/TabBarMenu"
-import { MenuItem } from "../TabBarMenuItem/TabBarMenuItem"
 import { TabBarToggle } from "../TabBarToggle/TabBarToggle"
 
 export const TabBar = ({
