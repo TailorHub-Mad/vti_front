@@ -5,7 +5,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "yarn run lint",
     "pre-commit": "lint-staged",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -38,6 +38,6 @@
     "prettier": "^2.3.2"
   },
   "lint-staged": {
-    "*.js": "next lint"
+    "*.js": "yarn run lint"
   }
 }
