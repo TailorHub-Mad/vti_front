@@ -21,7 +21,7 @@ const Index = () => {
         <Text variant="d_l_medium" casing="uppercase" margin="32px 0 8px 0">
           The spectacle before us was indeed sublime.
         </Text>
-        <Text casing="uppercase">
+        <Text>
           Apparently we had reached a great height in the atmosphere, for the sky was
           a dead black, and the stars had ceased to twinkle. By the same illusion
           which lifts the horizon of the sea to the level of the spectator on a

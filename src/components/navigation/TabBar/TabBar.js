@@ -1,9 +1,6 @@
 import { Box, Flex, Text } from "@chakra-ui/react"
 import React from "react"
-import {
-  TABBAR_ADMIN_LINKS,
-  TABBAR_USER_LINKS,
-} from "../../../constants/tabbar_links"
+import { TABBAR_ADMIN_LINKS, TABBAR_USER_LINKS } from "../../../utils/constants/tabbar_links"
 import { LogoFull } from "../../images/LogoFull/LogoFull"
 import { TabBarFooter } from "../TabBarFooter/TabBarFooter"
 import { TabBarMenu } from "../TabBarMenu/TabBarMenu"
