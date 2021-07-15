@@ -1,26 +1,16 @@
 import { AddIcon } from "@chakra-ui/icons"
 import { useState } from "react"
 import { MessageCard } from "../components/cards/MessageCard/MessageCard"
+import { NotificationCard } from "../components/cards/NotificationCard/NotificationCard"
 import { AddSelect } from "../components/forms/AddSelect/AddSelect"
 import { FormController } from "../components/forms/FormItemWrapper/FormController"
 import { InputSelect } from "../components/forms/InputSelect/InputSelect"
-import { SelectMenu } from "../components/forms/SelectMenu/SelectMenu"
 import { LogoFull } from "../components/images/LogoFull/LogoFull"
-import { Card } from "../components/layout/Card/Card"
 import { Page } from "../components/layout/Page/Page"
 import { Popup } from "../components/overlay/Popup/Popup"
 import { MOCK_SELECT_OPTIONS } from "../mock/mock"
 
-const {
-  Text,
-  Box,
-  Heading,
-  Center,
-  Input,
-  Button,
-  IconButton,
-  Grid,
-} = require("@chakra-ui/react")
+const { Text, Box, Input, Button, IconButton, Grid } = require("@chakra-ui/react")
 
 const Index = () => {
   const [mockSelectValue, setMockSelectValue] = useState("")
@@ -41,6 +31,9 @@ const Index = () => {
           light streaming through a rift in the clouds.
         </Text>
       </Box>
+      <Grid templateColumns="1fr" gap="16px" width="fit-content" marginBottom="32px">
+        <NotificationCard />
+      </Grid>
       <Grid
         templateColumns="1fr 1fr 1fr"
         gap="16px"

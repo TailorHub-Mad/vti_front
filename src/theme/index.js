@@ -2,6 +2,7 @@ import { extendTheme } from "@chakra-ui/react"
 import { Text } from "./components/text.theme"
 import { Input } from "./components/input.theme"
 import { Button } from "./components/button.theme"
+import { Icon } from "./components/icon.theme"
 import { Tag } from "./components/tag.theme"
 import { IconButton } from "./components/icon_button.theme"
 import { breakpoints } from "./fundations/breakpoints.theme"
@@ -23,6 +24,7 @@ const theme = extendTheme({
     Input,
     Button,
     IconButton,
+    Icon
   },
   icons,
 })
