@@ -3,6 +3,7 @@ export const Text = {
     fontFamily: "Noway-Regular",
     fontSize: "14px",
     lineHeight: "16px",
+    color:"blue"
   },
   variants: {
     d_l_regular: {

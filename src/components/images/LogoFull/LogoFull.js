@@ -9,6 +9,7 @@ export const LogoFull = ({ ...props }) => (
     viewBox="0 0 280 83"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    {...props}
   >
     <path d="M163.428 67.7388H165.443V78.9298H163.428V67.7388Z" fill="currentColor" />
     <path

@@ -10,9 +10,11 @@ export const Page = ({ children }) => {
       <Meta />
       <TabBar isOpen={isOpen} setIsOpen={(val) => setIsOpen(val)} />
       <Box
-        marginLeft={isOpen ? "200" : "24px"}
-        transition={"margin-left 0.2s ease-in"}
-        padding="32px"
+        transition={"padding-left 0.2s ease-in"}
+        padding={["20px", null, null, "32px"]}
+        paddingLeft={["20px", null, null, isOpen ? "224px" : "48px"]}
+        paddingTop={["88px", null, null, "32px"]}
+        overflowX={"hidden"}
       >
         {children}
       </Box>

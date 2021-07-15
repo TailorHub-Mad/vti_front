@@ -1,7 +1,7 @@
 import { Icon } from "@chakra-ui/icons"
 import React from "react"
 
-export const NotificationActiveIcon = (props) => {
+export const NotificationActiveLineIcon = (props) => {
   return (
     <Icon
       width="24"
