@@ -1,1 +1,1 @@
-Panel de administración de Vti gi
+Panel de administración de Vti
