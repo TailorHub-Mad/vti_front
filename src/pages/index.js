@@ -6,14 +6,28 @@ import { AddSelect } from "../components/forms/AddSelect/AddSelect"
 import { FormController } from "../components/forms/FormItemWrapper/FormController"
 import { InputSelect } from "../components/forms/InputSelect/InputSelect"
 import { LogoFull } from "../components/images/LogoFull/LogoFull"
+import { Card } from "../components/layout/Card/Card"
 import { Page } from "../components/layout/Page/Page"
 import { Popup } from "../components/overlay/Popup/Popup"
 import { MOCK_SELECT_OPTIONS } from "../mock/mock"
 
-const { Text, Box, Input, Button, IconButton, Grid } = require("@chakra-ui/react")
+const {
+  Text,
+  Box,
+  Input,
+  Button,
+  IconButton,
+  Grid,
+  Switch,
+  Checkbox,
+  RadioGroup,
+  Stack,
+  Radio,
+} = require("@chakra-ui/react")
 
 const Index = () => {
   const [mockSelectValue, setMockSelectValue] = useState("")
+  const [value, setValue] = useState("")
   return (
     <Page>
       <Box maxWidth="600px" width="100%" marginBottom="32px">
@@ -31,6 +45,26 @@ const Index = () => {
           light streaming through a rift in the clouds.
         </Text>
       </Box>
+      <Card margin="16px 0 32px 0" width="100%">
+        <Switch marginRight="16px" />
+        <Switch isDisabled />
+      </Card>
+      <Card margin="16px 0 32px 0" width="100%">
+        <Checkbox marginRight="16px" />
+        <Checkbox isDisabled />
+      </Card>
+      <Card margin="16px 0 32px 0" width="100%">
+        <RadioGroup onChange={setValue} value={value}>
+          <Stack direction="row">
+            <Radio value="1" cursor="pointer" marginRight="16px">
+              Proyecto
+            </Radio>
+            <Radio value="3" cursor="pointer">
+              Sistema de ensayo
+            </Radio>
+          </Stack>
+        </RadioGroup>
+      </Card>
       <Grid templateColumns="1fr" gap="16px" width="fit-content" marginBottom="32px">
         <NotificationCard />
       </Grid>
@@ -47,7 +81,7 @@ const Index = () => {
         <MessageCard />
         <MessageCard />
       </Grid>
-      <Box>
+      <Card width="50%">
         <FormController
           label="Nombre de usuario:"
           error="Esto es un test de error"
@@ -104,7 +138,7 @@ const Index = () => {
           <Button leftIcon={<AddIcon />}>Registrar proyecto</Button>
           <IconButton variant="icon_only" icon={<AddIcon />} />
         </Box>
-      </Box>
+      </Card>
     </Page>
   )
 }

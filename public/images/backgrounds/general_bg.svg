@@ -1,0 +1,12 @@
+<svg width="1509" height="808" viewBox="0 0 1509 808" fill="none"
+    xmlns="http://www.w3.org/2000/svg">
+    <path d="M1509 159.5L0.5 699V0H1509V159.5Z" fill="#EBEEF2"/>
+    <path d="M846.026 274.466L845.984 274.387L845.869 274.168C812.781 211.501 770.566 131.547 726.719 60L1473.14 60L1473.14 787.5C1454.47 794.539 1434.54 799.906 1413.22 803.448C1148.51 847.425 994.744 556.162 846.026 274.466Z" fill="#FAEFAE"/>
+    <g opacity="0.2">
+        <line x1="753.5" y1="63" x2="753.5" y2="793" stroke="#052E57" stroke-dasharray="5 5"/>
+        <line x1="513.5" y1="63" x2="513.5" y2="793" stroke="#052E57" stroke-dasharray="5 5"/>
+        <line x1="273.5" y1="63" x2="273.5" y2="793" stroke="#052E57" stroke-dasharray="5 5"/>
+        <line x1="993.5" y1="63" x2="993.5" y2="793" stroke="#052E57" stroke-dasharray="5 5"/>
+        <line x1="1233.5" y1="63" x2="1233.5" y2="793" stroke="#052E57" stroke-dasharray="5 5"/>
+    </g>
+</svg>

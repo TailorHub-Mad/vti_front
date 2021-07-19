@@ -19,6 +19,7 @@ export const OptionsMenu = ({ isOpen, onClose, children, ...props }) => {
       boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
       width="94px"
       height="64px"
+      zIndex="2"
       {...props}
     >
       {children}

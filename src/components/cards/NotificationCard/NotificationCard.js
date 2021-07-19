@@ -8,10 +8,10 @@ import { EventNotificationIcon } from "../../icons/EventNotificationIcon"
 import { PinIcon } from "../../icons/PinIcon"
 import { Card } from "../../layout/Card/Card"
 
-export const NotificationCard = ({onPin, onDelete}) => {
+export const NotificationCard = ({onPin, onDelete, ...props}) => {
     //TODO recibir name, desc, tipo de notification por props y modal de confirmación de delete
   return (
-    <Card width={["100%", null, null, "428px"]}>
+    <Card width={["100%", null, null, "428px"]} bgColor="white" {...props} >
       <Flex justify="space-between" marginBottom="12px">
         <Flex alignItems="center">
           <EventNotificationIcon

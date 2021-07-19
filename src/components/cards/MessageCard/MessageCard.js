@@ -34,7 +34,7 @@ export const MessageCard = ({
   ...props
 }) => {
   return (
-    <Card {...props}>
+    <Card bgColor="white" {...props} >
       <MessageCardHeader isFavourite={isFavourite} title={title} />
       <MessageCardInfo
         id={id}

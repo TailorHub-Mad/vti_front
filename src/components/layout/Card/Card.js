@@ -8,6 +8,7 @@ export const Card = ({ children, ...props }) => {
       borderRaidus="2px"
       width={["343px", null, null, "282px"]}
       padding="16px"
+      bgColor="white"
       {...props}
     >
       {children}

@@ -4,7 +4,7 @@ import React from "react"
 export const NewNoteLineIcon = (props) => {
   return (
     <Icon
-      width="24"
+      width="24px"
       height="25"
       viewBox="0 0 24 25"
       fill="none"

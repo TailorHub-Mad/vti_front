@@ -30,12 +30,37 @@ export const Button = {
       w: "48px",
       h: "48px",
     },
+    icon_only_secondary: {
+      bg: "white",
+      color: "blue.500",
+      minW: "48px",
+      w: "48px",
+      h: "48px",
+    },
     secondary: {
       minW: "194px",
       bg: "white",
       color: "blue.500",
       _hover: {
         bg: "#E1E5E8",
+      },
+      _active: {
+        bg: "#B1BCC7",
+      },
+      _disabled: {
+        opacity: 0.3,
+        pointerEvents: "none",
+      },
+    },
+    tool_button: {
+      borderColor: "white",
+      bg: "white",
+      color: "blue.500",
+      padding:"16px",
+      _hover: {
+        bg: "blue.500",
+        borderColor: "blue.500",
+        color:"white"
       },
       _active: {
         bg: "#B1BCC7",

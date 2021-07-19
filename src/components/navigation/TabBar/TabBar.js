@@ -27,7 +27,7 @@ export const TabBar = ({
         height={[isOpen ? "100vh" : "64px", null, null, "100vh"]}
         padding={["20px", null, null, "32px 32px"]}
         bg="blue.500"
-        transition={"all 0.2s ease-in"}
+        transition={"all 0.15s ease-in-out"}
         zIndex="999"
         overflow="hidden"
       >

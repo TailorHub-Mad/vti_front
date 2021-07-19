@@ -13,7 +13,7 @@ export const Table = ({ selectedRows, onRowSelect, config, content, ...props }) 
   const isSelected = (idx) => selectedRows?.includes(idx)
 
   return (
-    <Card width="100%" maxWidth="2400px" position="relative" {...props}>
+    <Card width="100%" maxWidth="2400px" position="relative" bgColor="white" {...props}>
       <Flex
         overflow="scroll"
         width="100%"
