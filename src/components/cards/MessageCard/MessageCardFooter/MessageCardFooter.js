@@ -72,7 +72,7 @@ export const MessageCardFooter = ({
             left={areMultipleUsers ? "0" : "auto"}
             right="0"
             zIndex="1"
-            bg="blue"
+            bg="blue.500"
           >
             <Text color="white" transform="uppercase" variant="d_xs_regular">
               {subscribedUsers[0]}

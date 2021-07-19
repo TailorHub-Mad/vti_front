@@ -17,7 +17,7 @@ const Index = () => {
   return (
     <Page>
       <Box maxWidth="600px" width="100%" marginBottom="32px">
-        <LogoFull color="blue" />
+        <LogoFull color="blue.500" />
         <Text variant="d_l_medium" casing="uppercase" margin="32px 0 8px 0">
           The spectacle before us was indeed sublime.
         </Text>

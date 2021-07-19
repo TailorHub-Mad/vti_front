@@ -19,7 +19,7 @@ export const FormController = ({ label, error, helper, children, onHelperClick, 
             {label}
           </FormLabel>
           {helper && (
-            <Tooltip hasArrow label={helper} bg="blue" borderRadius="2px" padding="8px" placement="top">
+            <Tooltip hasArrow label={helper} bg="blue.500" borderRadius="2px" padding="8px" placement="top">
               <span>
                 <HelpDarkIcon
                   width="24px"

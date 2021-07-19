@@ -11,13 +11,13 @@ export const Input = {
         fontSize: ["16px","17px"],
         lineHeight: ["21px","18.70px"],
         _focus: {
-          borderColor: "blue",
+          borderColor: "blue.500",
         },
         _invalid: {
           borderColor: "error",
         },
         _hover: {
-          borderColor: "blue",
+          borderColor: "blue.500",
         },
       },
     },

@@ -24,7 +24,7 @@ export const TabBarToggle = ({isOpen, onToggle}) => {
           transform={`rotateZ(${isOpen ? "180" : "0"}deg)`}
           height="24px"
           color="white"
-          bg="blue"
+          bg="blue.500"
           width="24px"
         >
           <ChevronRightIcon />

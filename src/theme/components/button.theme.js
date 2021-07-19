@@ -3,11 +3,11 @@ export const Button = {
     fontFamily: "Noway-Regular",
     fontWeight: "400",
     border: "2px solid",
-    borderColor: "blue",
+    borderColor: "blue.500",
     h: "48px",
     height: "48px",
     borderRadius: "2px",
-    bgColor: "blue",
+    bgColor: "blue.500",
     color: "white",
     _hover: {
       opacity: 0.8,
@@ -33,7 +33,7 @@ export const Button = {
     secondary: {
       minW: "194px",
       bg: "white",
-      color: "blue",
+      color: "blue.500",
       _hover: {
         bg: "#E1E5E8",
       },

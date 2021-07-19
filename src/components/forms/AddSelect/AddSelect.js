@@ -71,12 +71,12 @@ export const AddSelect = ({
                   onClick={() => setValues(["", ...values])}
                   opacity={values.length >= 1 && values[0] !== "" ? "1" : "0.3"}
                 >
-                  <AddIcon marginRight="4px" width="16px" color="blue" />
+                  <AddIcon marginRight="4px" width="16px" color="blue.500" />
                   <Text
                     marginTop="4px"
                     display="block"
                     variant="m_xs_regular"
-                    color="blue"
+                    color="blue.500"
                   >
                     Añadir tag
                   </Text>
