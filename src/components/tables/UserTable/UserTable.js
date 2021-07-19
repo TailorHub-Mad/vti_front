@@ -1,6 +1,7 @@
 import { Flex, Grid, Table, Text, Th, Thead, Tr } from "@chakra-ui/react"
 import { getDisplayName } from "next/dist/next-server/lib/utils"
 import React from "react"
+import { CUSTOM_SCROLLBAR } from "../../../theme/utils/utils.theme"
 import { MAX_TABLE_WIDTH, MIN_TABLE_WIDTH } from "../../../utils/constants/layout"
 import { getPercentage } from "../../../utils/functions/calculations"
 import { Card } from "../../layout/Card/Card"
@@ -83,7 +84,7 @@ export const UserTable = () => {
 
   return (
     <Card width="100%" maxWidth="2400px" position="relative">
-      <Flex overflow="scroll" width="100%" maxHeight="90vh" position="relative">
+      <Flex overflow="scroll" width="100%" maxHeight="90vh" position="relative" _css={CUSTOM_SCROLLBAR}>
         <Grid minWidth={MIN_TABLE_WIDTH} maxWidth={MAX_TABLE_WIDTH} width="100%">
           <Grid
             templateColumns={templateColumns}
