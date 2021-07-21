@@ -10,7 +10,7 @@ import React from "react"
 import { HelpDarkIcon } from "../../icons/HelpDarkIcon"
 
 export const FormController = ({ label, error, helper, children, onHelperClick, ...props }) => {
-  //TODO helper y ventna de apoyo
+  //TODO helper y ventana de apoyo
   return (
     <FormControl {...props}>
       {label ? (

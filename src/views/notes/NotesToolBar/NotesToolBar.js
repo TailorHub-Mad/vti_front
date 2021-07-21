@@ -2,18 +2,15 @@
 import { SearchIcon } from "@chakra-ui/icons"
 import { Button, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
 import React from "react"
+import { Filter } from "../../../components/filters/Filter/Filter"
 import { AddNoteIcon } from "../../../components/icons/AddNoteIcon"
-import { FilterIcon } from "../../../components/icons/FilterIcon"
 import { NotesIcon } from "../../../components/icons/NotesIcon"
 import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
 
 export const NotesToolBar = () => {
   return (
     <>
-      <Button variant="tool_button" marginRight="16px">
-        <FilterIcon marginRight="8px" />
-        Filtrar
-      </Button>
+      <Filter />
       <Button variant="tool_button" marginRight="16px">
         <NotesIcon marginRight="8px" />
         Agrupar

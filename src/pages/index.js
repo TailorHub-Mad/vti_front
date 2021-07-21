@@ -119,7 +119,7 @@ const Index = () => {
           marginTop="24px"
           onHelperClick={() => console.log("Helper click")}
         >
-          <AddSelect placeholder="Introduce tags" options={MOCK_SELECT_OPTIONS} />
+          <AddSelect value={[]} onChange={()=>console.log("ha cambiado")} placeholder="Introduce tags" options={MOCK_SELECT_OPTIONS} />
         </FormController>
         <Popup isOpen={false} variant="info" />
         <Box display="grid" gridGap="8px" margin="32px 0" gridTemplateColumns="auto">

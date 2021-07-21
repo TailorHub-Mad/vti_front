@@ -2,7 +2,7 @@ import { Flex, Text } from '@chakra-ui/react'
 import React from 'react'
 import { NotesIcon } from '../../../components/icons/NotesIcon'
 
-export const NotesMenu = (props) => {
+export const NotesMenu = ({notesCount = 0,...props}) => {
     return (
         <>
         <Flex {...props}>
@@ -26,7 +26,7 @@ export const NotesMenu = (props) => {
           </Flex>
         </Flex>
         <Text color="#C9C9C9" variant="d_s_medium">
-          18 Notas
+          {`${notesCount} Notas`}
         </Text>
         </>
     )

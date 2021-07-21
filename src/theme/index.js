@@ -2,6 +2,8 @@ import { extendTheme } from "@chakra-ui/react"
 import { Text } from "./components/text.theme"
 import { Input } from "./components/input.theme"
 import { Button } from "./components/button.theme"
+import { Switch } from "./components/switch.theme"
+import { Checkbox } from "./components/checkbox.theme"
 import { Icon } from "./components/icon.theme"
 import { Tag } from "./components/tag.theme"
 import { IconButton } from "./components/icon_button.theme"
@@ -24,7 +26,9 @@ const theme = extendTheme({
     Input,
     Button,
     IconButton,
-    Icon
+    Icon,
+    Checkbox,
+    Switch
   },
   icons,
 })

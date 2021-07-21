@@ -28,7 +28,7 @@ export const TabBar = ({
         padding={["20px", null, null, "32px 32px"]}
         bg="blue.500"
         transition={"all 0.15s ease-in-out"}
-        zIndex="999"
+        zIndex="990"
         overflow="hidden"
       >
         <LogoFull

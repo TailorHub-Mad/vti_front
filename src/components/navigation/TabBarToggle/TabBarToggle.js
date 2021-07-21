@@ -18,7 +18,7 @@ export const TabBarToggle = ({isOpen, onToggle}) => {
         transition={"left 0.15s ease-in-out"}
         cursor="pointer"
         onClick={onToggle}
-        zIndex="9990"
+        zIndex="991"
       >
         <Icon
           transform={`rotateZ(${isOpen ? "180" : "0"}deg)`}
