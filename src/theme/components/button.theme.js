@@ -56,14 +56,31 @@ export const Button = {
       borderColor: "white",
       bg: "white",
       color: "blue.500",
-      padding:"16px",
+      padding: "16px",
       _hover: {
         bg: "blue.500",
         borderColor: "blue.500",
-        color:"white"
+        color: "white",
       },
       _active: {
         bg: "#B1BCC7",
+      },
+      _disabled: {
+        opacity: 0.3,
+        pointerEvents: "none",
+      },
+    },
+    filter_button: {
+      fontFamily: "Noway-Medium",
+      fontSize:"14px",
+      minW: "32px",
+      maxW:"32px",
+      height: "27px",
+      bg: "start",
+      color: "white",
+      borderColor: "start",
+      _hover: {
+        opacity: 0.6,
       },
       _disabled: {
         opacity: 0.3,

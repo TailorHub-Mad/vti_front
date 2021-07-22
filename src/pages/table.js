@@ -1,5 +1,5 @@
-import { useState } from "react"
 
+import { useState } from "react"
 import { Page } from "../components/layout/Page/Page"
 import { Table } from "../components/tables/Table/Table"
 import { TableOptionsMenu } from "../components/tables/TableOptionsMenu/TableOptionsMenu"

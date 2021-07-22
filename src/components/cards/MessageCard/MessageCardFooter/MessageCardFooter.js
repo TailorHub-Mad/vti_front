@@ -4,7 +4,7 @@ import React from "react"
 import { BadgeIcon } from "../../../icons/BadgeIcon"
 import { LockCloseIcon } from "../../../icons/LockCloseIcon"
 import { LockOpenIcon } from "../../../icons/LockOpenIcon"
-import { MessagesIcon } from "../../../icons/messagesIcon"
+import { MessagesIcon } from "../../../icons/MessagesIcon"
 import { SubscribeIcon } from "../../../icons/SubscribeIcon"
 
 const icon_props = {

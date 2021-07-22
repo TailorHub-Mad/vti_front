@@ -63,8 +63,8 @@ const apuntes = () => {
             width="100%"
             marginBottom="32px"
           >
-            {notes.map((mock) => (
-              <MessageCard />
+            {notes.map((mock,idx) => (
+              <MessageCard key={idx} />
             ))}
           </Grid>
         ) : null}

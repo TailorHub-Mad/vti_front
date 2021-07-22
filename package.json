@@ -5,7 +5,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "yarn run lint",
+    "lint": "next lint",
     "pre-commit": "lint-staged",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -15,6 +15,7 @@
     "@chakra-ui/react": "^1.4.2",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
+    "faker": "^5.5.3",
     "framer-motion": "^4.0.3",
     "next": "latest",
     "next-translate": "^1.0.7",
@@ -38,6 +39,6 @@
     "prettier": "^2.3.2"
   },
   "lint-staged": {
-    "*.js": "yarn run lint"
+    "*.js": "next lint"
   }
 }

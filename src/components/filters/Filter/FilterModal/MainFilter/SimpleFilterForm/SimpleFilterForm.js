@@ -14,7 +14,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
         placeholder: "Alias proyecto",
         options: MOCK_SELECT_OPTIONS,
         label: "Proyecto",
-        helper: "Haz click para desplegar la ventana de ayuda",
+        helper: "Abrir ventana de ayuda",
         onHelperClick: () => openAuxModal("project"),
       },
     },
@@ -72,6 +72,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
         label: "Tags de proyecto",
         addItemLabel: "Añadir ",
         removeItemLabel: "Eliminar ",
+        helper: "Abrir ventana de ayuda",
+        onHelperClick: () => openAuxModal("project_tags"),
       },
     },
     note_tags: {
@@ -82,6 +84,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
         label: "Tags de apunte",
         addItemLabel: "Añadir ",
         removeItemLabel: "Eliminar ",
+        helper: "Abrir ventana de ayuda",
+        onHelperClick: () => openAuxModal("note_tags"),
       },
     },
     only_suscribed: {

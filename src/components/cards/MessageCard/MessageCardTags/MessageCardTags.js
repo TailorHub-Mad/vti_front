@@ -5,7 +5,6 @@ import { ProjectTag } from "../../../tags/ProjectTag/ProjectTag"
 import { TestSystemTag } from "../../../tags/TestSystemTag/TestSystemTag"
 
 const TagRow = ({ remainingTagsCount, tagComponent, tags, ...props }) => {
-  console.log(tagComponent, tags)
   return (
     <Box display="flex" alignItems="center" {...props}>
       {[...tags]
@@ -33,9 +32,9 @@ export const MessageCardTags = ({ tags }) => {
 
   return (
     <Box display="grid" gridRowGap="8px" gridTemplateColumns="100%" width="100%">
-      {Object.entries(tags).map(([tagName, tags]) => (
+      {Object.entries(tags).map(([tagName, tags],idx) => (
         <TagRow
-          key={tagName}
+          key={`${tagName}${idx}`}
           tags={tags}
           tagComponent={CompontentByTagType[tagName]}
           remainingTagsCount={getRemainingTags(tags)}
