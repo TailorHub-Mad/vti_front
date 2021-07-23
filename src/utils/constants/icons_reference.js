@@ -22,9 +22,13 @@ import { OptionsIcon } from "../../components/icons/OptionsIcon"
 import { SubscribeIcon } from "../../components/icons/SubscribeIcon"
 import { NotesIcon } from "../../components/icons/NotesIcon"
 import { ProjectLineIcon } from "../../components/icons/ProjectLineIcon"
+import { HideIcon } from "../../components/icons/HideIcon"
+import { ActiveIcon } from "../../components/icons/ActiveIcon"
+import { HideLineIcon } from "../../components/icons/HideLineIcon"
 
 export const ICONS_REFERENCE = {
   attachment: AttachmentIcon,
+  active: ActiveIcon,
   badge: BadgeIcon,
   badge_line: BadgeLineIcon,
   chevron_down: ChevronDownIcon,
@@ -33,6 +37,8 @@ export const ICONS_REFERENCE = {
   heart_line: HeartLineIcon,
   help_dark: HelpDarkIcon,
   help_line: HelpLineIcon,
+  hide: HideIcon,
+  hide_line: HideLineIcon,
   lock_close: LockCloseIcon,
   lock_open: LockOpenIcon,
   machine_line: MachineLineIcon,

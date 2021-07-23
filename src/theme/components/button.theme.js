@@ -87,6 +87,24 @@ export const Button = {
         pointerEvents: "none",
       },
     },
+    note_content:{
+      fontFamily: "Noway-Regular",
+      fontSize:"10px",
+      minW: "32px",
+      height: "25px",
+      bg: "white",
+      color: "blue.500",
+      borderColor: "blue.500",
+      padding:"8px 24px",
+      border: "1px solid",
+      _hover: {
+        opacity: 0.6,
+      },
+      _disabled: {
+        opacity: 0.3,
+        pointerEvents: "none",
+      },
+    }
   },
   defaultProps: {
     variant: "primary",

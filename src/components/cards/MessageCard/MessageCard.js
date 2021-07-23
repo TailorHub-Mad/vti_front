@@ -1,3 +1,5 @@
+import { useDisclosure } from "@chakra-ui/react"
+import { NoteDrawer } from "../../drawer/NoteDrawer/NoteDrawer"
 import { Card } from "../../layout/Card/Card"
 import { MessageCardFooter } from "./MessageCardFooter/MessageCardFooter"
 import { MessageCardHeader } from "./MessageCardHeader/MessageCardHeader"
@@ -5,41 +7,28 @@ import { MessageCardInfo } from "./MessageCardInfo/MessageCardInfo"
 import { MessageCardTags } from "./MessageCardTags/MessageCardTags"
 
 export const MessageCard = ({
-  id = "ID001",
-  author = "Autor muy largo con nombre gigante",
-  title = "Projecto M0 título",
-  isFavourite = true,
-  isClosed = true,
-  isUnread = true,
-  canSubscribe = false,
+  id,
   messagesCount,
   attachmentsCount,
-  subscribedUsers = ["PL", "", "", "", "", ""],
-  tags = {
-    project_tags: ["Proyecto 1", "Proyecto Nombre largo", "Proyecto", "", "", ""],
-    test_system_tags: [
-      "Sistema de Testing 1",
-      "Sistema",
-      "System",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-    ],
-    notes_tags: ["Nota 1", "Nota base 2", "Nota base 3", "", "", ""],
-  },
-  updatedAt = "15/02/2021",
+  subscribedUsers,
+  isFavourite,
+  title,
+  author,
+  updatedAt,
+  tags,
+  isClosed,
+  canSubscribe,
   ...props
 }) => {
+  const { isOpen, onClose, onOpen } = useDisclosure()
   return (
-    <Card bgColor="white" {...props} >
-      <MessageCardHeader isFavourite={isFavourite} title={title} />
+    <Card bgColor="white" {...props}>
+      <NoteDrawer isOpen={isOpen} onClose={() => onClose()} />
+      <MessageCardHeader isFavourite={isFavourite} title={title} onClick={onOpen} />
       <MessageCardInfo
         id={id}
         author={author}
-        updatedAt={updatedAt}
+        updatedAt={updatedAt.toLocaleDateString()}
         marginBottom="18px"
         marginTop="6px"
       />

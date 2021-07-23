@@ -1,6 +1,7 @@
 import { AttachmentIcon } from "@chakra-ui/icons"
 import { Box, Circle, Text } from "@chakra-ui/react"
 import React from "react"
+import { getAcronym } from "../../../../utils/functions/common"
 import { BadgeIcon } from "../../../icons/BadgeIcon"
 import { LockCloseIcon } from "../../../icons/LockCloseIcon"
 import { LockOpenIcon } from "../../../icons/LockOpenIcon"
@@ -75,7 +76,7 @@ export const MessageCardFooter = ({
             bg="blue.500"
           >
             <Text color="white" transform="uppercase" variant="d_xs_regular">
-              {subscribedUsers[0]}
+              {getAcronym(subscribedUsers[0])}
             </Text>
           </Circle>
         </Box>

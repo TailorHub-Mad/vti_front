@@ -7,8 +7,8 @@ export const SaveFilterModal = ({ onClose, ...props }) => {
     <Box
       width="460px"
       height="fit-content"
-      position="absolute"
-      top="calc(50vh - 100px)"
+      position="fixed"
+      top="calc(50vh - 300px)"
       left={"calc(50vw - 230px)"}
       transition="left 0.18s ease-in-out"
       bgColor="white"

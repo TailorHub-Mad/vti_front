@@ -4,10 +4,10 @@ export const Tag = {
   baseStyle: {
     container: {
       fontSize: "10px",
-      lineHeight: "13px",
-      padding: "5.5px 8px",
+      padding: "8px 8px 5px 0",
       overflow: "hidden",
       width:"fit-content",
+      height:"28px"
     },
 
   },
