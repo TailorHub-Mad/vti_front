@@ -7,9 +7,9 @@ const TABBAR_LINKS = {
     href: "/notas/nueva",
   },
   notes: {
-    label: "Notas",
+    label: "Apuntes",
     icon: ICONS_REFERENCE.notes,
-    href: "/notas/",
+    href: "/apuntes/",
   },
   projects: {
     label: "Proyectos",

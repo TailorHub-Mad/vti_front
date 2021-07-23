@@ -27,4 +27,4 @@ export const generateRandomNote = () => ({
   },
 })
 
-export const NOTES_MOCK = new Array(100).fill("").map(generateRandomNote)
+export const NOTES_MOCK = new Array(20).fill("").map(generateRandomNote)

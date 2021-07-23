@@ -1,14 +1,19 @@
-
 import { useState } from "react"
 import { Page } from "../components/layout/Page/Page"
+import { PageBody } from "../components/layout/PageBody/PageBody"
+import { PageHeader } from "../components/layout/PageHeader/PageHeader"
+import { PageMenu } from "../components/layout/PageMenu/PageMenu"
 import { Table } from "../components/tables/Table/Table"
 import { TableOptionsMenu } from "../components/tables/TableOptionsMenu/TableOptionsMenu"
 import { NoteTag } from "../components/tags/NoteTag/NoteTag"
 import { TagGroup } from "../components/tags/TagGroup/TagGroup"
 import { MIN_TABLE_WIDTH } from "../utils/constants/layout"
 import { getPercentage } from "../utils/functions/calculations"
+import { NotesEmptyState } from "../views/notes/NotesEmptyState/NotesEmptyState"
+import { NotesMenu } from "../views/notes/NotesMenu/NotesMenu"
+import { NotesToolBar } from "../views/notes/NotesToolBar/NotesToolBar"
 
-const { Text, Checkbox } = require("@chakra-ui/react")
+const { Text, Checkbox, Center, Spinner } = require("@chakra-ui/react")
 
 const table = () => {
   const [selectedRows, setSelectedRows] = useState([])
@@ -108,15 +113,40 @@ const table = () => {
     ],
     options: "",
   })
-
+  const isFetching = false
+  const notes = new Array(50).fill("")
+  const areNotes = notes && notes.length > 0
+  const [activeTab, setActiveTab] = useState("all")
   return (
     <Page>
-      <Table
-        config={user_table}
-        content={tableData}
-        selectedRows={selectedRows}
-        onRowSelect={(idx) => handleRowSelect(idx)}
-      />
+      <PageHeader title="Proyectos">
+        {areNotes && !isFetching ? <NotesToolBar /> : null}
+      </PageHeader>
+      <PageMenu>
+        {areNotes && !isFetching ? (
+          <NotesMenu
+            activeItem={activeTab}
+            notesCount={notes?.length}
+            onChange={(value) => setActiveTab(value)}
+          />
+        ) : null}
+      </PageMenu>
+      <PageBody>
+        {isFetching ? (
+          <Center marginTop="150px">
+            <Spinner size="xl" color="blue.500" />
+          </Center>
+        ) : null}
+        {!areNotes ? <NotesEmptyState /> : null}
+        {areNotes && !isFetching ? (
+          <Table
+            config={user_table}
+            content={tableData}
+            selectedRows={selectedRows}
+            onRowSelect={(idx) => handleRowSelect(idx)}
+          />
+        ) : null}
+      </PageBody>
     </Page>
   )
 }
