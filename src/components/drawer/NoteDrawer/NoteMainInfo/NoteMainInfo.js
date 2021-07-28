@@ -4,7 +4,7 @@ import React from "react"
 import { ActionLink } from "../../../buttons/ActionLink/ActionLink"
 import { GoToButton } from "../../../buttons/GoToButton/GoToButton"
 import { FolderCloseIcon } from "../../../icons/FolderCloseIcon"
-import { FormalizedIcon } from "../../../icons/FormalizedICon"
+import { FormalizedIcon } from "../../../icons/FormalizedIcon"
 import { LockCloseIcon } from "../../../icons/LockCloseIcon"
 import { ProjectTag } from "../../../tags/ProjectTag/ProjectTag"
 
