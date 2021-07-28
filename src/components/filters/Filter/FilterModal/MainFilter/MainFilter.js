@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react"
 import React from "react"
 import { AdvancedFilterIcon } from "../../../../icons/AdvancedFilterIcon"
-import { SimpleFilterIcon } from "../../../../icons/SimpleFilterICon"
+import { SimpleFilterIcon } from "../../../../icons/SimpleFilterIcon"
 import { FilterModalHeader } from "../FilterModalHeader/FilterModalHeader"
 import { AdvancedFilter } from "./AdvancedFilter/AdvancedFilter"
 import { SimpleFilterForm } from "./SimpleFilterForm/SimpleFilterForm"

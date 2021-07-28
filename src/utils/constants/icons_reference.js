@@ -1,4 +1,4 @@
-import { AttachmentIcon } from "../../components/icons/attachmentIcon"
+import { AttachmentIcon } from "../../components/icons/AttachmentIcon"
 import { BadgeIcon } from "../../components/icons/BadgeIcon"
 import { ClientsLineIcon } from "../../components/icons/ClientsLineIcon"
 import { HelpLineIcon } from "../../components/icons/HelpLineIcon"
