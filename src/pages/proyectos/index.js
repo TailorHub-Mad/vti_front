@@ -5,7 +5,7 @@ import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
 import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
 import { MOCK_TABLE_DATA } from "../../mock/projects_table"
 import { NotesEmptyState } from "../../views/notes/NotesEmptyState/NotesEmptyState"
-import { ProjectsTable } from "../../views/projects/projectsTable/ProjectsTable"
+import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
 import { ProjectsToolBar } from "../../views/projects/ProjectsToolBar/ProjectsToolBar"
 
 const projects = () => {
