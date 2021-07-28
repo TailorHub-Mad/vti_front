@@ -8,8 +8,8 @@ export const Group = ({ ...props }) => {
 
   return (
     <>
-      <Button variant="tool_button" marginRight="16px" onClick={onOpen}>
-        <NotesIcon marginRight="8px" />
+      <Button variant="tool_button" mr="16px" onClick={onOpen}>
+        <NotesIcon mr={["0","8px"]} />
         Agrupar
       </Button>
       <GroupModal isOpen={isOpen} onClose={onClose} />

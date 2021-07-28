@@ -10,7 +10,7 @@ export const Filter = ({ ...props }) => {
   return (
     <>
       <Button variant="tool_button" marginRight="16px" onClick={onOpen}>
-        <FilterIcon marginRight="8px" />
+        <FilterIcon mr={["0", "8px"]} display />
         Filtrar
       </Button>
       <FilterModal isOpen={isOpen} onClose={onClose} />

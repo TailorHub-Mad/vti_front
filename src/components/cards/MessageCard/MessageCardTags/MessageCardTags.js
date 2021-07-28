@@ -4,7 +4,7 @@ import { NoteTag } from "../../../tags/NoteTag/NoteTag"
 import { ProjectTag } from "../../../tags/ProjectTag/ProjectTag"
 import { TestSystemTag } from "../../../tags/TestSystemTag/TestSystemTag"
 
-const TagRow = ({ remainingTagsCount, tagComponent, tags, ...props }) => {
+const TagRow = ({ remainingTagsCount, tagComponent, tags = {}, ...props }) => {
   return (
     <Box display="flex" alignItems="center" {...props} height="28px">
       {[...tags]

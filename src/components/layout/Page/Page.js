@@ -5,17 +5,17 @@ import Meta from "../Meta/Meta"
 import { PageHeader } from "../PageHeader/PageHeader"
 
 export const Page = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
   return (
     <>
       <Meta />
       <TabBar isOpen={isOpen} setIsOpen={(val) => setIsOpen(val)} />
       <Box
         transition={"padding-left 0.15s ease-in-out"}
-        padding={["20px", null, null, "32px"]}
-        paddingLeft={["20px", null, null, isOpen ? "224px" : "48px"]}
-        paddingTop={["88px", null, null, "32px"]}
-        paddingBottom="0"
+        pl={["20px", null, null, isOpen ? "224px" : "48px"]}
+        pt={["88px", null, null, "32px"]}
+        pr={["20px", null, null, "24px"]}
+        pb="0"
         overflow={"hidden"}
         background={"url(/images/backgrounds/general_bg.svg)"}
         bgRepeat="no-repeat"

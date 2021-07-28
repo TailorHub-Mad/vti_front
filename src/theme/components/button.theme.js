@@ -57,6 +57,8 @@ export const Button = {
       bg: "white",
       color: "blue.500",
       padding: "16px",
+      width: ["46px", "46px", "46px", "auto"],
+      fontSize: ["0", "0", "0", "17px"],
       _hover: {
         bg: "blue.500",
         borderColor: "blue.500",
@@ -72,9 +74,9 @@ export const Button = {
     },
     filter_button: {
       fontFamily: "Noway-Medium",
-      fontSize:"14px",
+      fontSize: "14px",
       minW: "32px",
-      maxW:"32px",
+      maxW: "32px",
       height: "27px",
       bg: "start",
       color: "white",
@@ -87,15 +89,15 @@ export const Button = {
         pointerEvents: "none",
       },
     },
-    note_content:{
+    note_content: {
       fontFamily: "Noway-Regular",
-      fontSize:"10px",
+      fontSize: "10px",
       minW: "32px",
       height: "25px",
       bg: "white",
       color: "blue.500",
       borderColor: "blue.500",
-      padding:"8px 24px",
+      padding: "8px 24px",
       border: "1px solid",
       _hover: {
         opacity: 0.6,
@@ -104,7 +106,7 @@ export const Button = {
         opacity: 0.3,
         pointerEvents: "none",
       },
-    }
+    },
   },
   defaultProps: {
     variant: "primary",

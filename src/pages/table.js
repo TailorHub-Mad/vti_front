@@ -15,7 +15,7 @@ import { NotesToolBar } from "../views/notes/NotesToolBar/NotesToolBar"
 
 const { Text, Checkbox, Center, Spinner } = require("@chakra-ui/react")
 
-const table = () => {
+const projects = () => {
   const [selectedRows, setSelectedRows] = useState([])
   const calcProp = (width) => `${getPercentage(MIN_TABLE_WIDTH, width)}%`
 
@@ -50,7 +50,7 @@ const table = () => {
       },
       alias: {
         label: "Alias",
-        width: calcProp(85),
+        width: calcProp(89),
         type: "text",
       },
       nombre: {
@@ -137,7 +137,7 @@ const table = () => {
             <Spinner size="xl" color="blue.500" />
           </Center>
         ) : null}
-        {!areNotes ? <NotesEmptyState /> : null}
+        {!areNotes ? <NotesEmptyState  /> : null}
         {areNotes && !isFetching ? (
           <Table
             config={user_table}
@@ -151,4 +151,4 @@ const table = () => {
   )
 }
 
-export default table
+export default projects

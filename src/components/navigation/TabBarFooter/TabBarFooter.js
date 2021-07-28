@@ -18,6 +18,7 @@ export const TabBarFooter = ({areActiveNotifications}) => {
         />
         <MenuItem
           label="Notificaciones"
+          link="/notificaciones"
           icon={
             areActiveNotifications ? (
               <NotificationActiveLineIcon />
@@ -26,7 +27,7 @@ export const TabBarFooter = ({areActiveNotifications}) => {
             )
           }
         />
-        <MenuItem label="Cerrar sesión" icon={<SignOutLineIcon />} />
+        <MenuItem label="Cerrar sesión" link="/signout" icon={<SignOutLineIcon />} />
       </Box>
     )
 }

@@ -1,8 +1,7 @@
-import { Button, Center, Grid, Spinner, Text } from "@chakra-ui/react"
+import { Center, Grid, Spinner, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { MessageCard } from "../components/cards/MessageCard/MessageCard"
-import { AddNoteIcon } from "../components/icons/AddNoteIcon"
-import { UploadCloudIcon } from "../components/icons/UploadCloudIcon"
+import { NoteDrawer } from "../components/drawer/NoteDrawer/NoteDrawer"
 import { Page } from "../components/layout/Page/Page"
 import { PageBody } from "../components/layout/PageBody/PageBody"
 import { PageHeader } from "../components/layout/PageHeader/PageHeader"
@@ -16,11 +15,16 @@ const apuntes = () => {
   // TODO fetch notes
   // const notes = null
   const isFetching = false
-  const notes = new Array(50).fill("")
+  const notes = new Array(150).fill("")
   const areNotes = notes && notes.length > 0
   const [activeTab, setActiveTab] = useState("all")
+  const [showNoteDetails, setShowNoteDetails] = useState(null)
   return (
     <Page>
+      <NoteDrawer
+        isOpen={showNoteDetails}
+        onClose={() => setShowNoteDetails(null)}
+      />
       <PageHeader title="Apuntes">
         {areNotes && !isFetching ? <NotesToolBar /> : null}
       </PageHeader>
@@ -39,9 +43,7 @@ const apuntes = () => {
             <Spinner size="xl" color="blue.500" />
           </Center>
         ) : null}
-        {!areNotes ? (
-          <NotesEmptyState/>
-        ) : null}
+        {!areNotes ? <NotesEmptyState /> : null}
         {areNotes && !isFetching ? (
           <Grid
             templateColumns="repeat(auto-fill, 282px)"
@@ -50,7 +52,11 @@ const apuntes = () => {
             marginBottom="32px"
           >
             {NOTES_MOCK.map((mock, idx) => (
-              <MessageCard {...mock} key={idx} />
+              <MessageCard
+                {...mock}
+                key={idx}
+                onSeeDetails={() => setShowNoteDetails(idx.toString())}
+              />
             ))}
           </Grid>
         ) : null}

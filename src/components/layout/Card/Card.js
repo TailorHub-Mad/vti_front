@@ -6,6 +6,7 @@ export const Card = ({ children, ...props }) => {
     <Box
       boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
       borderRadius="2px"
+      border="1px solid white"
       width={["343px", null, null, "282px"]}
       padding="16px"
       bgColor="white"

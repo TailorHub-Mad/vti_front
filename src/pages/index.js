@@ -68,19 +68,7 @@ const Index = () => {
       <Grid templateColumns="1fr" gap="16px" width="fit-content" marginBottom="32px">
         <NotificationCard />
       </Grid>
-      <Grid
-        templateColumns="1fr 1fr 1fr"
-        gap="16px"
-        width="fit-content"
-        marginBottom="32px"
-      >
-        <MessageCard />
-        <MessageCard />
-        <MessageCard />
-        <MessageCard />
-        <MessageCard />
-        <MessageCard />
-      </Grid>
+
       <Card width="50%">
         <FormController
           label="Nombre de usuario:"

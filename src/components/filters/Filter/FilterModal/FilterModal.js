@@ -70,39 +70,26 @@ export const FilterModal = ({
             openSaveModal={() => setShowSaveFilter(true)}
           />
         </ScaleFade>
-        <ScaleFade in={showSaveFilter}>
+        {showSaveFilter ? (
           <SaveFilterModal onClose={() => setShowSaveFilter(false)} />
-        </ScaleFade>
-        <ScaleFade in={!showSaveFilter && showSecondaryContent === "project"}>
+        ) : null}
+        {!showSaveFilter && showSecondaryContent === "project" ? (
           <SupportFilter
             onClose={() => setShowSecondaryContent(false)}
             onSecondaryOpen={() => setShowAuxContent(true)}
             isAuxOpen={showAuxContent}
           />
-        </ScaleFade>
-        <SlideFade
-          in={!showSaveFilter && showSecondaryContent === "project_tags"}
-          offsetX="150px"
-          offsetY="0"
-        >
+        ) : null}
+        {!showSaveFilter && showSecondaryContent === "project_tags" ? (
           <AuxFilter onClose={() => setShowSecondaryContent(false)} />
-        </SlideFade>
-        <SlideFade
-          in={!showSaveFilter && showSecondaryContent === "note_tags"}
-          offsetX="150px"
-          offsetY="0"
-        >
+        ) : null}
+        {!showSaveFilter && showSecondaryContent === "note_tags" ? (
           <AuxFilter onClose={() => setShowSecondaryContent(false)} />
-        </SlideFade>
-        <SlideFade
-          in={
-            !showSaveFilter && showAuxContent && showSecondaryContent === "project"
-          }
-          offsetX="150px"
-          offsetY="0"
-        >
+        ) : null}
+
+        {!showSaveFilter && showAuxContent && showSecondaryContent === "project" ? (
           <AuxFilter onClose={() => setShowAuxContent(false)} />
-        </SlideFade>
+        ) : null}
       </FilterModalContent>
     </Modal>
   )

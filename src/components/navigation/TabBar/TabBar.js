@@ -9,7 +9,7 @@ import { TabBarToggle } from "../TabBarToggle/TabBarToggle"
 export const TabBar = ({
   isOpen,
   setIsOpen,
-  isAdmin = false,
+  isAdmin = true,
   areActiveNotifications = true,
 }) => {
   const onToggle = () => setIsOpen(!isOpen)

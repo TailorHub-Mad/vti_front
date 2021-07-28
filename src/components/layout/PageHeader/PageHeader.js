@@ -23,8 +23,14 @@ export const PageHeader = ({ title, children, ...props }) => {
       marginBottom="16px"
       {...props}
     >
-      <Text variant="d_l_medium">{title}</Text>
-      <Flex width="fit-content">{children}</Flex>
+      {title ? (
+        <>
+          <Text variant="d_l_medium">{title}</Text>
+          <Flex width="fit-content">{children}</Flex>
+        </>
+      ) : (
+        children
+      )}
     </Flex>
   )
 }

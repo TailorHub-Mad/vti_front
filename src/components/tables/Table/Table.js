@@ -13,13 +13,20 @@ export const Table = ({ selectedRows, onRowSelect, config, content, ...props }) 
   const isSelected = (idx) => selectedRows?.includes(idx)
 
   return (
-    <Card width="100%" maxWidth="2400px" position="relative" bgColor="white" {...props}>
+    <Card
+      width="100%"
+      maxWidth="2400px"
+      position="relative"
+      bgColor="white"
+      sx={CUSTOM_SCROLLBAR}
+      {...props}
+    >
       <Flex
         overflow="scroll"
         width="100%"
-        maxHeight="90vh"
+        maxHeight="calc(100vh - 230px)"
         position="relative"
-        _css={CUSTOM_SCROLLBAR}
+        sx={CUSTOM_SCROLLBAR}
       >
         <Grid minWidth={MIN_TABLE_WIDTH} maxWidth={MAX_TABLE_WIDTH} width="100%">
           <Grid
@@ -33,6 +40,7 @@ export const Table = ({ selectedRows, onRowSelect, config, content, ...props }) 
             left="0"
             bgColor="white"
             zIndex="1"
+            gridColumnGap="8px"
             alignItems="center"
             minWidth={MIN_TABLE_WIDTH}
             maxWidth={MAX_TABLE_WIDTH}
@@ -53,20 +61,33 @@ export const Table = ({ selectedRows, onRowSelect, config, content, ...props }) 
                 alignItems="center"
                 bgColor={isSelected(idx) ? "blue.100" : "white"}
                 _hover={{ bgColor: "blue.100" }}
+                gridColumnGap="8px"
               >
                 {Object.entries(item).map(([name, element]) => {
-                  if (head[name].type === "text") {
+                  console.log(element)
+                  if (head[name]?.type === "count") {
+                    return React.cloneElement(components.text, {
+                      children: element.length.toString(),
+                    })
+                  }
+                  if (head[name]?.type === "text") {
                     return React.cloneElement(components.text, {
                       children: element.toString(),
                     })
                   }
-                  if (head[name].type === "selector") {
+                  if (head[name]?.type === "link") {
+                    return React.cloneElement(components.link, {
+                      children: element.label,
+                      alias: element.link
+                    })
+                  }
+                  if (head[name]?.type === "selector") {
                     return React.cloneElement(components[name], {
                       isChecked: isSelected(idx),
                       onChange: () => onRowSelect(idx),
                     })
                   }
-                  if (head[name].type === "tagGroup") {
+                  if (head[name]?.type === "tagGroup") {
                     return React.cloneElement(components[name], {
                       tagsArr: element,
                     })
@@ -74,6 +95,8 @@ export const Table = ({ selectedRows, onRowSelect, config, content, ...props }) 
                   if (components[name] !== undefined) {
                     return React.cloneElement(components[name], {
                       children: element,
+                      id: element.id,
+                      alias: element.alias
                     })
                   }
                   return <Text key={name} />

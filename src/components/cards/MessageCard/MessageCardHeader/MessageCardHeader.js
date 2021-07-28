@@ -9,12 +9,12 @@ import { OptionsMenuItem } from "../../../navigation/OptionsMenu/OptionsMenuItem
 
 
 
-export const MessageCardHeader = ({ isFavourite, title, ...props }) => {
+export const MessageCardHeader = ({ isFavourite, title, onClick, ...props }) => {
   const [showOptions, setShowOptions] = useState(false)
 
   return (
     <Flex height="32px" justify="space-between" {...props}>
-      <Flex maxWidth="80%" height="32px">
+      <Flex maxWidth="80%" height="32px" onClick={onClick} cursor="pointer">
         {isFavourite ? (
           <HeartIcon color="error" {...ICONS_PROPS_16} marginRight="4px" />
         ) : null}

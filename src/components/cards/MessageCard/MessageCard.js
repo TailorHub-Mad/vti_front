@@ -18,17 +18,16 @@ export const MessageCard = ({
   tags,
   isClosed,
   canSubscribe,
+  onSeeDetails,
   ...props
 }) => {
-  const { isOpen, onClose, onOpen } = useDisclosure()
   return (
     <Card bgColor="white" {...props}>
-      <NoteDrawer isOpen={isOpen} onClose={() => onClose()} />
-      <MessageCardHeader isFavourite={isFavourite} title={title} onClick={onOpen} />
+      <MessageCardHeader isFavourite={isFavourite} title={title} onClick={onSeeDetails} />
       <MessageCardInfo
         id={id}
         author={author}
-        updatedAt={updatedAt.toLocaleDateString()}
+        updatedAt={updatedAt?.toLocaleDateString()}
         marginBottom="18px"
         marginTop="6px"
       />
