@@ -19,7 +19,7 @@ const TABBAR_LINKS = {
   test_systems: {
     label: "Sistemas ensayo",
     icon: ICONS_REFERENCE.machine_line,
-    href: "/sistemas-de-ensayo",
+    href: "/sistemas",
   },
   tags: {
     label: "Tags",
@@ -59,6 +59,22 @@ const {
   subscription,
 } = TABBAR_LINKS
 
-export const TABBAR_USER_LINKS = [new_note, notes, projects, test_systems, tags, subscription]
+export const TABBAR_USER_LINKS = [
+  new_note,
+  notes,
+  projects,
+  test_systems,
+  tags,
+  subscription,
+]
 
-export const TABBAR_ADMIN_LINKS = [notes, projects, test_systems, tags, clients,users, help, subscription]
+export const TABBAR_ADMIN_LINKS = [
+  notes,
+  projects,
+  test_systems,
+  tags,
+  clients,
+  users,
+  help,
+  subscription,
+]

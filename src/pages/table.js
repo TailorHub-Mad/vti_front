@@ -8,7 +8,7 @@ import { TableOptionsMenu } from "../components/tables/TableOptionsMenu/TableOpt
 import { NoteTag } from "../components/tags/NoteTag/NoteTag"
 import { TagGroup } from "../components/tags/TagGroup/TagGroup"
 import { MIN_TABLE_WIDTH } from "../utils/constants/layout"
-import { getPercentage } from "../utils/functions/calculations"
+import { getPercentage } from "../utils/functions/common"
 import { NotesEmptyState } from "../views/notes/NotesEmptyState/NotesEmptyState"
 import { NotesMenu } from "../views/notes/NotesMenu/NotesMenu"
 import { NotesToolBar } from "../views/notes/NotesToolBar/NotesToolBar"

@@ -1,10 +1,17 @@
-import { Flex, Grid, Text } from "@chakra-ui/react"
+import { Box, Flex, Grid, Text } from "@chakra-ui/react"
 import React from "react"
 import { CUSTOM_SCROLLBAR } from "../../../theme/utils/utils.theme"
 import { MAX_TABLE_WIDTH, MIN_TABLE_WIDTH } from "../../../utils/constants/layout"
 import { Card } from "../../layout/Card/Card"
 
-export const Table = ({ selectedRows, onRowSelect, config, content, ...props }) => {
+export const Table = ({
+  selectedRows,
+  onRowSelect,
+  header,
+  config,
+  content,
+  ...props
+}) => {
   const { head, components } = config
   const templateColumns = Object.values(head).reduce(
     (ac, cv) => (ac = `${ac} ${cv.width}`),
@@ -21,10 +28,12 @@ export const Table = ({ selectedRows, onRowSelect, config, content, ...props }) 
       sx={CUSTOM_SCROLLBAR}
       {...props}
     >
+      {header ? <Box>{header}</Box> : null}
+      
       <Flex
         overflow="scroll"
         width="100%"
-        maxHeight="calc(100vh - 230px)"
+        maxHeight={`calc(100vh - ${header ? "310px" : "230px"})`}
         position="relative"
         sx={CUSTOM_SCROLLBAR}
       >
@@ -63,6 +72,7 @@ export const Table = ({ selectedRows, onRowSelect, config, content, ...props }) 
                 _hover={{ bgColor: "blue.100" }}
                 gridColumnGap="8px"
               >
+                {/* TODO refactor del cloneElement para que reciba las props de forma más elegante */}
                 {Object.entries(item).map(([name, element]) => {
                   console.log(element)
                   if (head[name]?.type === "count") {
@@ -78,7 +88,7 @@ export const Table = ({ selectedRows, onRowSelect, config, content, ...props }) 
                   if (head[name]?.type === "link") {
                     return React.cloneElement(components.link, {
                       children: element.label,
-                      alias: element.link
+                      alias: element.link,
                     })
                   }
                   if (head[name]?.type === "selector") {
@@ -96,7 +106,7 @@ export const Table = ({ selectedRows, onRowSelect, config, content, ...props }) 
                     return React.cloneElement(components[name], {
                       children: element,
                       id: element.id,
-                      alias: element.alias
+                      alias: element.alias,
                     })
                   }
                   return <Text key={name} />
