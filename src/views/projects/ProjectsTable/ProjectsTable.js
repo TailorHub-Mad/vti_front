@@ -19,8 +19,8 @@ export const ProjectsTable = ({ items }) => {
       count: <Text />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       sector: <NoteTag />,
-      sistemas_ensayo: <TagGroup variant="testSystem" max={2} />,
-      tags_proyecto: <TagGroup variant="project" max={4} />,
+      sistemas_ensayo: <TagGroup variant="light_blue" max={3} />,
+      tags_proyecto: <TagGroup variant="pale_yellow" max={3} />,
       options: <TableOptionsMenu />,
     },
     head: {

@@ -1,17 +1,34 @@
-import { useAriaHidden } from "@chakra-ui/react"
-
 export const Tag = {
   baseStyle: {
-    container: {
+    label: {
       fontSize: "10px",
-      padding: "8px 8px 5px 0",
-      overflow: "hidden",
-      width:"fit-content",
-      height:"28px"
     },
-
+    container: {
+      padding: "8px 8px 5px 0",
+      height: "24px",
+      borderRadius: "full",
+    },
+    borderRadius: "full",
   },
   variants: {
+    violete: {
+      container: {
+        backgroundColor: "violete",
+        borderRadius: "50px",
+      },
+    },
+    pale_yellow: {
+      container: {
+        backgroundColor: "pale_yellow",
+        borderRadius: "50px",
+      },
+    },
+    light_blue: {
+      container: {
+        backgroundColor: "light_blue",
+        borderRadius: "50px",
+      },
+    },
     project: {
       container: {
         backgroundColor: "violete",

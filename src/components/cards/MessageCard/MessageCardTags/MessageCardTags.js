@@ -1,21 +1,8 @@
 import { Box } from "@chakra-ui/react"
 import React from "react"
-import { NoteTag } from "../../../tags/NoteTag/NoteTag"
-import { ProjectTag } from "../../../tags/ProjectTag/ProjectTag"
-import { TestSystemTag } from "../../../tags/TestSystemTag/TestSystemTag"
+import { TagRow } from "../../../layout/TagRow/TagRow"
+import { GeneralTag } from "../../../tags/GeneralTag/GeneralTag"
 
-const TagRow = ({ remainingTagsCount, tagComponent, tags = {}, ...props }) => {
-  return (
-    <Box display="flex" alignItems="center" {...props} height="28px">
-      {[...tags]
-        .slice(0, 2)
-        .map((tag) => React.cloneElement(tagComponent, { label: tag, marginRight: "8px" }))}
-      {remainingTagsCount > 0
-        ? React.cloneElement(tagComponent, { label: `+${remainingTagsCount}` })
-        : null}
-    </Box>
-  )
-}
 export const MessageCardTags = ({ tags }) => {
   const getRemainingTags = (tags) => {
     if (tags.length <= 2) {
@@ -24,10 +11,10 @@ export const MessageCardTags = ({ tags }) => {
       return tags.length - 2
     }
   }
-  const CompontentByTagType = {
-    test_system_tags: <TestSystemTag />,
-    project_tags: <ProjectTag />,
-    notes_tags: <NoteTag />,
+  const variantByTagName = {
+    test_system_tags: "pale_yellow",
+    project_tags: "violete",
+    notes_tags: "light_blue",
   }
 
   return (
@@ -36,7 +23,7 @@ export const MessageCardTags = ({ tags }) => {
         <TagRow
           key={`${tagName}${idx}`}
           tags={tags}
-          tagComponent={CompontentByTagType[tagName]}
+          variant={variantByTagName[tagName]}
           remainingTagsCount={getRemainingTags(tags)}
         />
       ))}

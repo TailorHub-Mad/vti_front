@@ -24,7 +24,7 @@ const TABBAR_LINKS = {
   tags: {
     label: "Tags",
     icon: ICONS_REFERENCE.tag_line,
-    href: "/tags",
+    href: "/tags-de-proyecto",
   },
   clients: {
     label: "Clientes",
