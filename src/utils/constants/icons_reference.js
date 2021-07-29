@@ -23,8 +23,10 @@ import { SubscribeIcon } from "../../components/icons/SubscribeIcon"
 import { NotesIcon } from "../../components/icons/NotesIcon"
 import { ProjectLineIcon } from "../../components/icons/ProjectLineIcon"
 import { HideIcon } from "../../components/icons/HideIcon"
-import { ActiveIcon } from "../../components/icons/ActiveIcon"
 import { HideLineIcon } from "../../components/icons/HideLineIcon"
+import { ActiveIcon } from "../../components/icons/ActiveIcon"
+import { TagLinkIcon, TagLinkICon } from "../../components/icons/TagLinkICon"
+import { ListIcon } from "../../components/icons/ListIcon"
 
 export const ICONS_REFERENCE = {
   attachment: AttachmentIcon,
@@ -39,6 +41,7 @@ export const ICONS_REFERENCE = {
   help_line: HelpLineIcon,
   hide: HideIcon,
   hide_line: HideLineIcon,
+  list: ListIcon,
   lock_close: LockCloseIcon,
   lock_open: LockOpenIcon,
   machine_line: MachineLineIcon,
@@ -53,5 +56,6 @@ export const ICONS_REFERENCE = {
   subscribe: SubscribeIcon,
   subscribe_line: SubscribeLineIcon,
   tag_line: TagLineIcon,
+  tag_link: TagLinkIcon,
   users_line: UsersLineIcon
 }

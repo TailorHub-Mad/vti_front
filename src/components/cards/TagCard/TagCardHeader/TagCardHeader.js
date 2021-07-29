@@ -9,8 +9,8 @@ import { OptionsMenuItem } from "../../../navigation/OptionsMenu/OptionsMenuItem
 export const TagCardHeader = ({
   title,
   onClick,
-  category = "Verdura",
-  father,
+  category,
+  parentTag,
   ...props
 }) => {
   const [showOptions, setShowOptions] = useState(false)
@@ -22,7 +22,7 @@ export const TagCardHeader = ({
           {title}
         </Text>
         <Text marginTop="2px" variant="d_xs_regular" casing="uppercase">
-          {father ? `${father} · ${category}` : category}
+          {parentTag ? `${parentTag} · ${category}` : category}
         </Text>
       </Box>
       <Box position="relative">

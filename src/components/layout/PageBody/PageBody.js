@@ -6,7 +6,7 @@ export const PageBody = ({ children, ...props }) => {
   return (
     <Box
       overflowY="scroll"
-      height="calc(100vh - 180px)"
+      height="calc(100vh - 135px)"
       pt="16px"
       sx={CUSTOM_SCROLLBAR}
       {...props}

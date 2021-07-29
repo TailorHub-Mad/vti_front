@@ -1,8 +1,10 @@
-import { Box, Center, Grid, Spinner, Text } from "@chakra-ui/react"
+import { Box, Center, Flex, Grid, Spinner, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { MessageCard } from "../components/cards/MessageCard/MessageCard"
 import { TagCard } from "../components/cards/TagCard/TagCard"
 import { NoteDrawer } from "../components/drawer/NoteDrawer/NoteDrawer"
+import { ListIcon } from "../components/icons/ListIcon"
+import { TagLinkIcon } from "../components/icons/TagLinkIcon"
 import { Page } from "../components/layout/Page/Page"
 import { PageBody } from "../components/layout/PageBody/PageBody"
 import { PageHeader } from "../components/layout/PageHeader/PageHeader"
@@ -13,6 +15,7 @@ import { PROJECT_TAGS_MOCK } from "../mock/tags"
 import { NotesEmptyState } from "../views/notes/NotesEmptyState/NotesEmptyState"
 import { NotesMenu } from "../views/notes/NotesMenu/NotesMenu"
 import { NotesToolBar } from "../views/notes/NotesToolBar/NotesToolBar"
+import { ProjectsTagsHeader } from "../views/projectTags/ProjectTagsHeader/ProjectTagsHeader"
 import { ProjectTagsToolBar } from "../views/projectTags/ProjectTagsToolBar/ProjectTagsToolBar"
 
 const tagsDeProyecto = () => {
@@ -21,7 +24,7 @@ const tagsDeProyecto = () => {
   const isFetching = false
   const notes = new Array(150).fill("")
   const areNotes = notes && notes.length > 0
-  const [activeTab, setActiveTab] = useState("all")
+  const [activeTab, setActiveTab] = useState("inheritance")
   const [showNoteDetails, setShowNoteDetails] = useState(null)
   return (
     <Page>
@@ -32,24 +35,59 @@ const tagsDeProyecto = () => {
       <PageHeader title="Tags de Proyecto">
         {areNotes && !isFetching ? <ProjectTagsToolBar /> : null}
       </PageHeader>
-      <Box p="32px" bgColor="white" boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)">
-        <PageBody height="calc(100vh - 250px)">
-          {isFetching ? <LoadingTableSpinner /> : null}
-          {!areNotes ? <NotesEmptyState /> : null}
-          {areNotes && !isFetching ? (
+      {isFetching ? <LoadingTableSpinner /> : null}
+      {!areNotes ? <NotesEmptyState /> : null}
+      <PageBody
+        p="32px"
+        bgColor="white"
+        boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
+      >
+        <ProjectsTagsHeader
+          activeItem={activeTab}
+          onChange={(value) => setActiveTab(value)}
+        />
+        {areNotes && !isFetching && activeTab === "inheritance" ? (
+          <>
+            <Text variant="d_s_medium">Primer Grado</Text>
             <Grid
               templateColumns="repeat(auto-fill, 266px)"
               gap="16px"
               width="100%"
-              marginBottom="32px"
+              mt="8px"
+              mb="24px"
             >
-              {PROJECT_TAGS_MOCK.map((tag) => (
+              {PROJECT_TAGS_MOCK.filter((tag) => tag.parentTag).map((tag) => (
                 <TagCard key={tag.name} {...tag} />
               ))}
             </Grid>
-          ) : null}
-        </PageBody>
-      </Box>
+            <Text variant="d_s_medium">Grado Cero</Text>
+            <Grid
+              templateColumns="repeat(auto-fill, 266px)"
+              gap="16px"
+              width="100%"
+              mt="8px"
+              mb="24px"
+            >
+              {PROJECT_TAGS_MOCK.filter((tag) => !tag.parentTag).map((tag) => (
+                <TagCard key={tag.name} {...tag} />
+              ))}
+            </Grid>
+          </>
+        ) : null}
+        {areNotes && !isFetching && activeTab === "alphabetic" ? (
+          <Grid
+            templateColumns="repeat(auto-fill, 266px)"
+            gap="16px"
+            width="100%"
+            mt="8px"
+            mb="24px"
+          >
+            {[...PROJECT_TAGS_MOCK].sort((a, b) => a.name.localeCompare(b.name)).map((tag) => (
+              <TagCard key={tag.name} {...tag} />
+            ))}
+          </Grid>
+        ) : null}
+      </PageBody>
     </Page>
   )
 }

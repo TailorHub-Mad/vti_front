@@ -18,21 +18,23 @@ export const TagCardTags = ({ projects, relatedTags, ...props }) => {
     <Box
       display="grid"
       gridRowGap="8px"
-      gridTemplateRows="28px"
+      gridTemplateRows="24px"
       gridTemplateColumns="100%"
       width="100%"
       mt="8px"
       mb="16px"
     >
       <TagRow
-        tags={projects}
-        tagComponent={<GeneralTag />}
-        remainingTagsCount={getRemainingTags(projects)}
-      />
-      <TagRow
         tags={relatedTags}
         tagComponent={<GeneralTag />}
         remainingTagsCount={getRemainingTags(relatedTags)}
+        variant="pale_yellow"
+      />
+      <TagRow
+        tags={projects}
+        tagComponent={<GeneralTag />}
+        remainingTagsCount={getRemainingTags(projects)}
+        variant="light_blue"
       />
     </Box>
   )

@@ -22,6 +22,7 @@ export const Page = ({ children }) => {
         bgAttachment="fixed"
         bgSize="stretch"
         bgPosition="0 -100px"
+        minH="100vh"
       >
         {children}
       </Box>
