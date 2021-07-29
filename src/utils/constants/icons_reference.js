@@ -25,7 +25,7 @@ import { ProjectLineIcon } from "../../components/icons/ProjectLineIcon"
 import { HideIcon } from "../../components/icons/HideIcon"
 import { HideLineIcon } from "../../components/icons/HideLineIcon"
 import { ActiveIcon } from "../../components/icons/ActiveIcon"
-import { TagLinkIcon, TagLinkICon } from "../../components/icons/TagLinkICon"
+import { TagLinkIcon } from "../../components/icons/TagLinkIcon"
 import { ListIcon } from "../../components/icons/ListIcon"
 
 export const ICONS_REFERENCE = {
