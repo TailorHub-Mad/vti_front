@@ -3,7 +3,7 @@ import React from "react"
 import { ICONS_REFERENCE } from "../../../utils/constants/icons_reference"
 
 export const ProjectsTagsHeader = ({
-  projectsCount = 0,
+  tagsCount = 0,
   onChange,
   activeItem = "inheritance",
 }) => {
@@ -55,7 +55,7 @@ export const ProjectsTagsHeader = ({
       </Flex>
       <Flex align="center">
         <Text color="#C9C9C9" variant="d_s_medium">
-          {`${projectsCount} Tags`}
+          {`${tagsCount} Tags`}
         </Text>
       </Flex>
     </Flex>

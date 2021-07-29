@@ -45,6 +45,7 @@ const tagsDeProyecto = () => {
         <ProjectsTagsHeader
           activeItem={activeTab}
           onChange={(value) => setActiveTab(value)}
+          tagsCount={PROJECT_TAGS_MOCK.length}
         />
         {areNotes && !isFetching && activeTab === "inheritance" ? (
           <>
