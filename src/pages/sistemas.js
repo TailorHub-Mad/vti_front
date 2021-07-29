@@ -18,13 +18,11 @@ const sistemas = () => {
       <PageHeader title="Sistemas de ensayo">
         {areSystems && !isFetching ? <TestSystemsToolbar /> : null}
       </PageHeader>
-      <PageBody>
         {isFetching ? <LoadingTableSpinner /> : null}
         {!areSystems ? <TestSystemsEmptyState /> : null}
         {areSystems && !isFetching ? (
           <TestSystemsTable items={MOCK_TEST_SYSTEM_TABLE} />
         ) : null}
-      </PageBody>
     </Page>
   )
 }

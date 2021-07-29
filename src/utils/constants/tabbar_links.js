@@ -34,17 +34,17 @@ const TABBAR_LINKS = {
   users: {
     label: "Usuarios",
     icon: ICONS_REFERENCE.users_line,
-    href: "/usuarios",
+    href: "/",
   },
   help: {
     label: "Apoyo",
     icon: ICONS_REFERENCE.help_line,
-    href: "/apoyo",
+    href: "/",
   },
   subscription: {
     label: "Subscripción",
     icon: ICONS_REFERENCE.subscribe_line,
-    href: "/subscripcion",
+    href: "/",
   },
 }
 const {

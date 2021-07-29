@@ -38,7 +38,7 @@ const apuntes = () => {
           />
         ) : null}
       </PageMenu>
-      <PageBody>
+      <PageBody height="calc(100vh - 140px)">
         {isFetching ? <LoadingTableSpinner /> : null}
         {!areNotes ? <NotesEmptyState /> : null}
         {areNotes && !isFetching ? (

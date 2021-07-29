@@ -25,7 +25,7 @@ export const TagGroup = ({ tagsArr, variant, max, ...props }) => {
           </GeneralTag>
         )
       })}
-      <GeneralTag variant={variant} {...props} marginRight="4px">
+      <GeneralTag variant={variant} {...props} width="32px" marginRight="4px" justifyContent="center">
         {`+${tagsArr?.length - max}`}
       </GeneralTag>
     </Flex>

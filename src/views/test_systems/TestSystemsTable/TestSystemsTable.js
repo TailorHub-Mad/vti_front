@@ -44,7 +44,7 @@ export const TestSystemsTable = ({ items, ...props }) => {
       },
       year: {
         label: "Año",
-        width: calcColWidth(50),
+        width: calcColWidth(45),
         type: "text",
       },
       projects: {
@@ -54,7 +54,7 @@ export const TestSystemsTable = ({ items, ...props }) => {
       },
       notes: {
         label: "Apuntes",
-        width: calcColWidth(360),
+        width: calcColWidth(350),
         type: "tagGroup",
       },
       options: {
@@ -78,7 +78,9 @@ export const TestSystemsTable = ({ items, ...props }) => {
       content={MOCK_TEST_SYSTEM_TABLE}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
+      tableHeight="calc(100vh - 190px)"
       p="32px"
+      pb="0"
       {...props}
     />
   )

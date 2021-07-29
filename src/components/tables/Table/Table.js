@@ -10,6 +10,7 @@ export const Table = ({
   header,
   config,
   content,
+  tableHeight,
   ...props
 }) => {
   const { head, components } = config
@@ -33,7 +34,7 @@ export const Table = ({
       <Flex
         overflow="scroll"
         width="100%"
-        maxHeight={`calc(100vh - ${header ? "310px" : "230px"})`}
+        maxHeight={tableHeight || `calc(100vh - ${header ? "310px" : "230px"})`}
         position="relative"
         sx={CUSTOM_SCROLLBAR}
       >
