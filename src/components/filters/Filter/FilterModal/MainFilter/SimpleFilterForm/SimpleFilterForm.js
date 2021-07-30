@@ -1,5 +1,5 @@
-import { Button, Checkbox, Flex, Grid, Switch, Text } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import { Checkbox, Switch } from "@chakra-ui/react"
+import React from "react"
 import { MOCK_SELECT_OPTIONS } from "../../../../../../mock/mock"
 import { AddSelect } from "../../../../../forms/AddSelect/AddSelect"
 import { InputSelect } from "../../../../../forms/InputSelect/InputSelect"

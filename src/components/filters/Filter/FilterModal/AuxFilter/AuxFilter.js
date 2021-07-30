@@ -14,7 +14,7 @@ import React from "react"
 import { ChevronDownIcon } from "../../../../icons/ChevronDownIcon"
 import { ChevronUpIcon } from "../../../../icons/ChevronUpIcon"
 import { ProjectsIcon } from "../../../../icons/ProjectsIcon"
-import { FilterModalHeader } from "../FilterModalHeader/FilterModalHeader"
+import { CustomModalHeader } from "../../../../overlay/modal/CustomModalHeader/CustomModalHeader"
 import faker from "faker"
 import { sortAlphabetic } from "../../../../../utils/functions/sorting"
 import { TestSystemTag } from "../../../../tags/TestSystemTag/TestSystemTag"
@@ -35,7 +35,7 @@ export const AuxFilter = ({ onClose, ...props }) => {
       padding="32px"
       {...props}
     >
-      <FilterModalHeader title="Ventana de apoyo" onClose={onClose} />
+      <CustomModalHeader title="Ventana de apoyo" onClose={onClose} />
       <Flex direction="column" mt="24px">
         <Flex align="center" mb="24px">
           <ProjectsIcon mr="2px" />

@@ -18,7 +18,7 @@ export const OptionsMenu = ({ isOpen, onClose, children, ...props }) => {
       borderRadius="2px"
       boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
       width="94px"
-      height="64px"
+      height="fit-content"
       zIndex="900"
       {...props}
     >

@@ -12,6 +12,7 @@ export const InputSelect = ({
   label,
   helper,
   onHelperClick,
+  isDisabled,
   ...props
 }) => {
   const [showSelectMenu, setShowSelectMenu] = useState(false)
@@ -45,6 +46,7 @@ export const InputSelect = ({
       label={label}
       helper={helper}
       onHelperClick={onHelperClick}
+      isDisabled={isDisabled}
       {...props}
     >
       <Box position="relative" ref={ref} {...props}>
@@ -53,12 +55,14 @@ export const InputSelect = ({
           onChange={handleChange}
           value={value}
           onClick={() => setShowSelectMenu(true)}
+          isDisabled={isDisabled}
         />
         <ChevronDownIcon
           position="absolute"
           right="16px"
           top="10px"
           width="24px"
+          opacity={isDisabled ? 0.3 : 1}
           transform={`rotateZ(${showSelectMenu ? "180" : "0"}deg)`}
         />
 

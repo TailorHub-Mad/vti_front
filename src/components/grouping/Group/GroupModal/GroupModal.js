@@ -9,8 +9,8 @@ import {
   RadioGroup,
 } from "@chakra-ui/react"
 import React, { useState } from "react"
-import { FilterModalContent } from "../../../filters/Filter/FilterModal/FilterModalContent/FilterModalContent"
-import { FilterModalHeader } from "../../../filters/Filter/FilterModal/FilterModalHeader/FilterModalHeader"
+import { CustomModalContent } from "../../../overlay/modal/CustomModalContent/CustomModalContent"
+import { CustomModalHeader } from "../../../overlay/modal/CustomModalHeader/CustomModalHeader"
 
 export const GroupModal = ({ isOpen, onClose, onGroup, ...props }) => {
   const [activeItem, setActiveItem] = useState(null)
@@ -35,7 +35,7 @@ export const GroupModal = ({ isOpen, onClose, onGroup, ...props }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
       <ModalOverlay />
-      <FilterModalContent>
+      <CustomModalContent>
         <ScaleFade in={isOpen}>
           <Box
             width="460px"
@@ -49,7 +49,7 @@ export const GroupModal = ({ isOpen, onClose, onGroup, ...props }) => {
             padding="32px"
             {...props}
           >
-            <FilterModalHeader title="Agrupar" onClose={onClose} pb="24px" />
+            <CustomModalHeader title="Agrupar" onClose={onClose} pb="24px" />
             <RadioGroup onChange={setActiveItem} value={activeItem}>
               {options.map((option) => (
                 <Flex
@@ -69,7 +69,7 @@ export const GroupModal = ({ isOpen, onClose, onGroup, ...props }) => {
             <Button onClick={()=>onGroup()} display="block" margin="0 auto"  mt="32px" >Agrupar</Button>
           </Box>
         </ScaleFade>
-      </FilterModalContent>
+      </CustomModalContent>
     </Modal>
   )
 }

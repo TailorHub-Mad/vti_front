@@ -12,7 +12,6 @@ const projects = () => {
   const isFetching = false
   const projects = new Array(50).fill("")
   const areProjects = projects && projects.length > 0
-  const [activeTab, setActiveTab] = useState("all")
   //TODO Fetch de la lista de proyectos, gestion de la carga y pasarlo a la tabla por props
   return (
     <Page>

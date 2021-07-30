@@ -3,12 +3,12 @@ import React from "react"
 
 export const LogoFull = ({ ...props }) => (
   <Icon
-    {...props}
-    width="280"
-    height="83"
+    width="280px"
+    height="auto"
     viewBox="0 0 280 83"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    objectFit="contain"
     {...props}
   >
     <path d="M163.428 67.7388H165.443V78.9298H163.428V67.7388Z" fill="currentColor" />

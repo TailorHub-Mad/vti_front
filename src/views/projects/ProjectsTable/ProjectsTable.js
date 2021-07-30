@@ -7,6 +7,7 @@ import { NoteTag } from "../../../components/tags/NoteTag/NoteTag"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
 import { ProjectsTableHeader } from "../ProjectsTableHeader/ProjectsTableHeader"
+import { ProjectRowOptionMenu } from "./ProjectRowOptionMenu/ProjectRowOptionMenu"
 
 export const ProjectsTable = ({ items }) => {
   //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
@@ -21,7 +22,7 @@ export const ProjectsTable = ({ items }) => {
       sector: <NoteTag />,
       sistemas_ensayo: <TagGroup variant="light_blue" max={3} />,
       tags_proyecto: <TagGroup variant="pale_yellow" max={3} />,
-      options: <TableOptionsMenu />,
+      options: <ProjectRowOptionMenu />,
     },
     head: {
       actions: {

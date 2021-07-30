@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Input, Switch, Text } from "@chakra-ui/react"
 import React from "react"
-import { FilterModalHeader } from "../FilterModalHeader/FilterModalHeader"
+import { CustomModalHeader } from "../../../../overlay/modal/CustomModalHeader/CustomModalHeader"
 
 export const SaveFilterModal = ({ onClose, ...props }) => {
   return (
@@ -16,7 +16,7 @@ export const SaveFilterModal = ({ onClose, ...props }) => {
       padding="32px"
       {...props}
     >
-      <FilterModalHeader title="Guardar filtro" onClose={onClose} pb="24px" />
+      <CustomModalHeader title="Guardar filtro" onClose={onClose} pb="24px" />
       <Text variant="d_s_medium" mb="2px">
         Escriba o seleccione una combinación
       </Text>

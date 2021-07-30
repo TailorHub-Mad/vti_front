@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react"
 import React from "react"
 
-export const FilterModalContent = ({ children, ...props }) => {
+export const CustomModalContent = ({ children, ...props }) => {
   return (
     <Box
       width="100vw"

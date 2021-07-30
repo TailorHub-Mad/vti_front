@@ -4,10 +4,8 @@ import { Button, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
 import React from "react"
 import { Filter } from "../../../components/filters/Filter/Filter"
 import { Group } from "../../../components/grouping/Group/Group"
-import { AddNoteIcon } from "../../../components/icons/AddNoteIcon"
-import { AddProjectIcon } from "../../../components/icons/AddProjectIcon"
-import { NotesIcon } from "../../../components/icons/NotesIcon"
 import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
+import { AddNewProject } from "../AddNewProjectModal/AddNewProject"
 
 export const ProjectsToolBar = () => {
   return (
@@ -28,10 +26,7 @@ export const ProjectsToolBar = () => {
       <Button variant="icon_only_secondary" marginRight="16px">
         <UploadCloudIcon />
       </Button>
-      <Button>
-        <AddProjectIcon marginRight="8px" />
-        Añadir proyecto
-      </Button>
+      <AddNewProject />
     </>
   )
 }

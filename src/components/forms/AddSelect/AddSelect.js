@@ -16,6 +16,7 @@ export const AddSelect = ({
   options = [],
   label,
   onHelperClick,
+  isDisabled,
   ...props
 }) => {
   const [values, setValues] = useState(value && Array.isArray(value) ? value : [""])
@@ -37,7 +38,7 @@ export const AddSelect = ({
   }, [values])
 
   return (
-    <FormController label={label} onHelperClick={onHelperClick} {...props}>
+    <FormController label={label} onHelperClick={onHelperClick} isDisabled={isDisabled} {...props}>
       <Box>
         {values.map((val, idx) => (
           <Box key={`${val}-${idx}`} marginBottom="16px">
@@ -46,6 +47,7 @@ export const AddSelect = ({
               onChange={(option) => handleChange(option, idx)}
               placeholder={placeholder}
               options={handleAvailableOptions(val)}
+              isDisabled={isDisabled}
             />
             {idx !== 0 ? (
               <Box

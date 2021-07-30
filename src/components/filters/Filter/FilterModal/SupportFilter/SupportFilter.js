@@ -3,7 +3,7 @@ import React from "react"
 import { MOCK_SELECT_OPTIONS } from "../../../../../mock/mock"
 import { FormController } from "../../../../forms/FormItemWrapper/FormController"
 import { InputSelect } from "../../../../forms/InputSelect/InputSelect"
-import { FilterModalHeader } from "../FilterModalHeader/FilterModalHeader"
+import { CustomModalHeader } from "../../../../overlay/modal/CustomModalHeader/CustomModalHeader"
 
 export const SupportFilter = ({ onClose, onSecondaryOpen, isAuxOpen, ...props }) => {
   return (
@@ -19,7 +19,7 @@ export const SupportFilter = ({ onClose, onSecondaryOpen, isAuxOpen, ...props })
       padding="32px"
       {...props}
     >
-      <FilterModalHeader title="Apoyo búsqueda de proyecto" onClose={onClose} />
+      <CustomModalHeader title="Apoyo búsqueda de proyecto" onClose={onClose} />
       <Box paddingTop="32px">
         <InputSelect
           options={MOCK_SELECT_OPTIONS}

@@ -2,21 +2,13 @@ import {
   ScaleFade,
   Modal,
   ModalOverlay,
-  SlideFade,
-  Text,
-  Switch,
-  Box,
-  Input,
-  Flex,
-  Button,
 } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { AuxFilter } from "./AuxFilter/AuxFilter"
 import { MainFilter } from "./MainFilter/MainFilter"
 import { SupportFilter } from "./SupportFilter/SupportFilter"
-import { FilterModalContent } from "./FilterModalContent/FilterModalContent"
-import { FilterModalHeader } from "./FilterModalHeader/FilterModalHeader"
 import { SaveFilterModal } from "./SaveFilterModal/SaveFilterModal"
+import { CustomModalContent } from "../../../overlay/modal/CustomModalContent/CustomModalContent"
 
 export const FilterModal = ({
   isOpen,
@@ -53,7 +45,7 @@ export const FilterModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
       <ModalOverlay />
-      <FilterModalContent>
+      <CustomModalContent>
         <ScaleFade
           in={
             !showSaveFilter &&
@@ -90,7 +82,7 @@ export const FilterModal = ({
         {!showSaveFilter && showAuxContent && showSecondaryContent === "project" ? (
           <AuxFilter onClose={() => setShowAuxContent(false)} />
         ) : null}
-      </FilterModalContent>
+      </CustomModalContent>
     </Modal>
   )
 }

@@ -12,7 +12,7 @@ import {
 import React from "react"
 import { AdvancedFilterIcon } from "../../../../icons/AdvancedFilterIcon"
 import { SimpleFilterIcon } from "../../../../icons/SimpleFilterIcon"
-import { FilterModalHeader } from "../FilterModalHeader/FilterModalHeader"
+import { CustomModalHeader } from "../../../../overlay/modal/CustomModalHeader/CustomModalHeader"
 import { AdvancedFilter } from "./AdvancedFilter/AdvancedFilter"
 import { SimpleFilterForm } from "./SimpleFilterForm/SimpleFilterForm"
 
@@ -38,7 +38,7 @@ export const MainFilter = ({
       padding="32px"
       {...props}
     >
-      <FilterModalHeader title="Filtrar" onClose={onClose} pb="24px" />
+      <CustomModalHeader title="Filtrar" onClose={onClose} pb="24px" />
       <Tabs mb="24px">
         <TabList>
           <Tab _focus={{ outline: "none" }} pl={0} alignItems="center">
