@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "pre-commit": "lint-staged",
+    "pre-commit": "next lint",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
