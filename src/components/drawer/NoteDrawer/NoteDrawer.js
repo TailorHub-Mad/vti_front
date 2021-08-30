@@ -1,15 +1,4 @@
-import {
-  Box,
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
-  Flex,
-  Slide,
-  SlideFade,
-  Text,
-} from "@chakra-ui/react"
+import { Box, Flex, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { CloseIcon } from "../../icons/CloseIcon"
 import { NOTE_MOCK } from "../../../mock/note"
@@ -80,26 +69,31 @@ export const NoteDrawer = ({ isOpen, note = NOTE_MOCK, onClose, ...props }) => {
               files={note.files}
             />
           </Box>
-          <Box
-            bgColor="white"
-            mt="24px"
-            p="32px"
-            borderRadius="2px"
-            boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
-          >
-            <NoteMainInfo
-              updatedAt={note.updatedAt}
-              project={note.project}
-              isResponse
-            />
-            <NoteDetailsAccordion
-              isResponse
-              name={note.name}
-              links={note.links}
-              message={note.message}
-              files={note.files}
-            />
-          </Box>
+          {note.responses
+            ? note.responses.map((res) => (
+                <Box
+                  key={res.id}
+                  bgColor="white"
+                  mt="24px"
+                  p="32px"
+                  borderRadius="2px"
+                  boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
+                >
+                  <NoteMainInfo
+                    updatedAt={res.updatedAt}
+                    project={res.project}
+                    isResponse
+                  />
+                  <NoteDetailsAccordion
+                    isResponse
+                    name={res.name}
+                    links={res.links}
+                    message={res.message}
+                    files={res.files}
+                  />
+                </Box>
+              ))
+            : null}
         </Box>
       </Box>
     </>
