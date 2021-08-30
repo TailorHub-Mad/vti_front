@@ -8,11 +8,11 @@ import { FormalizedIcon } from "../../../icons/FormalizedIcon"
 import { LockCloseIcon } from "../../../icons/LockCloseIcon"
 import { ProjectTag } from "../../../tags/ProjectTag/ProjectTag"
 
-export const NoteMainInfo = ({ updatedAt, project }) => {
+export const NoteMainInfo = ({ updatedAt, project, isResponse }) => {
   //TODO ACTIONS DE LOS LINKS
   return (
     <>
-      <Flex justify="space-between">
+      <Flex justify="space-between" h="16px">
         <Text variant="d_xs_regular" color="grey">
           {updatedAt?.toLocaleDateString()}
         </Text>
@@ -23,20 +23,22 @@ export const NoteMainInfo = ({ updatedAt, project }) => {
           <ActionLink color="error" icon={<DeleteIcon />} label="Eliminar" />
         </Flex>
       </Flex>
-      <Box mt="24px">
-        <Flex justify="space-between">
-          <Flex align="center">
-            <FolderCloseIcon mr="8px" />
-            <Text variant="d_s_medium" mt="4px">
-              Proyecto
-            </Text>
+      {isResponse ? null : (
+        <Box mt="24px">
+          <Flex justify="space-between">
+            <Flex align="center">
+              <FolderCloseIcon mr="8px" />
+              <Text variant="d_s_medium" mt="4px">
+                Proyecto
+              </Text>
+            </Flex>
+            <GoToButton label="Ver proyecto" />
           </Flex>
-          <GoToButton label="Ver proyecto" />
-        </Flex>
-        <ProjectTag mt="8px" ml="32px">
-          {project}
-        </ProjectTag>
-      </Box>
+          <ProjectTag mt="8px" ml="32px">
+            {project}
+          </ProjectTag>
+        </Box>
+      )}
     </>
   )
 }
