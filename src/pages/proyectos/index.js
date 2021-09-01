@@ -18,11 +18,9 @@ const projects = () => {
       <PageHeader title="Proyectos">
         {areProjects && !isFetching ? <ProjectsToolBar /> : null}
       </PageHeader>
-        {isFetching ? <LoadingTableSpinner /> : null}
-        {!areProjects ? <NotesEmptyState /> : null}
-        {areProjects && !isFetching ? (
-          <ProjectsTable items={MOCK_TABLE_DATA} />
-        ) : null}
+      {isFetching ? <LoadingTableSpinner /> : null}
+      {!areProjects ? <NotesEmptyState /> : null}
+      {areProjects && !isFetching ? <ProjectsTable items={MOCK_TABLE_DATA} /> : null}
     </Page>
   )
 }

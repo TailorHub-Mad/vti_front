@@ -4,7 +4,6 @@ import Link from "next/link"
 export const MenuItem = ({ label, icon, submenu, href, ...props }) => {
   //TODO link, detectar active y submenu
   const [showSubmenu, setShowSubmenu] = useState(false)
-  console.log("HREF", href)
   return (
     <Link href={href || "/apuntes"} passHref>
       <Flex
