@@ -5,14 +5,7 @@ import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInpu
 import { MOCK_SELECT_OPTIONS, MOCK_YEAR_OPTIONS } from "../../../../mock/mock"
 
 export const AddNewProjectForm = ({ openAuxModal, value, onChange }) => {
-  const {
-    id,
-    alias,
-    client,
-    sector,
-    year,
-    start_focal_point,
-  } = value
+  const { id, alias, client, sector, year, start_focal_point } = value
   // const checkIfDisabled = (value) => {
   //   const orderedValues = [
   //     "id",
@@ -79,8 +72,7 @@ export const AddNewProjectForm = ({ openAuxModal, value, onChange }) => {
         placeholder: "Punto focal inicio",
         options: MOCK_SELECT_OPTIONS,
         label: "Punto focal inicio",
-        isDisabled:
-          !id || !alias || !client || !sector || !year,
+        isDisabled: !id || !alias || !client || !sector || !year,
       },
     },
 
@@ -93,12 +85,7 @@ export const AddNewProjectForm = ({ openAuxModal, value, onChange }) => {
         addItemLabel: "Añadir ",
         removeItemLabel: "Eliminar ",
         isDisabled:
-          !id ||
-          !alias ||
-          !client ||
-          !sector ||
-          !year ||
-          !start_focal_point,
+          !id || !alias || !client || !sector || !year || !start_focal_point,
       },
     },
 
@@ -113,12 +100,7 @@ export const AddNewProjectForm = ({ openAuxModal, value, onChange }) => {
         helper: "Abrir ventana de ayuda",
         onHelperClick: () => openAuxModal("project_tags"),
         isDisabled:
-          !id ||
-          !alias ||
-          !client ||
-          !sector ||
-          !year ||
-          !start_focal_point,
+          !id || !alias || !client || !sector || !year || !start_focal_point,
       },
     },
   }
@@ -130,7 +112,6 @@ export const AddNewProjectForm = ({ openAuxModal, value, onChange }) => {
   }
 
   const handleFormChange = (input, _value) => {
-    console.log("CHANGE", input, _value)
     onChange({
       ...value,
       [input]: _value?.target?.checked ? _target.checked : _value,

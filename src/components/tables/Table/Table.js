@@ -30,7 +30,7 @@ export const Table = ({
       {...props}
     >
       {header ? <Box>{header}</Box> : null}
-      
+
       <Flex
         overflow="scroll"
         width="100%"
@@ -75,7 +75,6 @@ export const Table = ({
               >
                 {/* TODO refactor del cloneElement para que reciba las props de forma más elegante */}
                 {Object.entries(item).map(([name, element]) => {
-                  console.log(element)
                   if (head[name]?.type === "count") {
                     return React.cloneElement(components.text, {
                       children: element.length.toString(),

@@ -14,6 +14,5 @@ export const MOCK_SELECT_OPTIONS = [
 
 export const MOCK_YEAR_OPTIONS = new Array(40).fill("").map((_, idx) => {
   const _year = new Date().getFullYear() - idx
-  console.log(_year)
   return { label: _year, value: _year }
 })
