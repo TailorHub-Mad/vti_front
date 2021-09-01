@@ -1,5 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { MessageCard } from "../components/cards/MessageCard/MessageCard"
 import { NotificationCard } from "../components/cards/NotificationCard/NotificationCard"
 import { AddSelect } from "../components/forms/AddSelect/AddSelect"
@@ -9,7 +9,9 @@ import { LogoFull } from "../components/images/LogoFull/LogoFull"
 import { Card } from "../components/layout/Card/Card"
 import { Page } from "../components/layout/Page/Page"
 import { Popup } from "../components/overlay/Popup/Popup"
+import useAuthApi from "../hooks/api/useAuthApi"
 import { MOCK_SELECT_OPTIONS } from "../mock/mock"
+import AuthService from "../services/auth.service"
 
 const {
   Text,
@@ -28,6 +30,15 @@ const {
 const Index = () => {
   const [mockSelectValue, setMockSelectValue] = useState("")
   const [value, setValue] = useState("")
+  const { health } = useAuthApi()
+
+  useEffect(() => {
+    const isHealth = async () => {
+      const healthy = await health()
+      console.log("API STATUS", healthy)
+    }
+    isHealth()
+  }, [])
   return (
     <Page>
       <Box maxWidth="600px" width="100%" marginBottom="32px">
@@ -107,7 +118,12 @@ const Index = () => {
           marginTop="24px"
           onHelperClick={() => console.log("Helper click")}
         >
-          <AddSelect value={[]} onChange={()=>console.log("ha cambiado")} placeholder="Introduce tags" options={MOCK_SELECT_OPTIONS} />
+          <AddSelect
+            value={[]}
+            onChange={() => console.log("ha cambiado")}
+            placeholder="Introduce tags"
+            options={MOCK_SELECT_OPTIONS}
+          />
         </FormController>
         <Popup isOpen={false} variant="info" />
         <Box display="grid" gridGap="8px" margin="32px 0" gridTemplateColumns="auto">
