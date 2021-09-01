@@ -22,7 +22,7 @@ const auth = () => {
     >
       <Card
         width="492px"
-        heihgt="410px"
+        height="410px"
         p="32px 48px 56px 48px"
         display="flex"
         flexDirection="column"
