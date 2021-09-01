@@ -5,9 +5,12 @@ import { Login } from "../views/auth/Login/Login"
 
 const login = () => {
   const router = useRouter()
+  const {
+    state: { logged },
+  } = useContext(Context)
 
   useEffect(() => {
-    if (!new ServiceConstructor().token) return
+    if (!logged) return
     router.push("/")
   }, [])
 

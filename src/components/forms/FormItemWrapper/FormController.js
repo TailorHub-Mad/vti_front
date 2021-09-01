@@ -22,7 +22,13 @@ export const FormController = ({
     <FormControl {...props}>
       {label ? (
         <Box display="flex" alignItems="center">
-          <FormLabel margin="0" marginRight="4px" display="flex" alignItems="center">
+          <FormLabel
+            margin="0"
+            marginRight="4px"
+            display="flex"
+            alignItems="center"
+            color={error ? "#F95C5C" : "#052E57"}
+          >
             {label}
           </FormLabel>
           {helper && (

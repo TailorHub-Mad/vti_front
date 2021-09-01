@@ -8,6 +8,14 @@ const reducer = (state, action) => {
       return { role: state.role }
     }
 
+    case "IS_LOGGED": {
+      return { logged: true }
+    }
+
+    case "LOG_OUT": {
+      return { logged: false }
+    }
+
     default: {
       throw new Error(`Unhandled action type: ${action.type}`)
     }
@@ -15,7 +23,10 @@ const reducer = (state, action) => {
 }
 
 export const ContextProvider = ({ children }) => {
-  const [state, dispatch] = React.useReducer(reducer, { role: "ADMIN" })
+  const [state, dispatch] = React.useReducer(reducer, {
+    role: "ADMIN",
+    logged: false,
+  })
   const value = { state, dispatch }
   return <Context.Provider value={value}>{children}</Context.Provider>
 }
