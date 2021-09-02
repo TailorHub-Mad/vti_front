@@ -1,11 +1,4 @@
-import {
-  Box,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Text,
-  Tooltip,
-} from "@chakra-ui/react"
+import { Box, FormControl, FormLabel, Text, Tooltip } from "@chakra-ui/react"
 import React from "react"
 import { HelpDarkIcon } from "../../icons/HelpDarkIcon"
 

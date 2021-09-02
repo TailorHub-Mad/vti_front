@@ -1,5 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import { NotificationCard } from "../components/cards/NotificationCard/NotificationCard"
 import { AddSelect } from "../components/forms/AddSelect/AddSelect"
 import { FormController } from "../components/forms/FormItemWrapper/FormController"
@@ -10,8 +10,7 @@ import { Page } from "../components/layout/Page/Page"
 import { Popup } from "../components/overlay/Popup/Popup"
 import { MOCK_SELECT_OPTIONS } from "../mock/mock"
 import { ApiUserContext } from "../provider/ApiAuthProvider"
-
-const {
+import {
   Text,
   Box,
   Input,
@@ -23,10 +22,10 @@ const {
   RadioGroup,
   Stack,
   Radio,
-} = require("@chakra-ui/react")
+} from "@chakra-ui/react"
 
 const Index = () => {
-  const { isLoggedIn, user, role } = useContext(ApiUserContext)
+  const { isLoggedIn } = useContext(ApiUserContext)
 
   const [mockSelectValue, setMockSelectValue] = useState("")
   const [value, setValue] = useState("")

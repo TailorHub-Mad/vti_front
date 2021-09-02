@@ -1,11 +1,9 @@
-import { Box, Tag } from "@chakra-ui/react"
+import { Box } from "@chakra-ui/react"
 import React from "react"
 import { TagRow } from "../../../layout/TagRow/TagRow"
 import { GeneralTag } from "../../../tags/GeneralTag/GeneralTag"
-import { ProjectTag } from "../../../tags/ProjectTag/ProjectTag"
-import { TestSystemTag } from "../../../tags/TestSystemTag/TestSystemTag"
 
-export const TagCardTags = ({ projects, relatedTags, ...props }) => {
+export const TagCardTags = ({ projects, relatedTags }) => {
   const getRemainingTags = (tags) => {
     if (tags.length <= 2) {
       return 0

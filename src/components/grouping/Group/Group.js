@@ -3,7 +3,7 @@ import React from "react"
 import { NotesIcon } from "../../icons/NotesIcon"
 import { GroupModal } from "./GroupModal/GroupModal"
 
-export const Group = ({ ...props }) => {
+export const Group = () => {
   const { isOpen, onClose, onOpen } = useDisclosure()
 
   return (

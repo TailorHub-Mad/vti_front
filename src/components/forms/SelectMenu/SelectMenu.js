@@ -1,4 +1,4 @@
-import { Box, ListItem, UnorderedList } from "@chakra-ui/react"
+import { ListItem, UnorderedList } from "@chakra-ui/react"
 import React from "react"
 
 export const SelectMenu = ({ onSelect, options = [], ...props }) => {
@@ -21,7 +21,7 @@ export const SelectMenu = ({ onSelect, options = [], ...props }) => {
           padding="16px 8px"
           onClick={() => onSelect(option.value)}
         >
-          {option.label || ""}
+          {option.label || ""}
         </ListItem>
       ))}
     </UnorderedList>

@@ -1,13 +1,10 @@
 import {
   Button,
-  Image,
   Img,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
-  ModalHeader,
   ModalOverlay,
   Text,
 } from "@chakra-ui/react"
@@ -16,10 +13,10 @@ import React from "react"
 export const Popup = ({
   isOpen,
   onClose,
-  textBody,
+  // textBody,
   color,
-  textButtonPrimary,
-  textButtonSecondary,
+  // textButtonPrimary,
+  // textButtonSecondary,
   variant = "twoButtons",
   ...props
 }) => {
@@ -44,8 +41,8 @@ export const Popup = ({
         {variant === "info" && (
           <Img
             pos="absolute"
-            right={["20px",null,null,"40px"]}
-            top={["-70px",null,null,"-100px"]}
+            right={["20px", null, null, "40px"]}
+            top={["-70px", null, null, "-100px"]}
             src="/images/illustrations/girl_sit.svg"
             w={["68px", null, null, "auto"]}
             h="auto"

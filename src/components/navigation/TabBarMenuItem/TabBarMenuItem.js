@@ -1,9 +1,8 @@
 import { Flex, Icon, Text } from "@chakra-ui/react"
-import { useState } from "react"
 import Link from "next/link"
-export const MenuItem = ({ label, icon, submenu, href, ...props }) => {
+export const MenuItem = ({ label, icon, href, /*submenu,*/ ...props }) => {
   //TODO link, detectar active y submenu
-  const [showSubmenu, setShowSubmenu] = useState(false)
+  // const [showSubmenu, setShowSubmenu] = useState(false)
   return (
     <Link href={href || "/apuntes"} passHref>
       <Flex

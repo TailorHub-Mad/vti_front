@@ -1,8 +1,7 @@
-import { DeleteIcon } from "@chakra-ui/icons"
 import { Flex } from "@chakra-ui/react"
 import React from "react"
 
-export const OptionsMenuItem = ({isLast, children, ...props}) => {
+export const OptionsMenuItem = ({ isLast, children, ...props }) => {
   return (
     <Flex
       align="center"

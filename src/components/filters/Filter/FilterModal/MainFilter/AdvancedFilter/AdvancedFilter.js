@@ -1,6 +1,5 @@
 import { Button, Flex, Grid, Input, Text } from "@chakra-ui/react"
 import React from "react"
-import { FormController } from "../../../../../forms/FormItemWrapper/FormController"
 import { InputSelect } from "../../../../../forms/InputSelect/InputSelect"
 
 export const AdvancedFilter = () => {
@@ -35,10 +34,30 @@ export const AdvancedFilter = () => {
       <Text variant="d_s_medium" mb="2px" mt="16px">
         Seleccione el criterio a añadir
       </Text>
-      <InputSelect options={criteria} placeholder="Seleccione tipo de criterio" mb="8px" />
-      <InputSelect options={criteria} placeholder="Seleccione valor" mb="8px" isDisabled/>
+      <InputSelect
+        options={criteria}
+        placeholder="Seleccione tipo de criterio"
+        mb="8px"
+      />
+      <InputSelect
+        options={criteria}
+        placeholder="Seleccione valor"
+        mb="8px"
+        isDisabled
+      />
       <Flex>
-        <Input placeholder="Escriba" /> <Button variant="filter_button" ml="8px" width="48px" maxWidth="48px" maxHeight="48px" height="48px" fontSize="20px">+</Button>
+        <Input placeholder="Escriba" />{" "}
+        <Button
+          variant="filter_button"
+          ml="8px"
+          width="48px"
+          maxWidth="48px"
+          maxHeight="48px"
+          height="48px"
+          fontSize="20px"
+        >
+          +
+        </Button>
       </Flex>
     </>
   )

@@ -1,5 +1,3 @@
-import { useDisclosure } from "@chakra-ui/react"
-import { NoteDrawer } from "../../drawer/NoteDrawer/NoteDrawer"
 import { Card } from "../../layout/Card/Card"
 import { MessageCardFooter } from "./MessageCardFooter/MessageCardFooter"
 import { MessageCardHeader } from "./MessageCardHeader/MessageCardHeader"
@@ -23,7 +21,11 @@ export const MessageCard = ({
 }) => {
   return (
     <Card bgColor="white" {...props}>
-      <MessageCardHeader isFavourite={isFavourite} title={title} onClick={onSeeDetails} />
+      <MessageCardHeader
+        isFavourite={isFavourite}
+        title={title}
+        onClick={onSeeDetails}
+      />
       <MessageCardInfo
         id={id}
         author={author}
