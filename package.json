@@ -7,10 +7,10 @@
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier --write src",
+    "prepare:husky": "husky install",
     "pre-commit": "next lint",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "prepare:husky": "husky install"
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.0",
