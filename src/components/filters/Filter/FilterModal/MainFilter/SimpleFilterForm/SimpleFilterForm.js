@@ -5,8 +5,6 @@ import { AddSelect } from "../../../../../forms/AddSelect/AddSelect"
 import { InputSelect } from "../../../../../forms/InputSelect/InputSelect"
 
 export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
-
-
   const filterInputs = {
     project: {
       type: "select",
@@ -150,7 +148,6 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
     checkbox: <Checkbox />,
     switch: <Switch />,
   }
-
 
   const handleFilterChange = (input, _value) => {
     onChange({

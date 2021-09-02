@@ -1,12 +1,12 @@
-import { ChevronRightIcon, CloseIcon, Icon } from '@chakra-ui/icons'
-import { Box } from '@chakra-ui/react'
-import React from 'react'
-import { MenuMobileIcon } from '../../icons/MenuMobileIcon'
+import { ChevronRightIcon, CloseIcon, Icon } from "@chakra-ui/icons"
+import { Box } from "@chakra-ui/react"
+import React from "react"
+import { MenuMobileIcon } from "../../icons/MenuMobileIcon"
 
-export const TabBarToggle = ({isOpen, onToggle}) => {
-    return (
-        <>
-        <Box
+export const TabBarToggle = ({ isOpen, onToggle }) => {
+  return (
+    <>
+      <Box
         display={["none", null, null, "flex"]}
         flexDir="column"
         justifyContent="center"
@@ -47,6 +47,6 @@ export const TabBarToggle = ({isOpen, onToggle}) => {
           <MenuMobileIcon width="33px" color="white" />
         )}
       </Box>
-      </>
-    )
+    </>
+  )
 }

@@ -74,7 +74,6 @@ export const ClientsTable = ({ items }) => {
       p="32px"
       pb="0"
       tableHeight={"calc(100vh - 190px)"}
-      
     />
   )
 }

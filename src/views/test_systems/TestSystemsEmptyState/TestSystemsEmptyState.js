@@ -18,7 +18,11 @@ export const TestSystemsEmptyState = ({ ...props }) => {
       >
         Importar
       </Button>
-      <Button display="flex" justifyContent="flex-start" leftIcon={<AddTestSystemIcon />}>
+      <Button
+        display="flex"
+        justifyContent="flex-start"
+        leftIcon={<AddTestSystemIcon />}
+      >
         Añadir sistema
       </Button>
     </Center>

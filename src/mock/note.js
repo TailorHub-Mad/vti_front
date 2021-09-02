@@ -35,5 +35,5 @@ export const NOTE_MOCK = {
     name: `${faker.lorem.word()}.pdf`,
   })),
   responses: new Array(faker.datatype.number(12)).fill("").map(generateResponse),
-  id: faker.datatype.uuid()
+  id: faker.datatype.uuid(),
 }

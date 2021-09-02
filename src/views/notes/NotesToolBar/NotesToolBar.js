@@ -12,7 +12,7 @@ export const NotesToolBar = () => {
   return (
     <>
       <Filter />
-      <Group/>
+      <Group />
       <InputGroup width="196px" marginRight="16px">
         <InputLeftElement
           pointerEvents="none"
