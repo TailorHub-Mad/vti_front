@@ -1,7 +1,8 @@
 {
   "extends": [
-    "eslint:recommended",
-    "next"
+    "next",
+    "prettier",
+    "eslint:recommended"
   ],
   "rules": {
     "react-hooks/rules-of-hooks": "off",
