@@ -5,15 +5,15 @@ export const Context = React.createContext()
 const reducer = (state, action) => {
   switch (action.type) {
     case "SET_ROLE": {
-      return { role: state.role }
+      return { ...state, role: state.role }
     }
 
     case "IS_LOGGED": {
-      return { logged: true }
+      return { ...state, logged: true }
     }
 
     case "LOG_OUT": {
-      return { logged: false }
+      return { ...state, logged: false }
     }
 
     default: {
@@ -28,5 +28,6 @@ export const ContextProvider = ({ children }) => {
     logged: false,
   })
   const value = { state, dispatch }
+
   return <Context.Provider value={value}>{children}</Context.Provider>
 }

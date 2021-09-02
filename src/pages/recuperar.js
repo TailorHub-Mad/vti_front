@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from "react"
 import { Context } from "../context"
 import { RecoverPassword } from "../views/auth/RecoverPassword/RecoverPassword"
 
-const recuperarContraseña = () => {
+const recuperar = () => {
   const router = useRouter()
   const {
     state: { logged },
@@ -17,4 +17,4 @@ const recuperarContraseña = () => {
   return <RecoverPassword />
 }
 
-export default recuperarContraseña
+export default recuperar

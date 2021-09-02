@@ -1,5 +1,6 @@
 import { Button, Center, Flex, Input, Text } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
+import { Context } from "../../../context"
 import { FormController } from "../../../components/forms/FormItemWrapper/FormController"
 import { LogoFull } from "../../../components/images/LogoFull/LogoFull"
 import { Card } from "../../../components/layout/Card/Card"
@@ -8,10 +9,13 @@ import useAuthApi from "../../../hooks/api/useAuthApi"
 import { ShowPassowrd, ForgotPassword } from "./Login.style"
 import { HideLineIcon } from "../../../components/icons/HideLineIcon"
 import { useRouter } from "next/dist/client/router"
+import { setSessioncookie } from "../../../utils/functions/cookies"
+import { checkFormIsEmpty } from "../../../utils/functions/forms"
 
 export const Login = () => {
   const { login } = useAuthApi()
   const router = useRouter()
+  const context = useContext(Context)
 
   const [hasError, setHasError] = useState(false)
   const [passwordInputType, setPasswordInputType] = useState("password")
@@ -19,7 +23,22 @@ export const Login = () => {
   const handleOnClickShowPassword = () =>
     setPasswordInputType(passwordInputType == "password" ? "text" : "password")
 
-  const handleOnClickForgotPassword = () => router.push("/recuperar-contraseña")
+  const handleOnClickForgotPassword = () => router.push("/recuperar")
+
+  const handleSubmit = async (values) => {
+    const response = await login({ ...values })
+
+    if (response.error) {
+      setTimeout(() => {
+        setHasError(false)
+      }, 3000)
+      return setHasError(true)
+    }
+
+    setSessioncookie(response.token)
+    context.dispatch({ type: "IS_LOGGED" })
+    router.push("/")
+  }
 
   return (
     <Center
@@ -41,20 +60,8 @@ export const Login = () => {
         <LogoFull width="163px" color="blue.500" mb="32px" />
         <Formik
           initialValues={{ email: "", password: "" }}
-          onSubmit={async (values, { setSubmitting, set }) => {
-            const { error, data } = await login({ ...values })
-
-            console.log(error)
-
-            if (error) {
-              setHasError(true)
-              setTimeout(() => {
-                setHasError(false)
-              }, 3000)
-            }
-
-            console.log(data)
-
+          onSubmit={(values, { setSubmitting }) => {
+            handleSubmit(values)
             setSubmitting(false)
           }}
         >
@@ -96,7 +103,11 @@ export const Login = () => {
                 </ShowPassowrd>
               </FormController>
               <Flex justifyContent="center">
-                <Button type="submit" isLoading={props.isSubmitting}>
+                <Button
+                  type="submit"
+                  isLoading={props.isSubmitting}
+                  disabled={checkFormIsEmpty(props.values)}
+                >
                   Entrar
                 </Button>
               </Flex>
