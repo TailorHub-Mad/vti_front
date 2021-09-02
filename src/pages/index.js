@@ -1,5 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { MessageCard } from "../components/cards/MessageCard/MessageCard"
 import { NotificationCard } from "../components/cards/NotificationCard/NotificationCard"
 import { AddSelect } from "../components/forms/AddSelect/AddSelect"
@@ -9,6 +9,7 @@ import { LogoFull } from "../components/images/LogoFull/LogoFull"
 import { Card } from "../components/layout/Card/Card"
 import { Page } from "../components/layout/Page/Page"
 import { Popup } from "../components/overlay/Popup/Popup"
+import { Context } from "../context"
 import useAuthApi from "../hooks/api/useAuthApi"
 import { MOCK_SELECT_OPTIONS } from "../mock/mock"
 import AuthService from "../services/auth.service"
@@ -31,6 +32,8 @@ const Index = () => {
   const [mockSelectValue, setMockSelectValue] = useState("")
   const [value, setValue] = useState("")
   const { health } = useAuthApi()
+  const { state } = useContext(Context)
+  console.log(state)
 
   useEffect(() => {
     const isHealth = async () => {
