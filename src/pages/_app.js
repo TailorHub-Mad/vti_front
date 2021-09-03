@@ -1,5 +1,4 @@
 import { ChakraProvider, ColorModeProvider } from "@chakra-ui/react"
-import { ContextProvider } from "../context"
 import ApiUserProvider from "../provider/ApiAuthProvider"
 import theme from "../theme/"
 
@@ -12,9 +11,7 @@ function MyApp({ Component, pageProps }) {
         }}
       >
         <ApiUserProvider>
-          <ContextProvider>
-            <Component {...pageProps} />
-          </ContextProvider>
+          <Component {...pageProps} />
         </ApiUserProvider>
       </ColorModeProvider>
     </ChakraProvider>

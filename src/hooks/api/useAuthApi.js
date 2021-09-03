@@ -6,11 +6,10 @@ const useAuthApi = () => {
 
   const authService = new AuthService(addError, removeError)
 
-  const health = (data) => authService.health(data)
   const login = (data) => authService.login(data)
   const me = () => authService.me()
 
-  return { health, login, me }
+  return { login, me }
 }
 
 export default useAuthApi
