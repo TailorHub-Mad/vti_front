@@ -7,23 +7,21 @@
 //   ::-webkit-scrollbar-corner addresses the (usually) bottom corner of the scrollable element, where two scrollbars might meet
 //   ::-webkit-resizer addresses the draggable resizing handle that appears above the scrollbar-corner at the bottom corner of some elements
 
-
 export const CUSTOM_SCROLLBAR = {
-  '&::-webkit-scrollbar': {
-    width: '8px',
-    height:"8px",
-    borderRadius:'8px',
+  "&::-webkit-scrollbar": {
+    width: "8px",
+    height: "8px",
+    borderRadius: "8px",
     backgroundColor: `transparent`,
   },
-  '&::-webkit-scrollbar-thumb': {
+  "&::-webkit-scrollbar-thumb": {
     backgroundColor: `blue.400`,
-    width: '8px',
-    borderRadius:'8px',
+    width: "8px",
+    borderRadius: "8px",
     border: "0px solid transparent",
     backgroundClip: "content-box",
   },
-  '&::-webkit-scrollbar-thumb:hover': {
+  "&::-webkit-scrollbar-thumb:hover": {
     backgroundColor: `blue.500`,
-  }
+  },
 }
-

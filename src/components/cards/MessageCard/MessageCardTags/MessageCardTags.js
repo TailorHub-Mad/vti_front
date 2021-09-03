@@ -1,7 +1,6 @@
 import { Box } from "@chakra-ui/react"
 import React from "react"
 import { TagRow } from "../../../layout/TagRow/TagRow"
-import { GeneralTag } from "../../../tags/GeneralTag/GeneralTag"
 
 export const MessageCardTags = ({ tags }) => {
   const getRemainingTags = (tags) => {
@@ -18,8 +17,14 @@ export const MessageCardTags = ({ tags }) => {
   }
 
   return (
-    <Box display="grid" gridRowGap="8px" gridTemplateRows="28px"gridTemplateColumns="100%" width="100%" >
-      {Object.entries(tags).map(([tagName, tags],idx) => (
+    <Box
+      display="grid"
+      gridRowGap="8px"
+      gridTemplateRows="28px"
+      gridTemplateColumns="100%"
+      width="100%"
+    >
+      {Object.entries(tags).map(([tagName, tags], idx) => (
         <TagRow
           key={`${tagName}${idx}`}
           tags={tags}

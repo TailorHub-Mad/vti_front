@@ -3,11 +3,11 @@ export const Checkbox = {
     filter: {
       container: {
         width: "fit-content",
-        alignItems:"center",
+        alignItems: "center",
       },
       label: {
         fontSize: "14px",
-        lineHeight:"normal"
+        lineHeight: "normal",
       },
     },
   },

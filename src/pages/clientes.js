@@ -1,6 +1,4 @@
-import { useState } from "react"
 import { Page } from "../components/layout/Page/Page"
-import { PageBody } from "../components/layout/PageBody/PageBody"
 import { PageHeader } from "../components/layout/PageHeader/PageHeader"
 import { LoadingTableSpinner } from "../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
 import { MOCK_CLIENTS_TABLE_DATA } from "../mock/clients_table"
@@ -18,12 +16,11 @@ const clientes = () => {
       <PageHeader title="Clientes">
         {areProjects && !isFetching ? <ClientsToolBar /> : null}
       </PageHeader>
-        {isFetching ? <LoadingTableSpinner /> : null}
-        {!areProjects ? <NotesEmptyState /> : null}
-        {areProjects && !isFetching ? (
-          <ClientsTable items={MOCK_CLIENTS_TABLE_DATA} />
-        ) : null}
-
+      {isFetching ? <LoadingTableSpinner /> : null}
+      {!areProjects ? <NotesEmptyState /> : null}
+      {areProjects && !isFetching ? (
+        <ClientsTable items={MOCK_CLIENTS_TABLE_DATA} />
+      ) : null}
     </Page>
   )
 }

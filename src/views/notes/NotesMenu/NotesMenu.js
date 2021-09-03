@@ -8,7 +8,6 @@ export const NotesMenu = ({
   activeItem = "favs",
   ...props
 }) => {
-
   const visibility_menu = {
     all: {
       label: "Todos",

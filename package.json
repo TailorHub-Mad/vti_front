@@ -6,6 +6,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "prettier": "prettier --write src",
+    "prepare:husky": "husky install",
     "pre-commit": "next lint",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -30,6 +32,7 @@
     "@babel/core": "^7.14.6",
     "@babel/eslint-parser": "^7.14.7",
     "@babel/eslint-plugin": "^7.14.5",
+    "@next/eslint-plugin-next": "^11.1.2",
     "@storybook/addon-actions": "^6.3.4",
     "@storybook/addon-essentials": "^6.3.4",
     "@storybook/addon-links": "^6.3.4",
@@ -37,6 +40,7 @@
     "babel-loader": "^8.2.2",
     "eslint": "^7.30.0",
     "eslint-config-next": "^11.0.1",
+    "eslint-config-prettier": "^8.3.0",
     "husky": "^7.0.1",
     "lint-staged": ">=10",
     "prettier": "^2.3.2"

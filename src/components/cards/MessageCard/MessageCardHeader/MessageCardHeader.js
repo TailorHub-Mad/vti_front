@@ -1,13 +1,11 @@
 import { DeleteIcon } from "@chakra-ui/icons"
-import { Box, Flex, Text, useOutsideClick } from "@chakra-ui/react"
-import React, { useRef, useState } from "react"
+import { Box, Flex, Text } from "@chakra-ui/react"
+import React, { useState } from "react"
 import { ICONS_PROPS_16 } from "../../../../utils/constants/icons_props"
 import { HeartIcon } from "../../../icons/HeartIcon"
 import { OptionsIcon } from "../../../icons/OptionsIcon"
 import { OptionsMenu } from "../../../navigation/OptionsMenu/OptionsMenu"
 import { OptionsMenuItem } from "../../../navigation/OptionsMenu/OptionsMenuItem/OptionsMenuItem"
-
-
 
 export const MessageCardHeader = ({ isFavourite, title, onClick, ...props }) => {
   const [showOptions, setShowOptions] = useState(false)

@@ -2,7 +2,6 @@ import { Box } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { TabBar } from "../../navigation/TabBar/TabBar"
 import Meta from "../Meta/Meta"
-import { PageHeader } from "../PageHeader/PageHeader"
 
 export const Page = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true)

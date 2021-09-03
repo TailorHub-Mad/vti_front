@@ -1,4 +1,4 @@
-import { Flex, Tag, Text } from "@chakra-ui/react"
+import { Flex } from "@chakra-ui/react"
 import React from "react"
 import { GeneralTag } from "../GeneralTag/GeneralTag"
 
@@ -25,7 +25,13 @@ export const TagGroup = ({ tagsArr, variant, max, ...props }) => {
           </GeneralTag>
         )
       })}
-      <GeneralTag variant={variant} {...props} width="32px" marginRight="4px" justifyContent="center">
+      <GeneralTag
+        variant={variant}
+        {...props}
+        width="32px"
+        marginRight="4px"
+        justifyContent="center"
+      >
         {`+${tagsArr?.length - max}`}
       </GeneralTag>
     </Flex>

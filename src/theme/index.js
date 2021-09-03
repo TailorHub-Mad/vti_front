@@ -28,7 +28,7 @@ const theme = extendTheme({
     IconButton,
     Icon,
     Checkbox,
-    Switch
+    Switch,
   },
   icons,
 })

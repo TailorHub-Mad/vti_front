@@ -1,6 +1,5 @@
 import { Button, Center, Flex, Input, Text } from "@chakra-ui/react"
 import React, { useContext, useState } from "react"
-import { Context } from "../../../context"
 import { FormController } from "../../../components/forms/FormItemWrapper/FormController"
 import { LogoFull } from "../../../components/images/LogoFull/LogoFull"
 import { Card } from "../../../components/layout/Card/Card"
@@ -11,11 +10,12 @@ import { HideLineIcon } from "../../../components/icons/HideLineIcon"
 import { useRouter } from "next/dist/client/router"
 import { setSessioncookie } from "../../../utils/functions/cookies"
 import { checkFormIsEmpty } from "../../../utils/functions/forms"
+import { ApiUserContext } from "../../../provider/ApiAuthProvider"
 
 export const Login = () => {
   const { login } = useAuthApi()
   const router = useRouter()
-  const context = useContext(Context)
+  const { setRole, setIsLoggedIn } = useContext(ApiUserContext)
 
   const [hasError, setHasError] = useState(false)
   const [passwordInputType, setPasswordInputType] = useState("password")
@@ -35,8 +35,12 @@ export const Login = () => {
       return setHasError(true)
     }
 
-    setSessioncookie(response.token)
-    context.dispatch({ type: "IS_LOGGED" })
+    const { token, role } = response
+
+    setRole(role)
+    setIsLoggedIn(true)
+    setSessioncookie(token)
+
     router.push("/")
   }
 

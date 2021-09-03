@@ -3,10 +3,13 @@ import useApiError from "../useApiError"
 
 const useAuthApi = () => {
   const { addError, removeError } = useApiError()
+
   const authService = new AuthService(addError, removeError)
-  const health = (data) => authService.health(data)
+
   const login = (data) => authService.login(data)
-  return { health, login }
+  const me = () => authService.me()
+
+  return { login, me }
 }
 
 export default useAuthApi

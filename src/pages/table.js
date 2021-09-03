@@ -12,8 +12,7 @@ import { getPercentage } from "../utils/functions/common"
 import { NotesEmptyState } from "../views/notes/NotesEmptyState/NotesEmptyState"
 import { NotesMenu } from "../views/notes/NotesMenu/NotesMenu"
 import { NotesToolBar } from "../views/notes/NotesToolBar/NotesToolBar"
-
-const { Text, Checkbox, Center, Spinner } = require("@chakra-ui/react")
+import { Text, Checkbox, Center, Spinner } from "@chakra-ui/reac"
 
 const projects = () => {
   const [selectedRows, setSelectedRows] = useState([])
@@ -137,7 +136,7 @@ const projects = () => {
             <Spinner size="xl" color="blue.500" />
           </Center>
         ) : null}
-        {!areNotes ? <NotesEmptyState  /> : null}
+        {!areNotes ? <NotesEmptyState /> : null}
         {areNotes && !isFetching ? (
           <Table
             config={user_table}

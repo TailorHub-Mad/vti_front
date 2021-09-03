@@ -1,22 +1,14 @@
 import { Button, Center, Flex, Input, Text } from "@chakra-ui/react"
-import React, { useContext, useState } from "react"
-import { Context } from "../../../context"
+import React, { useState } from "react"
 import { FormController } from "../../../components/forms/FormItemWrapper/FormController"
 import { LogoFull } from "../../../components/images/LogoFull/LogoFull"
 import { Card } from "../../../components/layout/Card/Card"
 import { Formik } from "formik"
-import useAuthApi from "../../../hooks/api/useAuthApi"
-import { HideLineIcon } from "../../../components/icons/HideLineIcon"
-import { useRouter } from "next/dist/client/router"
-import { setSessioncookie } from "../../../utils/functions/cookies"
+
 import { checkFormIsEmpty } from "../../../utils/functions/forms"
 
 export const RecoverPassword = () => {
-  // const { login } = useAuthApi()
-  // const router = useRouter()
-  // const context = useContext(Context)
-
-  const [hasError, setHasError] = useState(false)
+  const [hasError, _] = useState(false)
 
   const handleSubmit = async (values) => {
     //TODO API function

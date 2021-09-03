@@ -66,7 +66,14 @@ export const GroupModal = ({ isOpen, onClose, onGroup, ...props }) => {
                 </Flex>
               ))}
             </RadioGroup>
-            <Button onClick={()=>onGroup()} display="block" margin="0 auto"  mt="32px" >Agrupar</Button>
+            <Button
+              onClick={() => onGroup()}
+              display="block"
+              margin="0 auto"
+              mt="32px"
+            >
+              Agrupar
+            </Button>
           </Box>
         </ScaleFade>
       </CustomModalContent>

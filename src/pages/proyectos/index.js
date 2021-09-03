@@ -1,6 +1,4 @@
-import { useState } from "react"
 import { Page } from "../../components/layout/Page/Page"
-import { PageBody } from "../../components/layout/PageBody/PageBody"
 import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
 import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
 import { MOCK_TABLE_DATA } from "../../mock/projects_table"

@@ -65,13 +65,15 @@ export const MainFilter = ({
             <Box m="16px 0">
               <Text color="grey">No hay filtros guardados para recordar</Text>
             </Box>
-            <AdvancedFilter  />
+            <AdvancedFilter />
           </TabPanel>
         </TabPanels>
       </Tabs>
 
       <Flex justifyContent="space-between">
-        <Button variant="secondary" onClick={openSaveModal}>Recordar</Button>
+        <Button variant="secondary" onClick={openSaveModal}>
+          Recordar
+        </Button>
         <Button>Filtrar</Button>
       </Flex>
     </Box>

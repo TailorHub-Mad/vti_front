@@ -1,5 +1,5 @@
 import { ChakraProvider, ColorModeProvider } from "@chakra-ui/react"
-import { Context, ContextProvider } from "../context"
+import ApiUserProvider from "../provider/ApiAuthProvider"
 import theme from "../theme/"
 
 function MyApp({ Component, pageProps }) {
@@ -10,9 +10,9 @@ function MyApp({ Component, pageProps }) {
           useSystemColorMode: true,
         }}
       >
-        <ContextProvider>
+        <ApiUserProvider>
           <Component {...pageProps} />
-        </ContextProvider>
+        </ApiUserProvider>
       </ColorModeProvider>
     </ChakraProvider>
   )
