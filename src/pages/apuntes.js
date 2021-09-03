@@ -1,4 +1,4 @@
-import { Center, Grid, Spinner, Text } from "@chakra-ui/react"
+import { Grid } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { MessageCard } from "../components/cards/MessageCard/MessageCard"
 import { NoteDrawer } from "../components/drawer/NoteDrawer/NoteDrawer"

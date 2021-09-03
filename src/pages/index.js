@@ -1,6 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons"
-import { useEffect, useState } from "react"
-import { MessageCard } from "../components/cards/MessageCard/MessageCard"
+import { useContext, useState } from "react"
 import { NotificationCard } from "../components/cards/NotificationCard/NotificationCard"
 import { AddSelect } from "../components/forms/AddSelect/AddSelect"
 import { FormController } from "../components/forms/FormItemWrapper/FormController"
@@ -9,11 +8,9 @@ import { LogoFull } from "../components/images/LogoFull/LogoFull"
 import { Card } from "../components/layout/Card/Card"
 import { Page } from "../components/layout/Page/Page"
 import { Popup } from "../components/overlay/Popup/Popup"
-import useAuthApi from "../hooks/api/useAuthApi"
 import { MOCK_SELECT_OPTIONS } from "../mock/mock"
-import AuthService from "../services/auth.service"
-
-const {
+import { ApiUserContext } from "../provider/ApiAuthProvider"
+import {
   Text,
   Box,
   Input,
@@ -25,21 +22,17 @@ const {
   RadioGroup,
   Stack,
   Radio,
-} = require("@chakra-ui/react")
+} from "@chakra-ui/react"
 
 const Index = () => {
+  const { isLoggedIn } = useContext(ApiUserContext)
+
   const [mockSelectValue, setMockSelectValue] = useState("")
   const [value, setValue] = useState("")
-  const { health } = useAuthApi()
 
-  useEffect(() => {
-    const isHealth = async () => {
-      const healthy = await health()
-      console.log("API STATUS", healthy)
-    }
-    isHealth()
-  }, [])
-  return (
+  return !isLoggedIn ? (
+    <>Loading...</>
+  ) : (
     <Page>
       <Box maxWidth="600px" width="100%" marginBottom="32px">
         <LogoFull color="blue.500" />
@@ -103,7 +96,7 @@ const Index = () => {
           label="Tag de proyecto"
           helper="Si necesitas ayuda contacta con nosotros"
           marginTop="24px"
-          onHelperClick={() => console.log("Helper click")}
+          onHelperClick={() => {}}
         >
           <InputSelect
             value={mockSelectValue}
@@ -116,11 +109,11 @@ const Index = () => {
           label="Tags de proyecto"
           helper="Si necesitas ayuda contacta con nosotros"
           marginTop="24px"
-          onHelperClick={() => console.log("Helper click")}
+          onHelperClick={() => {}}
         >
           <AddSelect
             value={[]}
-            onChange={() => console.log("ha cambiado")}
+            onChange={() => {}}
             placeholder="Introduce tags"
             options={MOCK_SELECT_OPTIONS}
           />

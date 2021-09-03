@@ -23,8 +23,6 @@ const clientes = () => {
     fetchClients()
   }, [])
 
-  console.log(clients)
-
   return (
     <Page>
       <PageHeader title="Clientes">

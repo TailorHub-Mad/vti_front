@@ -1,23 +1,27 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from "react"
 
 export const ApiErrorContext = React.createContext({
   error: null,
   addError: () => {},
   removeError: () => {},
-});
+})
 
 export default function ApiErrorProvider({ children }) {
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null)
 
-  const removeError = () => setError(null);
+  const removeError = () => setError(null)
 
-  const addError = (message) => setError(message);
+  const addError = (message) => setError(message)
 
   const contextValue = {
     error,
     addError: useCallback((message, status) => addError(message, status), []),
     removeError: useCallback(() => removeError(), []),
-  };
+  }
 
-  return <ApiErrorContext.Provider value={contextValue}>{children}</ApiErrorContext.Provider>;
+  return (
+    <ApiErrorContext.Provider value={contextValue}>
+      {children}
+    </ApiErrorContext.Provider>
+  )
 }

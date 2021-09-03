@@ -22,7 +22,7 @@ export const TagCard = ({
       p="16px"
       {...props}
     >
-      <TagCardHeader title={name} parentTag={parentTag} category={category}/>
+      <TagCardHeader title={name} parentTag={parentTag} category={category} />
 
       <TagCardTags projects={projects} relatedTags={relatedTags} />
       <Flex justify="space-between">

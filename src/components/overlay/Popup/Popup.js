@@ -1,13 +1,10 @@
 import {
   Button,
-  Image,
   Img,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
-  ModalHeader,
   ModalOverlay,
   Text,
 } from "@chakra-ui/react"
@@ -16,10 +13,10 @@ import React from "react"
 export const Popup = ({
   isOpen,
   onClose,
-  textBody,
+  // textBody,
   color,
-  textButtonPrimary,
-  textButtonSecondary,
+  // textButtonPrimary,
+  // textButtonSecondary,
   variant = "twoButtons",
   children,
   ...props

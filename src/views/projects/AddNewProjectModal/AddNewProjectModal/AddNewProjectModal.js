@@ -57,7 +57,7 @@ export const AddNewProjectModal = ({
             />
             <AddNewProjectForm
               value={formValues}
-              openAuxModal={()=>setShowSecondaryContent(true)}
+              openAuxModal={() => setShowSecondaryContent(true)}
               onChange={(val) => setFormValues(val)}
             />
           </Box>

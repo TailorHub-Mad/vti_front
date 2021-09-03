@@ -5,7 +5,7 @@ import { PageBody } from "../../../../components/layout/PageBody/PageBody"
 import { NOTES_MOCK } from "../../../../mock/notes"
 import { NotesToolBar } from "../../NotesToolBar/NotesToolBar"
 
-export const ProjectNotes = ({ notes = [] , showNoteDetails,}) => {
+export const ProjectNotes = ({ notes = [], showNoteDetails }) => {
   //TODO pasar notes por props
   return (
     <>

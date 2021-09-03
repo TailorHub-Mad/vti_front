@@ -57,5 +57,5 @@ export const ICONS_REFERENCE = {
   subscribe_line: SubscribeLineIcon,
   tag_line: TagLineIcon,
   tag_link: TagLinkIcon,
-  users_line: UsersLineIcon
+  users_line: UsersLineIcon,
 }

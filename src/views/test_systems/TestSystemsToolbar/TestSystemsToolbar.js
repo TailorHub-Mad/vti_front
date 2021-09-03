@@ -6,12 +6,12 @@ import { Filter } from "../../../components/filters/Filter/Filter"
 import { Group } from "../../../components/grouping/Group/Group"
 import { AddTestSystemIcon } from "../../../components/icons/AddTestSystemIcon"
 import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
-import { Context } from "../../../context"
+import { ApiUserContext } from "../../../provider/ApiAuthProvider"
 
 export const TestSystemsToolbar = () => {
   const {
     state: { role },
-  } = useContext(Context)
+  } = useContext(ApiUserContext)
 
   return (
     <>
@@ -28,7 +28,7 @@ export const TestSystemsToolbar = () => {
           variant="white"
         />
       </InputGroup>
-      {role === "ADMIN" && (
+      {role === "admin" && (
         <>
           <Button variant="icon_only_secondary" marginRight="16px">
             <UploadCloudIcon />

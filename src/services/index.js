@@ -1,5 +1,5 @@
 import axios from "axios"
-import { parseCookies } from "nookies"
+import { getSessioncookie } from "../utils/functions/cookies"
 // import { setRefreshCookie, setSessioncookie } from "../utils/functions/cookies"
 
 // const instance = axios.create({
@@ -12,13 +12,15 @@ const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 })
 
-// instance.interceptors.request.use(async (config) => {
-//   const token = await firebase.auth().currentUser?.getIdToken();
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// });
+instance.interceptors.request.use(async (config) => {
+  const { vti: token } = getSessioncookie()
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+
+  return config
+})
 
 // instance.interceptors.response.use(undefined, (error) => new Promise(async (resolve, reject) => {
 //   if (error.response && error.response.status === 401) {
@@ -35,22 +37,24 @@ const instance = axios.create({
 
 class ServiceConstructor {
   constructor(errorHandler, removeError) {
-    this.instance = instance;
-    this.errorHandler = errorHandler;
-    this.removeError = removeError;
+    this.instance = instance
+    this.errorHandler = errorHandler
+    this.removeError = removeError
   }
 
   makeRequest = async (request, validate) => {
     try {
-      typeof validate === 'function' && validate();
-      this.removeError();
-      const response = await request;
-      return response.data;
+      typeof validate === "function" && validate()
+      this.removeError()
+      const response = await request
+      return response.data
     } catch (e) {
-      this.errorHandler(e.response?.data?.details ? e.response.data.details[0]?.message : e?.message);
-      return { error: true };
+      this.errorHandler(
+        e.response?.data?.details ? e.response.data.details[0]?.message : e?.message
+      )
+      return { error: true }
     }
-  };
+  }
 }
 
-export default ServiceConstructor;
+export default ServiceConstructor

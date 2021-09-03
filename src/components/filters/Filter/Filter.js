@@ -3,9 +3,8 @@ import React from "react"
 import { FilterIcon } from "../../icons/FilterIcon"
 import { FilterModal } from "./FilterModal/FilterModal"
 
-export const Filter = ({ ...props }) => {
+export const Filter = () => {
   const { isOpen, onClose, onOpen } = useDisclosure()
-
 
   return (
     <>

@@ -1,7 +1,7 @@
 export const MOCK_TABLE_DATA = new Array(30).fill({
   actions: "",
   id: "ID001",
-  alias: {label: "US001", link: "ALIAS01R"},
+  alias: { label: "US001", link: "ALIAS01R" },
   sector: "Aeroespacial",
   punto_focal: "Fernando gómez",
   sistemas_ensayo: ["Sistema2", "Sistema2", "Sistema2", "Sistema2", "Sistema2"],

@@ -1,5 +1,4 @@
 import { Page } from "../components/layout/Page/Page"
-import { PageBody } from "../components/layout/PageBody/PageBody"
 import { PageHeader } from "../components/layout/PageHeader/PageHeader"
 import { LoadingTableSpinner } from "../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
 import { MOCK_TEST_SYSTEM_TABLE } from "../mock/test_system_table"
@@ -18,11 +17,11 @@ const sistemas = () => {
       <PageHeader title="Sistemas de ensayo">
         {areSystems && !isFetching ? <TestSystemsToolbar /> : null}
       </PageHeader>
-        {isFetching ? <LoadingTableSpinner /> : null}
-        {!areSystems ? <TestSystemsEmptyState /> : null}
-        {areSystems && !isFetching ? (
-          <TestSystemsTable items={MOCK_TEST_SYSTEM_TABLE} />
-        ) : null}
+      {isFetching ? <LoadingTableSpinner /> : null}
+      {!areSystems ? <TestSystemsEmptyState /> : null}
+      {areSystems && !isFetching ? (
+        <TestSystemsTable items={MOCK_TEST_SYSTEM_TABLE} />
+      ) : null}
     </Page>
   )
 }

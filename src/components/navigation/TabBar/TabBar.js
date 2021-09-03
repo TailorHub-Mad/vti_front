@@ -1,6 +1,6 @@
-import { Box, Flex, Text } from "@chakra-ui/react"
+import { Box, Flex } from "@chakra-ui/react"
 import React, { useContext } from "react"
-import { Context } from "../../../context"
+import { ApiUserContext } from "../../../provider/ApiAuthProvider"
 import {
   TABBAR_ADMIN_LINKS,
   TABBAR_USER_LINKS,
@@ -11,12 +11,10 @@ import { TabBarMenu } from "../TabBarMenu/TabBarMenu"
 import { TabBarToggle } from "../TabBarToggle/TabBarToggle"
 
 export const TabBar = ({ isOpen, setIsOpen, areActiveNotifications = true }) => {
-  const {
-    state: { role },
-  } = useContext(Context)
+  const { role } = useContext(ApiUserContext)
 
   const onToggle = () => setIsOpen(!isOpen)
-  const navMenuItems = role === "ADMIN" ? TABBAR_ADMIN_LINKS : TABBAR_USER_LINKS
+  const navMenuItems = role === "admin" ? TABBAR_ADMIN_LINKS : TABBAR_USER_LINKS
   return (
     <>
       <TabBarToggle onToggle={onToggle} isOpen={isOpen} />

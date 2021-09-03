@@ -7,9 +7,9 @@ import { InputSelect } from "../InputSelect/InputSelect"
 //TODO los botones de añadir y eliminar items podrían ser una variant de Button "aux"
 export const AddSelect = ({
   value,
-  name,
+  // name,
   placeholder,
-  errors,
+  // errors,
   onChange,
   addItemLabel,
   deleteItemLabel,
@@ -25,7 +25,7 @@ export const AddSelect = ({
       (option) => option.value === current || !values.includes(option.value)
     )
 
-  const error = errors && errors[name]?.type
+  // const error = errors && errors[name]?.type
 
   const handleChange = (option, idx) => {
     const nextOptions = [...values]
@@ -38,7 +38,12 @@ export const AddSelect = ({
   }, [values])
 
   return (
-    <FormController label={label} onHelperClick={onHelperClick} isDisabled={isDisabled} {...props}>
+    <FormController
+      label={label}
+      onHelperClick={onHelperClick}
+      isDisabled={isDisabled}
+      {...props}
+    >
       <Box>
         {values.map((val, idx) => (
           <Box key={`${val}-${idx}`} marginBottom="16px">

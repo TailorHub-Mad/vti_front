@@ -10,11 +10,11 @@ export const Input = {
         borderColor: "light_grey",
         fontSize: ["16px", "17px"],
         lineHeight: ["21px", "18.70px"],
-        _disabled:{
-          _hover:{
+        _disabled: {
+          _hover: {
             borderColor: "light_grey",
           },
-          opacity: 0.6
+          opacity: 0.6,
         },
         _focus: {
           borderColor: "blue.500",

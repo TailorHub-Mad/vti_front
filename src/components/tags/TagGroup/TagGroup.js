@@ -1,4 +1,4 @@
-import { Flex, Tag, Text } from "@chakra-ui/react"
+import { Flex } from "@chakra-ui/react"
 import React from "react"
 import { GeneralTag } from "../GeneralTag/GeneralTag"
 
@@ -17,7 +17,6 @@ export const TagGroup = ({ tagsArr, variant, max, ...props }) => {
     )
   }
   const remaining = [...tagsArr].slice(max)?.length
-  console.log("REMAINING", tagsArr, remaining)
   return (
     <Flex width="100%" maxWidth="100%">
       {[...tagsArr].slice(0, max).map((tag) => {

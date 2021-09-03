@@ -1,32 +1,45 @@
-import {
-  Box,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Text,
-  Tooltip,
-} from "@chakra-ui/react"
+import { Box, FormControl, FormLabel, Text, Tooltip } from "@chakra-ui/react"
 import React from "react"
 import { HelpDarkIcon } from "../../icons/HelpDarkIcon"
 
-export const FormController = ({ label, error, helper, children, onHelperClick, ...props }) => {
+export const FormController = ({
+  label,
+  error,
+  helper,
+  children,
+  onHelperClick,
+  ...props
+}) => {
   //TODO helper y ventana de apoyo
   return (
     <FormControl {...props}>
       {label ? (
         <Box display="flex" alignItems="center">
-          <FormLabel margin="0" marginRight="4px" display="flex" alignItems="center">
+          <FormLabel
+            margin="0"
+            marginRight="4px"
+            display="flex"
+            alignItems="center"
+            color={error ? "#F95C5C" : "#052E57"}
+          >
             {label}
           </FormLabel>
           {helper && (
-            <Tooltip hasArrow label={helper} bg="blue.500" borderRadius="2px" padding="8px" placement="top">
+            <Tooltip
+              hasArrow
+              label={helper}
+              bg="blue.500"
+              borderRadius="2px"
+              padding="8px"
+              placement="top"
+            >
               <span>
                 <HelpDarkIcon
                   width="24px"
                   height="24px"
                   marginBottom="4px"
                   cursor="pointer"
-                  onClick={()=> onHelperClick && onHelperClick()}
+                  onClick={() => onHelperClick && onHelperClick()}
                 />
               </span>
             </Tooltip>

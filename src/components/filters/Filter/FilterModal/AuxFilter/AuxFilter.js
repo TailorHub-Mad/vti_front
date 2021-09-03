@@ -1,4 +1,3 @@
-import { ArrowDownIcon } from "@chakra-ui/icons"
 import {
   Accordion,
   AccordionButton,
@@ -21,7 +20,7 @@ import { TestSystemTag } from "../../../../tags/TestSystemTag/TestSystemTag"
 export const AuxFilter = ({ onClose, ...props }) => {
   const project_tags = new Array(80)
     .fill("")
-    .map((_) => faker.lorem.word().toUpperCase())
+    .map(() => faker.lorem.word().toUpperCase())
 
   return (
     <Box
@@ -41,7 +40,7 @@ export const AuxFilter = ({ onClose, ...props }) => {
           <ProjectsIcon mr="2px" />
           <Text variant="d_s_medium">Proyectos</Text>
         </Flex>
-        <Accordion allowToggle allowMultiple >
+        <Accordion allowToggle allowMultiple>
           {Object.entries(sortAlphabetic(project_tags)).map(([name, group]) => (
             <AccordionItem key={name} border="0px" bg="transparent" pb={"8px"}>
               {({ isExpanded }) => (

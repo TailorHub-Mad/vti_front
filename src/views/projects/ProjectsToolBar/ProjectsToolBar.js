@@ -5,13 +5,13 @@ import React, { useContext } from "react"
 import { Filter } from "../../../components/filters/Filter/Filter"
 import { Group } from "../../../components/grouping/Group/Group"
 import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
-import { Context } from "../../../context"
+import { ApiUserContext } from "../../../provider/ApiAuthProvider"
 import { AddNewProject } from "../AddNewProjectModal/AddNewProject"
 
 export const ProjectsToolBar = () => {
   const {
     state: { role },
-  } = useContext(Context)
+  } = useContext(ApiUserContext)
 
   return (
     <>
@@ -29,7 +29,7 @@ export const ProjectsToolBar = () => {
         />
       </InputGroup>
 
-      {role === "ADMIN" && (
+      {role === "admin" && (
         <>
           <Button variant="icon_only_secondary" marginRight="16px">
             <UploadCloudIcon />

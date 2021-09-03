@@ -1,7 +1,7 @@
 import { Icon } from "@chakra-ui/icons"
 import React from "react"
 
-export const MachineLineIcon = (props) => {
+export const MachineLineIcon = () => {
   return (
     <Icon
       width="24px"

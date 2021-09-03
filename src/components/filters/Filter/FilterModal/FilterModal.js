@@ -1,8 +1,4 @@
-import {
-  ScaleFade,
-  Modal,
-  ModalOverlay,
-} from "@chakra-ui/react"
+import { ScaleFade, Modal, ModalOverlay } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { AuxFilter } from "./AuxFilter/AuxFilter"
 import { MainFilter } from "./MainFilter/MainFilter"
@@ -13,13 +9,13 @@ import { CustomModalContent } from "../../../overlay/modal/CustomModalContent/Cu
 export const FilterModal = ({
   isOpen,
   onClose,
-  textBody,
-  color,
-  title,
-  childen,
+  // textBody,
+  // color,
+  // title,
+  // childen,
   ...props
 }) => {
-  const [showMainContent, setShowMainContent] = useState(true)
+  const [showMainContent] = useState(true)
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [showAuxContent, setShowAuxContent] = useState(false)
   const [showSaveFilter, setShowSaveFilter] = useState(false)
