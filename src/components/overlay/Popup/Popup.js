@@ -21,6 +21,7 @@ export const Popup = ({
   textButtonPrimary,
   textButtonSecondary,
   variant = "twoButtons",
+  children,
   ...props
 }) => {
   return (
@@ -38,14 +39,14 @@ export const Popup = ({
         {/* <ModalCloseButton /> */}
         <ModalBody padding="0 24px">
           <Text textAlign="center" color={color}>
-            ¿Estás seguro de que deseas cerrar sesión?
+            {children}
           </Text>
         </ModalBody>
         {variant === "info" && (
           <Img
             pos="absolute"
-            right={["20px",null,null,"40px"]}
-            top={["-70px",null,null,"-100px"]}
+            right={["20px", null, null, "40px"]}
+            top={["-70px", null, null, "-100px"]}
             src="/images/illustrations/girl_sit.svg"
             w={["68px", null, null, "auto"]}
             h="auto"

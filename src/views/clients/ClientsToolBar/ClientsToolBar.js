@@ -2,8 +2,8 @@
 import { SearchIcon } from "@chakra-ui/icons"
 import { Button, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
 import React from "react"
-import { AddClientIcon } from "../../../components/icons/AddClientIcon"
 import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
+import { NewClient } from "./NewClient/NewClient"
 
 export const ClientsToolBar = () => {
   return (
@@ -22,10 +22,7 @@ export const ClientsToolBar = () => {
       <Button variant="icon_only_secondary" marginRight="16px">
         <UploadCloudIcon />
       </Button>
-      <Button>
-        <AddClientIcon marginRight="8px" />
-        Añadir cliente
-      </Button>
+      <NewClient/>
     </>
   )
 }

@@ -107,6 +107,16 @@ export const Button = {
         pointerEvents: "none",
       },
     },
+    text_only: {
+      fontFamily: "Noway-Regular",
+      fontSize: "14px",
+      border: "none",
+      bgColor: "transparent",
+      color: "blue.500",
+      width: "fit-content",
+      margin: "0 auto",
+      display:"block"
+    },
   },
   defaultProps: {
     variant: "primary",

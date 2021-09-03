@@ -125,7 +125,7 @@ const Index = () => {
             options={MOCK_SELECT_OPTIONS}
           />
         </FormController>
-        <Popup isOpen={false} variant="info" />
+        <Popup isOpen={true} variant="info" />
         <Box display="grid" gridGap="8px" margin="32px 0" gridTemplateColumns="auto">
           <Button isDisabled>Registrar proyecto</Button>
           <Button>Registrar proyecto</Button>
