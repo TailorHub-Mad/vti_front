@@ -3,7 +3,6 @@ import { Table } from "../../../components/tables/Table/Table"
 import { TableOptionsMenu } from "../../../components/tables/TableOptionsMenu/TableOptionsMenu"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
-import { MOCK_TEST_SYSTEM_TABLE } from "../../../mock/test_system_table"
 
 export const TestSystemsTable = ({ items, ...props }) => {
   const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
@@ -75,7 +74,7 @@ export const TestSystemsTable = ({ items, ...props }) => {
         </Flex>
       }
       config={test_systems_table}
-      content={MOCK_TEST_SYSTEM_TABLE}
+      content={items}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
       tableHeight="calc(100vh - 190px)"

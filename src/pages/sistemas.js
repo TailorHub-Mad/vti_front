@@ -1,27 +1,36 @@
+import { useContext } from "react"
 import { Page } from "../components/layout/Page/Page"
 import { PageHeader } from "../components/layout/PageHeader/PageHeader"
 import { LoadingTableSpinner } from "../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
-import { MOCK_TEST_SYSTEM_TABLE } from "../mock/test_system_table"
+import { ApiUserContext } from "../provider/ApiAuthProvider"
 import { TestSystemsEmptyState } from "../views/test_systems/TestSystemsEmptyState/TestSystemsEmptyState"
 import { TestSystemsTable } from "../views/test_systems/TestSystemsTable/TestSystemsTable"
 import { TestSystemsToolbar } from "../views/test_systems/TestSystemsToolbar/TestSystemsToolbar"
+import useSystemApi from "../hooks/api/useSystemsApi"
+import useFetchSWR from "../hooks/useFetchSWR"
 
 const sistemas = () => {
-  const isFetching = false
-  const test_systems = new Array(50).fill("")
-  const areSystems = test_systems && test_systems.length > 0
-  //TODO Fetch de la lista de sistemas, gestion de la carga y pasarlo a la tabla por props
+  const { isLoggedIn } = useContext(ApiUserContext)
+  const { systems } = useSystemApi()
 
-  return (
+  const { data, error, isLoadingSlow } = useFetchSWR("systems/", systems)
+
+  if (error) return <>ERROR...</>
+
+  const emptyData = !data ?? data[0].testSystem.length > 0
+
+  return !isLoggedIn ? (
+    <>Loading...</>
+  ) : (
     <Page>
       <PageHeader title="Sistemas de ensayo">
-        {areSystems && !isFetching ? <TestSystemsToolbar /> : null}
+        {!isLoadingSlow && !emptyData && <TestSystemsToolbar />}
       </PageHeader>
-      {isFetching ? <LoadingTableSpinner /> : null}
-      {!areSystems ? <TestSystemsEmptyState /> : null}
-      {areSystems && !isFetching ? (
-        <TestSystemsTable items={MOCK_TEST_SYSTEM_TABLE} />
-      ) : null}
+      {isLoadingSlow && <LoadingTableSpinner />}
+      {data && emptyData && <TestSystemsEmptyState />}
+      {!isLoadingSlow && !emptyData && (
+        <TestSystemsTable items={data[0].testSystem} />
+      )}
     </Page>
   )
 }

@@ -9,9 +9,7 @@ import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
 import { ApiUserContext } from "../../../provider/ApiAuthProvider"
 
 export const TestSystemsToolbar = () => {
-  const {
-    state: { role },
-  } = useContext(ApiUserContext)
+  const { role } = useContext(ApiUserContext)
 
   return (
     <>
