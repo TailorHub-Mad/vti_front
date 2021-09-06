@@ -8,7 +8,7 @@ import { AddTestSystemIcon } from "../../../components/icons/AddTestSystemIcon"
 import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
 import { ApiUserContext } from "../../../provider/ApiAuthProvider"
 
-export const TestSystemsToolbar = () => {
+export const TestSystemsToolbar = ({ onAddTestSystem, onSearch }) => {
   const { role } = useContext(ApiUserContext)
 
   return (
@@ -24,6 +24,7 @@ export const TestSystemsToolbar = () => {
           placeholder="Busque por ID, código"
           paddingLeft="40px"
           variant="white"
+          onChange={(e) => onSearch(e.target.value)}
         />
       </InputGroup>
       {role === "admin" && (
@@ -31,7 +32,7 @@ export const TestSystemsToolbar = () => {
           <Button variant="icon_only_secondary" marginRight="16px">
             <UploadCloudIcon />
           </Button>
-          <Button>
+          <Button onClick={onAddTestSystem}>
             <AddTestSystemIcon marginRight="8px" />
             Añadir sistema
           </Button>
