@@ -1,22 +1,30 @@
-import { Checkbox, Flex, Text } from "@chakra-ui/react"
+import { Checkbox, Text } from "@chakra-ui/react"
+import { useMemo, useState } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableOptionsMenu } from "../../../components/tables/TableOptionsMenu/TableOptionsMenu"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
+import { TestSystemTableHeader } from "../TestSystemsTableHeader/TestSystemTableHeader"
 
-export const TestSystemsTable = ({ items, ...props }) => {
-  const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
+export const TestSystemsTable = ({ items, deleteItems, ...props }) => {
+  const { selectedRows, setSelectedRows, handleRowSelect, calcColWidth } =
+    useTableActions()
+  const [activeItem, setActiveItem] = useState("all")
 
-  const content = items.map((e) => {
+  useMemo(() => {
+    setSelectedRows([])
+  }, [items.length])
+
+  const content = items?.map((item) => {
     return {
       actions: "",
-      id: e._id,
+      id: item._id,
       alias: "MedVelo-ADDITIUM--007", //TODO pending
-      client: e.clientAlias,
-      code: e.vtiCode,
-      year: e.date.year,
-      projects: e.projects, //TODO pending
-      notes: e.notes,
+      client: item.clientAlias,
+      code: item.vtiCode,
+      year: item.date.year,
+      projects: item.projects, //TODO pending
+      notes: item.notes,
       options: "",
     }
   })
@@ -80,12 +88,13 @@ export const TestSystemsTable = ({ items, ...props }) => {
   return (
     <Table
       header={
-        <Flex justify="space-between" align="center" pb="32px">
-          <Checkbox />
-          <Text variant="d_s_medium" color="grey">
-            {`${content?.length || 0} sistemas`}
-          </Text>
-        </Flex>
+        <TestSystemTableHeader
+          testSystemsCount={content?.length}
+          activeItem={activeItem}
+          onChange={(value) => setActiveItem(value)}
+          selectedRows={selectedRows}
+          deleteItems={(items) => deleteItems(items)}
+        />
       }
       config={test_systems_table}
       content={content}

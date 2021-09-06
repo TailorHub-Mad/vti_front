@@ -21,6 +21,7 @@
     "faker": "^5.5.3",
     "formik": "^2.2.9",
     "framer-motion": "^4.0.3",
+    "lodash": "^4.17.21",
     "next": "latest",
     "next-translate": "^1.0.7",
     "nookies": "^2.5.2",

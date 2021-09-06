@@ -7,8 +7,10 @@ const useSystemApi = () => {
   const systemService = new SystemService(addError, removeError)
 
   const systems = () => systemService.systems()
+  const editSystem = () => systemService.editSystem()
+  const deleteSystem = (id) => systemService.deleteSystem(id)
 
-  return { systems }
+  return { systems, editSystem, deleteSystem }
 }
 
 export default useSystemApi

@@ -82,7 +82,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, deleteItems }) => {
           activeItem={activeItem}
           onChange={(value) => setActiveItem(value)}
           selectedRows={selectedRows}
-          deleteItems={(items)=>deleteItems(items)}
+          deleteItems={(items) => deleteItems(items)}
         />
       }
       config={projects_table}
