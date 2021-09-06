@@ -78,7 +78,6 @@ const clientes = () => {
       >
         {`Desea eliminar ${clientToDelete}`}
       </Popup>
-
       <NewClientModal
         clientToEdit={clientToEdit}
         isOpen={isClientModalOpen}
