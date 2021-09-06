@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Page } from "../components/layout/Page/Page"
 import { PageHeader } from "../components/layout/PageHeader/PageHeader"
+import { Popup } from "../components/overlay/Popup/Popup"
 import { LoadingTableSpinner } from "../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
 import useClientsApi from "../hooks/api/useClientsApi"
+import { ApiToastContext } from "../provider/ApiToastProvider"
 import { ClientsTable } from "../views/clients/ClientsTable/ClientsTable"
 import { ClientsToolBar } from "../views/clients/ClientsToolBar/ClientsToolBar"
 import { NewClientModal } from "../views/clients/ClientsToolBar/NewClient/NewClientModal/NewClientModal"
@@ -15,12 +17,16 @@ const clientes = () => {
   const [clients, setClients] = useState(null)
   const [isClientModalOpen, setIsClientModalOpen] = useState(false)
   const [clientToEdit, setClientToEdit] = useState(false)
+  const { showToast } = useContext(ApiToastContext)
   const areClients = clients && clients.length > 0
+  const [clientToDelete, setClientToDelete] = useState(null)
   const onDelete = async (id) => {
     await deleteClient(id)
+    setClientToDelete(null)
     const _clients = [...clients].filter((client) => client._id !== id)
     setClients(_clients)
-    //TODO Meter toast de borrado correctamente
+    showToast("Clientes borrados correctamente")
+    //TODO Diferenciar borrado multiple de individual en el popup
   }
   const onEdit = (id) => {
     const [client] = [...clients].filter((client) => client._id === id)
@@ -39,6 +45,18 @@ const clientes = () => {
 
   return (
     <Page>
+      <Popup
+        variant="twoButtons"
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        color="error"
+        isOpen={clientToDelete}
+        onConfirm={() => onDelete(clientToDelete)}
+        onClose={() => setClientToDelete(null)}
+      >
+        {`Desea eliminar ${clientToDelete}`}
+      </Popup>
+
       <NewClientModal
         clientToEdit={clientToEdit}
         isOpen={isClientModalOpen}
@@ -57,7 +75,7 @@ const clientes = () => {
       {areClients && !isFetching ? (
         <ClientsTable
           clients={clients}
-          onDelete={onDelete}
+          onDelete={(id) => setClientToDelete(id)}
           onEdit={onEdit}
           deleteItems={(rows) => console.log("borra", rows)}
         />
