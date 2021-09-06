@@ -5,17 +5,18 @@ import React from "react"
 export const TestSystemTableHeader = ({
   testSystemsCount = 0,
   selectedRows,
-  deleteItems,
+  onDelete,
+  selectAllRows = () => {},
 }) => {
   return (
     <Flex justify="space-between" align="center" pb="32px">
       <Flex>
-        <Checkbox mr="8px" />
+        <Checkbox mr="8px" onChange={selectAllRows} />
         {selectedRows?.length > 0 ? (
           <Flex
             alignItems="center"
             justifyContent="center"
-            onClick={() => deleteItems(selectedRows)}
+            onClick={() => onDelete(selectedRows)}
             cursor="pointer"
           >
             <DeleteIcon mr="8px" color="error" />

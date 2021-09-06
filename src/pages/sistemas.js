@@ -12,38 +12,60 @@ import { ApiToastContext } from "../provider/ApiToastProvider"
 import { Popup } from "../components/overlay/Popup/Popup"
 import { pullAt } from "lodash"
 
+const DELETE_TYPE = {
+  ONE: "deleteOne",
+  MANY: "deleteMany",
+}
+
 const sistemas = () => {
   const { isLoggedIn } = useContext(ApiUserContext)
-  const { systems /*deleteSystem*/ } = useSystemApi()
+  const { systems, deleteSystem } = useSystemApi()
   const { showToast } = useContext(ApiToastContext)
   const { data, error, isLoading, mutate } = useFetchSWR("systems/", systems)
 
-  const [systemToDelete, setSystemToDelete] = useState(null)
+  const [deleteType, setDeleteType] = useState(null)
+  const [systemsToDelete, setSystemsToDelete] = useState(null)
 
-  const emptyData = !data ?? data[0].testSystem.length > 0
+  const emptyData = Boolean(data && data[0].testSystem.length === 0)
+  const systemsData = data ? data[0].testSystem : []
 
-  const onDelete = async (id) => {
-    // TODO -> API request pending
-    // await deleteSystem(id)
-    setSystemToDelete(null)
-    const updatedSystems = [...data[0].testSystem].filter(
-      (system) => system._id !== id
-    )
-    await mutate(updatedSystems, false)
-    showToast("Sistemas de ensayo borrados correctamente")
-    //TODO Diferenciar borrado multiple de individual en el popup
+  const handleOpenPopup = (systemsToDelete, type) => {
+    setDeleteType(type)
+    setSystemsToDelete(systemsToDelete)
   }
 
-  const onDeleteMany = async (ids, systems) => {
-    // TODO -> API request pending
-    // const deleteSystems = ids.map(async (id) => deleteSystem(id))
-    // await Promise.all(deleteSystems)
-    pullAt(systems, ids)
+  const handleClosePopup = () => {
+    setDeleteType(null)
+    setSystemsToDelete(null)
+  }
+
+  const handleDeleteFunction = async () => {
+    const f = deleteType === DELETE_TYPE.ONE ? deleteOne : deleteMany
+    await f(systemsToDelete, systemsData)
+    setDeleteType(null)
+    setSystemsToDelete(null)
+  }
+
+  const deleteOne = async (id, systems) => {
+    await deleteSystem(id)
+    const updatedSystems = []
+    updatedSystems.push({
+      testSystem: systems.filter((system) => system._id !== id),
+    })
+    await mutate(updatedSystems, false)
+    showToast("Sistema de ensayo borrado correctamente")
+  }
+
+  const deleteMany = async (positions, systems) => {
+    const deleteSystems = positions.map(async (position) =>
+      deleteSystem(systemsData[position]._id)
+    )
+    await Promise.all(deleteSystems)
+    pullAt(systems, positions)
     const updatedSystems = []
     updatedSystems.push({ testSystem: systems })
     await mutate(updatedSystems, false)
     showToast("Sistemas de ensayo borrados correctamente")
-    //TODO Diferenciar borrado multiple de individual en el popup
   }
 
   const onEdit = (/* id */) => {
@@ -63,26 +85,28 @@ const sistemas = () => {
         confirmText="Eliminar"
         cancelText="Cancelar"
         color="error"
-        isOpen={systemToDelete}
-        onConfirm={() => onDelete(systemToDelete)}
-        onClose={() => setSystemToDelete(null)}
+        isOpen={deleteType}
+        onConfirm={handleDeleteFunction}
+        onClose={handleClosePopup}
       >
-        {`Desea eliminar ${systemToDelete}`}
+        {deleteType === DELETE_TYPE.ONE
+          ? `¿Desea eliminar ${systemsToDelete}?`
+          : "¿Desea eliminar los sistemas de ensayo seleccionados?"}
       </Popup>
 
       <PageHeader title="Sistemas de ensayo">
         {!isLoading && !emptyData && <TestSystemsToolbar />}
       </PageHeader>
-      {isLoading && <LoadingTableSpinner />}
-      {data && emptyData && <TestSystemsEmptyState />}
-      {!isLoading && !emptyData && (
+      {isLoading ? <LoadingTableSpinner /> : null}
+      {emptyData ? <TestSystemsEmptyState /> : null}
+      {data && !emptyData ? (
         <TestSystemsTable
-          items={data[0].testSystem}
-          onDelete={(id) => setSystemToDelete(id, data[0].testSystem)}
+          items={systemsData}
+          onDelete={(id) => handleOpenPopup(id, DELETE_TYPE.ONE)}
+          onDeleteMany={(ids) => handleOpenPopup(ids, DELETE_TYPE.MANY)}
           onEdit={onEdit}
-          deleteItems={(ids) => onDeleteMany(ids, data[0].testSystem)}
         />
-      )}
+      ) : null}
     </Page>
   )
 }

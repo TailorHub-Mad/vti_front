@@ -6,8 +6,7 @@ class SystemService extends ServiceConstructor {
       this.instance.get(`/testSystem?limit=${limit}&offset=${offset}`)
     )
   editSystem = () => this.makeRequest(this.instance.get("/testSystem?limit=50"))
-  deleteSystem = (id) =>
-    this.makeRequest(this.instance.post(`/deleteTestSystem`, { id }))
+  deleteSystem = (id) => this.makeRequest(this.instance.delete(`/testSystem/${id}`))
 }
 
 export default SystemService
