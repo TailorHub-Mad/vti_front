@@ -3,17 +3,17 @@ import { Page } from "../../components/layout/Page/Page"
 import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
-import useClientsApi from "../../hooks/api/useClientsApi"
+import useClientApi from "../../hooks/api/useClientApi"
 import { ApiToastContext } from "../../provider/ApiToastProvider"
 import { SectorsTable } from "../../views/sectors/SectorsTable/SectorsTable"
 import { ViewEmptyState } from "../../views/common/NotesEmptyState/ViewEmptyState"
 import { MOCK_SECTORS_TABLE } from "../../mock/sectors_table"
 import { SectorsToolBar } from "../../views/sectors/SectorsToolBar/SectorsToolBar"
-import {NewSectorModal} from "../../views/sectors/SectorsToolBar/NewSectorModal/NewSectorModal"
+import { NewSectorModal } from "../../views/sectors/SectorsToolBar/NewSectorModal/NewSectorModal"
 const sectores = () => {
   const [isFetching, setIsFetching] = useState(false)
   //TODO Fetch de la lista de proyectos, gestion de la carga y pasarlo a la tabla por props
-  const { getClients, deleteClient } = useClientsApi()
+  const { getClients, deleteClient } = useClientApi()
   const [sectors, setSectors] = useState(MOCK_SECTORS_TABLE)
   const [allSectors, setAllSectors] = useState(null)
   const [isSectorModalOpen, setIsSectorModalOpen] = useState(false)
@@ -84,7 +84,10 @@ const sectores = () => {
       />
       <PageHeader title="Sectores">
         {areClients && !isFetching ? (
-          <SectorsToolBar onAddSector={() => setIsSectorModalOpen(true)} onSearch={handleSearch} />
+          <SectorsToolBar
+            onAddSector={() => setIsSectorModalOpen(true)}
+            onSearch={handleSearch}
+          />
         ) : null}
       </PageHeader>
       {isFetching ? <LoadingTableSpinner /> : null}

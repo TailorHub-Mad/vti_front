@@ -3,16 +3,15 @@ import { useEffect, useState } from "react"
 import { Page } from "../../components/layout/Page/Page"
 import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
 import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
-import useClientsApi from "../../hooks/api/useClientsApi"
+import useClientApi from "../../hooks/api/useClientApi"
 import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
 import { ProjectsToolBar } from "../../views/projects/ProjectsToolBar/ProjectsToolBar"
 
 const client = () => {
   const [isFetching, setIsFetching] = useState(false)
   const [client, setClient] = useState(null)
-  const { getClient } = useClientsApi()
+  const { getClient } = useClientApi()
   const router = useRouter()
-  console.log(client)
   useEffect(() => {
     setIsFetching(true)
     const fetchClients = async () => {

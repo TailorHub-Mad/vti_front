@@ -3,7 +3,7 @@ import { Page } from "../../components/layout/Page/Page"
 import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
-import useClientsApi from "../../hooks/api/useClientsApi"
+import useClientApi from "../../hooks/api/useClientApi"
 import { ApiToastContext } from "../../provider/ApiToastProvider"
 import { ClientsTable } from "../../views/clients/ClientsTable/ClientsTable"
 import { ClientsToolBar } from "../../views/clients/ClientsToolBar/ClientsToolBar"
@@ -13,7 +13,7 @@ import { ViewEmptyState } from "../../views/common/NotesEmptyState/ViewEmptyStat
 const clientes = () => {
   const [isFetching, setIsFetching] = useState(false)
   //TODO Fetch de la lista de proyectos, gestion de la carga y pasarlo a la tabla por props
-  const { getClients, deleteClient } = useClientsApi()
+  const { getClients, deleteClient } = useClientApi()
   const [clients, setClients] = useState(null)
   const [allClients, setAllClients] = useState(null)
   const [isClientModalOpen, setIsClientModalOpen] = useState(false)
@@ -83,7 +83,10 @@ const clientes = () => {
       />
       <PageHeader title="Clientes">
         {areClients && !isFetching ? (
-          <ClientsToolBar onAddClient={() => setIsClientModalOpen(true)} onSearch={handleSearch} />
+          <ClientsToolBar
+            onAddClient={() => setIsClientModalOpen(true)}
+            onSearch={handleSearch}
+          />
         ) : null}
       </PageHeader>
       {isFetching ? <LoadingTableSpinner /> : null}

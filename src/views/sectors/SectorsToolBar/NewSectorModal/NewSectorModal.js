@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { CloseIcon } from "../../../../components/icons/CloseIcon"
-import useClientsApi from "../../../../hooks/api/useClientsApi"
+import useClientApi from "../../../../hooks/api/useClientApi"
 import { ApiToastContext } from "../../../../provider/ApiToastProvider"
 import { NewSectorForm } from "../NewSectorForm/NewSectorForm"
 
@@ -17,7 +17,7 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
   const [values, setValues] = useState([{}])
   const isEdit = sectorToEdit
   const { showToast } = useContext(ApiToastContext)
-  const { createClient } = useClientsApi()
+  const { createClient } = useClientApi()
   const handleChange = (val, idx) => {
     const _values = [...values]
     _values[idx] = val
@@ -114,4 +114,3 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
     </Modal>
   )
 }
-
