@@ -1,6 +1,6 @@
 import { Checkbox, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
-import { ClientLink } from "../../../components/navigation/ClientLink/ClientLink"
+import { SectorLink } from "../../../components/navigation/SectorLink/SectorLink"
 import { Table } from "../../../components/tables/Table/Table"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
@@ -19,7 +19,7 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, deleteItems }) => {
         actions: "",
         id: sector._id,
         name: { label: sector.name, link: sector._id },
-        projects: [...sector.projects].map((project) => project.alias),
+        projects: ["Hola", "k ase"],
         options: "",
       }
     })
@@ -27,7 +27,7 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, deleteItems }) => {
   const sectors_table = {
     components: {
       text: <Text />,
-      link: <ClientLink />,
+      link: <SectorLink />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       projects: <TagGroup variant="pale_yellow" max={7} />,
       options: <SectorRowOptionMenu onDelete={onDelete} onEdit={onEdit} />,

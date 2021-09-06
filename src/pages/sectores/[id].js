@@ -2,39 +2,42 @@ import { useRouter } from "next/dist/client/router"
 import { useEffect, useState } from "react"
 import { Page } from "../../components/layout/Page/Page"
 import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
+import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
-import useClientApi from "../../hooks/api/useClientApi"
+import useSectorApi from "../../hooks/api/useSectorApi"
+import { MOCK_BACK_PROJECTS_DATA } from "../../mock/projects_table"
 import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
 import { ProjectsToolBar } from "../../views/projects/ProjectsToolBar/ProjectsToolBar"
 
-const client = () => {
+const sector = () => {
   const [isFetching, setIsFetching] = useState(false)
-  const [client, setClient] = useState(null)
-  const { getClient } = useClientApi()
+  const [sector, setSector] = useState(null)
+  const { getSector } = useSectorApi()
   const router = useRouter()
   useEffect(() => {
     setIsFetching(true)
-    const fetchClient = async () => {
-      const _clients = await getClient(router.query.id)
-      setClient(_clients)
+    const fetchSector = async () => {
+      const sector = await getSector(router.query.id)
+      setSector(sector)
       setIsFetching(false)
     }
-    fetchClient()
+    fetchSector()
   }, [])
   return (
     <Page>
       {isFetching ? <LoadingTableSpinner /> : null}
 
-      {client && !isFetching ? (
+      {sector && !isFetching ? (
         <>
-          <PageHeader title={`Clientes / ${client?.alias} / Proyectos`}>
+          <PageHeader>
+            <BreadCrumbs lastText="Proyectos" />
             <ProjectsToolBar />
           </PageHeader>
-          <ProjectsTable items={client.projects} />
+          <ProjectsTable items={MOCK_BACK_PROJECTS_DATA} />
         </>
       ) : null}
     </Page>
   )
 }
 
-export default client
+export default sector

@@ -56,7 +56,7 @@ export const Table = ({
             maxWidth={MAX_TABLE_WIDTH}
           >
             {Object.values(head).map((element) => (
-              <Text key={element.label}>{element.label}</Text>
+              <Text key={element?.label}>{element?.label}</Text>
             ))}
           </Grid>
           {content.map((item, idx) => {
@@ -79,7 +79,8 @@ export const Table = ({
                 {Object.entries(item).map(([name, element]) => {
                   if (head[name]?.type === "count") {
                     return React.cloneElement(components.text, {
-                      children: element.length.toString(),
+                      children: element?.length.toString(),
+                      textAlign: "left"
                     })
                   }
                   if (head[name]?.type === "text") {
@@ -89,8 +90,8 @@ export const Table = ({
                   }
                   if (head[name]?.type === "link") {
                     return React.cloneElement(components.link, {
-                      children: element.label,
-                      alias: element.link,
+                      children: element?.label,
+                      alias: element?.link,
                     })
                   }
                   if (head[name]?.type === "selector") {
@@ -108,7 +109,7 @@ export const Table = ({
                     return React.cloneElement(components[name], {
                       children: element,
                       id: item.id,
-                      alias: element.alias,
+                      alias: element?.alias,
                     })
                   }
                   return <Text key={name} />
