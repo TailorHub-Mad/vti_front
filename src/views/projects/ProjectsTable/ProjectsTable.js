@@ -9,9 +9,22 @@ import { ProjectsTableHeader } from "../ProjectsTableHeader/ProjectsTableHeader"
 import { ProjectRowOptionMenu } from "./ProjectRowOptionMenu/ProjectRowOptionMenu"
 
 export const ProjectsTable = ({ items }) => {
+  console.log(items)
   //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
   const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
   const [activeItem, setActiveItem] = useState("all")
+  const elements = items.map((e) => ({
+    actions: "",
+    id: e.id,
+    alias: e.alias,
+    sector: e.sector,
+    punto_focal: e.focusPoint || "",
+    sistemas_ensayo: e.testSystems,
+    tags_proyecto: e.tags,
+    users: [""],
+    apuntes: e.notes,
+    options: "",
+  }))
   const projects_table = {
     components: {
       text: <Text />,
@@ -82,10 +95,11 @@ export const ProjectsTable = ({ items }) => {
         <ProjectsTableHeader
           activeItem={activeItem}
           onChange={(value) => setActiveItem(value)}
+          projectsCount={elements.length}
         />
       }
       config={projects_table}
-      content={items}
+      content={elements}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
       tableHeight="calc(100vh - 195px)"

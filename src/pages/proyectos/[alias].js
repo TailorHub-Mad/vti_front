@@ -6,7 +6,7 @@ import { NoteDrawer } from "../../components/drawer/NoteDrawer/NoteDrawer"
 import { ProjectDetails } from "../../views/notes/Project/ProjectDetails/ProjectDetails"
 import { ProjectNotes } from "../../views/notes/Project/ProjectNotes/ProjectNotes"
 import { ProjectHeader } from "../../views/notes/Project/ProjectHeader/ProjectHeader"
-import { Center, Spinner, Box } from "@chakra-ui/reac"
+import { Center, Spinner, Box } from "@chakra-ui/react"
 faker.locale = "es"
 
 const project = () => {
