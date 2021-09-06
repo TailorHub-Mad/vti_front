@@ -23,19 +23,24 @@ import {
   Stack,
   Radio,
 } from "@chakra-ui/react"
+import { ApiToastContext } from "../provider/ApiToastProvider"
 
 const Index = () => {
   const { isLoggedIn } = useContext(ApiUserContext)
 
   const [mockSelectValue, setMockSelectValue] = useState("")
   const [value, setValue] = useState("")
+  const { showToast } = useContext(ApiToastContext)
 
   return !isLoggedIn ? (
     <>Loading...</>
   ) : (
     <Page>
       <Box maxWidth="600px" width="100%" marginBottom="32px">
-        <LogoFull color="blue.500" />
+        <LogoFull
+          color="blue.500"
+          onClick={() => showToast("Haz hecho click en el logo!", 1000)}
+        />
         <Text variant="d_l_medium" casing="uppercase" margin="32px 0 8px 0">
           The spectacle before us was indeed sublime.
         </Text>

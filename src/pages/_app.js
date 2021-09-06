@@ -1,5 +1,6 @@
 import { ChakraProvider, ColorModeProvider } from "@chakra-ui/react"
 import ApiUserProvider from "../provider/ApiAuthProvider"
+import ApiToastProvider from "../provider/ApiToastProvider"
 import theme from "../theme/"
 
 function MyApp({ Component, pageProps }) {
@@ -11,7 +12,9 @@ function MyApp({ Component, pageProps }) {
         }}
       >
         <ApiUserProvider>
-          <Component {...pageProps} />
+          <ApiToastProvider>
+            <Component {...pageProps} />
+          </ApiToastProvider>
         </ApiUserProvider>
       </ColorModeProvider>
     </ChakraProvider>

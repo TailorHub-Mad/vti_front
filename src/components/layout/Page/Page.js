@@ -1,14 +1,21 @@
 import { Box } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
+import { ApiToastContext } from "../../../provider/ApiToastProvider"
 import { TabBar } from "../../navigation/TabBar/TabBar"
+import { Popup } from "../../overlay/Popup/Popup"
 import Meta from "../Meta/Meta"
 
 export const Page = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true)
+  const { isToastOpen, message } = useContext(ApiToastContext)
+
   return (
     <>
       <Meta />
       <TabBar isOpen={isOpen} setIsOpen={(val) => setIsOpen(val)} />
+      <Popup isOpen={isToastOpen} variant="info">
+        {message}
+      </Popup>
       <Box
         transition={"padding-left 0.15s ease-in-out"}
         pl={["20px", null, null, isOpen ? "224px" : "48px"]}
