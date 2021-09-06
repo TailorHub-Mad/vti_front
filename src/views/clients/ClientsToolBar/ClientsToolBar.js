@@ -1,13 +1,13 @@
 /* eslint-disable react/no-children-prop */
 import { SearchIcon } from "@chakra-ui/icons"
-import { Button, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
+import { Button, Flex, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
 import React from "react"
 import { AddClientIcon } from "../../../components/icons/AddClientIcon"
 import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
 
 export const ClientsToolBar = ({ onAddClient, onSearch }) => {
   return (
-    <>
+    <Flex>
       <InputGroup width="196px" marginRight="16px">
         <InputLeftElement
           pointerEvents="none"
@@ -27,6 +27,6 @@ export const ClientsToolBar = ({ onAddClient, onSearch }) => {
         <AddClientIcon marginRight="8px" />
         Añadir cliente
       </Button>
-    </>
+    </Flex>
   )
 }

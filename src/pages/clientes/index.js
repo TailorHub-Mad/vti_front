@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { Page } from "../../components/layout/Page/Page"
 import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
+import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
 import useClientApi from "../../hooks/api/useClientApi"
@@ -81,7 +82,8 @@ const clientes = () => {
           setClientToEdit(null)
         }}
       />
-      <PageHeader title="Clientes">
+      <PageHeader>
+        <BreadCrumbs />
         {areClients && !isFetching ? (
           <ClientsToolBar
             onAddClient={() => setIsClientModalOpen(true)}

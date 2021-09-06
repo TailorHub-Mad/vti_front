@@ -2,6 +2,7 @@ import { useRouter } from "next/dist/client/router"
 import { useEffect, useState } from "react"
 import { Page } from "../../components/layout/Page/Page"
 import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
+import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
 import useClientApi from "../../hooks/api/useClientApi"
 import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
@@ -27,7 +28,8 @@ const client = () => {
 
       {client && !isFetching ? (
         <>
-          <PageHeader title={`Clientes / ${client?.alias} / Proyectos`}>
+          <PageHeader>
+            <BreadCrumbs lastText="Proyectos" />
             <ProjectsToolBar />
           </PageHeader>
           <ProjectsTable items={client.projects} />
