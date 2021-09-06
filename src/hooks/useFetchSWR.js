@@ -1,24 +1,27 @@
 import { useEffect, useState } from "react"
 import useSWR from "swr"
 
-const useFetchSWR = (key, fetcher) => {
-  const [isLoadingSlow, setIsLoadingSlow] = useState(false)
+const useFetchSWR = (key, fetcher, refreshInterval) => {
+  const [isLoading, setIsLoading] = useState(false)
 
-  const { data, error } = useSWR(key, fetcher, {
+  const { data, error, mutate } = useSWR(key, fetcher, {
     loadingTimeout: 1000,
     onLoadingSlow() {
-      setIsLoadingSlow(true)
+      setIsLoading(true)
     },
+    dedupingInterval: 5000,
+    errorRetryCount: 10,
+    refreshInterval: refreshInterval || 30000,
   })
 
   useEffect(() => {
-    if (data && isLoadingSlow) {
-      const timer = setTimeout(setIsLoadingSlow, 1000, false)
+    if (data && isLoading) {
+      const timer = setTimeout(setIsLoading, 1000, false)
       return () => clearTimeout(timer)
     }
-  }, [data, isLoadingSlow])
+  }, [data, isLoading])
 
-  return { data, error, isLoadingSlow }
+  return { data, error, isLoading, mutate }
 }
 
 export default useFetchSWR

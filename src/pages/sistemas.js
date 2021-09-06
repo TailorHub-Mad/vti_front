@@ -13,7 +13,7 @@ const sistemas = () => {
   const { isLoggedIn } = useContext(ApiUserContext)
   const { systems } = useSystemApi()
 
-  const { data, error, isLoadingSlow } = useFetchSWR("systems/", systems)
+  const { data, error, isLoading } = useFetchSWR("systems/", systems)
 
   if (error) return <>ERROR...</>
 
@@ -24,13 +24,11 @@ const sistemas = () => {
   ) : (
     <Page>
       <PageHeader title="Sistemas de ensayo">
-        {!isLoadingSlow && !emptyData && <TestSystemsToolbar />}
+        {!isLoading && !emptyData && <TestSystemsToolbar />}
       </PageHeader>
-      {isLoadingSlow && <LoadingTableSpinner />}
+      {isLoading && <LoadingTableSpinner />}
       {data && emptyData && <TestSystemsEmptyState />}
-      {!isLoadingSlow && !emptyData && (
-        <TestSystemsTable items={data[0].testSystem} />
-      )}
+      {!isLoading && !emptyData && <TestSystemsTable items={data[0].testSystem} />}
     </Page>
   )
 }
