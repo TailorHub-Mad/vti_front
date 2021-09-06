@@ -12,21 +12,20 @@ import { NewClientModal } from "../../views/clients/ClientsToolBar/NewClient/New
 import { ViewEmptyState } from "../../views/common/NotesEmptyState/ViewEmptyState"
 
 const clientes = () => {
-  //TODO Fetch de la lista de proyectos, gestion de la carga y pasarlo a la tabla por props
   const { getClients, deleteClient } = useClientApi()
   const { showToast } = useContext(ApiToastContext)
-  
+
   const [isFetching, setIsFetching] = useState(false)
-  
+
   const [clients, setClients] = useState(null)
   const [allClients, setAllClients] = useState(null)
   const areClients = clients && clients.length > 0
 
   const [isClientModalOpen, setIsClientModalOpen] = useState(false)
-  
+
   const [clientToEdit, setClientToEdit] = useState(null)
   const [clientToDelete, setClientToDelete] = useState(null)
-  
+
   const onDelete = async (id) => {
     await deleteClient(id)
     setClientToDelete(null)
