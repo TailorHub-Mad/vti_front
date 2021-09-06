@@ -9,10 +9,7 @@ import { ApiUserContext } from "../../../provider/ApiAuthProvider"
 import { AddNewProject } from "../AddNewProjectModal/AddNewProject"
 
 export const ProjectsToolBar = () => {
-  const {
-    state: { role },
-  } = useContext(ApiUserContext)
-
+  const { role } = useContext(ApiUserContext)
   return (
     <>
       <Filter />

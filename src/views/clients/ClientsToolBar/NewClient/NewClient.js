@@ -3,7 +3,7 @@ import React from "react"
 import { AddClientIcon } from "../../../../components/icons/AddClientIcon"
 import { NewClientModal } from "./NewClientModal/NewClientModal"
 
-export const NewClient = ({ ...props }) => {
+export const NewClient = () => {
   const { isOpen, onClose, onOpen } = useDisclosure()
 
   return (

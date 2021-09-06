@@ -5,16 +5,28 @@ import { LoadingTableSpinner } from "../components/spinners/LoadingTableSpinner/
 import useClientsApi from "../hooks/api/useClientsApi"
 import { ClientsTable } from "../views/clients/ClientsTable/ClientsTable"
 import { ClientsToolBar } from "../views/clients/ClientsToolBar/ClientsToolBar"
+import { NewClientModal } from "../views/clients/ClientsToolBar/NewClient/NewClientModal/NewClientModal"
 import { NotesEmptyState } from "../views/notes/NotesEmptyState/NotesEmptyState"
 
 const clientes = () => {
   const isFetching = false
-  const projects = new Array(50).fill("")
-  const areProjects = projects && projects.length > 0
   //TODO Fetch de la lista de proyectos, gestion de la carga y pasarlo a la tabla por props
-  const { getClients } = useClientsApi()
+  const { getClients, deleteClient } = useClientsApi()
   const [clients, setClients] = useState(null)
-
+  const [isClientModalOpen, setIsClientModalOpen] = useState(false)
+  const [clientToEdit, setClientToEdit] = useState(false)
+  const areClients = clients && clients.length > 0
+  const onDelete = async (id) => {
+    await deleteClient(id)
+    const _clients = [...clients].filter((client) => client._id !== id)
+    setClients(_clients)
+    //TODO Meter toast de borrado correctamente
+  }
+  const onEdit = (id) => {
+    const [client] = [...clients].filter((client) => client._id === id)
+    setClientToEdit(client)
+    setIsClientModalOpen(true)
+  }
   useEffect(() => {
     const fetchClients = async () => {
       const _clients = await getClients()
@@ -25,13 +37,28 @@ const clientes = () => {
 
   return (
     <Page>
+      <NewClientModal
+        clientToEdit={clientToEdit}
+        isOpen={isClientModalOpen}
+        onClose={() => {
+          setIsClientModalOpen(false)
+          setClientToEdit(null)
+        }}
+      />
       <PageHeader title="Clientes">
-        {areProjects && !isFetching ? <ClientsToolBar /> : null}
+        {areClients && !isFetching ? (
+          <ClientsToolBar onAddClient={() => setIsClientModalOpen(true)} />
+        ) : null}
       </PageHeader>
       {isFetching ? <LoadingTableSpinner /> : null}
-      {!areProjects ? <NotesEmptyState /> : null}
-      {areProjects && !isFetching ? (
-        <ClientsTable clients={clients} />
+      {!areClients ? <NotesEmptyState /> : null}
+      {areClients && !isFetching ? (
+        <ClientsTable
+          clients={clients}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          deleteItems={(rows) => console.log("borra", rows)}
+        />
       ) : null}
     </Page>
   )

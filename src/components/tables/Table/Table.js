@@ -77,6 +77,7 @@ export const Table = ({
               >
                 {/* TODO refactor del cloneElement para que reciba las props de forma más elegante */}
                 {Object.entries(item).map(([name, element]) => {
+                 
                   if (head[name]?.type === "count") {
                     return React.cloneElement(components.text, {
                       children: element.length.toString(),
@@ -107,7 +108,7 @@ export const Table = ({
                   if (components[name] !== undefined) {
                     return React.cloneElement(components[name], {
                       children: element,
-                      id: element.id,
+                      id: item.id,
                       alias: element.alias,
                     })
                   }

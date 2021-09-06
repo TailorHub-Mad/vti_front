@@ -1,32 +1,21 @@
 import {
-  ScaleFade,
   Modal,
   ModalOverlay,
   Text,
   ModalContent,
   ModalHeader,
-  ModalCloseButton,
   Button,
   Box,
 } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { CloseIcon } from "../../../../../components/icons/CloseIcon"
-import { Popup } from "../../../../../components/overlay/Popup/Popup"
 import useClientsApi from "../../../../../hooks/api/useClientsApi"
-import { useShowToast } from "../../../../../hooks/useShowToast"
 import { NewClientForm } from "../NewClientForm/NewClientForm"
 
-export const NewClientModal = ({
-  isOpen,
-  onClose,
-  color,
-  title,
-  childen,
-  ...props
-}) => {
+export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
   const [values, setValues] = useState([{}])
+  const isEdit = clientToEdit
   const { createClient } = useClientsApi()
-  const { showToast, isToastOpen } = useShowToast()
   const handleChange = (val, idx) => {
     const _values = [...values]
     _values[idx] = val
@@ -47,19 +36,22 @@ export const NewClientModal = ({
       return await createClient(val)
     })
 
+    // eslint-disable-next-line no-undef
     const resultsArr = await Promise.all(clientsQueue)
-    showToast()
+    //Meter toast de éxito
     if (resultsArr.some((result) => result.error)) {
       console.log("ERROR")
       return
     }
   }
 
+  useEffect(() => {
+    const { name, alias, _id } = clientToEdit || {}
+    setValues([{ name, alias, id: _id }])
+  }, [clientToEdit])
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
-      <Popup isOpen={isToastOpen} variant="info">
-        Clientes creados correctamente!
-      </Popup>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <ModalHeader
@@ -69,10 +61,12 @@ export const NewClientModal = ({
           justifyContent="space-between"
           w="100%"
         >
-          <Text variant="d_l_medium"> Añadir nuevo cliente</Text>
+          <Text variant="d_l_medium">
+            {isEdit ? "Editar cliente" : "Añadir nuevo cliente"}
+          </Text>
           <CloseIcon width="24px" height="24px" cursor="pointer" onClick={onClose} />
         </ModalHeader>
-        {values.map((clientsToAdd, idx) => (
+        {values.map((client, idx) => (
           <Box key={`client-${idx}`}>
             {idx !== 0 ? (
               <Text margin="32px 0" variant="d_l_medium">
@@ -80,33 +74,38 @@ export const NewClientModal = ({
               </Text>
             ) : null}
             <NewClientForm
-              value={clientsToAdd}
+              value={client}
               onChange={(val) => handleChange(val, idx)}
             />
-            <Button
-              variant="text_only"
-              color="error"
-              onClick={() => handleDelete(idx)}
-            >
-              Eliminar
-            </Button>
+            {idx !== 0 ? (
+              <Button
+                variant="text_only"
+                color="error"
+                onClick={() => handleDelete(idx)}
+              >
+                Eliminar
+              </Button>
+            ) : null}
           </Box>
         ))}
         <Button
           w="194px"
           margin="0 auto"
+          mt="24px"
           disabled={checkInputs()}
           onClick={handleSubmit}
         >
           Guardar
         </Button>
-        <Button
-          variant="text_only"
-          onClick={() => setValues([...values, {}])}
-          disabled={checkInputs()}
-        >
-          Añadir nuevo cliente
-        </Button>
+        {!isEdit ? (
+          <Button
+            variant="text_only"
+            onClick={() => setValues([...values, {}])}
+            disabled={checkInputs()}
+          >
+            Añadir nuevo cliente
+          </Button>
+        ) : null}
       </ModalContent>
     </Modal>
   )
