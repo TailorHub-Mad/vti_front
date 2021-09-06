@@ -1,6 +1,6 @@
 import { Checkbox, Text } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
-import { ProjectLink } from "../../../components/navigation/ProjectLink/ProjectLink"
+import React, { useState } from "react"
+import { ClientLink } from "../../../components/navigation/ClientLink/ClientLink"
 import { Table } from "../../../components/tables/Table/Table"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
@@ -28,7 +28,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, deleteItems }) => {
   const projects_table = {
     components: {
       text: <Text />,
-      link: <ProjectLink />,
+      link: <ClientLink />,
       count: <Text />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       testSystem: <TagGroup variant="light_blue" max={3} />,
@@ -82,7 +82,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, deleteItems }) => {
           activeItem={activeItem}
           onChange={(value) => setActiveItem(value)}
           selectedRows={selectedRows}
-          deleteItems={(items)=>deleteItems(items)}
+          deleteItems={(items) => deleteItems(items)}
         />
       }
       config={projects_table}
