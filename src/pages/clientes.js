@@ -9,7 +9,7 @@ import { NewClientModal } from "../views/clients/ClientsToolBar/NewClient/NewCli
 import { NotesEmptyState } from "../views/notes/NotesEmptyState/NotesEmptyState"
 
 const clientes = () => {
-  const isFetching = false
+  const [isFetching, setIsFetching] = useState(false)
   //TODO Fetch de la lista de proyectos, gestion de la carga y pasarlo a la tabla por props
   const { getClients, deleteClient } = useClientsApi()
   const [clients, setClients] = useState(null)
@@ -28,9 +28,11 @@ const clientes = () => {
     setIsClientModalOpen(true)
   }
   useEffect(() => {
+    setIsFetching(true)
     const fetchClients = async () => {
       const _clients = await getClients()
       setClients(_clients)
+      setIsFetching(false)
     }
     fetchClients()
   }, [])
@@ -51,7 +53,7 @@ const clientes = () => {
         ) : null}
       </PageHeader>
       {isFetching ? <LoadingTableSpinner /> : null}
-      {!areClients ? <NotesEmptyState /> : null}
+      {!areClients && !isFetching ? <NotesEmptyState /> : null}
       {areClients && !isFetching ? (
         <ClientsTable
           clients={clients}
