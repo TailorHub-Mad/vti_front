@@ -30,7 +30,8 @@ const ApiUserProvider = ({ children }) => {
       const _user = await me()
       if (_user.error) return router.push("/login")
       setUser(_user[0])
-      setRole(_user[0].role)
+      // setRole(_user[0].role)
+      setRole("admin")
       setIsLoggedIn(true)
     }
     getUser()

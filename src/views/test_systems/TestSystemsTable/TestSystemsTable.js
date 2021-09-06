@@ -7,6 +7,20 @@ import useTableActions from "../../../hooks/useTableActions"
 export const TestSystemsTable = ({ items, ...props }) => {
   const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
 
+  const content = items.map((e) => {
+    return {
+      actions: "",
+      id: e._id,
+      alias: "MedVelo-ADDITIUM--007", //TODO pending
+      client: e.clientAlias,
+      code: e.vtiCode,
+      year: e.date.year,
+      projects: e.projects, //TODO pending
+      notes: e.notes,
+      options: "",
+    }
+  })
+
   const test_systems_table = {
     components: {
       text: <Text />,
@@ -69,12 +83,12 @@ export const TestSystemsTable = ({ items, ...props }) => {
         <Flex justify="space-between" align="center" pb="32px">
           <Checkbox />
           <Text variant="d_s_medium" color="grey">
-            {`${items?.length || 0} sistemas`}
+            {`${content?.length || 0} sistemas`}
           </Text>
         </Flex>
       }
       config={test_systems_table}
-      content={items}
+      content={content}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
       tableHeight="calc(100vh - 190px)"
