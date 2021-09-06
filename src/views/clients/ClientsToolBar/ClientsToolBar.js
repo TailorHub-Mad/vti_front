@@ -5,7 +5,7 @@ import React from "react"
 import { AddClientIcon } from "../../../components/icons/AddClientIcon"
 import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
 
-export const ClientsToolBar = ({ onAddClient }) => {
+export const ClientsToolBar = ({ onAddClient, onSearch }) => {
   return (
     <>
       <InputGroup width="196px" marginRight="16px">
@@ -17,6 +17,7 @@ export const ClientsToolBar = ({ onAddClient }) => {
           placeholder="Busque por ID, Alias..."
           paddingLeft="40px"
           variant="white"
+          onChange={(e) => onSearch(e.target.value)}
         />
       </InputGroup>
       <Button variant="icon_only_secondary" marginRight="16px">
