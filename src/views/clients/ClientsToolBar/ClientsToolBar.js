@@ -5,7 +5,7 @@ import React from "react"
 import { AddClientIcon } from "../../../components/icons/AddClientIcon"
 import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
 
-export const ClientsToolBar = () => {
+export const ClientsToolBar = ({ onAddClient }) => {
   return (
     <>
       <InputGroup width="196px" marginRight="16px">
@@ -22,7 +22,7 @@ export const ClientsToolBar = () => {
       <Button variant="icon_only_secondary" marginRight="16px">
         <UploadCloudIcon />
       </Button>
-      <Button>
+      <Button onClick={onAddClient}>
         <AddClientIcon marginRight="8px" />
         Añadir cliente
       </Button>

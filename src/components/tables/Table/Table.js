@@ -20,10 +20,10 @@ export const Table = ({
   )
   const isSelected = (idx) => selectedRows?.includes(idx)
 
-  return (
+  return content ? (
     <Card
       width="100%"
-      maxWidth="2400px"
+      maxWidth={MAX_TABLE_WIDTH}
       position="relative"
       bgColor="white"
       sx={CUSTOM_SCROLLBAR}
@@ -66,15 +66,18 @@ export const Table = ({
                 templateColumns={templateColumns}
                 borderBottom="1px"
                 borderColor="grey"
-                height="60px"
+                height="fit-content"
                 width="100%"
                 alignItems="center"
+                padding="21px 0"
                 bgColor={isSelected(idx) ? "blue.100" : "white"}
                 _hover={{ bgColor: "blue.100" }}
                 gridColumnGap="8px"
+                overflow="hidden"
               >
                 {/* TODO refactor del cloneElement para que reciba las props de forma más elegante */}
                 {Object.entries(item).map(([name, element]) => {
+                 
                   if (head[name]?.type === "count") {
                     return React.cloneElement(components.text, {
                       children: element.length.toString(),
@@ -105,7 +108,7 @@ export const Table = ({
                   if (components[name] !== undefined) {
                     return React.cloneElement(components[name], {
                       children: element,
-                      id: element.id,
+                      id: item.id,
                       alias: element.alias,
                     })
                   }
@@ -117,5 +120,7 @@ export const Table = ({
         </Grid>
       </Flex>
     </Card>
+  ) : (
+    <></>
   )
 }

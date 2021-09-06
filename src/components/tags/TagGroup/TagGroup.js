@@ -3,9 +3,9 @@ import React from "react"
 import { GeneralTag } from "../GeneralTag/GeneralTag"
 
 export const TagGroup = ({ tagsArr, variant, max, ...props }) => {
-  if (!max || tagsArr?.length <= +max) {
+  if (!max || tagsArr?.length <= max) {
     return (
-      <Flex>
+      <Flex width="100%" maxWidth="100%">
         {tagsArr.map((tag) => {
           return (
             <GeneralTag key={tag} variant={variant} {...props} marginRight="4px">
@@ -16,8 +16,9 @@ export const TagGroup = ({ tagsArr, variant, max, ...props }) => {
       </Flex>
     )
   }
+  const remaining = [...tagsArr].slice(max)?.length
   return (
-    <Flex>
+    <Flex width="100%" maxWidth="100%">
       {[...tagsArr].slice(0, max).map((tag) => {
         return (
           <GeneralTag key={tag} variant={variant} {...props} marginRight="4px">
@@ -25,15 +26,18 @@ export const TagGroup = ({ tagsArr, variant, max, ...props }) => {
           </GeneralTag>
         )
       })}
-      <GeneralTag
-        variant={variant}
-        {...props}
-        width="32px"
-        marginRight="4px"
-        justifyContent="center"
-      >
-        {`+${tagsArr?.length - max}`}
-      </GeneralTag>
+      {remaining > 0 ? (
+        <GeneralTag
+          variant={variant}
+          {...props}
+          width="32px"
+          marginRight="4px"
+          justifyContent="center"
+          minWidth="28px"
+        >
+          {`+${[...tagsArr].slice(max).length}`}
+        </GeneralTag>
+      ) : null}
     </Flex>
   )
 }
