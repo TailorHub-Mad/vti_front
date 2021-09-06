@@ -7,14 +7,16 @@ import {
   Button,
   Box,
 } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { CloseIcon } from "../../../../../components/icons/CloseIcon"
 import useClientsApi from "../../../../../hooks/api/useClientsApi"
+import { ApiToastContext } from "../../../../../provider/ApiToastProvider"
 import { NewClientForm } from "../NewClientForm/NewClientForm"
 
 export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
   const [values, setValues] = useState([{}])
   const isEdit = clientToEdit
+  const { showToast } = useContext(ApiToastContext)
   const { createClient } = useClientsApi()
   const handleChange = (val, idx) => {
     const _values = [...values]
@@ -39,6 +41,8 @@ export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
     // eslint-disable-next-line no-undef
     const resultsArr = await Promise.all(clientsQueue)
     //Meter toast de éxito
+    showToast("CLiente añadido correctamente!")
+    onClose()
     if (resultsArr.some((result) => result.error)) {
       console.log("ERROR")
       return
