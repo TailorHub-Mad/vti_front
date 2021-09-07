@@ -15,6 +15,11 @@ const TABBAR_LINKS = {
     label: "Proyectos",
     icon: ICONS_REFERENCE.project_line,
     href: "/proyectos",
+  },
+  projects_admin: {
+    label: "Proyectos",
+    icon: ICONS_REFERENCE.project_line,
+    href: "/proyectos",
     submenu: [
       {
         label: "Sectores",
@@ -76,6 +81,7 @@ const {
   new_note,
   notes,
   projects,
+  projects_admin,
   test_systems,
   tags,
   clients,
@@ -95,7 +101,7 @@ export const TABBAR_USER_LINKS = [
 
 export const TABBAR_ADMIN_LINKS = [
   notes,
-  projects,
+  projects_admin,
   test_systems,
   tags,
   clients,
