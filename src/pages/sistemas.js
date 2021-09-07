@@ -26,7 +26,7 @@ const sistemas = () => {
 
   // Create - Update state
   const [isSystemModalOpen, setIsSystemModalOpen] = useState(false)
-  const [systemToEdit, setSystemToEdit] = useState(false)
+  const [systemToEdit, setSystemToEdit] = useState(null)
 
   // Delete state
   const [deleteType, setDeleteType] = useState(null)
@@ -54,8 +54,8 @@ const sistemas = () => {
   }
 
   const handleOnCloseModal = () => {
-    setIsSystemModalOpen(false)
     setSystemToEdit(null)
+    setIsSystemModalOpen(false)
   }
 
   const handleDeleteFunction = async () => {
@@ -76,10 +76,10 @@ const sistemas = () => {
   }
 
   const deleteMany = async (positions, systems) => {
-    const deleteSystems = positions.map(async (position) =>
+    const systemsQueue = positions.map(async (position) =>
       deleteSystem(systemsData[position]._id)
     )
-    await Promise.all(deleteSystems)
+    await Promise.all(systemsQueue)
     pullAt(systems, positions)
     const updatedSystems = []
     updatedSystems.push({ testSystem: systems })
@@ -87,10 +87,10 @@ const sistemas = () => {
     showToast("Sistemas de ensayo borrados correctamente")
   }
 
-  const onEdit = (/* id */) => {
-    // const [client] = [...clients].filter((client) => client._id === id)
-    // setClientToEdit(client)
-    // setIsClientModalOpen(true)
+  const onEdit = (id) => {
+    const system = [...systemsData].find((system) => system._id === id)
+    setSystemToEdit(system)
+    setIsSystemModalOpen(true)
   }
 
   const onSearch = (search) => {
@@ -132,7 +132,7 @@ const sistemas = () => {
       </Popup>
 
       <NewTestSystemModal
-        clientToEdit={systemToEdit}
+        systemToEdit={systemToEdit}
         isOpen={isSystemModalOpen}
         onClose={handleOnCloseModal}
       />

@@ -9,6 +9,7 @@ export const SimpleInput = ({
   label,
   helper,
   onHelperClick,
+  isDisabled = false,
   ...props
 }) => {
   return (
@@ -16,6 +17,7 @@ export const SimpleInput = ({
       label={label}
       helper={helper}
       onHelperClick={onHelperClick}
+      isDisabled={isDisabled}
       {...props}
     >
       <Input

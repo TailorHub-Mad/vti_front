@@ -1,5 +1,5 @@
 import { Box, Input, useOutsideClick } from "@chakra-ui/react"
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { ChevronDownIcon } from "../../icons/ChevronDownIcon"
 import { FormController } from "../FormItemWrapper/FormController"
 import { SelectMenu } from "../SelectMenu/SelectMenu"
@@ -23,6 +23,8 @@ export const InputSelect = ({
     filterOptions(e.target.value)
   }
 
+  console.log("le llega el value", value)
+
   const handleSelect = (_value) => {
     const [selected] = availableOptions?.filter((option) => option.value === _value)
     onChange && onChange(selected.label)
@@ -36,10 +38,17 @@ export const InputSelect = ({
     setAvailableOptions(nextOptions)
   }
 
+  const handleOnClickInput = () => setShowSelectMenu(!showSelectMenu)
+
   useOutsideClick({
     ref: ref,
     handler: () => setShowSelectMenu(false),
   })
+
+  useEffect(() => {
+    if (!options.length > 0) return
+    setAvailableOptions(options)
+  }, [options])
 
   return (
     <FormController
@@ -54,8 +63,9 @@ export const InputSelect = ({
           placeholder={placeholder}
           onChange={handleChange}
           value={value}
-          onClick={() => setShowSelectMenu(true)}
+          onClick={handleOnClickInput}
           isDisabled={isDisabled}
+          _loading
         />
         <ChevronDownIcon
           position="absolute"
@@ -64,6 +74,8 @@ export const InputSelect = ({
           width="24px"
           opacity={isDisabled ? 0.3 : 1}
           transform={`rotateZ(${showSelectMenu ? "180" : "0"}deg)`}
+          cursor="pointer"
+          onClick={handleOnClickInput}
         />
 
         {showSelectMenu && (

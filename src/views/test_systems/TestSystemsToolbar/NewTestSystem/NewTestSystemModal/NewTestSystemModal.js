@@ -9,56 +9,72 @@ import {
 } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { CloseIcon } from "../../../../../components/icons/CloseIcon"
-import useClientsApi from "../../../../../hooks/api/useClientsApi"
+import useSystemApi from "../../../../../hooks/api/useSystemsApi"
 import { ApiToastContext } from "../../../../../provider/ApiToastProvider"
-import { NewClientForm } from "../NewTestSystemForm/NewTestSystemForm"
+import { NewTestSystemForm } from "../NewTestSystemForm/NewTestSystemForm"
 
-export const NewTestSystemModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
-  const [values, setValues] = useState([{}])
-  const isEdit = clientToEdit
+export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) => {
   const { showToast } = useContext(ApiToastContext)
-  const { createClient } = useClientsApi()
+  const { createSystem } = useSystemApi()
+
+  const [values, setValues] = useState([{}])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const isEdit = Boolean(systemToEdit)
+
   const handleChange = (val, idx) => {
     const _values = [...values]
     _values[idx] = val
     setValues(_values)
   }
-  const handleDelete = (idx) => {
+
+  const handleDelete = (index) => {
     const _values = [...values]
-    _values.splice(idx, 1)
+    _values.splice(index, 1)
     setValues(_values)
   }
 
-  const checkInputs = () => {
-    return values.some((val) => !val.name || !val.id || !val.alias)
+  const checkInputsAreEmpty = () => {
+    return values.some(
+      (value) =>
+        !value.id || !value.vtiCode || !value.client || !value.alias || !value.year
+    )
   }
 
   const handleSubmit = async () => {
-    const clientsQueue = values.map(async (val) => {
-      return await createClient(val)
-    })
+    setIsSubmitting(true)
+    const systemsQueue = values.map(async (value) => createSystem(value))
+    // TODO -> manage errors
+    await Promise.all(systemsQueue)
 
-    // eslint-disable-next-line no-undef
-    const resultsArr = await Promise.all(clientsQueue)
-    //Meter toast de éxito
-    showToast("CLiente añadido correctamente!")
+    showToast("¡Has añadido nuevo/s ensayo/s!")
+    setIsSubmitting(false)
     onClose()
-    if (resultsArr.some((result) => result.error)) {
-      console.log("ERROR")
-      return
-    }
   }
 
   useEffect(() => {
-    const { name, alias, _id } = clientToEdit || {}
-    setValues([{ name, alias, id: _id }])
-  }, [clientToEdit])
+    if (!systemToEdit) return
+
+    const {
+      _id,
+      vtiCode,
+      clientAlias,
+      alias,
+      date: { year },
+    } = systemToEdit || {}
+    setValues([{ vtiCode, clientAlias, alias, year, id: _id }])
+  }, [systemToEdit])
+
+  useEffect(() => {
+    if (isOpen) return
+    setValues([{}])
+  }, [isOpen])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
-        {/* <ModalHeader
+        <ModalHeader
           mb="32px"
           display="flex"
           p="0"
@@ -66,50 +82,54 @@ export const NewTestSystemModal = ({ isOpen, onClose, clientToEdit, ...props }) 
           w="100%"
         >
           <Text variant="d_l_medium">
-            {isEdit ? "Editar cliente" : "Añadir nuevo cliente"}
+            {isEdit ? "Editar sistema" : "Añadir nuevo sistema"}
           </Text>
           <CloseIcon width="24px" height="24px" cursor="pointer" onClick={onClose} />
         </ModalHeader>
-        {values.map((client, idx) => (
-          <Box key={`client-${idx}`}>
-            {idx !== 0 ? (
+        {values.map((system, index) => (
+          <Box key={`system-${index}`}>
+            {index !== 0 && (
               <Text margin="32px 0" variant="d_l_medium">
-                Añadir nuevo cliente
+                Añadir nuevo sistema
               </Text>
-            ) : null}
-            <NewClientForm
-              value={client}
-              onChange={(val) => handleChange(val, idx)}
+            )}
+
+            <NewTestSystemForm
+              value={system}
+              onChange={(value) => handleChange(value, index)}
             />
-            {idx !== 0 ? (
+
+            {index !== 0 && (
               <Button
                 variant="text_only"
                 color="error"
-                onClick={() => handleDelete(idx)}
+                onClick={() => handleDelete(index)}
               >
                 Eliminar
               </Button>
-            ) : null}
+            )}
           </Box>
         ))}
         <Button
           w="194px"
           margin="0 auto"
           mt="24px"
-          disabled={checkInputs()}
+          disabled={checkInputsAreEmpty()}
           onClick={handleSubmit}
+          isLoading={isSubmitting}
         >
           Guardar
         </Button>
-        {!isEdit ? (
+
+        {isEdit || (
           <Button
             variant="text_only"
             onClick={() => setValues([...values, {}])}
-            disabled={checkInputs()}
+            disabled={checkInputsAreEmpty()}
           >
-            Añadir nuevo cliente
+            Añadir nuevo sistema
           </Button>
-        ) : null} */}
+        )}
       </ModalContent>
     </Modal>
   )
