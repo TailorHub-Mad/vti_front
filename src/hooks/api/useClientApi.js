@@ -1,9 +1,9 @@
-import ClientsService from "../../services/clients.service"
+import ClientService from "../../services/client.service"
 import useApiError from "../useApiError"
 
-const useClientsApi = () => {
+const useClientApi = () => {
   const { addError, removeError } = useApiError()
-  const clientService = new ClientsService(addError, removeError)
+  const clientService = new ClientService(addError, removeError)
 
   const getClients = () => clientService.getClients()
 
@@ -18,4 +18,4 @@ const useClientsApi = () => {
   return { getClients, getClient, createClient, updateClient, deleteClient }
 }
 
-export default useClientsApi
+export default useClientApi

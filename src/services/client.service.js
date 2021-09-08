@@ -1,6 +1,6 @@
 import ServiceConstructor from "."
 
-class ClientsService extends ServiceConstructor {
+class ClientService extends ServiceConstructor {
   getClients = () => this.makeRequest(this.instance.get("/clients?limit=50"))
 
   getClient = (id) => this.makeRequest(this.instance.get(`/clients/${id}`))
@@ -14,4 +14,4 @@ class ClientsService extends ServiceConstructor {
   deleteClient = (id) => this.makeRequest(this.instance.delete(`/clients/${id}`))
 }
 
-export default ClientsService
+export default ClientService

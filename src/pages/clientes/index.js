@@ -1,26 +1,33 @@
 import { useContext, useEffect, useState } from "react"
 import { Page } from "../../components/layout/Page/Page"
 import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
+import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
-import useClientsApi from "../../hooks/api/useClientsApi"
+import useClientApi from "../../hooks/api/useClientApi"
 import { ApiToastContext } from "../../provider/ApiToastProvider"
 import { ClientsTable } from "../../views/clients/ClientsTable/ClientsTable"
 import { ClientsToolBar } from "../../views/clients/ClientsToolBar/ClientsToolBar"
 import { NewClientModal } from "../../views/clients/ClientsToolBar/NewClient/NewClientModal/NewClientModal"
+import { ImportFilesModal } from "../../views/common/ImportFilesModal/ImportFilesModal"
 import { ViewEmptyState } from "../../views/common/NotesEmptyState/ViewEmptyState"
 
 const clientes = () => {
+  const { getClients, deleteClient } = useClientApi()
+  const { showToast } = useContext(ApiToastContext)
+
   const [isFetching, setIsFetching] = useState(false)
-  //TODO Fetch de la lista de proyectos, gestion de la carga y pasarlo a la tabla por props
-  const { getClients, deleteClient } = useClientsApi()
+
   const [clients, setClients] = useState(null)
   const [allClients, setAllClients] = useState(null)
-  const [isClientModalOpen, setIsClientModalOpen] = useState(false)
-  const [clientToEdit, setClientToEdit] = useState(false)
-  const { showToast } = useContext(ApiToastContext)
   const areClients = clients && clients.length > 0
+
+  const [showImportModal, setShowImportModal] = useState(false)
+  const [isClientModalOpen, setIsClientModalOpen] = useState(false)
+
+  const [clientToEdit, setClientToEdit] = useState(null)
   const [clientToDelete, setClientToDelete] = useState(null)
+
   const onDelete = async (id) => {
     await deleteClient(id)
     setClientToDelete(null)
@@ -29,13 +36,16 @@ const clientes = () => {
     showToast("Clientes borrados correctamente")
     //TODO Diferenciar borrado multiple de individual en el popup
   }
+
   const onEdit = (id) => {
     const [client] = [...clients].filter((client) => client._id === id)
     setClientToEdit(client)
     setIsClientModalOpen(true)
   }
 
-  const handleImport = () => {}
+  const handleExport = () => {
+    console.log("Export departments")
+  }
 
   const handleSearch = (val) => {
     const results = allClients.filter(
@@ -70,7 +80,6 @@ const clientes = () => {
       >
         {`Desea eliminar ${clientToDelete}`}
       </Popup>
-
       <NewClientModal
         clientToEdit={clientToEdit}
         isOpen={isClientModalOpen}
@@ -79,11 +88,18 @@ const clientes = () => {
           setClientToEdit(null)
         }}
       />
-      <PageHeader title="Clientes">
+      <ImportFilesModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
+      />
+      <PageHeader>
+        <BreadCrumbs />
         {areClients && !isFetching ? (
           <ClientsToolBar
             onAddClient={() => setIsClientModalOpen(true)}
             onSearch={handleSearch}
+            onImport={() => setShowImportModal(true)}
+            onExport={handleExport}
           />
         ) : null}
       </PageHeader>
@@ -93,7 +109,7 @@ const clientes = () => {
           message="Añadir clientes a la platorma"
           importButtonText="Importar"
           addButtonText="Añadir cliente"
-          onImport={handleImport}
+          onImport={() => setShowImportModal(true)}
           onAdd={() => setIsClientModalOpen(true)}
         />
       ) : null}

@@ -12,15 +12,15 @@ export const ProjectsTable = ({ items }) => {
   //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
   const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
   const [activeItem, setActiveItem] = useState("all")
-  const elements = items.map((e) => ({
+  const elements = items?.map((e) => ({
     actions: "",
     id: e.id,
-    alias: e.alias,
+    alias: { label: e.alias, link: e.id },
     sector: e.sector,
     punto_focal: e.focusPoint || "",
     sistemas_ensayo: e.testSystems,
     tags_proyecto: e.tags,
-    users: [""],
+    usuarios: e.users,
     apuntes: e.notes,
     options: "",
   }))
@@ -94,7 +94,7 @@ export const ProjectsTable = ({ items }) => {
         <ProjectsTableHeader
           activeItem={activeItem}
           onChange={(value) => setActiveItem(value)}
-          projectsCount={elements.length}
+          projectsCount={elements?.length}
         />
       }
       config={projects_table}

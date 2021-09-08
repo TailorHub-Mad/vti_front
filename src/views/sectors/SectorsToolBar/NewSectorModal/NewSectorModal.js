@@ -8,16 +8,16 @@ import {
   Box,
 } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
-import { CloseIcon } from "../../../../../components/icons/CloseIcon"
-import useClientApi from "../../../../../hooks/api/useClientApi"
-import { ApiToastContext } from "../../../../../provider/ApiToastProvider"
-import { NewClientForm } from "../NewClientForm/NewClientForm"
+import { CloseIcon } from "../../../../components/icons/CloseIcon"
+import useSectorApi from "../../../../hooks/api/useSectorApi"
+import { ApiToastContext } from "../../../../provider/ApiToastProvider"
+import { NewSectorForm } from "../NewSectorForm/NewSectorForm"
 
-export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
+export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
   const [values, setValues] = useState([{}])
-  const isEdit = clientToEdit
+  const isEdit = sectorToEdit
   const { showToast } = useContext(ApiToastContext)
-  const { createClient } = useClientApi()
+  const { createSector } = useSectorApi()
   const handleChange = (val, idx) => {
     const _values = [...values]
     _values[idx] = val
@@ -34,14 +34,14 @@ export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
   }
 
   const handleSubmit = async () => {
-    const clientsQueue = values.map(async (val) => {
-      return await createClient(val)
+    const sectorsQueue = values.map(async (val) => {
+      return await createSector(val)
     })
 
     // eslint-disable-next-line no-undef
-    const resultsArr = await Promise.all(clientsQueue)
+    const resultsArr = await Promise.all(sectorsQueue)
     //Meter toast de éxito
-    showToast("CLiente añadido correctamente!")
+    showToast("Sector añadido correctamente!")
     onClose()
     if (resultsArr.some((result) => result.error)) {
       console.log("ERROR")
@@ -50,9 +50,9 @@ export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
   }
 
   useEffect(() => {
-    const { name, alias, _id } = clientToEdit || {}
+    const { name, alias, _id } = sectorToEdit || {}
     setValues([{ name, alias, id: _id }])
-  }, [clientToEdit])
+  }, [sectorToEdit])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
@@ -66,19 +66,19 @@ export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
           w="100%"
         >
           <Text variant="d_l_medium">
-            {isEdit ? "Editar cliente" : "Añadir nuevo cliente"}
+            {isEdit ? "Editar sector" : "Añadir nuevo sector"}
           </Text>
           <CloseIcon width="24px" height="24px" cursor="pointer" onClick={onClose} />
         </ModalHeader>
-        {values.map((client, idx) => (
-          <Box key={`client-${idx}`}>
+        {values.map((sector, idx) => (
+          <Box key={`sector-${idx}`}>
             {idx !== 0 ? (
               <Text margin="32px 0" variant="d_l_medium">
-                Añadir nuevo cliente
+                Añadir nuevo sector
               </Text>
             ) : null}
-            <NewClientForm
-              value={client}
+            <NewSectorForm
+              value={sector}
               onChange={(val) => handleChange(val, idx)}
             />
             {idx !== 0 ? (
@@ -107,7 +107,7 @@ export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
             onClick={() => setValues([...values, {}])}
             disabled={checkInputs()}
           >
-            Añadir nuevo cliente
+            Añadir nuevo sector
           </Button>
         ) : null}
       </ModalContent>

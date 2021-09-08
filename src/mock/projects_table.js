@@ -40,3 +40,16 @@ export const MOCK_TABLE_DATA = new Array(30).fill({
   ],
   options: "",
 })
+
+export const MOCK_BACK_PROJECTS_DATA = new Array(30).fill({
+  actions: "",
+  id: "ABC001",
+  alias: "AL-DEV01",
+  sector: "AUTOMOCION",
+  focusPoint: ["Test", "Person"],
+  testSystems: ["Sistema1", "Sistema3"],
+  tags: ["Tag1", "Tag2"],
+  users: ["Pere", "Gom", "Anabel","Leonardo"],
+  notes: ["Nota1", "Nota2", "Nota3"],
+  options: "",
+})
