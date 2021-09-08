@@ -1,5 +1,6 @@
 import { Checkbox, Text } from "@chakra-ui/react"
 import { useMemo, useState } from "react"
+import { TestSystemLink } from "../../../components/navigation/TestSystemLink/TestSystemLink"
 import { Table } from "../../../components/tables/Table/Table"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
@@ -48,6 +49,8 @@ export const TestSystemsTable = ({
   const test_systems_table = {
     components: {
       text: <Text />,
+      link: <TestSystemLink />,
+      count: <Text />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       notes: <TagGroup variant="testSystem" max={4} />,
       projects: <TagGroup variant="project" max={3} />,

@@ -73,7 +73,6 @@ export const Table = ({
                 bgColor={isSelected(idx) ? "blue.100" : "white"}
                 _hover={{ bgColor: "blue.100" }}
                 gridColumnGap="8px"
-                overflow="hidden"
               >
                 {/* TODO refactor del cloneElement para que reciba las props de forma más elegante */}
                 {Object.entries(item).map(([name, element]) => {
