@@ -22,8 +22,11 @@ import {
   RadioGroup,
   Stack,
   Radio,
+  useDisclosure,
 } from "@chakra-ui/react"
 import { ApiToastContext } from "../provider/ApiToastProvider"
+import { FileInput } from "../components/forms/FileInput/FileInput"
+import { ImportFilesModal } from "../views/common/ImportFilesModal/ImportFilesModal"
 
 const Index = () => {
   const { isLoggedIn } = useContext(ApiUserContext)
@@ -31,11 +34,12 @@ const Index = () => {
   const [mockSelectValue, setMockSelectValue] = useState("")
   const [value, setValue] = useState("")
   const { showToast } = useContext(ApiToastContext)
-
+  const { isOpen, onClose, onOpen } = useDisclosure()
   return !isLoggedIn ? (
     <>Loading...</>
   ) : (
     <Page>
+      <ImportFilesModal isOpen={isOpen} onClose={onClose} />
       <Box maxWidth="600px" width="100%" marginBottom="32px">
         <LogoFull
           color="blue.500"
@@ -54,6 +58,7 @@ const Index = () => {
           light streaming through a rift in the clouds.
         </Text>
       </Box>
+      <FileInput />
       <Card margin="16px 0 32px 0" width="100%">
         <Switch marginRight="16px" />
         <Switch isDisabled />
@@ -77,7 +82,7 @@ const Index = () => {
       <Grid templateColumns="1fr" gap="16px" width="fit-content" marginBottom="32px">
         <NotificationCard />
       </Grid>
-
+      <Button onClick={onOpen}>Abrir ventana de import</Button>
       <Card width="50%">
         <FormController
           label="Nombre de usuario:"
