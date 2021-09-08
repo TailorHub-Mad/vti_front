@@ -13,6 +13,7 @@ import { Popup } from "../components/overlay/Popup/Popup"
 import { pullAt } from "lodash"
 import { NewTestSystemModal } from "../views/test_systems/TestSystemsToolbar/NewTestSystem/NewTestSystemModal/NewTestSystemModal"
 import { SWR_CACHE_KEYS } from "../utils/constants/swr"
+import { ImportFilesModal } from "../views/common/ImportFilesModal/ImportFilesModal"
 
 const DeleteType = {
   ONE: "deleteOne",
@@ -28,6 +29,8 @@ const sistemas = () => {
     systems
   )
 
+  const [showImportModal, setShowImportModal] = useState(false)
+
   // Create - Update state
   const [isSystemModalOpen, setIsSystemModalOpen] = useState(false)
   const [systemToEdit, setSystemToEdit] = useState(null)
@@ -40,8 +43,11 @@ const sistemas = () => {
   const [searchChain, setSearchChain] = useState("")
   const [searchedSystems, setSearchedSystems] = useState([])
 
-  const emptyData = Boolean(data && data[0].testSystem.length === 0)
-  const systemsData = data ? data[0].testSystem : []
+  const emptyData = Boolean(data && data[0]?.testSystems.length === 0)
+  const systemsData = data ? data[0]?.testSystems : []
+
+  // TODO
+  const handleExport = () => {}
 
   const handleOpenPopup = (systemsToDelete, type) => {
     setDeleteType(type)
@@ -145,18 +151,27 @@ const sistemas = () => {
         isOpen={isSystemModalOpen}
         onClose={handleOnCloseModal}
       />
+      <ImportFilesModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
+      />
 
       <PageHeader title="Sistemas de ensayo">
         {!isLoading && !emptyData && (
           <TestSystemsToolbar
             onAddTestSystem={handleOnOpenModal}
             onSearch={onSearch}
+            onImport={() => setShowImportModal(true)}
+            onExport={handleExport}
           />
         )}
       </PageHeader>
       {isLoading ? <LoadingTableSpinner /> : null}
       {emptyData ? (
-        <TestSystemsEmptyState onAddTestSystem={handleOnOpenModal} />
+        <TestSystemsEmptyState
+          onAddTestSystem={handleOnOpenModal}
+          onImport={() => setShowImportModal(true)}
+        />
       ) : null}
       {data && !emptyData ? (
         <TestSystemsTable

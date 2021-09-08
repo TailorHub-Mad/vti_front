@@ -1,11 +1,11 @@
 import React from "react"
 import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
 import { SimpleInput } from "../../../../../components/forms/SimpleInput/SimpleInput"
-import useClientsApi from "../../../../../hooks/api/useClientsApi"
+import useClientApi from "../../../../../hooks/api/useClientApi"
 import useFetchSWR from "../../../../../hooks/useFetchSWR"
 
 export const NewTestSystemForm = ({ value, onChange }) => {
-  const { getClients } = useClientsApi()
+  const { getClients } = useClientApi()
   // TODO -> manage errors & loading state
   const { data /*error, isLoading*/ } = useFetchSWR("clients/", getClients)
 
