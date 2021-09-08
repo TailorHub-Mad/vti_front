@@ -67,14 +67,14 @@ export const MenuItem = ({ label, icon, href, submenu, ...props }) => {
         {...props}
       />
       {submenu && showSubmenu
-        ? submenu.map((link,idx) => (
+        ? submenu.map((link, idx) => (
             <MenuLink
               key={link.label}
               label={link.label}
               icon={link.icon()}
               href={link.href}
               pl="16px"
-              mb={idx === submenu.length -1  ? "16px" : "0"}
+              mb={idx === submenu.length - 1 ? "16px" : "0"}
             />
           ))
         : null}

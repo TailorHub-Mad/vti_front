@@ -83,7 +83,10 @@ const clientes = () => {
       />
       <PageHeader title="Clientes">
         {areClients && !isFetching ? (
-          <ClientsToolBar onAddClient={() => setIsClientModalOpen(true)} onSearch={handleSearch} />
+          <ClientsToolBar
+            onAddClient={() => setIsClientModalOpen(true)}
+            onSearch={handleSearch}
+          />
         ) : null}
       </PageHeader>
       {isFetching ? <LoadingTableSpinner /> : null}
