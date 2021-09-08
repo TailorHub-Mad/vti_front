@@ -9,15 +9,15 @@ import {
 } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { CloseIcon } from "../../../../components/icons/CloseIcon"
-import useSectorApi from "../../../../hooks/api/useSectorApi"
+import useDepartmentApi from "../../../../hooks/api/useDepartmentApi"
 import { ApiToastContext } from "../../../../provider/ApiToastProvider"
-import { NewSectorForm } from "../NewSectorForm/NewSectorForm"
+import { NewDepartmentForm } from "../NewDepartmentForm/NewDepartmentForm"
 
-export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
+export const NewDepartmentModal = ({ isOpen, onClose, departmentToEdit, ...props }) => {
   const [values, setValues] = useState([{}])
-  const isEdit = sectorToEdit
+  const isEdit = departmentToEdit
   const { showToast } = useContext(ApiToastContext)
-  const { createSector } = useSectorApi()
+  const { createDepartment } = useDepartmentApi()
   const handleChange = (val, idx) => {
     const _values = [...values]
     _values[idx] = val
@@ -34,14 +34,14 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
   }
 
   const handleSubmit = async () => {
-    const sectorsQueue = values.map(async (val) => {
-      return await createSector(val)
+    const departmentsQueue = values.map(async (val) => {
+      return await createDepartment(val)
     })
 
     // eslint-disable-next-line no-undef
-    const resultsArr = await Promise.all(sectorsQueue)
+    const resultsArr = await Promise.all(departmentsQueue)
     //Meter toast de éxito
-    showToast("Sector añadido correctamente!")
+    showToast("Departamento añadido correctamente!")
     onClose()
     if (resultsArr.some((result) => result.error)) {
       console.log("ERROR")
@@ -50,9 +50,9 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
   }
 
   useEffect(() => {
-    const { name, alias, _id } = sectorToEdit || {}
+    const { name, alias, _id } = departmentToEdit || {}
     setValues([{ name, alias, id: _id }])
-  }, [sectorToEdit])
+  }, [departmentToEdit])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
@@ -66,19 +66,19 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
           w="100%"
         >
           <Text variant="d_l_medium">
-            {isEdit ? "Editar sector" : "Añadir nuevo sector"}
+            {isEdit ? "Editar departamento" : "Añadir nuevo departamento"}
           </Text>
           <CloseIcon width="24px" height="24px" cursor="pointer" onClick={onClose} />
         </ModalHeader>
-        {values.map((sector, idx) => (
-          <Box key={`sector-${idx}`}>
+        {values.map((department, idx) => (
+          <Box key={`department-${idx}`}>
             {idx !== 0 ? (
               <Text margin="32px 0" variant="d_l_medium">
-                Añadir nuevo sector
+                Añadir nuevo departamento
               </Text>
             ) : null}
-            <NewSectorForm
-              value={sector}
+            <NewDepartmentForm
+              value={department}
               onChange={(val) => handleChange(val, idx)}
             />
             {idx !== 0 ? (
@@ -107,7 +107,7 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
             onClick={() => setValues([...values, {}])}
             disabled={checkInputs()}
           >
-            Añadir nuevo sector
+            Añadir nuevo departamento
           </Button>
         ) : null}
       </ModalContent>

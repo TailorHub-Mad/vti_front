@@ -19,14 +19,14 @@ const sectores = () => {
   const [isSectorModalOpen, setIsSectorModalOpen] = useState(false)
   const [sectorToEdit, setClientToEdit] = useState(false)
   const { showToast } = useContext(ApiToastContext)
-  const areClients = sectors && sectors.length > 0
+  const areSectors = sectors && sectors.length > 0
   const [sectorToDelete, setSectorToDelete] = useState(null)
   const onDelete = async (id) => {
     await deleteClient(id)
     setSectorToDelete(null)
     const _sectors = [...sectors].filter((sector) => sector._id !== id)
     setSectors(_sectors)
-    showToast("Clientes borrados correctamente")
+    showToast("Sectores borrados correctamente")
     //TODO Diferenciar borrado multiple de individual en el popup
   }
   const onEdit = (id) => {
@@ -83,7 +83,7 @@ const sectores = () => {
         }}
       />
       <PageHeader title="Sectores">
-        {areClients && !isFetching ? (
+        {areSectors && !isFetching ? (
           <SectorsToolBar
             onAddSector={() => setIsSectorModalOpen(true)}
             onSearch={handleSearch}
@@ -91,7 +91,7 @@ const sectores = () => {
         ) : null}
       </PageHeader>
       {isFetching ? <LoadingTableSpinner /> : null}
-      {!areClients && !isFetching ? (
+      {!areSectors && !isFetching ? (
         <ViewEmptyState
           message="Añadir sectores a la platorma"
           importButtonText="Importar"
@@ -100,7 +100,7 @@ const sectores = () => {
           onAdd={() => setIsSectorModalOpen(true)}
         />
       ) : null}
-      {areClients && !isFetching ? (
+      {areSectors && !isFetching ? (
         <SectorsTable
           sectors={sectors}
           onDelete={(id) => setSectorToDelete(id)}
