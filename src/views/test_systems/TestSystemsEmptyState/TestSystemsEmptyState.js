@@ -3,7 +3,7 @@ import React from "react"
 import { AddTestSystemIcon } from "../../../components/icons/AddTestSystemIcon"
 import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
 
-export const TestSystemsEmptyState = ({ ...props }) => {
+export const TestSystemsEmptyState = ({ onAddTestSystem, onImport, ...props }) => {
   return (
     <Center flexDir="column" mt="150px" {...props}>
       <Text variant="d_s_medium" mb="24px">
@@ -15,6 +15,7 @@ export const TestSystemsEmptyState = ({ ...props }) => {
         leftIcon={<UploadCloudIcon />}
         variant="secondary"
         mb="16px"
+        onClick={onImport}
       >
         Importar
       </Button>
@@ -22,6 +23,7 @@ export const TestSystemsEmptyState = ({ ...props }) => {
         display="flex"
         justifyContent="flex-start"
         leftIcon={<AddTestSystemIcon />}
+        onClick={onAddTestSystem}
       >
         Añadir sistema
       </Button>

@@ -12,9 +12,7 @@ import { CloseIcon } from "../../../components/icons/CloseIcon"
 
 export const ImportFilesModal = ({ title, isOpen, onClose, ...props }) => {
   const [files, setFiles] = useState(null)
-  const handleSubmit = () => {
-    console.log("Files", files)
-  }
+  const handleSubmit = () => {}
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
       <ModalOverlay />
@@ -29,7 +27,9 @@ export const ImportFilesModal = ({ title, isOpen, onClose, ...props }) => {
           <Text variant="d_l_medium">{title || "Importar archivos"}</Text>
           <CloseIcon width="24px" height="24px" cursor="pointer" onClick={onClose} />
         </ModalHeader>
-        <Text variant="d_s_medium" mb="8px">{"Adjunte sus documentos"}</Text>
+        <Text variant="d_s_medium" mb="8px">
+          {"Adjunte sus documentos"}
+        </Text>
         <FileInput value={files} onChange={(_files) => setFiles(_files)} />
         <Button w="194px" margin="0 auto" mt="64px" onClick={handleSubmit}>
           Guardar

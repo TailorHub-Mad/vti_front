@@ -118,7 +118,7 @@ const clientes = () => {
           clients={clients}
           onDelete={(id) => setClientToDelete(id)}
           onEdit={onEdit}
-          deleteItems={(rows) => console.log("borra", rows)}
+          deleteItems={() => {}}
         />
       ) : null}
     </Page>

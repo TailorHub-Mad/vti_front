@@ -57,8 +57,10 @@ export const FileInput = ({
       >
         <input {...getInputProps()} />
         <Box textAlign="center">
-          <UploadFileIcon color="grey" mb="3px"/>
-          <Text variant="d_s_medium" color="grey" >{label || "Adjunte o arrastre EXCEL"}</Text>
+          <UploadFileIcon color="grey" mb="3px" />
+          <Text variant="d_s_medium" color="grey">
+            {label || "Adjunte o arrastre EXCEL"}
+          </Text>
         </Box>
       </Flex>
       {fileError ? <Text color="error">Error en documentos</Text> : null}

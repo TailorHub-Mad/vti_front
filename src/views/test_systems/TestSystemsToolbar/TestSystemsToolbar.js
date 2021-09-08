@@ -2,16 +2,19 @@
 import { SearchIcon } from "@chakra-ui/icons"
 import { Button, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
 import React, { useContext } from "react"
+import { CloudButton } from "../../../components/buttons/CloudButton/CloudButton"
 import { Filter } from "../../../components/filters/Filter/Filter"
 import { Group } from "../../../components/grouping/Group/Group"
 import { AddTestSystemIcon } from "../../../components/icons/AddTestSystemIcon"
-import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
 import { ApiUserContext } from "../../../provider/ApiAuthProvider"
 
-export const TestSystemsToolbar = () => {
-  const {
-    state: { role },
-  } = useContext(ApiUserContext)
+export const TestSystemsToolbar = ({
+  onAddTestSystem,
+  onSearch,
+  onImport,
+  onExport,
+}) => {
+  const { role } = useContext(ApiUserContext)
 
   return (
     <>
@@ -26,14 +29,14 @@ export const TestSystemsToolbar = () => {
           placeholder="Busque por ID, código"
           paddingLeft="40px"
           variant="white"
+          onChange={(e) => onSearch(e.target.value)}
         />
       </InputGroup>
       {role === "admin" && (
         <>
-          <Button variant="icon_only_secondary" marginRight="16px">
-            <UploadCloudIcon />
-          </Button>
-          <Button>
+          <CloudButton onImport={onImport} onExport={onExport} />
+
+          <Button onClick={onAddTestSystem}>
             <AddTestSystemIcon marginRight="8px" />
             Añadir sistema
           </Button>

@@ -52,7 +52,8 @@ class ServiceConstructor {
       this.errorHandler(
         e.response?.data?.details ? e.response.data.details[0]?.message : e?.message
       )
-      return { error: true }
+      if (e.response.config.method === "post") return { error: true }
+      throw e
     }
   }
 }

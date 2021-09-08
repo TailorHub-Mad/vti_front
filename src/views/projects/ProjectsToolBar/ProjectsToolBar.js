@@ -10,6 +10,7 @@ import { AddNewProject } from "../AddNewProjectModal/AddNewProject"
 
 export const ProjectsToolBar = () => {
   const { role } = useContext(ApiUserContext)
+
   return (
     <Flex width="fit-content">
       <Filter />

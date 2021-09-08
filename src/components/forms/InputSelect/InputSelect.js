@@ -1,5 +1,5 @@
 import { Box, Input, useOutsideClick } from "@chakra-ui/react"
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { ChevronDownIcon } from "../../icons/ChevronDownIcon"
 import { FormController } from "../FormItemWrapper/FormController"
 import { SelectMenu } from "../SelectMenu/SelectMenu"
@@ -15,17 +15,20 @@ export const InputSelect = ({
   isDisabled,
   ...props
 }) => {
+  const [inputValue, setInputValue] = useState(value)
   const [showSelectMenu, setShowSelectMenu] = useState(false)
   const [availableOptions, setAvailableOptions] = useState(options)
   const ref = useRef(null)
   const handleChange = (e) => {
     onChange && onChange(e.target.value)
+    setInputValue(e.target.value)
     filterOptions(e.target.value)
   }
 
   const handleSelect = (_value) => {
     const [selected] = availableOptions?.filter((option) => option.value === _value)
-    onChange && onChange(selected.label)
+    onChange && onChange(selected.value)
+    setInputValue(selected.label)
     setShowSelectMenu(false)
   }
 
@@ -36,10 +39,17 @@ export const InputSelect = ({
     setAvailableOptions(nextOptions)
   }
 
+  const handleOnClickInput = () => setShowSelectMenu(!showSelectMenu)
+
   useOutsideClick({
     ref: ref,
     handler: () => setShowSelectMenu(false),
   })
+
+  useEffect(() => {
+    if (!options.length > 0) return
+    setAvailableOptions(options)
+  }, [options])
 
   return (
     <FormController
@@ -53,9 +63,10 @@ export const InputSelect = ({
         <Input
           placeholder={placeholder}
           onChange={handleChange}
-          value={value}
-          onClick={() => setShowSelectMenu(true)}
+          value={inputValue}
+          onClick={handleOnClickInput}
           isDisabled={isDisabled}
+          _loading
         />
         <ChevronDownIcon
           position="absolute"
@@ -64,6 +75,8 @@ export const InputSelect = ({
           width="24px"
           opacity={isDisabled ? 0.3 : 1}
           transform={`rotateZ(${showSelectMenu ? "180" : "0"}deg)`}
+          cursor="pointer"
+          onClick={handleOnClickInput}
         />
 
         {showSelectMenu && (
