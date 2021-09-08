@@ -17,7 +17,7 @@ import { NewTestSystemForm } from "../NewTestSystemForm/NewTestSystemForm"
 
 export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) => {
   const { showToast } = useContext(ApiToastContext)
-  const { createSystem } = useSystemApi()
+  const { createSystem, editSystem } = useSystemApi()
   const { mutate, cache } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
@@ -49,7 +49,21 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
   const handleSubmit = async () => {
     setIsSubmitting(true)
 
-    const systemsToCreate = values.map((value) => {
+    const updatedSystemsList = isEdit
+      ? await handleEditSystem()
+      : await handleCreateSystem()
+
+    updatedSystemsList
+      ? await mutate(SWR_CACHE_KEYS.systems, updatedSystemsList, false)
+      : await mutate(SWR_CACHE_KEYS.systems)
+
+    showToast(isEdit ? "Editado correctamente" : "¡Has añadido nuevo/s ensayo/s!")
+    setIsSubmitting(false)
+    onClose()
+  }
+
+  const formatSystems = (systems) => {
+    return systems.map((value) => {
       const { clientAlias: client, year, vtiCode, alias } = value
       return {
         vtiCode,
@@ -60,6 +74,10 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
         client,
       }
     })
+  }
+
+  const handleCreateSystem = async () => {
+    const systemsToCreate = formatSystems(values)
     const systemsQueue = systemsToCreate.map((system) => createSystem(system))
     const response = await Promise.all(systemsQueue)
 
@@ -91,17 +109,27 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
       updatedSystems.push({
         testSystem: [...formatSystemsSuccessfull, ...cacheSystems[0].testSystem],
       })
-      await mutate(SWR_CACHE_KEYS.systems, updatedSystems, false)
-    } else await mutate(SWR_CACHE_KEYS.systems)
+      return updatedSystems
+    }
 
-    showToast("¡Has añadido nuevo/s ensayo/s!")
-    setIsSubmitting(false)
-    onClose()
+    return null
+  }
+
+  const handleEditSystem = async () => {
+    const { _id } = systemToEdit
+    const [formatedSystem] = formatSystems(values)
+
+    // TODO -> provisional
+    delete formatedSystem["client"]
+
+    await editSystem(_id, formatedSystem)
+
+    // TODO -> optimize cache request (update cache with updated system)
+    return null
   }
 
   useEffect(() => {
     if (!systemToEdit) return
-
     const {
       _id,
       vtiCode,

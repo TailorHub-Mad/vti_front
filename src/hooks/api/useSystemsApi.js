@@ -8,7 +8,7 @@ const useSystemApi = () => {
 
   const systems = () => systemService.systems()
   const createSystem = (system) => systemService.createSystem(system)
-  const editSystem = () => systemService.editSystem()
+  const editSystem = (id, system) => systemService.editSystem(id, system)
   const deleteSystem = (id) => systemService.deleteSystem(id)
 
   return { systems, createSystem, editSystem, deleteSystem }
