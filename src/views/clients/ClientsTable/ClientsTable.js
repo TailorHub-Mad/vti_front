@@ -19,7 +19,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, deleteItems }) => {
         id: client._id,
         alias: client.alias,
         name: { label: client.name, link: client._id },
-        testSystem: client.testSystem.map((testSystem) => testSystem.alias),
+        testSystems: client.testSystems.map((testSystem) => testSystem.alias),
         projects: [...client.projects].map((project) => project.alias),
         options: "",
       }
@@ -31,7 +31,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, deleteItems }) => {
       link: <ClientLink />,
       count: <Text />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
-      testSystem: <TagGroup variant="light_blue" max={3} />,
+      testSystems: <TagGroup variant="light_blue" max={3} />,
       projects: <TagGroup variant="pale_yellow" max={7} />,
       options: <ClientRowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
     },
@@ -56,7 +56,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, deleteItems }) => {
         width: calcColWidth(300),
         type: "link",
       },
-      testSystem: {
+      testSystems: {
         label: "Sistemas de ensayo",
         width: calcColWidth(250),
         type: "tagGroup",

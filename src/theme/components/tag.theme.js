@@ -35,7 +35,7 @@ export const Tag = {
         borderRadius: "50px",
       },
     },
-    testSystem: {
+    testSystems: {
       container: {
         backgroundColor: "pale_yellow",
         borderRadius: "50px",

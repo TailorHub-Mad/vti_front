@@ -84,7 +84,7 @@ const sistemas = () => {
     await deleteSystem(id)
     const updatedSystems = []
     updatedSystems.push({
-      testSystem: systems.filter((system) => system._id !== id),
+      testSystems: systems.filter((system) => system._id !== id),
     })
     await mutate(updatedSystems, false)
     showToast("Sistema de ensayo borrado correctamente")
@@ -97,7 +97,7 @@ const sistemas = () => {
     await Promise.all(systemsQueue)
     pullAt(systems, positions)
     const updatedSystems = []
-    updatedSystems.push({ testSystem: systems })
+    updatedSystems.push({ testSystems: systems })
     await mutate(updatedSystems, false)
     showToast("Sistemas de ensayo borrados correctamente")
   }

@@ -107,7 +107,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
         }
       })
       updatedSystems.push({
-        testSystem: [...formatSystemsSuccessfull, ...cacheSystems[0].testSystem],
+        testSystems: [...formatSystemsSuccessfull, ...cacheSystems[0].testSystems],
       })
       return updatedSystems
     }
