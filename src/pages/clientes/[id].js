@@ -12,7 +12,6 @@ const client = () => {
   const [client, setClient] = useState(null)
   const { getClient } = useClientsApi()
   const router = useRouter()
-  console.log(client)
   useEffect(() => {
     setIsFetching(true)
     const fetchClients = async () => {

@@ -9,7 +9,6 @@ import { ProjectsTableHeader } from "../ProjectsTableHeader/ProjectsTableHeader"
 import { ProjectRowOptionMenu } from "./ProjectRowOptionMenu/ProjectRowOptionMenu"
 
 export const ProjectsTable = ({ items }) => {
-  console.log(items)
   //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
   const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
   const [activeItem, setActiveItem] = useState("all")

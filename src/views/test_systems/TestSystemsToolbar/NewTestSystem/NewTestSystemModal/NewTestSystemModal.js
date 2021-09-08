@@ -122,7 +122,12 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
     // TODO -> provisional
     delete formatedSystem["client"]
 
-    await editSystem(_id, formatedSystem)
+    const response = await editSystem(_id, formatedSystem)
+
+    // // TODO -> manage errors
+    if (response?.error) {
+      console.log("ERROR")
+    }
 
     // TODO -> optimize cache request (update cache with updated system)
     return null

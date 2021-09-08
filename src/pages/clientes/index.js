@@ -35,9 +35,7 @@ const clientes = () => {
     setIsClientModalOpen(true)
   }
 
-  const handleImport = () => {
-    console.log("Import clients")
-  }
+  const handleImport = () => {}
 
   const handleSearch = (val) => {
     const results = allClients.filter(
@@ -104,7 +102,7 @@ const clientes = () => {
           clients={clients}
           onDelete={(id) => setClientToDelete(id)}
           onEdit={onEdit}
-          deleteItems={(rows) => console.log("borra", rows)}
+          deleteItems={() => {}}
         />
       ) : null}
     </Page>

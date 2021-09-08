@@ -12,9 +12,7 @@ import { CloseIcon } from "../../../components/icons/CloseIcon"
 
 export const ImportFilesModal = ({ title, isOpen, onClose, ...props }) => {
   const [files, setFiles] = useState(null)
-  const handleSubmit = () => {
-    console.log("Files", files)
-  }
+  const handleSubmit = () => {}
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
       <ModalOverlay />
