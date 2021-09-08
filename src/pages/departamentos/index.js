@@ -63,6 +63,7 @@ const departamentos = () => {
     setIsFetching(true)
     const fetchClients = async () => {
       const _departments = await getDepartments()
+      console.log(_departments)
       setDepartments(MOCK_DEPARTMENTS_TABLE)
       setAllDepartments([])
       setIsFetching(false)
@@ -113,7 +114,7 @@ const departamentos = () => {
           message="Añadir departmentes a la platorma"
           importButtonText="Importar"
           addButtonText="Añadir department"
-          onImport={handleImport}
+          onImport={() => setShowImportModal(true)}
           onAdd={() => setIsDepartmentModalOpen(true)}
         />
       ) : null}

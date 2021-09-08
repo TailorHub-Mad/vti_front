@@ -1,4 +1,4 @@
-import { Box, Button, Text, useDisclosure, useOutsideClick } from "@chakra-ui/react"
+import { Box, Button, Text, useDisclosure } from "@chakra-ui/react"
 import React from "react"
 import { ExportIcon } from "../../icons/ExportIcon"
 import { UploadCloudIcon } from "../../icons/UploadCloudIcon"
@@ -31,3 +31,4 @@ export const CloudButton = ({ onImport, onExport }) => {
     </Box>
   )
 }
+ 

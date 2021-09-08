@@ -9,6 +9,7 @@ import { ApiToastContext } from "../../provider/ApiToastProvider"
 import { ClientsTable } from "../../views/clients/ClientsTable/ClientsTable"
 import { ClientsToolBar } from "../../views/clients/ClientsToolBar/ClientsToolBar"
 import { NewClientModal } from "../../views/clients/ClientsToolBar/NewClient/NewClientModal/NewClientModal"
+import { ImportFilesModal } from "../../views/common/ImportFilesModal/ImportFilesModal"
 import { ViewEmptyState } from "../../views/common/NotesEmptyState/ViewEmptyState"
 
 const clientes = () => {
@@ -21,6 +22,7 @@ const clientes = () => {
   const [allClients, setAllClients] = useState(null)
   const areClients = clients && clients.length > 0
 
+  const [showImportModal, setShowImportModal] = useState(false)
   const [isClientModalOpen, setIsClientModalOpen] = useState(false)
 
   const [clientToEdit, setClientToEdit] = useState(null)
@@ -41,8 +43,8 @@ const clientes = () => {
     setIsClientModalOpen(true)
   }
 
-  const handleImport = () => {
-    console.log("Import clients")
+  const handleExport = () => {
+    console.log("Export departments")
   }
 
   const handleSearch = (val) => {
@@ -86,12 +88,18 @@ const clientes = () => {
           setClientToEdit(null)
         }}
       />
+      <ImportFilesModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
+      />
       <PageHeader>
         <BreadCrumbs />
         {areClients && !isFetching ? (
           <ClientsToolBar
             onAddClient={() => setIsClientModalOpen(true)}
             onSearch={handleSearch}
+            onImport={() => setShowImportModal(true)}
+            onExport={handleExport}
           />
         ) : null}
       </PageHeader>
@@ -101,7 +109,7 @@ const clientes = () => {
           message="Añadir clientes a la platorma"
           importButtonText="Importar"
           addButtonText="Añadir cliente"
-          onImport={handleImport}
+          onImport={() => setShowImportModal(true)}
           onAdd={() => setIsClientModalOpen(true)}
         />
       ) : null}

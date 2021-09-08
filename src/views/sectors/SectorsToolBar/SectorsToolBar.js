@@ -2,10 +2,10 @@
 import { SearchIcon } from "@chakra-ui/icons"
 import { Button, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
 import React from "react"
+import { CloudButton } from "../../../components/buttons/CloudButton/CloudButton"
 import { AddSectorIcon } from "../../../components/icons/AddSectorIcon"
-import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
 
-export const SectorsToolBar = ({ onAddSector, onSearch }) => {
+export const SectorsToolBar = ({ onAddSector, onSearch, onImport, onExport }) => {
   return (
     <>
       <InputGroup width="196px" marginRight="16px">
@@ -20,9 +20,8 @@ export const SectorsToolBar = ({ onAddSector, onSearch }) => {
           onChange={(e) => onSearch(e.target.value)}
         />
       </InputGroup>
-      <Button variant="icon_only_secondary" marginRight="16px">
-        <UploadCloudIcon />
-      </Button>
+      <CloudButton onImport={onImport} onExport={onExport} />
+
       <Button onClick={onAddSector}>
         <AddSectorIcon marginRight="8px" />
         Añadir sector

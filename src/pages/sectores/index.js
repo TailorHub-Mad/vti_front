@@ -10,17 +10,23 @@ import { ViewEmptyState } from "../../views/common/NotesEmptyState/ViewEmptyStat
 import { MOCK_SECTORS_TABLE } from "../../mock/sectors_table"
 import { SectorsToolBar } from "../../views/sectors/SectorsToolBar/SectorsToolBar"
 import { NewSectorModal } from "../../views/sectors/SectorsToolBar/NewSectorModal/NewSectorModal"
+import { ImportFilesModal } from "../../views/common/ImportFilesModal/ImportFilesModal"
 const sectores = () => {
-  const [isFetching, setIsFetching] = useState(false)
-  //TODO Fetch de la lista de proyectos, gestion de la carga y pasarlo a la tabla por props
   const { getClients, deleteClient } = useClientApi()
+  const { showToast } = useContext(ApiToastContext)
+
+  const [isFetching, setIsFetching] = useState(false)
+
   const [sectors, setSectors] = useState(MOCK_SECTORS_TABLE)
   const [allSectors, setAllSectors] = useState(null)
-  const [isSectorModalOpen, setIsSectorModalOpen] = useState(false)
-  const [sectorToEdit, setClientToEdit] = useState(false)
-  const { showToast } = useContext(ApiToastContext)
   const areSectors = sectors && sectors.length > 0
+
+  const [isSectorModalOpen, setIsSectorModalOpen] = useState(false)
+  const [showImportModal, setShowImportModal] = useState(false)
+
+  const [sectorToEdit, setClientToEdit] = useState(false)
   const [sectorToDelete, setSectorToDelete] = useState(null)
+
   const onDelete = async (id) => {
     await deleteClient(id)
     setSectorToDelete(null)
@@ -35,8 +41,8 @@ const sectores = () => {
     setIsSectorModalOpen(true)
   }
 
-  const handleImport = () => {
-    console.log("Import sectors")
+  const handleExport = () => {
+    console.log("Export sectors")
   }
 
   const handleSearch = (val) => {
@@ -82,11 +88,19 @@ const sectores = () => {
           setClientToEdit(null)
         }}
       />
+
+      <ImportFilesModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
+      />
+
       <PageHeader title="Sectores">
         {areSectors && !isFetching ? (
           <SectorsToolBar
             onAddSector={() => setIsSectorModalOpen(true)}
             onSearch={handleSearch}
+            onImport={() => setShowImportModal(true)}
+            onExport={handleExport}
           />
         ) : null}
       </PageHeader>
@@ -96,7 +110,7 @@ const sectores = () => {
           message="Añadir sectores a la platorma"
           importButtonText="Importar"
           addButtonText="Añadir sector"
-          onImport={handleImport}
+          onImport={() => setShowImportModal(true)}
           onAdd={() => setIsSectorModalOpen(true)}
         />
       ) : null}
