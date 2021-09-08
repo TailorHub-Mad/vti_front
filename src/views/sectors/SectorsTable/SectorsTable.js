@@ -1,39 +1,36 @@
 import { Checkbox, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
-import { ClientLink } from "../../../components/navigation/ClientLink/ClientLink"
+import { SectorLink } from "../../../components/navigation/SectorLink/SectorLink"
 import { Table } from "../../../components/tables/Table/Table"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
-import { ClientsTableHeader } from "../ClientsTableHeader/ClientsTableHeader"
-import { ClientRowOptionMenu } from "./ClientRowOptionMenu/ClientRowOptionMenu"
+import { SectorsTableHeader } from "../SectorsTableHeader/SectorsTableHeader"
+import { SectorRowOptionMenu } from "./SectorRowOptionMenu/SectorRowOptionMenu"
 
-export const ClientsTable = ({ clients, onDelete, onEdit, deleteItems }) => {
+export const SectorsTable = ({ sectors, onDelete, onEdit, deleteItems }) => {
   //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
+  //Hacer componente sectorLink
   const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
   const [activeItem, setActiveItem] = useState("all")
-  const _clients =
-    clients &&
-    clients.map((client) => {
+  const _sectors =
+    sectors &&
+    sectors.map((sector) => {
       return {
         actions: "",
-        id: client._id,
-        alias: client.alias,
-        name: { label: client.name, link: client._id },
-        testSystem: client.testSystem.map((testSystem) => testSystem.alias),
-        projects: [...client.projects].map((project) => project.alias),
+        id: sector._id,
+        name: { label: sector.name, link: sector._id },
+        projects: ["Hola", "k ase"],
         options: "",
       }
     })
 
-  const projects_table = {
+  const sectors_table = {
     components: {
       text: <Text />,
-      link: <ClientLink />,
-      count: <Text />,
+      link: <SectorLink />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
-      testSystem: <TagGroup variant="light_blue" max={3} />,
       projects: <TagGroup variant="pale_yellow" max={7} />,
-      options: <ClientRowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
+      options: <SectorRowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
     },
     head: {
       actions: {
@@ -46,24 +43,14 @@ export const ClientsTable = ({ clients, onDelete, onEdit, deleteItems }) => {
         width: calcColWidth(80),
         type: "text",
       },
-      alias: {
-        label: "Alias",
-        width: calcColWidth(80),
-        type: "text",
-      },
       name: {
         label: "Nombre",
-        width: calcColWidth(300),
+        width: calcColWidth(120),
         type: "link",
-      },
-      testSystem: {
-        label: "Sistemas de ensayo",
-        width: calcColWidth(250),
-        type: "tagGroup",
       },
       projects: {
         label: "Proyectos",
-        width: calcColWidth(300),
+        width: calcColWidth(815),
         type: "tagGroup",
       },
       options: {
@@ -77,16 +64,16 @@ export const ClientsTable = ({ clients, onDelete, onEdit, deleteItems }) => {
   return (
     <Table
       header={
-        <ClientsTableHeader
-          clientsCount={clients?.length}
+        <SectorsTableHeader
+          sectorsCount={sectors?.length}
           activeItem={activeItem}
           onChange={(value) => setActiveItem(value)}
           selectedRows={selectedRows}
           deleteItems={(items) => deleteItems(items)}
         />
       }
-      config={projects_table}
-      content={_clients}
+      config={sectors_table}
+      content={_sectors}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
       p="32px"

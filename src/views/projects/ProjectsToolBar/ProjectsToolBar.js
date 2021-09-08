@@ -1,6 +1,6 @@
 /* eslint-disable react/no-children-prop */
 import { SearchIcon } from "@chakra-ui/icons"
-import { Button, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
+import { Button, Flex, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
 import React, { useContext } from "react"
 import { Filter } from "../../../components/filters/Filter/Filter"
 import { Group } from "../../../components/grouping/Group/Group"
@@ -9,12 +9,9 @@ import { ApiUserContext } from "../../../provider/ApiAuthProvider"
 import { AddNewProject } from "../AddNewProjectModal/AddNewProject"
 
 export const ProjectsToolBar = () => {
-  const {
-    state: { role },
-  } = useContext(ApiUserContext)
-
+  const { role } = useContext(ApiUserContext)
   return (
-    <>
+    <Flex width="fit-content">
       <Filter />
       <Group />
       <InputGroup width="196px" marginRight="16px">
@@ -37,6 +34,6 @@ export const ProjectsToolBar = () => {
           <AddNewProject />
         </>
       )}
-    </>
+    </Flex>
   )
 }

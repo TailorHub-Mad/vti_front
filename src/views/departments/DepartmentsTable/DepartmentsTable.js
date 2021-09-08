@@ -1,39 +1,37 @@
 import { Checkbox, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
-import { ClientLink } from "../../../components/navigation/ClientLink/ClientLink"
+import { DepartmentLink } from "../../../components/navigation/DepartmentLink/DepartmentLink"
 import { Table } from "../../../components/tables/Table/Table"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
-import { ClientsTableHeader } from "../ClientsTableHeader/ClientsTableHeader"
-import { ClientRowOptionMenu } from "./ClientRowOptionMenu/ClientRowOptionMenu"
+import { DepartmentsTableHeader } from "../DepartmentsTableHeader/DepartmentsTableHeader"
+import { DepartmentRowOptionMenu } from "./DepartmentRowOptionMenu/DepartmentRowOptionMenu"
 
-export const ClientsTable = ({ clients, onDelete, onEdit, deleteItems }) => {
+export const DepartmentsTable = ({ departments, onDelete, onEdit, deleteItems }) => {
   //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
+  //Hacer componente departmentLink
+  console.log("DEPART", departments)
   const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
   const [activeItem, setActiveItem] = useState("all")
-  const _clients =
-    clients &&
-    clients.map((client) => {
+  const _departments =
+    departments &&
+    departments.map((department) => {
       return {
         actions: "",
-        id: client._id,
-        alias: client.alias,
-        name: { label: client.name, link: client._id },
-        testSystem: client.testSystem.map((testSystem) => testSystem.alias),
-        projects: [...client.projects].map((project) => project.alias),
+        id: department._id,
+        name: { label: department.name, link: department._id },
+        users: ["Usuario 1", "Usuario 2", "Usuario 3"],
         options: "",
       }
     })
 
-  const projects_table = {
+  const departments_table = {
     components: {
       text: <Text />,
-      link: <ClientLink />,
-      count: <Text />,
+      link: <DepartmentLink />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
-      testSystem: <TagGroup variant="light_blue" max={3} />,
-      projects: <TagGroup variant="pale_yellow" max={7} />,
-      options: <ClientRowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
+      users: <TagGroup variant="pale_yellow" max={7} />,
+      options: <DepartmentRowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
     },
     head: {
       actions: {
@@ -46,24 +44,14 @@ export const ClientsTable = ({ clients, onDelete, onEdit, deleteItems }) => {
         width: calcColWidth(80),
         type: "text",
       },
-      alias: {
-        label: "Alias",
-        width: calcColWidth(80),
-        type: "text",
-      },
       name: {
-        label: "Nombre",
-        width: calcColWidth(300),
+        label: "Departamento",
+        width: calcColWidth(120),
         type: "link",
       },
-      testSystem: {
-        label: "Sistemas de ensayo",
-        width: calcColWidth(250),
-        type: "tagGroup",
-      },
-      projects: {
-        label: "Proyectos",
-        width: calcColWidth(300),
+      users: {
+        label: "Usuarios",
+        width: calcColWidth(815),
         type: "tagGroup",
       },
       options: {
@@ -77,16 +65,16 @@ export const ClientsTable = ({ clients, onDelete, onEdit, deleteItems }) => {
   return (
     <Table
       header={
-        <ClientsTableHeader
-          clientsCount={clients?.length}
+        <DepartmentsTableHeader
+          departmentsCount={departments?.length}
           activeItem={activeItem}
           onChange={(value) => setActiveItem(value)}
           selectedRows={selectedRows}
           deleteItems={(items) => deleteItems(items)}
         />
       }
-      config={projects_table}
-      content={_clients}
+      config={departments_table}
+      content={_departments}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
       p="32px"

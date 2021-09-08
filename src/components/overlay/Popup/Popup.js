@@ -13,10 +13,11 @@ import React from "react"
 export const Popup = ({
   isOpen,
   onClose,
-  // textBody,
+  message,
   color,
-  // textButtonPrimary,
-  // textButtonSecondary,
+  confirmText,
+  cancelText,
+  onConfirm,
   variant = "twoButtons",
   children,
   ...props
@@ -32,11 +33,9 @@ export const Popup = ({
         boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
         padding="40px 0"
       >
-        {/* <ModalHeader>Modal Title</ModalHeader> */}
-        {/* <ModalCloseButton /> */}
         <ModalBody padding="0 24px">
           <Text textAlign="center" color={color}>
-            {children}
+            {children || message}
           </Text>
         </ModalBody>
         {variant === "info" && (
@@ -57,8 +56,13 @@ export const Popup = ({
             gridTemplateColumns={["1fr", null, null, "1fr 1fr"]}
             gridColumnGap="16px"
           >
-            <Button color={color} borderColor={color} variant="secondary">
-              Cerrar sesión
+            <Button
+              color={color}
+              borderColor={color}
+              variant="secondary"
+              onClick={onConfirm}
+            >
+              {confirmText}
             </Button>
             <Button
               marginTop={["16px", null, null, "0"]}
@@ -66,14 +70,19 @@ export const Popup = ({
               borderColor={color}
               onClick={onClose}
             >
-              Cancelar
+              {cancelText}
             </Button>
           </ModalFooter>
         )}
         {variant === "hover" && (
           <ModalFooter padding="16px 24px 0 24px">
-            <Button color={color} borderColor={color} variant="secondary">
-              Cancelar
+            <Button
+              color={color}
+              borderColor={color}
+              variant="secondary"
+              onClick={onClose}
+            >
+              {cancelText}
             </Button>
           </ModalFooter>
         )}

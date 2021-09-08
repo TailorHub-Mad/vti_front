@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { MIN_TABLE_WIDTH } from "../utils/constants/layout"
 import { getPercentage } from "../utils/functions/common"
 

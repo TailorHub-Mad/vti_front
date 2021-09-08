@@ -12,7 +12,6 @@ import { TabBarToggle } from "../TabBarToggle/TabBarToggle"
 
 export const TabBar = ({ isOpen, setIsOpen, areActiveNotifications = true }) => {
   const { role } = useContext(ApiUserContext)
-
   const onToggle = () => setIsOpen(!isOpen)
   const navMenuItems = role === "admin" ? TABBAR_ADMIN_LINKS : TABBAR_USER_LINKS
   return (

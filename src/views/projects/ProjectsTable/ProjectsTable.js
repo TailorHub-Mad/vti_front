@@ -1,8 +1,7 @@
-import { Checkbox, Flex, Text } from "@chakra-ui/react"
+import { Checkbox, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { ProjectLink } from "../../../components/navigation/ProjectLink/ProjectLink"
 import { Table } from "../../../components/tables/Table/Table"
-import { TableOptionsMenu } from "../../../components/tables/TableOptionsMenu/TableOptionsMenu"
 import { NoteTag } from "../../../components/tags/NoteTag/NoteTag"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
@@ -13,6 +12,18 @@ export const ProjectsTable = ({ items }) => {
   //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
   const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
   const [activeItem, setActiveItem] = useState("all")
+  const elements = items?.map((e) => ({
+    actions: "",
+    id: e.id,
+    alias: { label: e.alias, link: e.id },
+    sector: e.sector,
+    punto_focal: e.focusPoint || "",
+    sistemas_ensayo: e.testSystems,
+    tags_proyecto: e.tags,
+    usuarios: e.users,
+    apuntes: e.notes,
+    options: "",
+  }))
   const projects_table = {
     components: {
       text: <Text />,
@@ -83,10 +94,11 @@ export const ProjectsTable = ({ items }) => {
         <ProjectsTableHeader
           activeItem={activeItem}
           onChange={(value) => setActiveItem(value)}
+          projectsCount={elements?.length}
         />
       }
       config={projects_table}
-      content={items}
+      content={elements}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
       tableHeight="calc(100vh - 195px)"

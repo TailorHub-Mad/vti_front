@@ -2,8 +2,8 @@ import { DeleteIcon } from "@chakra-ui/icons"
 import { Checkbox, Flex, Text } from "@chakra-ui/react"
 import React from "react"
 
-export const ClientsTableHeader = ({
-  clientsCount = 0,
+export const DepartmentsTableHeader = ({
+  departmentsCount = 0,
   selectedRows,
   deleteItems,
 }) => {
@@ -20,7 +20,7 @@ export const ClientsTableHeader = ({
       </Flex>
       <Flex align="center">
         <Text color="#C9C9C9" variant="d_s_medium">
-          {`${clientsCount} Clientes`}
+          {`${departmentsCount} Departamentos`}
         </Text>
       </Flex>
     </Flex>
