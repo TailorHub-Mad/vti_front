@@ -15,19 +15,20 @@ export const InputSelect = ({
   isDisabled,
   ...props
 }) => {
+  const [inputValue, setInputValue] = useState(value)
   const [showSelectMenu, setShowSelectMenu] = useState(false)
   const [availableOptions, setAvailableOptions] = useState(options)
   const ref = useRef(null)
   const handleChange = (e) => {
     onChange && onChange(e.target.value)
+    setInputValue(e.target.value)
     filterOptions(e.target.value)
   }
 
-  console.log("le llega el value", value)
-
   const handleSelect = (_value) => {
     const [selected] = availableOptions?.filter((option) => option.value === _value)
-    onChange && onChange(selected.label)
+    onChange && onChange(selected.value)
+    setInputValue(selected.label)
     setShowSelectMenu(false)
   }
 
@@ -62,7 +63,7 @@ export const InputSelect = ({
         <Input
           placeholder={placeholder}
           onChange={handleChange}
-          value={value}
+          value={inputValue}
           onClick={handleOnClickInput}
           isDisabled={isDisabled}
           _loading

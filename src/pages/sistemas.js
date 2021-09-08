@@ -12,8 +12,9 @@ import { ApiToastContext } from "../provider/ApiToastProvider"
 import { Popup } from "../components/overlay/Popup/Popup"
 import { pullAt } from "lodash"
 import { NewTestSystemModal } from "../views/test_systems/TestSystemsToolbar/NewTestSystem/NewTestSystemModal/NewTestSystemModal"
+import { SWR_CACHE_KEYS } from "../utils/constants/swr"
 
-const DELETE_TYPE = {
+const DeleteType = {
   ONE: "deleteOne",
   MANY: "deleteMany",
 }
@@ -22,7 +23,10 @@ const sistemas = () => {
   const { isLoggedIn } = useContext(ApiUserContext)
   const { systems, deleteSystem } = useSystemApi()
   const { showToast } = useContext(ApiToastContext)
-  const { data, error, isLoading, mutate } = useFetchSWR("systems/", systems)
+  const { data, error, isLoading, mutate } = useFetchSWR(
+    SWR_CACHE_KEYS.systems,
+    systems
+  )
 
   // Create - Update state
   const [isSystemModalOpen, setIsSystemModalOpen] = useState(false)
@@ -59,10 +63,15 @@ const sistemas = () => {
   }
 
   const handleDeleteFunction = async () => {
-    const f = deleteType === DELETE_TYPE.ONE ? deleteOne : deleteMany
+    const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     await f(systemsToDelete, systemsData)
     setDeleteType(null)
     setSystemsToDelete(null)
+  }
+
+  const getAliasByIdSystem = (id) => {
+    const { alias } = systemsData.find((system) => system._id === id)
+    return alias
   }
 
   const deleteOne = async (id, systems) => {
@@ -76,7 +85,7 @@ const sistemas = () => {
   }
 
   const deleteMany = async (positions, systems) => {
-    const systemsQueue = positions.map(async (position) =>
+    const systemsQueue = positions.map((position) =>
       deleteSystem(systemsData[position]._id)
     )
     await Promise.all(systemsQueue)
@@ -126,8 +135,8 @@ const sistemas = () => {
         onConfirm={handleDeleteFunction}
         onClose={handleClosePopup}
       >
-        {deleteType === DELETE_TYPE.ONE
-          ? `¿Desea eliminar ${systemsToDelete}?`
+        {deleteType === DeleteType.ONE
+          ? `¿Desea eliminar ${getAliasByIdSystem(systemsToDelete)}?`
           : "¿Desea eliminar los sistemas de ensayo seleccionados?"}
       </Popup>
 
@@ -152,8 +161,8 @@ const sistemas = () => {
       {data && !emptyData ? (
         <TestSystemsTable
           items={searchChain !== "" ? searchedSystems : systemsData}
-          onDelete={(id) => handleOpenPopup(id, DELETE_TYPE.ONE)}
-          onDeleteMany={(ids) => handleOpenPopup(ids, DELETE_TYPE.MANY)}
+          onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
+          onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
           onEdit={onEdit}
         />
       ) : null}

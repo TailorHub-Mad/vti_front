@@ -29,13 +29,14 @@ export const NewTestSystemForm = ({ value, onChange }) => {
 
   const currentYear = new Date().getFullYear()
   const formInputs = {
-    id: {
-      type: "text",
-      config: {
-        placeholder: "ID",
-        label: "ID",
-      },
-    },
+    // TODO -> autogenerate ID
+    // id: {
+    //   type: "text",
+    //   config: {
+    //     placeholder: "ID",
+    //     label: "ID",
+    //   },
+    // },
     vtiCode: {
       type: "text",
       config: {
@@ -75,12 +76,9 @@ export const NewTestSystemForm = ({ value, onChange }) => {
     text: <InputSelect options={handleOptinsList()} />,
   }
 
-  console.log("todos los valores", value)
-
   return (
     <>
       {Object.entries(formInputs).map(([name, { type, config, select }], index) => {
-        console.log(value[name])
         const objToClone = select ? seelctInputRefObj : inputRefObj
         return React.cloneElement(objToClone[type], {
           value: value[name],

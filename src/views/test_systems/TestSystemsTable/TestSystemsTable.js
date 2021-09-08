@@ -35,11 +35,11 @@ export const TestSystemsTable = ({
     return {
       actions: "",
       id: item._id,
-      alias: "MedVelo-ADDITIUM--007", //TODO -> API pending
+      alias: item.alias,
       client: item.clientAlias,
       code: item.vtiCode,
       year: item.date.year,
-      projects: item.projects, //TODO -> DB pending
+      projects: item.projects,
       notes: item.notes,
       options: "",
     }

@@ -8,14 +8,17 @@ import {
   Box,
 } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
+import { useSWRConfig } from "swr"
 import { CloseIcon } from "../../../../../components/icons/CloseIcon"
 import useSystemApi from "../../../../../hooks/api/useSystemsApi"
 import { ApiToastContext } from "../../../../../provider/ApiToastProvider"
+import { SWR_CACHE_KEYS } from "../../../../../utils/constants/swr"
 import { NewTestSystemForm } from "../NewTestSystemForm/NewTestSystemForm"
 
 export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) => {
   const { showToast } = useContext(ApiToastContext)
   const { createSystem } = useSystemApi()
+  const { mutate, cache } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -37,15 +40,59 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
   const checkInputsAreEmpty = () => {
     return values.some(
       (value) =>
-        !value.id || !value.vtiCode || !value.client || !value.alias || !value.year
+        // TODO -> autogenerate ID
+        // !value.id ||
+        !value.vtiCode || !value.clientAlias || !value.alias || !value.year
     )
   }
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
-    const systemsQueue = values.map(async (value) => createSystem(value))
-    // TODO -> manage errors
-    await Promise.all(systemsQueue)
+
+    const systemsToCreate = values.map((value) => {
+      const { clientAlias: client, year, vtiCode, alias } = value
+      return {
+        vtiCode,
+        alias,
+        date: {
+          year,
+        },
+        client,
+      }
+    })
+    const systemsQueue = systemsToCreate.map((system) => createSystem(system))
+    const response = await Promise.all(systemsQueue)
+
+    const [systemsSuccessfull, systemsError] = response.reduce(
+      ([succ, error], e, index) => {
+        e?.error
+          ? error.push(systemsToCreate[index])
+          : succ.push(systemsToCreate[index])
+        return [succ, error]
+      },
+      [[], []]
+    )
+
+    // // TODO -> manage errors
+    if (systemsError.length > 0) {
+      console.log("ERROR")
+    }
+
+    if (cache.has(SWR_CACHE_KEYS.systems)) {
+      const cacheSystems = cache.get(SWR_CACHE_KEYS.systems)
+      const updatedSystems = []
+      const formatSystemsSuccessfull = systemsSuccessfull.map((system) => {
+        return {
+          ...system,
+          projects: [],
+          notes: [],
+        }
+      })
+      updatedSystems.push({
+        testSystem: [...formatSystemsSuccessfull, ...cacheSystems[0].testSystem],
+      })
+      await mutate(SWR_CACHE_KEYS.systems, updatedSystems, false)
+    } else await mutate(SWR_CACHE_KEYS.systems)
 
     showToast("¡Has añadido nuevo/s ensayo/s!")
     setIsSubmitting(false)
@@ -117,6 +164,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
           disabled={checkInputsAreEmpty()}
           onClick={handleSubmit}
           isLoading={isSubmitting}
+          pointerEvents={isSubmitting ? "none" : "all"}
         >
           Guardar
         </Button>

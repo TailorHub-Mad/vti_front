@@ -7,7 +7,7 @@ const useSystemApi = () => {
   const systemService = new SystemService(addError, removeError)
 
   const systems = () => systemService.systems()
-  const createSystem = () => systemService.createSystem()
+  const createSystem = (system) => systemService.createSystem(system)
   const editSystem = () => systemService.editSystem()
   const deleteSystem = (id) => systemService.deleteSystem(id)
 

@@ -20,7 +20,9 @@ export const TestSystemTableHeader = ({
             cursor="pointer"
           >
             <DeleteIcon mr="8px" color="error" />
-            <Text color="error">Eliminar</Text>
+            <Text color="error" marginTop="6px">
+              Eliminar
+            </Text>
           </Flex>
         ) : null}
       </Flex>
