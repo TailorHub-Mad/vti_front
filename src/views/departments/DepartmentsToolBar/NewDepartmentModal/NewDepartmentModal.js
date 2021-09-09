@@ -13,7 +13,12 @@ import useDepartmentApi from "../../../../hooks/api/useDepartmentApi"
 import { ApiToastContext } from "../../../../provider/ApiToastProvider"
 import { NewDepartmentForm } from "../NewDepartmentForm/NewDepartmentForm"
 
-export const NewDepartmentModal = ({ isOpen, onClose, departmentToEdit, ...props }) => {
+export const NewDepartmentModal = ({
+  isOpen,
+  onClose,
+  departmentToEdit,
+  ...props
+}) => {
   const [values, setValues] = useState([{}])
   const isEdit = departmentToEdit
   const { showToast } = useContext(ApiToastContext)

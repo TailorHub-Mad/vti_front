@@ -12,7 +12,11 @@ export const DepartmentsTableHeader = ({
       <Flex>
         <Checkbox mr="8px" />
         {selectedRows?.length > 0 ? (
-          <Flex alignItems="center" onClick={() => deleteItems(selectedRows)} cursor="pointer">
+          <Flex
+            alignItems="center"
+            onClick={() => deleteItems(selectedRows)}
+            cursor="pointer"
+          >
             <DeleteIcon mr="8px" color="error" />
             <Text color="error">Eliminar</Text>
           </Flex>

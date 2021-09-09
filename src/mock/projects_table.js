@@ -49,7 +49,7 @@ export const MOCK_BACK_PROJECTS_DATA = new Array(30).fill({
   focusPoint: ["Test", "Person"],
   testSystems: ["Sistema1", "Sistema3"],
   tags: ["Tag1", "Tag2"],
-  users: ["Pere", "Gom", "Anabel","Leonardo"],
+  users: ["Pere", "Gom", "Anabel", "Leonardo"],
   notes: ["Nota1", "Nota2", "Nota3"],
   options: "",
 })

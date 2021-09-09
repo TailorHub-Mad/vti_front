@@ -12,7 +12,7 @@ export const BreadCrumbs = ({ lastText }) => {
     .filter((el) => el)
     .map((el) => capitalize(el))
   lastText && items.push(lastText)
-  
+
   const generateUrl = (lastIdx) => {
     const url = router.asPath
       .split("/")

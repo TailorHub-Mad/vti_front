@@ -15,7 +15,13 @@ const useDepartmentApi = () => {
 
   const deleteDepartment = (id) => departmentService.deleteDepartment(id)
 
-  return { getDepartments, getDepartment, createDepartment, updateDepartment, deleteDepartment }
+  return {
+    getDepartments,
+    getDepartment,
+    createDepartment,
+    updateDepartment,
+    deleteDepartment,
+  }
 }
 
 export default useDepartmentApi
