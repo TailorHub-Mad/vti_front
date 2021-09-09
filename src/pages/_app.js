@@ -1,4 +1,4 @@
-import { ChakraProvider, ColorModeProvider } from "@chakra-ui/react"
+import { ChakraProvider } from "@chakra-ui/react"
 import ApiUserProvider from "../provider/ApiAuthProvider"
 import ApiToastProvider from "../provider/ApiToastProvider"
 import { SWRConfig } from "swr"
@@ -9,19 +9,13 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <ChakraProvider resetCSS theme={theme}>
-      <ColorModeProvider
-        options={{
-          useSystemColorMode: true,
-        }}
-      >
-        <ApiUserProvider>
-          <SWRConfig value={swrConfig}>
-            <ApiToastProvider>
-              <Component {...pageProps} />
-            </ApiToastProvider>
-          </SWRConfig>
-        </ApiUserProvider>
-      </ColorModeProvider>
+      <ApiUserProvider>
+        <SWRConfig value={swrConfig}>
+          <ApiToastProvider>
+            <Component {...pageProps} />
+          </ApiToastProvider>
+        </SWRConfig>
+      </ApiUserProvider>
     </ChakraProvider>
   )
 }

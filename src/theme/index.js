@@ -13,6 +13,8 @@ import { colors } from "./fundations/colors.theme"
 import { icons } from "./fundations/icons.theme"
 
 const theme = extendTheme({
+  initialColorMode: "light",
+  useSystemColorMode: false,
   colors,
   fonts: {
     heading: "Noway-Medium",
