@@ -19,9 +19,14 @@ export const TagGroup = ({ tagsArr, variant, max, ...props }) => {
   const remaining = [...tagsArr].slice(max)?.length
   return (
     <Flex width="100%" maxWidth="100%">
-      {[...tagsArr].slice(0, max).map((tag) => {
+      {[...tagsArr].slice(0, max).map((tag, index) => {
         return (
-          <GeneralTag key={tag} variant={variant} {...props} marginRight="4px">
+          <GeneralTag
+            key={`${tag}-${index}`}
+            variant={variant}
+            {...props}
+            marginRight="4px"
+          >
             {tag}
           </GeneralTag>
         )
