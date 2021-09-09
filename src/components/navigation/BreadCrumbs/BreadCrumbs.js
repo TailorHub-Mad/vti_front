@@ -25,9 +25,10 @@ export const BreadCrumbs = ({ lastText }) => {
   return (
     <Flex alignItems="center">
       {items.map((navItem, idx) => {
+        const key = `${navItem}-${idx}`
         return (
-          <>
-            {idx > 0 && idx < items.length ? <ArrowRight /> : null}
+          <div key={key}>
+            {idx > 0 && idx < items.length && <ArrowRight />}
             {idx === items.length - 1 ? (
               <Text variant="d_l_medium" color="blue.500" mt="4px" as="a">
                 {navItem}
@@ -39,7 +40,7 @@ export const BreadCrumbs = ({ lastText }) => {
                 </Text>
               </Link>
             )}
-          </>
+          </div>
         )
       })}
     </Flex>

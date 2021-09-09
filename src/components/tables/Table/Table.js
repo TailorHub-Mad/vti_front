@@ -55,14 +55,14 @@ export const Table = ({
             minWidth={MIN_TABLE_WIDTH}
             maxWidth={MAX_TABLE_WIDTH}
           >
-            {Object.values(head).map((element) => (
-              <Text key={element?.label}>{element?.label}</Text>
+            {Object.values(head).map((element, idx) => (
+              <Text key={`${element?.label.id}-${idx}`}>{element?.label}</Text>
             ))}
           </Grid>
           {content.map((item, idx) => {
             return (
               <Grid
-                key={item.id}
+                key={`${item.id}-${idx}`}
                 templateColumns={templateColumns}
                 borderBottom="1px"
                 borderColor="grey"
@@ -75,33 +75,38 @@ export const Table = ({
                 gridColumnGap="8px"
               >
                 {/* TODO refactor del cloneElement para que reciba las props de forma más elegante */}
-                {Object.entries(item).map(([name, element]) => {
+                {Object.entries(item).map(([name, element], index) => {
                   if (head[name]?.type === "count") {
                     return React.cloneElement(components.text, {
                       children: element?.length.toString(),
                       textAlign: "left",
+                      key: `${name}-${index}`,
                     })
                   }
                   if (head[name]?.type === "text") {
                     return React.cloneElement(components.text, {
                       children: element?.toString(),
+                      key: `${name}-${index}`,
                     })
                   }
                   if (head[name]?.type === "link") {
                     return React.cloneElement(components.link, {
                       children: element?.label,
                       url: element?.link,
+                      key: `${name}-${index}`,
                     })
                   }
                   if (head[name]?.type === "selector") {
                     return React.cloneElement(components[name], {
                       isChecked: isSelected(idx),
                       onChange: () => onRowSelect(idx),
+                      key: `${name}-${index}`,
                     })
                   }
                   if (head[name]?.type === "tagGroup") {
                     return React.cloneElement(components[name], {
                       tagsArr: element,
+                      key: `${name}-${index}`,
                     })
                   }
                   if (components[name] !== undefined) {
@@ -109,9 +114,10 @@ export const Table = ({
                       children: element,
                       id: item.id,
                       alias: element?.alias,
+                      key: `${name}-${index}`,
                     })
                   }
-                  return <Text key={name} />
+                  return <Text key={`${name}-${index}`} />
                 })}
               </Grid>
             )

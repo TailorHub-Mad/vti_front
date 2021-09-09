@@ -13,7 +13,7 @@ export const TabBarMenu = ({ navMenuItems, ...props }) => {
     >
       {navMenuItems.map((link) => (
         <MenuItem
-          key="label"
+          key={link.label}
           label={link.label}
           href={link.href}
           icon={<link.icon />}
