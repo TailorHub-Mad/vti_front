@@ -8,7 +8,7 @@ import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
 import { ApiUserContext } from "../../../provider/ApiAuthProvider"
 import { AddNewProject } from "../AddNewProjectModal/AddNewProject"
 
-export const ProjectsToolBar = () => {
+export const ProjectsToolBar = ({ onSearch }) => {
   const { role } = useContext(ApiUserContext)
 
   return (
@@ -24,6 +24,7 @@ export const ProjectsToolBar = () => {
           placeholder="Busque por ID, Alias"
           paddingLeft="40px"
           variant="white"
+          onChange={(e) => onSearch(e.target.value)}
         />
       </InputGroup>
 

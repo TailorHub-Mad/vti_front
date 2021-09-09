@@ -47,9 +47,9 @@ const projects = () => {
 
   const handleSearch = (val) => {
     const results = allProjects.filter(
-      (cl) =>
-        cl.alias.toLowerCase().includes(val.toLowerCase()) ||
-        cl.name.toLowerCase().includes(val.toLowerCase())
+      (project) =>
+        project.alias.toLowerCase().includes(val.toLowerCase()) ||
+        project._id.toLowerCase().includes(val.toLowerCase())
     )
     setProjects(results)
   }
@@ -84,7 +84,9 @@ const projects = () => {
   return (
     <Page>
       <PageHeader title="Proyectos">
-        {areProjects && !isFetching ? <ProjectsToolBar /> : null}
+        {areProjects && !isFetching ? (
+          <ProjectsToolBar onSearch={(val) => handleSearch(val)} />
+        ) : null}
       </PageHeader>
       {isFetching ? <LoadingTableSpinner /> : null}
       {!areProjects ? <NotesEmptyState /> : null}
