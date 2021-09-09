@@ -8,9 +8,9 @@ import {
   Box,
 } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
-import { CloseIcon } from "../../../../../components/icons/CloseIcon"
-import useClientApi from "../../../../../hooks/api/useClientApi"
-import { ApiToastContext } from "../../../../../provider/ApiToastProvider"
+import { CloseIcon } from "../../../../components/icons/CloseIcon"
+import useClientApi from "../../../../hooks/api/useClientApi"
+import { ApiToastContext } from "../../../../provider/ApiToastProvider"
 import { NewClientForm } from "../NewClientForm/NewClientForm"
 
 export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {

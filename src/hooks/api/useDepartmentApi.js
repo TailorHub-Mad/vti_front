@@ -5,7 +5,9 @@ const useDepartmentApi = () => {
   const { addError, removeError } = useApiError()
   const departmentService = new DepartmentService(addError, removeError)
 
-  const getDepartments = () => departmentService.getDepartments()
+  const getDepartments = () => {
+    // departmentService.getDepartments()
+  }
 
   const getDepartment = (id) => departmentService.getDepartment(id)
 

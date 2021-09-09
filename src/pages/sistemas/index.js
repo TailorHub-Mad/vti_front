@@ -3,22 +3,19 @@ import { Page } from "../../components/layout/Page/Page"
 import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
 import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
 import { ApiUserContext } from "../../provider/ApiAuthProvider"
-import { TestSystemsEmptyState } from "../../views/test_systems/TestSystemsEmptyState/TestSystemsEmptyState"
 import { TestSystemsTable } from "../../views/test_systems/TestSystemsTable/TestSystemsTable"
-import { TestSystemsToolbar } from "../../views/test_systems/TestSystemsToolbar/TestSystemsToolbar"
 import useSystemApi from "../../hooks/api/useSystemsApi"
 import useFetchSWR from "../../hooks/useFetchSWR"
 import { ApiToastContext } from "../../provider/ApiToastProvider"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import { pullAt } from "lodash"
-import { NewTestSystemModal } from "../../views/test_systems/TestSystemsToolbar/NewTestSystem/NewTestSystemModal/NewTestSystemModal"
+import { NewTestSystemModal } from "../../views/test_systems/NewTestSystem/NewTestSystemModal/NewTestSystemModal"
 import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 import { ImportFilesModal } from "../../views/common/ImportFilesModal/ImportFilesModal"
-
-const DeleteType = {
-  ONE: "deleteOne",
-  MANY: "deleteMany",
-}
+import { DeleteType } from "../../utils/constants/global_config"
+import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
+import { ViewEmptyState } from "../../views/common/NotesEmptyState/ViewEmptyState"
+import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 
 const sistemas = () => {
   const { isLoggedIn } = useContext(ApiUserContext)
@@ -156,9 +153,10 @@ const sistemas = () => {
         onClose={() => setShowImportModal(false)}
       />
 
-      <PageHeader title="Sistemas de ensayo">
+      <PageHeader>
+        <BreadCrumbs />
         {!isLoading && !emptyData && (
-          <TestSystemsToolbar
+          <ToolBar
             onAddTestSystem={handleOnOpenModal}
             onSearch={onSearch}
             onImport={() => setShowImportModal(true)}
@@ -168,9 +166,12 @@ const sistemas = () => {
       </PageHeader>
       {isLoading ? <LoadingTableSpinner /> : null}
       {emptyData ? (
-        <TestSystemsEmptyState
-          onAddTestSystem={handleOnOpenModal}
+        <ViewEmptyState
+          message="Añadir sistemas a la platorma"
+          importButtonText="Importar"
+          addButtonText="Añadir sistema"
           onImport={() => setShowImportModal(true)}
+          onAdd={handleOnOpenModal}
         />
       ) : null}
       {data && !emptyData ? (

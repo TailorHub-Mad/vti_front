@@ -1,8 +1,8 @@
 import React from "react"
-import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
-import { SimpleInput } from "../../../../../components/forms/SimpleInput/SimpleInput"
-import useClientApi from "../../../../../hooks/api/useClientApi"
-import useFetchSWR from "../../../../../hooks/useFetchSWR"
+import { InputSelect } from "../../../../components/forms/InputSelect/InputSelect"
+import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
+import useClientApi from "../../../../hooks/api/useClientApi"
+import useFetchSWR from "../../../../hooks/useFetchSWR"
 
 export const NewTestSystemForm = ({ value, onChange }) => {
   const { getClients } = useClientApi()

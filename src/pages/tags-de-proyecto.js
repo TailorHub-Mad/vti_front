@@ -5,11 +5,11 @@ import { NoteDrawer } from "../components/drawer/NoteDrawer/NoteDrawer"
 import { Page } from "../components/layout/Page/Page"
 import { PageBody } from "../components/layout/PageBody/PageBody"
 import { PageHeader } from "../components/layout/PageHeader/PageHeader"
+import { ToolBar } from "../components/navigation/ToolBar/ToolBar"
 import { LoadingTableSpinner } from "../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
 import { PROJECT_TAGS_MOCK } from "../mock/tags"
 import { NotesEmptyState } from "../views/notes/NotesEmptyState/NotesEmptyState"
 import { ProjectsTagsHeader } from "../views/projectTags/ProjectTagsHeader/ProjectTagsHeader"
-import { ProjectTagsToolBar } from "../views/projectTags/ProjectTagsToolBar/ProjectTagsToolBar"
 
 const tagsDeProyecto = () => {
   // TODO fetch notes
@@ -26,7 +26,7 @@ const tagsDeProyecto = () => {
         onClose={() => setShowNoteDetails(null)}
       />
       <PageHeader title="Tags de Proyecto">
-        {areNotes && !isFetching ? <ProjectTagsToolBar /> : null}
+        {areNotes && !isFetching ? <ToolBar /> : null}
       </PageHeader>
       {isFetching ? <LoadingTableSpinner /> : null}
       {!areNotes ? <NotesEmptyState /> : null}

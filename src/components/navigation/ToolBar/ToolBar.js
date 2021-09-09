@@ -1,47 +1,51 @@
-/* eslint-disable react/no-children-prop */
 import { SearchIcon } from "@chakra-ui/icons"
-import { Button, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
+import { Button, Input, InputGroup, InputLeftElement, Flex } from "@chakra-ui/react"
 import React, { useContext } from "react"
-import { CloudButton } from "../../../components/buttons/CloudButton/CloudButton"
-import { Filter } from "../../../components/filters/Filter/Filter"
-import { Group } from "../../../components/grouping/Group/Group"
-import { AddTestSystemIcon } from "../../../components/icons/AddTestSystemIcon"
+import { CloudButton } from "../../buttons/CloudButton/CloudButton"
+import { Filter } from "../../filters/Filter/Filter"
+import { Group } from "../../grouping/Group/Group"
+import { AddTestSystemIcon } from "../../icons/AddTestSystemIcon"
 import { ApiUserContext } from "../../../provider/ApiAuthProvider"
+import { RoleType } from "../../../utils/constants/global_config"
 
-export const TestSystemsToolbar = ({
-  onAddTestSystem,
+export const ToolBar = ({
+  onAdd,
   onSearch,
   onImport,
   onExport,
+  addLabel,
+  searchPlaceholder,
+  withoutFilter,
+  withoutGroup,
 }) => {
   const { role } = useContext(ApiUserContext)
 
   return (
-    <>
-      <Filter />
-      <Group />
+    <Flex>
+      {withoutFilter || <Filter />}
+      {withoutGroup || <Group />}
       <InputGroup width="196px" marginRight="16px">
         <InputLeftElement
           pointerEvents="none"
           children={<SearchIcon color="gray" />}
         />
         <Input
-          placeholder="Busque por ID, código"
+          placeholder={searchPlaceholder ?? "Busque por ID"}
           paddingLeft="40px"
           variant="white"
           onChange={(e) => onSearch(e.target.value)}
         />
       </InputGroup>
-      {role === "admin" && (
+      {role === RoleType.ADMIN && (
         <>
           <CloudButton onImport={onImport} onExport={onExport} />
 
-          <Button onClick={onAddTestSystem}>
+          <Button onClick={onAdd}>
             <AddTestSystemIcon marginRight="8px" />
-            Añadir sistema
+            {addLabel ?? "Añadir"}
           </Button>
         </>
       )}
-    </>
+    </Flex>
   )
 }

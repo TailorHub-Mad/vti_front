@@ -8,9 +8,9 @@ import { ApiToastContext } from "../../provider/ApiToastProvider"
 import { ViewEmptyState } from "../../views/common/NotesEmptyState/ViewEmptyState"
 import { MOCK_DEPARTMENTS_TABLE } from "../../mock/departments_table"
 import { DepartmentsTable } from "../../views/departments/DepartmentsTable/DepartmentsTable"
-import { DepartmentsToolBar } from "../../views/departments/DepartmentsToolBar/DepartmentsToolBar"
-import { NewDepartmentModal } from "../../views/departments/DepartmentsToolBar/NewDepartmentModal/NewDepartmentModal"
+import { NewDepartmentModal } from "../../views/departments/NewDepartment/NewDepartmentModal/NewDepartmentModal"
 import { ImportFilesModal } from "../../views/common/ImportFilesModal/ImportFilesModal"
+import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 const departamentos = () => {
   const { showToast } = useContext(ApiToastContext)
   const { getDepartments, deleteDepartment } = useDepartmentApi()
@@ -97,7 +97,7 @@ const departamentos = () => {
       />
       <PageHeader title="Departamentos">
         {areDepartments && !isFetching ? (
-          <DepartmentsToolBar
+          <ToolBar
             onAddDepartment={() => setIsDepartmentModalOpen(true)}
             onSearch={handleSearch}
             onImport={() => setShowImportModal(true)}

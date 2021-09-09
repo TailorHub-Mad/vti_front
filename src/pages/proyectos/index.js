@@ -1,10 +1,10 @@
 import { Page } from "../../components/layout/Page/Page"
 import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
+import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
 import { MOCK_TABLE_DATA } from "../../mock/projects_table"
 import { NotesEmptyState } from "../../views/notes/NotesEmptyState/NotesEmptyState"
 import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
-import { ProjectsToolBar } from "../../views/projects/ProjectsToolBar/ProjectsToolBar"
 
 const projects = () => {
   const isFetching = false
@@ -14,7 +14,7 @@ const projects = () => {
   return (
     <Page>
       <PageHeader title="Proyectos">
-        {areProjects && !isFetching ? <ProjectsToolBar /> : null}
+        {areProjects && !isFetching ? <ToolBar /> : null}
       </PageHeader>
       {isFetching ? <LoadingTableSpinner /> : null}
       {!areProjects ? <NotesEmptyState /> : null}

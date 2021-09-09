@@ -8,9 +8,9 @@ import { ApiToastContext } from "../../provider/ApiToastProvider"
 import { SectorsTable } from "../../views/sectors/SectorsTable/SectorsTable"
 import { ViewEmptyState } from "../../views/common/NotesEmptyState/ViewEmptyState"
 import { MOCK_SECTORS_TABLE } from "../../mock/sectors_table"
-import { SectorsToolBar } from "../../views/sectors/SectorsToolBar/SectorsToolBar"
-import { NewSectorModal } from "../../views/sectors/SectorsToolBar/NewSectorModal/NewSectorModal"
+import { NewSectorModal } from "../../views/sectors/NewSector/NewSectorModal/NewSectorModal"
 import { ImportFilesModal } from "../../views/common/ImportFilesModal/ImportFilesModal"
+import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 const sectores = () => {
   const { getClients, deleteClient } = useClientApi()
   const { showToast } = useContext(ApiToastContext)
@@ -93,7 +93,7 @@ const sectores = () => {
 
       <PageHeader title="Sectores">
         {areSectors && !isFetching ? (
-          <SectorsToolBar
+          <ToolBar
             onAddSector={() => setIsSectorModalOpen(true)}
             onSearch={handleSearch}
             onImport={() => setShowImportModal(true)}

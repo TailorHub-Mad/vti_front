@@ -5,10 +5,10 @@ import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
 import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
-import { ProjectsToolBar } from "../../views/projects/ProjectsToolBar/ProjectsToolBar"
 import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 import { useSWRConfig } from "swr"
 import useSystemApi from "../../hooks/api/useSystemsApi"
+import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 
 const system = () => {
   const router = useRouter()
@@ -48,9 +48,9 @@ const system = () => {
         <>
           <PageHeader>
             <BreadCrumbs lastText="Proyectos" />
-            <ProjectsToolBar />
+            <ToolBar />
           </PageHeader>
-          <ProjectsTable items={system.projects} />
+          <ProjectsTable items={systemData.projects} />
         </>
       ) : (
         <LoadingTableSpinner />

@@ -11,8 +11,8 @@ import { MIN_TABLE_WIDTH } from "../utils/constants/layout"
 import { getPercentage } from "../utils/functions/common"
 import { NotesEmptyState } from "../views/notes/NotesEmptyState/NotesEmptyState"
 import { NotesMenu } from "../views/notes/NotesMenu/NotesMenu"
-import { NotesToolBar } from "../views/notes/NotesToolBar/NotesToolBar"
 import { Text, Checkbox, Center, Spinner } from "@chakra-ui/reac"
+import { ToolBar } from "../components/navigation/ToolBar/ToolBar"
 
 const projects = () => {
   const [selectedRows, setSelectedRows] = useState([])
@@ -119,7 +119,7 @@ const projects = () => {
   return (
     <Page>
       <PageHeader title="Proyectos">
-        {areNotes && !isFetching ? <NotesToolBar /> : null}
+        {areNotes && !isFetching ? <ToolBar /> : null}
       </PageHeader>
       <PageMenu>
         {areNotes && !isFetching ? (

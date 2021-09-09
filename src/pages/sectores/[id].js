@@ -3,11 +3,11 @@ import { useEffect, useState } from "react"
 import { Page } from "../../components/layout/Page/Page"
 import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
+import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
 import useSectorApi from "../../hooks/api/useSectorApi"
 import { MOCK_BACK_PROJECTS_DATA } from "../../mock/projects_table"
 import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
-import { ProjectsToolBar } from "../../views/projects/ProjectsToolBar/ProjectsToolBar"
 
 const sector = () => {
   const [isFetching, setIsFetching] = useState(false)
@@ -31,7 +31,7 @@ const sector = () => {
         <>
           <PageHeader>
             <BreadCrumbs lastText="Proyectos" />
-            <ProjectsToolBar />
+            <ToolBar />
           </PageHeader>
           <ProjectsTable items={MOCK_BACK_PROJECTS_DATA} />
         </>

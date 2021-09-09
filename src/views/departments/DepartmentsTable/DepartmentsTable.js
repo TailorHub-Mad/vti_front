@@ -3,9 +3,9 @@ import React, { useState } from "react"
 import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
 import { RowOptionMenu } from "../../../components/navigation/RowOptionMenu/RowOptionMenu"
 import { Table } from "../../../components/tables/Table/Table"
+import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
-import { DepartmentsTableHeader } from "../DepartmentsTableHeader/DepartmentsTableHeader"
 
 export const DepartmentsTable = ({ departments, onDelete, onEdit, deleteItems }) => {
   //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
@@ -63,7 +63,7 @@ export const DepartmentsTable = ({ departments, onDelete, onEdit, deleteItems })
   return (
     <Table
       header={
-        <DepartmentsTableHeader
+        <TableHeader
           departmentsCount={departments?.length}
           activeItem={activeItem}
           onChange={(value) => setActiveItem(value)}

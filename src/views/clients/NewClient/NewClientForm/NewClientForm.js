@@ -1,5 +1,5 @@
 import React from "react"
-import { SimpleInput } from "../../../../../components/forms/SimpleInput/SimpleInput"
+import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
 
 export const NewClientForm = ({ value, onChange }) => {
   const formInputs = {

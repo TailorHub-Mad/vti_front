@@ -1,22 +1,20 @@
 import { Checkbox, Text } from "@chakra-ui/react"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
 import { RowOptionMenu } from "../../../components/navigation/RowOptionMenu/RowOptionMenu"
 import { Table } from "../../../components/tables/Table/Table"
+import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
-import { TestSystemTableHeader } from "../TestSystemsTableHeader/TestSystemTableHeader"
 
 export const TestSystemsTable = ({
   items: systems,
   onDelete,
   onEdit,
   onDeleteMany,
-  ...props
 }) => {
   const { selectedRows, setSelectedRows, handleRowSelect, calcColWidth } =
     useTableActions()
-  const [activeItem, setActiveItem] = useState("all")
 
   useMemo(() => {
     setSelectedRows([])
@@ -107,10 +105,9 @@ export const TestSystemsTable = ({
   return (
     <Table
       header={
-        <TestSystemTableHeader
-          testSystemsCount={_systems?.length}
-          activeItem={activeItem}
-          onChange={(value) => setActiveItem(value)}
+        <TableHeader
+          count={_systems?.length}
+          countLable="Sistemas de ensayo"
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
           selectAllRows={handleSelectAllRows}
@@ -123,7 +120,6 @@ export const TestSystemsTable = ({
       tableHeight="calc(100vh - 190px)"
       p="32px"
       pb="0"
-      {...props}
     />
   )
 }

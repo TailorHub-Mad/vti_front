@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { Page } from "../../components/layout/Page/Page"
 import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
+import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
 import useDepartmentApi from "../../hooks/api/useDepartmentApi"
 
@@ -28,7 +29,7 @@ const department = () => {
         <>
           <PageHeader>
             <BreadCrumbs lastText="Proyectos" />
-            {/* <ProjectsToolBar /> */}
+            <ToolBar />
           </PageHeader>
           {/* <ProjectsTable items={MOCK_BACK_PROJECTS_DATA} /> */}
         </>
