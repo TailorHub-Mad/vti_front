@@ -1,11 +1,11 @@
 import { Checkbox, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
+import { RowOptionMenu } from "../../../components/navigation/RowOptionMenu/RowOptionMenu"
 import { Table } from "../../../components/tables/Table/Table"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
 import { ClientsTableHeader } from "../ClientsTableHeader/ClientsTableHeader"
-import { ClientRowOptionMenu } from "./ClientRowOptionMenu/ClientRowOptionMenu"
 
 export const ClientsTable = ({ clients, onDelete, onEdit, deleteItems }) => {
   //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
@@ -33,7 +33,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, deleteItems }) => {
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       testSystems: <TagGroup variant="light_blue" max={3} />,
       projects: <TagGroup variant="pale_yellow" max={7} />,
-      options: <ClientRowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
+      options: <RowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
     },
     head: {
       actions: {

@@ -1,12 +1,12 @@
 import { Checkbox, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
+import { RowOptionMenu } from "../../../components/navigation/RowOptionMenu/RowOptionMenu"
 import { Table } from "../../../components/tables/Table/Table"
 import { NoteTag } from "../../../components/tags/NoteTag/NoteTag"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
 import { ProjectsTableHeader } from "../ProjectsTableHeader/ProjectsTableHeader"
-import { ProjectRowOptionMenu } from "./ProjectRowOptionMenu/ProjectRowOptionMenu"
 
 export const ProjectsTable = ({ items }) => {
   //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
@@ -33,7 +33,7 @@ export const ProjectsTable = ({ items }) => {
       sector: <NoteTag />,
       sistemas_ensayo: <TagGroup variant="light_blue" max={3} />,
       tags_proyecto: <TagGroup variant="pale_yellow" max={3} />,
-      options: <ProjectRowOptionMenu />,
+      options: <RowOptionMenu />,
     },
     head: {
       actions: {
