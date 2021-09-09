@@ -20,6 +20,8 @@ export const Table = ({
   )
   const isSelected = (idx) => selectedRows?.includes(idx)
 
+  console.log("selectedRows", selectedRows)
+
   return content ? (
     <Card
       width="100%"
@@ -114,6 +116,7 @@ export const Table = ({
                       children: element,
                       id: item.id,
                       alias: element?.alias,
+                      disabled: selectedRows.length > 1,
                       key: `${name}-${index}`,
                     })
                   }

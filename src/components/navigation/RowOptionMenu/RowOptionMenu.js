@@ -6,9 +6,9 @@ import { OptionsMenuItem } from "../../navigation/OptionsMenu/OptionsMenuItem/Op
 import { TableOptionsMenu } from "../../tables/TableOptionsMenu/TableOptionsMenu"
 import { ICONS_PROPS_16 } from "../../../utils/constants/icons_props"
 
-export const RowOptionMenu = ({ onEdit, onDelete, id }) => {
+export const RowOptionMenu = ({ onEdit, onDelete, disabled, id }) => {
   return (
-    <TableOptionsMenu>
+    <TableOptionsMenu disabled={disabled}>
       <OptionsMenuItem onClick={() => onEdit(id)}>
         <EditIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
         <Text variant="d_xs_regular" marginRight="2px">
