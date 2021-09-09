@@ -1,5 +1,5 @@
 import { Checkbox, Text } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React from "react"
 import { ProjectLink } from "../../../components/navigation/ProjectLink/ProjectLink"
 import { Table } from "../../../components/tables/Table/Table"
 import { NoteTag } from "../../../components/tags/NoteTag/NoteTag"
@@ -8,21 +8,25 @@ import useTableActions from "../../../hooks/useTableActions"
 import { ProjectsTableHeader } from "../ProjectsTableHeader/ProjectsTableHeader"
 import { ProjectRowOptionMenu } from "./ProjectRowOptionMenu/ProjectRowOptionMenu"
 
-export const ProjectsTable = ({ items }) => {
-  //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
+export const ProjectsTable = ({ items, activeTab, onTabChange }) => {
   const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
-  const [activeItem, setActiveItem] = useState("all")
   const elements = items?.map((e) => ({
     actions: "",
-    id: e.id,
-    alias: { label: e.alias, link: e.id },
-    sector: e.sector,
-    punto_focal: e.focusPoint || "",
-    sistemas_ensayo: e.testSystems,
-    tags_proyecto: e.tags,
-    usuarios: e.users,
-    apuntes: e.notes,
+    id: e._id,
+    alias: { label: e.alias, link: e._id },
+    sector: e.sector || "Automoción",
+    focusPoint: e.focusPoint.length > 0 ? e.focusPoint : ["Persona", "Responsable"],
+    testSystems: e.testSystems.map((ts) => ts.alias),
+    tags:
+      e.tag.length > 0
+        ? e.tag
+        : ["Tag Proyecto A", "Tag Proyecto B", "Tag Proyecto C"],
+    usuarios: e.users || ["User A", "User B", "User C"],
+    notes: e.notes.map((note) => note.title),
     options: "",
+    config: {
+      isFinished: e.isFinished,
+    },
   }))
   const projects_table = {
     components: {
@@ -31,8 +35,8 @@ export const ProjectsTable = ({ items }) => {
       count: <Text />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       sector: <NoteTag />,
-      sistemas_ensayo: <TagGroup variant="light_blue" max={3} />,
-      tags_proyecto: <TagGroup variant="pale_yellow" max={3} />,
+      testSystems: <TagGroup variant="light_blue" max={3} />,
+      tags: <TagGroup variant="pale_yellow" max={3} />,
       options: <ProjectRowOptionMenu />,
     },
     head: {
@@ -56,17 +60,17 @@ export const ProjectsTable = ({ items }) => {
         width: calcColWidth(120),
         type: "text",
       },
-      punto_focal: {
+      focusPoint: {
         label: "Punto Focal",
         width: calcColWidth(120),
         type: "text",
       },
-      sistemas_ensayo: {
+      testSystems: {
         label: "sistemas de ensayo",
         width: calcColWidth(220),
         type: "tagGroup",
       },
-      tags_proyecto: {
+      tags: {
         label: "Tags de proyecto",
         width: calcColWidth(220),
         type: "tagGroup",
@@ -76,7 +80,7 @@ export const ProjectsTable = ({ items }) => {
         width: calcColWidth(60),
         type: "count",
       },
-      apuntes: {
+      notes: {
         label: "Apuntes",
         width: calcColWidth(55),
         type: "count",
@@ -92,8 +96,8 @@ export const ProjectsTable = ({ items }) => {
     <Table
       header={
         <ProjectsTableHeader
-          activeItem={activeItem}
-          onChange={(value) => setActiveItem(value)}
+          activeItem={activeTab}
+          onChange={(value) => onTabChange(value)}
           projectsCount={elements?.length}
         />
       }

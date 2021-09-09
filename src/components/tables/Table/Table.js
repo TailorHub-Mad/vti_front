@@ -1,4 +1,5 @@
 import { Box, Flex, Grid, Text } from "@chakra-ui/react"
+import { unique } from "faker"
 import React from "react"
 import { CUSTOM_SCROLLBAR } from "../../../theme/utils/utils.theme"
 import { MAX_TABLE_WIDTH, MIN_TABLE_WIDTH } from "../../../utils/constants/layout"
@@ -55,14 +56,17 @@ export const Table = ({
             minWidth={MIN_TABLE_WIDTH}
             maxWidth={MAX_TABLE_WIDTH}
           >
-            {Object.values(head).map((element) => (
-              <Text key={element?.label}>{element?.label}</Text>
+            {Object.values(head).map((element, idx) => (
+              <Text key={`${element?.label}-${idx}`}>{element?.label}</Text>
             ))}
           </Grid>
           {content.map((item, idx) => {
+            const { isFinished } = item.config
+            const colorConfig = { color: isFinished ? "correct.500" : "blue.500" }
+            const bgColorConfig = isFinished ? { variant: "green" } : {}
             return (
               <Grid
-                key={item.id}
+                key={item._id || item.id || `it-${idx}`}
                 templateColumns={templateColumns}
                 borderBottom="1px"
                 borderColor="grey"
@@ -75,33 +79,45 @@ export const Table = ({
                 gridColumnGap="8px"
               >
                 {/* TODO refactor del cloneElement para que reciba las props de forma más elegante */}
-                {Object.entries(item).map(([name, element]) => {
+                {Object.entries(item).map(([name, element], idx) => {
                   if (head[name]?.type === "count") {
                     return React.cloneElement(components.text, {
                       children: element?.length.toString(),
-                      textAlign: "left"
+                      textAlign: "left",
+                      key: `${name}-${idx}`,
+                      ...colorConfig,
                     })
                   }
                   if (head[name]?.type === "text") {
                     return React.cloneElement(components.text, {
                       children: element?.toString(),
+                      key: `${name}-${idx}`,
+
+                      ...colorConfig,
                     })
                   }
                   if (head[name]?.type === "link") {
                     return React.cloneElement(components.link, {
                       children: element?.label,
                       alias: element?.link,
+                      key: `${name}-${idx}`,
+
+                      ...colorConfig,
                     })
                   }
                   if (head[name]?.type === "selector") {
                     return React.cloneElement(components[name], {
                       isChecked: isSelected(idx),
                       onChange: () => onRowSelect(idx),
+                      key: `${name}-${idx}`,
                     })
                   }
                   if (head[name]?.type === "tagGroup") {
                     return React.cloneElement(components[name], {
                       tagsArr: element,
+                      key: `${name}-${idx}`,
+
+                      ...bgColorConfig,
                     })
                   }
                   if (components[name] !== undefined) {
@@ -109,6 +125,7 @@ export const Table = ({
                       children: element,
                       id: item.id,
                       alias: element?.alias,
+                      key: `${name}-${idx}`,
                     })
                   }
                   return <Text key={name} />
