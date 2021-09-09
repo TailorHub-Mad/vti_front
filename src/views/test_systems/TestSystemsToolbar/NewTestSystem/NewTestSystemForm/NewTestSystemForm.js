@@ -85,6 +85,7 @@ export const NewTestSystemForm = ({ value, onChange }) => {
           onChange: (val) => handleFormChange(name, val),
           marginBottom: name === "name" ? "0" : "24px",
           isDisabled: index !== 0 && !value[Object.keys(value)[index - 1]],
+          key: `${name}-${index}`,
           ...config,
         })
       })}

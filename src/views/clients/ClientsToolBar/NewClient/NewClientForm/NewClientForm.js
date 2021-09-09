@@ -39,11 +39,12 @@ export const NewClientForm = ({ value, onChange }) => {
 
   return (
     <>
-      {Object.entries(formInputs).map(([name, { type, config }]) => {
+      {Object.entries(formInputs).map(([name, { type, config }], index) => {
         return React.cloneElement(inputRefObj[type], {
           value: value[name],
           onChange: (val) => handleFormChange(name, val),
           marginBottom: name === "name" ? "0" : "24px",
+          key: `${name}-${index}`,
           // isDisabled: idx !== 0 && !value[Object.keys(value)[idx - 1]],
           //TODO Check para que sea secuencial el form (disable next step hasta que esté ok el previo)
           ...config,
