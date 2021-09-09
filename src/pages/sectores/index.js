@@ -41,9 +41,7 @@ const sectores = () => {
     setIsSectorModalOpen(true)
   }
 
-  const handleExport = () => {
-    console.log("Export sectors")
-  }
+  const handleExport = () => {}
 
   const handleSearch = (val) => {
     const results = allSectors.filter(
@@ -57,8 +55,7 @@ const sectores = () => {
   useEffect(() => {
     setIsFetching(true)
     const fetchClients = async () => {
-      const _sectors = await getClients()
-      console.log(_sectors)
+      await getClients()
       setSectors(MOCK_SECTORS_TABLE)
       setAllSectors([])
       setIsFetching(false)
@@ -119,7 +116,7 @@ const sectores = () => {
           sectors={sectors}
           onDelete={(id) => setSectorToDelete(id)}
           onEdit={onEdit}
-          deleteItems={(rows) => console.log("borra", rows)}
+          deleteItems={() => {}}
         />
       ) : null}
     </Page>

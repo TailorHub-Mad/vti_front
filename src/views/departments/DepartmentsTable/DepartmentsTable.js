@@ -1,16 +1,14 @@
 import { Checkbox, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
-import { DepartmentLink } from "../../../components/navigation/DepartmentLink/DepartmentLink"
+import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
+import { RowOptionMenu } from "../../../components/navigation/RowOptionMenu/RowOptionMenu"
 import { Table } from "../../../components/tables/Table/Table"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
 import { DepartmentsTableHeader } from "../DepartmentsTableHeader/DepartmentsTableHeader"
-import { DepartmentRowOptionMenu } from "./DepartmentRowOptionMenu/DepartmentRowOptionMenu"
 
 export const DepartmentsTable = ({ departments, onDelete, onEdit, deleteItems }) => {
   //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
-  //Hacer componente departmentLink
-  console.log("DEPART", departments)
   const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
   const [activeItem, setActiveItem] = useState("all")
   const _departments =
@@ -19,7 +17,7 @@ export const DepartmentsTable = ({ departments, onDelete, onEdit, deleteItems })
       return {
         actions: "",
         id: department._id,
-        name: { label: department.name, link: department._id },
+        name: { label: department.name, link: `/departamentos/${department._id}` },
         users: ["Usuario 1", "Usuario 2", "Usuario 3"],
         options: "",
       }
@@ -28,10 +26,10 @@ export const DepartmentsTable = ({ departments, onDelete, onEdit, deleteItems })
   const departments_table = {
     components: {
       text: <Text />,
-      link: <DepartmentLink />,
+      link: <LinkItem />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       users: <TagGroup variant="pale_yellow" max={7} />,
-      options: <DepartmentRowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
+      options: <RowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
     },
     head: {
       actions: {

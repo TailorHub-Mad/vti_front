@@ -1,11 +1,11 @@
 import { Checkbox, Text } from "@chakra-ui/react"
 import { useMemo, useState } from "react"
-import { TestSystemLink } from "../../../components/navigation/TestSystemLink/TestSystemLink"
+import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
+import { RowOptionMenu } from "../../../components/navigation/RowOptionMenu/RowOptionMenu"
 import { Table } from "../../../components/tables/Table/Table"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
 import { TestSystemTableHeader } from "../TestSystemsTableHeader/TestSystemTableHeader"
-import { TestSystemsRowOptionMenu } from "./TestSystemsRowOptionMenu/TestSystemsRowOptionMenu"
 
 export const TestSystemsTable = ({
   items,
@@ -49,12 +49,12 @@ export const TestSystemsTable = ({
   const test_systems_table = {
     components: {
       text: <Text />,
-      link: <TestSystemLink />,
+      link: <LinkItem />,
       count: <Text />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       notes: <TagGroup variant="testSystem" max={4} />,
       projects: <TagGroup variant="project" max={3} />,
-      options: <TestSystemsRowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
+      options: <RowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
     },
     head: {
       actions: {

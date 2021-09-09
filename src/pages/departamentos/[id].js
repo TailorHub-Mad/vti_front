@@ -6,7 +6,6 @@ import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs
 import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
 import useDepartmentApi from "../../hooks/api/useDepartmentApi"
 
-
 const department = () => {
   const [isFetching, setIsFetching] = useState(false)
   const [department, setDepartment] = useState(null)

@@ -1,12 +1,12 @@
 import { Checkbox, Text } from "@chakra-ui/react"
 import React from "react"
-import { ProjectLink } from "../../../components/navigation/ProjectLink/ProjectLink"
+import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
+import { RowOptionMenu } from "../../../components/navigation/RowOptionMenu/RowOptionMenu"
 import { Table } from "../../../components/tables/Table/Table"
 import { NoteTag } from "../../../components/tags/NoteTag/NoteTag"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
 import { ProjectsTableHeader } from "../ProjectsTableHeader/ProjectsTableHeader"
-import { ProjectRowOptionMenu } from "./ProjectRowOptionMenu/ProjectRowOptionMenu"
 
 export const ProjectsTable = ({ items, activeTab, onTabChange }) => {
   const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
@@ -21,7 +21,7 @@ export const ProjectsTable = ({ items, activeTab, onTabChange }) => {
       e.tag.length > 0
         ? e.tag
         : ["Tag Proyecto A", "Tag Proyecto B", "Tag Proyecto C"],
-    usuarios: e.users || ["User A", "User B", "User C"],
+    users: e.users || ["User A", "User B", "User C"],
     notes: e.notes.map((note) => note.title),
     options: "",
     config: {
@@ -31,13 +31,13 @@ export const ProjectsTable = ({ items, activeTab, onTabChange }) => {
   const projects_table = {
     components: {
       text: <Text />,
-      link: <ProjectLink />,
+      link: <LinkItem />,
       count: <Text />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       sector: <NoteTag />,
       testSystems: <TagGroup variant="light_blue" max={3} />,
       tags: <TagGroup variant="pale_yellow" max={3} />,
-      options: <ProjectRowOptionMenu />,
+      options: <RowOptionMenu />,
     },
     head: {
       actions: {
@@ -75,7 +75,7 @@ export const ProjectsTable = ({ items, activeTab, onTabChange }) => {
         width: calcColWidth(220),
         type: "tagGroup",
       },
-      usuarios: {
+      users: {
         label: "Usuarios",
         width: calcColWidth(60),
         type: "count",

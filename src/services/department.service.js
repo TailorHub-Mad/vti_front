@@ -11,7 +11,8 @@ class DepartmentService extends ServiceConstructor {
   updateDepartment = (data) =>
     this.makeRequest(this.instance.put(`/department/${data.id}`, data))
 
-  deleteDepartment = (id) => this.makeRequest(this.instance.delete(`/department/${id}`))
+  deleteDepartment = (id) =>
+    this.makeRequest(this.instance.delete(`/department/${id}`))
 }
 
 export default DepartmentService

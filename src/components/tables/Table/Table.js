@@ -1,5 +1,4 @@
 import { Box, Flex, Grid, Text } from "@chakra-ui/react"
-import { unique } from "faker"
 import React from "react"
 import { CUSTOM_SCROLLBAR } from "../../../theme/utils/utils.theme"
 import { MAX_TABLE_WIDTH, MIN_TABLE_WIDTH } from "../../../utils/constants/layout"
@@ -20,6 +19,8 @@ export const Table = ({
     ""
   )
   const isSelected = (idx) => selectedRows?.includes(idx)
+
+  console.log("selectedRows", selectedRows)
 
   return content ? (
     <Card
@@ -92,7 +93,6 @@ export const Table = ({
                     return React.cloneElement(components.text, {
                       children: element?.toString(),
                       key: `${name}-${idx}`,
-
                       ...colorConfig,
                     })
                   }
@@ -101,7 +101,7 @@ export const Table = ({
                       children: element?.label,
                       alias: element?.link,
                       key: `${name}-${idx}`,
-
+                      url: element?.link,
                       ...colorConfig,
                     })
                   }
@@ -116,7 +116,6 @@ export const Table = ({
                     return React.cloneElement(components[name], {
                       tagsArr: element,
                       key: `${name}-${idx}`,
-
                       ...bgColorConfig,
                     })
                   }
@@ -125,10 +124,11 @@ export const Table = ({
                       children: element,
                       id: item.id,
                       alias: element?.alias,
+                      disabled: selectedRows.length > 1,
                       key: `${name}-${idx}`,
                     })
                   }
-                  return <Text key={name} />
+                  return <Text key={`${name}-${idx}`} />
                 })}
               </Grid>
             )
