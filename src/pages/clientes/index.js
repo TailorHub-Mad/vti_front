@@ -43,9 +43,7 @@ const clientes = () => {
     setIsClientModalOpen(true)
   }
 
-  const handleExport = () => {
-    console.log("Export departments")
-  }
+  const handleExport = () => {}
 
   const handleSearch = (val) => {
     const results = allClients.filter(

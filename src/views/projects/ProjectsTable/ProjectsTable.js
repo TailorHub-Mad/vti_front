@@ -1,6 +1,6 @@
 import { Checkbox, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
-import { ProjectLink } from "../../../components/navigation/ProjectLink/ProjectLink"
+import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
 import { Table } from "../../../components/tables/Table/Table"
 import { NoteTag } from "../../../components/tags/NoteTag/NoteTag"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
@@ -12,22 +12,22 @@ export const ProjectsTable = ({ items }) => {
   //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
   const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
   const [activeItem, setActiveItem] = useState("all")
-  const elements = items?.map((e) => ({
+  const elements = items?.map((project) => ({
     actions: "",
-    id: e.id,
-    alias: { label: e.alias, link: e.id },
-    sector: e.sector,
-    punto_focal: e.focusPoint || "",
-    sistemas_ensayo: e.testSystems,
-    tags_proyecto: e.tags,
-    usuarios: e.users,
-    apuntes: e.notes,
+    id: project._id,
+    alias: { label: project.alias, link: `/proyectos/${project._id}` },
+    sector: project.sector,
+    punto_focal: project.focusPoint || "",
+    sistemas_ensayo: project.testSystems,
+    tags_proyecto: project.tags,
+    usuarios: project.users,
+    apuntes: project.notes,
     options: "",
   }))
   const projects_table = {
     components: {
       text: <Text />,
-      link: <ProjectLink />,
+      link: <LinkItem />,
       count: <Text />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       sector: <NoteTag />,

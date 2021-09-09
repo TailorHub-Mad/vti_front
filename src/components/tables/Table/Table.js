@@ -79,7 +79,7 @@ export const Table = ({
                   if (head[name]?.type === "count") {
                     return React.cloneElement(components.text, {
                       children: element?.length.toString(),
-                      textAlign: "left"
+                      textAlign: "left",
                     })
                   }
                   if (head[name]?.type === "text") {
@@ -90,7 +90,7 @@ export const Table = ({
                   if (head[name]?.type === "link") {
                     return React.cloneElement(components.link, {
                       children: element?.label,
-                      alias: element?.link,
+                      url: element?.link,
                     })
                   }
                   if (head[name]?.type === "selector") {

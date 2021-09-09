@@ -46,9 +46,7 @@ const departamentos = () => {
     setIsDepartmentModalOpen(true)
   }
 
-  const handleExport = () => {
-    console.log("Export departments")
-  }
+  const handleExport = () => {}
 
   const handleSearch = (val) => {
     const results = allDepartments.filter(
@@ -62,8 +60,7 @@ const departamentos = () => {
   useEffect(() => {
     setIsFetching(true)
     const fetchClients = async () => {
-      const _departments = await getDepartments()
-      console.log(_departments)
+      await getDepartments()
       setDepartments(MOCK_DEPARTMENTS_TABLE)
       setAllDepartments([])
       setIsFetching(false)
@@ -123,7 +120,7 @@ const departamentos = () => {
           departments={departments}
           onDelete={(id) => setDepartmentToDelete(id)}
           onEdit={onEdit}
-          deleteItems={(rows) => console.log("borra", rows)}
+          deleteItems={() => {}}
         />
       ) : null}
     </Page>
