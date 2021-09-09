@@ -2,12 +2,12 @@ import { Grid } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { MessageCard } from "../components/cards/MessageCard/MessageCard"
 import { NoteDrawer } from "../components/drawer/NoteDrawer/NoteDrawer"
-import { Page } from "../components/layout/Page/Page"
+import { Page } from "../components/layout/Pages/Page"
 import { PageBody } from "../components/layout/PageBody/PageBody"
-import { PageHeader } from "../components/layout/PageHeader/PageHeader"
+import { PageHeader } from "../components/layout/Pages/PageHeader/PageHeader"
 import { PageMenu } from "../components/layout/PageMenu/PageMenu"
 import { ToolBar } from "../components/navigation/ToolBar/ToolBar"
-import { LoadingTableSpinner } from "../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
+import { Spinner } from "../components/spinner/Spinner"
 import { NOTES_MOCK } from "../mock/notes"
 import { NotesEmptyState } from "../views/notes/NotesEmptyState/NotesEmptyState"
 import { NotesMenu } from "../views/notes/NotesMenu/NotesMenu"
@@ -39,7 +39,7 @@ const apuntes = () => {
         ) : null}
       </PageMenu>
       <PageBody height="calc(100vh - 140px)">
-        {isFetching ? <LoadingTableSpinner /> : null}
+        {isFetching ? <Spinner /> : null}
         {!areNotes ? <NotesEmptyState /> : null}
         {areNotes && !isFetching ? (
           <Grid

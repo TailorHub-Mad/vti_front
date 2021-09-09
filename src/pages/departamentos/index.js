@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react"
-import { Page } from "../../components/layout/Page/Page"
-import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
+import { Page } from "../../components/layout/Pages/Page"
+import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { Popup } from "../../components/overlay/Popup/Popup"
-import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
+import { Spinner } from "../../components/spinner/Spinner"
 import useDepartmentApi from "../../hooks/api/useDepartmentApi"
-import { ApiToastContext } from "../../provider/ApiToastProvider"
+import { ApiToastContext } from "../../provider/ToastProvider"
 import { ViewEmptyState } from "../../views/common/NotesEmptyState/ViewEmptyState"
 import { MOCK_DEPARTMENTS_TABLE } from "../../mock/departments_table"
 import { DepartmentsTable } from "../../views/departments/DepartmentsTable/DepartmentsTable"
@@ -105,7 +105,7 @@ const departamentos = () => {
           />
         ) : null}
       </PageHeader>
-      {isFetching ? <LoadingTableSpinner /> : null}
+      {isFetching ? <Spinner /> : null}
       {!areDepartments && !isFetching ? (
         <ViewEmptyState
           message="Añadir departmentes a la platorma"

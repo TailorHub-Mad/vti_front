@@ -114,7 +114,7 @@ export const AddNewProjectForm = ({ openAuxModal, value, onChange }) => {
   const handleFormChange = (input, _value) => {
     onChange({
       ...value,
-      [input]: _value?.target?.checked ? _target.checked : _value,
+      [input]: _value?.target?.checked ?? _value,
     })
   }
 

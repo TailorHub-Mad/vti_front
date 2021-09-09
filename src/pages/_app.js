@@ -1,6 +1,6 @@
 import { ChakraProvider } from "@chakra-ui/react"
-import ApiUserProvider from "../provider/ApiAuthProvider"
-import ApiToastProvider from "../provider/ApiToastProvider"
+import ApiAuthProvider from "../provider/ApiAuthProvider"
+import ToastProvider from "../provider/ToastProvider"
 import { SWRConfig } from "swr"
 import theme from "../theme/"
 
@@ -9,13 +9,13 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <ChakraProvider resetCSS theme={theme}>
-      <ApiUserProvider>
+      <ApiAuthProvider>
         <SWRConfig value={swrConfig}>
-          <ApiToastProvider>
+          <ToastProvider>
             <Component {...pageProps} />
-          </ApiToastProvider>
+          </ToastProvider>
         </SWRConfig>
-      </ApiUserProvider>
+      </ApiAuthProvider>
     </ChakraProvider>
   )
 }

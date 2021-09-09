@@ -1,7 +1,7 @@
 import { Checkbox, Text } from "@chakra-ui/react"
 import { useMemo } from "react"
 import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
-import { RowOptionMenu } from "../../../components/navigation/RowOptionMenu/RowOptionMenu"
+import { OptionsMenuRow } from "../../../components/navigation/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
@@ -52,7 +52,7 @@ export const TestSystemsTable = ({
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       notes: <TagGroup variant="testSystem" max={4} />,
       projects: <TagGroup variant="project" max={3} />,
-      options: <RowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
+      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />,
     },
     head: {
       actions: {

@@ -1,4 +1,4 @@
-import { Page } from "../../components/layout/Page/Page"
+import { Page } from "../../components/layout/Pages/Page"
 import { ProjectInfoBar } from "../../views/notes/Project/ProjectInfoBar/ProjectInfoBar"
 import faker from "faker"
 import { useState } from "react"

@@ -6,10 +6,10 @@ import {
   TABBAR_ADMIN_LINKS,
   TABBAR_USER_LINKS,
 } from "../../../utils/constants/tabbar_links"
-import { LogoFull } from "../../images/LogoFull/LogoFull"
-import { TabBarFooter } from "../TabBarFooter/TabBarFooter"
-import { TabBarMenu } from "../TabBarMenu/TabBarMenu"
-import { TabBarToggle } from "../TabBarToggle/TabBarToggle"
+import { LogoFull } from "../../images/LogoFull"
+import { TabBarFooter } from "./TabBarFooter/TabBarFooter"
+import { TabBarMenu } from "./TabBarMenu/TabBarMenu"
+import { TabBarToggle } from "./TabBarToggle/TabBarToggle"
 
 export const TabBar = ({ isOpen, setIsOpen, areActiveNotifications = true }) => {
   const { role } = useContext(ApiUserContext)

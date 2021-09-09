@@ -13,7 +13,7 @@ export const generateRandomNote = () => ({
   canSubscribe: faker.datatype.boolean(),
   subscribedUsers: new Array(faker.datatype.number(10))
     .fill("")
-    .map((_) => `${faker.name.firstName()} ${faker.name.lastName()}`),
+    .map(() => `${faker.name.firstName()} ${faker.name.lastName()}`),
   tags: {
     project_tags: new Array(faker.datatype.number(10))
       .fill("")

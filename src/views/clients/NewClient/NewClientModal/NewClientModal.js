@@ -10,7 +10,7 @@ import {
 import React, { useContext, useEffect, useState } from "react"
 import { CloseIcon } from "../../../../components/icons/CloseIcon"
 import useClientApi from "../../../../hooks/api/useClientApi"
-import { ApiToastContext } from "../../../../provider/ApiToastProvider"
+import { ApiToastContext } from "../../../../provider/ToastProvider"
 import { NewClientForm } from "../NewClientForm/NewClientForm"
 
 export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
@@ -38,7 +38,6 @@ export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
       return await createClient(val)
     })
 
-    // eslint-disable-next-line no-undef
     const resultsArr = await Promise.all(clientsQueue)
     //Meter toast de éxito
     showToast("CLiente añadido correctamente!")

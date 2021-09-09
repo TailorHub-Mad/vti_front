@@ -2,11 +2,11 @@ import { Grid, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { TagCard } from "../components/cards/TagCard/TagCard"
 import { NoteDrawer } from "../components/drawer/NoteDrawer/NoteDrawer"
-import { Page } from "../components/layout/Page/Page"
+import { Page } from "../components/layout/Pages/Page"
 import { PageBody } from "../components/layout/PageBody/PageBody"
-import { PageHeader } from "../components/layout/PageHeader/PageHeader"
+import { PageHeader } from "../components/layout/Pages/PageHeader/PageHeader"
 import { ToolBar } from "../components/navigation/ToolBar/ToolBar"
-import { LoadingTableSpinner } from "../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
+import { Spinner } from "../components/spinner/Spinner"
 import { PROJECT_TAGS_MOCK } from "../mock/tags"
 import { NotesEmptyState } from "../views/notes/NotesEmptyState/NotesEmptyState"
 import { ProjectsTagsHeader } from "../views/projectTags/ProjectTagsHeader/ProjectTagsHeader"
@@ -28,7 +28,7 @@ const tagsDeProyecto = () => {
       <PageHeader title="Tags de Proyecto">
         {areNotes && !isFetching ? <ToolBar /> : null}
       </PageHeader>
-      {isFetching ? <LoadingTableSpinner /> : null}
+      {isFetching ? <Spinner /> : null}
       {!areNotes ? <NotesEmptyState /> : null}
       <PageBody
         p="32px"

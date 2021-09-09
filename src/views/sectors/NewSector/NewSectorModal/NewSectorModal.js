@@ -10,7 +10,7 @@ import {
 import React, { useContext, useEffect, useState } from "react"
 import { CloseIcon } from "../../../../components/icons/CloseIcon"
 import useSectorApi from "../../../../hooks/api/useSectorApi"
-import { ApiToastContext } from "../../../../provider/ApiToastProvider"
+import { ApiToastContext } from "../../../../provider/ToastProvider"
 import { NewSectorForm } from "../NewSectorForm/NewSectorForm"
 
 export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
@@ -38,7 +38,6 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
       return await createSector(val)
     })
 
-    // eslint-disable-next-line no-undef
     const resultsArr = await Promise.all(sectorsQueue)
     //Meter toast de éxito
     showToast("Sector añadido correctamente!")

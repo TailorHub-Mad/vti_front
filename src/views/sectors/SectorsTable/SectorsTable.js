@@ -1,7 +1,7 @@
 import { Checkbox, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
-import { RowOptionMenu } from "../../../components/navigation/RowOptionMenu/RowOptionMenu"
+import { OptionsMenuRow } from "../../../components/navigation/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
@@ -30,7 +30,7 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, deleteItems }) => {
       link: <LinkItem />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       projects: <TagGroup variant="pale_yellow" max={7} />,
-      options: <RowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
+      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />,
     },
     head: {
       actions: {

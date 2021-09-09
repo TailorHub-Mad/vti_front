@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react"
-import { Page } from "../../components/layout/Page/Page"
-import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
-import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
+import { Page } from "../../components/layout/Pages/Page"
+import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
+import { Spinner } from "../../components/spinner/Spinner"
 import { ApiUserContext } from "../../provider/ApiAuthProvider"
 import { TestSystemsTable } from "../../views/test_systems/TestSystemsTable/TestSystemsTable"
 import useSystemApi from "../../hooks/api/useSystemsApi"
 import useFetchSWR from "../../hooks/useFetchSWR"
-import { ApiToastContext } from "../../provider/ApiToastProvider"
+import { ApiToastContext } from "../../provider/ToastProvider"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import { pullAt } from "lodash"
 import { NewTestSystemModal } from "../../views/test_systems/NewTestSystem/NewTestSystemModal/NewTestSystemModal"
@@ -164,7 +164,7 @@ const sistemas = () => {
           />
         )}
       </PageHeader>
-      {isLoading ? <LoadingTableSpinner /> : null}
+      {isLoading ? <Spinner /> : null}
       {emptyData ? (
         <ViewEmptyState
           message="Añadir sistemas a la platorma"

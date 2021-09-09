@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react"
-import { Page } from "../../components/layout/Page/Page"
-import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
+import { Page } from "../../components/layout/Pages/Page"
+import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { Popup } from "../../components/overlay/Popup/Popup"
-import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
+import { Spinner } from "../../components/spinner/Spinner"
 import useClientApi from "../../hooks/api/useClientApi"
-import { ApiToastContext } from "../../provider/ApiToastProvider"
+import { ApiToastContext } from "../../provider/ToastProvider"
 import { SectorsTable } from "../../views/sectors/SectorsTable/SectorsTable"
 import { ViewEmptyState } from "../../views/common/NotesEmptyState/ViewEmptyState"
 import { MOCK_SECTORS_TABLE } from "../../mock/sectors_table"
@@ -101,7 +101,7 @@ const sectores = () => {
           />
         ) : null}
       </PageHeader>
-      {isFetching ? <LoadingTableSpinner /> : null}
+      {isFetching ? <Spinner /> : null}
       {!areSectors && !isFetching ? (
         <ViewEmptyState
           message="Añadir sectores a la platorma"

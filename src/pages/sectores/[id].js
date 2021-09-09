@@ -1,10 +1,10 @@
 import { useRouter } from "next/dist/client/router"
 import { useEffect, useState } from "react"
-import { Page } from "../../components/layout/Page/Page"
-import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
+import { Page } from "../../components/layout/Pages/Page"
+import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
-import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
+import { Spinner } from "../../components/spinner/Spinner"
 import useSectorApi from "../../hooks/api/useSectorApi"
 import { MOCK_BACK_PROJECTS_DATA } from "../../mock/projects_table"
 import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
@@ -25,7 +25,7 @@ const sector = () => {
   }, [])
   return (
     <Page>
-      {isFetching ? <LoadingTableSpinner /> : null}
+      {isFetching ? <Spinner /> : null}
 
       {sector && !isFetching ? (
         <>

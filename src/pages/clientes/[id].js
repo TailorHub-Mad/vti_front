@@ -1,9 +1,9 @@
 import { useRouter } from "next/dist/client/router"
 import { useEffect, useState } from "react"
-import { Page } from "../../components/layout/Page/Page"
-import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
+import { Page } from "../../components/layout/Pages/Page"
+import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
-import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
+import { Spinner } from "../../components/spinner/Spinner"
 import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
 import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 import { useSWRConfig } from "swr"
@@ -48,7 +48,7 @@ const client = () => {
           <ProjectsTable items={clientData.projects} />
         </>
       ) : (
-        <LoadingTableSpinner />
+        <Spinner />
       )}
     </Page>
   )

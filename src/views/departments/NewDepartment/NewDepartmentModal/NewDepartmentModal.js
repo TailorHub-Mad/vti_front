@@ -10,7 +10,7 @@ import {
 import React, { useContext, useEffect, useState } from "react"
 import { CloseIcon } from "../../../../components/icons/CloseIcon"
 import useDepartmentApi from "../../../../hooks/api/useDepartmentApi"
-import { ApiToastContext } from "../../../../provider/ApiToastProvider"
+import { ApiToastContext } from "../../../../provider/ToastProvider"
 import { NewDepartmentForm } from "../NewDepartmentForm/NewDepartmentForm"
 
 export const NewDepartmentModal = ({
@@ -43,7 +43,6 @@ export const NewDepartmentModal = ({
       return await createDepartment(val)
     })
 
-    // eslint-disable-next-line no-undef
     const resultsArr = await Promise.all(departmentsQueue)
     //Meter toast de éxito
     showToast("Departamento añadido correctamente!")

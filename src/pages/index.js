@@ -4,9 +4,9 @@ import { NotificationCard } from "../components/cards/NotificationCard/Notificat
 import { AddSelect } from "../components/forms/AddSelect/AddSelect"
 import { FormController } from "../components/forms/FormItemWrapper/FormController"
 import { InputSelect } from "../components/forms/InputSelect/InputSelect"
-import { LogoFull } from "../components/images/LogoFull/LogoFull"
+import { LogoFull } from "../components/images/LogoFulll"
 import { Card } from "../components/layout/Card/Card"
-import { Page } from "../components/layout/Page/Page"
+import { Page } from "../components/layout/Pages/Page"
 import { Popup } from "../components/overlay/Popup/Popup"
 import { MOCK_SELECT_OPTIONS } from "../mock/mock"
 import { ApiUserContext } from "../provider/ApiAuthProvider"
@@ -24,7 +24,7 @@ import {
   Radio,
   useDisclosure,
 } from "@chakra-ui/react"
-import { ApiToastContext } from "../provider/ApiToastProvider"
+import { ApiToastContext } from "../provider/ToastProvider"
 import { FileInput } from "../components/forms/FileInput/FileInput"
 import { ImportFilesModal } from "../views/common/ImportFilesModal/ImportFilesModal"
 

@@ -4,7 +4,7 @@ import useAuthApi from "../../hooks/api/useAuthApi"
 
 export const ApiUserContext = React.createContext()
 
-const ApiUserProvider = ({ children }) => {
+const ApiAuthProvider = ({ children }) => {
   const router = useRouter()
   const { me } = useAuthApi()
 
@@ -43,4 +43,4 @@ const ApiUserProvider = ({ children }) => {
   )
 }
 
-export default ApiUserProvider
+export default ApiAuthProvider

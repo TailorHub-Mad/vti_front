@@ -1,7 +1,7 @@
-import { Page } from "../../components/layout/Page/Page"
-import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
+import { Page } from "../../components/layout/Pages/Page"
+import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
-import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
+import { Spinner } from "../../components/spinner/Spinner"
 import { MOCK_TABLE_DATA } from "../../mock/projects_table"
 import { NotesEmptyState } from "../../views/notes/NotesEmptyState/NotesEmptyState"
 import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
@@ -16,7 +16,7 @@ const projects = () => {
       <PageHeader title="Proyectos">
         {areProjects && !isFetching ? <ToolBar /> : null}
       </PageHeader>
-      {isFetching ? <LoadingTableSpinner /> : null}
+      {isFetching ? <Spinner /> : null}
       {!areProjects ? <NotesEmptyState /> : null}
       {areProjects && !isFetching ? <ProjectsTable items={MOCK_TABLE_DATA} /> : null}
     </Page>

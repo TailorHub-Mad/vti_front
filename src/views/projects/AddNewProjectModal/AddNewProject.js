@@ -3,7 +3,7 @@ import React from "react"
 import { AddProjectIcon } from "../../../components/icons/AddProjectIcon"
 import { AddNewProjectModal } from "./AddNewProjectModal/AddNewProjectModal"
 
-export const AddNewProject = ({ ...props }) => {
+export const AddNewProject = () => {
   const { isOpen, onClose, onOpen } = useDisclosure()
 
   return (

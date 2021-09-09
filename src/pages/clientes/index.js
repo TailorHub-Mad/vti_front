@@ -1,15 +1,15 @@
 import { pullAt } from "lodash"
 import { useContext, useEffect, useState } from "react"
-import { Page } from "../../components/layout/Page/Page"
-import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
+import { Page } from "../../components/layout/Pages/Page"
+import { PageHeader } from "../../components/layout/Pages/Pages/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { Popup } from "../../components/overlay/Popup/Popup"
-import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
+import { Spinner } from "../../components/spinner/Spinner"
 import useClientApi from "../../hooks/api/useClientApi"
 import useFetchSWR from "../../hooks/useFetchSWR"
 import { ApiUserContext } from "../../provider/ApiAuthProvider"
-import { ApiToastContext } from "../../provider/ApiToastProvider"
+import { ApiToastContext } from "../../provider/ToastProvider"
 import { DeleteType } from "../../utils/constants/global_config"
 import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 import { ClientsTable } from "../../views/clients/ClientsTable/ClientsTable"
@@ -161,7 +161,7 @@ const clientes = () => {
           />
         )}
       </PageHeader>
-      {isLoading ? <LoadingTableSpinner /> : null}
+      {isLoading ? <Spinner /> : null}
       {emptyData ? (
         <ViewEmptyState
           message="Añadir clientes a la platorma"

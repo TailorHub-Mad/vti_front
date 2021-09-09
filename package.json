@@ -5,7 +5,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint src/",
     "prettier": "prettier --write src",
     "prepare:husky": "husky install",
     "pre-commit": "yarn run prettier && yarn run lint"

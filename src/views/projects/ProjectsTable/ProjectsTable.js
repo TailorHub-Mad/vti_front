@@ -1,7 +1,7 @@
 import { Checkbox, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
-import { RowOptionMenu } from "../../../components/navigation/RowOptionMenu/RowOptionMenu"
+import { OptionsMenuRow } from "../../../components/navigation/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
 import { Table } from "../../../components/tables/Table/Table"
 import { NoteTag } from "../../../components/tags/NoteTag/NoteTag"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
@@ -33,7 +33,7 @@ export const ProjectsTable = ({ items }) => {
       sector: <NoteTag />,
       sistemas_ensayo: <TagGroup variant="light_blue" max={3} />,
       tags_proyecto: <TagGroup variant="pale_yellow" max={3} />,
-      options: <RowOptionMenu />,
+      options: <OptionsMenuRow />,
     },
     head: {
       actions: {

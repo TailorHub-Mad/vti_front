@@ -8,8 +8,7 @@ import { NoteTag } from "../../../../components/tags/NoteTag/NoteTag"
 import { ProjectTag } from "../../../../components/tags/ProjectTag/ProjectTag"
 import { TestSystemTag } from "../../../../components/tags/TestSystemTag/TestSystemTag"
 
-export const ProjectDetails = ({ projectInfo = {}, ...props }) => {
-  const { main_person, users, tags, test_systems } = projectInfo
+export const ProjectDetails = () => {
   const [showProjectDetails, setShowProjectDetails] = useState(false)
 
   return (

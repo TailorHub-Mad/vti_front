@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { ApiErrorContext } from "../provider/ApiErrorProvider"
+import { ApiErrorContext } from "../provider/ErrorProvider"
 
 function useApiError() {
   const { error, addError, removeError } = useContext(ApiErrorContext)
