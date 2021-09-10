@@ -1,11 +1,11 @@
 import { ScaleFade, Modal, ModalOverlay, Box, Button } from "@chakra-ui/react"
 import React, { useState } from "react"
-import { AuxFilter } from "../../../../components/filters/Filter/FilterModal/AuxFilter/AuxFilter"
-import { CustomModalContent } from "../../../../components/overlay/modal/CustomModalContent/CustomModalContent"
-import { CustomModalHeader } from "../../../../components/overlay/modal/CustomModalHeader/CustomModalHeader"
-import { AddNewProjectForm } from "../AddNewProjectForm/AddNewProjectForm"
+import { AuxFilter } from "../../../components/filters/Filter/FilterModal/AuxFilter/AuxFilter"
+import { CustomModalContent } from "../../../components/overlay/modal/CustomModalContent/CustomModalContent"
+import { CustomModalHeader } from "../../../components/overlay/modal/CustomModalHeader/CustomModalHeader"
+import { NewProjectForm } from "./NewProjectForm/NewProjectForm"
 
-export const AddNewProjectModal = ({
+export const NewProjectModal = ({
   isOpen,
   onClose,
   textBody,
@@ -55,7 +55,7 @@ export const AddNewProjectModal = ({
               onClose={onClose}
               pb="24px"
             />
-            <AddNewProjectForm
+            <NewProjectForm
               value={formValues}
               openAuxModal={() => setShowSecondaryContent(true)}
               onChange={(val) => setFormValues(val)}

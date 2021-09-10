@@ -2,13 +2,13 @@
 import { SearchIcon } from "@chakra-ui/icons"
 import { Button, Flex, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
 import React, { useContext } from "react"
+import { CloudButton } from "../../../components/buttons/CloudButton/CloudButton"
 import { Filter } from "../../../components/filters/Filter/Filter"
 import { Group } from "../../../components/grouping/Group/Group"
-import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
+import { AddProjectIcon } from "../../../components/icons/AddProjectIcon"
 import { ApiUserContext } from "../../../provider/ApiAuthProvider"
-import { AddNewProject } from "../AddNewProjectModal/AddNewProject"
 
-export const ProjectsToolBar = ({ onSearch }) => {
+export const ProjectsToolBar = ({ onSearch, onImport, onExport, onAddProject }) => {
   const { role } = useContext(ApiUserContext)
 
   return (
@@ -30,10 +30,11 @@ export const ProjectsToolBar = ({ onSearch }) => {
 
       {role === "admin" && (
         <>
-          <Button variant="icon_only_secondary" marginRight="16px">
-            <UploadCloudIcon />
+          <CloudButton onImport={onImport} onExport={onExport} />
+          <Button onClick={onAddProject}>
+            <AddProjectIcon marginRight="8px" />
+            Añadir proyecto
           </Button>
-          <AddNewProject />
         </>
       )}
     </Flex>

@@ -4,7 +4,7 @@ class ProjectService extends ServiceConstructor {
   getProjects = () => this.makeRequest(this.instance.get("/projects?limit=50"))
 
   getGroupedProjects = () =>
-    this.makeRequest(this.instance.get("/projects/group?limit=50"))
+    this.makeRequest(this.instance.get(`/projects/group?group=client&real=true`))
 
   getProject = (id) => this.makeRequest(this.instance.get(`/projects/${id}`))
 

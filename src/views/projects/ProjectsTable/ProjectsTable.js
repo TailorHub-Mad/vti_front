@@ -1,5 +1,5 @@
 import { Checkbox, Text } from "@chakra-ui/react"
-import React from "react"
+import React, { useMemo } from "react"
 import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
 import { RowOptionMenu } from "../../../components/navigation/RowOptionMenu/RowOptionMenu"
 import { Table } from "../../../components/tables/Table/Table"
@@ -8,26 +8,77 @@ import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
 import { ProjectsTableHeader } from "../ProjectsTableHeader/ProjectsTableHeader"
 
-export const ProjectsTable = ({ items, activeTab, onTabChange }) => {
-  const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
-  const elements = items?.map((e) => ({
-    actions: "",
-    id: e._id,
-    alias: { label: e.alias, link: e._id },
-    sector: e.sector || "Automoción",
-    focusPoint: e.focusPoint.length > 0 ? e.focusPoint : ["Persona", "Responsable"],
-    testSystems: e.testSystems.map((ts) => ts.alias),
-    tags:
-      e.tag.length > 0
-        ? e.tag
-        : ["Tag Proyecto A", "Tag Proyecto B", "Tag Proyecto C"],
-    users: e.users || ["User A", "User B", "User C"],
-    notes: e.notes.map((note) => note.title),
-    options: "",
-    config: {
-      isFinished: e.isFinished,
-    },
-  }))
+export const ProjectsTable = ({
+  items,
+  activeTab,
+  onTabChange,
+  onDelete,
+  onDeleteMany,
+  onEdit,
+  isGrouped,
+}) => {
+  const { selectedRows, setSelectedRows, handleRowSelect, calcColWidth } =
+    useTableActions()
+  console.log("ITEMSSS", items)
+  useMemo(() => {
+    setSelectedRows([])
+  }, [items?.length])
+
+  const handleSelectAllRows = (e) => {
+    const value = e.target.checked ? [...Array(items.length).keys()] : []
+    setSelectedRows(value)
+  }
+
+  const handleOnDelete = () => {
+    if (selectedRows.length > 1) return onDeleteMany(selectedRows)
+    return onDelete(items[selectedRows[0]]._id)
+  }
+
+  const elements = !isGrouped
+    ? items?.map((e) => ({
+        actions: "",
+        id: e._id,
+        alias: { label: e.alias, link: e._id },
+        sector: e.sector || "Automoción",
+        focusPoint:
+          e.focusPoint.length > 0 ? e.focusPoint : ["Persona", "Responsable"],
+        testSystems: e.testSystems.map((ts) => ts.alias),
+        tags:
+          e.tag.length > 0
+            ? e.tag
+            : ["Tag Proyecto A", "Tag Proyecto B", "Tag Proyecto C"],
+        users: e.users || ["User A", "User B", "User C"],
+        notes: e.notes.map((note) => note.title),
+        options: "",
+        config: {
+          isFinished: e.isFinished,
+        },
+      }))
+    : items.map((it) => {
+        const _it = [...it]
+        _it[1] = it[1].map((e) => ({
+          actions: "",
+          id: e._id,
+          alias: { label: e.alias, link: e._id },
+          sector: e.sector || "Automoción",
+          focusPoint:
+            e.focusPoint.length > 0 ? e.focusPoint : ["Persona", "Responsable"],
+          testSystems: e.testSystems.map((ts) => ts.alias),
+          tags:
+            e.tag?.length > 0
+              ? e.tag
+              : ["Tag Proyecto A", "Tag Proyecto B", "Tag Proyecto C"],
+          users: e.users || ["User A", "User B", "User C"],
+          notes: e.notes.map((note) => note.title),
+          options: "",
+          config: {
+            isFinished: e.isFinished,
+          },
+        }))
+        console.log(_it)
+        return _it
+      })
+
   const projects_table = {
     components: {
       text: <Text />,
@@ -37,7 +88,7 @@ export const ProjectsTable = ({ items, activeTab, onTabChange }) => {
       sector: <NoteTag />,
       testSystems: <TagGroup variant="light_blue" max={3} />,
       tags: <TagGroup variant="pale_yellow" max={3} />,
-      options: <RowOptionMenu />,
+      options: <RowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
     },
     head: {
       actions: {
@@ -99,6 +150,9 @@ export const ProjectsTable = ({ items, activeTab, onTabChange }) => {
           activeItem={activeTab}
           onChange={(value) => onTabChange(value)}
           projectsCount={elements?.length}
+          selectedRows={selectedRows}
+          onDelete={handleOnDelete}
+          selectAllRows={handleSelectAllRows}
         />
       }
       config={projects_table}
@@ -108,6 +162,7 @@ export const ProjectsTable = ({ items, activeTab, onTabChange }) => {
       tableHeight="calc(100vh - 195px)"
       p="32px"
       pb="0"
+      isGrouped={isGrouped}
     />
   )
 }

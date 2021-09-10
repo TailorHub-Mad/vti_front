@@ -1,11 +1,43 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { AddSelect } from "../../../../components/forms/AddSelect/AddSelect"
 import { InputSelect } from "../../../../components/forms/InputSelect/InputSelect"
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
+import useClientApi from "../../../../hooks/api/useClientApi"
+import useSectorApi from "../../../../hooks/api/useSectorApi"
+import useUserApi from "../../../../hooks/api/useUserApi"
 import { MOCK_SELECT_OPTIONS, MOCK_YEAR_OPTIONS } from "../../../../mock/mock"
 
-export const AddNewProjectForm = ({ openAuxModal, value, onChange }) => {
-  const { id, alias, client, sector, year, start_focal_point } = value
+export const NewProjectForm = ({ openAuxModal, value, onChange }) => {
+  const { alias, client, sector, year, focusPoint } = value
+  const { getClients } = useClientApi()
+  const { getSectors } = useSectorApi()
+  const { getUsers } = useUserApi()
+  //Client
+  const [clientsOpt, setClientsOpt] = useState([])
+  const [sectorsOpt, setSectorsOpt] = useState([])
+  const [usersOpt, setUsersOpt] = useState([])
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      const _clients = await getClients()
+      const _clientsArr = _clients.map((cl) => ({ label: cl.alias, value: cl._id }))
+      setClientsOpt(_clientsArr)
+    }
+    const fetchSectors = async () => {
+      const _sectors = await getSectors()
+      const _sectorsArr = _sectors.map((sc) => ({ label: sc.title, value: sc.id }))
+      setSectorsOpt(_sectorsArr)
+    }
+    const fetchUsers = async () => {
+      const _users = await getUsers()
+      const _usersArr = _users.map((user) => ({ label: user.alias, value: user.id }))
+      setUsersOpt(_usersArr)
+    }
+    fetchClients()
+    fetchSectors()
+    fetchUsers()
+  }, [])
+
   // const checkIfDisabled = (value) => {
   //   const orderedValues = [
   //     "id",
@@ -13,7 +45,7 @@ export const AddNewProjectForm = ({ openAuxModal, value, onChange }) => {
   //     "client",
   //     "sector",
   //     "year",
-  //     "start_focal_point",
+  //     "focusPoint",
   //     "test_systems",
   //     "project_tags",
   //   ]
@@ -23,38 +55,40 @@ export const AddNewProjectForm = ({ openAuxModal, value, onChange }) => {
   //   work in progress
   // }
 
+  //Fetch clients, sectors, users, testSystems, projectTags
+  //Si metemos el id el check de isDisabled debe empezar por id
+
   const filterInputs = {
-    id: {
-      type: "input",
-      config: {
-        placeholder: "ID",
-        label: "ID",
-      },
-    },
+    // id: {
+    //   type: "input",
+    //   config: {
+    //     placeholder: "ID",
+    //     label: "ID",
+    //   },
+    // },
     alias: {
       type: "input",
       config: {
         placeholder: "Alias",
         label: "Alias",
-        isDisabled: !id,
       },
     },
     client: {
       type: "select",
       config: {
         placeholder: "Cliente",
-        options: MOCK_SELECT_OPTIONS,
+        options: clientsOpt,
         label: "Cliente",
-        isDisabled: !id || !alias,
+        isDisabled: !alias,
       },
     },
     sector: {
       type: "select",
       config: {
         placeholder: "Sector",
-        options: MOCK_SELECT_OPTIONS,
+        options: sectorsOpt,
         label: "Sector",
-        isDisabled: !id || !alias || !client,
+        isDisabled: !alias || !client,
       },
     },
     year: {
@@ -63,16 +97,16 @@ export const AddNewProjectForm = ({ openAuxModal, value, onChange }) => {
         placeholder: "2021",
         options: MOCK_YEAR_OPTIONS,
         label: "Año",
-        isDisabled: !id || !alias || !client || !sector,
+        isDisabled: !alias || !client || !sector,
       },
     },
-    start_focal_point: {
+    focusPoint: {
       type: "select",
       config: {
         placeholder: "Punto focal inicio",
-        options: MOCK_SELECT_OPTIONS,
+        options: usersOpt || MOCK_SELECT_OPTIONS,
         label: "Punto focal inicio",
-        isDisabled: !id || !alias || !client || !sector || !year,
+        isDisabled: !alias || !client || !sector || !year,
       },
     },
 
@@ -84,8 +118,7 @@ export const AddNewProjectForm = ({ openAuxModal, value, onChange }) => {
         label: "Sistemas de ensayos",
         addItemLabel: "Añadir ",
         removeItemLabel: "Eliminar ",
-        isDisabled:
-          !id || !alias || !client || !sector || !year || !start_focal_point,
+        isDisabled: !alias || !client || !sector || !year || !focusPoint,
       },
     },
 
@@ -99,8 +132,7 @@ export const AddNewProjectForm = ({ openAuxModal, value, onChange }) => {
         removeItemLabel: "Eliminar ",
         helper: "Abrir ventana de ayuda",
         onHelperClick: () => openAuxModal("project_tags"),
-        isDisabled:
-          !id || !alias || !client || !sector || !year || !start_focal_point,
+        isDisabled: !alias || !client || !sector || !year || !focusPoint,
       },
     },
   }
@@ -114,7 +146,7 @@ export const AddNewProjectForm = ({ openAuxModal, value, onChange }) => {
   const handleFormChange = (input, _value) => {
     onChange({
       ...value,
-      [input]: _value?.target?.checked ? _target.checked : _value,
+      [input]: _value?.target?.checked ? _value._target.checked : _value,
     })
   }
 

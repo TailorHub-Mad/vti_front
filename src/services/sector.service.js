@@ -1,7 +1,7 @@
 import ServiceConstructor from "."
 
 class SectorService extends ServiceConstructor {
-  getSectors = () => this.makeRequest(this.instance.get("/sector?limit=50"))
+  getSectors = () => this.makeRequest(this.instance.get("/sector/all?limit=50"))
 
   getSector = (id) => this.makeRequest(this.instance.get(`/sector/${id}`))
 

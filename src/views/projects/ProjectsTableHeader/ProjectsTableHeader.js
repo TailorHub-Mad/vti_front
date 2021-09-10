@@ -1,3 +1,4 @@
+import { DeleteIcon } from "@chakra-ui/icons"
 import { chakra, Checkbox, Flex, Text } from "@chakra-ui/react"
 import React from "react"
 import { ICONS_REFERENCE } from "../../../utils/constants/icons_reference"
@@ -6,6 +7,9 @@ export const ProjectsTableHeader = ({
   projectsCount = 0,
   onChange,
   activeItem = "all",
+  selectedRows,
+  onDelete,
+  selectAllRows = () => {},
 }) => {
   const visibility_menu = {
     all: {
@@ -23,7 +27,22 @@ export const ProjectsTableHeader = ({
   return (
     <Flex justify="space-between" align="center" pb="32px">
       <Flex>
-        <Checkbox mr="8px" />
+        <Flex>
+          <Checkbox mr="8px" onChange={selectAllRows} />
+          {selectedRows?.length > 0 ? (
+            <Flex
+              alignItems="center"
+              justifyContent="center"
+              onClick={() => onDelete(selectedRows)}
+              cursor="pointer"
+            >
+              <DeleteIcon mr="8px" color="error" />
+              <Text color="error" marginTop="6px">
+                Eliminar
+              </Text>
+            </Flex>
+          ) : null}
+        </Flex>
         {Object.entries(visibility_menu).map(([name, item], idx) => {
           const isActive = name === activeItem
           return (

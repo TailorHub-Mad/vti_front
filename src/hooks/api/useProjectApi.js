@@ -4,11 +4,7 @@ import useApiError from "../useApiError"
 const useProjectApi = () => {
   const { addError, removeError } = useApiError()
   const projectService = new ProjectService(addError, removeError)
-
-  const getProjects = async () => {
-    const projects = await projectService.getProjects()
-    return projects[0].projects
-  }
+  const getProjects = () => projectService.getProjects()
 
   const getGroupedProjects = () => projectService.getGroupedProjects()
 
