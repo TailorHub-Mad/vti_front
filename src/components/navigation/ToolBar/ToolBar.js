@@ -5,7 +5,7 @@ import { CloudButton } from "../../buttons/CloudButton/CloudButton"
 import { Filter } from "../../filters/Filter"
 import { Group } from "../../grouping/Group"
 import { AddTestSystemIcon } from "../../icons/AddTestSystemIcon"
-import { ApiUserContext } from "../../../provider/ApiAuthProvider"
+import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 import { RoleType } from "../../../utils/constants/global_config"
 
 export const ToolBar = ({
@@ -18,7 +18,7 @@ export const ToolBar = ({
   withoutFilter,
   withoutGroup,
 }) => {
-  const { role } = useContext(ApiUserContext)
+  const { role } = useContext(ApiAuthContext)
 
   return (
     <Flex>

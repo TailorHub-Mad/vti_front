@@ -1,13 +1,6 @@
 import axios from "axios"
 import { getSessioncookie } from "../utils/functions/cookies"
-// import { setRefreshCookie, setSessioncookie } from "../utils/functions/cookies"
 
-// const instance = axios.create({
-//   baseURL:
-//     process.env.NODE_ENV === "production"
-//       ? process.env.NEXT_PUBLIC_API_URL_PROD
-//       : process.env.NEXT_PUBLIC_API_URL,
-// })
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 })
@@ -21,19 +14,6 @@ instance.interceptors.request.use(async (config) => {
 
   return config
 })
-
-// instance.interceptors.response.use(undefined, (error) => new Promise(async (resolve, reject) => {
-//   if (error.response && error.response.status === 401) {
-//     const token = "";
-//     if (token) {
-//       error.config.__isRetryRequest = true;
-//       error.config.headers.Authorization = `Bearer ${token}`;
-//       axios(error.config).then(resolve, reject);
-//       return;
-//     }
-//   }
-//   reject(error);
-// }));
 
 class ServiceConstructor {
   constructor(errorHandler, removeError) {

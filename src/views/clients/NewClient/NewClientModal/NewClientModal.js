@@ -10,13 +10,13 @@ import {
 import React, { useContext, useEffect, useState } from "react"
 import { CloseIcon } from "../../../../components/icons/CloseIcon"
 import useClientApi from "../../../../hooks/api/useClientApi"
-import { ApiToastContext } from "../../../../provider/ToastProvider"
+import { ToastContext } from "../../../../provider/ToastProvider"
 import { NewClientForm } from "../NewClientForm/NewClientForm"
 
 export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
   const [values, setValues] = useState([{}])
   const isEdit = clientToEdit
-  const { showToast } = useContext(ApiToastContext)
+  const { showToast } = useContext(ToastContext)
   const { createClient } = useClientApi()
   const handleChange = (val, idx) => {
     const _values = [...values]

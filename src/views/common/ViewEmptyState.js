@@ -1,7 +1,7 @@
 import { Button, Center, Text } from "@chakra-ui/react"
 import React from "react"
-import { AddNoteIcon } from "../../../components/icons/AddNoteIcon"
-import { UploadCloudIcon } from "../../../components/icons/UploadCloudIcon"
+import { AddNoteIcon } from "../../components/icons/AddNoteIcon"
+import { UploadCloudIcon } from "../../components/icons/UploadCloudIcon"
 
 export const ViewEmptyState = ({
   children,

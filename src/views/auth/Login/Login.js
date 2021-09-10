@@ -10,12 +10,12 @@ import { HideLineIcon } from "../../../components/icons/HideLineIcon"
 import { useRouter } from "next/dist/client/router"
 import { setSessioncookie } from "../../../utils/functions/cookies"
 import { checkFormIsEmpty } from "../../../utils/functions/forms"
-import { ApiUserContext } from "../../../provider/ApiAuthProvider"
+import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 
 export const Login = () => {
   const { login } = useAuthApi()
   const router = useRouter()
-  const { setRole, setIsLoggedIn } = useContext(ApiUserContext)
+  const { setRole, setIsLoggedIn } = useContext(ApiAuthContext)
 
   const [hasError, setHasError] = useState(false)
   const [passwordInputType, setPasswordInputType] = useState("password")

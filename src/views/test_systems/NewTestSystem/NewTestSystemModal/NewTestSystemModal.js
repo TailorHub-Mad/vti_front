@@ -11,12 +11,12 @@ import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
 import { CloseIcon } from "../../../../components/icons/CloseIcon"
 import useSystemApi from "../../../../hooks/api/useSystemsApi"
-import { ApiToastContext } from "../../../../provider/ToastProvider"
+import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { NewTestSystemForm } from "../NewTestSystemForm/NewTestSystemForm"
 
 export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) => {
-  const { showToast } = useContext(ApiToastContext)
+  const { showToast } = useContext(ToastContext)
   const { createSystem, editSystem } = useSystemApi()
   const { mutate, cache } = useSWRConfig()
 

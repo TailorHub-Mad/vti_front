@@ -1,8 +1,8 @@
 import SystemService from "../../services/systems.service"
-import useApiError from "../useApiError"
+import useError from "../useError"
 
 const useSystemApi = () => {
-  const { addError, removeError } = useApiError()
+  const { addError, removeError } = useError()
 
   const systemService = new SystemService(addError, removeError)
 

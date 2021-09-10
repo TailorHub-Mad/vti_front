@@ -7,8 +7,8 @@ import {
   Text,
 } from "@chakra-ui/react"
 import React, { useState } from "react"
-import { FileInput } from "../../../components/forms/FileInput/FileInput"
-import { CloseIcon } from "../../../components/icons/CloseIcon"
+import { FileInput } from "../../../forms/FileInput/FileInput"
+import { CloseIcon } from "../../../icons/CloseIcon"
 
 export const ImportFilesModal = ({ title, isOpen, onClose, ...props }) => {
   const [files, setFiles] = useState(null)

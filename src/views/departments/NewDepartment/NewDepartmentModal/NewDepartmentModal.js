@@ -10,7 +10,7 @@ import {
 import React, { useContext, useEffect, useState } from "react"
 import { CloseIcon } from "../../../../components/icons/CloseIcon"
 import useDepartmentApi from "../../../../hooks/api/useDepartmentApi"
-import { ApiToastContext } from "../../../../provider/ToastProvider"
+import { ToastContext } from "../../../../provider/ToastProvider"
 import { NewDepartmentForm } from "../NewDepartmentForm/NewDepartmentForm"
 
 export const NewDepartmentModal = ({
@@ -21,7 +21,7 @@ export const NewDepartmentModal = ({
 }) => {
   const [values, setValues] = useState([{}])
   const isEdit = departmentToEdit
-  const { showToast } = useContext(ApiToastContext)
+  const { showToast } = useContext(ToastContext)
   const { createDepartment } = useDepartmentApi()
   const handleChange = (val, idx) => {
     const _values = [...values]

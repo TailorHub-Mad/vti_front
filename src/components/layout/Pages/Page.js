@@ -1,13 +1,13 @@
 import { Box } from "@chakra-ui/react"
 import React, { useContext, useState } from "react"
-import { ApiToastContext } from "../../../provider/ToastProvider"
+import { ToastContext } from "../../../provider/ToastProvider"
 import { TabBar } from "../../navigation/TabBar/TabBar"
 import { Popup } from "../../overlay/Popup/Popup"
 import Meta from "../Meta/Meta"
 
 export const Page = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true)
-  const { isToastOpen, message } = useContext(ApiToastContext)
+  const { isToastOpen, message } = useContext(ToastContext)
 
   return (
     <>

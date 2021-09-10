@@ -158,11 +158,12 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
 
   return (
     <>
-      {Object.entries(filterInputs).map(([name, { type, config }]) => {
+      {Object.entries(filterInputs).map(([name, { type, config }], idx) => {
         return React.cloneElement(inputRefObj[type], {
           value: value[name],
           onChange: (val) => handleFilterChange(name, val),
           marginBottom: "24px",
+          key: `${name}-${idx}`,
           ...config,
         })
       })}

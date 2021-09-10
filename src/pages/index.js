@@ -9,7 +9,7 @@ import { Card } from "../components/layout/Card/Card"
 import { Page } from "../components/layout/Pages/Page"
 import { Popup } from "../components/overlay/Popup/Popup"
 import { MOCK_SELECT_OPTIONS } from "../mock/mock"
-import { ApiUserContext } from "../provider/ApiAuthProvider"
+import { ApiAuthContext } from "../provider/ApiAuthProvider"
 import {
   Text,
   Box,
@@ -24,16 +24,16 @@ import {
   Radio,
   useDisclosure,
 } from "@chakra-ui/react"
-import { ApiToastContext } from "../provider/ToastProvider"
+import { ToastContext } from "../provider/ToastProvider"
 import { FileInput } from "../components/forms/FileInput/FileInput"
-import { ImportFilesModal } from "../views/common/ImportFilesModal/ImportFilesModal"
+import { ImportFilesModal } from "../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 
 const Index = () => {
-  const { isLoggedIn } = useContext(ApiUserContext)
+  const { isLoggedIn } = useContext(ApiAuthContext)
 
   const [mockSelectValue, setMockSelectValue] = useState("")
   const [value, setValue] = useState("")
-  const { showToast } = useContext(ApiToastContext)
+  const { showToast } = useContext(ToastContext)
   const { isOpen, onClose, onOpen } = useDisclosure()
   return !isLoggedIn ? (
     <>Loading...</>

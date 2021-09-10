@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { TOAST_DEFAULT_TIME } from "../../utils/constants/global_config"
 
-export const ApiToastContext = React.createContext()
+export const ToastContext = React.createContext()
 
 const ToastProvider = ({ children }) => {
   const [message, setMessage] = useState(null)
@@ -23,9 +23,7 @@ const ToastProvider = ({ children }) => {
   }
 
   return (
-    <ApiToastContext.Provider value={contextValue}>
-      {children}
-    </ApiToastContext.Provider>
+    <ToastContext.Provider value={contextValue}>{children}</ToastContext.Provider>
   )
 }
 

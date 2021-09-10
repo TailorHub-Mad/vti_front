@@ -8,19 +8,19 @@ import { Popup } from "../../components/overlay/Popup/Popup"
 import { Spinner } from "../../components/spinner/Spinner"
 import useClientApi from "../../hooks/api/useClientApi"
 import useFetchSWR from "../../hooks/useFetchSWR"
-import { ApiUserContext } from "../../provider/ApiAuthProvider"
-import { ApiToastContext } from "../../provider/ToastProvider"
+import { ApiAuthContext } from "../../provider/ApiAuthProvider"
+import { ToastContext } from "../../provider/ToastProvider"
 import { DeleteType } from "../../utils/constants/global_config"
 import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 import { ClientsTable } from "../../views/clients/ClientsTable/ClientsTable"
 import { NewClientModal } from "../../views/clients/NewClient/NewClientModal/NewClientModal"
-import { ImportFilesModal } from "../../views/common/ImportFilesModal/ImportFilesModal"
-import { ViewEmptyState } from "../../views/common/NotesEmptyState/ViewEmptyState"
+import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
+import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 
 const clientes = () => {
-  const { isLoggedIn } = useContext(ApiUserContext)
+  const { isLoggedIn } = useContext(ApiAuthContext)
   const { getClients, deleteClient } = useClientApi()
-  const { showToast } = useContext(ApiToastContext)
+  const { showToast } = useContext(ToastContext)
   const { data, error, isLoading, mutate } = useFetchSWR(
     SWR_CACHE_KEYS.clients,
     getClients

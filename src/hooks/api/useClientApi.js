@@ -1,8 +1,8 @@
 import ClientService from "../../services/client.service"
-import useApiError from "../useApiError"
+import useError from "../useError"
 
 const useClientApi = () => {
-  const { addError, removeError } = useApiError()
+  const { addError, removeError } = useError()
   const clientService = new ClientService(addError, removeError)
 
   const getClients = () => clientService.getClients()

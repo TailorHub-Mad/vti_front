@@ -10,13 +10,13 @@ import {
 import React, { useContext, useEffect, useState } from "react"
 import { CloseIcon } from "../../../../components/icons/CloseIcon"
 import useSectorApi from "../../../../hooks/api/useSectorApi"
-import { ApiToastContext } from "../../../../provider/ToastProvider"
+import { ToastContext } from "../../../../provider/ToastProvider"
 import { NewSectorForm } from "../NewSectorForm/NewSectorForm"
 
 export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
   const [values, setValues] = useState([{}])
   const isEdit = sectorToEdit
-  const { showToast } = useContext(ApiToastContext)
+  const { showToast } = useContext(ToastContext)
   const { createSector } = useSectorApi()
   const handleChange = (val, idx) => {
     const _values = [...values]

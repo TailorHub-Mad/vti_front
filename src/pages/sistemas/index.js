@@ -2,25 +2,25 @@ import { useContext, useEffect, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { Spinner } from "../../components/spinner/Spinner"
-import { ApiUserContext } from "../../provider/ApiAuthProvider"
+import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { TestSystemsTable } from "../../views/test_systems/TestSystemsTable/TestSystemsTable"
 import useSystemApi from "../../hooks/api/useSystemsApi"
 import useFetchSWR from "../../hooks/useFetchSWR"
-import { ApiToastContext } from "../../provider/ToastProvider"
+import { ToastContext } from "../../provider/ToastProvider"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import { pullAt } from "lodash"
 import { NewTestSystemModal } from "../../views/test_systems/NewTestSystem/NewTestSystemModal/NewTestSystemModal"
 import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
-import { ImportFilesModal } from "../../views/common/ImportFilesModal/ImportFilesModal"
+import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { DeleteType } from "../../utils/constants/global_config"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
-import { ViewEmptyState } from "../../views/common/NotesEmptyState/ViewEmptyState"
+import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 
 const sistemas = () => {
-  const { isLoggedIn } = useContext(ApiUserContext)
+  const { isLoggedIn } = useContext(ApiAuthContext)
   const { systems, deleteSystem } = useSystemApi()
-  const { showToast } = useContext(ApiToastContext)
+  const { showToast } = useContext(ToastContext)
   const { data, error, isLoading, mutate } = useFetchSWR(
     SWR_CACHE_KEYS.systems,
     systems

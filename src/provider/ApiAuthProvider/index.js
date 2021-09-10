@@ -2,7 +2,7 @@ import { useRouter } from "next/dist/client/router"
 import React, { useState, useEffect, useCallback } from "react"
 import useAuthApi from "../../hooks/api/useAuthApi"
 
-export const ApiUserContext = React.createContext()
+export const ApiAuthContext = React.createContext()
 
 const ApiAuthProvider = ({ children }) => {
   const router = useRouter()
@@ -37,9 +37,9 @@ const ApiAuthProvider = ({ children }) => {
     getUser()
   }, [])
   return (
-    <ApiUserContext.Provider value={contextValue}>
+    <ApiAuthContext.Provider value={contextValue}>
       {children}
-    </ApiUserContext.Provider>
+    </ApiAuthContext.Provider>
   )
 }
 

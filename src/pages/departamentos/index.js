@@ -4,15 +4,15 @@ import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import { Spinner } from "../../components/spinner/Spinner"
 import useDepartmentApi from "../../hooks/api/useDepartmentApi"
-import { ApiToastContext } from "../../provider/ToastProvider"
-import { ViewEmptyState } from "../../views/common/NotesEmptyState/ViewEmptyState"
+import { ToastContext } from "../../provider/ToastProvider"
+import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { MOCK_DEPARTMENTS_TABLE } from "../../mock/departments_table"
 import { DepartmentsTable } from "../../views/departments/DepartmentsTable/DepartmentsTable"
 import { NewDepartmentModal } from "../../views/departments/NewDepartment/NewDepartmentModal/NewDepartmentModal"
-import { ImportFilesModal } from "../../views/common/ImportFilesModal/ImportFilesModal"
+import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 const departamentos = () => {
-  const { showToast } = useContext(ApiToastContext)
+  const { showToast } = useContext(ToastContext)
   const { getDepartments, deleteDepartment } = useDepartmentApi()
 
   const [isFetching, setIsFetching] = useState(false)

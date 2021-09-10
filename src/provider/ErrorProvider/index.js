@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react"
 
-export const ApiErrorContext = React.createContext({
+export const ErrorContext = React.createContext({
   error: null,
   addError: () => {},
   removeError: () => {},
@@ -20,8 +20,6 @@ export default function ErrorProvider({ children }) {
   }
 
   return (
-    <ApiErrorContext.Provider value={contextValue}>
-      {children}
-    </ApiErrorContext.Provider>
+    <ErrorContext.Provider value={contextValue}>{children}</ErrorContext.Provider>
   )
 }
