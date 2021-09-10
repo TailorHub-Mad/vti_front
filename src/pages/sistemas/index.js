@@ -167,7 +167,7 @@ const sistemas = () => {
       {isLoading ? <Spinner /> : null}
       {emptyData ? (
         <ViewEmptyState
-          message="Añadir sistemas a la platorma"
+          message="Añadir sistemas a la plataforma"
           importButtonText="Importar"
           addButtonText="Añadir sistema"
           onImport={() => setShowImportModal(true)}

@@ -164,7 +164,7 @@ const clientes = () => {
       {isLoading ? <Spinner /> : null}
       {emptyData ? (
         <ViewEmptyState
-          message="Añadir clientes a la platorma"
+          message="Añadir clientes a la plataforma"
           importButtonText="Importar"
           addButtonText="Añadir cliente"
           onImport={() => setShowImportModal(true)}

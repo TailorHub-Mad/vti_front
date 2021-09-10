@@ -108,7 +108,7 @@ const departamentos = () => {
       {isFetching ? <Spinner /> : null}
       {!areDepartments && !isFetching ? (
         <ViewEmptyState
-          message="Añadir departmentes a la platorma"
+          message="Añadir departmentes a la plataforma"
           importButtonText="Importar"
           addButtonText="Añadir department"
           onImport={() => setShowImportModal(true)}

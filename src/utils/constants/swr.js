@@ -3,4 +3,6 @@ export const SWR_CACHE_KEYS = {
   system: "system/",
   clients: "clietns/",
   client: "client/",
+  sectors: "sectors/",
+  sector: "sector/",
 }

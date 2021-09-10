@@ -1,7 +1,7 @@
 import { Button, Center, Flex, Input, Text } from "@chakra-ui/react"
 import React, { useContext, useState } from "react"
 import { FormController } from "../../../components/forms/FormItemWrapper/FormController"
-import { LogoFull } from "../../../components/images/LogoFulll"
+import { LogoFull } from "../../../components/images/LogoFull"
 import { Card } from "../../../components/cards/Card"
 import { Formik } from "formik"
 import useAuthApi from "../../../hooks/api/useAuthApi"
