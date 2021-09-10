@@ -2,7 +2,7 @@ import { Box, Flex, Grid, Text } from "@chakra-ui/react"
 import React from "react"
 import { CUSTOM_SCROLLBAR } from "../../../theme/utils/utils.theme"
 import { MAX_TABLE_WIDTH, MIN_TABLE_WIDTH } from "../../../utils/constants/layout"
-import { Card } from "../../layout/Card/Card"
+import { Card } from "../../cards/Card"
 
 export const Table = ({
   selectedRows,

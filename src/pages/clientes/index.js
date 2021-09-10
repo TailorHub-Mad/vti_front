@@ -1,7 +1,7 @@
 import { pullAt } from "lodash"
 import { useContext, useEffect, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
-import { PageHeader } from "../../components/layout/Pages/Pages/PageHeader/PageHeader"
+import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { Popup } from "../../components/overlay/Popup/Popup"

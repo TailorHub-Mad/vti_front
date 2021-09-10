@@ -1,7 +1,7 @@
 import { Checkbox, Text } from "@chakra-ui/react"
 import { useMemo } from "react"
 import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
-import { OptionsMenuRow } from "../../../components/navigation/OptionsMenu/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
+import { OptionsMenuRow } from "../../../components/navigation/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"

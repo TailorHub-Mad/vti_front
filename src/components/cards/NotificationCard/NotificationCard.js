@@ -4,7 +4,7 @@ import { BLINK_ANIMATION } from "../../../theme/animations/animations"
 import { DeleteIcon } from "../../icons/DeleteIcon"
 import { EventNotificationIcon } from "../../icons/EventNotificationIcon"
 import { PinIcon } from "../../icons/PinIcon"
-import { Card } from "../../layout/Card/Card"
+import { Card } from "../../cards/Card"
 
 export const NotificationCard = ({ onPin, onDelete, ...props }) => {
   //TODO recibir name, desc, tipo de notification por props y modal de confirmación de delete

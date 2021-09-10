@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react"
 import React from "react"
-import { GeneralTag } from "../../tags/GeneralTag/GeneralTag"
+import { GeneralTag } from "../GeneralTag/GeneralTag"
 
 export const TagRow = ({ remainingTagsCount, tags = {}, variant, ...props }) => {
   //TODO A lo mejor hay que refactorizar las tags para que sólo sea una prop "color" y evitar por tipo

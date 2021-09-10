@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react"
 import React from "react"
-import { TagRow } from "../../../layout/TagRow/TagRow"
+import { TagRow } from "../../../tags/TagRow/TagRow"
 
 export const MessageCardTags = ({ tags }) => {
   const getRemainingTags = (tags) => {

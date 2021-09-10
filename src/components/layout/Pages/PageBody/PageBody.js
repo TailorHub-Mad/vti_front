@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react"
 import React from "react"
-import { CUSTOM_SCROLLBAR } from "../../../../../theme/utils/utils.theme"
+import { CUSTOM_SCROLLBAR } from "../../../../theme/utils/utils.theme"
 
 export const PageBody = ({ children, ...props }) => {
   return (

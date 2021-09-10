@@ -1,4 +1,4 @@
-import { Card } from "../../layout/Card/Card"
+import { Card } from "../Card"
 import { MessageCardFooter } from "./MessageCardFooter/MessageCardFooter"
 import { MessageCardHeader } from "./MessageCardHeader/MessageCardHeader"
 import { MessageCardInfo } from "./MessageCardInfo/MessageCardInfo"
