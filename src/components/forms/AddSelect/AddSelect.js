@@ -11,7 +11,7 @@ export const AddSelect = ({
   placeholder,
   // errors,
   onChange,
-  addItemLabel,
+  additemlabel,
   deleteItemLabel,
   options = [],
   label,
@@ -95,7 +95,7 @@ export const AddSelect = ({
                       variant="m_xs_regular"
                       color="blue.500"
                     >
-                      {addItemLabel || "Añadir"}
+                      {additemlabel || "Añadir"}
                     </Text>
                   </Box>
                 ) : null}

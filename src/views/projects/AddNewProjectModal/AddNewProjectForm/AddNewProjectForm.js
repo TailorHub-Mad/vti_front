@@ -82,8 +82,8 @@ export const AddNewProjectForm = ({ openAuxModal, value, onChange }) => {
         placeholder: "Sistema de ensayo",
         options: MOCK_SELECT_OPTIONS,
         label: "Sistemas de ensayos",
-        addItemLabel: "Añadir ",
-        removeItemLabel: "Eliminar ",
+        additemlabel: "Añadir ",
+        removeitemlabel: "Eliminar ",
         isDisabled:
           !id || !alias || !client || !sector || !year || !start_focal_point,
       },
@@ -95,8 +95,8 @@ export const AddNewProjectForm = ({ openAuxModal, value, onChange }) => {
         placeholder: "Proyecto",
         options: MOCK_SELECT_OPTIONS,
         label: "Tags de proyecto",
-        addItemLabel: "Añadir ",
-        removeItemLabel: "Eliminar ",
+        additemlabel: "Añadir ",
+        removeitemlabel: "Eliminar ",
         helper: "Abrir ventana de ayuda",
         onHelperClick: () => openAuxModal("project_tags"),
         isDisabled:
