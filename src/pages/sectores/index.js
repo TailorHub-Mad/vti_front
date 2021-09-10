@@ -26,8 +26,6 @@ const sectores = () => {
     getSectors
   )
 
-  console.log(data)
-
   const [showImportModal, setShowImportModal] = useState(false)
 
   // Create - Update state
@@ -42,8 +40,8 @@ const sectores = () => {
   const [searchChain, setSearchChain] = useState("")
   const [searchedSectors, setSearchedSectors] = useState([])
 
-  const emptyData = Boolean(data && data[0]?.testSectors.length === 0)
-  const sectorsData = data ? data[0]?.testSectors : []
+  const emptyData = Boolean(data && data.length === 0)
+  const sectorsData = data ?? []
 
   // TODO
   const handleExport = () => {}
@@ -86,7 +84,7 @@ const sectores = () => {
       testSectors: sectors.filter((sector) => sector._id !== id),
     })
     await mutate(updatedSectors, false)
-    showToast("Sistema de ensayo borrado correctamente")
+    showToast("Sector borrado correctamente")
   }
 
   const deleteMany = async (positions, sectors) => {
@@ -98,7 +96,7 @@ const sectores = () => {
     const updatedSectors = []
     updatedSectors.push({ testSectors: sectors })
     await mutate(updatedSectors, false)
-    showToast("Sistemas de ensayo borrados correctamente")
+    showToast("Sectores borrados correctamente")
   }
 
   const onEdit = (id) => {
@@ -126,10 +124,8 @@ const sectores = () => {
   }, [data])
 
   if (error) return <>ERROR...</>
-
-  return !isLoggedIn ? (
-    <>Loading...</>
-  ) : (
+  if (!data || !isLoggedIn) return <>Loading...</>
+  return (
     <Page>
       <Popup
         variant="twoButtons"
@@ -160,10 +156,12 @@ const sectores = () => {
         <BreadCrumbs />
         {!isLoading && !emptyData && (
           <ToolBar
-            onAddTestSystem={handleOnOpenModal}
+            onAdd={handleOnOpenModal}
             onSearch={onSearch}
             onImport={() => setShowImportModal(true)}
             onExport={handleExport}
+            addLabel="Añadir sector"
+            searchPlaceholder="Busqueda por ID, Alias"
           />
         )}
       </PageHeader>

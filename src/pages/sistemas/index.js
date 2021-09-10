@@ -124,7 +124,7 @@ const sistemas = () => {
   }, [data])
 
   if (error) return <>ERROR...</>
-
+  if (!data || !isLoggedIn) return <>Loading...</>
   return !isLoggedIn ? (
     <>Loading...</>
   ) : (
@@ -157,10 +157,12 @@ const sistemas = () => {
         <BreadCrumbs />
         {!isLoading && !emptyData && (
           <ToolBar
-            onAddTestSystem={handleOnOpenModal}
+            onAdd={handleOnOpenModal}
             onSearch={onSearch}
             onImport={() => setShowImportModal(true)}
             onExport={handleExport}
+            addLabel="Añadir sistema"
+            searchPlaceholder="Busqueda por ID, Código"
           />
         )}
       </PageHeader>

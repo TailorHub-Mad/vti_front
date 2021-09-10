@@ -1,10 +1,7 @@
 import SystemService from "../../services/systems.service"
-import useError from "../useError"
 
 const useSystemApi = () => {
-  const { addError, removeError } = useError()
-
-  const systemService = new SystemService(addError, removeError)
+  const systemService = SystemService()
 
   const systems = () => systemService.systems()
   const system = (id) => systemService.system(id)

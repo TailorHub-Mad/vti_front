@@ -154,10 +154,14 @@ const clientes = () => {
         <BreadCrumbs />
         {!isLoading && !emptyData && (
           <ToolBar
-            onAddTestSystem={handleOnOpenModal}
+            onAdd={handleOnOpenModal}
             onSearch={onSearch}
             onImport={() => setShowImportModal(true)}
             onExport={handleExport}
+            addLabel="Añadir cliente"
+            searchPlaceholder="Busqueda por ID, Alias"
+            withoutFilter
+            withoutGroup
           />
         )}
       </PageHeader>

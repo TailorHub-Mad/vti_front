@@ -1,17 +1,15 @@
-import ServiceConstructor from "."
+import { ServiceConstructor } from "."
 
-class ClientService extends ServiceConstructor {
-  getClients = () => this.makeRequest(this.instance.get("/clients?limit=50"))
+const ClientService = () => {
+  const { instance, execute } = ServiceConstructor
 
-  getClient = (id) => this.makeRequest(this.instance.get(`/clients/${id}`))
+  const getClients = () => execute(instance.get("/clients?limit=50"))
+  const getClient = (id) => execute(instance.get(`/clients/${id}`))
+  const createClient = (data) => execute(instance.post(`/clients/create`, data))
+  const updateClient = (data) => execute(instance.put(`/clients/${data.id}`, data))
+  const deleteClient = (id) => execute(instance.delete(`/clients/${id}`))
 
-  createClient = (data) =>
-    this.makeRequest(this.instance.post(`/clients/create`, data))
-
-  updateClient = (data) =>
-    this.makeRequest(this.instance.put(`/clients/${data.id}`, data))
-
-  deleteClient = (id) => this.makeRequest(this.instance.delete(`/clients/${id}`))
+  return { getClients, getClient, createClient, updateClient, deleteClient }
 }
 
 export default ClientService

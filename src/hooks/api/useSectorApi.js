@@ -1,9 +1,7 @@
 import SectorService from "../../services/sector.service"
-import useError from "../useError"
 
 const useSectorApi = () => {
-  const { addError, removeError } = useError()
-  const sectorService = new SectorService(addError, removeError)
+  const sectorService = SectorService()
 
   const getSectors = () => sectorService.getSectors()
 

@@ -27,16 +27,22 @@ const ApiAuthProvider = ({ children }) => {
 
   useEffect(() => {
     const getUser = async () => {
-      const _user = await me()
-      if (_user.error) return router.push("/login")
-      setUser(_user[0])
-      // TODO -> provisional
-      // setRole(_user[0].role)
-      setRole("admin")
-      setIsLoggedIn(true)
+      try {
+        const _user = await me()
+        setUser(_user[0])
+        // TODO -> provisional
+        // setRole(_user[0].role)
+        setRole("admin")
+        setIsLoggedIn(true)
+      } catch (error) {
+        setIsLoggedIn(false)
+        if (error.response.status === 401 && router.route !== "/login")
+          return router.push("/login")
+      }
     }
     getUser()
   }, [])
+
   return (
     <ApiAuthContext.Provider value={contextValue}>
       {children}

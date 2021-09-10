@@ -1,4 +1,5 @@
 export const SWR_CACHE_KEYS = {
+  me: "/me",
   systems: "systems/",
   system: "system/",
   clients: "clietns/",

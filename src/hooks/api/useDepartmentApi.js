@@ -1,13 +1,9 @@
 import DepartmentService from "../../services/department.service"
-import useError from "../useError"
 
 const useDepartmentApi = () => {
-  const { addError, removeError } = useError()
-  const departmentService = new DepartmentService(addError, removeError)
+  const departmentService = new DepartmentService()
 
-  const getDepartments = () => {
-    // departmentService.getDepartments()
-  }
+  const getDepartments = () => departmentService.getDepartments()
 
   const getDepartment = (id) => departmentService.getDepartment(id)
 

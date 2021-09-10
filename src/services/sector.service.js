@@ -1,17 +1,16 @@
-import ServiceConstructor from "."
+import { ServiceConstructor } from "."
 
-class SectorService extends ServiceConstructor {
-  getSectors = () => this.makeRequest(this.instance.get("/sectors?limit=50"))
+const SectorService = () => {
+  const { instance, execute } = ServiceConstructor
 
-  getSector = (id) => this.makeRequest(this.instance.get(`/sector/${id}`))
+  const getSectors = (limit = 50, offset = 0) =>
+    execute(instance.get(`/sector?limit=${limit}&offset=${offset}`))
+  const getSector = (id) => execute(instance.get(`/sector/${id}`))
+  const createSector = (data) => execute(instance.post(`/sector/create`, data))
+  const updateSector = (data) => execute(instance.put(`/sector/${data.id}`, data))
+  const deleteSector = (id) => execute(instance.delete(`/sector/${id}`))
 
-  createSector = (data) =>
-    this.makeRequest(this.instance.post(`/sector/create`, data))
-
-  updateSector = (data) =>
-    this.makeRequest(this.instance.put(`/sector/${data.id}`, data))
-
-  deleteSector = (id) => this.makeRequest(this.instance.delete(`/sector/${id}`))
+  return { getSectors, getSector, createSector, updateSector, deleteSector }
 }
 
 export default SectorService

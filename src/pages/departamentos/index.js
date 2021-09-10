@@ -98,10 +98,12 @@ const departamentos = () => {
       <PageHeader title="Departamentos">
         {areDepartments && !isFetching ? (
           <ToolBar
-            onAddDepartment={() => setIsDepartmentModalOpen(true)}
+            onAdd={() => setIsDepartmentModalOpen(true)}
             onSearch={handleSearch}
             onImport={() => setShowImportModal(true)}
             onExport={handleExport}
+            addLabel="Añadir departamento"
+            searchPlaceholder="Busqueda por ID, Alias"
           />
         ) : null}
       </PageHeader>
