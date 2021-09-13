@@ -67,7 +67,7 @@ export const GroupModal = ({ isOpen, onClose, onGroup, ...props }) => {
               ))}
             </RadioGroup>
             <Button
-              onClick={() => onGroup()}
+              onClick={() => onGroup(activeItem)}
               display="block"
               margin="0 auto"
               mt="32px"

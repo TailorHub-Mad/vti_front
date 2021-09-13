@@ -26,10 +26,10 @@ export const TableGroup = ({
               key={row._id || row.id || `it-${idx}`}
               item={row}
               templateColumns={templateColumns}
-              isSelected={isSelected(idx)}
+              isSelected={isSelected(row._id || row.id)}
               idx={idx}
               components={components}
-              onRowSelect={onRowSelect}
+              onRowSelect={() => onRowSelect(row._id || row.id)}
               selectedRows={selectedRows}
               head={head}
             />

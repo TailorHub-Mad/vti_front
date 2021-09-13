@@ -8,13 +8,13 @@ import { Group } from "../../../components/grouping/Group/Group"
 import { AddProjectIcon } from "../../../components/icons/AddProjectIcon"
 import { ApiUserContext } from "../../../provider/ApiAuthProvider"
 
-export const ProjectsToolBar = ({ onSearch, onImport, onExport, onAddProject }) => {
+export const ProjectsToolBar = ({ onSearch, onImport, onExport, onAddProject, onGroup }) => {
   const { role } = useContext(ApiUserContext)
 
   return (
     <Flex width="fit-content">
       <Filter />
-      <Group />
+      <Group onGroup={(activeItem)=>onGroup(activeItem)}/>
       <InputGroup width="196px" marginRight="16px">
         <InputLeftElement
           pointerEvents="none"

@@ -19,13 +19,18 @@ export const ProjectsTable = ({
 }) => {
   const { selectedRows, setSelectedRows, handleRowSelect, calcColWidth } =
     useTableActions()
-  console.log("ITEMSSS", items)
+
   useMemo(() => {
     setSelectedRows([])
   }, [items?.length])
 
-  const handleSelectAllRows = (e) => {
-    const value = e.target.checked ? [...Array(items.length).keys()] : []
+  const handleSelectAllRows = () => {
+    //TODO Mejorar comportamiento del check global
+    const value = items.map((it) => it._id || it.id)
+    if (value.length === selectedRows.length) {
+      setSelectedRows([])
+      return
+    }
     setSelectedRows(value)
   }
 
@@ -34,29 +39,9 @@ export const ProjectsTable = ({
     return onDelete(items[selectedRows[0]]._id)
   }
 
-  const elements = !isGrouped
-    ? items?.map((e) => ({
-        actions: "",
-        id: e._id,
-        alias: { label: e.alias, link: e._id },
-        sector: e.sector || "Automoción",
-        focusPoint:
-          e.focusPoint.length > 0 ? e.focusPoint : ["Persona", "Responsable"],
-        testSystems: e.testSystems.map((ts) => ts.alias),
-        tags:
-          e.tag.length > 0
-            ? e.tag
-            : ["Tag Proyecto A", "Tag Proyecto B", "Tag Proyecto C"],
-        users: e.users || ["User A", "User B", "User C"],
-        notes: e.notes.map((note) => note.title),
-        options: "",
-        config: {
-          isFinished: e.isFinished,
-        },
-      }))
-    : items.map((it) => {
-        const _it = [...it]
-        _it[1] = it[1].map((e) => ({
+  const elements = items
+    ? !isGrouped
+      ? items?.map((e) => ({
           actions: "",
           id: e._id,
           alias: { label: e.alias, link: e._id },
@@ -65,7 +50,7 @@ export const ProjectsTable = ({
             e.focusPoint.length > 0 ? e.focusPoint : ["Persona", "Responsable"],
           testSystems: e.testSystems.map((ts) => ts.alias),
           tags:
-            e.tag?.length > 0
+            e.tag.length > 0
               ? e.tag
               : ["Tag Proyecto A", "Tag Proyecto B", "Tag Proyecto C"],
           users: e.users || ["User A", "User B", "User C"],
@@ -75,9 +60,31 @@ export const ProjectsTable = ({
             isFinished: e.isFinished,
           },
         }))
-        console.log(_it)
-        return _it
-      })
+      : items.map((it) => {
+          const _it = [...it]
+          _it[1] = it[1].map((e) => ({
+            actions: "",
+            id: e._id,
+            alias: { label: e.alias, link: e._id },
+            sector: e.sector || "Automoción",
+            focusPoint:
+              e.focusPoint.length > 0 ? e.focusPoint : ["Persona", "Responsable"],
+            testSystems: e.testSystems.map((ts) => ts.alias),
+            tags:
+              e.tag?.length > 0
+                ? e.tag
+                : ["Tag Proyecto A", "Tag Proyecto B", "Tag Proyecto C"],
+            users: e.users || ["User A", "User B", "User C"],
+            notes: e.notes.map((note) => note.title),
+            options: "",
+            config: {
+              isFinished: e.isFinished,
+            },
+          }))
+          console.log(_it)
+          return _it
+        })
+    : null
 
   const projects_table = {
     components: {
@@ -158,7 +165,7 @@ export const ProjectsTable = ({
       config={projects_table}
       content={elements}
       selectedRows={selectedRows}
-      onRowSelect={(idx) => handleRowSelect(idx)}
+      onRowSelect={(id) => handleRowSelect(id)}
       tableHeight="calc(100vh - 195px)"
       p="32px"
       pb="0"

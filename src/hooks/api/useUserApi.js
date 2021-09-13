@@ -8,7 +8,6 @@ const useUserApi = () => {
   const getUsers = () => userService.getUsers()
 
 
-
   return { getUsers}
 }
 

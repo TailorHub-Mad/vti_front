@@ -6,13 +6,13 @@ const useTableActions = () => {
   const [selectedRows, setSelectedRows] = useState([])
   const calcColWidth = (width) => `${getPercentage(MIN_TABLE_WIDTH, width)}%`
 
-  const handleRowSelect = (idx) => {
-    if (selectedRows.includes(idx)) {
-      const nextItems = selectedRows.filter((item) => item !== idx)
+  const handleRowSelect = (id) => {
+    if (selectedRows.includes(id)) {
+      const nextItems = selectedRows.filter((item) => item !== id)
       setSelectedRows(nextItems)
       return
     }
-    setSelectedRows([...selectedRows, idx])
+    setSelectedRows([...selectedRows, id])
   }
   return { selectedRows, setSelectedRows, handleRowSelect, calcColWidth }
 }

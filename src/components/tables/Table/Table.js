@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, Text } from "@chakra-ui/react"
+import { Box, Flex, Grid } from "@chakra-ui/react"
 import React from "react"
 import { CUSTOM_SCROLLBAR } from "../../../theme/utils/utils.theme"
 import { MAX_TABLE_WIDTH, MIN_TABLE_WIDTH } from "../../../utils/constants/layout"
@@ -22,7 +22,8 @@ export const Table = ({
     (ac, cv) => (ac = `${ac} ${cv.width}`),
     ""
   )
-  const isSelected = (idx) => selectedRows?.includes(idx)
+  console.log("SELECTED", selectedRows)
+  const isSelected = (id) => selectedRows?.includes(id)
 
   return content ? (
     <Card
@@ -44,35 +45,36 @@ export const Table = ({
       >
         <Grid minWidth={MIN_TABLE_WIDTH} maxWidth={MAX_TABLE_WIDTH} width="100%">
           <TableHead templateColumns={templateColumns} head={head} />
-          {isGrouped ? 
-          content.map((item, idx) => {
-            return (
-              <TableGroup
-                key={`it-${idx}`}
-                item={item}
-                templateColumns={templateColumns}
-                idx={idx}
-                components={components}
-                onRowSelect={onRowSelect}
-                selectedRows={selectedRows}
-                head={head}
-              />
-            )
-          }): content.map((item, idx) => {
-            return (
-              <TableRow
-                key={item._id || item.id || `it-${idx}`}
-                item={item}
-                templateColumns={templateColumns}
-                isSelected={isSelected(idx)}
-                idx={idx}
-                components={components}
-                onRowSelect={onRowSelect}
-                selectedRows={selectedRows}
-                head={head}
-              />
-            )
-          })}
+          {isGrouped
+            ? content.map((item, idx) => {
+                return (
+                  <TableGroup
+                    key={`it-${idx}`}
+                    item={item}
+                    templateColumns={templateColumns}
+                    idx={idx}
+                    components={components}
+                    onRowSelect={(id) => onRowSelect(id)}
+                    selectedRows={selectedRows}
+                    head={head}
+                  />
+                )
+              })
+            : content.map((item, idx) => {
+                return (
+                  <TableRow
+                    key={item._id || item.id || `it-${idx}`}
+                    item={item}
+                    templateColumns={templateColumns}
+                    isSelected={isSelected(item._id || item.id)}
+                    idx={idx}
+                    components={components}
+                    onRowSelect={() => onRowSelect(item._id || item.id)}
+                    selectedRows={selectedRows}
+                    head={head}
+                  />
+                )
+              })}
         </Grid>
       </Flex>
     </Card>

@@ -21,20 +21,30 @@ const DeleteType = {
   MANY: "deleteMany",
 }
 
+const fetchType = {
+  ALL: "all",
+  GROUPED: "grouped",
+  FILTERED: "filtered",
+}
+
 const projects = () => {
   const { isLoggedIn } = useContext(ApiUserContext)
   const { getProjects, getGroupedProjects, deleteProject } = useProjectApi()
   const { showToast } = useContext(ApiToastContext)
-  const { data, error, isLoading, mutate } = useFetchSWR(
-    SWR_CACHE_KEYS.projects,
-    getProjects
-  )
+  const [fetchState, setFetchState] = useState(fetchType.ALL)
+  const isGrouped = fetchState === fetchType.GROUPED
+  const isFiltered = fetchState === fetchType.FILTERED
 
-  const [isGrouped, setIsGrouped] = useState(true)
-  const [groupedProjects, setGroupedProjects] = useState(null)
+  const fetchHandler = {
+    all: () => useFetchSWR(SWR_CACHE_KEYS.projects, getProjects),
+    grouped: () => useFetchSWR(SWR_CACHE_KEYS.groupedProjects, getGroupedProjects),
+    filtered: () =>
+      useFetchSWR([SWR_CACHE_KEYS.groupedProjects, "keys"], getGroupedProjects),
+  }
+
+  const { data, error, isLoading, mutate } = fetchHandler[fetchState]()
 
   const [showImportModal, setShowImportModal] = useState(false)
-
   // Create - Update state
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
   const [projectToEdit, setProjectToEdit] = useState(null)
@@ -48,11 +58,17 @@ const projects = () => {
   const [searchedProjects, setSearchedProjects] = useState([])
 
   const emptyData = Boolean(data && data[0]?.projects.length === 0)
+
+  //TODO también hacer un handler de la transformación de la información
+  //Handler global Fetch key, fetcher, data transform
+  
   const projectsData = data
-    ? data[0]?.projects.map((proj) => ({
-        ...proj,
-        isFinished: faker.datatype.boolean(),
-      }))
+    ? isGrouped
+      ? Object.entries(data).slice(0, 30)
+      : data[0]?.projects.map((proj) => ({
+          ...proj,
+          isFinished: faker.datatype.boolean(),
+        }))
     : []
 
   const [activeTab, setActiveTab] = useState("all")
@@ -77,7 +93,6 @@ const projects = () => {
     setProjectToEdit(null)
     setIsProjectModalOpen(false)
   }
-
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     await f(projectsToDelete, projectsData)
@@ -142,18 +157,22 @@ const projects = () => {
     }
   }
 
+  const handleGrouping = (option) => {
+    setFetchState(fetchType.GROUPED)
+  }
+
   useEffect(() => {
     if (emptyData || searchChain === "") return
     onSearch(searchChain)
   }, [data])
 
-  useEffect(() => {
-    const fetchGrouped = async () => {
-      const _projects = await getGroupedProjects()
-      setGroupedProjects(Object.entries(_projects).slice(0,30))
-    }
-    fetchGrouped()
-  }, [])
+  // useEffect(() => {
+  //   const fetchGrouped = async () => {
+  //     const _projects = await getGroupedProjects()
+  //     setGroupedProjects(Object.entries(_projects).slice(0, 30))
+  //   }
+  //   fetchGrouped()
+  // }, [])
 
   if (error) return <>ERROR...</>
 
@@ -193,6 +212,7 @@ const projects = () => {
             onExport={handleExport}
             onImport={() => setShowImportModal(true)}
             onAddProject={handleOnOpenModal}
+            onGroup={(option) => handleGrouping(option)}
           />
         ) : null}
       </PageHeader>
@@ -203,16 +223,10 @@ const projects = () => {
           onImport={() => setShowImportModal(true)}
         />
       ) : null}
-      {data && groupedProjects && !isLoading ? (
+      {data && !isLoading ? (
         <ProjectsTable
           isGrouped={isGrouped}
-          items={
-            isGrouped
-              ? groupedProjects
-              : searchChain !== ""
-              ? searchedProjects
-              : projectsData
-          }
+          items={searchChain !== "" ? searchedProjects : projectsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
           onEdit={onEdit}
