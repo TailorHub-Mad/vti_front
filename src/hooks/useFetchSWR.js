@@ -9,7 +9,7 @@ const useFetchSWR = (key, fetcher, refreshInterval) => {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const { data, error, mutate } = useSWR(key, fetcher, {
+  const { data, error, mutate, isValidating } = useSWR(key, fetcher, {
     loadingTimeout: 1000,
     onLoadingSlow() {
       setIsLoading(true)
@@ -36,7 +36,7 @@ const useFetchSWR = (key, fetcher, refreshInterval) => {
 
   if (isUnauthorize) return { unauthorize: true }
 
-  return { data, error, isLoading, mutate }
+  return { data, error, isLoading, mutate, isValidating }
 }
 
 export default useFetchSWR

@@ -14,8 +14,8 @@ export const ProjectsTable = ({ items }) => {
   const [activeItem, setActiveItem] = useState("all")
   const elements = items?.map((project) => ({
     actions: "",
-    id: project._id,
-    alias: { label: project.alias, link: `/proyectos/${project._id}` },
+    id: project.id,
+    alias: { label: project.alias, link: `/proyectos/${project.id}` },
     sector: project.sector,
     punto_focal: project.focusPoint || "",
     sistemas_ensayo: project.testSystems,

@@ -14,7 +14,7 @@ export const NewTestSystemForm = ({ value, onChange }) => {
 
     return data.map((client) => {
       return {
-        value: client._id,
+        value: client.id,
         label: client.alias,
       }
     })

@@ -4,7 +4,7 @@ import React from "react"
 
 export const TableHeader = ({
   count = 0,
-  countLable = "",
+  countLabel = "",
   selectedRows,
   onDelete,
   selectAllRows = () => {},
@@ -29,7 +29,7 @@ export const TableHeader = ({
       </Flex>
       <Flex align="center">
         <Text color="#C9C9C9" variant="d_s_medium">
-          {`${count} ${countLable}`}
+          {`${count} ${countLabel}`}
         </Text>
       </Flex>
     </Flex>

@@ -49,8 +49,8 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
   }
 
   useEffect(() => {
-    const { name, alias, _id } = sectorToEdit || {}
-    setValues([{ name, alias, id: _id }])
+    const { name, alias, id } = sectorToEdit || {}
+    setValues([{ name, alias, id: id }])
   }, [sectorToEdit])
 
   return (

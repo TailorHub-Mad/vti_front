@@ -16,6 +16,7 @@ import useFetchSWR from "../../hooks/useFetchSWR"
 import { DeleteType } from "../../utils/constants/global_config"
 import { pullAt } from "lodash"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
+import { getFieldObjectById } from "../../utils/functions/common"
 
 const sectores = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -72,16 +73,11 @@ const sectores = () => {
     setSectorsToDelete(null)
   }
 
-  const getAliasByIdSector = (id) => {
-    const { alias } = sectorsData.find((sector) => sector._id === id)
-    return alias
-  }
-
   const deleteOne = async (id, sectors) => {
     await deleteSector(id)
     const updatedSectors = []
     updatedSectors.push({
-      testSectors: sectors.filter((sector) => sector._id !== id),
+      testSectors: sectors.filter((sector) => sector.id !== id),
     })
     await mutate(updatedSectors, false)
     showToast("Sector borrado correctamente")
@@ -89,7 +85,7 @@ const sectores = () => {
 
   const deleteMany = async (positions, sectors) => {
     const sectorsQueue = positions.map((position) =>
-      deleteSector(sectorsData[position]._id)
+      deleteSector(sectorsData[position].id)
     )
     await Promise.all(sectorsQueue)
     pullAt(sectors, positions)
@@ -100,7 +96,7 @@ const sectores = () => {
   }
 
   const onEdit = (id) => {
-    const sector = [...sectorsData].find((sector) => sector._id === id)
+    const sector = [...sectorsData].find((sector) => sector.id === id)
     setSectorToEdit(sector)
     setIsSectorModalOpen(true)
   }
@@ -112,7 +108,7 @@ const sectores = () => {
 
     const results = sectorsData.filter(
       (sector) =>
-        sector._id.toLowerCase().includes(search.toLowerCase()) ||
+        sector.id.toLowerCase().includes(search.toLowerCase()) ||
         sector.vtiCode.toLowerCase().includes(search.toLowerCase())
     )
     setSearchedSectors(results)
@@ -137,8 +133,12 @@ const sectores = () => {
         onClose={handleClosePopup}
       >
         {deleteType === DeleteType.ONE
-          ? `¿Desea eliminar ${getAliasByIdSector(sectorsToDelete)}?`
-          : "¿Desea eliminar los sectores de ensayo seleccionados?"}
+          ? `¿Desea eliminar ${getFieldObjectById(
+              sectorsData,
+              "title",
+              sectorsToDelete
+            )}?`
+          : "¿Desea eliminar los sectores seleccionados?"}
       </Popup>
 
       <NewSectorModal

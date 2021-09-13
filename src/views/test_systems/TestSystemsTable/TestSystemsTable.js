@@ -27,14 +27,14 @@ export const TestSystemsTable = ({
 
   const handleOnDelete = () => {
     if (selectedRows.length > 1) return onDeleteMany(selectedRows)
-    return onDelete(systems[selectedRows[0]]._id)
+    return onDelete(systems[selectedRows[0]].id)
   }
 
   const _systems = systems?.map((system) => {
     return {
       actions: "",
-      id: system._id,
-      alias: { label: system.alias, link: `/sistemas/${system._id}` },
+      id: system.id,
+      alias: { label: system.alias, link: `/sistemas/${system.id}` },
       client: system.clientAlias,
       code: system.vtiCode,
       year: system.date.year,
@@ -107,7 +107,7 @@ export const TestSystemsTable = ({
       header={
         <TableHeader
           count={_systems?.length}
-          countLable="Sistemas de ensayo"
+          countLabel="Sistemas de ensayo"
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
           selectAllRows={handleSelectAllRows}

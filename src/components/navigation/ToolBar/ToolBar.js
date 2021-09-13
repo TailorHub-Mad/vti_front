@@ -15,15 +15,15 @@ export const ToolBar = ({
   onExport,
   addLabel,
   searchPlaceholder,
-  withoutFilter,
-  withoutGroup,
+  noFilter,
+  noGroup,
 }) => {
   const { role } = useContext(ApiAuthContext)
 
   return (
     <Flex>
-      {withoutFilter || <Filter />}
-      {withoutGroup || <Group />}
+      {noFilter || <Filter />}
+      {noGroup || <Group />}
       <InputGroup width="196px" marginRight="16px">
         <InputLeftElement
           pointerEvents="none"

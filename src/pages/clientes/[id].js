@@ -19,7 +19,7 @@ const client = () => {
   const [clientNotFound, setClientNotFound] = useState(false)
 
   const findClientInCache = (clients, id) => {
-    const client = clients.find((client) => client._id === id)
+    const client = clients.find((client) => client.id === id)
     if (client) return setClientData(client)
     getClient()
   }
@@ -36,7 +36,6 @@ const client = () => {
 
   // TOOD -> Manage error page
   if (clientNotFound) return <>Error. No se ha encontrado el Client.</>
-
   return (
     <Page>
       {clientData ? (

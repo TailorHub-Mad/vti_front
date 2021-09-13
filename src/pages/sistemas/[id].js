@@ -19,7 +19,7 @@ const system = () => {
   const [systemNotFound, setSystemNotFound] = useState(false)
 
   const findSystemInCache = (systems, id) => {
-    const system = systems.find((system) => system._id === id)
+    const system = systems.find((system) => system.id === id)
     if (system) return setSystemData(system)
     getSystem()
   }
@@ -41,7 +41,6 @@ const system = () => {
 
   // TOOD -> Manage error page
   if (systemNotFound) return <>Error. No se ha encontrado el Sistema.</>
-
   return (
     <Page>
       {systemData ? (

@@ -116,13 +116,13 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
   }
 
   const handleEditSystem = async () => {
-    const { _id } = systemToEdit
+    const { id } = systemToEdit
     const [formatedSystem] = formatSystems(values)
 
     // TODO -> provisional
     delete formatedSystem["client"]
 
-    const response = await editSystem(_id, formatedSystem)
+    const response = await editSystem(id, formatedSystem)
 
     // // TODO -> manage errors
     if (response?.error) {
@@ -136,13 +136,13 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
   useEffect(() => {
     if (!systemToEdit) return
     const {
-      _id,
+      id,
       vtiCode,
       clientAlias,
       alias,
       date: { year },
     } = systemToEdit || {}
-    setValues([{ vtiCode, clientAlias, alias, year, id: _id }])
+    setValues([{ vtiCode, clientAlias, alias, year, id: id }])
   }, [systemToEdit])
 
   useEffect(() => {

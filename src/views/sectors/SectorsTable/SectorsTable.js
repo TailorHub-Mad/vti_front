@@ -1,5 +1,5 @@
 import { Checkbox, Text } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useMemo } from "react"
 import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
 import { OptionsMenuRow } from "../../../components/navigation/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
 import { Table } from "../../../components/tables/Table/Table"
@@ -7,19 +7,32 @@ import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
 
-export const SectorsTable = ({ sectors, onDelete, onEdit, deleteItems }) => {
-  //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
-  //Hacer componente sectorLink
-  const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
-  const [activeItem, setActiveItem] = useState("all")
+export const SectorsTable = ({ items: sectors, onDelete, onEdit, onDeleteMany }) => {
+  const { selectedRows, setSelectedRows, handleRowSelect, calcColWidth } =
+    useTableActions()
+
+  useMemo(() => {
+    setSelectedRows([])
+  }, [sectors.length])
+
+  const handleSelectAllRows = (e) => {
+    const value = e.target.checked ? [...Array(sectors.length).keys()] : []
+    setSelectedRows(value)
+  }
+
+  const handleOnDelete = () => {
+    if (selectedRows.length > 1) return onDeleteMany(selectedRows)
+    return onDelete(sectors[selectedRows[0]].id)
+  }
+
   const _sectors =
     sectors &&
     sectors.map((sector) => {
       return {
         actions: "",
-        id: sector._id,
-        name: { label: sector.name, link: `/sectores/${sector._id}` },
-        projects: [],
+        id: sector.id,
+        name: { label: sector.title, link: `/sectores/${sector.id}` },
+        projects: sector.projects,
         options: "",
       }
     })
@@ -39,7 +52,7 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, deleteItems }) => {
         type: "selector",
       },
       id: {
-        label: "id",
+        label: "ID",
         width: calcColWidth(80),
         type: "text",
       },
@@ -65,11 +78,11 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, deleteItems }) => {
     <Table
       header={
         <TableHeader
-          sectorsCount={sectors?.length}
-          activeItem={activeItem}
-          onChange={(value) => setActiveItem(value)}
+          count={_sectors?.length}
+          countLabel="Sectores"
           selectedRows={selectedRows}
-          deleteItems={(items) => deleteItems(items)}
+          onDelete={handleOnDelete}
+          selectAllRows={handleSelectAllRows}
         />
       }
       config={sectors_table}

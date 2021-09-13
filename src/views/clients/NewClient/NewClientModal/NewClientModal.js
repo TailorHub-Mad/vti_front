@@ -49,8 +49,8 @@ export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
   }
 
   useEffect(() => {
-    const { name, alias, _id } = clientToEdit || {}
-    setValues([{ name, alias, id: _id }])
+    const { name, alias, id } = clientToEdit || {}
+    setValues([{ name, alias, id: id }])
   }, [clientToEdit])
 
   return (

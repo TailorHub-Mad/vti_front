@@ -22,7 +22,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
 
   const handleOnDelete = () => {
     if (selectedRows.length > 1) return onDeleteMany(selectedRows)
-    return onDelete(clients[selectedRows[0]]._id)
+    return onDelete(clients[selectedRows[0]].id)
   }
 
   const _clients =
@@ -30,9 +30,9 @@ export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
     clients.map((client) => {
       return {
         actions: "",
-        id: client._id,
+        id: client.id,
         alias: client.alias,
-        name: { label: client.name, link: `/clientes/${client._id}` },
+        name: { label: client.name, link: `/clientes/${client.id}` },
         testSystems: client.testSystems?.map((testSystem) => testSystem.alias),
         projects: [...client.projects].map((project) => project.alias),
         options: "",
@@ -56,7 +56,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
         type: "selector",
       },
       id: {
-        label: "id",
+        label: "ID",
         width: calcColWidth(80),
         type: "text",
       },
@@ -93,7 +93,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
       header={
         <TableHeader
           count={_clients?.length}
-          countLable="Clientes"
+          countLabel="Clientes"
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
           selectAllRows={handleSelectAllRows}

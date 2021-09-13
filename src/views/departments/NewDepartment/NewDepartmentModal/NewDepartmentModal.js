@@ -54,8 +54,8 @@ export const NewDepartmentModal = ({
   }
 
   useEffect(() => {
-    const { name, alias, _id } = departmentToEdit || {}
-    setValues([{ name, alias, id: _id }])
+    const { name, alias, id } = departmentToEdit || {}
+    setValues([{ name, alias, id: id }])
   }, [departmentToEdit])
 
   return (
