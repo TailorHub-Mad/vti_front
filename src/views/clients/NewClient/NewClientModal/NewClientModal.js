@@ -8,50 +8,124 @@ import {
   Box,
 } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
+import { useSWRConfig } from "swr"
 import { CloseIcon } from "../../../../components/icons/CloseIcon"
 import useClientApi from "../../../../hooks/api/useClientApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
+import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { NewClientForm } from "../NewClientForm/NewClientForm"
 
 export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
-  const [values, setValues] = useState([{}])
-  const isEdit = clientToEdit
   const { showToast } = useContext(ToastContext)
-  const { createClient } = useClientApi()
+  const { createClient, editClient } = useClientApi()
+  const { mutate, cache } = useSWRConfig()
+
+  const [values, setValues] = useState([{}])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const isEdit = Boolean(clientToEdit)
+
   const handleChange = (val, idx) => {
     const _values = [...values]
     _values[idx] = val
     setValues(_values)
   }
-  const handleDelete = (idx) => {
+
+  const handleDelete = (index) => {
     const _values = [...values]
-    _values.splice(idx, 1)
+    _values.splice(index, 1)
     setValues(_values)
   }
 
-  const checkInputs = () => {
-    return values.some((val) => !val.name || !val.id || !val.alias)
+  const checkInputsAreEmpty = () => {
+    return values.some(
+      (value) =>
+        // TODO -> autogenerate ID
+        // !value.id ||
+        !value.alias || !value.name
+    )
   }
 
   const handleSubmit = async () => {
-    const clientsQueue = values.map(async (val) => {
-      return await createClient(val)
-    })
+    setIsSubmitting(true)
 
-    const resultsArr = await Promise.all(clientsQueue)
-    //Meter toast de éxito
-    showToast("CLiente añadido correctamente!")
+    const updatedClientsList = isEdit
+      ? await handleEditClient()
+      : await handleCreateClient()
+
+    updatedClientsList
+      ? await mutate(SWR_CACHE_KEYS.clients, updatedClientsList, false)
+      : await mutate(SWR_CACHE_KEYS.clients)
+
+    showToast(isEdit ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
+    setIsSubmitting(false)
     onClose()
-    if (resultsArr.some((result) => result.error)) {
+  }
+
+  const handleCreateClient = async () => {
+    const clientsToCreate = [...values]
+    const clientsQueue = clientsToCreate.map((client) => createClient(client))
+    const response = await Promise.all(clientsQueue)
+
+    const [clientsSuccessfull, clientsError] = response.reduce(
+      ([succ, error], e, index) => {
+        e?.error
+          ? error.push(clientsToCreate[index])
+          : succ.push(clientsToCreate[index])
+        return [succ, error]
+      },
+      [[], []]
+    )
+
+    // // TODO -> manage errors
+    if (clientsError.length > 0) {
       console.log("ERROR")
-      return
     }
+
+    if (cache.has(SWR_CACHE_KEYS.clients)) {
+      const cacheClients = cache.get(SWR_CACHE_KEYS.clients)
+      const updatedClients = []
+      const formatClientsSuccessfull = clientsSuccessfull.map((client) => {
+        return {
+          ...client,
+          projects: [],
+          notes: [],
+        }
+      })
+      updatedClients.push({
+        testClients: [...formatClientsSuccessfull, ...cacheClients[0].testClients],
+      })
+      return updatedClients
+    }
+
+    return null
+  }
+
+  const handleEditClient = async () => {
+    const { id } = clientToEdit
+    const [formatedClient] = [...values]
+
+    const response = await editClient(id, formatedClient)
+
+    // // TODO -> manage errors
+    if (response?.error) {
+      console.log("ERROR")
+    }
+
+    // TODO -> optimize cache request (update cache with updated client)
+    return null
   }
 
   useEffect(() => {
-    const { name, alias, id } = clientToEdit || {}
-    setValues([{ name, alias, id: id }])
+    if (!clientToEdit) return
+    const { id, alias, name } = clientToEdit || {}
+    setValues([{ alias, name, id }])
   }, [clientToEdit])
+
+  useEffect(() => {
+    if (isOpen) return
+    setValues([{}])
+  }, [isOpen])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
@@ -95,8 +169,10 @@ export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
           w="194px"
           margin="0 auto"
           mt="24px"
-          disabled={checkInputs()}
+          disabled={checkInputsAreEmpty()}
           onClick={handleSubmit}
+          isLoading={isSubmitting}
+          pointerEvents={isSubmitting ? "none" : "all"}
         >
           Guardar
         </Button>
@@ -104,7 +180,7 @@ export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
           <Button
             variant="text_only"
             onClick={() => setValues([...values, {}])}
-            disabled={checkInputs()}
+            disabled={checkInputsAreEmpty()}
           >
             Añadir nuevo cliente
           </Button>

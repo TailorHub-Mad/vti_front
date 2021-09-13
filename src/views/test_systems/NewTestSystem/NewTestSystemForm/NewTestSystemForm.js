@@ -3,11 +3,12 @@ import { InputSelect } from "../../../../components/forms/InputSelect/InputSelec
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
 import useClientApi from "../../../../hooks/api/useClientApi"
 import useFetchSWR from "../../../../hooks/useFetchSWR"
+import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 
 export const NewTestSystemForm = ({ value, onChange }) => {
   const { getClients } = useClientApi()
   // TODO -> manage errors & loading state
-  const { data /*error, isLoading*/ } = useFetchSWR("clients/", getClients)
+  const { data } = useFetchSWR(SWR_CACHE_KEYS.clients, getClients)
 
   const handleOptinsList = () => {
     if (!data) return []

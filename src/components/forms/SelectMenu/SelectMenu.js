@@ -14,9 +14,9 @@ export const SelectMenu = ({ onSelect, options = [], ...props }) => {
       zIndex="900"
       {...props}
     >
-      {options.map((option) => (
+      {options.map((option, idx) => (
         <ListItem
-          key={option.value}
+          key={`${option.value}-${idx}`}
           _hover={{ bgColor: "blue.500", color: "white", cursor: "pointer" }}
           padding="16px 8px"
           onClick={() => onSelect(option.value)}
