@@ -1,11 +1,11 @@
-import ServiceConstructor from "."
+import { ServiceConstructor } from "."
 
-class UserService extends ServiceConstructor {
-  getUsers = () =>
-    this.makeRequest(
-      this.instance.get(`/user/all`)
-    )
+const UserService = () => {
+  const { instance, execute } = ServiceConstructor
+  const getUsers = () => execute(instance.get(`/user/all`))
   //TODO CRUD completo
+
+  return { getUsers }
 }
 
 export default UserService

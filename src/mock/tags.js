@@ -11,7 +11,7 @@ const generateRandomTag = () => {
     name: capitalize(faker.lorem.words(1)),
     projects: new Array(faker.datatype.number(10))
       .fill("")
-      .map((_) => `${faker.name.firstName()} ${faker.name.lastName()}`),
+      .map(() => `${faker.name.firstName()} ${faker.name.lastName()}`),
     relatedTags: hasParent
       ? new Array(faker.datatype.number(10)).fill("").map(() => faker.lorem.word(10))
       : [],

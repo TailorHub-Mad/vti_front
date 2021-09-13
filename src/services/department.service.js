@@ -1,18 +1,24 @@
-import ServiceConstructor from "."
+import { ServiceConstructor } from "."
 
-class DepartmentService extends ServiceConstructor {
-  getDepartments = () => this.makeRequest(this.instance.get("/department?limit=50"))
+const DepartmentService = () => {
+  const { instance, execute } = ServiceConstructor
 
-  getDepartment = (id) => this.makeRequest(this.instance.get(`/department/${id}`))
+  const getDepartments = (limit = 50, offset = 0) =>
+    execute(instance.get(`/department?limit=${limit}&offset=${offset}`))
+  const getDepartment = (id) => execute(instance.get(`/department/${id}`))
+  const createDepartment = (data) =>
+    execute(instance.post(`/department/create`, data))
+  const updateDepartment = (data) =>
+    execute(instance.put(`/department/${data.id}`, data))
+  const deleteDepartment = (id) => execute(instance.delete(`/department/${id}`))
 
-  createDepartment = (data) =>
-    this.makeRequest(this.instance.post(`/department/create`, data))
-
-  updateDepartment = (data) =>
-    this.makeRequest(this.instance.put(`/department/${data.id}`, data))
-
-  deleteDepartment = (id) =>
-    this.makeRequest(this.instance.delete(`/department/${id}`))
+  return {
+    getDepartments,
+    getDepartment,
+    createDepartment,
+    updateDepartment,
+    deleteDepartment,
+  }
 }
 
 export default DepartmentService

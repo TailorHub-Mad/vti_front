@@ -1,18 +1,18 @@
 import { Flex, Grid, Text } from "@chakra-ui/react"
 import React from "react"
 import { MessageCard } from "../../../../components/cards/MessageCard/MessageCard"
-import { PageBody } from "../../../../components/layout/PageBody/PageBody"
+import { PageBody } from "../../../../components/layout/Pages/PageBody/PageBody"
+import { ToolBar } from "../../../../components/navigation/ToolBar/ToolBar"
 import { NOTES_MOCK } from "../../../../mock/notes"
-import { NotesToolBar } from "../../NotesToolBar/NotesToolBar"
 
-export const ProjectNotes = ({ notes = [], showNoteDetails }) => {
+export const ProjectNotes = ({ showNoteDetails }) => {
   //TODO pasar notes por props
   return (
     <>
       <Flex justify="space-between" align="center" mt="24px" mb="24px">
         <Text variant="d_l_regular">Apuntes</Text>
         <Flex width="fit-content">
-          <NotesToolBar />
+          <ToolBar />
         </Flex>
       </Flex>
       <PageBody height="calc(100vh - 260px)">

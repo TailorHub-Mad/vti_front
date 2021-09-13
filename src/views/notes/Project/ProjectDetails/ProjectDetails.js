@@ -7,9 +7,10 @@ import { TestSystemLineIcon } from "../../../../components/icons/TestSystemLineI
 import { NoteTag } from "../../../../components/tags/NoteTag/NoteTag"
 import { ProjectTag } from "../../../../components/tags/ProjectTag/ProjectTag"
 import { TestSystemTag } from "../../../../components/tags/TestSystemTag/TestSystemTag"
+import { PATHS } from "../../../../utils/constants/paths"
+import Link from "next/link"
 
-export const ProjectDetails = ({ projectInfo = {}, ...props }) => {
-  const { main_person, users, tags, test_systems } = projectInfo
+export const ProjectDetails = ({ focusPoint, testSystems, tags, users }) => {
   const [showProjectDetails, setShowProjectDetails] = useState(false)
 
   return (
@@ -29,7 +30,7 @@ export const ProjectDetails = ({ projectInfo = {}, ...props }) => {
             <PeopleLineIcon mr="8px" />
             <Text variant="d_m_regular">Punto focal del proyecto</Text>
           </Flex>
-          <ProjectTag ml="32px">Persona X</ProjectTag>
+          {focusPoint && <ProjectTag ml="32px">{focusPoint}</ProjectTag>}
         </Box>
         <Box mt="16px" mb="32px">
           <Flex align="center" mb="8px">
@@ -37,13 +38,12 @@ export const ProjectDetails = ({ projectInfo = {}, ...props }) => {
             <Text variant="d_m_regular">Usuarios del proyecto</Text>
           </Flex>
           <Flex ml="32px">
-            <NoteTag mr="8px">Persona X</NoteTag>
-            <NoteTag mr="8px">Persona X</NoteTag>
-            <NoteTag mr="8px">Persona X</NoteTag>
-            <NoteTag mr="8px">Persona X</NoteTag>
-            <NoteTag mr="8px">Persona X</NoteTag>
-            <NoteTag mr="8px">Persona X</NoteTag>
-            <NoteTag mr="8px">Persona X</NoteTag>
+            {users &&
+              users.map((user, idx) => (
+                <NoteTag key={`${user}-${idx}`} mr="8px">
+                  {user}
+                </NoteTag>
+              ))}
           </Flex>
         </Box>
         <Box mt="16px" mb="32px">
@@ -52,9 +52,12 @@ export const ProjectDetails = ({ projectInfo = {}, ...props }) => {
             <Text variant="d_m_regular">Tags del proyecto</Text>
           </Flex>
           <Flex ml="32px">
-            <TestSystemTag mr="8px">Persona X</TestSystemTag>
-            <TestSystemTag mr="8px">Persona X</TestSystemTag>
-            <TestSystemTag mr="8px">Persona X</TestSystemTag>
+            {tags?.length > 0 &&
+              tags.map((tag, idx) => (
+                <TestSystemTag key={`${tag}-${idx}`} mr="8px">
+                  {tag}
+                </TestSystemTag>
+              ))}
           </Flex>
         </Box>
         <Box mt="16px" mb="32px">
@@ -63,15 +66,14 @@ export const ProjectDetails = ({ projectInfo = {}, ...props }) => {
             <Text variant="d_m_regular">Sistemas de ensayo del proyecto</Text>
           </Flex>
           <Flex ml="32px">
-            <Button variant="note_content" mr="8px" mb="8px">
-              Sistema de ensayo 1
-            </Button>
-            <Button variant="note_content" mr="8px" mb="8px">
-              Sistema de ensayo 2
-            </Button>
-            <Button variant="note_content" mr="8px" mb="8px">
-              Sistema de ensayo 3
-            </Button>
+            {testSystems &&
+              testSystems.map((ts) => (
+                <Link key={ts._id} href={`${PATHS.testSystems}/${ts._id}`}>
+                  <Button variant="note_content" mr="8px" mb="8px">
+                    {ts.alias}
+                  </Button>
+                </Link>
+              ))}
           </Flex>
         </Box>
       </Collapse>

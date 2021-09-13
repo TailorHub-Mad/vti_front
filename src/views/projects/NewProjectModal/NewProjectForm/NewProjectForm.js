@@ -7,15 +7,16 @@ import useSectorApi from "../../../../hooks/api/useSectorApi"
 import useUserApi from "../../../../hooks/api/useUserApi"
 import { MOCK_SELECT_OPTIONS, MOCK_YEAR_OPTIONS } from "../../../../mock/mock"
 
-export const NewProjectForm = ({ openAuxModal, value, onChange }) => {
+export const NewProjectForm = ({ openAuxModal, value, onChange, isEdit }) => {
   const { alias, client, sector, year, focusPoint } = value
-  const { getClients } = useClientApi()
+  const { getClients, getClient } = useClientApi()
   const { getSectors } = useSectorApi()
   const { getUsers } = useUserApi()
   //Client
   const [clientsOpt, setClientsOpt] = useState([])
   const [sectorsOpt, setSectorsOpt] = useState([])
   const [usersOpt, setUsersOpt] = useState([])
+  const [testSystemsOpt, setTestSystemsOpt] = useState([])
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -33,10 +34,23 @@ export const NewProjectForm = ({ openAuxModal, value, onChange }) => {
       const _usersArr = _users.map((user) => ({ label: user.alias, value: user.id }))
       setUsersOpt(_usersArr)
     }
+
     fetchClients()
     fetchSectors()
     fetchUsers()
   }, [])
+
+  useEffect(() => {
+    const fetchTestSystems = async () => {
+      const _clientInfo = await getClient(client)
+      const _testSystemsArr = _clientInfo.testSystems.map((ts) => ({
+        label: ts.alias,
+        value: ts.id,
+      }))
+      setTestSystemsOpt(_testSystemsArr)
+    }
+    client && fetchTestSystems()
+  }, [client])
 
   // const checkIfDisabled = (value) => {
   //   const orderedValues = [
@@ -46,7 +60,7 @@ export const NewProjectForm = ({ openAuxModal, value, onChange }) => {
   //     "sector",
   //     "year",
   //     "focusPoint",
-  //     "test_systems",
+  //     "testSystems",
   //     "project_tags",
   //   ]
   //   const index = orderedValues.indexOf(value)
@@ -79,7 +93,7 @@ export const NewProjectForm = ({ openAuxModal, value, onChange }) => {
         placeholder: "Cliente",
         options: clientsOpt,
         label: "Cliente",
-        isDisabled: !alias,
+        isDisabled: !isEdit && !alias,
       },
     },
     sector: {
@@ -88,7 +102,7 @@ export const NewProjectForm = ({ openAuxModal, value, onChange }) => {
         placeholder: "Sector",
         options: sectorsOpt,
         label: "Sector",
-        isDisabled: !alias || !client,
+        isDisabled: !isEdit && (!alias || !client),
       },
     },
     year: {
@@ -97,42 +111,44 @@ export const NewProjectForm = ({ openAuxModal, value, onChange }) => {
         placeholder: "2021",
         options: MOCK_YEAR_OPTIONS,
         label: "Año",
-        isDisabled: !alias || !client || !sector,
+        isDisabled: !isEdit && (!alias || !client || !sector),
       },
     },
     focusPoint: {
       type: "select",
       config: {
         placeholder: "Punto focal inicio",
-        options: usersOpt || MOCK_SELECT_OPTIONS,
+        options: usersOpt || MOCK_SELECT_OPTIONS,
         label: "Punto focal inicio",
-        isDisabled: !alias || !client || !sector || !year,
+        isDisabled: !isEdit && (!alias || !client || !sector || !year),
       },
     },
 
-    test_systems: {
+    testSystems: {
       type: "add_select",
       config: {
-        placeholder: "Sistema de ensayo",
-        options: MOCK_SELECT_OPTIONS,
-        label: "Sistemas de ensayos",
+        placeholder: "Sistemas de ensayo",
+        options: testSystemsOpt,
+        label: "Sistemas de ensayo",
         addItemLabel: "Añadir ",
         removeItemLabel: "Eliminar ",
-        isDisabled: !alias || !client || !sector || !year || !focusPoint,
+        isDisabled:
+          !isEdit && (!alias || !client || !sector || !year || !focusPoint),
       },
     },
 
-    project_tags: {
+    tags: {
       type: "add_select",
       config: {
         placeholder: "Proyecto",
         options: MOCK_SELECT_OPTIONS,
         label: "Tags de proyecto",
-        addItemLabel: "Añadir ",
-        removeItemLabel: "Eliminar ",
+        additemlabel: "Añadir ",
+        removeitemlabel: "Eliminar ",
         helper: "Abrir ventana de ayuda",
         onHelperClick: () => openAuxModal("project_tags"),
-        isDisabled: !alias || !client || !sector || !year || !focusPoint,
+        isDisabled: true,
+        // isDisabled: !alias || !client || !sector || !year || !focusPoint,
       },
     },
   }

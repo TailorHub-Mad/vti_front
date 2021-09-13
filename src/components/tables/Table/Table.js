@@ -2,7 +2,8 @@ import { Box, Flex, Grid } from "@chakra-ui/react"
 import React from "react"
 import { CUSTOM_SCROLLBAR } from "../../../theme/utils/utils.theme"
 import { MAX_TABLE_WIDTH, MIN_TABLE_WIDTH } from "../../../utils/constants/layout"
-import { Card } from "../../layout/Card/Card"
+import { Card } from "../../cards/Card"
+
 import { TableGroup } from "./TableGroup/TableGroup"
 import { TableHead } from "./TableHead/TableHead"
 import { TableRow } from "./TableRow.js/TableRow"
@@ -22,7 +23,6 @@ export const Table = ({
     (ac, cv) => (ac = `${ac} ${cv.width}`),
     ""
   )
-  console.log("SELECTED", selectedRows)
   const isSelected = (id) => selectedRows?.includes(id)
 
   return content ? (

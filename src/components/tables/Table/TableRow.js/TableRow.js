@@ -11,7 +11,7 @@ export const TableRow = ({
   head,
   ...props
 }) => {
-  const { isFinished } = item.config
+  const { isFinished } = item?.config || {}
   const colorConfig = { color: isFinished ? "correct.500" : "blue.500" }
   const bgColorConfig = isFinished ? { variant: "green" } : {}
   return (

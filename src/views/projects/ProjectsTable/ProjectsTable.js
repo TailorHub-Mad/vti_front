@@ -1,11 +1,12 @@
 import { Checkbox, Text } from "@chakra-ui/react"
 import React, { useMemo } from "react"
 import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
-import { RowOptionMenu } from "../../../components/navigation/RowOptionMenu/RowOptionMenu"
+import { OptionsMenuRow } from "../../../components/navigation/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
 import { Table } from "../../../components/tables/Table/Table"
 import { NoteTag } from "../../../components/tags/NoteTag/NoteTag"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
+import { PATHS } from "../../../utils/constants/paths"
 import { ProjectsTableHeader } from "../ProjectsTableHeader/ProjectsTableHeader"
 
 export const ProjectsTable = ({
@@ -36,56 +37,43 @@ export const ProjectsTable = ({
 
   const handleOnDelete = () => {
     if (selectedRows.length > 1) return onDeleteMany(selectedRows)
-    return onDelete(items[selectedRows[0]]._id)
+    return onDelete(selectedRows[0])
   }
+
+  const transformProjectData = (e) => ({
+    actions: "",
+    id: e._id,
+    alias: { label: e.alias, link: `${PATHS.projects}/${e._id}` },
+    sector: e.sector?.title || "Automoción",
+    focusPoint:
+      e.focusPoint?.length > 0
+        ? e.focusPoint.map((fp) => fp.alias).join(", ")
+        : ["Persona", "Responsable"],
+    testSystems: e.testSystems?.map((ts) => ts.alias),
+    tags:
+      e.tag?.length > 0
+        ? e.tag
+        : ["Tag Proyecto A", "Tag Proyecto B", "Tag Proyecto C"],
+    users: e.users || ["User A", "User B", "User C"],
+    notes: e.notes?.map((note) => note.title),
+    options: "",
+    config: {
+      isFinished: e.isFinished,
+    },
+  })
 
   const elements = items
     ? !isGrouped
-      ? items?.map((e) => ({
-          actions: "",
-          id: e._id,
-          alias: { label: e.alias, link: e._id },
-          sector: e.sector || "Automoción",
-          focusPoint:
-            e.focusPoint.length > 0 ? e.focusPoint : ["Persona", "Responsable"],
-          testSystems: e.testSystems.map((ts) => ts.alias),
-          tags:
-            e.tag.length > 0
-              ? e.tag
-              : ["Tag Proyecto A", "Tag Proyecto B", "Tag Proyecto C"],
-          users: e.users || ["User A", "User B", "User C"],
-          notes: e.notes.map((note) => note.title),
-          options: "",
-          config: {
-            isFinished: e.isFinished,
-          },
-        }))
+      ? items?.map(transformProjectData)
       : items.map((it) => {
           const _it = [...it]
-          _it[1] = it[1].map((e) => ({
-            actions: "",
-            id: e._id,
-            alias: { label: e.alias, link: e._id },
-            sector: e.sector || "Automoción",
-            focusPoint:
-              e.focusPoint.length > 0 ? e.focusPoint : ["Persona", "Responsable"],
-            testSystems: e.testSystems.map((ts) => ts.alias),
-            tags:
-              e.tag?.length > 0
-                ? e.tag
-                : ["Tag Proyecto A", "Tag Proyecto B", "Tag Proyecto C"],
-            users: e.users || ["User A", "User B", "User C"],
-            notes: e.notes.map((note) => note.title),
-            options: "",
-            config: {
-              isFinished: e.isFinished,
-            },
-          }))
+          _it[1] = it[1].map(transformProjectData)
           console.log(_it)
           return _it
         })
     : null
 
+  console.log(items)
   const projects_table = {
     components: {
       text: <Text />,
@@ -95,7 +83,7 @@ export const ProjectsTable = ({
       sector: <NoteTag />,
       testSystems: <TagGroup variant="light_blue" max={3} />,
       tags: <TagGroup variant="pale_yellow" max={3} />,
-      options: <RowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
+      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />,
     },
     head: {
       actions: {

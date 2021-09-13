@@ -3,18 +3,24 @@ import { SearchIcon } from "@chakra-ui/icons"
 import { Button, Flex, Input, InputGroup, InputLeftElement } from "@chakra-ui/react"
 import React, { useContext } from "react"
 import { CloudButton } from "../../../components/buttons/CloudButton/CloudButton"
-import { Filter } from "../../../components/filters/Filter/Filter"
-import { Group } from "../../../components/grouping/Group/Group"
+import { Filter } from "../../../components/filters/Filter"
+import { Group } from "../../../components/grouping/Group"
 import { AddProjectIcon } from "../../../components/icons/AddProjectIcon"
-import { ApiUserContext } from "../../../provider/ApiAuthProvider"
+import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 
-export const ProjectsToolBar = ({ onSearch, onImport, onExport, onAddProject, onGroup }) => {
-  const { role } = useContext(ApiUserContext)
+export const ProjectsToolBar = ({
+  onSearch,
+  onImport,
+  onExport,
+  onAddProject,
+  onGroup,
+}) => {
+  const { role } = useContext(ApiAuthContext)
 
   return (
     <Flex width="fit-content">
       <Filter />
-      <Group onGroup={(activeItem)=>onGroup(activeItem)}/>
+      <Group onGroup={(activeItem) => onGroup(activeItem)} />
       <InputGroup width="196px" marginRight="16px">
         <InputLeftElement
           pointerEvents="none"

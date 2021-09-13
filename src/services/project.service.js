@@ -1,19 +1,29 @@
-import ServiceConstructor from "."
+import { ServiceConstructor } from "."
 
-class ProjectService extends ServiceConstructor {
-  getProjects = () => this.makeRequest(this.instance.get("/projects?limit=50"))
+const ProjectService = () => {
+  const { instance, execute } = ServiceConstructor
 
-  getGroupedProjects = () =>
-    this.makeRequest(this.instance.get(`/projects/group?group=client&real=true`))
+  const getProjects = () => execute(instance.get("/projects?limit=50"))
 
-  getProject = (id) => this.makeRequest(this.instance.get(`/projects/${id}`))
+  const getGroupedProjects = () =>
+    execute(instance.get(`/projects/group?group=client&real=true`))
 
-  createProject = (data) => this.makeRequest(this.instance.post(`/projects/`, data))
+  const getProject = (id) => execute(instance.get(`/projects/${id}`))
 
-  updateProject = (data) =>
-    this.makeRequest(this.instance.put(`/projects/${data.id}`, data))
+  const createProject = (data) => execute(instance.post(`/projects/`, data))
 
-  deleteProject = (id) => this.makeRequest(this.instance.delete(`/projects/${id}`))
+  const updateProject = (data) => execute(instance.put(`/projects/${data.id}`, data))
+
+  const deleteProject = (id) => execute(instance.delete(`/projects/${id}`))
+
+  return {
+    getProjects,
+    getGroupedProjects,
+    getProject,
+    createProject,
+    updateProject,
+    deleteProject,
+  }
 }
 
 export default ProjectService

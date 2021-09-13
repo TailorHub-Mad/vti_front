@@ -1,20 +1,20 @@
 import { useContext, useEffect, useState } from "react"
-import { Page } from "../../components/layout/Page/Page"
-import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
-import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
 import useProjectApi from "../../hooks/api/useProjectApi"
-import { ApiToastContext } from "../../provider/ApiToastProvider"
 import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
 import { ProjectsToolBar } from "../../views/projects/ProjectsToolBar/ProjectsToolBar"
 import { pullAt } from "lodash"
 import faker from "faker"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import useFetchSWR from "../../hooks/useFetchSWR"
-import { ApiUserContext } from "../../provider/ApiAuthProvider"
+import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
-import { ImportFilesModal } from "../../views/common/ImportFilesModal/ImportFilesModal"
 import { ProjectsEmptyState } from "../../views/projects/ProjectsEmptyState/ProjectsEmptyState"
 import { NewProjectModal } from "../../views/projects/NewProjectModal/NewProjectModal"
+import { Page } from "../../components/layout/Pages/Page"
+import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
+import { Spinner } from "../../components/spinner/Spinner"
+import { ToastContext } from "../../provider/ToastProvider"
+import { ImportFilesModal } from "../../components/overlay/modal/ImportFilesModal/ImportFilesModal"
 
 const DeleteType = {
   ONE: "deleteOne",
@@ -28,12 +28,13 @@ const fetchType = {
 }
 
 const projects = () => {
-  const { isLoggedIn } = useContext(ApiUserContext)
-  const { getProjects, getGroupedProjects, deleteProject } = useProjectApi()
-  const { showToast } = useContext(ApiToastContext)
+  const { isLoggedIn } = useContext(ApiAuthContext)
+  const { getProjects, getGroupedProjects, deleteProject, createProject } =
+    useProjectApi()
+  const { showToast } = useContext(ToastContext)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const isGrouped = fetchState === fetchType.GROUPED
-  const isFiltered = fetchState === fetchType.FILTERED
+  // const isFiltered = fetchState === fetchType.FILTERED
 
   const fetchHandler = {
     all: () => useFetchSWR(SWR_CACHE_KEYS.projects, getProjects),
@@ -61,7 +62,7 @@ const projects = () => {
 
   //TODO también hacer un handler de la transformación de la información
   //Handler global Fetch key, fetcher, data transform
-  
+
   const projectsData = data
     ? isGrouped
       ? Object.entries(data).slice(0, 30)
@@ -93,6 +94,7 @@ const projects = () => {
     setProjectToEdit(null)
     setIsProjectModalOpen(false)
   }
+
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     await f(projectsToDelete, projectsData)
@@ -101,7 +103,7 @@ const projects = () => {
   }
 
   const getAliasByIdProject = (id) => {
-    const { alias } = projectsData.find((project) => project._id === id)
+    const { alias } = projectsData.find((project) => project._id === id) || {}
     return alias
   }
 
@@ -115,14 +117,14 @@ const projects = () => {
     showToast("Proyecto borrado correctamente")
   }
 
-  const deleteMany = async (positions, projects) => {
-    const projectsQueue = positions.map((position) =>
-      deleteProject(projectsData[position]._id)
-    )
+  const deleteMany = async (ids, projects) => {
+    const projectsQueue = ids.map((id) => deleteProject(id))
     await Promise.all(projectsQueue)
-    pullAt(projects, positions)
+
     const updatedProjects = []
-    updatedProjects.push({ projects: projects })
+    updatedProjects.push({
+      projects: projects.filter((pr) => !ids.includes(pr._id)),
+    })
     await mutate(updatedProjects, false)
     showToast("Proyectos borrados correctamente")
   }
@@ -158,7 +160,25 @@ const projects = () => {
   }
 
   const handleGrouping = (option) => {
+    console.log("OPTION", option)
     setFetchState(fetchType.GROUPED)
+  }
+  console.log(projectsData)
+  const handleNewProject = async (values) => {
+    try {
+      const _values = {
+        ...values,
+        date: { year: values.year.toString(), month: "02", day: "25" },
+      }
+      delete _values.year
+      delete _values.id
+      delete _values.tags
+      await createProject(_values)
+      showToast("Proyecto creado satisfactoriamente")
+      setIsProjectModalOpen(false)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   useEffect(() => {
@@ -198,6 +218,7 @@ const projects = () => {
         projectToEdit={projectToEdit}
         isOpen={isProjectModalOpen}
         onClose={handleOnCloseModal}
+        onSubmit={handleNewProject}
       />
 
       <ImportFilesModal
@@ -216,7 +237,7 @@ const projects = () => {
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <LoadingTableSpinner /> : null}
+      {isLoading ? <Spinner /> : null}
       {emptyData ? (
         <ProjectsEmptyState
           onAddProject={handleOnOpenModal}

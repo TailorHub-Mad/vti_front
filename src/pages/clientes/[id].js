@@ -1,40 +1,54 @@
 import { useRouter } from "next/dist/client/router"
 import { useEffect, useState } from "react"
-import { Page } from "../../components/layout/Page/Page"
-import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
+import { Page } from "../../components/layout/Pages/Page"
+import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
-import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
-import useClientApi from "../../hooks/api/useClientApi"
+import { Spinner } from "../../components/spinner/Spinner"
 import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
-import { ProjectsToolBar } from "../../views/projects/ProjectsToolBar/ProjectsToolBar"
+import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
+import { useSWRConfig } from "swr"
+import useClientApi from "../../hooks/api/useClientApi"
+import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 
 const client = () => {
-  const [isFetching, setIsFetching] = useState(false)
-  const [client, setClient] = useState(null)
-  const { getClient } = useClientApi()
   const router = useRouter()
+  const { cache } = useSWRConfig()
+  const { getClient: client } = useClientApi()
+
+  const [clientData, setClientData] = useState(null)
+  const [clientNotFound, setClientNotFound] = useState(false)
+
+  const findClientInCache = (clients, id) => {
+    const client = clients.find((client) => client.id === id)
+    if (client) return setClientData(client)
+    getClient()
+  }
+
+  const getClient = async () => {
+    const data = await client(router.query.id)
+    data.length === 0 ? setClientNotFound(true) : setClientData(data[0])
+  }
+
   useEffect(() => {
-    setIsFetching(true)
-    const fetchClient = async () => {
-      const _clients = await getClient(router.query.id)
-      setClient(_clients)
-      setIsFetching(false)
-    }
-    fetchClient()
-  }, [])
+    if (!cache.has(SWR_CACHE_KEYS.clients)) return getClient()
+    findClientInCache(cache.get(SWR_CACHE_KEYS.clients), router.query.id)
+  }, [cache])
+
+  // TOOD -> Manage error page
+  if (clientNotFound) return <>Error. No se ha encontrado el Client.</>
   return (
     <Page>
-      {isFetching ? <LoadingTableSpinner /> : null}
-
-      {client && !isFetching ? (
+      {clientData ? (
         <>
           <PageHeader>
             <BreadCrumbs lastText="Proyectos" />
-            <ProjectsToolBar />
+            <ToolBar />
           </PageHeader>
-          <ProjectsTable items={client.projects} />
+          <ProjectsTable items={clientData.projects} />
         </>
-      ) : null}
+      ) : (
+        <Spinner />
+      )}
     </Page>
   )
 }

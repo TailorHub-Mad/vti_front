@@ -1,8 +1,8 @@
 import { Button, Center, Flex, Input, Text } from "@chakra-ui/react"
 import React, { useContext, useState } from "react"
 import { FormController } from "../../../components/forms/FormItemWrapper/FormController"
-import { LogoFull } from "../../../components/images/LogoFull/LogoFull"
-import { Card } from "../../../components/layout/Card/Card"
+import { LogoFull } from "../../../components/images/LogoFull"
+import { Card } from "../../../components/cards/Card"
 import { Formik } from "formik"
 import useAuthApi from "../../../hooks/api/useAuthApi"
 import { ShowPassowrd, ForgotPassword } from "./Login.style"
@@ -10,12 +10,12 @@ import { HideLineIcon } from "../../../components/icons/HideLineIcon"
 import { useRouter } from "next/dist/client/router"
 import { setSessioncookie } from "../../../utils/functions/cookies"
 import { checkFormIsEmpty } from "../../../utils/functions/forms"
-import { ApiUserContext } from "../../../provider/ApiAuthProvider"
+import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 
 export const Login = () => {
   const { login } = useAuthApi()
   const router = useRouter()
-  const { setRole, setIsLoggedIn } = useContext(ApiUserContext)
+  const { setRole, setIsLoggedIn } = useContext(ApiAuthContext)
 
   const [hasError, setHasError] = useState(false)
   const [passwordInputType, setPasswordInputType] = useState("password")

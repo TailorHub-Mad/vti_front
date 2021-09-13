@@ -1,38 +1,43 @@
 import { useRouter } from "next/dist/client/router"
-import { useEffect, useState } from "react"
-import { Page } from "../../components/layout/Page/Page"
-import { PageHeader } from "../../components/layout/PageHeader/PageHeader"
+import { useContext } from "react"
+import { Page } from "../../components/layout/Pages/Page"
+import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
-import { LoadingTableSpinner } from "../../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
+import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
+import { Spinner } from "../../components/spinner/Spinner"
 import useDepartmentApi from "../../hooks/api/useDepartmentApi"
+import useFetchSWR from "../../hooks/useFetchSWR"
+import { ApiAuthContext } from "../../provider/ApiAuthProvider"
+import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
+import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
 
 const department = () => {
-  const [isFetching, setIsFetching] = useState(false)
-  const [department, setDepartment] = useState(null)
-  const { getDepartment } = useDepartmentApi()
   const router = useRouter()
-  useEffect(() => {
-    setIsFetching(true)
-    const fetchSector = async () => {
-      const department = await getDepartment(router.query.id)
-      setDepartment(department)
-      setIsFetching(false)
-    }
-    fetchSector()
-  }, [])
+  const { isLoggedIn } = useContext(ApiAuthContext)
+  const { getDepartment } = useDepartmentApi()
+
+  const { data, error, isLoading, isValidating } = useFetchSWR(
+    [SWR_CACHE_KEYS.department, router.query.id],
+    getDepartment
+  )
+
+  const notFound = !isValidating && !data
+
+  if (error) return <>ERROR...</>
+  if (!isLoggedIn) return <>Loading...</>
   return (
     <Page>
-      {isFetching ? <LoadingTableSpinner /> : null}
-
-      {department && !isFetching ? (
+      {isLoading || !data ? <Spinner /> : null}
+      {notFound && <>Error. No se ha encontrado el departamento.</>}
+      {data && (
         <>
           <PageHeader>
             <BreadCrumbs lastText="Proyectos" />
-            {/* <ProjectsToolBar /> */}
+            <ToolBar />
           </PageHeader>
-          {/* <ProjectsTable items={MOCK_BACK_PROJECTS_DATA} /> */}
+          <ProjectsTable items={data.projects} />
         </>
-      ) : null}
+      )}
     </Page>
   )
 }

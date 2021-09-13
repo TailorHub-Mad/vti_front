@@ -2,9 +2,9 @@ import { useRouter } from "next/dist/client/router"
 import React, { useState, useEffect, useCallback } from "react"
 import useAuthApi from "../../hooks/api/useAuthApi"
 
-export const ApiUserContext = React.createContext()
+export const ApiAuthContext = React.createContext()
 
-const ApiUserProvider = ({ children }) => {
+const ApiAuthProvider = ({ children }) => {
   const router = useRouter()
   const { me } = useAuthApi()
 
@@ -27,20 +27,27 @@ const ApiUserProvider = ({ children }) => {
 
   useEffect(() => {
     const getUser = async () => {
-      const _user = await me()
-      if (_user.error) return router.push("/login")
-      setUser(_user[0])
-      // setRole(_user[0].role)
-      setRole("admin")
-      setIsLoggedIn(true)
+      try {
+        const _user = await me()
+        setUser(_user[0])
+        // TODO -> provisional
+        // setRole(_user[0].role)
+        setRole("admin")
+        setIsLoggedIn(true)
+      } catch (error) {
+        setIsLoggedIn(false)
+        if (error.response.status === 401 && router.route !== "/login")
+          return router.push("/login")
+      }
     }
     getUser()
   }, [])
+
   return (
-    <ApiUserContext.Provider value={contextValue}>
+    <ApiAuthContext.Provider value={contextValue}>
       {children}
-    </ApiUserContext.Provider>
+    </ApiAuthContext.Provider>
   )
 }
 
-export default ApiUserProvider
+export default ApiAuthProvider

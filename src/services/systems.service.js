@@ -1,15 +1,17 @@
-import ServiceConstructor from "."
+import { ServiceConstructor } from "."
 
-class SystemService extends ServiceConstructor {
-  systems = (limit = 50, offset = 0) =>
-    this.makeRequest(
-      this.instance.get(`/testSystem?limit=${limit}&offset=${offset}`)
-    )
-  createSystem = (system) =>
-    this.makeRequest(this.instance.post("/testSystem", system))
-  editSystem = (id, system) =>
-    this.makeRequest(this.instance.put(`/testSystem/${id}`, system))
-  deleteSystem = (id) => this.makeRequest(this.instance.delete(`/testSystem/${id}`))
+const SystemService = () => {
+  const { instance, execute } = ServiceConstructor
+
+  const systems = (limit = 50, offset = 0) =>
+    execute(instance.get(`/testSystem?limit=${limit}&offset=${offset}`))
+  const system = (id) => execute(instance.get(`/testSystem/${id}`))
+  const createSystem = (system) => execute(instance.post("/testSystem", system))
+  const editSystem = (id, system) =>
+    execute(instance.put(`/testSystem/${id}`, system))
+  const deleteSystem = (id) => execute(instance.delete(`/testSystem/${id}`))
+
+  return { systems, system, createSystem, editSystem, deleteSystem }
 }
 
 export default SystemService

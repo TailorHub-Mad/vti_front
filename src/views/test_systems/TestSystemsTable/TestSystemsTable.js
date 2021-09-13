@@ -1,47 +1,45 @@
 import { Checkbox, Text } from "@chakra-ui/react"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
-import { RowOptionMenu } from "../../../components/navigation/RowOptionMenu/RowOptionMenu"
+import { OptionsMenuRow } from "../../../components/navigation/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
 import { Table } from "../../../components/tables/Table/Table"
+import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
-import { TestSystemTableHeader } from "../TestSystemsTableHeader/TestSystemTableHeader"
 
 export const TestSystemsTable = ({
-  items,
+  items: systems,
   onDelete,
   onEdit,
   onDeleteMany,
-  ...props
 }) => {
   const { selectedRows, setSelectedRows, handleRowSelect, calcColWidth } =
     useTableActions()
-  const [activeItem, setActiveItem] = useState("all")
 
   useMemo(() => {
     setSelectedRows([])
-  }, [items.length])
+  }, [systems.length])
 
   const handleSelectAllRows = (e) => {
-    const value = e.target.checked ? [...Array(items.length).keys()] : []
+    const value = e.target.checked ? [...Array(systems.length).keys()] : []
     setSelectedRows(value)
   }
 
   const handleOnDelete = () => {
     if (selectedRows.length > 1) return onDeleteMany(selectedRows)
-    return onDelete(items[selectedRows[0]]._id)
+    return onDelete(systems[selectedRows[0]].id)
   }
 
-  const content = items?.map((item) => {
+  const _systems = systems?.map((system) => {
     return {
       actions: "",
-      id: item._id,
-      alias: item.alias,
-      client: item.clientAlias,
-      code: item.vtiCode,
-      year: item.date.year,
-      projects: item.projects,
-      notes: item.notes,
+      id: system.id,
+      alias: { label: system.alias, link: `/sistemas/${system.id}` },
+      client: system.clientAlias,
+      code: system.vtiCode,
+      year: system.date.year,
+      projects: system.projects,
+      notes: system.notes,
       options: "",
     }
   })
@@ -54,7 +52,7 @@ export const TestSystemsTable = ({
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       notes: <TagGroup variant="testSystem" max={4} />,
       projects: <TagGroup variant="project" max={3} />,
-      options: <RowOptionMenu onDelete={onDelete} onEdit={onEdit} />,
+      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />,
     },
     head: {
       actions: {
@@ -70,7 +68,7 @@ export const TestSystemsTable = ({
       alias: {
         label: "Alias",
         width: calcColWidth(88),
-        type: "text",
+        type: "link",
       },
       client: {
         label: "Cliente",
@@ -107,23 +105,21 @@ export const TestSystemsTable = ({
   return (
     <Table
       header={
-        <TestSystemTableHeader
-          testSystemsCount={content?.length}
-          activeItem={activeItem}
-          onChange={(value) => setActiveItem(value)}
+        <TableHeader
+          count={_systems?.length}
+          countLabel="Sistemas de ensayo"
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
           selectAllRows={handleSelectAllRows}
         />
       }
       config={test_systems_table}
-      content={content}
+      content={_systems}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
       tableHeight="calc(100vh - 190px)"
       p="32px"
       pb="0"
-      {...props}
     />
   )
 }

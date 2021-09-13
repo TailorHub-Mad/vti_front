@@ -1,8 +1,12 @@
-import ServiceConstructor from "."
+import { ServiceConstructor } from "."
 
-class AuthService extends ServiceConstructor {
-  login = (data) => this.makeRequest(this.instance.post("/user/login", data))
-  me = () => this.makeRequest(this.instance.get("/user/me"))
+const AuthService = () => {
+  const { instance, execute } = ServiceConstructor
+
+  const login = (data) => execute(instance.post("/user/login", data))
+  const me = () => execute(instance.get("/user/me"))
+
+  return { login, me }
 }
 
 export default AuthService

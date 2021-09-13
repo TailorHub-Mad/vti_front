@@ -1,9 +1,8 @@
 import ProjectService from "../../services/project.service"
-import useApiError from "../useApiError"
 
 const useProjectApi = () => {
-  const { addError, removeError } = useApiError()
-  const projectService = new ProjectService(addError, removeError)
+  const projectService = ProjectService()
+
   const getProjects = () => projectService.getProjects()
 
   const getGroupedProjects = () => projectService.getGroupedProjects()

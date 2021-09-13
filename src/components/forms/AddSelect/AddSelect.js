@@ -11,7 +11,7 @@ export const AddSelect = ({
   placeholder,
   // errors,
   onChange,
-  addItemLabel,
+  additemlabel,
   deleteItemLabel,
   options = [],
   label,
@@ -53,6 +53,7 @@ export const AddSelect = ({
               placeholder={placeholder}
               options={handleAvailableOptions(val)}
               isDisabled={isDisabled}
+              autocomplete="off"
             />
             {idx !== 0 ? (
               <Box
@@ -95,7 +96,7 @@ export const AddSelect = ({
                       variant="m_xs_regular"
                       color="blue.500"
                     >
-                      {addItemLabel || "Añadir"}
+                      {additemlabel || "Añadir"}
                     </Text>
                   </Box>
                 ) : null}
