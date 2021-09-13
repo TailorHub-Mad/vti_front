@@ -6,8 +6,8 @@ const ProjectService = () => {
   const getProjects = () => execute(instance.get("/projects?limit=50"))
 
   const getGroupedProjects = () =>
-    execute(instance.get(`/projects/group?group=client&real=true`))
-
+    execute(instance.get(`/projects/group?group=client`))
+//client years sector date.year projects.tags.name tags
   const getProject = (id) => execute(instance.get(`/projects/${id}`))
 
   const createProject = (data) => execute(instance.post(`/projects/`, data))

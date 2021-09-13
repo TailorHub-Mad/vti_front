@@ -9,7 +9,7 @@ export const Group = ({onGroup}) => {
   return (
     <>
       <Button variant="tool_button" mr="16px" onClick={onOpen}>
-        <NotesIcon mr={["8px", "0"]} />
+        <NotesIcon mr={["8px", "8px"]} />
         Agrupar
       </Button>
       <GroupModal isOpen={isOpen} onClose={onClose} onGroup={(activeItem)=>onGroup(activeItem)}/>
