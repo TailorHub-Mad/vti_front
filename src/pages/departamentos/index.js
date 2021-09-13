@@ -16,6 +16,7 @@ import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { DeleteType } from "../../utils/constants/global_config"
 import { pullAt } from "lodash"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
+import { AddDepartmentIcon } from "../../components/icons/AddDepartmentIcon"
 
 const departamentos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -164,6 +165,7 @@ const departamentos = () => {
             onExport={handleExport}
             addLabel="Añadir departamento"
             searchPlaceholder="Busqueda por ID, Alias"
+            icon={<AddDepartmentIcon />}
           />
         )}
       </PageHeader>

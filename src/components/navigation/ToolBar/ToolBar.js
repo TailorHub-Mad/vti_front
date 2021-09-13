@@ -4,7 +4,7 @@ import React, { useContext } from "react"
 import { CloudButton } from "../../buttons/CloudButton/CloudButton"
 import { Filter } from "../../filters/Filter"
 import { Group } from "../../grouping/Group"
-import { AddTestSystemIcon } from "../../icons/AddTestSystemIcon"
+import { AddProjectIcon } from "../../icons/AddProjectIcon"
 import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 import { RoleType } from "../../../utils/constants/global_config"
 
@@ -17,6 +17,7 @@ export const ToolBar = ({
   searchPlaceholder,
   noFilter,
   noGroup,
+  icon,
 }) => {
   const { role } = useContext(ApiAuthContext)
 
@@ -41,7 +42,14 @@ export const ToolBar = ({
           <CloudButton onImport={onImport} onExport={onExport} />
 
           <Button onClick={onAdd}>
-            <AddTestSystemIcon marginRight="8px" />
+            {icon ? (
+              React.cloneElement(icon, {
+                marginRight: "8px",
+              })
+            ) : (
+              <AddProjectIcon marginRight="8px" />
+            )}
+
             {addLabel ?? "Añadir"}
           </Button>
         </>

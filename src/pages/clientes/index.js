@@ -16,6 +16,7 @@ import { ClientsTable } from "../../views/clients/ClientsTable/ClientsTable"
 import { NewClientModal } from "../../views/clients/NewClient/NewClientModal/NewClientModal"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
+import { AddClientIcon } from "../../components/icons/AddClientIcon"
 
 const clientes = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -162,6 +163,7 @@ const clientes = () => {
             searchPlaceholder="Busqueda por ID, Alias"
             withoutFilter
             withoutGroup
+            icon={<AddClientIcon />}
           />
         )}
       </PageHeader>
