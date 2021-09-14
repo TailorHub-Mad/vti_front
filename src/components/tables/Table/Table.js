@@ -9,9 +9,9 @@ import { TableHead } from "./TableHead/TableHead"
 import { TableRow } from "./TableRow.js/TableRow"
 
 export const Table = ({
-  selectedRows,
   onRowSelect,
   header,
+  selectedRows,
   config,
   content,
   tableHeight,
@@ -23,7 +23,7 @@ export const Table = ({
     (ac, cv) => (ac = `${ac} ${cv.width}`),
     ""
   )
-  const isSelected = (id) => selectedRows?.includes(id)
+  const isSelected = (id) => !!selectedRows[id]
 
   return content ? (
     <Card

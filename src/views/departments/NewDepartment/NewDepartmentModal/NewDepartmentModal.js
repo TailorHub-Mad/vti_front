@@ -22,7 +22,7 @@ export const NewDepartmentModal = ({
   ...props
 }) => {
   const { showToast } = useContext(ToastContext)
-  const { createDepartment, editDepartment } = useDepartmentApi()
+  const { createDepartment, updateDepartment } = useDepartmentApi()
   const { mutate, cache } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
@@ -104,7 +104,7 @@ export const NewDepartmentModal = ({
       updatedDepartments.push({
         testDepartments: [
           ...formatDepartmentsSuccessfull,
-          ...cacheDepartments[0].testDepartments,
+          ...cacheDepartments[0]?.testDepartments,
         ],
       })
       return updatedDepartments
@@ -117,7 +117,7 @@ export const NewDepartmentModal = ({
     const { id } = departmentToEdit
     const [formatedDepartment] = [...values]
 
-    const response = await editDepartment(id, formatedDepartment)
+    const response = await updateDepartment(id, { name: formatedDepartment.name })
 
     // // TODO -> manage errors
     if (response?.error) {

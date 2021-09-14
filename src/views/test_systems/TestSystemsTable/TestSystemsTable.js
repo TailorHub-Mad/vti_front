@@ -13,17 +13,17 @@ export const TestSystemsTable = ({
   onEdit,
   onDeleteMany,
 }) => {
-  const { selectedRows, setSelectedRows, handleRowSelect, calcColWidth } =
-    useTableActions()
+  const {
+    selectedRows,
+    setSelectedRows,
+    handleSelectAllRows,
+    handleRowSelect,
+    calcColWidth,
+  } = useTableActions()
 
   useMemo(() => {
     setSelectedRows([])
   }, [systems.length])
-
-  const handleSelectAllRows = (e) => {
-    const value = e.target.checked ? [...Array(systems.length).keys()] : []
-    setSelectedRows(value)
-  }
 
   const handleOnDelete = () => {
     if (selectedRows.length > 1) return onDeleteMany(selectedRows)
@@ -33,7 +33,7 @@ export const TestSystemsTable = ({
   const _systems = systems?.map((system) => {
     return {
       actions: "",
-      id: system.id,
+      id: system._id,
       alias: { label: system.alias, link: `/sistemas/${system.id}` },
       client: system.clientAlias,
       code: system.vtiCode,
@@ -110,7 +110,7 @@ export const TestSystemsTable = ({
           countLabel="Sistemas de ensayo"
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
-          selectAllRows={handleSelectAllRows}
+          selectAllRows={() => handleSelectAllRows(_systems)}
         />
       }
       config={test_systems_table}

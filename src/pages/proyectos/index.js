@@ -28,8 +28,13 @@ const fetchType = {
 
 const projects = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { getProjects, getGroupedProjects, deleteProject, createProject,updateProject } =
-    useProjectApi()
+  const {
+    getProjects,
+    getGroupedProjects,
+    deleteProject,
+    createProject,
+    updateProject,
+  } = useProjectApi()
   const { showToast } = useContext(ToastContext)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const isGrouped = fetchState === fetchType.GROUPED
@@ -43,7 +48,6 @@ const projects = () => {
   }
 
   const { data, error, isLoading, mutate } = fetchHandler[fetchState]()
-
   const [showImportModal, setShowImportModal] = useState(false)
   // Create - Update state
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
@@ -147,21 +151,21 @@ const projects = () => {
     setSearchedProjects(results)
   }
 
-  const handleTabChange = (value) => {
+  const handleTabChange = async (value) => {
     if (value === "all") {
       setActiveTab("all")
-      // setProjects(allProjects)
+      // await mutate(projectsData, false)
     } else {
       setActiveTab("active")
-      // const _projects = allProjects.filter((project) => !project.isFinished)
-      // setProjects(_projects)
+      // const _projects = projectsData.filter((project) => !project.isFinished)
+      // await mutate(_projects, false)
     }
   }
 
-  const handleGrouping = (option) => {
-    console.log("OPTION", option)
+  const handleGrouping = () => {
     setFetchState(fetchType.GROUPED)
   }
+
   const handleNewProject = async (values) => {
     try {
       const _values = {
@@ -200,14 +204,6 @@ const projects = () => {
     if (emptyData || searchChain === "") return
     onSearch(searchChain)
   }, [data])
-
-  // useEffect(() => {
-  //   const fetchGrouped = async () => {
-  //     const _projects = await getGroupedProjects()
-  //     setGroupedProjects(Object.entries(_projects).slice(0, 30))
-  //   }
-  //   fetchGrouped()
-  // }, [])
 
   if (error) return <>ERROR...</>
 

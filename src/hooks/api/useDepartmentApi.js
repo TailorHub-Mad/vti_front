@@ -6,7 +6,7 @@ const useDepartmentApi = () => {
   const getDepartments = () => departmentService.getDepartments()
   const getDepartment = (_, id) => departmentService.getDepartment(id)
   const createDepartment = (data) => departmentService.createDepartment(data)
-  const updateDepartment = (data) => departmentService.updateDepartment(data)
+  const updateDepartment = (id,data) => departmentService.updateDepartment(id,data)
   const deleteDepartment = (id) => departmentService.deleteDepartment(id)
 
   return {

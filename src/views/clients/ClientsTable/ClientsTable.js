@@ -8,17 +8,17 @@ import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
 
 export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
-  const { selectedRows, setSelectedRows, handleRowSelect, calcColWidth } =
-    useTableActions()
+  const {
+    selectedRows,
+    setSelectedRows,
+    handleRowSelect,
+    handleSelectAllRows,
+    calcColWidth,
+  } = useTableActions()
 
   useMemo(() => {
     setSelectedRows([])
   }, [clients.length])
-
-  const handleSelectAllRows = (e) => {
-    const value = e.target.checked ? [...Array(clients.length).keys()] : []
-    setSelectedRows(value)
-  }
 
   const handleOnDelete = () => {
     if (selectedRows.length > 1) return onDeleteMany(selectedRows)
@@ -30,7 +30,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
     clients.map((client) => {
       return {
         actions: "",
-        id: client.id,
+        id: client._id,
         alias: client.alias,
         name: { label: client.name, link: `/clientes/${client.id}` },
         testSystems: client.testSystems?.map((testSystem) => testSystem.alias),
@@ -96,7 +96,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
           countLabel="Clientes"
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
-          selectAllRows={handleSelectAllRows}
+          selectAllRows={() => handleSelectAllRows(_clients)}
         />
       }
       config={projects_table}

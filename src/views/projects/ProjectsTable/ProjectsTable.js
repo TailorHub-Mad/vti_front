@@ -18,22 +18,17 @@ export const ProjectsTable = ({
   onEdit,
   isGrouped,
 }) => {
-  const { selectedRows, setSelectedRows, handleRowSelect, calcColWidth } =
-    useTableActions()
+  const {
+    selectedRows,
+    setSelectedRows,
+    handleSelectAllRows,
+    handleRowSelect,
+    calcColWidth,
+  } = useTableActions()
 
   useMemo(() => {
     setSelectedRows([])
   }, [items?.length])
-
-  const handleSelectAllRows = () => {
-    //TODO Mejorar comportamiento del check global
-    const value = items.map((it) => it._id || it.id)
-    if (value.length === selectedRows.length) {
-      setSelectedRows([])
-      return
-    }
-    setSelectedRows(value)
-  }
 
   const handleOnDelete = () => {
     if (selectedRows.length > 1) return onDeleteMany(selectedRows)
@@ -44,7 +39,7 @@ export const ProjectsTable = ({
     actions: "",
     id: e._id,
     alias: { label: e.alias, link: `${PATHS.projects}/${e._id}` },
-    sector: e.sector?.title || "Automoción",
+    sector: e.sector ? e.sector[0]?.title : "",
     focusPoint:
       e.focusPoint?.length > 0
         ? e.focusPoint.map((fp) => fp.alias).join(", ")
@@ -146,7 +141,7 @@ export const ProjectsTable = ({
           projectsCount={elements?.length}
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
-          selectAllRows={handleSelectAllRows}
+          selectAllRows={() => handleSelectAllRows(items)}
         />
       }
       config={projects_table}
