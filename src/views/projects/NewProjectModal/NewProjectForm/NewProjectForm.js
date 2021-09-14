@@ -7,7 +7,7 @@ import useSectorApi from "../../../../hooks/api/useSectorApi"
 import useUserApi from "../../../../hooks/api/useUserApi"
 import { MOCK_SELECT_OPTIONS, MOCK_YEAR_OPTIONS } from "../../../../mock/mock"
 
-export const NewProjectForm = ({ openAuxModal, value, onChange, isEdit }) => {
+export const NewProjectForm = ({ openAuxModal, value, onChange, projectToEdit }) => {
   const { alias, client, sector, year, focusPoint } = value
   const { getClients, getClient } = useClientApi()
   const { getSectors } = useSectorApi()
@@ -34,11 +34,18 @@ export const NewProjectForm = ({ openAuxModal, value, onChange, isEdit }) => {
       const _usersArr = _users.map((user) => ({ label: user.alias, value: user.id }))
       setUsersOpt(_usersArr)
     }
-
     fetchClients()
     fetchSectors()
     fetchUsers()
   }, [])
+
+  useEffect(() => {
+   if(clientsOpt?.length > 0){
+    const [cl] = clientsOpt.filter(_client => _client.label === projectToEdit.clientAlias)
+    console.log(cl)
+    handleFormChange("client", cl.value)
+   }
+  }, [clientsOpt])
 
   useEffect(() => {
     const fetchTestSystems = async () => {
@@ -93,7 +100,7 @@ export const NewProjectForm = ({ openAuxModal, value, onChange, isEdit }) => {
         placeholder: "Cliente",
         options: clientsOpt,
         label: "Cliente",
-        isDisabled: !isEdit && !alias,
+        isDisabled: !projectToEdit && !alias,
       },
     },
     sector: {
@@ -102,7 +109,7 @@ export const NewProjectForm = ({ openAuxModal, value, onChange, isEdit }) => {
         placeholder: "Sector",
         options: sectorsOpt,
         label: "Sector",
-        isDisabled: !isEdit && (!alias || !client),
+        isDisabled: !projectToEdit && (!alias || !client),
       },
     },
     year: {
@@ -111,7 +118,7 @@ export const NewProjectForm = ({ openAuxModal, value, onChange, isEdit }) => {
         placeholder: "2021",
         options: MOCK_YEAR_OPTIONS,
         label: "Año",
-        isDisabled: !isEdit && (!alias || !client || !sector),
+        isDisabled: !projectToEdit && (!alias || !client || !sector),
       },
     },
     focusPoint: {
@@ -120,7 +127,7 @@ export const NewProjectForm = ({ openAuxModal, value, onChange, isEdit }) => {
         placeholder: "Punto focal inicio",
         options: usersOpt || MOCK_SELECT_OPTIONS,
         label: "Punto focal inicio",
-        isDisabled: !isEdit && (!alias || !client || !sector || !year),
+        isDisabled: !projectToEdit && (!alias || !client || !sector || !year),
       },
     },
 
@@ -133,7 +140,7 @@ export const NewProjectForm = ({ openAuxModal, value, onChange, isEdit }) => {
         addItemLabel: "Añadir ",
         removeItemLabel: "Eliminar ",
         isDisabled:
-          !isEdit && (!alias || !client || !sector || !year || !focusPoint),
+          !projectToEdit && (!alias || !client || !sector || !year || !focusPoint),
       },
     },
 

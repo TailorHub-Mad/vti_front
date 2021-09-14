@@ -30,7 +30,7 @@ export const NewProjectModal = ({
     if (projectToEdit) {
       const _project = {
         alias: projectToEdit?.alias,
-        client: projectToEdit?.clientAlias,
+        client: "",
         sector: projectToEdit?.sector[0]?._id,
         focusPoint: projectToEdit?.focusPoint.map((fp) => fp._id),
         testSystems: projectToEdit?.testSystems.map((ts) => ts._id),
@@ -64,7 +64,7 @@ export const NewProjectModal = ({
               pb="24px"
             />
             <NewProjectForm
-              isEdit={projectToEdit}
+              projectToEdit={projectToEdit}
               value={formValues}
               openAuxModal={() => setShowSecondaryContent(true)}
               onChange={(val) => setFormValues(val)}
