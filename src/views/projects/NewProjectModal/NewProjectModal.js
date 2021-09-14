@@ -32,7 +32,7 @@ export const NewProjectModal = ({
         alias: projectToEdit?.alias,
         client: "",
         sector: projectToEdit?.sector[0]?._id,
-        focusPoint: projectToEdit?.focusPoint.map((fp) => fp._id),
+        focusPoint: projectToEdit?.focusPoint.map((fp) => fp._id)[0],
         testSystems: projectToEdit?.testSystems.map((ts) => ts._id),
         year: +projectToEdit?.date?.year,
       }

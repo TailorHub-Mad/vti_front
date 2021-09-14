@@ -15,7 +15,7 @@ export const InputSelect = ({
   isDisabled,
   ...props
 }) => {
-  const [inputValue, setInputValue] = useState(value)
+  const [inputValue, setInputValue] = useState(null)
   const [showSelectMenu, setShowSelectMenu] = useState(false)
   const [availableOptions, setAvailableOptions] = useState(options)
   const ref = useRef(null)
@@ -27,10 +27,17 @@ export const InputSelect = ({
 
   const handleSelect = (_value) => {
     const [selected] = availableOptions?.filter((option) => option.value === _value)
-    onChange && onChange(selected.value)
-    setInputValue(selected.label)
+    onChange && onChange(selected?.value)
+    setInputValue(selected?.label)
     setShowSelectMenu(false)
   }
+
+  useEffect(() => {
+    if (value && !inputValue && availableOptions) {
+      const [selected] = availableOptions?.filter((option) => option.value === value)
+      setInputValue(selected?.label)
+    }
+  }, [value, availableOptions])
 
   const filterOptions = (_value) => {
     const nextOptions = [...options]?.filter((option) =>

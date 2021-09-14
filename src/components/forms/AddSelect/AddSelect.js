@@ -26,6 +26,11 @@ export const AddSelect = ({
     )
 
   // const error = errors && errors[name]?.type
+  useEffect(() => {
+    console.log("VALUE", label, value)
+  }, [value])
+
+  console.log("SVALUES", label, values)
 
   const handleChange = (option, idx) => {
     const nextOptions = [...values]

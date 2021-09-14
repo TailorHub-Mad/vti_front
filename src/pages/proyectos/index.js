@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react"
 import useProjectApi from "../../hooks/api/useProjectApi"
 import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
 import { ProjectsToolBar } from "../../views/projects/ProjectsToolBar/ProjectsToolBar"
-import { pullAt } from "lodash"
 import faker from "faker"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import useFetchSWR from "../../hooks/useFetchSWR"
@@ -29,7 +28,7 @@ const fetchType = {
 
 const projects = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { getProjects, getGroupedProjects, deleteProject, createProject } =
+  const { getProjects, getGroupedProjects, deleteProject, createProject,updateProject } =
     useProjectApi()
   const { showToast } = useContext(ToastContext)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
@@ -163,7 +162,6 @@ const projects = () => {
     console.log("OPTION", option)
     setFetchState(fetchType.GROUPED)
   }
-  console.log(projectsData)
   const handleNewProject = async (values) => {
     try {
       const _values = {
@@ -175,6 +173,23 @@ const projects = () => {
       delete _values.tags
       await createProject(_values)
       showToast("Proyecto creado satisfactoriamente")
+      setIsProjectModalOpen(false)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const handleEditProject = async (values) => {
+    try {
+      const _values = {
+        ...values,
+        date: { year: values.year.toString(), month: "02", day: "25" },
+      }
+      delete _values.year
+      delete _values.id
+      delete _values.tags
+      await updateProject(_values, projectToEdit._id)
+      showToast("Proyecto editado satisfactoriamente")
       setIsProjectModalOpen(false)
     } catch (e) {
       console.log(e)
@@ -218,7 +233,7 @@ const projects = () => {
         projectToEdit={projectToEdit}
         isOpen={isProjectModalOpen}
         onClose={handleOnCloseModal}
-        onSubmit={handleNewProject}
+        onSubmit={projectToEdit ? handleEditProject : handleNewProject}
       />
 
       <ImportFilesModal

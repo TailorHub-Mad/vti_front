@@ -73,7 +73,6 @@ export const ProjectsTable = ({
         })
     : null
 
-  console.log(items)
   const projects_table = {
     components: {
       text: <Text />,
