@@ -5,10 +5,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint src/",
-    "prettier": "prettier --write src",
+    "lint": "eslint src/ --fix",
+    "format": "prettier --write src/",
     "prepare:husky": "husky install",
-    "pre-commit": "yarn run prettier && yarn run lint"
+    "pre-commit": "yarn run format && yarn run lint"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.0",

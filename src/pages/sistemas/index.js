@@ -16,6 +16,7 @@ import { DeleteType } from "../../utils/constants/global_config"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
+import { AddTestSystemIcon } from "../../components/icons/AddTestSystemIcon"
 
 const sistemas = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -163,6 +164,7 @@ const sistemas = () => {
             onExport={handleExport}
             addLabel="Añadir sistema"
             searchPlaceholder="Busqueda por ID, Código"
+            icon={<AddTestSystemIcon />}
           />
         )}
       </PageHeader>

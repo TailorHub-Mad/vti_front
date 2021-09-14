@@ -2,14 +2,22 @@ import React from "react"
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
 
 export const NewClientForm = ({ value, onChange }) => {
+  const handleFormChange = (input, _value) => {
+    onChange({
+      ...value,
+      [input]: _value,
+    })
+  }
+
   const formInputs = {
-    id: {
-      type: "text",
-      config: {
-        placeholder: "ID",
-        label: "ID",
-      },
-    },
+    // TODO -> autogenerate ID
+    // id: {
+    //   type: "text",
+    //   config: {
+    //     placeholder: "ID",
+    //     label: "ID",
+    //   },
+    // },
     alias: {
       type: "text",
       config: {
@@ -30,13 +38,6 @@ export const NewClientForm = ({ value, onChange }) => {
     text: <SimpleInput />,
   }
 
-  const handleFormChange = (input, _value) => {
-    onChange({
-      ...value,
-      [input]: _value,
-    })
-  }
-
   return (
     <>
       {Object.entries(formInputs).map(([name, { type, config }], index) => {
@@ -44,9 +45,8 @@ export const NewClientForm = ({ value, onChange }) => {
           value: value[name],
           onChange: (val) => handleFormChange(name, val),
           marginBottom: name === "name" ? "0" : "24px",
+          isDisabled: index !== 0 && !value[Object.keys(value)[index - 1]],
           key: `${name}-${index}`,
-          // isDisabled: idx !== 0 && !value[Object.keys(value)[idx - 1]],
-          //TODO Check para que sea secuencial el form (disable next step hasta que esté ok el previo)
           ...config,
         })
       })}

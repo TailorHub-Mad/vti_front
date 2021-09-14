@@ -17,6 +17,7 @@ import { DeleteType } from "../../utils/constants/global_config"
 import { pullAt } from "lodash"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { getFieldObjectById } from "../../utils/functions/common"
+import { AddSectorIcon } from "../../components/icons/AddSectorIcon"
 
 const sectores = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -162,6 +163,7 @@ const sectores = () => {
             onExport={handleExport}
             addLabel="Añadir sector"
             searchPlaceholder="Busqueda por ID, Alias"
+            icon={<AddSectorIcon />}
           />
         )}
       </PageHeader>

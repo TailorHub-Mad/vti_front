@@ -8,9 +8,11 @@ import {
   Box,
 } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
+import { useSWRConfig } from "swr"
 import { CloseIcon } from "../../../../components/icons/CloseIcon"
 import useDepartmentApi from "../../../../hooks/api/useDepartmentApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
+import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { NewDepartmentForm } from "../NewDepartmentForm/NewDepartmentForm"
 
 export const NewDepartmentModal = ({
@@ -19,44 +21,123 @@ export const NewDepartmentModal = ({
   departmentToEdit,
   ...props
 }) => {
-  const [values, setValues] = useState([{}])
-  const isEdit = departmentToEdit
   const { showToast } = useContext(ToastContext)
-  const { createDepartment } = useDepartmentApi()
+  const { createDepartment, editDepartment } = useDepartmentApi()
+  const { mutate, cache } = useSWRConfig()
+
+  const [values, setValues] = useState([{}])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const isEdit = Boolean(departmentToEdit)
+
   const handleChange = (val, idx) => {
     const _values = [...values]
     _values[idx] = val
     setValues(_values)
   }
-  const handleDelete = (idx) => {
+
+  const handleDelete = (index) => {
     const _values = [...values]
-    _values.splice(idx, 1)
+    _values.splice(index, 1)
     setValues(_values)
   }
 
-  const checkInputs = () => {
-    return values.some((val) => !val.name || !val.id || !val.alias)
+  const checkInputsAreEmpty = () => {
+    return values.some(
+      (value) =>
+        // TODO -> autogenerate ID
+        // !value.id ||
+        !value.name
+    )
   }
 
   const handleSubmit = async () => {
-    const departmentsQueue = values.map(async (val) => {
-      return await createDepartment(val)
-    })
+    setIsSubmitting(true)
 
-    const resultsArr = await Promise.all(departmentsQueue)
-    //Meter toast de éxito
-    showToast("Departamento añadido correctamente!")
+    const updatedDepartmentsList = isEdit
+      ? await handleEditDepartment()
+      : await handleCreateDepartment()
+
+    updatedDepartmentsList
+      ? await mutate(SWR_CACHE_KEYS.departments, updatedDepartmentsList, false)
+      : await mutate(SWR_CACHE_KEYS.departments)
+
+    showToast(isEdit ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
+    setIsSubmitting(false)
     onClose()
-    if (resultsArr.some((result) => result.error)) {
+  }
+
+  const handleCreateDepartment = async () => {
+    const departmentsToCreate = [...values]
+    const departmentsQueue = departmentsToCreate.map((department) =>
+      createDepartment(department)
+    )
+    const response = await Promise.all(departmentsQueue)
+
+    const [departmentsSuccessfull, departmentsError] = response.reduce(
+      ([succ, error], e, index) => {
+        e?.error
+          ? error.push(departmentsToCreate[index])
+          : succ.push(departmentsToCreate[index])
+        return [succ, error]
+      },
+      [[], []]
+    )
+
+    // // TODO -> manage errors
+    if (departmentsError.length > 0) {
       console.log("ERROR")
-      return
     }
+
+    if (cache.has(SWR_CACHE_KEYS.departments)) {
+      const cacheDepartments = cache.get(SWR_CACHE_KEYS.departments)
+      const updatedDepartments = []
+      const formatDepartmentsSuccessfull = departmentsSuccessfull.map(
+        (department) => {
+          return {
+            ...department,
+            projects: [],
+            notes: [],
+          }
+        }
+      )
+      updatedDepartments.push({
+        testDepartments: [
+          ...formatDepartmentsSuccessfull,
+          ...cacheDepartments[0].testDepartments,
+        ],
+      })
+      return updatedDepartments
+    }
+
+    return null
+  }
+
+  const handleEditDepartment = async () => {
+    const { id } = departmentToEdit
+    const [formatedDepartment] = [...values]
+
+    const response = await editDepartment(id, formatedDepartment)
+
+    // // TODO -> manage errors
+    if (response?.error) {
+      console.log("ERROR")
+    }
+
+    // TODO -> optimize cache request (update cache with updated department)
+    return null
   }
 
   useEffect(() => {
-    const { name, alias, id } = departmentToEdit || {}
-    setValues([{ name, alias, id: id }])
+    if (!departmentToEdit) return
+    const { id, name } = departmentToEdit || {}
+    setValues([{ name, id }])
   }, [departmentToEdit])
+
+  useEffect(() => {
+    if (isOpen) return
+    setValues([{}])
+  }, [isOpen])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
@@ -100,8 +181,10 @@ export const NewDepartmentModal = ({
           w="194px"
           margin="0 auto"
           mt="24px"
-          disabled={checkInputs()}
+          disabled={checkInputsAreEmpty()}
           onClick={handleSubmit}
+          isLoading={isSubmitting}
+          pointerEvents={isSubmitting ? "none" : "all"}
         >
           Guardar
         </Button>
@@ -109,7 +192,7 @@ export const NewDepartmentModal = ({
           <Button
             variant="text_only"
             onClick={() => setValues([...values, {}])}
-            disabled={checkInputs()}
+            disabled={checkInputsAreEmpty()}
           >
             Añadir nuevo departamento
           </Button>

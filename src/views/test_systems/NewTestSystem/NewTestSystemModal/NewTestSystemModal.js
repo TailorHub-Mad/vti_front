@@ -57,7 +57,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
       ? await mutate(SWR_CACHE_KEYS.systems, updatedSystemsList, false)
       : await mutate(SWR_CACHE_KEYS.systems)
 
-    showToast(isEdit ? "Editado correctamente" : "¡Has añadido nuevo/s ensayo/s!")
+    showToast(isEdit ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
     setIsSubmitting(false)
     onClose()
   }
@@ -142,7 +142,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
       alias,
       date: { year },
     } = systemToEdit || {}
-    setValues([{ vtiCode, clientAlias, alias, year, id: id }])
+    setValues([{ vtiCode, clientAlias, alias, year, id }])
   }, [systemToEdit])
 
   useEffect(() => {
