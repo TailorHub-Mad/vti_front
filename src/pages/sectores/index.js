@@ -78,7 +78,7 @@ const sectores = () => {
     await deleteSector(id)
     const updatedSectors = []
     updatedSectors.push({
-      testSectors: sectors.filter((sector) => sector.id !== id),
+      testSectors: sectors.filter((sector) => sector._id !== id),
     })
     await mutate(updatedSectors, false)
     showToast("Sector borrado correctamente")
@@ -86,7 +86,7 @@ const sectores = () => {
 
   const deleteMany = async (positions, sectors) => {
     const sectorsQueue = positions.map((position) =>
-      deleteSector(sectorsData[position].id)
+      deleteSector(sectorsData[position]._id)
     )
     await Promise.all(sectorsQueue)
     pullAt(sectors, positions)
@@ -97,7 +97,7 @@ const sectores = () => {
   }
 
   const onEdit = (id) => {
-    const sector = [...sectorsData].find((sector) => sector.id === id)
+    const sector = [...sectorsData].find((sector) => sector._id === id)
     setSectorToUpdate(sector)
     setIsSectorModalOpen(true)
   }
@@ -109,7 +109,7 @@ const sectores = () => {
 
     const results = sectorsData.filter(
       (sector) =>
-        sector.id.toLowerCase().includes(search.toLowerCase()) ||
+        sector._id.toLowerCase().includes(search.toLowerCase()) ||
         sector.vtiCode.toLowerCase().includes(search.toLowerCase())
     )
     setSearchedSectors(results)

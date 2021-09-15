@@ -74,7 +74,7 @@ const sistemas = () => {
   }
 
   const getAliasByIdSystem = (id) => {
-    const { alias } = systemsData.find((system) => system.id === id)
+    const { alias } = systemsData.find((system) => system._id === id)
     return alias
   }
 
@@ -82,7 +82,7 @@ const sistemas = () => {
     await deleteSystem(id)
     const updatedSystems = []
     updatedSystems.push({
-      testSystems: systems.filter((system) => system.id !== id),
+      testSystems: systems.filter((system) => system._id !== id),
     })
     await mutate(updatedSystems, false)
     showToast("Sistema de ensayo borrado correctamente")
@@ -90,7 +90,7 @@ const sistemas = () => {
 
   const deleteMany = async (positions, systems) => {
     const systemsQueue = positions.map((position) =>
-      deleteSystem(systemsData[position].id)
+      deleteSystem(systemsData[position]._id)
     )
     await Promise.all(systemsQueue)
     pullAt(systems, positions)
@@ -101,7 +101,7 @@ const sistemas = () => {
   }
 
   const onEdit = (id) => {
-    const system = [...systemsData].find((system) => system.id === id)
+    const system = [...systemsData].find((system) => system._id === id)
     setSystemToUpdate(system)
     setIsSystemModalOpen(true)
   }
@@ -113,7 +113,7 @@ const sistemas = () => {
 
     const results = systemsData.filter(
       (system) =>
-        system.id.toLowerCase().includes(search.toLowerCase()) ||
+        system._id.toLowerCase().includes(search.toLowerCase()) ||
         system.vtiCode.toLowerCase().includes(search.toLowerCase())
     )
     setSearchedSystems(results)

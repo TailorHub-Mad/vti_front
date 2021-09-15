@@ -74,7 +74,7 @@ const departamentos = () => {
   }
 
   const getAliasByIdDepartment = (id) => {
-    const { alias } = departmentsData.find((department) => department.id === id)
+    const { alias } = departmentsData.find((department) => department._id === id)
     return alias
   }
 
@@ -82,7 +82,7 @@ const departamentos = () => {
     await deleteDepartment(id)
     const updatedDepartments = []
     updatedDepartments.push({
-      testDepartments: departments.filter((department) => department.id !== id),
+      testDepartments: departments.filter((department) => department._id !== id),
     })
     await mutate(updatedDepartments, false)
     showToast("Departmento borrado correctamente")
@@ -90,7 +90,7 @@ const departamentos = () => {
 
   const deleteMany = async (positions, departments) => {
     const departmentsQueue = positions.map((position) =>
-      deleteDepartment(departmentsData[position].id)
+      deleteDepartment(departmentsData[position]._id)
     )
     await Promise.all(departmentsQueue)
     pullAt(departments, positions)
@@ -102,7 +102,7 @@ const departamentos = () => {
 
   const onEdit = (id) => {
     const department = [...departmentsData].find(
-      (department) => department.id === id
+      (department) => department._id === id
     )
     setDepartmentToUpdate(department)
     setIsDepartmentModalOpen(true)
@@ -115,7 +115,7 @@ const departamentos = () => {
 
     const results = departmentsData.filter(
       (department) =>
-        department.id.toLowerCase().includes(search.toLowerCase()) ||
+        department._id.toLowerCase().includes(search.toLowerCase()) ||
         department.vtiCode.toLowerCase().includes(search.toLowerCase())
     )
     setSearchedDepartments(results)
