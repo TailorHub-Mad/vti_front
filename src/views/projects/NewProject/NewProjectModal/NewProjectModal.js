@@ -1,18 +1,10 @@
-import { CloseIcon } from "@chakra-ui/icons"
-import {
-  ScaleFade,
-  Modal,
-  ModalOverlay,
-  Box,
-  Button,
-  ModalHeader,
-  Text,
-} from "@chakra-ui/react"
+import { ScaleFade, Modal, ModalOverlay, Box, Button } from "@chakra-ui/react"
 
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
 import { AuxFilter } from "../../../../components/filters/FilterModal/AuxFilter/AuxFilter"
 import { CustomModalContent } from "../../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
+import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import useProjectApi from "../../../../hooks/api/useProjectApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
@@ -143,23 +135,11 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
             padding="32px"
             {...props}
           >
-            <ModalHeader
-              mb="32px"
-              display="flex"
-              p="0"
-              justifyContent="space-between"
-              w="100%"
-            >
-              <Text variant="d_l_medium">
-                {isUpdate ? "Editar proyecto" : "Añadir nuevo proyecto"}
-              </Text>
-              <CloseIcon
-                width="24px"
-                height="24px"
-                cursor="pointer"
-                onClick={onClose}
-              />
-            </ModalHeader>
+            <CustomModalHeader
+              title={isUpdate ? "Editar proyecto" : "Añadir nuevo proyecto"}
+              onClose={onClose}
+              pb="24px"
+            />
             <NewProjectForm
               projectToUpdate={projectToUpdate}
               value={values}

@@ -1,15 +1,8 @@
-import {
-  Modal,
-  ModalOverlay,
-  Text,
-  ModalContent,
-  ModalHeader,
-  Button,
-  Box,
-} from "@chakra-ui/react"
+import { Modal, ModalOverlay, ModalContent, Button } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
-import { CloseIcon } from "../../../../components/icons/CloseIcon"
+import { MultipleFormContent } from "../../../../components/forms/MultipleFormContent/MultipleFormContent"
+import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import useDepartmentApi from "../../../../hooks/api/useDepartmentApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
@@ -143,40 +136,19 @@ export const NewDepartmentModal = ({
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
-        <ModalHeader
-          mb="32px"
-          display="flex"
-          p="0"
-          justifyContent="space-between"
-          w="100%"
+        <CustomModalHeader
+          title={isUpdate ? "Editar departamento" : "Añadir nuevo departamento"}
+          onClose={onClose}
+          pb="24px"
+        />
+        <MultipleFormContent
+          values={values}
+          onChange={handleChange}
+          onDelete={handleDelete}
+          addTitle="Añadir nuevo departamento"
         >
-          <Text variant="d_l_medium">
-            {isUpdate ? "Editar departamento" : "Añadir nuevo departamento"}
-          </Text>
-          <CloseIcon width="24px" height="24px" cursor="pointer" onClick={onClose} />
-        </ModalHeader>
-        {values.map((department, idx) => (
-          <Box key={`department-${idx}`}>
-            {idx !== 0 ? (
-              <Text margin="32px 0" variant="d_l_medium">
-                Añadir nuevo departamento
-              </Text>
-            ) : null}
-            <NewDepartmentForm
-              value={department}
-              onChange={(val) => handleChange(val, idx)}
-            />
-            {idx !== 0 ? (
-              <Button
-                variant="text_only"
-                color="error"
-                onClick={() => handleDelete(idx)}
-              >
-                Eliminar
-              </Button>
-            ) : null}
-          </Box>
-        ))}
+          <NewDepartmentForm />
+        </MultipleFormContent>
         <Button
           w="194px"
           margin="0 auto"

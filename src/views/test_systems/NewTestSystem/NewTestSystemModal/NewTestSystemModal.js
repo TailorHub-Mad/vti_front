@@ -1,19 +1,12 @@
-import {
-  Modal,
-  ModalOverlay,
-  Text,
-  ModalContent,
-  ModalHeader,
-  Button,
-  Box,
-} from "@chakra-ui/react"
+import { Modal, ModalOverlay, ModalContent, Button } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
-import { CloseIcon } from "../../../../components/icons/CloseIcon"
+import { MultipleFormContent } from "../../../../components/forms/MultipleFormContent/MultipleFormContent"
+import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import useSystemApi from "../../../../hooks/api/useSystemApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
-import { NewTestSystemForm } from "../NewTestSystemForm/NewTestSystemForm"
+import { NewNoteForm } from "../../../notes/NewNote/NewNoteForm/NewNoteForm"
 
 export const NewTestSystemModal = ({
   isOpen,
@@ -159,42 +152,19 @@ export const NewTestSystemModal = ({
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
-        <ModalHeader
-          mb="32px"
-          display="flex"
-          p="0"
-          justifyContent="space-between"
-          w="100%"
+        <CustomModalHeader
+          title={isUpdate ? "Editar sistema" : "Añadir nuevo sistema"}
+          onClose={onClose}
+          pb="24px"
+        />
+        <MultipleFormContent
+          values={values}
+          onChange={handleChange}
+          onDelete={handleDelete}
+          addTitle="Añadir nuevo sistema"
         >
-          <Text variant="d_l_medium">
-            {isUpdate ? "Editar sistema" : "Añadir nuevo sistema"}
-          </Text>
-          <CloseIcon width="24px" height="24px" cursor="pointer" onClick={onClose} />
-        </ModalHeader>
-        {values.map((system, index) => (
-          <Box key={`system-${index}`}>
-            {index !== 0 && (
-              <Text margin="32px 0" variant="d_l_medium">
-                Añadir nuevo sistema
-              </Text>
-            )}
-
-            <NewTestSystemForm
-              value={system}
-              onChange={(value) => handleChange(value, index)}
-            />
-
-            {index !== 0 && (
-              <Button
-                variant="text_only"
-                color="error"
-                onClick={() => handleDelete(index)}
-              >
-                Eliminar
-              </Button>
-            )}
-          </Box>
-        ))}
+          <NewNoteForm />
+        </MultipleFormContent>
         <Button
           w="194px"
           margin="0 auto"

@@ -1,15 +1,8 @@
-import {
-  Modal,
-  ModalOverlay,
-  Text,
-  ModalContent,
-  ModalHeader,
-  Button,
-  Box,
-} from "@chakra-ui/react"
+import { Modal, ModalOverlay, ModalContent, Button } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
-import { CloseIcon } from "../../../../components/icons/CloseIcon"
+import { MultipleFormContent } from "../../../../components/forms/MultipleFormContent/MultipleFormContent"
+import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import useNoteApi from "../../../../hooks/api/useNoteApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
@@ -129,37 +122,19 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
-        <ModalHeader
-          mb="32px"
-          display="flex"
-          p="0"
-          justifyContent="space-between"
-          w="100%"
+        <CustomModalHeader
+          title={isUpdate ? "Editar apunte" : "Añadir nuevo apunte"}
+          onClose={onClose}
+          pb="24px"
+        />
+        <MultipleFormContent
+          values={values}
+          onChange={handleChange}
+          onDelete={handleDelete}
+          addTitle="Añadir nuevo apunte"
         >
-          <Text variant="d_l_medium">
-            {isUpdate ? "Editar apunte" : "Añadir nuevo apunte"}
-          </Text>
-          <CloseIcon width="24px" height="24px" cursor="pointer" onClick={onClose} />
-        </ModalHeader>
-        {values.map((note, idx) => (
-          <Box key={`note-${idx}`}>
-            {idx !== 0 ? (
-              <Text margin="32px 0" variant="d_l_medium">
-                Añadir nuevo apunte
-              </Text>
-            ) : null}
-            <NewNoteForm value={note} onChange={(val) => handleChange(val, idx)} />
-            {idx !== 0 ? (
-              <Button
-                variant="text_only"
-                color="error"
-                onClick={() => handleDelete(idx)}
-              >
-                Eliminar
-              </Button>
-            ) : null}
-          </Box>
-        ))}
+          <NewNoteForm />
+        </MultipleFormContent>
         <Button
           w="194px"
           margin="0 auto"
