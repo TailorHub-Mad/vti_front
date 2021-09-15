@@ -10,16 +10,10 @@ export const NewTestSystemForm = ({ value, onChange }) => {
   // TODO -> manage errors & loading state
   const { data } = useFetchSWR(SWR_CACHE_KEYS.clients, getClients)
 
-  const handleOptinsList = () => {
-    if (!data) return []
+  const formatClients = (_clients) =>
+    _clients.map((cl) => ({ label: cl.alias, value: cl._id }))
 
-    return data.map((client) => {
-      return {
-        value: client.id,
-        label: client.alias,
-      }
-    })
-  }
+  const clientsOptions = data ? formatClients(data) : []
 
   const handleFormChange = (input, _value) => {
     onChange({
@@ -28,7 +22,6 @@ export const NewTestSystemForm = ({ value, onChange }) => {
     })
   }
 
-  const currentYear = new Date().getFullYear()
   const formInputs = {
     // TODO -> autogenerate ID
     // id: {
@@ -46,11 +39,11 @@ export const NewTestSystemForm = ({ value, onChange }) => {
       },
     },
     clientAlias: {
-      select: true,
-      type: "text",
+      type: "select",
       config: {
         placeholder: "AliasCL",
         label: "Cliente*",
+        options: clientsOptions,
       },
     },
     alias: {
@@ -63,7 +56,7 @@ export const NewTestSystemForm = ({ value, onChange }) => {
     year: {
       type: "text",
       config: {
-        placeholder: currentYear,
+        placeholder: new Date().getFullYear(),
         label: "Año*",
       },
     },
@@ -71,17 +64,13 @@ export const NewTestSystemForm = ({ value, onChange }) => {
 
   const inputRefObj = {
     text: <SimpleInput />,
-  }
-
-  const seelctInputRefObj = {
-    text: <InputSelect options={handleOptinsList()} />,
+    select: <InputSelect />,
   }
 
   return (
     <>
-      {Object.entries(formInputs).map(([name, { type, config, select }], index) => {
-        const objToClone = select ? seelctInputRefObj : inputRefObj
-        return React.cloneElement(objToClone[type], {
+      {Object.entries(formInputs).map(([name, { type, config }], index) => {
+        return React.cloneElement(inputRefObj[type], {
           value: value[name],
           onChange: (val) => handleFormChange(name, val),
           marginBottom: name === "name" ? "0" : "24px",

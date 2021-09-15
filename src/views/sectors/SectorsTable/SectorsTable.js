@@ -82,7 +82,7 @@ export const SectorsTable = ({ items: sectors, onDelete, onEdit, onDeleteMany })
           countLabel="Sectores"
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
-          selectAllRows={handleSelectAllRows}
+          selectAllRows={() => handleSelectAllRows(_sectors)}
         />
       }
       config={sectors_table}

@@ -54,7 +54,7 @@ export const ProjectsTable = ({
     },
   })
 
-  const elements = items
+  const _projects = items
     ? !isGrouped
       ? items?.map(transformProjectData)
       : items.map((it) => {
@@ -134,14 +134,14 @@ export const ProjectsTable = ({
         <ProjectsTableHeader
           activeItem={activeTab}
           onChange={onTabChange}
-          projectsCount={elements?.length}
+          projectsCount={_projects?.length}
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
-          selectAllRows={handleSelectAllRows}
+          selectAllRows={() => handleSelectAllRows(_projects)}
         />
       }
       config={projects_table}
-      content={elements}
+      content={_projects}
       selectedRows={selectedRows}
       onRowSelect={(id) => handleRowSelect(id)}
       tableHeight="calc(100vh - 195px)"

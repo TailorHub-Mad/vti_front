@@ -12,4 +12,6 @@ export const SWR_CACHE_KEYS = {
   department: "department/",
   notes: "notes/",
   note: "note/",
+  users: "users/",
+  user: "user/",
 }

@@ -5,17 +5,18 @@ import {
   ModalOverlay,
   Box,
   Button,
-  ModalContent,
   ModalHeader,
   Text,
 } from "@chakra-ui/react"
+
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
-import { AuxFilter } from "../../../components/filters/FilterModal/AuxFilter/AuxFilter"
-import useProjectApi from "../../../hooks/api/useProjectApi"
-import { ToastContext } from "../../../provider/ToastProvider"
-import { SWR_CACHE_KEYS } from "../../../utils/constants/swr"
-import { NewProjectForm } from "./NewProjectForm/NewProjectForm"
+import { AuxFilter } from "../../../../components/filters/FilterModal/AuxFilter/AuxFilter"
+import { CustomModalContent } from "../../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
+import useProjectApi from "../../../../hooks/api/useProjectApi"
+import { ToastContext } from "../../../../provider/ToastProvider"
+import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
+import { NewProjectForm } from "../NewProjectForm/NewProjectForm"
 
 export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) => {
   const { showToast } = useContext(ToastContext)
@@ -31,6 +32,8 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
   const handleChange = (val) => setValues(val)
 
   const checkInputsAreEmpty = () => Object.values(values).some((field) => !field)
+
+  const handleOpenSecundaryContent = () => setShowSecondaryContent(true)
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
@@ -106,12 +109,13 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
 
   useEffect(() => {
     if (!projectToUpdate) return
+    console.log("projectToUpdate", projectToUpdate)
     const _project = {
       alias: projectToUpdate?.alias,
-      client: "",
-      project: projectToUpdate?.sector[0]?._id,
-      focusPoint: projectToUpdate?.focusPoint.map((fp) => fp._id)[0],
-      testSystems: projectToUpdate?.testSystems.map((ts) => ts._id),
+      sector: projectToUpdate.sector[0]?.title,
+      client: projectToUpdate?.clientAlias,
+      focusPoint: projectToUpdate?.focusPoint.map((fp) => fp.alias)[0],
+      testSystems: projectToUpdate?.testSystems.map((ts) => ts.alias),
       year: +projectToUpdate?.date?.year,
     }
     setValues(_project)
@@ -125,7 +129,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
       <ModalOverlay />
-      <ModalContent p="48px 32px" borderRadius="2px">
+      <CustomModalContent>
         <ScaleFade in={showSecondaryContent || showSecondaryContent !== "project"}>
           <Box
             width="460px"
@@ -147,7 +151,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
               w="100%"
             >
               <Text variant="d_l_medium">
-                {isUpdate ? "Editar departamento" : "Añadir nuevo departamento"}
+                {isUpdate ? "Editar proyecto" : "Añadir nuevo proyecto"}
               </Text>
               <CloseIcon
                 width="24px"
@@ -159,7 +163,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
             <NewProjectForm
               projectToUpdate={projectToUpdate}
               value={values}
-              openAuxModal={() => setShowSecondaryContent(true)}
+              openAuxModal={handleOpenSecundaryContent}
               onChange={handleChange}
             />
             <Button
@@ -178,7 +182,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
         {showSecondaryContent ? (
           <AuxFilter onClose={() => setShowSecondaryContent(false)} />
         ) : null}
-      </ModalContent>
+      </CustomModalContent>
     </Modal>
   )
 }

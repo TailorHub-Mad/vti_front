@@ -70,10 +70,11 @@ export const InputSelect = ({
         <Input
           placeholder={placeholder}
           onChange={handleChange}
-          value={inputValue}
+          value={inputValue || ""}
           onClick={handleOnClickInput}
           isDisabled={isDisabled}
           _loading
+          autoComplete="off"
         />
         <ChevronDownIcon
           position="absolute"

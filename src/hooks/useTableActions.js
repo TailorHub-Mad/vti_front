@@ -23,7 +23,7 @@ const useTableActions = () => {
     }
 
     const nextValues = items.reduce((obj, cv) => {
-      const itemId = cv.id || cv._id
+      const itemId = cv._id
       const _next = { ...obj, [itemId]: true }
       return _next
     }, {})

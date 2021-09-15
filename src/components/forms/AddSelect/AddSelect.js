@@ -20,13 +20,11 @@ export const AddSelect = ({
   ...props
 }) => {
   const [values, setValues] = useState(value && Array.isArray(value) ? value : [""])
+  const [, /*availableOptions*/ setAvailableOptions] = useState(options)
   const handleAvailableOptions = (current) =>
     options.filter(
       (option) => option.value === current || !values.includes(option.value)
     )
-
-  // const error = errors && errors[name]?.type
-  useEffect(() => {}, [value])
 
   const handleChange = (option, idx) => {
     const nextOptions = [...values]
@@ -37,6 +35,18 @@ export const AddSelect = ({
   useEffect(() => {
     onChange && onChange(values)
   }, [values])
+
+  // useEffect(() => {
+  //   if (value && !values && availableOptions) {
+  //     const selected = availableOptions?.filter((option) => option.value === value)
+  //     setValues(selected.map((e) => e?.label))
+  //   }
+  // }, [value, availableOptions])
+
+  useEffect(() => {
+    if (!options.length > 0) return
+    setAvailableOptions(options)
+  }, [options])
 
   return (
     <FormController
@@ -54,7 +64,6 @@ export const AddSelect = ({
               placeholder={placeholder}
               options={handleAvailableOptions(val)}
               isDisabled={isDisabled}
-              autocomplete="off"
             />
             {idx !== 0 ? (
               <Box

@@ -6,7 +6,7 @@ import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs
 import { Spinner } from "../../components/spinner/Spinner"
 import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
 import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
-import useSystemApi from "../../hooks/api/useSystemsApi"
+import useSystemApi from "../../hooks/api/useSystemApi"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import useFetchSWR from "../../hooks/useFetchSWR"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
