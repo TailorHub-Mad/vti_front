@@ -24,7 +24,7 @@ import { NewNoteModal } from "../views/notes/NewNote/NewNoteModal/NewNoteModal"
 import { NotesMenu } from "../views/notes/NotesMenu/NotesMenu"
 
 const apuntes = () => {
-  const { isLoggedIn, user } = useContext(ApiAuthContext)
+  const { isLoggedIn } = useContext(ApiAuthContext)
   const { notes, deleteNote } = useNoteApi()
   const { showToast } = useContext(ToastContext)
   const { data, error, isLoading, mutate } = useFetchSWR(SWR_CACHE_KEYS.notes, notes)
@@ -43,7 +43,7 @@ const apuntes = () => {
   const [searchChain, setSearchChain] = useState("")
   const [, /*searchedNotes*/ setSearchedNotes] = useState([])
 
-  const emptyData = Boolean(data && data[0]?.notes.length === 0)
+  const isEmptyData = Boolean(data && data[0]?.notes.length === 0)
   const notesData = data ? data[0]?.notes : []
 
   // TODO
@@ -118,11 +118,9 @@ const apuntes = () => {
   }
 
   useEffect(() => {
-    if (emptyData || searchChain === "") return
+    if (isEmptyData || searchChain === "") return
     onSearch(searchChain)
   }, [notesData])
-
-  console.log("user", user)
 
   // * REVIEW
   const [activeTab, setActiveTab] = useState("all")
@@ -166,7 +164,7 @@ const apuntes = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {!isLoading && !emptyData && (
+        {!isLoading && !isEmptyData && (
           <ToolBar
             onAdd={handleOnOpenModal}
             onSearch={onSearch}
@@ -181,7 +179,7 @@ const apuntes = () => {
         )}
       </PageHeader>
       <PageMenu>
-        {notesData && !emptyData ? (
+        {notesData && !isEmptyData ? (
           <NotesMenu
             activeItem={activeTab}
             notesCount={notes?.length}
@@ -191,7 +189,7 @@ const apuntes = () => {
       </PageMenu>
       <PageBody height="calc(100vh - 140px)">
         {isLoading ? <Spinner /> : null}
-        {emptyData ? (
+        {isEmptyData ? (
           <ViewEmptyState
             message="Añadir clientes a la plataforma"
             importButtonText="Importar"
@@ -200,7 +198,7 @@ const apuntes = () => {
             onAdd={() => setIsNoteModalOpen(true)}
           />
         ) : null}
-        {notesData && !emptyData ? (
+        {notesData && !isEmptyData ? (
           <Grid
             templateColumns="repeat(auto-fill, 282px)"
             gap="16px"

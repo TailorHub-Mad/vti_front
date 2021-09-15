@@ -75,7 +75,7 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
       [[], []]
     )
 
-    // // TODO -> manage errors
+    // TODO -> manage errors
     if (notesError.length > 0) {
       console.log("ERROR")
     }
@@ -105,7 +105,7 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
 
     const response = await updateNote(id, formatedNote)
 
-    // // TODO -> manage errors
+    // TODO -> manage errors
     if (response?.error) {
       console.log("ERROR")
     }
@@ -116,7 +116,7 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
 
   useEffect(() => {
     if (!noteToUpdate) return
-    const { id, alias, name } = noteToUpdate || {}
+    const { id, alias, name } = noteToUpdate
     setValues([{ alias, name, id }])
   }, [noteToUpdate])
 

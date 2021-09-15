@@ -1,13 +1,8 @@
 import { useContext, useEffect, useState } from "react"
 import useProjectApi from "../../hooks/api/useProjectApi"
-import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
-import { ProjectsToolBar } from "../../views/projects/ProjectsToolBar/ProjectsToolBar"
-import faker from "faker"
+import { ProjectsTable } from "../../views/projects/ProjectTable/ProjectTable"
 import { Popup } from "../../components/overlay/Popup/Popup"
-import useFetchSWR from "../../hooks/useFetchSWR"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
-import { ProjectsEmptyState } from "../../views/projects/ProjectsEmptyState/ProjectsEmptyState"
 import { NewProjectModal } from "../../views/projects/NewProjectModal/NewProjectModal"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
@@ -15,30 +10,22 @@ import { Spinner } from "../../components/spinner/Spinner"
 import { ToastContext } from "../../provider/ToastProvider"
 import { ImportFilesModal } from "../../components/overlay/modal/ImportFilesModal/ImportFilesModal"
 import { DeleteType, fetchType } from "../../utils/constants/global_config"
+import { projectFetchHandler } from "../../swr/project.swr"
+import { ViewEmptyState } from "../../views/common/ViewEmptyState"
+import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
+import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
+import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
 
-const projects = () => {
+const proyectos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const {
-    getProjects,
-    getGroupedProjects,
-    deleteProject,
-    createProject,
-    updateProject,
-  } = useProjectApi()
+  const { deleteProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
-  const isGrouped = fetchState === fetchType.GROUPED
-  // const isFiltered = fetchState === fetchType.FILTERED
+  const { data, error, isLoading, mutate } = projectFetchHandler(fetchState)
 
-  const fetchHandler = {
-    all: () => useFetchSWR(SWR_CACHE_KEYS.projects, getProjects),
-    grouped: () => useFetchSWR(SWR_CACHE_KEYS.groupedProjects, getGroupedProjects),
-    filtered: () =>
-      useFetchSWR([SWR_CACHE_KEYS.groupedProjects, "keys"], getGroupedProjects),
-  }
-
-  const { data, error, isLoading, mutate } = fetchHandler[fetchState]()
+  const [activeTab, setActiveTab] = useState("all")
   const [showImportModal, setShowImportModal] = useState(false)
+
   // Create - Update state
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
   const [projectToUpdate, setProjectToUpdate] = useState(null)
@@ -51,22 +38,11 @@ const projects = () => {
   const [searchChain, setSearchChain] = useState("")
   const [searchedProjects, setSearchedProjects] = useState([])
 
-  const emptyData = Boolean(data && data[0]?.projects.length === 0)
+  const isGrouped = fetchState === fetchType.GROUPED
+  const isEmptyData = Boolean(data && data[0]?.projects.length === 0)
+  const projectsData = data ? data[0]?.projects : []
 
-  //TODO también hacer un handler de la transformación de la información
-  //Handler global Fetch key, fetcher, data transform
-
-  const projectsData = data
-    ? isGrouped
-      ? Object.entries(data).slice(0, 30)
-      : data[0]?.projects.map((proj) => ({
-          ...proj,
-          isFinished: faker.datatype.boolean(),
-        }))
-    : []
-
-  const [activeTab, setActiveTab] = useState("all")
-
+  // TODO
   const handleExport = () => {}
 
   const handleOpenPopup = (projectsToDelete, type) => {
@@ -152,46 +128,16 @@ const projects = () => {
     }
   }
 
-  const handleGrouping = () => {
+  const handleOnGroup = () => {
     setFetchState(fetchType.GROUPED)
   }
 
-  const handleNewProject = async (values) => {
-    try {
-      const _values = {
-        ...values,
-        date: { year: values.year.toString(), month: "02", day: "25" },
-      }
-      delete _values.year
-      delete _values.id
-      delete _values.tags
-      await createProject(_values)
-      showToast("Proyecto creado satisfactoriamente")
-      setIsProjectModalOpen(false)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  const handleUpdateProject = async (values) => {
-    try {
-      const _values = {
-        ...values,
-        date: { year: values.year.toString(), month: "02", day: "25" },
-      }
-      delete _values.year
-      delete _values.id
-      delete _values.tags
-      await updateProject(_values, projectToUpdate._id)
-      showToast("Proyecto editado satisfactoriamente")
-      setIsProjectModalOpen(false)
-    } catch (e) {
-      console.log(e)
-    }
+  const handleOnFilter = () => {
+    setFetchState(fetchType.FILTERED)
   }
 
   useEffect(() => {
-    if (emptyData || searchChain === "") return
+    if (isEmptyData || searchChain === "") return
     onSearch(searchChain)
   }, [data])
 
@@ -219,7 +165,6 @@ const projects = () => {
         projectToUpdate={projectToUpdate}
         isOpen={isProjectModalOpen}
         onClose={handleOnCloseModal}
-        onSubmit={projectToUpdate ? handleUpdateProject : handleNewProject}
       />
 
       <ImportFilesModal
@@ -227,22 +172,30 @@ const projects = () => {
         onClose={() => setShowImportModal(false)}
       />
 
-      <PageHeader title="Proyectos">
-        {!isLoading && !emptyData ? (
-          <ProjectsToolBar
+      <PageHeader>
+        <BreadCrumbs />
+        {!isLoading && !isEmptyData && (
+          <ToolBar
+            onAdd={handleOnOpenModal}
             onSearch={onSearch}
-            onExport={handleExport}
+            onGroup={handleOnGroup}
+            onFilter={handleOnFilter}
             onImport={() => setShowImportModal(true)}
-            onAddProject={handleOnOpenModal}
-            onGroup={(option) => handleGrouping(option)}
+            onExport={handleExport}
+            addLabel="Añadir proyecto"
+            searchPlaceholder="Busqueda por ID, Alias"
+            icon={<AddProjectIcon />}
           />
-        ) : null}
+        )}
       </PageHeader>
       {isLoading ? <Spinner /> : null}
-      {emptyData ? (
-        <ProjectsEmptyState
-          onAddProject={handleOnOpenModal}
+      {isEmptyData ? (
+        <ViewEmptyState
+          message="Añadir proyectos a la plataforma"
+          importButtonText="Importar"
+          addButtonText="Añadir proyecto"
           onImport={() => setShowImportModal(true)}
+          onAdd={handleOnOpenModal}
         />
       ) : null}
       {data && !isLoading ? (
@@ -260,4 +213,4 @@ const projects = () => {
   )
 }
 
-export default projects
+export default proyectos

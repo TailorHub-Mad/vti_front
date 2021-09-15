@@ -7,7 +7,7 @@ import { NoteTag } from "../../../components/tags/NoteTag/NoteTag"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
 import { PATHS } from "../../../utils/constants/paths"
-import { ProjectsTableHeader } from "../ProjectsTableHeader/ProjectsTableHeader"
+import { ProjectsTableHeader } from "./ProjectsTableHeader"
 
 export const ProjectsTable = ({
   items,
@@ -45,11 +45,8 @@ export const ProjectsTable = ({
         ? e.focusPoint.map((fp) => fp.alias).join(", ")
         : ["Persona", "Responsable"],
     testSystems: e.testSystems?.map((ts) => ts.alias),
-    tags:
-      e.tag?.length > 0
-        ? e.tag
-        : ["Tag Proyecto A", "Tag Proyecto B", "Tag Proyecto C"],
-    users: e.users || ["User A", "User B", "User C"],
+    tags: e.tag,
+    users: e.users,
     notes: e.notes?.map((note) => note.title),
     options: "",
     config: {
@@ -63,7 +60,6 @@ export const ProjectsTable = ({
       : items.map((it) => {
           const _it = [...it]
           _it[1] = it[1].map(transformProjectData)
-          console.log(_it)
           return _it
         })
     : null
@@ -137,11 +133,11 @@ export const ProjectsTable = ({
       header={
         <ProjectsTableHeader
           activeItem={activeTab}
-          onChange={(value) => onTabChange(value)}
+          onChange={onTabChange}
           projectsCount={elements?.length}
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
-          selectAllRows={() => handleSelectAllRows(items)}
+          selectAllRows={handleSelectAllRows}
         />
       }
       config={projects_table}

@@ -11,6 +11,8 @@ import { RoleType } from "../../../utils/constants/global_config"
 export const ToolBar = ({
   onAdd,
   onSearch,
+  onGroup,
+  onFilter,
   onImport,
   onExport,
   addLabel,
@@ -21,10 +23,13 @@ export const ToolBar = ({
 }) => {
   const { role } = useContext(ApiAuthContext)
 
+  const handleOnGroup = (activeItem) => onGroup(activeItem)
+  const handleOnFilter = (activeItem) => onFilter(activeItem)
+
   return (
     <Flex>
-      {noFilter || <Filter />}
-      {noGroup || <Group />}
+      {noFilter || <Filter onFilter={handleOnFilter} />}
+      {noGroup || <Group onGroup={handleOnGroup} />}
       <InputGroup width="196px" marginRight="16px">
         <InputLeftElement
           pointerEvents="none"

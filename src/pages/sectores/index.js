@@ -42,7 +42,7 @@ const sectores = () => {
   const [searchChain, setSearchChain] = useState("")
   const [searchedSectors, setSearchedSectors] = useState([])
 
-  const emptyData = Boolean(data && data.length === 0)
+  const isEmptyData = Boolean(data && data.length === 0)
   const sectorsData = data ?? []
 
   // TODO
@@ -116,7 +116,7 @@ const sectores = () => {
   }
 
   useEffect(() => {
-    if (emptyData || searchChain === "") return
+    if (isEmptyData || searchChain === "") return
     onSearch(searchChain)
   }, [data])
 
@@ -155,7 +155,7 @@ const sectores = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {!isLoading && !emptyData && (
+        {!isLoading && !isEmptyData && (
           <ToolBar
             onAdd={handleOnOpenModal}
             onSearch={onSearch}
@@ -168,7 +168,7 @@ const sectores = () => {
         )}
       </PageHeader>
       {isLoading ? <Spinner /> : null}
-      {emptyData ? (
+      {isEmptyData ? (
         <ViewEmptyState
           message="Añadir sectores a la plataforma"
           importButtonText="Importar"
@@ -177,7 +177,7 @@ const sectores = () => {
           onAdd={handleOnOpenModal}
         />
       ) : null}
-      {data && !emptyData ? (
+      {data && !isEmptyData ? (
         <SectorsTable
           items={searchChain !== "" ? searchedSectors : sectorsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}

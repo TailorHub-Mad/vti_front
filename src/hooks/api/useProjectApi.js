@@ -11,7 +11,7 @@ const useProjectApi = () => {
 
   const createProject = (data) => projectService.createProject(data)
 
-  const updateProject = (data, id) => projectService.updateProject(data, id)
+  const updateProject = (id, data) => projectService.updateProject(data, id)
 
   const deleteProject = (id) => projectService.deleteProject(id)
 

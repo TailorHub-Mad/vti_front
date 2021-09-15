@@ -12,7 +12,7 @@ const ProjectService = () => {
 
   const createProject = (data) => execute(instance.post(`/projects/`, data))
 
-  const updateProject = (data, id) => execute(instance.put(`/projects/${id}`, data))
+  const updateProject = (id, data) => execute(instance.put(`/projects/${id}`, data))
 
   const deleteProject = (id) => execute(instance.delete(`/projects/${id}`))
 

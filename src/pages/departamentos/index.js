@@ -41,7 +41,7 @@ const departamentos = () => {
   const [searchChain, setSearchChain] = useState("")
   const [searchedDepartments, setSearchedDepartments] = useState([])
 
-  const emptyData = Boolean(data && data.length === 0)
+  const isEmptyData = Boolean(data && data.length === 0)
   const departmentsData = data ?? []
 
   // TODO
@@ -122,7 +122,7 @@ const departamentos = () => {
   }
 
   useEffect(() => {
-    if (emptyData || searchChain === "") return
+    if (isEmptyData || searchChain === "") return
     onSearch(searchChain)
   }, [data])
 
@@ -157,7 +157,7 @@ const departamentos = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {!isLoading && !emptyData && (
+        {!isLoading && !isEmptyData && (
           <ToolBar
             onAdd={handleOnOpenModal}
             onSearch={onSearch}
@@ -170,7 +170,7 @@ const departamentos = () => {
         )}
       </PageHeader>
       {isLoading ? <Spinner /> : null}
-      {emptyData ? (
+      {isEmptyData ? (
         <ViewEmptyState
           message="Añadir departamentos a la plataforma"
           importButtonText="Importar"
@@ -179,7 +179,7 @@ const departamentos = () => {
           onAdd={handleOnOpenModal}
         />
       ) : null}
-      {data && !emptyData ? (
+      {data && !isEmptyData ? (
         <DepartmentsTable
           items={searchChain !== "" ? searchedDepartments : departmentsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}

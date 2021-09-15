@@ -96,7 +96,7 @@ export const NewTestSystemModal = ({
       [[], []]
     )
 
-    // // TODO -> manage errors
+    // TODO -> manage errors
     if (systemsError.length > 0) {
       console.log("ERROR")
     }
@@ -129,7 +129,7 @@ export const NewTestSystemModal = ({
 
     const response = await updateSystem(id, formatedSystem)
 
-    // // TODO -> manage errors
+    // TODO -> manage errors
     if (response?.error) {
       console.log("ERROR")
     }
@@ -146,7 +146,7 @@ export const NewTestSystemModal = ({
       clientAlias,
       alias,
       date: { year },
-    } = systemToUpdate || {}
+    } = systemToUpdate
     setValues([{ vtiCode, clientAlias, alias, year, id }])
   }, [systemToUpdate])
 

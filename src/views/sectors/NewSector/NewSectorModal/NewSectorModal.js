@@ -77,9 +77,10 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToUpdate, ...props }) =>
       [[], []]
     )
 
-    // // TODO -> manage errors
+    // TODO -> manage errors
     if (sectorsError.length > 0) {
       console.log("ERROR")
+      return
     }
 
     if (cache.has(SWR_CACHE_KEYS.sectors)) {
@@ -106,9 +107,10 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToUpdate, ...props }) =>
     const [formatedSector] = [...values]
     const response = await updateSector(id, { title: formatedSector.title })
 
-    // // TODO -> manage errors
+    // TODO -> manage errors
     if (response?.error) {
       console.log("ERROR")
+      return
     }
 
     // TODO -> optimize cache request (update cache with updated sector)
@@ -117,7 +119,7 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToUpdate, ...props }) =>
 
   useEffect(() => {
     if (!sectorToUpdate) return
-    const { id, title } = sectorToUpdate || {}
+    const { id, title } = sectorToUpdate
     setValues([{ title, id }])
   }, [sectorToUpdate])
 

@@ -41,7 +41,7 @@ const clientes = () => {
   const [searchChain, setSearchChain] = useState("")
   const [searchedClients, setSearchedClients] = useState([])
 
-  const emptyData = Boolean(data && data.length === 0)
+  const isEmptyData = Boolean(data && data.length === 0)
   const clientsData = data ?? []
 
   // TODO
@@ -116,7 +116,7 @@ const clientes = () => {
   }
 
   useEffect(() => {
-    if (emptyData || searchChain === "") return
+    if (isEmptyData || searchChain === "") return
     onSearch(searchChain)
   }, [clientsData])
 
@@ -153,7 +153,7 @@ const clientes = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {!isLoading && !emptyData && (
+        {!isLoading && !isEmptyData && (
           <ToolBar
             onAdd={handleOnOpenModal}
             onSearch={onSearch}
@@ -168,7 +168,7 @@ const clientes = () => {
         )}
       </PageHeader>
       {isLoading ? <Spinner /> : null}
-      {emptyData ? (
+      {isEmptyData ? (
         <ViewEmptyState
           message="Añadir clientes a la plataforma"
           importButtonText="Importar"
@@ -177,7 +177,7 @@ const clientes = () => {
           onAdd={() => setIsClientModalOpen(true)}
         />
       ) : null}
-      {clientsData && !emptyData ? (
+      {clientsData && !isEmptyData ? (
         <ClientsTable
           clients={searchChain !== "" ? searchedClients : clientsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}

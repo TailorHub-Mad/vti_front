@@ -41,7 +41,7 @@ const sistemas = () => {
   const [searchChain, setSearchChain] = useState("")
   const [searchedSystems, setSearchedSystems] = useState([])
 
-  const emptyData = Boolean(data && data[0]?.testSystems.length === 0)
+  const isEmptyData = Boolean(data && data[0]?.testSystems.length === 0)
   const systemsData = data ? data[0]?.testSystems : []
 
   // TODO
@@ -120,7 +120,7 @@ const sistemas = () => {
   }
 
   useEffect(() => {
-    if (emptyData || searchChain === "") return
+    if (isEmptyData || searchChain === "") return
     onSearch(searchChain)
   }, [data])
 
@@ -156,7 +156,7 @@ const sistemas = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {!isLoading && !emptyData && (
+        {!isLoading && !isEmptyData && (
           <ToolBar
             onAdd={handleOnOpenModal}
             onSearch={onSearch}
@@ -169,7 +169,7 @@ const sistemas = () => {
         )}
       </PageHeader>
       {isLoading ? <Spinner /> : null}
-      {emptyData ? (
+      {isEmptyData ? (
         <ViewEmptyState
           message="Añadir sistemas a la plataforma"
           importButtonText="Importar"
@@ -178,7 +178,7 @@ const sistemas = () => {
           onAdd={handleOnOpenModal}
         />
       ) : null}
-      {data && !emptyData ? (
+      {data && !isEmptyData ? (
         <TestSystemsTable
           items={searchChain !== "" ? searchedSystems : systemsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}

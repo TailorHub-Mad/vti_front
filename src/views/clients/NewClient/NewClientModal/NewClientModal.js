@@ -77,7 +77,7 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate, ...props }) =>
       [[], []]
     )
 
-    // // TODO -> manage errors
+    // TODO -> manage errors
     if (clientsError.length > 0) {
       console.log("ERROR")
     }
@@ -107,7 +107,7 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate, ...props }) =>
 
     const response = await updateClient(id, formatedClient)
 
-    // // TODO -> manage errors
+    // TODO -> manage errors
     if (response?.error) {
       console.log("ERROR")
     }
@@ -118,7 +118,7 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate, ...props }) =>
 
   useEffect(() => {
     if (!clientToUpdate) return
-    const { id, alias, name } = clientToUpdate || {}
+    const { id, alias, name } = clientToUpdate
     setValues([{ alias, name, id }])
   }, [clientToUpdate])
 
