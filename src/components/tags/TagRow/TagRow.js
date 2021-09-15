@@ -7,8 +7,8 @@ export const TagRow = ({ remainingTagsCount, tags = {}, variant, ...props }) => 
 
   return (
     <Box display="flex" alignItems="center" {...props} height="28px">
-      {[...tags].slice(0, 3).map((tag) => (
-        <GeneralTag key={tag} variant={variant} mr="8px">
+      {[...tags].slice(0, 3).map((tag, idx) => (
+        <GeneralTag key={`${tag}-${idx}`} variant={variant} mr="8px">
           {tag}
         </GeneralTag>
       ))}

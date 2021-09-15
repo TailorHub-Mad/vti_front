@@ -28,8 +28,8 @@ export const NoteDetailsAccordion = ({
           title="Sistema de ensayo del proyecto"
           icon={<TestSystemLineIcon mr="8px" />}
         >
-          {testSystems.map((ts) => (
-            <Button key={ts} variant="note_content" mr="8px" mb="8px">
+          {testSystems.map((ts, idx) => (
+            <Button key={`${ts}-${idx}`} variant="note_content" mr="8px" mb="8px">
               {ts}
             </Button>
           ))}
@@ -37,8 +37,8 @@ export const NoteDetailsAccordion = ({
       ) : null}
       {noteTags ? (
         <NoteAccordionItem title="Tags de apunte" icon={<TagLineIcon mr="8px" />}>
-          {noteTags.map((note) => (
-            <TestSystemTag key={note} mr="8px" mb="8px">
+          {noteTags.map((note, idx) => (
+            <TestSystemTag key={`${note}-${idx}`} mr="8px" mb="8px">
               {note}
             </TestSystemTag>
           ))}
@@ -56,8 +56,8 @@ export const NoteDetailsAccordion = ({
       ) : null}
       {links ? (
         <NoteAccordionItem title="Link" icon={<LinkLineIcon mr="8px" />}>
-          {links.map((link) => (
-            <Button key={link} variant="note_content" mr="8px" mb="8px">
+          {links.map((link, idx) => (
+            <Button key={`${link}-${idx}`} variant="note_content" mr="8px" mb="8px">
               <LinkLineIcon width="16px" />
               {link}
             </Button>
@@ -66,8 +66,13 @@ export const NoteDetailsAccordion = ({
       ) : null}
       {files ? (
         <NoteAccordionItem title="Adjuntos" icon={<CloudLineIcon mr="8px" />}>
-          {files.map((file) => (
-            <Button key={file.name} variant="note_content" mr="8px" mb="8px">
+          {files.map((file, idx) => (
+            <Button
+              key={`${file.name}-${idx}`}
+              variant="note_content"
+              mr="8px"
+              mb="8px"
+            >
               {file.type === "image" ? <ImageTypeIcon /> : <PdfTypeIcon />}
               {file.name}
             </Button>

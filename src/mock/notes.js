@@ -9,7 +9,6 @@ export const generateRandomNote = () => ({
   title: faker.lorem.words(6),
   isFavourite: faker.datatype.boolean(),
   isClosed: faker.datatype.boolean(),
-  isUnread: faker.datatype.boolean(),
   canSubscribe: faker.datatype.boolean(),
   subscribedUsers: new Array(faker.datatype.number(10))
     .fill("")

@@ -6,6 +6,8 @@ export const SWR_CACHE_KEYS = {
   client: "client/",
   sectors: "sectors/",
   sector: "sector/",
-  departments: "departments",
-  department: "department",
+  departments: "departments/",
+  department: "department/",
+  notes: "notes/",
+  note: "note/",
 }
