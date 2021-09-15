@@ -1,11 +1,11 @@
 import { Button, Center, Flex, Input, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { FormController } from "../../../components/forms/FormItemWrapper/FormController"
-import { LogoFull } from "../../../components/images/LogoFulll"
 import { Card } from "../../../components/cards/Card"
 import { Formik } from "formik"
 
 import { checkFormIsEmpty } from "../../../utils/functions/forms"
+import { LogoFull } from "../../../components/images/LogoFull"
 
 export const RecoverPassword = () => {
   const [hasError] = useState(false)

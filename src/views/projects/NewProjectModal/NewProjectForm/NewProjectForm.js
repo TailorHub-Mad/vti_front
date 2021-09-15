@@ -40,9 +40,8 @@ export const NewProjectForm = ({ openAuxModal, value, onChange, projectToEdit })
   }, [])
 
   useEffect(() => {
-   if(clientsOpt?.length > 0){
-    const [cl] = clientsOpt.filter(_client => _client.label === projectToEdit.clientAlias)
-    console.log(cl)
+   if(projectToEdit && clientsOpt?.length > 0){
+    const [cl] = clientsOpt.filter(_client => _client.label === projectToEdit?.clientAlias)
     handleFormChange("client", cl.value)
    }
   }, [clientsOpt])

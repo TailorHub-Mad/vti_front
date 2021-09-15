@@ -35,6 +35,7 @@ const project = () => {
     data.length === 0
       ? setProjectNotFound(true)
       : setProjectData(data[0]?.projects[0])
+    console.log(projectNotFound)
   }
 
   useEffect(() => {
