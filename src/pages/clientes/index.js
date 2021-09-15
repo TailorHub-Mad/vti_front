@@ -31,7 +31,7 @@ const clientes = () => {
 
   // Create - Update state
   const [isClientModalOpen, setIsClientModalOpen] = useState(false)
-  const [clientToEdit, setClientToEdit] = useState(null)
+  const [clientToUpdate, setClientToUpdate] = useState(null)
 
   // Delete state
   const [deleteType, setDeleteType] = useState(null)
@@ -62,7 +62,7 @@ const clientes = () => {
   }
 
   const handleOnCloseModal = () => {
-    setClientToEdit(null)
+    setClientToUpdate(null)
     setIsClientModalOpen(false)
   }
 
@@ -98,7 +98,7 @@ const clientes = () => {
 
   const onEdit = (id) => {
     const client = [...clientsData].find((client) => client._id === id)
-    setClientToEdit(client)
+    setClientToUpdate(client)
     setIsClientModalOpen(true)
   }
 
@@ -141,7 +141,7 @@ const clientes = () => {
       </Popup>
 
       <NewClientModal
-        clientToEdit={clientToEdit}
+        clientToUpdate={clientToUpdate}
         isOpen={isClientModalOpen}
         onClose={handleOnCloseModal}
       />

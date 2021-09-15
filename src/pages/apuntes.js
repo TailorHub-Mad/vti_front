@@ -33,7 +33,7 @@ const apuntes = () => {
 
   // Create - Update state
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false)
-  const [noteToEdit, setNoteToEdit] = useState(null)
+  const [noteToUpdate, setNoteToUpdate] = useState(null)
 
   // Delete state
   const [deleteType, setDeleteType] = useState(null)
@@ -64,7 +64,7 @@ const apuntes = () => {
   }
 
   const handleOnCloseModal = () => {
-    setNoteToEdit(null)
+    setNoteToUpdate(null)
     setIsNoteModalOpen(false)
   }
 
@@ -100,7 +100,7 @@ const apuntes = () => {
 
   // const onEdit = (id) => {
   //   const note = [...notesData].find((note) => note._id === id)
-  //   setNoteToEdit(note)
+  //   setNoteToUpdate(note)
   //   setIsNoteModalOpen(true)
   // }
 
@@ -149,7 +149,7 @@ const apuntes = () => {
       </Popup>
 
       <NewNoteModal
-        clientToEdit={noteToEdit}
+        clientToUpdate={noteToUpdate}
         isOpen={isNoteModalOpen}
         onClose={handleOnCloseModal}
       />

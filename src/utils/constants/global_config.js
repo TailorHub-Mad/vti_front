@@ -3,6 +3,12 @@ export const DeleteType = {
   MANY: "deleteMany",
 }
 
+export const fetchType = {
+  ALL: "all",
+  GROUPED: "grouped",
+  FILTERED: "filtered",
+}
+
 export const RoleType = {
   USER: "user",
   ADMIN: "admin",

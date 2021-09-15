@@ -15,15 +15,20 @@ import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { NewTestSystemForm } from "../NewTestSystemForm/NewTestSystemForm"
 
-export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) => {
+export const NewTestSystemModal = ({
+  isOpen,
+  onClose,
+  systemToUpdate,
+  ...props
+}) => {
   const { showToast } = useContext(ToastContext)
-  const { createSystem, editSystem } = useSystemApi()
+  const { createSystem, updateSystem } = useSystemApi()
   const { mutate, cache } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const isEdit = Boolean(systemToEdit)
+  const isUpdate = Boolean(systemToUpdate)
 
   const handleChange = (val, idx) => {
     const _values = [...values]
@@ -49,15 +54,15 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
   const handleSubmit = async () => {
     setIsSubmitting(true)
 
-    const updatedSystemsList = isEdit
-      ? await handleEditSystem()
+    const updatedSystemsList = isUpdate
+      ? await handleUpdateSystem()
       : await handleCreateSystem()
 
     updatedSystemsList
       ? await mutate(SWR_CACHE_KEYS.systems, updatedSystemsList, false)
       : await mutate(SWR_CACHE_KEYS.systems)
 
-    showToast(isEdit ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
+    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
     setIsSubmitting(false)
     onClose()
   }
@@ -115,14 +120,14 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
     return null
   }
 
-  const handleEditSystem = async () => {
-    const { id } = systemToEdit
+  const handleUpdateSystem = async () => {
+    const { id } = systemToUpdate
     const [formatedSystem] = formatSystems(values)
 
     // TODO -> provisional
     delete formatedSystem["client"]
 
-    const response = await editSystem(id, formatedSystem)
+    const response = await updateSystem(id, formatedSystem)
 
     // // TODO -> manage errors
     if (response?.error) {
@@ -134,16 +139,16 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
   }
 
   useEffect(() => {
-    if (!systemToEdit) return
+    if (!systemToUpdate) return
     const {
       id,
       vtiCode,
       clientAlias,
       alias,
       date: { year },
-    } = systemToEdit || {}
+    } = systemToUpdate || {}
     setValues([{ vtiCode, clientAlias, alias, year, id }])
-  }, [systemToEdit])
+  }, [systemToUpdate])
 
   useEffect(() => {
     if (isOpen) return
@@ -162,7 +167,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
           w="100%"
         >
           <Text variant="d_l_medium">
-            {isEdit ? "Editar sistema" : "Añadir nuevo sistema"}
+            {isUpdate ? "Editar sistema" : "Añadir nuevo sistema"}
           </Text>
           <CloseIcon width="24px" height="24px" cursor="pointer" onClick={onClose} />
         </ModalHeader>
@@ -202,7 +207,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToEdit, ...props }) 
           Guardar
         </Button>
 
-        {isEdit || (
+        {isUpdate || (
           <Button
             variant="text_only"
             onClick={() => setValues([...values, {}])}

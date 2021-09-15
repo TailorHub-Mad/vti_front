@@ -7,12 +7,12 @@ const ProjectService = () => {
 
   const getGroupedProjects = () =>
     execute(instance.get(`/projects/group?group=client`))
-//client years sector date.year projects.tags.name tags
+  //client years sector date.year projects.tags.name tags
   const getProject = (id) => execute(instance.get(`/projects/${id}`))
 
   const createProject = (data) => execute(instance.post(`/projects/`, data))
 
-  const updateProject = (data,id) => execute(instance.put(`/projects/${id}`, data))
+  const updateProject = (data, id) => execute(instance.put(`/projects/${id}`, data))
 
   const deleteProject = (id) => execute(instance.delete(`/projects/${id}`))
 

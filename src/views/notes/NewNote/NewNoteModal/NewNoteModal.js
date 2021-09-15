@@ -15,15 +15,15 @@ import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { NewNoteForm } from "../NewNoteForm/NewNoteForm"
 
-export const NewNoteModal = ({ isOpen, onClose, noteToEdit, ...props }) => {
+export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
   const { showToast } = useContext(ToastContext)
-  const { createNote, editNote } = useNoteApi()
+  const { createNote, updateNote } = useNoteApi()
   const { mutate, cache } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const isEdit = Boolean(noteToEdit)
+  const isUpdate = Boolean(noteToUpdate)
 
   const handleChange = (val, idx) => {
     const _values = [...values]
@@ -49,15 +49,15 @@ export const NewNoteModal = ({ isOpen, onClose, noteToEdit, ...props }) => {
   const handleSubmit = async () => {
     setIsSubmitting(true)
 
-    const updatedNotesList = isEdit
-      ? await handleEditNote()
+    const updatedNotesList = isUpdate
+      ? await handleUpdateNote()
       : await handleCreateNote()
 
     updatedNotesList
       ? await mutate(SWR_CACHE_KEYS.notes, updatedNotesList, false)
       : await mutate(SWR_CACHE_KEYS.notes)
 
-    showToast(isEdit ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
+    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
     setIsSubmitting(false)
     onClose()
   }
@@ -99,11 +99,11 @@ export const NewNoteModal = ({ isOpen, onClose, noteToEdit, ...props }) => {
     return null
   }
 
-  const handleEditNote = async () => {
-    const { id } = noteToEdit
+  const handleUpdateNote = async () => {
+    const { id } = noteToUpdate
     const [formatedNote] = [...values]
 
-    const response = await editNote(id, formatedNote)
+    const response = await updateNote(id, formatedNote)
 
     // // TODO -> manage errors
     if (response?.error) {
@@ -115,10 +115,10 @@ export const NewNoteModal = ({ isOpen, onClose, noteToEdit, ...props }) => {
   }
 
   useEffect(() => {
-    if (!noteToEdit) return
-    const { id, alias, name } = noteToEdit || {}
+    if (!noteToUpdate) return
+    const { id, alias, name } = noteToUpdate || {}
     setValues([{ alias, name, id }])
-  }, [noteToEdit])
+  }, [noteToUpdate])
 
   useEffect(() => {
     if (isOpen) return
@@ -137,7 +137,7 @@ export const NewNoteModal = ({ isOpen, onClose, noteToEdit, ...props }) => {
           w="100%"
         >
           <Text variant="d_l_medium">
-            {isEdit ? "Editar notee" : "Añadir nuevo notee"}
+            {isUpdate ? "Editar apunte" : "Añadir nuevo apunte"}
           </Text>
           <CloseIcon width="24px" height="24px" cursor="pointer" onClick={onClose} />
         </ModalHeader>
@@ -145,7 +145,7 @@ export const NewNoteModal = ({ isOpen, onClose, noteToEdit, ...props }) => {
           <Box key={`note-${idx}`}>
             {idx !== 0 ? (
               <Text margin="32px 0" variant="d_l_medium">
-                Añadir nuevo notee
+                Añadir nuevo apunte
               </Text>
             ) : null}
             <NewNoteForm value={note} onChange={(val) => handleChange(val, idx)} />
@@ -171,13 +171,13 @@ export const NewNoteModal = ({ isOpen, onClose, noteToEdit, ...props }) => {
         >
           Guardar
         </Button>
-        {!isEdit ? (
+        {!isUpdate ? (
           <Button
             variant="text_only"
             onClick={() => setValues([...values, {}])}
             disabled={checkInputsAreEmpty()}
           >
-            Añadir nuevo notee
+            Añadir nuevo apunte
           </Button>
         ) : null}
       </ModalContent>

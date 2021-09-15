@@ -6,7 +6,7 @@ const useSectorApi = () => {
   const getSectors = () => sectorService.getSectors()
   const getSector = (id) => sectorService.getSector(id)
   const createSector = (data) => sectorService.createSector(data)
-  const updateSector = (id,data) => sectorService.updateSector(id,data)
+  const updateSector = (id, data) => sectorService.updateSector(id, data)
   const deleteSector = (id) => sectorService.deleteSector(id)
 
   return { getSectors, getSector, createSector, updateSector, deleteSector }

@@ -19,7 +19,12 @@ export const ProjectsEmptyState = ({ onAddProject, onImport, ...props }) => {
       >
         Importar
       </Button>
-      <Button display="flex" justifyContent="flex-start" leftIcon={<AddNoteIcon />} onClick={onAddProject}>
+      <Button
+        display="flex"
+        justifyContent="flex-start"
+        leftIcon={<AddNoteIcon />}
+        onClick={onAddProject}
+      >
         Añadir proyecto
       </Button>
     </Center>

@@ -3,7 +3,7 @@ import React from "react"
 import { NotesIcon } from "../icons/NotesIcon"
 import { GroupModal } from "./GroupModal/GroupModal"
 
-export const Group = ({onGroup}) => {
+export const Group = ({ onGroup }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
 
   return (
@@ -12,7 +12,11 @@ export const Group = ({onGroup}) => {
         <NotesIcon mr={["8px", "8px"]} />
         Agrupar
       </Button>
-      <GroupModal isOpen={isOpen} onClose={onClose} onGroup={(activeItem)=>onGroup(activeItem)}/>
+      <GroupModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onGroup={(activeItem) => onGroup(activeItem)}
+      />
     </>
   )
 }

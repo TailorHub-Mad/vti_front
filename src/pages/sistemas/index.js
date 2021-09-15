@@ -31,7 +31,7 @@ const sistemas = () => {
 
   // Create - Update state
   const [isSystemModalOpen, setIsSystemModalOpen] = useState(false)
-  const [systemToEdit, setSystemToEdit] = useState(null)
+  const [systemToUpdate, setSystemToUpdate] = useState(null)
 
   // Delete state
   const [deleteType, setDeleteType] = useState(null)
@@ -62,7 +62,7 @@ const sistemas = () => {
   }
 
   const handleOnCloseModal = () => {
-    setSystemToEdit(null)
+    setSystemToUpdate(null)
     setIsSystemModalOpen(false)
   }
 
@@ -102,7 +102,7 @@ const sistemas = () => {
 
   const onEdit = (id) => {
     const system = [...systemsData].find((system) => system.id === id)
-    setSystemToEdit(system)
+    setSystemToUpdate(system)
     setIsSystemModalOpen(true)
   }
 
@@ -145,7 +145,7 @@ const sistemas = () => {
       </Popup>
 
       <NewTestSystemModal
-        systemToEdit={systemToEdit}
+        systemToUpdate={systemToUpdate}
         isOpen={isSystemModalOpen}
         onClose={handleOnCloseModal}
       />

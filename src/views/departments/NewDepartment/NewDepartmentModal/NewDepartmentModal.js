@@ -18,7 +18,7 @@ import { NewDepartmentForm } from "../NewDepartmentForm/NewDepartmentForm"
 export const NewDepartmentModal = ({
   isOpen,
   onClose,
-  departmentToEdit,
+  departmentToUpdate,
   ...props
 }) => {
   const { showToast } = useContext(ToastContext)
@@ -28,7 +28,7 @@ export const NewDepartmentModal = ({
   const [values, setValues] = useState([{}])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const isEdit = Boolean(departmentToEdit)
+  const isUpdate = Boolean(departmentToUpdate)
 
   const handleChange = (val, idx) => {
     const _values = [...values]
@@ -54,15 +54,15 @@ export const NewDepartmentModal = ({
   const handleSubmit = async () => {
     setIsSubmitting(true)
 
-    const updatedDepartmentsList = isEdit
-      ? await handleEditDepartment()
+    const updatedDepartmentsList = isUpdate
+      ? await handleUpdateDepartment()
       : await handleCreateDepartment()
 
     updatedDepartmentsList
       ? await mutate(SWR_CACHE_KEYS.departments, updatedDepartmentsList, false)
       : await mutate(SWR_CACHE_KEYS.departments)
 
-    showToast(isEdit ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
+    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
     setIsSubmitting(false)
     onClose()
   }
@@ -113,8 +113,8 @@ export const NewDepartmentModal = ({
     return null
   }
 
-  const handleEditDepartment = async () => {
-    const { id } = departmentToEdit
+  const handleUpdateDepartment = async () => {
+    const { id } = departmentToUpdate
     const [formatedDepartment] = [...values]
 
     const response = await updateDepartment(id, { name: formatedDepartment.name })
@@ -129,10 +129,10 @@ export const NewDepartmentModal = ({
   }
 
   useEffect(() => {
-    if (!departmentToEdit) return
-    const { id, name } = departmentToEdit || {}
+    if (!departmentToUpdate) return
+    const { id, name } = departmentToUpdate || {}
     setValues([{ name, id }])
-  }, [departmentToEdit])
+  }, [departmentToUpdate])
 
   useEffect(() => {
     if (isOpen) return
@@ -151,7 +151,7 @@ export const NewDepartmentModal = ({
           w="100%"
         >
           <Text variant="d_l_medium">
-            {isEdit ? "Editar departamento" : "Añadir nuevo departamento"}
+            {isUpdate ? "Editar departamento" : "Añadir nuevo departamento"}
           </Text>
           <CloseIcon width="24px" height="24px" cursor="pointer" onClick={onClose} />
         </ModalHeader>
@@ -188,7 +188,7 @@ export const NewDepartmentModal = ({
         >
           Guardar
         </Button>
-        {!isEdit ? (
+        {!isUpdate ? (
           <Button
             variant="text_only"
             onClick={() => setValues([...values, {}])}

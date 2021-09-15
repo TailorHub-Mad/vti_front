@@ -32,7 +32,7 @@ const sectores = () => {
 
   // Create - Update state
   const [isSectorModalOpen, setIsSectorModalOpen] = useState(false)
-  const [sectorToEdit, setSectorToEdit] = useState(null)
+  const [sectorToUpdate, setSectorToUpdate] = useState(null)
 
   // Delete state
   const [deleteType, setDeleteType] = useState(null)
@@ -63,7 +63,7 @@ const sectores = () => {
   }
 
   const handleOnCloseModal = () => {
-    setSectorToEdit(null)
+    setSectorToUpdate(null)
     setIsSectorModalOpen(false)
   }
 
@@ -98,7 +98,7 @@ const sectores = () => {
 
   const onEdit = (id) => {
     const sector = [...sectorsData].find((sector) => sector.id === id)
-    setSectorToEdit(sector)
+    setSectorToUpdate(sector)
     setIsSectorModalOpen(true)
   }
 
@@ -143,7 +143,7 @@ const sectores = () => {
       </Popup>
 
       <NewSectorModal
-        sectorToEdit={sectorToEdit}
+        sectorToUpdate={sectorToUpdate}
         isOpen={isSectorModalOpen}
         onClose={handleOnCloseModal}
       />

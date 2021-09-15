@@ -15,7 +15,7 @@ import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { NewSectorForm } from "../NewSectorForm/NewSectorForm"
 
-export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
+export const NewSectorModal = ({ isOpen, onClose, sectorToUpdate, ...props }) => {
   const { showToast } = useContext(ToastContext)
   const { createSector, updateSector } = useSectorApi()
   const { mutate, cache } = useSWRConfig()
@@ -23,7 +23,7 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
   const [values, setValues] = useState([{}])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const isEdit = Boolean(sectorToEdit)
+  const isUpdate = Boolean(sectorToUpdate)
 
   const handleChange = (val, idx) => {
     const _values = [...values]
@@ -49,15 +49,15 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
   const handleSubmit = async () => {
     setIsSubmitting(true)
 
-    const updatedSectorsList = isEdit
-      ? await handleEditSector()
+    const updatedSectorsList = isUpdate
+      ? await handleUpdateSector()
       : await handleCreateSector()
 
     updatedSectorsList
       ? await mutate(SWR_CACHE_KEYS.sectors, updatedSectorsList, false)
       : await mutate(SWR_CACHE_KEYS.sectors)
 
-    showToast(isEdit ? "Editado correctamente" : "¡Has añadido nuevo/s ensayo/s!")
+    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s ensayo/s!")
     setIsSubmitting(false)
     onClose()
   }
@@ -101,8 +101,8 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
     return null
   }
 
-  const handleEditSector = async () => {
-    const { id } = sectorToEdit
+  const handleUpdateSector = async () => {
+    const { id } = sectorToUpdate
     const [formatedSector] = [...values]
     const response = await updateSector(id, { title: formatedSector.title })
 
@@ -116,10 +116,10 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
   }
 
   useEffect(() => {
-    if (!sectorToEdit) return
-    const { id, title } = sectorToEdit || {}
+    if (!sectorToUpdate) return
+    const { id, title } = sectorToUpdate || {}
     setValues([{ title, id }])
-  }, [sectorToEdit])
+  }, [sectorToUpdate])
 
   useEffect(() => {
     if (isOpen) return
@@ -138,7 +138,7 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
           w="100%"
         >
           <Text variant="d_l_medium">
-            {isEdit ? "Editar sector" : "Añadir nuevo sector"}
+            {isUpdate ? "Editar sector" : "Añadir nuevo sector"}
           </Text>
           <CloseIcon width="24px" height="24px" cursor="pointer" onClick={onClose} />
         </ModalHeader>
@@ -176,7 +176,7 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
           Guardar
         </Button>
 
-        {isEdit || (
+        {isUpdate || (
           <Button
             variant="text_only"
             onClick={() => setValues([...values, {}])}

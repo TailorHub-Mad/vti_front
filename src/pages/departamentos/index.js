@@ -31,7 +31,7 @@ const departamentos = () => {
 
   // Create - Update state
   const [isDepartmentModalOpen, setIsDepartmentModalOpen] = useState(false)
-  const [departmentToEdit, setDepartmentToEdit] = useState(null)
+  const [departmentToUpdate, setDepartmentToUpdate] = useState(null)
 
   // Delete state
   const [deleteType, setDeleteType] = useState(null)
@@ -62,7 +62,7 @@ const departamentos = () => {
   }
 
   const handleOnCloseModal = () => {
-    setDepartmentToEdit(null)
+    setDepartmentToUpdate(null)
     setIsDepartmentModalOpen(false)
   }
 
@@ -104,7 +104,7 @@ const departamentos = () => {
     const department = [...departmentsData].find(
       (department) => department.id === id
     )
-    setDepartmentToEdit(department)
+    setDepartmentToUpdate(department)
     setIsDepartmentModalOpen(true)
   }
 
@@ -145,7 +145,7 @@ const departamentos = () => {
       </Popup>
 
       <NewDepartmentModal
-        departmentToEdit={departmentToEdit}
+        departmentToUpdate={departmentToUpdate}
         isOpen={isDepartmentModalOpen}
         onClose={handleOnCloseModal}
       />

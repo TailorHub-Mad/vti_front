@@ -7,11 +7,11 @@ const SystemService = () => {
     execute(instance.get(`/testSystem?limit=${limit}&offset=${offset}`))
   const system = (id) => execute(instance.get(`/testSystem/${id}`))
   const createSystem = (system) => execute(instance.post("/testSystem", system))
-  const editSystem = (id, system) =>
+  const updateSystem = (id, system) =>
     execute(instance.put(`/testSystem/${id}`, system))
   const deleteSystem = (id) => execute(instance.delete(`/testSystem/${id}`))
 
-  return { systems, system, createSystem, editSystem, deleteSystem }
+  return { systems, system, createSystem, updateSystem, deleteSystem }
 }
 
 export default SystemService

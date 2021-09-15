@@ -9,7 +9,7 @@ export const NewProjectModal = ({
   isOpen,
   onClose,
   onSubmit,
-  projectToEdit,
+  projectToUpdate,
   ...props
 }) => {
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
@@ -27,19 +27,19 @@ export const NewProjectModal = ({
   const moveToLeft = showSecondaryContent
 
   useEffect(() => {
-    if (projectToEdit) {
+    if (projectToUpdate) {
       const _project = {
-        alias: projectToEdit?.alias,
+        alias: projectToUpdate?.alias,
         client: "",
-        sector: projectToEdit?.sector[0]?._id,
-        focusPoint: projectToEdit?.focusPoint.map((fp) => fp._id)[0],
-        testSystems: projectToEdit?.testSystems.map((ts) => ts._id),
-        year: +projectToEdit?.date?.year,
+        sector: projectToUpdate?.sector[0]?._id,
+        focusPoint: projectToUpdate?.focusPoint.map((fp) => fp._id)[0],
+        testSystems: projectToUpdate?.testSystems.map((ts) => ts._id),
+        year: +projectToUpdate?.date?.year,
       }
       //Falta id en el alias del cliente
       setFormValues(_project)
     }
-  }, [projectToEdit])
+  }, [projectToUpdate])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
@@ -59,12 +59,12 @@ export const NewProjectModal = ({
             {...props}
           >
             <CustomModalHeader
-              title={projectToEdit ? "Editar proyecto" : "Añadir nuevo proyecto"}
+              title={projectToUpdate ? "Editar proyecto" : "Añadir nuevo proyecto"}
               onClose={onClose}
               pb="24px"
             />
             <NewProjectForm
-              projectToEdit={projectToEdit}
+              projectToUpdate={projectToUpdate}
               value={formValues}
               openAuxModal={() => setShowSecondaryContent(true)}
               onChange={(val) => setFormValues(val)}

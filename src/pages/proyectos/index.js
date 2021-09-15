@@ -14,17 +14,7 @@ import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { Spinner } from "../../components/spinner/Spinner"
 import { ToastContext } from "../../provider/ToastProvider"
 import { ImportFilesModal } from "../../components/overlay/modal/ImportFilesModal/ImportFilesModal"
-
-const DeleteType = {
-  ONE: "deleteOne",
-  MANY: "deleteMany",
-}
-
-const fetchType = {
-  ALL: "all",
-  GROUPED: "grouped",
-  FILTERED: "filtered",
-}
+import { DeleteType, fetchType } from "../../utils/constants/global_config"
 
 const projects = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -51,7 +41,7 @@ const projects = () => {
   const [showImportModal, setShowImportModal] = useState(false)
   // Create - Update state
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
-  const [projectToEdit, setProjectToEdit] = useState(null)
+  const [projectToUpdate, setProjectToUpdate] = useState(null)
 
   // Delete state
   const [deleteType, setDeleteType] = useState(null)
@@ -94,7 +84,7 @@ const projects = () => {
   }
 
   const handleOnCloseModal = () => {
-    setProjectToEdit(null)
+    setProjectToUpdate(null)
     setIsProjectModalOpen(false)
   }
 
@@ -134,7 +124,7 @@ const projects = () => {
 
   const onEdit = (id) => {
     const project = [...projectsData].find((project) => project._id === id)
-    setProjectToEdit(project)
+    setProjectToUpdate(project)
     setIsProjectModalOpen(true)
   }
 
@@ -183,7 +173,7 @@ const projects = () => {
     }
   }
 
-  const handleEditProject = async (values) => {
+  const handleUpdateProject = async (values) => {
     try {
       const _values = {
         ...values,
@@ -192,7 +182,7 @@ const projects = () => {
       delete _values.year
       delete _values.id
       delete _values.tags
-      await updateProject(_values, projectToEdit._id)
+      await updateProject(_values, projectToUpdate._id)
       showToast("Proyecto editado satisfactoriamente")
       setIsProjectModalOpen(false)
     } catch (e) {
@@ -226,10 +216,10 @@ const projects = () => {
       </Popup>
 
       <NewProjectModal
-        projectToEdit={projectToEdit}
+        projectToUpdate={projectToUpdate}
         isOpen={isProjectModalOpen}
         onClose={handleOnCloseModal}
-        onSubmit={projectToEdit ? handleEditProject : handleNewProject}
+        onSubmit={projectToUpdate ? handleUpdateProject : handleNewProject}
       />
 
       <ImportFilesModal

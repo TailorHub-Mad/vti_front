@@ -68,7 +68,7 @@ export const ProjectDetails = ({ focusPoint, testSystems, tags, users }) => {
           <Flex ml="32px">
             {testSystems &&
               testSystems.map((ts) => (
-                <Link key={ts._id} href={`${PATHS.testSystems}/${ts._id}`}>
+                <Link key={ts._id} href={`${PATHS.testSystems}/${ts._id}`} passHref>
                   <Button variant="note_content" mr="8px" mb="8px">
                     {ts.alias}
                   </Button>

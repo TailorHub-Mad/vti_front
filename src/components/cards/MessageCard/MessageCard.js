@@ -27,7 +27,7 @@ export const MessageCard = ({
       />
       <MessageCardTags tags={note.tags} />
       <MessageCardFooter
-        isClosed={note.approved}
+        isClosed={note.approved} // TODO -> change API (approved -> close/lock)
         isSubscribe={isSubscribe}
         onLock={() => {}}
         onUnlock={() => {}}

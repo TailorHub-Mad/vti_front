@@ -15,15 +15,15 @@ import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { NewClientForm } from "../NewClientForm/NewClientForm"
 
-export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
+export const NewClientModal = ({ isOpen, onClose, clientToUpdate, ...props }) => {
   const { showToast } = useContext(ToastContext)
-  const { createClient, editClient } = useClientApi()
+  const { createClient, updateClient } = useClientApi()
   const { mutate, cache } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const isEdit = Boolean(clientToEdit)
+  const isUpdate = Boolean(clientToUpdate)
 
   const handleChange = (val, idx) => {
     const _values = [...values]
@@ -49,15 +49,15 @@ export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
   const handleSubmit = async () => {
     setIsSubmitting(true)
 
-    const updatedClientsList = isEdit
-      ? await handleEditClient()
+    const updatedClientsList = isUpdate
+      ? await handleUpdateClient()
       : await handleCreateClient()
 
     updatedClientsList
       ? await mutate(SWR_CACHE_KEYS.clients, updatedClientsList, false)
       : await mutate(SWR_CACHE_KEYS.clients)
 
-    showToast(isEdit ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
+    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
     setIsSubmitting(false)
     onClose()
   }
@@ -101,11 +101,11 @@ export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
     return null
   }
 
-  const handleEditClient = async () => {
-    const { id } = clientToEdit
+  const handleUpdateClient = async () => {
+    const { id } = clientToUpdate
     const [formatedClient] = [...values]
 
-    const response = await editClient(id, formatedClient)
+    const response = await updateClient(id, formatedClient)
 
     // // TODO -> manage errors
     if (response?.error) {
@@ -117,10 +117,10 @@ export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
   }
 
   useEffect(() => {
-    if (!clientToEdit) return
-    const { id, alias, name } = clientToEdit || {}
+    if (!clientToUpdate) return
+    const { id, alias, name } = clientToUpdate || {}
     setValues([{ alias, name, id }])
-  }, [clientToEdit])
+  }, [clientToUpdate])
 
   useEffect(() => {
     if (isOpen) return
@@ -139,7 +139,7 @@ export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
           w="100%"
         >
           <Text variant="d_l_medium">
-            {isEdit ? "Editar cliente" : "Añadir nuevo cliente"}
+            {isUpdate ? "Editar cliente" : "Añadir nuevo cliente"}
           </Text>
           <CloseIcon width="24px" height="24px" cursor="pointer" onClick={onClose} />
         </ModalHeader>
@@ -176,7 +176,7 @@ export const NewClientModal = ({ isOpen, onClose, clientToEdit, ...props }) => {
         >
           Guardar
         </Button>
-        {!isEdit ? (
+        {!isUpdate ? (
           <Button
             variant="text_only"
             onClick={() => setValues([...values, {}])}
