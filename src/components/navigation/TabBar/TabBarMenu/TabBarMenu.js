@@ -11,9 +11,9 @@ export const TabBarMenu = ({ navMenuItems, ...props }) => {
       marginTop={["64px", null, null, "16px"]}
       {...props}
     >
-      {navMenuItems.map((link) => (
+      {navMenuItems.map((link, idx) => (
         <MenuItem
-          key={link.label}
+          key={`${link.label}-${idx}`}
           label={link.label}
           href={link.href}
           icon={<link.icon />}

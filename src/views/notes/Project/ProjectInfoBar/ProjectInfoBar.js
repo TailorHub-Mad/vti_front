@@ -11,7 +11,7 @@ export const ProjectInfoBar = ({ projectInfo, updatedAt, ...props }) => {
         </>
       ))}
       <Text mr="16px" color="blue.400">
-        Última actualización: {updatedAt.toLocaleDateString()}
+        Última actualización: {updatedAt?.toLocaleDateString()}
       </Text>
     </Flex>
   )

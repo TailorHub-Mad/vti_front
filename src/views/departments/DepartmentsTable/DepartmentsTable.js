@@ -13,17 +13,17 @@ export const DepartmentsTable = ({
   onEdit,
   onDeleteMany,
 }) => {
-  const { selectedRows, setSelectedRows, handleRowSelect, calcColWidth } =
-    useTableActions()
+  const {
+    selectedRows,
+    setSelectedRows,
+    handleRowSelect,
+    handleSelectAllRows,
+    calcColWidth,
+  } = useTableActions()
 
   useMemo(() => {
     setSelectedRows([])
   }, [departments.length])
-
-  const handleSelectAllRows = (e) => {
-    const value = e.target.checked ? [...Array(departments.length).keys()] : []
-    setSelectedRows(value)
-  }
 
   const handleOnDelete = () => {
     if (selectedRows.length > 1) return onDeleteMany(selectedRows)
@@ -87,7 +87,7 @@ export const DepartmentsTable = ({
           countLabel="Departamentos"
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
-          selectAllRows={handleSelectAllRows}
+          selectAllRows={() => handleSelectAllRows(_departments)}
         />
       }
       config={departments_table}

@@ -17,7 +17,7 @@ import { NewSectorForm } from "../NewSectorForm/NewSectorForm"
 
 export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
   const { showToast } = useContext(ToastContext)
-  const { createSector, editSector } = useSectorApi()
+  const { createSector, updateSector } = useSectorApi()
   const { mutate, cache } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
@@ -104,8 +104,7 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToEdit, ...props }) => {
   const handleEditSector = async () => {
     const { id } = sectorToEdit
     const [formatedSector] = [...values]
-
-    const response = await editSector(id, formatedSector)
+    const response = await updateSector(id, { title: formatedSector.title })
 
     // // TODO -> manage errors
     if (response?.error) {

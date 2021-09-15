@@ -1,29 +1,73 @@
 import { Checkbox, Text } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useMemo } from "react"
 import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
 import { OptionsMenuRow } from "../../../components/navigation/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
 import { Table } from "../../../components/tables/Table/Table"
 import { NoteTag } from "../../../components/tags/NoteTag/NoteTag"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
+import { PATHS } from "../../../utils/constants/paths"
 import { ProjectsTableHeader } from "../ProjectsTableHeader/ProjectsTableHeader"
 
-export const ProjectsTable = ({ items }) => {
-  //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
-  const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
-  const [activeItem, setActiveItem] = useState("all")
-  const elements = items?.map((project) => ({
+export const ProjectsTable = ({
+  items,
+  activeTab,
+  onTabChange,
+  onDelete,
+  onDeleteMany,
+  onEdit,
+  isGrouped,
+}) => {
+  const {
+    selectedRows,
+    setSelectedRows,
+    handleSelectAllRows,
+    handleRowSelect,
+    calcColWidth,
+  } = useTableActions()
+
+  useMemo(() => {
+    setSelectedRows([])
+  }, [items?.length])
+
+  const handleOnDelete = () => {
+    if (selectedRows.length > 1) return onDeleteMany(selectedRows)
+    return onDelete(selectedRows[0])
+  }
+
+  const transformProjectData = (e) => ({
     actions: "",
-    id: project.id,
-    alias: { label: project.alias, link: `/proyectos/${project.id}` },
-    sector: project.sector,
-    punto_focal: project.focusPoint || "",
-    sistemas_ensayo: project.testSystems,
-    tags_proyecto: project.tags,
-    usuarios: project.users,
-    apuntes: project.notes,
+    id: e._id,
+    alias: { label: e.alias, link: `${PATHS.projects}/${e._id}` },
+    sector: e.sector ? e.sector[0]?.title : "",
+    focusPoint:
+      e.focusPoint?.length > 0
+        ? e.focusPoint.map((fp) => fp.alias).join(", ")
+        : ["Persona", "Responsable"],
+    testSystems: e.testSystems?.map((ts) => ts.alias),
+    tags:
+      e.tag?.length > 0
+        ? e.tag
+        : ["Tag Proyecto A", "Tag Proyecto B", "Tag Proyecto C"],
+    users: e.users || ["User A", "User B", "User C"],
+    notes: e.notes?.map((note) => note.title),
     options: "",
-  }))
+    config: {
+      isFinished: e.isFinished,
+    },
+  })
+
+  const elements = items
+    ? !isGrouped
+      ? items?.map(transformProjectData)
+      : items.map((it) => {
+          const _it = [...it]
+          _it[1] = it[1].map(transformProjectData)
+          console.log(_it)
+          return _it
+        })
+    : null
+
   const projects_table = {
     components: {
       text: <Text />,
@@ -31,9 +75,9 @@ export const ProjectsTable = ({ items }) => {
       count: <Text />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       sector: <NoteTag />,
-      sistemas_ensayo: <TagGroup variant="light_blue" max={3} />,
-      tags_proyecto: <TagGroup variant="pale_yellow" max={3} />,
-      options: <OptionsMenuRow />,
+      testSystems: <TagGroup variant="light_blue" max={3} />,
+      tags: <TagGroup variant="pale_yellow" max={3} />,
+      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />,
     },
     head: {
       actions: {
@@ -56,27 +100,27 @@ export const ProjectsTable = ({ items }) => {
         width: calcColWidth(120),
         type: "text",
       },
-      punto_focal: {
+      focusPoint: {
         label: "Punto Focal",
         width: calcColWidth(120),
         type: "text",
       },
-      sistemas_ensayo: {
+      testSystems: {
         label: "sistemas de ensayo",
         width: calcColWidth(220),
         type: "tagGroup",
       },
-      tags_proyecto: {
+      tags: {
         label: "Tags de proyecto",
         width: calcColWidth(220),
         type: "tagGroup",
       },
-      usuarios: {
+      users: {
         label: "Usuarios",
         width: calcColWidth(60),
         type: "count",
       },
-      apuntes: {
+      notes: {
         label: "Apuntes",
         width: calcColWidth(55),
         type: "count",
@@ -92,18 +136,22 @@ export const ProjectsTable = ({ items }) => {
     <Table
       header={
         <ProjectsTableHeader
-          activeItem={activeItem}
-          onChange={(value) => setActiveItem(value)}
+          activeItem={activeTab}
+          onChange={(value) => onTabChange(value)}
           projectsCount={elements?.length}
+          selectedRows={selectedRows}
+          onDelete={handleOnDelete}
+          selectAllRows={() => handleSelectAllRows(items)}
         />
       }
       config={projects_table}
       content={elements}
       selectedRows={selectedRows}
-      onRowSelect={(idx) => handleRowSelect(idx)}
+      onRowSelect={(id) => handleRowSelect(id)}
       tableHeight="calc(100vh - 195px)"
       p="32px"
       pb="0"
+      isGrouped={isGrouped}
     />
   )
 }

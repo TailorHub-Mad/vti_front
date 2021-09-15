@@ -1,8 +1,6 @@
 import { useState } from "react"
 import { Page } from "../components/layout/Pages/Page"
-import { PageBody } from "../components/layout/PageBody/PageBody"
 import { PageHeader } from "../components/layout/Pages/PageHeader/PageHeader"
-import { PageMenu } from "../components/layout/PageMenu/PageMenu"
 import { Table } from "../components/tables/Table/Table"
 import { TableOptionsMenu } from "../components/tables/TableOptionsMenu/TableOptionsMenu"
 import { NoteTag } from "../components/tags/NoteTag/NoteTag"
@@ -11,8 +9,10 @@ import { MIN_TABLE_WIDTH } from "../utils/constants/layout"
 import { getPercentage } from "../utils/functions/common"
 import { NotesEmptyState } from "../views/notes/NotesEmptyState/NotesEmptyState"
 import { NotesMenu } from "../views/notes/NotesMenu/NotesMenu"
-import { Text, Checkbox, Center, Spinner } from "@chakra-ui/reac"
+import { Text, Checkbox, Center, Spinner } from "@chakra-ui/react"
 import { ToolBar } from "../components/navigation/ToolBar/ToolBar"
+import { PageBody } from "../components/layout/Pages/PageBody/PageBody"
+import { PageMenu } from "../components/layout/Pages/PageMenu/PageMenu"
 
 const projects = () => {
   const [selectedRows, setSelectedRows] = useState([])

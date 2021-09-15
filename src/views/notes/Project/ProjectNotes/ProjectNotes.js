@@ -1,7 +1,7 @@
 import { Flex, Grid, Text } from "@chakra-ui/react"
 import React from "react"
 import { MessageCard } from "../../../../components/cards/MessageCard/MessageCard"
-import { PageBody } from "../../../../components/layout/PageBody/PageBody"
+import { PageBody } from "../../../../components/layout/Pages/PageBody/PageBody"
 import { ToolBar } from "../../../../components/navigation/ToolBar/ToolBar"
 import { NOTES_MOCK } from "../../../../mock/notes"
 

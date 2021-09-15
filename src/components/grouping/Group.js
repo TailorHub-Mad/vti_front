@@ -3,16 +3,16 @@ import React from "react"
 import { NotesIcon } from "../icons/NotesIcon"
 import { GroupModal } from "./GroupModal/GroupModal"
 
-export const Group = () => {
+export const Group = ({onGroup}) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
 
   return (
     <>
       <Button variant="tool_button" mr="16px" onClick={onOpen}>
-        <NotesIcon mr={["8px", "0"]} />
+        <NotesIcon mr={["8px", "8px"]} />
         Agrupar
       </Button>
-      <GroupModal isOpen={isOpen} onClose={onClose} />
+      <GroupModal isOpen={isOpen} onClose={onClose} onGroup={(activeItem)=>onGroup(activeItem)}/>
     </>
   )
 }

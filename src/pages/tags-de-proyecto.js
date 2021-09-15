@@ -3,13 +3,13 @@ import React, { useState } from "react"
 import { TagCard } from "../components/cards/TagCard/TagCard"
 import { NoteDrawer } from "../components/drawer/NoteDrawer/NoteDrawer"
 import { Page } from "../components/layout/Pages/Page"
-import { PageBody } from "../components/layout/PageBody/PageBody"
+import { PageBody } from "../components/layout/Pages/PageBody/PageBody"
 import { PageHeader } from "../components/layout/Pages/PageHeader/PageHeader"
 import { ToolBar } from "../components/navigation/ToolBar/ToolBar"
 import { Spinner } from "../components/spinner/Spinner"
 import { PROJECT_TAGS_MOCK } from "../mock/tags"
 import { NotesEmptyState } from "../views/notes/NotesEmptyState/NotesEmptyState"
-import { ProjectsTagsHeader } from "../views/projectTags/ProjectTagsHeader/ProjectTagsHeader"
+import { ProjectsTagsHeader } from "../views/project_tags/ProjectTagsHeader/ProjectTagsHeader"
 
 const tagsDeProyecto = () => {
   // TODO fetch notes
