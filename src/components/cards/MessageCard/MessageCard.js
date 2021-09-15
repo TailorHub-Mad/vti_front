@@ -5,46 +5,38 @@ import { MessageCardInfo } from "./MessageCardInfo/MessageCardInfo"
 import { MessageCardTags } from "./MessageCardTags/MessageCardTags"
 
 export const MessageCard = ({
-  id,
-  messagesCount,
-  attachmentsCount,
-  subscribedUsers,
-  isFavourite,
-  title,
-  author,
-  updatedAt,
-  tags,
-  isClosed,
-  canSubscribe,
+  note,
   onSeeDetails,
-  ...props
+  subscribedUsers,
+  isSubscribe,
+  isFavourite,
 }) => {
   return (
-    <Card bgColor="white" {...props}>
+    <Card bgColor="white">
       <MessageCardHeader
         isFavourite={isFavourite}
-        title={title}
+        title={note.title}
         onClick={onSeeDetails}
       />
       <MessageCardInfo
-        id={id}
-        author={author}
-        updatedAt={updatedAt?.toLocaleDateString()}
+        id={note._id}
+        author={note.owner}
+        updatedAt={new Date(note.updatedAt).toLocaleDateString()}
         marginBottom="18px"
         marginTop="6px"
       />
-      <MessageCardTags tags={tags} />
+      <MessageCardTags tags={note.tags} />
       <MessageCardFooter
-        isClosed={isClosed}
-        canSubscribe={canSubscribe}
+        isClosed={note.approved}
+        isSubscribe={isSubscribe}
         onLock={() => {}}
         onUnlock={() => {}}
         onSubscribe={() => {}}
         onValidate={() => {}}
         seeMessages={() => {}}
         seeAttachments={() => {}}
-        messagesCount={messagesCount}
-        attachmentsCount={attachmentsCount}
+        messagesCount={note.messages?.length}
+        attachmentsCount={note.documents?.length}
         subscribedUsers={subscribedUsers}
         marginTop="16px"
       />

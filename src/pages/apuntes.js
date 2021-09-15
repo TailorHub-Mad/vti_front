@@ -15,7 +15,6 @@ import { Popup } from "../components/overlay/Popup/Popup"
 import { Spinner } from "../components/spinner/Spinner"
 import useNoteApi from "../hooks/api/useNoteApi"
 import useFetchSWR from "../hooks/useFetchSWR"
-import { NOTES_MOCK } from "../mock/notes"
 import { ApiAuthContext } from "../provider/ApiAuthProvider"
 import { ToastContext } from "../provider/ToastProvider"
 import { DeleteType } from "../utils/constants/global_config"
@@ -25,7 +24,7 @@ import { NewNoteModal } from "../views/notes/NewNote/NewNoteModal/NewNoteModal"
 import { NotesMenu } from "../views/notes/NotesMenu/NotesMenu"
 
 const apuntes = () => {
-  const { isLoggedIn } = useContext(ApiAuthContext)
+  const { isLoggedIn, user } = useContext(ApiAuthContext)
   const { notes, deleteNote } = useNoteApi()
   const { showToast } = useContext(ToastContext)
   const { data, error, isLoading, mutate } = useFetchSWR(SWR_CACHE_KEYS.notes, notes)
@@ -44,8 +43,8 @@ const apuntes = () => {
   const [searchChain, setSearchChain] = useState("")
   const [, /*searchedNotes*/ setSearchedNotes] = useState([])
 
-  const emptyData = Boolean(data && data.length === 0)
-  const notesData = data ?? []
+  const emptyData = Boolean(data && data[0]?.notes.length === 0)
+  const notesData = data ? data[0]?.notes : []
 
   // TODO
   const handleExport = () => {}
@@ -122,6 +121,8 @@ const apuntes = () => {
     if (emptyData || searchChain === "") return
     onSearch(searchChain)
   }, [notesData])
+
+  console.log("user", user)
 
   // * REVIEW
   const [activeTab, setActiveTab] = useState("all")
@@ -206,10 +207,10 @@ const apuntes = () => {
             width="100%"
             marginBottom="32px"
           >
-            {NOTES_MOCK.map((mock, idx) => (
+            {notesData.map((note, idx) => (
               <MessageCard
-                {...mock}
-                key={idx}
+                note={note}
+                key={`${note.title}-${idx}`}
                 onSeeDetails={() => setShowNoteDetails(idx.toString())}
               />
             ))}

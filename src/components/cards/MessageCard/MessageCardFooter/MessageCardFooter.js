@@ -17,7 +17,7 @@ const icon_props = {
 
 export const MessageCardFooter = ({
   isClosed,
-  canSubscribe,
+  isSubscribe,
   onLock,
   onUnlock,
   onSubscribe,
@@ -43,8 +43,8 @@ export const MessageCardFooter = ({
       ) : (
         <LockOpenIcon {...icon_props} onClick={onLock} />
       )}
+      {isSubscribe ? <SubscribeIcon {...icon_props} onClick={onSubscribe} /> : null}
       <BadgeIcon {...icon_props} onClick={onValidate} />
-      {canSubscribe ? <SubscribeIcon {...icon_props} onClick={onSubscribe} /> : null}
       <Box display="flex" alignItems="center">
         <Text color="grey" variant="d_xs_regular" marginRight="2px">
           {messagesCount}
