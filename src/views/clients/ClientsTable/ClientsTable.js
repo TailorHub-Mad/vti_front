@@ -34,7 +34,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
         alias: client.alias,
         name: { label: client.name, link: `/clientes/${client.id}` },
         testSystems: client.testSystems?.map((testSystem) => testSystem.alias),
-        projects: [...client.projects].map((project) => project.alias),
+        projects: client.projects?.map((project) => project.alias),
         options: "",
       }
     })

@@ -17,6 +17,7 @@ import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddTestSystemIcon } from "../../components/icons/AddTestSystemIcon"
+import { checkDataIsEmpty } from "../../utils/functions/common"
 
 const sistemas = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -41,7 +42,7 @@ const sistemas = () => {
   const [searchChain, setSearchChain] = useState("")
   const [searchedSystems, setSearchedSystems] = useState([])
 
-  const isEmptyData = Boolean(data && data[0]?.testSystems.length === 0)
+  const isEmptyData = checkDataIsEmpty(data)
   const systemsData = data ? data[0]?.testSystems : []
 
   // TODO

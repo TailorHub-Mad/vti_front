@@ -16,7 +16,7 @@ import useFetchSWR from "../../hooks/useFetchSWR"
 import { DeleteType } from "../../utils/constants/global_config"
 import { pullAt } from "lodash"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
-import { getFieldObjectById } from "../../utils/functions/common"
+import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import { AddSectorIcon } from "../../components/icons/AddSectorIcon"
 
 const sectores = () => {
@@ -42,7 +42,7 @@ const sectores = () => {
   const [searchChain, setSearchChain] = useState("")
   const [searchedSectors, setSearchedSectors] = useState([])
 
-  const isEmptyData = Boolean(data && data.length === 0)
+  const isEmptyData = checkDataIsEmpty(data)
   const sectorsData = data ?? []
 
   // TODO

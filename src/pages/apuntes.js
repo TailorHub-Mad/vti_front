@@ -18,6 +18,7 @@ import { ApiAuthContext } from "../provider/ApiAuthProvider"
 import { ToastContext } from "../provider/ToastProvider"
 import { noteFetchHandler } from "../swr/note.swr"
 import { fetchOption, fetchType } from "../utils/constants/global_config"
+import { checkDataIsEmpty } from "../utils/functions/common"
 import { ViewEmptyState } from "../views/common/ViewEmptyState"
 import { NewNoteModal } from "../views/notes/NewNote/NewNoteModal/NewNoteModal"
 import { NotesMenu } from "../views/notes/NotesMenu/NotesMenu"
@@ -44,7 +45,7 @@ const apuntes = () => {
 
   const [noteToDelete, setNoteToDelete] = useState(null)
 
-  const isEmptyData = Boolean(data && data[0]?.notes.length === 0)
+  const isEmptyData = checkDataIsEmpty(data)
   const notesData = data ? data[0]?.notes : []
 
   // TODO

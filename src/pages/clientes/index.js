@@ -17,6 +17,7 @@ import { NewClientModal } from "../../views/clients/NewClient/NewClientModal/New
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { AddClientIcon } from "../../components/icons/AddClientIcon"
+import { checkDataIsEmpty } from "../../utils/functions/common"
 
 const clientes = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -41,8 +42,8 @@ const clientes = () => {
   const [searchChain, setSearchChain] = useState("")
   const [searchedClients, setSearchedClients] = useState([])
 
-  const isEmptyData = Boolean(data && data.length === 0)
-  const clientsData = data ?? []
+  const isEmptyData = checkDataIsEmpty(data)
+  const clientsData = data && !isEmptyData ? data : null
 
   // TODO
   const handleExport = () => {}
@@ -149,7 +150,7 @@ const clientes = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {!isLoading && !isEmptyData && (
+        {clientsData ? (
           <ToolBar
             onAdd={() => setIsClientModalOpen(true)}
             onSearch={onSearch}
@@ -161,7 +162,7 @@ const clientes = () => {
             withoutGroup
             icon={<AddClientIcon />}
           />
-        )}
+        ) : null}
       </PageHeader>
       {isLoading ? <Spinner /> : null}
       {isEmptyData ? (
@@ -173,7 +174,7 @@ const clientes = () => {
           onAdd={() => setIsClientModalOpen(true)}
         />
       ) : null}
-      {clientsData && !isEmptyData ? (
+      {clientsData ? (
         <ClientsTable
           clients={searchChain !== "" ? searchedClients : clientsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}

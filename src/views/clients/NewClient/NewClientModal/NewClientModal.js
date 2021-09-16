@@ -56,42 +56,19 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate, ...props }) =>
   }
 
   const handleCreateClient = async () => {
-    const clientsToCreate = [...values]
-    const clientsQueue = clientsToCreate.map((client) => createClient(client))
-    const response = await Promise.all(clientsQueue)
+    try {
+      const clientsToCreate = [...values]
+      await createClient(clientsToCreate)
 
-    const [clientsSuccessfull, clientsError] = response.reduce(
-      ([succ, error], e, index) => {
-        e?.error
-          ? error.push(clientsToCreate[index])
-          : succ.push(clientsToCreate[index])
-        return [succ, error]
-      },
-      [[], []]
-    )
+      if (!cache.has(SWR_CACHE_KEYS.clients)) return null
 
-    // TODO -> manage errors
-    if (clientsError.length > 0) {
+      const cacheClients = cache.get(SWR_CACHE_KEYS.clients)
+      const updatedClients = [...clientsToCreate, ...cacheClients]
+      return updatedClients
+    } catch (error) {
+      // TODO -> manage errors
       console.log("ERROR")
     }
-
-    if (cache.has(SWR_CACHE_KEYS.clients)) {
-      const cacheClients = cache.get(SWR_CACHE_KEYS.clients)
-      const updatedClients = []
-      const formatClientsSuccessfull = clientsSuccessfull.map((client) => {
-        return {
-          ...client,
-          projects: [],
-          notes: [],
-        }
-      })
-      updatedClients.push({
-        testClients: [...formatClientsSuccessfull, ...cacheClients[0].testClients],
-      })
-      return updatedClients
-    }
-
-    return null
   }
 
   const handleUpdateClient = async () => {

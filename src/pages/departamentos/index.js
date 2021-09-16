@@ -17,6 +17,7 @@ import { DeleteType } from "../../utils/constants/global_config"
 import { pullAt } from "lodash"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { AddDepartmentIcon } from "../../components/icons/AddDepartmentIcon"
+import { checkDataIsEmpty } from "../../utils/functions/common"
 
 const departamentos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -41,7 +42,7 @@ const departamentos = () => {
   const [searchChain, setSearchChain] = useState("")
   const [searchedDepartments, setSearchedDepartments] = useState([])
 
-  const isEmptyData = Boolean(data && data.length === 0)
+  const isEmptyData = checkDataIsEmpty(data)
   const departmentsData = data ?? []
 
   // TODO

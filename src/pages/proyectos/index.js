@@ -19,6 +19,7 @@ import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
+import { checkDataIsEmpty } from "../../utils/functions/common"
 
 const proyectos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -43,7 +44,7 @@ const proyectos = () => {
   const [projectsToDelete, setProjectsToDelete] = useState(null)
 
   const isGrouped = fetchState === fetchType.GROUPED
-  const isEmptyData = Boolean(data && data[0]?.projects.length === 0)
+  const isEmptyData = checkDataIsEmpty(data)
   const projectsData = data ? data[0]?.projects : []
 
   // TODO

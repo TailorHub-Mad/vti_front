@@ -19,3 +19,8 @@ export const getFieldObjectById = (collection, field, id) => {
   const item = collection.find((item) => item.id === id)
   return item[field]
 }
+
+export const checkDataIsEmpty = (data) => {
+  if (!data) return false
+  if (data.length === 0) return true
+}
