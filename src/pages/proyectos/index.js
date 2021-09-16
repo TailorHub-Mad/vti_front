@@ -20,6 +20,7 @@ const proyectos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
   const { deleteProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
+
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const { data, error, isLoading, mutate } = projectFetchHandler(fetchState)
 
@@ -53,10 +54,6 @@ const proyectos = () => {
   const handleClosePopup = () => {
     setDeleteType(null)
     setProjectsToDelete(null)
-  }
-
-  const handleOnOpenModal = () => {
-    setIsProjectModalOpen(true)
   }
 
   const handleOnCloseModal = () => {
@@ -176,7 +173,7 @@ const proyectos = () => {
         <BreadCrumbs />
         {!isLoading && !isEmptyData && (
           <ToolBar
-            onAdd={handleOnOpenModal}
+            onAdd={() => setIsProjectModalOpen(true)}
             onSearch={onSearch}
             onGroup={handleOnGroup}
             onFilter={handleOnFilter}
@@ -195,7 +192,7 @@ const proyectos = () => {
           importButtonText="Importar"
           addButtonText="Añadir proyecto"
           onImport={() => setShowImportModal(true)}
-          onAdd={handleOnOpenModal}
+          onAdd={() => setIsProjectModalOpen(true)}
         />
       ) : null}
       {data && !isLoading ? (

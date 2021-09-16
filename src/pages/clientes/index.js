@@ -57,10 +57,6 @@ const clientes = () => {
     setClientsToDelete(null)
   }
 
-  const handleOnOpenModal = () => {
-    setIsClientModalOpen(true)
-  }
-
   const handleOnCloseModal = () => {
     setClientToUpdate(null)
     setIsClientModalOpen(false)
@@ -155,7 +151,7 @@ const clientes = () => {
         <BreadCrumbs />
         {!isLoading && !isEmptyData && (
           <ToolBar
-            onAdd={handleOnOpenModal}
+            onAdd={() => setIsClientModalOpen(true)}
             onSearch={onSearch}
             onImport={() => setShowImportModal(true)}
             onExport={handleExport}

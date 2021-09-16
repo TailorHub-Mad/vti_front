@@ -5,7 +5,7 @@ import { ICONS_REFERENCE } from "../../../utils/constants/icons_reference"
 export const NotesMenu = ({
   notesCount = 0,
   onChange,
-  activeItem = "favs",
+  activeItem = "all",
   ...props
 }) => {
   const visibility_menu = {

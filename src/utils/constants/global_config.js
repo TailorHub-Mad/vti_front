@@ -9,6 +9,11 @@ export const fetchType = {
   FILTERED: "filtered",
 }
 
+export const fetchOption = {
+  FILTER: "filter",
+  SEARCH: "search",
+}
+
 export const RoleType = {
   USER: "user",
   ADMIN: "admin",

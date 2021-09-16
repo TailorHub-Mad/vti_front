@@ -1,7 +1,6 @@
-import { Button, Modal, ModalOverlay, Text } from "@chakra-ui/react"
+import { Button, Modal, ModalOverlay, Text, ModalContent } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { FileInput } from "../../../forms/FileInput/FileInput"
-import { CustomModalContent } from "../CustomModalContent/CustomModalContent"
 import { CustomModalHeader } from "../CustomModalHeader/CustomModalHeader"
 
 export const ImportFilesModal = ({ title, isOpen, onClose, ...props }) => {
@@ -10,7 +9,7 @@ export const ImportFilesModal = ({ title, isOpen, onClose, ...props }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
       <ModalOverlay />
-      <CustomModalContent>
+      <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
           title={title || "Importar archivos"}
           onClose={onClose}
@@ -23,7 +22,7 @@ export const ImportFilesModal = ({ title, isOpen, onClose, ...props }) => {
         <Button w="194px" margin="0 auto" mt="64px" onClick={handleSubmit}>
           Guardar
         </Button>
-      </CustomModalContent>
+      </ModalContent>
     </Modal>
   )
 }

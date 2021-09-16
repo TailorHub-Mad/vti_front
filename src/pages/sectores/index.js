@@ -58,10 +58,6 @@ const sectores = () => {
     setSectorsToDelete(null)
   }
 
-  const handleOnOpenModal = () => {
-    setIsSectorModalOpen(true)
-  }
-
   const handleOnCloseModal = () => {
     setSectorToUpdate(null)
     setIsSectorModalOpen(false)
@@ -157,7 +153,7 @@ const sectores = () => {
         <BreadCrumbs />
         {!isLoading && !isEmptyData && (
           <ToolBar
-            onAdd={handleOnOpenModal}
+            onAdd={() => setIsSectorModalOpen(true)}
             onSearch={onSearch}
             onImport={() => setShowImportModal(true)}
             onExport={handleExport}
@@ -174,7 +170,7 @@ const sectores = () => {
           importButtonText="Importar"
           addButtonText="Añadir sector"
           onImport={() => setShowImportModal(true)}
-          onAdd={handleOnOpenModal}
+          onAdd={() => setIsSectorModalOpen(true)}
         />
       ) : null}
       {data && !isEmptyData ? (

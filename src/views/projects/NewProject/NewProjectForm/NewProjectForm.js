@@ -16,7 +16,6 @@ export const NewProjectForm = ({ openAuxModal, value, onChange }) => {
   const { getUsers } = useUserApi()
   const { systems: getSystems } = useSystemApi()
 
-  console.log("value", value)
   // TODO -> manage errors & loading state
   const { data: clients } = useFetchSWR(SWR_CACHE_KEYS.clients, getClients)
   const { data: sectors } = useFetchSWR(SWR_CACHE_KEYS.sectors, getSectors)

@@ -9,34 +9,38 @@ export const MessageCard = ({
   onSeeDetails,
   subscribedUsers,
   isSubscribe,
-  isFavourite,
+  isFavorite,
+  handleDelete,
+  handleFavorite,
 }) => {
+  const handleOnFavorite = () => {
+    if (isFavorite) return
+    handleFavorite()
+  }
+
   return (
     <Card bgColor="white">
       <MessageCardHeader
-        isFavourite={isFavourite}
-        title={note.title}
+        isFavorite={isFavorite}
+        title={note?.title}
         onClick={onSeeDetails}
+        onDelele={handleDelete}
+        onFavorite={handleOnFavorite}
       />
       <MessageCardInfo
-        id={note._id}
-        author={note.owner}
-        updatedAt={new Date(note.updatedAt).toLocaleDateString()}
+        id={note?._id}
+        author={note?.owner}
+        updatedAt={new Date(note?.updatedAt).toLocaleDateString()}
         marginBottom="18px"
         marginTop="6px"
       />
-      <MessageCardTags tags={note.tags} />
+      <MessageCardTags tags={note?.tags} />
       <MessageCardFooter
-        isClosed={note.approved} // TODO -> change API (approved -> close/lock)
+        isClosed={note?.lock}
         isSubscribe={isSubscribe}
-        onLock={() => {}}
-        onUnlock={() => {}}
-        onSubscribe={() => {}}
-        onValidate={() => {}}
-        seeMessages={() => {}}
-        seeAttachments={() => {}}
-        messagesCount={note.messages?.length}
-        attachmentsCount={note.documents?.length}
+        isValidate={note?.approved}
+        messagesCount={note?.messages?.length}
+        attachmentsCount={note?.documents?.length}
         subscribedUsers={subscribedUsers}
         marginTop="16px"
       />

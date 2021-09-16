@@ -57,10 +57,6 @@ const sistemas = () => {
     setSystemsToDelete(null)
   }
 
-  const handleOnOpenModal = () => {
-    setIsSystemModalOpen(true)
-  }
-
   const handleOnCloseModal = () => {
     setSystemToUpdate(null)
     setIsSystemModalOpen(false)
@@ -158,7 +154,7 @@ const sistemas = () => {
         <BreadCrumbs />
         {!isLoading && !isEmptyData && (
           <ToolBar
-            onAdd={handleOnOpenModal}
+            onAdd={() => setIsSystemModalOpen(true)}
             onSearch={onSearch}
             onImport={() => setShowImportModal(true)}
             onExport={handleExport}
@@ -175,7 +171,7 @@ const sistemas = () => {
           importButtonText="Importar"
           addButtonText="Añadir sistema"
           onImport={() => setShowImportModal(true)}
-          onAdd={handleOnOpenModal}
+          onAdd={() => setIsSystemModalOpen(true)}
         />
       ) : null}
       {data && !isEmptyData ? (

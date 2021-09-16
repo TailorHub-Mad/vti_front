@@ -1,6 +1,6 @@
 import { Grid } from "@chakra-ui/react"
-import { pullAt } from "lodash"
-import React, { useContext, useEffect, useState } from "react"
+import { remove } from "lodash"
+import React, { useContext, useState } from "react"
 import { MessageCard } from "../components/cards/MessageCard/MessageCard"
 import { NoteDrawer } from "../components/drawer/NoteDrawer/NoteDrawer"
 import { AddNoteIcon } from "../components/icons/AddNoteIcon"
@@ -14,34 +14,35 @@ import { ImportFilesModal } from "../components/overlay/Modal/ImportFilesModal/I
 import { Popup } from "../components/overlay/Popup/Popup"
 import { Spinner } from "../components/spinner/Spinner"
 import useNoteApi from "../hooks/api/useNoteApi"
-import useFetchSWR from "../hooks/useFetchSWR"
 import { ApiAuthContext } from "../provider/ApiAuthProvider"
 import { ToastContext } from "../provider/ToastProvider"
-import { DeleteType } from "../utils/constants/global_config"
-import { SWR_CACHE_KEYS } from "../utils/constants/swr"
+import { noteFetchHandler } from "../swr/note.swr"
+import { fetchOption, fetchType } from "../utils/constants/global_config"
 import { ViewEmptyState } from "../views/common/ViewEmptyState"
 import { NewNoteModal } from "../views/notes/NewNote/NewNoteModal/NewNoteModal"
 import { NotesMenu } from "../views/notes/NotesMenu/NotesMenu"
 
 const apuntes = () => {
-  const { isLoggedIn } = useContext(ApiAuthContext)
+  const { isLoggedIn, user } = useContext(ApiAuthContext)
   const { notes, deleteNote } = useNoteApi()
   const { showToast } = useContext(ToastContext)
-  const { data, error, isLoading, mutate } = useFetchSWR(SWR_CACHE_KEYS.notes, notes)
+
+  const [fetchState, setFetchState] = useState(fetchType.ALL)
+  const [fetchOptions, setFetchOptions] = useState({})
+
+  const { data, error, isLoading, mutate } = noteFetchHandler(
+    fetchState,
+    fetchOptions
+  )
 
   const [showImportModal, setShowImportModal] = useState(false)
+  const [showNoteDetails, setShowNoteDetails] = useState(false)
 
   // Create - Update state
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false)
   const [noteToUpdate, setNoteToUpdate] = useState(null)
 
-  // Delete state
-  const [deleteType, setDeleteType] = useState(null)
-  const [notesToDelete, setNotesToDelete] = useState(null)
-
-  // Search state
-  const [searchChain, setSearchChain] = useState("")
-  const [, /*searchedNotes*/ setSearchedNotes] = useState([])
+  const [noteToDelete, setNoteToDelete] = useState(null)
 
   const isEmptyData = Boolean(data && data[0]?.notes.length === 0)
   const notesData = data ? data[0]?.notes : []
@@ -49,85 +50,43 @@ const apuntes = () => {
   // TODO
   const handleExport = () => {}
 
-  // const handleOpenPopup = (notesToDelete, type) => {
-  //   setDeleteType(type)
-  //   setNotesToDelete(notesToDelete)
-  // }
-
-  const handleClosePopup = () => {
-    setDeleteType(null)
-    setNotesToDelete(null)
-  }
-
-  const handleOnOpenModal = () => {
-    setIsNoteModalOpen(true)
-  }
-
   const handleOnCloseModal = () => {
     setNoteToUpdate(null)
     setIsNoteModalOpen(false)
   }
 
-  const handleDeleteFunction = async () => {
-    const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
-    await f(notesToDelete, notesData)
-    setDeleteType(null)
-    setNotesToDelete(null)
+  const getTitleByIdNote = (id) => {
+    if (!id) return
+    const { title } = notesData.find((note) => note._id === id)
+    return title
   }
 
-  const getAliasByIdNote = (id) => {
-    const { alias } = notesData.find((note) => note._id === id)
-    return alias
-  }
-
-  const deleteOne = async (id, notes) => {
+  const handleDelete = async (id) => {
     await deleteNote(id)
-    const updatedNotes = notes.filter((note) => note._id !== id)
+    const updatedNotes = remove(notes, (note) => note._id === id)
     await mutate(updatedNotes, false)
+    setNoteToDelete(null)
     showToast("Apunte borrado correctamente")
   }
 
-  const deleteMany = async (positions, notes) => {
-    const notesQueue = positions.map((position) =>
-      deleteNote(notesData[position]._id)
-    )
-    await Promise.all(notesQueue)
-    pullAt(notes, positions)
-    const updatedNotes = [...notes]
-    await mutate(updatedNotes, false)
-    showToast("Apuntes borrados correctamente")
-  }
+  // TODO
+  const handleFavorite = async (/*id*/) => {}
+
+  const checkIsFavorite = (id) => user.favorites.notes.includes(id)
+  const checkIsSubscribe = (id) => user.subscribed.notes.includes(id)
 
   // const onEdit = (id) => {
-  //   const note = [...notesData].find((note) => note._id === id)
+  //   const note = notesData.find((note) => note._id === id)
   //   setNoteToUpdate(note)
   //   setIsNoteModalOpen(true)
   // }
 
-  const onSearch = (search) => {
-    setSearchChain(search)
-
-    if (search === "") return setSearchedNotes([])
-
-    const results = notesData.filter(
-      (note) =>
-        note._id.toLowerCase().includes(search.toLowerCase()) ||
-        note.vtiCode.toLowerCase().includes(search.toLowerCase())
-    )
-    setSearchedNotes(results)
-  }
-
-  useEffect(() => {
-    if (isEmptyData || searchChain === "") return
-    onSearch(searchChain)
-  }, [notesData])
-
-  // * REVIEW
-  const [activeTab, setActiveTab] = useState("all")
-  const [showNoteDetails, setShowNoteDetails] = useState(null)
+  const onSearch = (search) =>
+    setFetchOptions({
+      [fetchOption.SEARCH]: search,
+    })
 
   if (error) return <>ERROR...</>
-
   return !isLoggedIn ? (
     <>Loading...</>
   ) : (
@@ -137,13 +96,11 @@ const apuntes = () => {
         confirmText="Eliminar"
         cancelText="Cancelar"
         color="error"
-        isOpen={deleteType}
-        onConfirm={handleDeleteFunction}
-        onClose={handleClosePopup}
+        isOpen={noteToDelete}
+        onConfirm={handleDelete}
+        onClose={() => setNoteToDelete(null)}
       >
-        {deleteType === DeleteType.ONE
-          ? `¿Desea eliminar ${getAliasByIdNote(notesToDelete)}?`
-          : "¿Desea eliminar los apuntes seleccionados?"}
+        {`¿Desea eliminar ${getTitleByIdNote(noteToDelete)}?`}
       </Popup>
 
       <NewNoteModal
@@ -159,14 +116,14 @@ const apuntes = () => {
 
       <NoteDrawer
         isOpen={showNoteDetails}
-        onClose={() => setShowNoteDetails(null)}
+        onClose={() => setShowNoteDetails(false)}
       />
 
       <PageHeader>
         <BreadCrumbs />
         {!isLoading && !isEmptyData && (
           <ToolBar
-            onAdd={handleOnOpenModal}
+            onAdd={() => setIsNoteModalOpen(true)}
             onSearch={onSearch}
             onImport={() => setShowImportModal(true)}
             onExport={handleExport}
@@ -181,9 +138,9 @@ const apuntes = () => {
       <PageMenu>
         {notesData && !isEmptyData ? (
           <NotesMenu
-            activeItem={activeTab}
+            activeItem={fetchState}
             notesCount={notes?.length}
-            onChange={(value) => setActiveTab(value)}
+            onChange={(state) => setFetchState(state)}
           />
         ) : null}
       </PageMenu>
@@ -207,9 +164,14 @@ const apuntes = () => {
           >
             {notesData.map((note, idx) => (
               <MessageCard
-                note={note}
                 key={`${note.title}-${idx}`}
-                onSeeDetails={() => setShowNoteDetails(idx.toString())}
+                note={note}
+                onSeeDetails={() => setShowNoteDetails(true)}
+                subscribedUsers={null} // TOPO -> review
+                isSubscribe={checkIsSubscribe(note._id)}
+                isFavorite={checkIsFavorite(note._id)}
+                handleDelete={() => setNoteToDelete(idx)}
+                handleFavorite={() => handleFavorite(idx)}
               />
             ))}
           </Grid>

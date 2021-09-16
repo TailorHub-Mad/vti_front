@@ -57,10 +57,6 @@ const departamentos = () => {
     setDepartmentsToDelete(null)
   }
 
-  const handleOnOpenModal = () => {
-    setIsDepartmentModalOpen(true)
-  }
-
   const handleOnCloseModal = () => {
     setDepartmentToUpdate(null)
     setIsDepartmentModalOpen(false)
@@ -159,7 +155,7 @@ const departamentos = () => {
         <BreadCrumbs />
         {!isLoading && !isEmptyData && (
           <ToolBar
-            onAdd={handleOnOpenModal}
+            onAdd={() => setIsDepartmentModalOpen(true)}
             onSearch={onSearch}
             onImport={() => setShowImportModal(true)}
             onExport={handleExport}
@@ -176,7 +172,7 @@ const departamentos = () => {
           importButtonText="Importar"
           addButtonText="Añadir departamento"
           onImport={() => setShowImportModal(true)}
-          onAdd={handleOnOpenModal}
+          onAdd={() => setIsDepartmentModalOpen(true)}
         />
       ) : null}
       {data && !isEmptyData ? (
