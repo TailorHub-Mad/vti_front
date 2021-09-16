@@ -21,7 +21,7 @@ export const SectorsTable = ({ items: sectors, onDelete, onEdit, onDeleteMany })
   }
 
   const handleOnDelete = () => {
-    if (selectedRows.length > 1) return onDeleteMany(selectedRows)
+    if (Object.keys(selectedRows).length > 1) return onDeleteMany(selectedRows)
     return onDelete(sectors[selectedRows[0]].id)
   }
 

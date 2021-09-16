@@ -13,7 +13,7 @@ export const TableHeader = ({
     <Flex justify="space-between" align="center" pb="32px">
       <Flex>
         <Checkbox mr="8px" onChange={selectAllRows} />
-        {selectedRows?.length > 0 ? (
+        {Object.keys(selectedRows)?.length > 0 ? (
           <Flex
             alignItems="center"
             justifyContent="center"

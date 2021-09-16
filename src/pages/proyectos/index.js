@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import useProjectApi from "../../hooks/api/useProjectApi"
 import { ProjectsTable } from "../../views/projects/ProjectTable/ProjectTable"
 import { Popup } from "../../components/overlay/Popup/Popup"
@@ -9,7 +9,11 @@ import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { Spinner } from "../../components/spinner/Spinner"
 import { ToastContext } from "../../provider/ToastProvider"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
-import { DeleteType, fetchType } from "../../utils/constants/global_config"
+import {
+  DeleteType,
+  fetchOption,
+  fetchType,
+} from "../../utils/constants/global_config"
 import { projectFetchHandler } from "../../swr/project.swr"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
@@ -22,9 +26,12 @@ const proyectos = () => {
   const { showToast } = useContext(ToastContext)
 
   const [fetchState, setFetchState] = useState(fetchType.ALL)
-  const { data, error, isLoading, mutate } = projectFetchHandler(fetchState)
+  const [fetchOptions, setFetchOptions] = useState({})
+  const { data, error, isLoading, mutate } = projectFetchHandler(
+    fetchState,
+    fetchOptions
+  )
 
-  const [activeTab, setActiveTab] = useState("all")
   const [showImportModal, setShowImportModal] = useState(false)
 
   // Create - Update state
@@ -34,10 +41,6 @@ const proyectos = () => {
   // Delete state
   const [deleteType, setDeleteType] = useState(null)
   const [projectsToDelete, setProjectsToDelete] = useState(null)
-
-  // Search state
-  const [searchChain, setSearchChain] = useState("")
-  const [searchedProjects, setSearchedProjects] = useState([])
 
   const isGrouped = fetchState === fetchType.GROUPED
   const isEmptyData = Boolean(data && data[0]?.projects.length === 0)
@@ -61,16 +64,16 @@ const proyectos = () => {
     setIsProjectModalOpen(false)
   }
 
+  const getAliasByIdProject = (id) => {
+    const { alias } = projectsData.find((project) => project._id === id) || {}
+    return alias
+  }
+
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     await f(projectsToDelete, projectsData)
     setDeleteType(null)
     setProjectsToDelete(null)
-  }
-
-  const getAliasByIdProject = (id) => {
-    const { alias } = projectsData.find((project) => project._id === id) || {}
-    return alias
   }
 
   const deleteOne = async (id, projects) => {
@@ -84,12 +87,13 @@ const proyectos = () => {
   }
 
   const deleteMany = async (ids, projects) => {
-    const projectsQueue = ids.map((id) => deleteProject(id))
+    const idProjects = Object.keys(ids)
+    const projectsQueue = idProjects.map((id) => deleteProject(id))
     await Promise.all(projectsQueue)
 
     const updatedProjects = []
     updatedProjects.push({
-      projects: projects.filter((pr) => !ids.includes(pr._id)),
+      projects: projects.filter((pr) => !idProjects.includes(pr._id)),
     })
     await mutate(updatedProjects, false)
     showToast("Proyectos borrados correctamente")
@@ -101,29 +105,10 @@ const proyectos = () => {
     setIsProjectModalOpen(true)
   }
 
-  const onSearch = (search) => {
-    setSearchChain(search)
-
-    if (search === "") return setSearchedProjects([])
-
-    const results = projectsData.filter(
-      (project) =>
-        project._id.toLowerCase().includes(search.toLowerCase()) ||
-        project.alias.toLowerCase().includes(search.toLowerCase())
-    )
-    setSearchedProjects(results)
-  }
-
-  const handleTabChange = async (value) => {
-    if (value === "all") {
-      setActiveTab("all")
-      // await mutate(projectsData, false)
-    } else {
-      setActiveTab("active")
-      // const _projects = projectsData.filter((project) => !project.isFinished)
-      // await mutate(_projects, false)
-    }
-  }
+  const onSearch = (search) =>
+    setFetchOptions({
+      [fetchOption.SEARCH]: search,
+    })
 
   const handleOnGroup = () => {
     setFetchState(fetchType.GROUPED)
@@ -133,13 +118,7 @@ const proyectos = () => {
     setFetchState(fetchType.FILTERED)
   }
 
-  useEffect(() => {
-    if (isEmptyData || searchChain === "") return
-    onSearch(searchChain)
-  }, [data])
-
   if (error) return <>ERROR...</>
-
   return !isLoggedIn ? (
     <>Loading...</>
   ) : (
@@ -198,12 +177,11 @@ const proyectos = () => {
       {data && !isLoading ? (
         <ProjectsTable
           isGrouped={isGrouped}
-          items={searchChain !== "" ? searchedProjects : projectsData}
+          items={projectsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
           onEdit={onEdit}
-          activeTab={activeTab}
-          onTabChange={(value) => handleTabChange(value)}
+          onTabChange={(state) => setFetchState(state)}
         />
       ) : null}
     </Page>

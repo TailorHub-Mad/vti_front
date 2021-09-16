@@ -1,35 +1,38 @@
 import { DeleteIcon } from "@chakra-ui/icons"
 import { chakra, Checkbox, Flex, Text } from "@chakra-ui/react"
 import React from "react"
+import { fetchType } from "../../../utils/constants/global_config"
 import { ICONS_REFERENCE } from "../../../utils/constants/icons_reference"
+
+const visibility_menu = {
+  all: {
+    label: "Todos",
+    value: fetchType.ALL,
+    active_icon: ICONS_REFERENCE.notes,
+    icon: ICONS_REFERENCE.notes,
+  },
+  active: {
+    label: "Activos",
+    value: fetchType.ACTIVE,
+    active_icon: ICONS_REFERENCE.active,
+    icon: ICONS_REFERENCE.active,
+  },
+}
 
 export const ProjectsTableHeader = ({
   projectsCount = 0,
   onChange,
-  activeItem = "all",
+  activeItem = fetchType.ALL,
   selectedRows,
   onDelete,
   selectAllRows = () => {},
 }) => {
-  const visibility_menu = {
-    all: {
-      label: "Todos",
-      active_icon: ICONS_REFERENCE.notes,
-      icon: ICONS_REFERENCE.notes,
-    },
-    active: {
-      label: "Activos",
-      active_icon: ICONS_REFERENCE.active,
-      icon: ICONS_REFERENCE.active,
-    },
-  }
-
   return (
     <Flex justify="space-between" align="center" pb="32px">
       <Flex>
-        <Flex>
+        <Flex mr="15px">
           <Checkbox mr="8px" onChange={selectAllRows} />
-          {selectedRows?.length > 0 ? (
+          {Object.keys(selectedRows)?.length > 0 ? (
             <Flex
               alignItems="center"
               justifyContent="center"
@@ -51,7 +54,7 @@ export const ProjectsTableHeader = ({
               height="24px"
               align="center"
               cursor="pointer"
-              onClick={() => onChange && onChange(name)}
+              onClick={() => onChange(item.value)}
               ml={idx !== 0 ? "16px" : "0"}
             >
               {item.icon ? (
@@ -73,14 +76,14 @@ export const ProjectsTableHeader = ({
         })}
       </Flex>
       <Flex align="center">
-        <Text variant="d_xs_regular" color="green" mr="8px">
+        <Text variant="d_xs_regular" color="green" mr="15px">
           <chakra.span
             w="6px"
             h="6px"
             bgColor="green"
             display="inline-block"
             borderRadius="3px"
-            mr="9px"
+            mr="5px"
             mb="1px"
           />
           Proyectos Finalizados

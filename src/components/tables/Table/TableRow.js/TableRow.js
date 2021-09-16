@@ -73,7 +73,7 @@ export const TableRow = ({
             children: element,
             id: item.id,
             alias: element?.alias,
-            disabled: selectedRows.length > 1,
+            disabled: Object.keys(selectedRows).length > 1,
             key: `${name}-${idx}`,
           })
         }

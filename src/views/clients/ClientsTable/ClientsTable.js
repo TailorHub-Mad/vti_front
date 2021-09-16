@@ -21,7 +21,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
   }, [clients.length])
 
   const handleOnDelete = () => {
-    if (selectedRows.length > 1) return onDeleteMany(selectedRows)
+    if (Object.keys(selectedRows).length > 1) return onDeleteMany(selectedRows)
     return onDelete(clients[selectedRows[0]].id)
   }
 

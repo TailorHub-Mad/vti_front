@@ -5,6 +5,7 @@ export const DeleteType = {
 
 export const fetchType = {
   ALL: "all",
+  ACTIVE: "active",
   GROUPED: "grouped",
   FILTERED: "filtered",
 }

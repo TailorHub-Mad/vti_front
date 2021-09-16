@@ -26,7 +26,7 @@ export const DepartmentsTable = ({
   }, [departments.length])
 
   const handleOnDelete = () => {
-    if (selectedRows.length > 1) return onDeleteMany(selectedRows)
+    if (Object.keys(selectedRows).length > 1) return onDeleteMany(selectedRows)
     return onDelete(departments[selectedRows[0]].id)
   }
 
