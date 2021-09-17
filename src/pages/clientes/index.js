@@ -18,8 +18,9 @@ import { NewClientModal } from "../../views/clients/NewClient/NewClientModal/New
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { AddClientIcon } from "../../components/icons/AddClientIcon"
-import { checkDataIsEmpty } from "../../utils/functions/common"
+import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import { clientFetchHandler } from "../../swr/client.swr"
+import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 
 const clientes = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -65,33 +66,44 @@ const clientes = () => {
     setIsClientModalOpen(false)
   }
 
+  const handleDeleteMessage = () => {
+    if (deleteType === DeleteType.MANY)
+      return "¿Desea eliminar los sectores seleccionados?"
+    const label = getFieldObjectById(clientsData, "alias", clientsToDelete)
+    return `¿Desea eliminar ${label}?`
+  }
+
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
-    await f(clientsToDelete, clientsData)
+    const updated = await f(clientsToDelete, clientsData)
+    updated.length > 0
+      ? await mutate(updated, false)
+      : await mutate(SWR_CACHE_KEYS.clients)
     setDeleteType(null)
     setClientsToDelete(null)
   }
 
-  const getAliasByIdClient = (id) => {
-    const client = clientsData?.find((client) => client._id === id)
-    return client?.alias
-  }
-
   const deleteOne = async (id, clients) => {
-    await deleteClient(id)
-    const updatedClients = clients.filter((client) => client._id !== id)
-    await mutate(updatedClients, false)
-    showToast("Cliente borrado correctamente")
+    try {
+      await deleteClient(id)
+      showToast("Cliente borrado correctamente")
+      return clients.filter((client) => client._id !== id)
+    } catch (error) {
+      // TODO -> manage erros
+      console.log("ERROR")
+    }
   }
 
   const deleteMany = async (clientsId, clients) => {
-    const clientsQueue = clientsId.map((id) => deleteClient(id))
-    await Promise.all(clientsQueue)
-    const updatedClients = clients.filter(
-      (client) => !clientsId.includes(client._id)
-    )
-    await mutate(updatedClients, false)
-    showToast("Clientes borrados correctamente")
+    try {
+      const clientsQueue = clientsId.map((id) => deleteClient(id))
+      await Promise.all(clientsQueue)
+      showToast("Clientes borrados correctamente")
+      return clients.filter((client) => !clientsId.includes(client._id))
+    } catch (error) {
+      // TODO -> manage erros
+      console.log("ERROR")
+    }
   }
 
   const onEdit = (id) => {
@@ -121,9 +133,7 @@ const clientes = () => {
         onConfirm={handleDeleteFunction}
         onClose={handleClosePopup}
       >
-        {deleteType === DeleteType.ONE
-          ? `¿Desea eliminar ${getAliasByIdClient(clientsToDelete)}?`
-          : "¿Desea eliminar los clientes seleccionados?"}
+        {handleDeleteMessage()}
       </Popup>
 
       <NewClientModal

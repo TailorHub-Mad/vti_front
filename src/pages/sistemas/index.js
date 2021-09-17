@@ -18,8 +18,9 @@ import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddTestSystemIcon } from "../../components/icons/AddTestSystemIcon"
-import { checkDataIsEmpty } from "../../utils/functions/common"
+import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import { systemFetchHandler } from "../../swr/systems.swr"
+import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 
 const sistemas = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -65,38 +66,54 @@ const sistemas = () => {
     setIsSystemModalOpen(false)
   }
 
+  const handleDeleteMessage = () => {
+    if (deleteType === DeleteType.MANY)
+      return "¿Desea eliminar los sectores seleccionados?"
+    const label = getFieldObjectById(systemsData, "alias", systemsToDelete)
+    return `¿Desea eliminar ${label}?`
+  }
+
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
-    await f(systemsToDelete, systemsData)
+    const updated = await f(systemsToDelete, systemsData)
+    updated.length > 0
+      ? await mutate(updated, false)
+      : await mutate(SWR_CACHE_KEYS.systems)
     setDeleteType(null)
     setSystemsToDelete(null)
   }
 
-  const getAliasByIdSystem = (id) => {
-    const system = systemsData?.find((system) => system._id === id)
-    return system?.alias
-  }
-
   const deleteOne = async (id, systems) => {
-    await deleteSystem(id)
-    const updatedSystems = []
-    updatedSystems.push({
-      testSystems: systems.filter((system) => system._id !== id),
-    })
-    await mutate(updatedSystems, false)
-    showToast("Sistema de ensayo borrado correctamente")
+    try {
+      await deleteSystem(id)
+      showToast("Sistema borrado correctamente")
+      const updatedSystems = []
+      const filteredSystems = systems.filter((system) => system._id !== id)
+      updatedSystems.push({
+        testSystems: filteredSystems,
+      })
+      return updatedSystems
+    } catch (error) {
+      // TODO -> manage erros
+      console.log("ERROR")
+    }
   }
 
   const deleteMany = async (systemsId, systems) => {
-    const systemsQueue = systemsId.map((id) => deleteSystem(id))
-    await Promise.all(systemsQueue)
-    const updatedSystems = []
-    const filteredSystems = systems.filter(
-      (system) => !systemsId.includes(system._id)
-    )
-    updatedSystems.push({ testSystems: filteredSystems })
-    await mutate(updatedSystems, false)
-    showToast("Sistemas de ensayo borrados correctamente")
+    try {
+      const systemsQueue = systemsId.map((id) => deleteSystem(id))
+      await Promise.all(systemsQueue)
+      showToast("Clientes borrados correctamente")
+      const updatedSystems = []
+      const filteredSystems = systems.filter(
+        (system) => !systemsId.includes(system._id)
+      )
+      updatedSystems.push({ testSystems: filteredSystems })
+      return filteredSystems
+    } catch (error) {
+      // TODO -> manage erros
+      console.log("ERROR")
+    }
   }
 
   const onEdit = (id) => {
@@ -126,9 +143,7 @@ const sistemas = () => {
         onConfirm={handleDeleteFunction}
         onClose={handleClosePopup}
       >
-        {deleteType === DeleteType.ONE
-          ? `¿Desea eliminar ${getAliasByIdSystem(systemsToDelete)}?`
-          : "¿Desea eliminar los sistemas de ensayo seleccionados?"}
+        {handleDeleteMessage()}
       </Popup>
 
       <NewTestSystemModal

@@ -3,6 +3,7 @@ import React from "react"
 import { MenuItem } from "../TabBarMenuItem/TabBarMenuItem"
 
 export const TabBarMenu = ({ navMenuItems, ...props }) => {
+  console.log(navMenuItems)
   return (
     <Box
       as="nav"

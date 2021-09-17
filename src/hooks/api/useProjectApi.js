@@ -2,17 +2,11 @@ import ProjectService from "../../services/project.service"
 
 const useProjectApi = () => {
   const projectService = ProjectService()
-
   const getProjects = () => projectService.getProjects()
-
   const getGroupedProjects = () => projectService.getGroupedProjects()
-
   const getProject = (id) => projectService.getProject(id)
-
   const createProject = (data) => projectService.createProject(data)
-
-  const updateProject = (id, data) => projectService.updateProject(data, id)
-
+  const updateProject = (id, data) => projectService.updateProject(id, data)
   const deleteProject = (id) => projectService.deleteProject(id)
 
   return {

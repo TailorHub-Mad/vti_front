@@ -19,7 +19,8 @@ import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
-import { checkDataIsEmpty } from "../../utils/functions/common"
+import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
+import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 
 const proyectos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -65,42 +66,58 @@ const proyectos = () => {
     setIsProjectModalOpen(false)
   }
 
-  const getAliasByIdProject = (id) => {
-    const project = projectsData?.find((project) => project._id === id) || {}
-    return project?.alias
+  const handleDeleteMessage = () => {
+    if (deleteType === DeleteType.MANY)
+      return "¿Desea eliminar los sectores seleccionados?"
+    const label = getFieldObjectById(projectsData, "alias", projectToDelete)
+    return `¿Desea eliminar ${label}?`
   }
 
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
-    await f(projectToDelete, projectsData)
+    const updated = await f(projectToDelete, projectsData)
+    updated.length > 0
+      ? await mutate(updated, false)
+      : await mutate(SWR_CACHE_KEYS.projects)
     setDeleteType(null)
     setProjectsToDelete(null)
   }
 
   const deleteOne = async (id, projects) => {
-    console.log(id)
-    await deleteProject(id)
-    const updatedProjects = []
-    updatedProjects.push({
-      projects: projects.filter((project) => project._id !== id),
-    })
-    await mutate(updatedProjects, false)
-    showToast("Proyecto borrado correctamente")
+    try {
+      await deleteProject(id)
+      showToast("Proyecto borrado correctamente")
+      const updatedProjects = []
+      const filteredProjects = projects.filter((system) => system._id !== id)
+      updatedProjects.push({
+        testProjects: filteredProjects,
+      })
+      return updatedProjects
+    } catch (error) {
+      // TODO -> manage erros
+      console.log("ERROR")
+    }
   }
 
   const deleteMany = async (projectsId, projects) => {
-    const projectsQueue = projectsId.map((id) => deleteProject(id))
-    await Promise.all(projectsQueue)
-    const updatedProjects = []
-    updatedProjects.push({
-      projects: projects.filter((pr) => !projectsId.includes(pr._id)),
-    })
-    await mutate(updatedProjects, false)
-    showToast("Proyectos borrados correctamente")
+    try {
+      const projectsQueue = projectsId.map((id) => deleteProject(id))
+      await Promise.all(projectsQueue)
+      showToast("Clientes borrados correctamente")
+      const updatedProjects = []
+      const filteredProjects = projects.filter(
+        (project) => !projectsId.includes(project._id)
+      )
+      updatedProjects.push({ project: filteredProjects })
+      return filteredProjects
+    } catch (error) {
+      // TODO -> manage erros
+      console.log("ERROR")
+    }
   }
 
   const onEdit = (id) => {
-    const project = [...projectsData].find((project) => project._id === id)
+    const project = projectsData.find((project) => project._id === id)
     setProjectToUpdate(project)
     setIsProjectModalOpen(true)
   }
@@ -132,9 +149,7 @@ const proyectos = () => {
         onConfirm={handleDeleteFunction}
         onClose={handleClosePopup}
       >
-        {deleteType === DeleteType.ONE
-          ? `¿Desea eliminar ${getAliasByIdProject(projectToDelete)}?`
-          : "¿Desea eliminar los proyectos seleccionados?"}
+        {handleDeleteMessage()}
       </Popup>
 
       <NewProjectModal

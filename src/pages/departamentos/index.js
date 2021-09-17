@@ -20,6 +20,7 @@ import { AddDepartmentIcon } from "../../components/icons/AddDepartmentIcon"
 import { departmentFetchHandler } from "../../swr/department.swr"
 import { checkDataIsEmpty } from "../../utils/functions/common"
 import useDepartmentApi from "../../hooks/api/useDepartmentApi"
+import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 
 const departamentos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -65,35 +66,44 @@ const departamentos = () => {
     setIsDepartmentModalOpen(false)
   }
 
-  const handleDeleteFunction = async () => {
-    const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
-    await f(departmentsToDelete, departmentsData)
-    setDeleteType(null)
-    setDepartmentsToDelete(null)
-  }
-
   const getAliasByIdDepartment = (id) => {
     const department = departmentsData.find((department) => department._id === id)
     return department?.alias
   }
 
+  const handleDeleteFunction = async () => {
+    const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
+    const updated = await f(departmentsToDelete, departmentsData)
+    updated.length > 0
+      ? await mutate(updated, false)
+      : await mutate(SWR_CACHE_KEYS.departments)
+    setDeleteType(null)
+    setDepartmentsToDelete(null)
+  }
+
   const deleteOne = async (id, departments) => {
-    await deleteDepartment(id)
-    const updatedDepartments = departments.filter(
-      (department) => department._id !== id
-    )
-    await mutate(updatedDepartments, false)
-    showToast("Departamento borrado correctamente")
+    try {
+      await deleteDepartment(id)
+      showToast("Departamento borrado correctamente")
+      return departments.filter((department) => department._id !== id)
+    } catch (error) {
+      // TODO -> manage erros
+      console.log("ERROR")
+    }
   }
 
   const deleteMany = async (departmentsId, departments) => {
-    const departmentsQueue = departmentsId.map((id) => deleteDepartment(id))
-    await Promise.all(departmentsQueue)
-    const updatedDepartments = departments.filter(
-      (department) => !departmentsId.includes(department._id)
-    )
-    await mutate(updatedDepartments, false)
-    showToast("Departamentos borrados correctamente")
+    try {
+      const departmentsQueue = departmentsId.map((id) => deleteDepartment(id))
+      await Promise.all(departmentsQueue)
+      showToast("Departamentos borrados correctamente")
+      return departments.filter(
+        (department) => !departmentsId.includes(department._id)
+      )
+    } catch (error) {
+      // TODO -> manage erros
+      console.log("ERROR")
+    }
   }
 
   const onEdit = (id) => {

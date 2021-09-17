@@ -10,7 +10,12 @@ import useFetchSWR from "../../../../hooks/useFetchSWR"
 import { MOCK_SELECT_OPTIONS, MOCK_YEAR_OPTIONS } from "../../../../mock/mock"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 
-export const NewProjectForm = ({ openAuxModal, value, onChange, projectToEdit }) => {
+export const NewProjectForm = ({
+  openAuxModal,
+  value,
+  onChange,
+  projectToUpdate,
+}) => {
   const { getClients } = useClientApi()
   const { getSectors } = useSectorApi()
   const { getUsers } = useUserApi()
@@ -68,6 +73,7 @@ export const NewProjectForm = ({ openAuxModal, value, onChange, projectToEdit })
         placeholder: "Cliente",
         options: clientsOptions,
         label: "Cliente",
+        disabled: Boolean(projectToUpdate),
       },
     },
     sector: {
@@ -104,7 +110,6 @@ export const NewProjectForm = ({ openAuxModal, value, onChange, projectToEdit })
         removeitemlabel: "Eliminar ",
       },
     },
-
     tags: {
       type: "add_select",
       config: {
@@ -120,14 +125,28 @@ export const NewProjectForm = ({ openAuxModal, value, onChange, projectToEdit })
     },
   }
 
+  // TODO REVIEW
   useEffect(() => {
-    if (projectToEdit && clientsOptions?.length > 0) {
-      const [cl] = clientsOptions.filter(
-        (_client) => _client.label === projectToEdit?.clientAlias
-      )
-      handleFormChange("client", cl.value)
-    }
-  }, [clientsOptions])
+    if (!projectToUpdate) return
+    const client = clientsOptions?.find(
+      (_client) => _client.label === projectToUpdate?.clientAlias
+    )
+    if (client) handleFormChange("client", client.value)
+  }, [])
+
+  useEffect(() => {
+    if (!projectToUpdate) return
+    const sector = sectorsOptions?.find(
+      (_sector) => _sector.label === projectToUpdate?.sector
+    )
+    if (sector) handleFormChange("sector", sector.value)
+  }, [])
+
+  useEffect(() => {
+    if (!projectToUpdate) return
+    const user = usersOptions?.find((_user) => _user.label === projectToUpdate?.user)
+    if (user) handleFormChange("focusPoint", user.value)
+  }, [])
 
   const inputRefObj = {
     input: <SimpleInput />,
@@ -142,7 +161,9 @@ export const NewProjectForm = ({ openAuxModal, value, onChange, projectToEdit })
           value: value[name],
           onChange: (val) => handleFormChange(name, val),
           marginBottom: "24px",
-          isDisabled: index !== 0 && !value[Object.keys(value)[index - 1]],
+          isDisabled:
+            config.disabled ||
+            (index !== 0 && !value[Object.keys(value)[index - 1]]),
           key: `${name}-${index}`,
           ...config,
         })

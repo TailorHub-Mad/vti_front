@@ -1,15 +1,13 @@
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons"
 import { Box, Text } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { FormController } from "../FormItemWrapper/FormController"
 import { InputSelect } from "../InputSelect/InputSelect"
 
 //TODO los botones de añadir y eliminar items podrían ser una variant de Button "aux"
 export const AddSelect = ({
-  value,
-  // name,
+  value = [""],
   placeholder,
-  // errors,
   onChange,
   additemlabel,
   deleteItemLabel,
@@ -19,21 +17,19 @@ export const AddSelect = ({
   isDisabled,
   ...props
 }) => {
-  const [values, setValues] = useState(value && Array.isArray(value) ? value : [""])
-  const handleAvailableOptions = (current) =>
-    options.filter(
-      (option) => option.value === current || !values.includes(option.value)
-    )
+  const [values, setValues] = useState(value)
+  // const handleAvailableOptions = (current) =>
+  //   options.filter(
+  //     (option) => option.value === current || !values.includes(option.value)
+  //   )
 
   const handleChange = (option, idx) => {
+    const selected = options?.find(({ value }) => value == option)
+    onChange && onChange(selected?.value)
     const nextOptions = [...values]
-    nextOptions[idx] = option
+    nextOptions[idx] = selected.label
     setValues(nextOptions)
   }
-
-  useEffect(() => {
-    onChange && onChange(values)
-  }, [values])
 
   return (
     <FormController
@@ -49,9 +45,8 @@ export const AddSelect = ({
               value={val}
               onChange={(option) => handleChange(option, idx)}
               placeholder={placeholder}
-              options={handleAvailableOptions(val)}
+              options={options}
               isDisabled={isDisabled}
-              autocomplete="off"
             />
             {idx !== 0 ? (
               <Box

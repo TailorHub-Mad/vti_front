@@ -20,6 +20,7 @@ import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import { AddSectorIcon } from "../../components/icons/AddSectorIcon"
 import { sectorFetchHandler } from "../../swr/sector.swr"
+import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 
 const sectores = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -65,28 +66,44 @@ const sectores = () => {
     setIsSectorModalOpen(false)
   }
 
+  const handleDeleteMessage = () => {
+    if (deleteType === DeleteType.MANY)
+      return "¿Desea eliminar los sectores seleccionados?"
+    const label = getFieldObjectById(sectorsData, "title", sectorsToDelete)
+    return `¿Desea eliminar ${label}?`
+  }
+
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
-    await f(sectorsToDelete, sectorsData)
+    const updated = await f(sectorsToDelete, sectorsData)
+    updated.length > 0
+      ? await mutate(updated, false)
+      : await mutate(SWR_CACHE_KEYS.sectors)
     setDeleteType(null)
     setSectorsToDelete(null)
   }
 
   const deleteOne = async (id, sectors) => {
-    await deleteSector(id)
-    const updatedSectors = sectors.filter((sector) => sector._id !== id)
-    await mutate(updatedSectors, false)
-    showToast("Sector borrado correctamente")
+    try {
+      await deleteSector(id)
+      showToast("Sector borrado correctamente")
+      return sectors.filter((sector) => sector._id !== id)
+    } catch (error) {
+      // TODO -> manage erros
+      console.log("ERROR")
+    }
   }
 
   const deleteMany = async (sectorsId, sectors) => {
-    const sectorsQueue = sectorsId.map((id) => deleteSector(id))
-    await Promise.all(sectorsQueue)
-    const updatedClients = sectors.filter(
-      (sector) => !sectorsId.includes(sector._id)
-    )
-    await mutate(updatedClients, false)
-    showToast("Sectores borrados correctamente")
+    try {
+      const sectorsQueue = sectorsId.map((id) => deleteSector(id))
+      await Promise.all(sectorsQueue)
+      showToast("Clientes borrados correctamente")
+      return sectors.filter((sector) => !sectorsId.includes(sector._id))
+    } catch (error) {
+      // TODO -> manage erros
+      console.log("ERROR")
+    }
   }
 
   const onEdit = (id) => {
@@ -116,13 +133,7 @@ const sectores = () => {
         onConfirm={handleDeleteFunction}
         onClose={handleClosePopup}
       >
-        {deleteType === DeleteType.ONE
-          ? `¿Desea eliminar ${getFieldObjectById(
-              sectorsData,
-              "title",
-              sectorsToDelete
-            )}?`
-          : "¿Desea eliminar los sectores seleccionados?"}
+        {handleDeleteMessage()}
       </Popup>
 
       <NewSectorModal

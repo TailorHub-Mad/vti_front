@@ -9,7 +9,7 @@ const Index = () => {
 
   useEffect(() => {
     if (!isLoggedIn) return
-    router.push(PATHS.notes)
+    router.push(PATHS.projects)
   }, [isLoggedIn])
 
   return <>Loading...</>
