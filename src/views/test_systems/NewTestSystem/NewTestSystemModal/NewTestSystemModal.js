@@ -125,6 +125,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
           values={values}
           onChange={handleChange}
           onDelete={handleDelete}
+          objectToUpdate={systemToUpdate}
           addTitle="Añadir nuevo sistema"
         >
           <NewTestSystemForm />

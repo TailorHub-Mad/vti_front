@@ -15,7 +15,7 @@ export const InputSelect = ({
   isDisabled,
   ...props
 }) => {
-  const [inputValue, setInputValue] = useState(value)
+  const [inputValue, setInputValue] = useState(null)
   const [showSelectMenu, setShowSelectMenu] = useState(false)
   const [availableOptions, setAvailableOptions] = useState(options)
   const ref = useRef(null)
@@ -70,11 +70,10 @@ export const InputSelect = ({
         <Input
           placeholder={placeholder}
           onChange={handleChange}
-          value={inputValue || ""}
+          value={inputValue}
           onClick={handleOnClickInput}
           isDisabled={isDisabled}
           _loading
-          autoComplete="off"
         />
         <ChevronDownIcon
           position="absolute"

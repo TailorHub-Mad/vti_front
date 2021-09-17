@@ -38,8 +38,9 @@ export const ProjectsTable = ({
   }
 
   const handleOnDelete = () => {
-    if (Object.keys(selectedRows).length > 1) return onDeleteMany(selectedRows)
-    return onDelete(selectedRows[0])
+    const projectsId = Object.keys(selectedRows)
+    if (Object.keys(selectedRows).length > 1) return onDeleteMany(projectsId)
+    return onDelete(projectsId[0])
   }
 
   const transformProjectData = (project) => ({

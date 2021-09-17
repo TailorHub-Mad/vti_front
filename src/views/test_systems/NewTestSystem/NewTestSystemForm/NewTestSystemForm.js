@@ -5,7 +5,7 @@ import useClientApi from "../../../../hooks/api/useClientApi"
 import useFetchSWR from "../../../../hooks/useFetchSWR"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 
-export const NewTestSystemForm = ({ value, onChange, systemToUpdate }) => {
+export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
   const { getClients } = useClientApi()
   // TODO -> manage errors & loading state
   const { data } = useFetchSWR(SWR_CACHE_KEYS.clients, getClients)
@@ -36,7 +36,7 @@ export const NewTestSystemForm = ({ value, onChange, systemToUpdate }) => {
       config: {
         placeholder: "Cod",
         label: "Cod VTI*",
-        disabled: Boolean(!systemToUpdate),
+        disabled: Boolean(objectToUpdate),
       },
     },
     clientAlias: {
@@ -45,7 +45,7 @@ export const NewTestSystemForm = ({ value, onChange, systemToUpdate }) => {
         placeholder: "AliasCL",
         label: "Cliente*",
         options: clientsOptions,
-        disabled: Boolean(!systemToUpdate),
+        disabled: Boolean(objectToUpdate),
       },
     },
     alias: {
@@ -70,9 +70,9 @@ export const NewTestSystemForm = ({ value, onChange, systemToUpdate }) => {
   }
 
   // useEffect(() => {
-  //   if (systemToUpdate && clientsOptions?.length > 0) {
+  //   if (objectToUpdate && clientsOptions?.length > 0) {
   //     const [cl] = clientsOptions.filter(
-  //       (_client) => _client.label === systemToUpdate?.clientAlias
+  //       (_client) => _client.label === objectToUpdate?.clientAlias
   //     )
   //     handleFormChange("client", cl.value)
   //   }

@@ -7,6 +7,7 @@ export const MultipleFormContent = ({
   onDelete = () => {},
   addTitle,
   deleteTitle,
+  objectToUpdate,
   children,
 }) => {
   return (
@@ -22,6 +23,7 @@ export const MultipleFormContent = ({
             {React.cloneElement(children, {
               value: value,
               onChange: (val) => onChange(val, idx),
+              objectToUpdate: objectToUpdate,
             })}
           </>
           {idx !== 0 ? (

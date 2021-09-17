@@ -14,30 +14,30 @@ export const NewProjectForm = ({ openAuxModal, value, onChange, projectToEdit })
   const { getClients } = useClientApi()
   const { getSectors } = useSectorApi()
   const { getUsers } = useUserApi()
-  const { systems: getSystems } = useSystemApi()
+  const { getSystems } = useSystemApi()
 
   // TODO -> manage errors & loading state
   const { data: clients } = useFetchSWR(SWR_CACHE_KEYS.clients, getClients)
   const { data: sectors } = useFetchSWR(SWR_CACHE_KEYS.sectors, getSectors)
   const { data: users } = useFetchSWR(SWR_CACHE_KEYS.users, getUsers)
-  const { data: systems } = useFetchSWR(SWR_CACHE_KEYS.users, getSystems)
+  const { data: systems } = useFetchSWR(SWR_CACHE_KEYS.systems, getSystems)
 
   const formatClients = (_clients) =>
     _clients.map((client) => ({ label: client.alias, value: client._id }))
 
   const formatSectors = (_sectors) =>
-    _sectors.map((sector) => ({ label: sector.title, value: sector.id }))
+    _sectors.map((sector) => ({ label: sector.title, value: sector._id }))
 
   const formatUsers = (_users) =>
-    _users.map((user) => ({ label: user.alias, value: user.id }))
+    _users.map((user) => ({ label: user.alias, value: user._id }))
 
-  const formatSystems = (_users) =>
-    _users.map((system) => ({ label: system.alias, value: system.id }))
+  const formatSystems = (_systems) =>
+    _systems.map((system) => ({ label: system.alias, value: system._id }))
 
   const clientsOptions = clients ? formatClients(clients) : []
   const sectorsOptions = sectors ? formatSectors(sectors) : []
   const usersOptions = users ? formatUsers(users) : []
-  const systemsOptions = systems ? formatSystems(systems) : []
+  const systemsOptions = systems ? formatSystems(systems[0].testSystems) : []
 
   const handleFormChange = (input, _value) => {
     onChange({

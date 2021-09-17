@@ -8,24 +8,23 @@ import { ProjectNotes } from "../../views/notes/Project/ProjectNotes/ProjectNote
 import { ProjectHeader } from "../../views/notes/Project/ProjectHeader/ProjectHeader"
 import { Spinner, Box } from "@chakra-ui/react"
 import { useRouter } from "next/dist/client/router"
-import useProjectApi from "../../hooks/api/useProjectApi"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
-import useFetchSWR from "../../hooks/useFetchSWR"
+import { projectFetchHandler } from "../../swr/project.swr"
+import { fetchOption, fetchType } from "../../utils/constants/global_config"
 faker.locale = "es"
 
 const project = () => {
   const router = useRouter()
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { getProject } = useProjectApi()
-
-  const { data, error, isLoading, isValidating } = useFetchSWR(
-    [SWR_CACHE_KEYS.project, router.query.id],
-    getProject
-  )
 
   const [showNoteDetails, setShowNoteDetails] = useState(false)
-  const detailBoxWidth = "536.5px"
+
+  const { data, error, isLoading, isValidating } = projectFetchHandler(
+    fetchType.ID,
+    {
+      [fetchOption.ID]: router.query.id,
+    }
+  )
 
   const notFound = !isValidating && !data
 
@@ -38,7 +37,7 @@ const project = () => {
       {data && (
         <>
           <Box
-            width={showNoteDetails ? `calc(100% - ${detailBoxWidth})` : "100%"}
+            width={showNoteDetails ? `calc(100% - 536.5px)` : "100%"}
             transition="width 0.3s ease-in-out"
           >
             <ProjectHeader />

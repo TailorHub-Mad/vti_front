@@ -41,7 +41,7 @@ const proyectos = () => {
 
   // Delete state
   const [deleteType, setDeleteType] = useState(null)
-  const [projectsToDelete, setProjectsToDelete] = useState(null)
+  const [projectToDelete, setProjectsToDelete] = useState(null)
 
   const isGrouped = fetchState === fetchType.GROUPED
   const isEmptyData = checkDataIsEmpty(data)
@@ -50,9 +50,9 @@ const proyectos = () => {
   // TODO
   const handleExport = () => {}
 
-  const handleOpenPopup = (projectsToDelete, type) => {
+  const handleOpenPopup = (projectToDelete, type) => {
     setDeleteType(type)
-    setProjectsToDelete(projectsToDelete)
+    setProjectsToDelete(projectToDelete)
   }
 
   const handleClosePopup = () => {
@@ -66,18 +66,19 @@ const proyectos = () => {
   }
 
   const getAliasByIdProject = (id) => {
-    const { alias } = projectsData.find((project) => project._id === id) || {}
-    return alias
+    const project = projectsData?.find((project) => project._id === id) || {}
+    return project?.alias
   }
 
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
-    await f(projectsToDelete, projectsData)
+    await f(projectToDelete, projectsData)
     setDeleteType(null)
     setProjectsToDelete(null)
   }
 
   const deleteOne = async (id, projects) => {
+    console.log(id)
     await deleteProject(id)
     const updatedProjects = []
     updatedProjects.push({
@@ -87,14 +88,12 @@ const proyectos = () => {
     showToast("Proyecto borrado correctamente")
   }
 
-  const deleteMany = async (ids, projects) => {
-    const idProjects = Object.keys(ids)
-    const projectsQueue = idProjects.map((id) => deleteProject(id))
+  const deleteMany = async (projectsId, projects) => {
+    const projectsQueue = projectsId.map((id) => deleteProject(id))
     await Promise.all(projectsQueue)
-
     const updatedProjects = []
     updatedProjects.push({
-      projects: projects.filter((pr) => !idProjects.includes(pr._id)),
+      projects: projects.filter((pr) => !projectsId.includes(pr._id)),
     })
     await mutate(updatedProjects, false)
     showToast("Proyectos borrados correctamente")
@@ -134,7 +133,7 @@ const proyectos = () => {
         onClose={handleClosePopup}
       >
         {deleteType === DeleteType.ONE
-          ? `¿Desea eliminar ${getAliasByIdProject(projectsToDelete)}?`
+          ? `¿Desea eliminar ${getAliasByIdProject(projectToDelete)}?`
           : "¿Desea eliminar los proyectos seleccionados?"}
       </Popup>
 
@@ -151,7 +150,7 @@ const proyectos = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {!isLoading && !isEmptyData && (
+        {projectsData ? (
           <ToolBar
             onAdd={() => setIsProjectModalOpen(true)}
             onSearch={onSearch}
@@ -163,7 +162,7 @@ const proyectos = () => {
             searchPlaceholder="Busqueda por ID, Alias"
             icon={<AddProjectIcon />}
           />
-        )}
+        ) : null}
       </PageHeader>
       {isLoading ? <Spinner /> : null}
       {isEmptyData ? (
@@ -175,7 +174,7 @@ const proyectos = () => {
           onAdd={() => setIsProjectModalOpen(true)}
         />
       ) : null}
-      {data && !isLoading ? (
+      {projectsData ? (
         <ProjectsTable
           isGrouped={isGrouped}
           items={projectsData}

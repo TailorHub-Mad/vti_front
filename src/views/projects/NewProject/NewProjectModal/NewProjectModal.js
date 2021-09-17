@@ -16,14 +16,24 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
   const { mutate, cache } = useSWRConfig()
 
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
-  const [values, setValues] = useState({})
+  const [values, setValues] = useState({
+    alias: "",
+    client: "",
+    sector: "",
+    year: "",
+    focusPoint: "",
+    testSystems: "",
+    tags: "",
+  })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isUpdate = Boolean(projectToUpdate)
 
   const handleChange = (val) => setValues(val)
 
-  const checkInputsAreEmpty = () => Object.values(values).some((field) => !field)
+  const checkInputsAreEmpty = () => {
+    return Object.keys(values).some((key) => !values[key])
+  }
 
   const handleOpenSecundaryContent = () => setShowSecondaryContent(true)
 
