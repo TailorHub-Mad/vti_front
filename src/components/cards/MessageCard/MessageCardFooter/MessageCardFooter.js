@@ -12,18 +12,13 @@ const icon_props = {
   width: "16px",
   height: "16px",
   color: "grey",
-  cursor: "pointer",
+  cursor: "default",
 }
 
 export const MessageCardFooter = ({
   isClosed,
-  canSubscribe,
-  onLock,
-  onUnlock,
-  onSubscribe,
-  onValidate,
-  seeMessages,
-  seeAttachments,
+  isSubscribe,
+  isValidate,
   messagesCount = 0,
   attachmentsCount = 0,
   subscribedUsers,
@@ -39,24 +34,29 @@ export const MessageCardFooter = ({
       {...props}
     >
       {isClosed ? (
-        <LockCloseIcon {...icon_props} onClick={onUnlock} />
+        <LockCloseIcon {...icon_props} />
       ) : (
-        <LockOpenIcon {...icon_props} onClick={onLock} />
+        <LockOpenIcon {...icon_props} />
       )}
-      <BadgeIcon {...icon_props} onClick={onValidate} />
-      {canSubscribe ? <SubscribeIcon {...icon_props} onClick={onSubscribe} /> : null}
+
+      {isSubscribe ? <SubscribeIcon {...icon_props} color={"blue.500"} /> : null}
+
+      {isValidate ? <BadgeIcon {...icon_props} color={"blue.500"} /> : null}
+
       <Box display="flex" alignItems="center">
         <Text color="grey" variant="d_xs_regular" marginRight="2px">
           {messagesCount}
         </Text>
-        <MessagesIcon {...icon_props} onClick={seeMessages} />
+        <MessagesIcon {...icon_props} />
       </Box>
+
       <Box display="flex" alignItems="center">
         <Text color="grey" variant="d_xs_regular" marginRight="2px">
           {attachmentsCount}
         </Text>
-        <AttachmentIcon {...icon_props} onClick={seeAttachments} />
+        <AttachmentIcon {...icon_props} />
       </Box>
+
       {subscribedUsers ? (
         <Box w="42px" h="24px" position="relative">
           {areMultipleUsers ? (

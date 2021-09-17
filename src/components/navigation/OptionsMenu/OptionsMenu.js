@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import { Box, useOutsideClick } from "@chakra-ui/react"
 import React, { useRef } from "react"
 

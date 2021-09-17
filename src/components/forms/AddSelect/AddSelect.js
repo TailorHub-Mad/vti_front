@@ -1,17 +1,15 @@
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons"
 import { Box, Text } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { FormController } from "../FormItemWrapper/FormController"
 import { InputSelect } from "../InputSelect/InputSelect"
 
 //TODO los botones de añadir y eliminar items podrían ser una variant de Button "aux"
 export const AddSelect = ({
-  value,
-  name,
+  value = [""],
   placeholder,
-  errors,
   onChange,
-  addItemLabel,
+  additemlabel,
   deleteItemLabel,
   options = [],
   label,
@@ -19,26 +17,27 @@ export const AddSelect = ({
   isDisabled,
   ...props
 }) => {
-  const [values, setValues] = useState(value && Array.isArray(value) ? value : [""])
-  const handleAvailableOptions = (current) =>
-    options.filter(
-      (option) => option.value === current || !values.includes(option.value)
-    )
-
-  const error = errors && errors[name]?.type
+  const [values, setValues] = useState(value)
+  // const handleAvailableOptions = (current) =>
+  //   options.filter(
+  //     (option) => option.value === current || !values.includes(option.value)
+  //   )
 
   const handleChange = (option, idx) => {
+    const selected = options?.find(({ value }) => value == option)
+    onChange && onChange(selected?.value)
     const nextOptions = [...values]
-    nextOptions[idx] = option
+    nextOptions[idx] = selected.label
     setValues(nextOptions)
   }
 
-  useEffect(() => {
-    onChange && onChange(values)
-  }, [values])
-
   return (
-    <FormController label={label} onHelperClick={onHelperClick} isDisabled={isDisabled} {...props}>
+    <FormController
+      label={label}
+      onHelperClick={onHelperClick}
+      isDisabled={isDisabled}
+      {...props}
+    >
       <Box>
         {values.map((val, idx) => (
           <Box key={`${val}-${idx}`} marginBottom="16px">
@@ -46,7 +45,7 @@ export const AddSelect = ({
               value={val}
               onChange={(option) => handleChange(option, idx)}
               placeholder={placeholder}
-              options={handleAvailableOptions(val)}
+              options={options}
               isDisabled={isDisabled}
             />
             {idx !== 0 ? (
@@ -90,7 +89,7 @@ export const AddSelect = ({
                       variant="m_xs_regular"
                       color="blue.500"
                     >
-                      {addItemLabel || "Añadir"}
+                      {additemlabel || "Añadir"}
                     </Text>
                   </Box>
                 ) : null}

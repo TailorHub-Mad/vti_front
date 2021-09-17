@@ -1,14 +1,14 @@
 import { Flex, Text } from "@chakra-ui/react"
 import React from "react"
+import { fetchType } from "../../../utils/constants/global_config"
 import { ICONS_REFERENCE } from "../../../utils/constants/icons_reference"
 
 export const NotesMenu = ({
   notesCount = 0,
   onChange,
-  activeItem = "favs",
+  activeItem = fetchType.ALL,
   ...props
 }) => {
-
   const visibility_menu = {
     all: {
       label: "Todos",

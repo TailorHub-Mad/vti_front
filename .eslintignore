@@ -1,5 +1,3 @@
 node_modules/
 *.test.js
 next/
-stories/
-storybook-static/

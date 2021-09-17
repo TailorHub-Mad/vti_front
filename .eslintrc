@@ -1,7 +1,18 @@
 {
-  "extends": "next",
+  "extends": ["next", "eslint:recommended", "prettier"],
   "rules": {
-    "react-hooks/rules-of-hooks": "off",
-    "react-hooks/exhaustive-deps": "off"
+    "react-hooks/rules-of-hooks": 0,
+    "react-hooks/exhaustive-deps": 0,
+    "react/no-children-prop": 0,
+    "react/display-name": 0,
+    "no-unused-vars": [
+      "error",
+      { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }
+    ]
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
   }
 }

@@ -21,7 +21,10 @@ export const colors = {
   grey: "#C4C4C4",
   light_grey: "#EBEEF2",
   error: "#F95C5C",
-  correct: "#277948",
+  correct: {
+    300: "#27794830",
+    500: "#277948",
+  },
   alert: "#E98535",
   start: "#0085FF",
   blue_alt: "#18548F",

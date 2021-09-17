@@ -27,6 +27,8 @@ import { HideLineIcon } from "../../components/icons/HideLineIcon"
 import { ActiveIcon } from "../../components/icons/ActiveIcon"
 import { TagLinkIcon } from "../../components/icons/TagLinkIcon"
 import { ListIcon } from "../../components/icons/ListIcon"
+import { SectorIcon } from "../../components/icons/SectorIcon"
+import { DepartmentIcon } from "../../components/icons/DepartmentIcon"
 
 export const ICONS_REFERENCE = {
   attachment: AttachmentIcon,
@@ -35,6 +37,7 @@ export const ICONS_REFERENCE = {
   badge_line: BadgeLineIcon,
   chevron_down: ChevronDownIcon,
   clients_line: ClientsLineIcon,
+  departments: DepartmentIcon,
   heart: HeartIcon,
   heart_line: HeartLineIcon,
   help_dark: HelpDarkIcon,
@@ -53,9 +56,10 @@ export const ICONS_REFERENCE = {
   notification_line: NotificationLineIcon,
   options: OptionsIcon,
   signout_line: SignOutLineIcon,
+  sector: SectorIcon,
   subscribe: SubscribeIcon,
   subscribe_line: SubscribeLineIcon,
   tag_line: TagLineIcon,
   tag_link: TagLinkIcon,
-  users_line: UsersLineIcon
+  users_line: UsersLineIcon,
 }

@@ -1,17 +1,15 @@
-import { AddIcon } from "@chakra-ui/icons"
 import { Flex, Text } from "@chakra-ui/react"
-import { css } from "@emotion/react"
 import React from "react"
 import { BLINK_ANIMATION } from "../../../theme/animations/animations"
 import { DeleteIcon } from "../../icons/DeleteIcon"
 import { EventNotificationIcon } from "../../icons/EventNotificationIcon"
 import { PinIcon } from "../../icons/PinIcon"
-import { Card } from "../../layout/Card/Card"
+import { Card } from "../../cards/Card"
 
-export const NotificationCard = ({onPin, onDelete, ...props}) => {
-    //TODO recibir name, desc, tipo de notification por props y modal de confirmación de delete
+export const NotificationCard = ({ onPin, onDelete, ...props }) => {
+  //TODO recibir name, desc, tipo de notification por props y modal de confirmación de delete
   return (
-    <Card width={["100%", null, null, "428px"]} bgColor="white" {...props} >
+    <Card width={["100%", null, null, "428px"]} bgColor="white" {...props}>
       <Flex justify="space-between" marginBottom="12px">
         <Flex alignItems="center">
           <EventNotificationIcon
@@ -25,8 +23,20 @@ export const NotificationCard = ({onPin, onDelete, ...props}) => {
           </Text>
         </Flex>
         <Flex alignItems="center">
-          <PinIcon width="16px" height="16px" color="grey" cursor="pointer" onClick={onPin} />
-          <DeleteIcon width="16px" height="16px" color="grey" cursor="pointer" onDelete={onDelete}/>
+          <PinIcon
+            width="16px"
+            height="16px"
+            color="grey"
+            cursor="pointer"
+            onClick={onPin}
+          />
+          <DeleteIcon
+            width="16px"
+            height="16px"
+            color="grey"
+            cursor="pointer"
+            onDelete={onDelete}
+          />
         </Flex>
       </Flex>
       <Text variant="d_s_regular" marginBottom="8px">

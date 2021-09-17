@@ -16,6 +16,18 @@ const TABBAR_LINKS = {
     icon: ICONS_REFERENCE.project_line,
     href: "/proyectos",
   },
+  projects_admin: {
+    label: "Proyectos",
+    icon: ICONS_REFERENCE.project_line,
+    href: "/proyectos",
+    submenu: [
+      {
+        label: "Sectores",
+        icon: ICONS_REFERENCE.sector,
+        href: "/sectores",
+      },
+    ],
+  },
   test_systems: {
     label: "Sistemas ensayo",
     icon: ICONS_REFERENCE.machine_line,
@@ -24,7 +36,18 @@ const TABBAR_LINKS = {
   tags: {
     label: "Tags",
     icon: ICONS_REFERENCE.tag_line,
-    href: "/tags-de-proyecto",
+    submenu: [
+      {
+        label: "Proyecto",
+        icon: ICONS_REFERENCE.tag_line,
+        href: "/tags-de-proyecto",
+      },
+      {
+        label: "Apunte",
+        icon: ICONS_REFERENCE.tag_line,
+        href: "/tags-de-apunte",
+      },
+    ],
   },
   clients: {
     label: "Clientes",
@@ -35,6 +58,13 @@ const TABBAR_LINKS = {
     label: "Usuarios",
     icon: ICONS_REFERENCE.users_line,
     href: "/",
+    submenu: [
+      {
+        label: "Departamentos",
+        icon: ICONS_REFERENCE.departments,
+        href: "/departamentos",
+      },
+    ],
   },
   help: {
     label: "Apoyo",
@@ -51,6 +81,7 @@ const {
   new_note,
   notes,
   projects,
+  projects_admin,
   test_systems,
   tags,
   clients,
@@ -70,7 +101,7 @@ export const TABBAR_USER_LINKS = [
 
 export const TABBAR_ADMIN_LINKS = [
   notes,
-  projects,
+  projects_admin,
   test_systems,
   tags,
   clients,

@@ -70,9 +70,9 @@ export const NoteDrawer = ({ isOpen, note = NOTE_MOCK, onClose, ...props }) => {
             />
           </Box>
           {note.responses
-            ? note.responses.map((res) => (
+            ? note.responses.map((res, idx) => (
                 <Box
-                  key={res.id}
+                  key={`${res.id}-${idx}`}
                   bgColor="white"
                   mt="24px"
                   p="32px"

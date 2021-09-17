@@ -6,7 +6,7 @@ import React from "react"
 import { ActionLink } from "../../../../components/buttons/ActionLink/ActionLink"
 import { ArrowRightIcon } from "../../../../components/icons/ArrowRightIcon"
 import { FinishIcon } from "../../../../components/icons/FinishIcon"
-import { PageHeader } from "../../../../components/layout/PageHeader/PageHeader"
+import { PageHeader } from "../../../../components/layout/Pages/PageHeader/PageHeader"
 
 export const ProjectHeader = () => {
   //TODO Conectar las acciones con la main page

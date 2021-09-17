@@ -1,25 +1,53 @@
 import { Checkbox, Text } from "@chakra-ui/react"
-import React, { useState } from "react"
-import { ProjectLink } from "../../../components/navigation/ProjectLink/ProjectLink"
+import { useMemo } from "react"
+import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
+import { OptionsMenuRow } from "../../../components/navigation/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
 import { Table } from "../../../components/tables/Table/Table"
-import { TableOptionsMenu } from "../../../components/tables/TableOptionsMenu/TableOptionsMenu"
+import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
-import { ClientsTableHeader } from "../ClientsTableHeader/ClientsTableHeader"
+import { PATHS } from "../../../utils/constants/paths"
 
-export const ClientsTable = ({ items }) => {
-  //TODO Crear el estado "finalizado" para que se sobreponga el color en verde
-  const { selectedRows, handleRowSelect, calcColWidth } = useTableActions()
-  const [activeItem, setActiveItem] = useState("all")
+export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
+  const {
+    selectedRows,
+    setSelectedRows,
+    handleRowSelect,
+    handleSelectAllRows,
+    calcColWidth,
+  } = useTableActions()
+
+  useMemo(() => {
+    setSelectedRows([])
+  }, [clients.length])
+
+  const handleOnDelete = () => {
+    const clientsId = Object.keys(selectedRows)
+    if (Object.keys(selectedRows).length > 1) return onDeleteMany(clientsId)
+    return onDelete(clientsId[0])
+  }
+
+  const _clients = clients?.map((client) => {
+    return {
+      actions: "",
+      id: client._id,
+      alias: client.alias,
+      name: { label: client.name, link: `${PATHS.clients}/${client._id}` },
+      testSystems: client.testSystems?.map((testSystem) => testSystem.alias),
+      projects: client.projects?.map((project) => project.alias),
+      options: "",
+    }
+  })
+
   const projects_table = {
     components: {
       text: <Text />,
-      link: <ProjectLink />,
+      link: <LinkItem />,
       count: <Text />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
-      sistemas_ensayo: <TagGroup variant="light_blue" max={3} />,
-      proyectos: <TagGroup variant="pale_yellow" max={7} />,
-      options: <TableOptionsMenu />,
+      testSystems: <TagGroup variant="light_blue" max={3} />,
+      projects: <TagGroup variant="pale_yellow" max={7} />,
+      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />,
     },
     head: {
       actions: {
@@ -28,7 +56,7 @@ export const ClientsTable = ({ items }) => {
         type: "selector",
       },
       id: {
-        label: "id",
+        label: "ID",
         width: calcColWidth(80),
         type: "text",
       },
@@ -37,19 +65,19 @@ export const ClientsTable = ({ items }) => {
         width: calcColWidth(80),
         type: "text",
       },
-      nombre: {
+      name: {
         label: "Nombre",
-        width: calcColWidth(110),
+        width: calcColWidth(300),
         type: "link",
       },
-      sistemas_ensayo: {
+      testSystems: {
         label: "Sistemas de ensayo",
-        width: calcColWidth(230),
+        width: calcColWidth(250),
         type: "tagGroup",
       },
-      proyectos: {
+      projects: {
         label: "Proyectos",
-        width: calcColWidth(500),
+        width: calcColWidth(300),
         type: "tagGroup",
       },
       options: {
@@ -59,22 +87,25 @@ export const ClientsTable = ({ items }) => {
       },
     },
   }
+
   return (
     <Table
       header={
-        <ClientsTableHeader
-          activeItem={activeItem}
-          onChange={(value) => setActiveItem(value)}
+        <TableHeader
+          count={_clients?.length}
+          countLabel="Clientes"
+          selectedRows={selectedRows}
+          onDelete={handleOnDelete}
+          selectAllRows={() => handleSelectAllRows(_clients)}
         />
       }
       config={projects_table}
-      content={items}
+      content={_clients}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
+      tableHeight={"calc(100vh - 190px)"}
       p="32px"
       pb="0"
-      tableHeight={"calc(100vh - 190px)"}
-      
     />
   )
 }

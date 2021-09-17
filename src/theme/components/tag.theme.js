@@ -29,13 +29,19 @@ export const Tag = {
         borderRadius: "50px",
       },
     },
+    green: {
+      container: {
+        backgroundColor: "correct.300",
+        borderRadius: "50px",
+      },
+    },
     project: {
       container: {
         backgroundColor: "violete",
         borderRadius: "50px",
       },
     },
-    testSystem: {
+    testSystems: {
       container: {
         backgroundColor: "pale_yellow",
         borderRadius: "50px",

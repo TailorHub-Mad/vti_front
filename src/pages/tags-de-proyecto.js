@@ -1,22 +1,15 @@
-import { Box, Center, Flex, Grid, Spinner, Text } from "@chakra-ui/react"
+import { Grid, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
-import { MessageCard } from "../components/cards/MessageCard/MessageCard"
 import { TagCard } from "../components/cards/TagCard/TagCard"
 import { NoteDrawer } from "../components/drawer/NoteDrawer/NoteDrawer"
-import { ListIcon } from "../components/icons/ListIcon"
-import { TagLinkIcon } from "../components/icons/TagLinkIcon"
-import { Page } from "../components/layout/Page/Page"
-import { PageBody } from "../components/layout/PageBody/PageBody"
-import { PageHeader } from "../components/layout/PageHeader/PageHeader"
-import { PageMenu } from "../components/layout/PageMenu/PageMenu"
-import { LoadingTableSpinner } from "../components/spinners/LoadingTableSpinner/LoadingTableSpinner"
-import { NOTES_MOCK } from "../mock/notes"
+import { Page } from "../components/layout/Pages/Page"
+import { PageBody } from "../components/layout/Pages/PageBody/PageBody"
+import { PageHeader } from "../components/layout/Pages/PageHeader/PageHeader"
+import { ToolBar } from "../components/navigation/ToolBar/ToolBar"
+import { Spinner } from "../components/spinner/Spinner"
 import { PROJECT_TAGS_MOCK } from "../mock/tags"
 import { NotesEmptyState } from "../views/notes/NotesEmptyState/NotesEmptyState"
-import { NotesMenu } from "../views/notes/NotesMenu/NotesMenu"
-import { NotesToolBar } from "../views/notes/NotesToolBar/NotesToolBar"
-import { ProjectsTagsHeader } from "../views/projectTags/ProjectTagsHeader/ProjectTagsHeader"
-import { ProjectTagsToolBar } from "../views/projectTags/ProjectTagsToolBar/ProjectTagsToolBar"
+import { ProjectsTagsHeader } from "../views/project_tags/ProjectTagsHeader/ProjectTagsHeader"
 
 const tagsDeProyecto = () => {
   // TODO fetch notes
@@ -33,9 +26,9 @@ const tagsDeProyecto = () => {
         onClose={() => setShowNoteDetails(null)}
       />
       <PageHeader title="Tags de Proyecto">
-        {areNotes && !isFetching ? <ProjectTagsToolBar /> : null}
+        {areNotes && !isFetching ? <ToolBar /> : null}
       </PageHeader>
-      {isFetching ? <LoadingTableSpinner /> : null}
+      {isFetching ? <Spinner /> : null}
       {!areNotes ? <NotesEmptyState /> : null}
       <PageBody
         p="32px"
@@ -84,9 +77,11 @@ const tagsDeProyecto = () => {
             mt="8px"
             mb="24px"
           >
-            {[...PROJECT_TAGS_MOCK].sort((a, b) => a.name.localeCompare(b.name)).map((tag) => (
-              <TagCard key={tag.name} {...tag} />
-            ))}
+            {[...PROJECT_TAGS_MOCK]
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((tag) => (
+                <TagCard key={tag.name} {...tag} />
+              ))}
           </Grid>
         ) : null}
       </PageBody>
