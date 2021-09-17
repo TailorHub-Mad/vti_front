@@ -11,7 +11,7 @@ import { NewSectorForm } from "../NewSectorForm/NewSectorForm"
 export const NewSectorModal = ({ isOpen, onClose, sectorToUpdate, ...props }) => {
   const { showToast } = useContext(ToastContext)
   const { createSector, updateSector } = useSectorApi()
-  const { mutate, cache } = useSWRConfig()
+  const { mutate } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -41,79 +41,38 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToUpdate, ...props }) =>
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
-
-    const updatedSectorsList = isUpdate
-      ? await handleUpdateSector()
-      : await handleCreateSector()
-
-    updatedSectorsList
-      ? await mutate(SWR_CACHE_KEYS.sectors, updatedSectorsList, false)
-      : await mutate(SWR_CACHE_KEYS.sectors)
-
-    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s ensayo/s!")
+    isUpdate ? await handleUpdateSector() : await handleCreateSector()
+    await mutate(SWR_CACHE_KEYS.sectors)
+    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sector/s!")
     setIsSubmitting(false)
     onClose()
   }
 
   const handleCreateSector = async () => {
-    const sectorsToCreate = [...values]
-    const sectorsQueue = sectorsToCreate.map((sector) => createSector(sector))
-    const response = await Promise.all(sectorsQueue)
-
-    const [sectorsSuccessfull, sectorsError] = response.reduce(
-      ([succ, error], e, index) => {
-        e?.error
-          ? error.push(sectorsToCreate[index])
-          : succ.push(sectorsToCreate[index])
-        return [succ, error]
-      },
-      [[], []]
-    )
-
-    // TODO -> manage errors
-    if (sectorsError.length > 0) {
+    try {
+      const sectorsToCreate = [...values]
+      await createSector(sectorsToCreate)
+    } catch (error) {
+      // TODO -> manage errors
       console.log("ERROR")
-      return
     }
-
-    if (cache.has(SWR_CACHE_KEYS.sectors)) {
-      const cacheSectors = cache.get(SWR_CACHE_KEYS.sectors)
-      const updatedSectors = []
-      const formatSectorsSuccessfull = sectorsSuccessfull.map((sector) => {
-        return {
-          ...sector,
-          projects: [],
-          notes: [],
-        }
-      })
-      updatedSectors.push({
-        testSectors: [...formatSectorsSuccessfull, ...cacheSectors[0].testSectors],
-      })
-      return updatedSectors
-    }
-
-    return null
   }
 
   const handleUpdateSector = async () => {
-    const { id } = sectorToUpdate
-    const [formatedSector] = [...values]
-    const response = await updateSector(id, { title: formatedSector.title })
-
-    // TODO -> manage errors
-    if (response?.error) {
+    try {
+      const { _id } = sectorToUpdate
+      const [data] = [...values]
+      await updateSector(_id, data)
+    } catch (error) {
+      // TODO -> manage errors
       console.log("ERROR")
-      return
     }
-
-    // TODO -> optimize cache request (update cache with updated sector)
-    return null
   }
 
   useEffect(() => {
     if (!sectorToUpdate) return
-    const { id, title } = sectorToUpdate
-    setValues([{ title, id }])
+    const { title } = sectorToUpdate
+    setValues([{ title }])
   }, [sectorToUpdate])
 
   useEffect(() => {

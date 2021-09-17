@@ -24,7 +24,7 @@ export const ViewEmptyState = ({
         variant="secondary"
         mb="16px"
         onClick={onImport}
-        w="175px"
+        w="234px"
       >
         {importButtonText || "Importar"}
       </Button>
@@ -33,7 +33,7 @@ export const ViewEmptyState = ({
         justifyContent="flex-start"
         leftIcon={<AddNoteIcon />}
         onClick={onAdd}
-        w="175px"
+        w="234px"
       >
         {addButtonText || "Añadir"}
       </Button>

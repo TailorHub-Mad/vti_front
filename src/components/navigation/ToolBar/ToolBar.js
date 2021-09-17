@@ -30,7 +30,11 @@ export const ToolBar = ({
     <Flex>
       {noFilter || <Filter onFilter={handleOnFilter} />}
       {noGroup || <Group onGroup={handleOnGroup} />}
-      <InputGroup width="196px" marginRight="16px">
+      <InputGroup
+        width="196px"
+        marginRight="16px"
+        cursor="not-allowed" /* provisional */
+      >
         <InputLeftElement
           pointerEvents="none"
           children={<SearchIcon color="gray" />}
@@ -40,6 +44,8 @@ export const ToolBar = ({
           paddingLeft="40px"
           variant="white"
           onChange={(e) => onSearch(e.target.value)}
+          isDisabled={true} /* provisional */
+          pointerEvents="none" /* provisional */
         />
       </InputGroup>
       {role === RoleType.ADMIN && (

@@ -1,31 +1,37 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { Spinner } from "../../components/spinner/Spinner"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { TestSystemsTable } from "../../views/test_systems/TestSystemsTable/TestSystemsTable"
 import useSystemApi from "../../hooks/api/useSystemApi"
-import useFetchSWR from "../../hooks/useFetchSWR"
 import { ToastContext } from "../../provider/ToastProvider"
 import { Popup } from "../../components/overlay/Popup/Popup"
-import { pullAt } from "lodash"
 import { NewTestSystemModal } from "../../views/test_systems/NewTestSystem/NewTestSystemModal/NewTestSystemModal"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
-import { DeleteType } from "../../utils/constants/global_config"
+import {
+  DeleteType,
+  fetchOption,
+  fetchType,
+} from "../../utils/constants/global_config"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddTestSystemIcon } from "../../components/icons/AddTestSystemIcon"
 import { checkDataIsEmpty } from "../../utils/functions/common"
+import { systemFetchHandler } from "../../swr/systems.swr"
 
 const sistemas = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { systems, deleteSystem } = useSystemApi()
+  const { deleteSystem } = useSystemApi()
   const { showToast } = useContext(ToastContext)
-  const { data, error, isLoading, mutate } = useFetchSWR(
-    SWR_CACHE_KEYS.systems,
-    systems
+
+  const [fetchState, setFetchState] = useState(fetchType.ALL)
+  const [fetchOptions, setFetchOptions] = useState({})
+
+  const { data, error, isLoading, mutate } = systemFetchHandler(
+    fetchState,
+    fetchOptions
   )
 
   const [showImportModal, setShowImportModal] = useState(false)
@@ -38,12 +44,8 @@ const sistemas = () => {
   const [deleteType, setDeleteType] = useState(null)
   const [systemsToDelete, setSystemsToDelete] = useState(null)
 
-  // Search state
-  const [searchChain, setSearchChain] = useState("")
-  const [searchedSystems, setSearchedSystems] = useState([])
-
   const isEmptyData = checkDataIsEmpty(data)
-  const systemsData = data ? data[0]?.testSystems : []
+  const systemsData = data && !isEmptyData ? data[0].testSystems : null
 
   // TODO
   const handleExport = () => {}
@@ -71,8 +73,8 @@ const sistemas = () => {
   }
 
   const getAliasByIdSystem = (id) => {
-    const { alias } = systemsData.find((system) => system._id === id)
-    return alias
+    const system = systemsData?.find((system) => system._id === id)
+    return system?.alias
   }
 
   const deleteOne = async (id, systems) => {
@@ -85,44 +87,32 @@ const sistemas = () => {
     showToast("Sistema de ensayo borrado correctamente")
   }
 
-  const deleteMany = async (positions, systems) => {
-    const systemsQueue = positions.map((position) =>
-      deleteSystem(systemsData[position]._id)
-    )
+  const deleteMany = async (systemsId, systems) => {
+    const systemsQueue = systemsId.map((id) => deleteSystem(id))
     await Promise.all(systemsQueue)
-    pullAt(systems, positions)
     const updatedSystems = []
-    updatedSystems.push({ testSystems: systems })
+    const filteredSystems = systems.filter(
+      (system) => !systemsId.includes(system._id)
+    )
+    updatedSystems.push({ testSystems: filteredSystems })
     await mutate(updatedSystems, false)
     showToast("Sistemas de ensayo borrados correctamente")
   }
 
   const onEdit = (id) => {
-    const system = [...systemsData].find((system) => system._id === id)
+    const system = systemsData.find((system) => system._id === id)
     setSystemToUpdate(system)
     setIsSystemModalOpen(true)
   }
 
   const onSearch = (search) => {
-    setSearchChain(search)
-
-    if (search === "") return setSearchedSystems([])
-
-    const results = systemsData.filter(
-      (system) =>
-        system._id.toLowerCase().includes(search.toLowerCase()) ||
-        system.vtiCode.toLowerCase().includes(search.toLowerCase())
-    )
-    setSearchedSystems(results)
+    setFetchState(fetchType.SEARCH)
+    setFetchOptions({
+      [fetchOption.SEARCH]: search,
+    })
   }
 
-  useEffect(() => {
-    if (isEmptyData || searchChain === "") return
-    onSearch(searchChain)
-  }, [data])
-
   if (error) return <>ERROR...</>
-  if (!data || !isLoggedIn) return <>Loading...</>
   return !isLoggedIn ? (
     <>Loading...</>
   ) : (
@@ -153,7 +143,7 @@ const sistemas = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {!isLoading && !isEmptyData && (
+        {systemsData ? (
           <ToolBar
             onAdd={() => setIsSystemModalOpen(true)}
             onSearch={onSearch}
@@ -163,7 +153,7 @@ const sistemas = () => {
             searchPlaceholder="Busqueda por ID, Código"
             icon={<AddTestSystemIcon />}
           />
-        )}
+        ) : null}
       </PageHeader>
       {isLoading ? <Spinner /> : null}
       {isEmptyData ? (
@@ -175,11 +165,11 @@ const sistemas = () => {
           onAdd={() => setIsSystemModalOpen(true)}
         />
       ) : null}
-      {data && !isEmptyData ? (
+      {systemsData ? (
         <TestSystemsTable
-          items={searchChain !== "" ? searchedSystems : systemsData}
+          systems={systemsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
-          onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
+          onDeleteMany={(systemsId) => handleOpenPopup(systemsId, DeleteType.MANY)}
           onEdit={onEdit}
         />
       ) : null}

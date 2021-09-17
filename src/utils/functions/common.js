@@ -16,8 +16,8 @@ export const capitalize = (word) => {
 export const getPercentage = (full, size) => ((size / full) * 100).toFixed(2)
 
 export const getFieldObjectById = (collection, field, id) => {
-  const item = collection.find((item) => item.id === id)
-  return item[field]
+  const item = collection?.find((item) => item._id === id)
+  return !item ?? item[field]
 }
 
 export const checkDataIsEmpty = (data) => {

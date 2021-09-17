@@ -4,9 +4,9 @@ const useClientApi = () => {
   const clientService = ClientService()
 
   const getClients = () => clientService.getClients()
-  const getClient = (id) => clientService.getClient(id)
+  const getClient = (_, id) => clientService.getClient(id)
   const createClient = (data) => clientService.createClient(data)
-  const updateClient = (data) => clientService.updateClient(data)
+  const updateClient = (id, data) => clientService.updateClient(id, data)
   const deleteClient = (id) => clientService.deleteClient(id)
 
   return { getClients, getClient, createClient, updateClient, deleteClient }

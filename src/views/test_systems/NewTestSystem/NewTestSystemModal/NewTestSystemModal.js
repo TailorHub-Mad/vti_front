@@ -6,17 +6,12 @@ import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomMo
 import useSystemApi from "../../../../hooks/api/useSystemApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
-import { NewNoteForm } from "../../../notes/NewNote/NewNoteForm/NewNoteForm"
+import { NewTestSystemForm } from "../NewTestSystemForm/NewTestSystemForm"
 
-export const NewTestSystemModal = ({
-  isOpen,
-  onClose,
-  systemToUpdate,
-  ...props
-}) => {
+export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
   const { showToast } = useContext(ToastContext)
   const { createSystem, updateSystem } = useSystemApi()
-  const { mutate, cache } = useSWRConfig()
+  const { mutate } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -44,23 +39,7 @@ export const NewTestSystemModal = ({
     )
   }
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true)
-
-    const updatedSystemsList = isUpdate
-      ? await handleUpdateSystem()
-      : await handleCreateSystem()
-
-    updatedSystemsList
-      ? await mutate(SWR_CACHE_KEYS.systems, updatedSystemsList, false)
-      : await mutate(SWR_CACHE_KEYS.systems)
-
-    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
-    setIsSubmitting(false)
-    onClose()
-  }
-
-  const formatSystems = (systems) => {
+  const formatCreateSystems = (systems) => {
     return systems.map((value) => {
       const { clientAlias: client, year, vtiCode, alias } = value
       return {
@@ -74,73 +53,58 @@ export const NewTestSystemModal = ({
     })
   }
 
+  const formatUpdateSystems = (systems) => {
+    return systems.map((value) => {
+      const { year, alias } = value
+      return {
+        alias,
+        date: {
+          year,
+        },
+      }
+    })
+  }
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true)
+    isUpdate ? await handleUpdateSystem() : await handleCreateSystem()
+    await mutate(SWR_CACHE_KEYS.systems)
+    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
+    setIsSubmitting(false)
+    onClose()
+  }
+
   const handleCreateSystem = async () => {
-    const systemsToCreate = formatSystems(values)
-    const systemsQueue = systemsToCreate.map((system) => createSystem(system))
-    const response = await Promise.all(systemsQueue)
-
-    const [systemsSuccessfull, systemsError] = response.reduce(
-      ([succ, error], e, index) => {
-        e?.error
-          ? error.push(systemsToCreate[index])
-          : succ.push(systemsToCreate[index])
-        return [succ, error]
-      },
-      [[], []]
-    )
-
-    // TODO -> manage errors
-    if (systemsError.length > 0) {
+    try {
+      const systemsToCreate = formatCreateSystems(values)
+      const systemsQueue = systemsToCreate.map((system) => createSystem(system))
+      await Promise.all(systemsQueue)
+    } catch (error) {
+      // TODO -> manage errors
       console.log("ERROR")
     }
-
-    if (cache.has(SWR_CACHE_KEYS.systems)) {
-      const cacheSystems = cache.get(SWR_CACHE_KEYS.systems)
-      const updatedSystems = []
-      const formatSystemsSuccessfull = systemsSuccessfull.map((system) => {
-        return {
-          ...system,
-          projects: [],
-          notes: [],
-        }
-      })
-      updatedSystems.push({
-        testSystems: [...formatSystemsSuccessfull, ...cacheSystems[0].testSystems],
-      })
-      return updatedSystems
-    }
-
-    return null
   }
 
   const handleUpdateSystem = async () => {
-    const { id } = systemToUpdate
-    const [formatedSystem] = formatSystems(values)
-
-    // TODO -> provisional
-    delete formatedSystem["client"]
-
-    const response = await updateSystem(id, formatedSystem)
-
-    // TODO -> manage errors
-    if (response?.error) {
+    try {
+      const { _id } = systemToUpdate
+      const [data] = formatUpdateSystems(values)
+      await updateSystem(_id, data)
+    } catch (error) {
+      // TODO -> manage errors
       console.log("ERROR")
     }
-
-    // TODO -> optimize cache request (update cache with updated system)
-    return null
   }
 
   useEffect(() => {
     if (!systemToUpdate) return
     const {
-      id,
       vtiCode,
       clientAlias,
       alias,
       date: { year },
     } = systemToUpdate
-    setValues([{ vtiCode, clientAlias, alias, year, id }])
+    setValues([{ vtiCode, clientAlias, alias, year }])
   }, [systemToUpdate])
 
   useEffect(() => {
@@ -149,7 +113,7 @@ export const NewTestSystemModal = ({
   }, [isOpen])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} {...props}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
@@ -163,7 +127,7 @@ export const NewTestSystemModal = ({
           onDelete={handleDelete}
           addTitle="Añadir nuevo sistema"
         >
-          <NewNoteForm />
+          <NewTestSystemForm />
         </MultipleFormContent>
         <Button
           w="194px"

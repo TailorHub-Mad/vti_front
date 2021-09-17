@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { AddSelect } from "../../../../components/forms/AddSelect/AddSelect"
 import { InputSelect } from "../../../../components/forms/InputSelect/InputSelect"
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
@@ -10,7 +10,7 @@ import useFetchSWR from "../../../../hooks/useFetchSWR"
 import { MOCK_SELECT_OPTIONS, MOCK_YEAR_OPTIONS } from "../../../../mock/mock"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 
-export const NewProjectForm = ({ openAuxModal, value, onChange }) => {
+export const NewProjectForm = ({ openAuxModal, value, onChange, projectToEdit }) => {
   const { getClients } = useClientApi()
   const { getSectors } = useSectorApi()
   const { getUsers } = useUserApi()
@@ -119,6 +119,15 @@ export const NewProjectForm = ({ openAuxModal, value, onChange }) => {
       },
     },
   }
+
+  useEffect(() => {
+    if (projectToEdit && clientsOptions?.length > 0) {
+      const [cl] = clientsOptions.filter(
+        (_client) => _client.label === projectToEdit?.clientAlias
+      )
+      handleFormChange("client", cl.value)
+    }
+  }, [clientsOptions])
 
   const inputRefObj = {
     input: <SimpleInput />,

@@ -6,36 +6,36 @@ import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
+import { PATHS } from "../../../utils/constants/paths"
 
-export const SectorsTable = ({ items: sectors, onDelete, onEdit, onDeleteMany }) => {
-  const { selectedRows, setSelectedRows, handleRowSelect, calcColWidth } =
-    useTableActions()
+export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
+  const {
+    selectedRows,
+    setSelectedRows,
+    handleRowSelect,
+    handleSelectAllRows,
+    calcColWidth,
+  } = useTableActions()
 
   useMemo(() => {
     setSelectedRows([])
   }, [sectors.length])
 
-  const handleSelectAllRows = (e) => {
-    const value = e.target.checked ? [...Array(sectors.length).keys()] : []
-    setSelectedRows(value)
-  }
-
   const handleOnDelete = () => {
-    if (Object.keys(selectedRows).length > 1) return onDeleteMany(selectedRows)
-    return onDelete(sectors[selectedRows[0]].id)
+    const sectorsId = Object.keys(selectedRows)
+    if (Object.keys(selectedRows).length > 1) return onDeleteMany(sectorsId)
+    return onDelete(sectorsId[0])
   }
 
-  const _sectors =
-    sectors &&
-    sectors.map((sector) => {
-      return {
-        actions: "",
-        id: sector.id,
-        name: { label: sector.title, link: `/sectores/${sector.id}` },
-        projects: sector.projects,
-        options: "",
-      }
-    })
+  const _sectors = sectors?.map((sector) => {
+    return {
+      actions: "",
+      id: sector._id,
+      name: { label: sector.title, link: `${PATHS.sectors}/${sector._id}` },
+      projects: sector.projects,
+      options: "",
+    }
+  })
 
   const sectors_table = {
     components: {

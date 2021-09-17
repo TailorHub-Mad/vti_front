@@ -15,7 +15,7 @@ export const InputSelect = ({
   isDisabled,
   ...props
 }) => {
-  const [inputValue, setInputValue] = useState(null)
+  const [inputValue, setInputValue] = useState(value)
   const [showSelectMenu, setShowSelectMenu] = useState(false)
   const [availableOptions, setAvailableOptions] = useState(options)
   const ref = useRef(null)

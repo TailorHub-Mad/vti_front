@@ -1,5 +1,4 @@
-import { pullAt } from "lodash"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
@@ -7,25 +6,32 @@ import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import { Spinner } from "../../components/spinner/Spinner"
 import useClientApi from "../../hooks/api/useClientApi"
-import useFetchSWR from "../../hooks/useFetchSWR"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { ToastContext } from "../../provider/ToastProvider"
-import { DeleteType } from "../../utils/constants/global_config"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
+import {
+  DeleteType,
+  fetchOption,
+  fetchType,
+} from "../../utils/constants/global_config"
 import { ClientsTable } from "../../views/clients/ClientsTable/ClientsTable"
 import { NewClientModal } from "../../views/clients/NewClient/NewClientModal/NewClientModal"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { AddClientIcon } from "../../components/icons/AddClientIcon"
 import { checkDataIsEmpty } from "../../utils/functions/common"
+import { clientFetchHandler } from "../../swr/client.swr"
 
 const clientes = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { getClients, deleteClient } = useClientApi()
+  const { deleteClient } = useClientApi()
   const { showToast } = useContext(ToastContext)
-  const { data, error, isLoading, mutate } = useFetchSWR(
-    SWR_CACHE_KEYS.clients,
-    getClients
+
+  const [fetchState, setFetchState] = useState(fetchType.ALL)
+  const [fetchOptions, setFetchOptions] = useState({})
+
+  const { data, error, isLoading, mutate } = clientFetchHandler(
+    fetchState,
+    fetchOptions
   )
 
   const [showImportModal, setShowImportModal] = useState(false)
@@ -37,10 +43,6 @@ const clientes = () => {
   // Delete state
   const [deleteType, setDeleteType] = useState(null)
   const [clientsToDelete, setClientsToDelete] = useState(null)
-
-  // Search state
-  const [searchChain, setSearchChain] = useState("")
-  const [searchedClients, setSearchedClients] = useState([])
 
   const isEmptyData = checkDataIsEmpty(data)
   const clientsData = data && !isEmptyData ? data : null
@@ -71,8 +73,8 @@ const clientes = () => {
   }
 
   const getAliasByIdClient = (id) => {
-    const { alias } = clientsData.find((client) => client._id === id)
-    return alias
+    const client = clientsData?.find((client) => client._id === id)
+    return client?.alias
   }
 
   const deleteOne = async (id, clients) => {
@@ -82,43 +84,30 @@ const clientes = () => {
     showToast("Cliente borrado correctamente")
   }
 
-  const deleteMany = async (positions, clients) => {
-    const clientsQueue = positions.map((position) =>
-      deleteClient(clientsData[position]._id)
-    )
+  const deleteMany = async (clientsId, clients) => {
+    const clientsQueue = clientsId.map((id) => deleteClient(id))
     await Promise.all(clientsQueue)
-    pullAt(clients, positions)
-    const updatedClients = [...clients]
+    const updatedClients = clients.filter(
+      (client) => !clientsId.includes(client._id)
+    )
     await mutate(updatedClients, false)
     showToast("Clientes borrados correctamente")
   }
 
   const onEdit = (id) => {
-    const client = [...clientsData].find((client) => client._id === id)
+    const client = clientsData.find((client) => client._id === id)
     setClientToUpdate(client)
     setIsClientModalOpen(true)
   }
 
   const onSearch = (search) => {
-    setSearchChain(search)
-
-    if (search === "") return setSearchedClients([])
-
-    const results = clientsData.filter(
-      (client) =>
-        client._id.toLowerCase().includes(search.toLowerCase()) ||
-        client.vtiCode.toLowerCase().includes(search.toLowerCase())
-    )
-    setSearchedClients(results)
+    setFetchState(fetchType.SEARCH)
+    setFetchOptions({
+      [fetchOption.SEARCH]: search,
+    })
   }
 
-  useEffect(() => {
-    if (isEmptyData || searchChain === "") return
-    onSearch(searchChain)
-  }, [clientsData])
-
   if (error) return <>ERROR...</>
-
   return !isLoggedIn ? (
     <>Loading...</>
   ) : (
@@ -176,9 +165,9 @@ const clientes = () => {
       ) : null}
       {clientsData ? (
         <ClientsTable
-          clients={searchChain !== "" ? searchedClients : clientsData}
+          clients={clientsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
-          onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
+          onDeleteMany={(clientsId) => handleOpenPopup(clientsId, DeleteType.MANY)}
           onEdit={onEdit}
         />
       ) : null}

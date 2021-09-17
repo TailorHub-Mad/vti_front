@@ -5,12 +5,15 @@ export const DeleteType = {
 
 export const fetchType = {
   ALL: "all",
+  ID: "id",
   ACTIVE: "active",
   GROUPED: "grouped",
   FILTERED: "filtered",
+  SEARCH: "search",
 }
 
 export const fetchOption = {
+  ID: "id",
   FILTER: "filter",
   SEARCH: "search",
 }

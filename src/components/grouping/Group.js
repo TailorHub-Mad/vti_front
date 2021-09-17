@@ -8,7 +8,12 @@ export const Group = ({ onGroup }) => {
 
   return (
     <>
-      <Button variant="tool_button" mr="16px" onClick={onOpen}>
+      <Button
+        variant="tool_button"
+        mr="16px"
+        onClick={onOpen}
+        isDisabled={true} /* provisional */
+      >
         <NotesIcon mr={["8px", "8px"]} />
         Agrupar
       </Button>

@@ -6,9 +6,10 @@ import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
+import { PATHS } from "../../../utils/constants/paths"
 
 export const DepartmentsTable = ({
-  items: departments,
+  departments,
   onDelete,
   onEdit,
   onDeleteMany,
@@ -26,21 +27,23 @@ export const DepartmentsTable = ({
   }, [departments.length])
 
   const handleOnDelete = () => {
-    if (Object.keys(selectedRows).length > 1) return onDeleteMany(selectedRows)
-    return onDelete(departments[selectedRows[0]].id)
+    const departmentsId = Object.keys(selectedRows)
+    if (Object.keys(selectedRows).length > 1) return onDeleteMany(departmentsId)
+    return onDelete(departmentsId[0])
   }
 
-  const _departments =
-    departments &&
-    departments.map((department) => {
-      return {
-        actions: "",
-        id: department.id,
-        name: { label: department.name, link: `/departamentos/${department.id}` },
-        users: ["Usuario 1", "Usuario 2", "Usuario 3"],
-        options: "",
-      }
-    })
+  const _departments = departments?.map((department) => {
+    return {
+      actions: "",
+      id: department._id,
+      name: {
+        label: department.name,
+        link: `${PATHS.departments}/${department._id}`,
+      },
+      users: [], // TODO
+      options: "",
+    }
+  })
 
   const departments_table = {
     components: {

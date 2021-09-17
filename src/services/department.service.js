@@ -9,7 +9,8 @@ const DepartmentService = () => {
     execute(instance.post(`/department/create`, data))
   const updateDepartment = (id, data) =>
     execute(instance.put(`/department/update/${id}`, data))
-  const deleteDepartment = (id) => execute(instance.delete(`/department/${id}`))
+  const deleteDepartment = (id) =>
+    execute(instance.delete(`/department/delete/${id}`))
 
   return {
     getDepartments,

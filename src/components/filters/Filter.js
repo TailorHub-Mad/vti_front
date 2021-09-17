@@ -8,7 +8,12 @@ export const Filter = () => {
 
   return (
     <>
-      <Button variant="tool_button" marginRight="16px" onClick={onOpen}>
+      <Button
+        variant="tool_button"
+        marginRight="16px"
+        onClick={onOpen}
+        isDisabled={true} /* provisional */
+      >
         <FilterIcon mr={["8px", "8px"]} display />
         Filtrar
       </Button>

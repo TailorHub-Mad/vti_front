@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { Popup } from "../../components/overlay/Popup/Popup"
@@ -10,22 +10,28 @@ import { NewSectorModal } from "../../views/sectors/NewSector/NewSectorModal/New
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import useSectorApi from "../../hooks/api/useSectorApi"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
-import useFetchSWR from "../../hooks/useFetchSWR"
-import { DeleteType } from "../../utils/constants/global_config"
-import { pullAt } from "lodash"
+import {
+  DeleteType,
+  fetchOption,
+  fetchType,
+} from "../../utils/constants/global_config"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import { AddSectorIcon } from "../../components/icons/AddSectorIcon"
+import { sectorFetchHandler } from "../../swr/sector.swr"
 
 const sectores = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { getSectors, deleteSector } = useSectorApi()
+  const { deleteSector } = useSectorApi()
   const { showToast } = useContext(ToastContext)
-  const { data, error, isLoading, mutate } = useFetchSWR(
-    SWR_CACHE_KEYS.sectors,
-    getSectors
+
+  const [fetchState, setFetchState] = useState(fetchType.ALL)
+  const [fetchOptions, setFetchOptions] = useState({})
+
+  const { data, error, isLoading, mutate } = sectorFetchHandler(
+    fetchState,
+    fetchOptions
   )
 
   const [showImportModal, setShowImportModal] = useState(false)
@@ -38,12 +44,8 @@ const sectores = () => {
   const [deleteType, setDeleteType] = useState(null)
   const [sectorsToDelete, setSectorsToDelete] = useState(null)
 
-  // Search state
-  const [searchChain, setSearchChain] = useState("")
-  const [searchedSectors, setSearchedSectors] = useState([])
-
   const isEmptyData = checkDataIsEmpty(data)
-  const sectorsData = data ?? []
+  const sectorsData = data && !isEmptyData ? data : null
 
   // TODO
   const handleExport = () => {}
@@ -72,53 +74,38 @@ const sectores = () => {
 
   const deleteOne = async (id, sectors) => {
     await deleteSector(id)
-    const updatedSectors = []
-    updatedSectors.push({
-      testSectors: sectors.filter((sector) => sector._id !== id),
-    })
+    const updatedSectors = sectors.filter((sector) => sector._id !== id)
     await mutate(updatedSectors, false)
     showToast("Sector borrado correctamente")
   }
 
-  const deleteMany = async (positions, sectors) => {
-    const sectorsQueue = positions.map((position) =>
-      deleteSector(sectorsData[position]._id)
-    )
+  const deleteMany = async (sectorsId, sectors) => {
+    const sectorsQueue = sectorsId.map((id) => deleteSector(id))
     await Promise.all(sectorsQueue)
-    pullAt(sectors, positions)
-    const updatedSectors = []
-    updatedSectors.push({ testSectors: sectors })
-    await mutate(updatedSectors, false)
+    const updatedClients = sectors.filter(
+      (sector) => !sectorsId.includes(sector._id)
+    )
+    await mutate(updatedClients, false)
     showToast("Sectores borrados correctamente")
   }
 
   const onEdit = (id) => {
-    const sector = [...sectorsData].find((sector) => sector._id === id)
+    const sector = sectorsData.find((sector) => sector._id === id)
     setSectorToUpdate(sector)
     setIsSectorModalOpen(true)
   }
 
   const onSearch = (search) => {
-    setSearchChain(search)
-
-    if (search === "") return setSearchedSectors([])
-
-    const results = sectorsData.filter(
-      (sector) =>
-        sector._id.toLowerCase().includes(search.toLowerCase()) ||
-        sector.vtiCode.toLowerCase().includes(search.toLowerCase())
-    )
-    setSearchedSectors(results)
+    setFetchState(fetchType.SEARCH)
+    setFetchOptions({
+      [fetchOption.SEARCH]: search,
+    })
   }
 
-  useEffect(() => {
-    if (isEmptyData || searchChain === "") return
-    onSearch(searchChain)
-  }, [data])
-
   if (error) return <>ERROR...</>
-  if (!data || !isLoggedIn) return <>Loading...</>
-  return (
+  return !isLoggedIn ? (
+    <>Loading...</>
+  ) : (
     <Page>
       <Popup
         variant="twoButtons"
@@ -151,7 +138,7 @@ const sectores = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {!isLoading && !isEmptyData && (
+        {sectorsData ? (
           <ToolBar
             onAdd={() => setIsSectorModalOpen(true)}
             onSearch={onSearch}
@@ -161,7 +148,7 @@ const sectores = () => {
             searchPlaceholder="Busqueda por ID, Alias"
             icon={<AddSectorIcon />}
           />
-        )}
+        ) : null}
       </PageHeader>
       {isLoading ? <Spinner /> : null}
       {isEmptyData ? (
@@ -173,9 +160,9 @@ const sectores = () => {
           onAdd={() => setIsSectorModalOpen(true)}
         />
       ) : null}
-      {data && !isEmptyData ? (
+      {sectorsData ? (
         <SectorsTable
-          items={searchChain !== "" ? searchedSectors : sectorsData}
+          sectors={sectorsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
           onEdit={onEdit}

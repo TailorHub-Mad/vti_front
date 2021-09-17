@@ -1,31 +1,37 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import { Spinner } from "../../components/spinner/Spinner"
-import useDepartmentApi from "../../hooks/api/useDepartmentApi"
 import { ToastContext } from "../../provider/ToastProvider"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { DepartmentsTable } from "../../views/departments/DepartmentsTable/DepartmentsTable"
 import { NewDepartmentModal } from "../../views/departments/NewDepartment/NewDepartmentModal/NewDepartmentModal"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
-import useFetchSWR from "../../hooks/useFetchSWR"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
-import { DeleteType } from "../../utils/constants/global_config"
-import { pullAt } from "lodash"
+import {
+  DeleteType,
+  fetchOption,
+  fetchType,
+} from "../../utils/constants/global_config"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { AddDepartmentIcon } from "../../components/icons/AddDepartmentIcon"
+import { departmentFetchHandler } from "../../swr/department.swr"
 import { checkDataIsEmpty } from "../../utils/functions/common"
+import useDepartmentApi from "../../hooks/api/useDepartmentApi"
 
 const departamentos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { getDepartments, deleteDepartment } = useDepartmentApi()
+  const { deleteDepartment } = useDepartmentApi()
   const { showToast } = useContext(ToastContext)
-  const { data, error, isLoading, mutate } = useFetchSWR(
-    SWR_CACHE_KEYS.departments,
-    getDepartments
+
+  const [fetchState, setFetchState] = useState(fetchType.ALL)
+  const [fetchOptions, setFetchOptions] = useState({})
+
+  const { data, error, isLoading, mutate } = departmentFetchHandler(
+    fetchState,
+    fetchOptions
   )
 
   const [showImportModal, setShowImportModal] = useState(false)
@@ -38,12 +44,8 @@ const departamentos = () => {
   const [deleteType, setDeleteType] = useState(null)
   const [departmentsToDelete, setDepartmentsToDelete] = useState(null)
 
-  // Search state
-  const [searchChain, setSearchChain] = useState("")
-  const [searchedDepartments, setSearchedDepartments] = useState([])
-
   const isEmptyData = checkDataIsEmpty(data)
-  const departmentsData = data ?? []
+  const departmentsData = data && !isEmptyData ? data : null
 
   // TODO
   const handleExport = () => {}
@@ -71,61 +73,46 @@ const departamentos = () => {
   }
 
   const getAliasByIdDepartment = (id) => {
-    const { alias } = departmentsData.find((department) => department._id === id)
-    return alias
+    const department = departmentsData.find((department) => department._id === id)
+    return department?.alias
   }
 
   const deleteOne = async (id, departments) => {
     await deleteDepartment(id)
-    const updatedDepartments = []
-    updatedDepartments.push({
-      testDepartments: departments.filter((department) => department._id !== id),
-    })
+    const updatedDepartments = departments.filter(
+      (department) => department._id !== id
+    )
     await mutate(updatedDepartments, false)
-    showToast("Departmento borrado correctamente")
+    showToast("Departamento borrado correctamente")
   }
 
-  const deleteMany = async (positions, departments) => {
-    const departmentsQueue = positions.map((position) =>
-      deleteDepartment(departmentsData[position]._id)
-    )
+  const deleteMany = async (departmentsId, departments) => {
+    const departmentsQueue = departmentsId.map((id) => deleteDepartment(id))
     await Promise.all(departmentsQueue)
-    pullAt(departments, positions)
-    const updatedDepartments = []
-    updatedDepartments.push({ testDepartments: departments })
+    const updatedDepartments = departments.filter(
+      (department) => !departmentsId.includes(department._id)
+    )
     await mutate(updatedDepartments, false)
-    showToast("Departmentos borrados correctamente")
+    showToast("Departamentos borrados correctamente")
   }
 
   const onEdit = (id) => {
-    const department = [...departmentsData].find(
-      (department) => department._id === id
-    )
+    const department = departmentsData.find((department) => department._id === id)
     setDepartmentToUpdate(department)
     setIsDepartmentModalOpen(true)
   }
 
   const onSearch = (search) => {
-    setSearchChain(search)
-
-    if (search === "") return setSearchedDepartments([])
-
-    const results = departmentsData.filter(
-      (department) =>
-        department._id.toLowerCase().includes(search.toLowerCase()) ||
-        department.vtiCode.toLowerCase().includes(search.toLowerCase())
-    )
-    setSearchedDepartments(results)
+    setFetchState(fetchType.SEARCH)
+    setFetchOptions({
+      [fetchOption.SEARCH]: search,
+    })
   }
 
-  useEffect(() => {
-    if (isEmptyData || searchChain === "") return
-    onSearch(searchChain)
-  }, [data])
-
   if (error) return <>ERROR...</>
-  if (!data || !isLoggedIn) return <>Loading...</>
-  return (
+  return !isLoggedIn ? (
+    <>Loading...</>
+  ) : (
     <Page>
       <Popup
         variant="twoButtons"
@@ -154,33 +141,35 @@ const departamentos = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {!isLoading && !isEmptyData && (
+        {departmentsData ? (
           <ToolBar
             onAdd={() => setIsDepartmentModalOpen(true)}
             onSearch={onSearch}
             onImport={() => setShowImportModal(true)}
             onExport={handleExport}
-            addLabel="Añadir departamento"
+            addLabel="Añadir departamentos"
             searchPlaceholder="Busqueda por ID, Alias"
             icon={<AddDepartmentIcon />}
           />
-        )}
+        ) : null}
       </PageHeader>
       {isLoading ? <Spinner /> : null}
       {isEmptyData ? (
         <ViewEmptyState
           message="Añadir departamentos a la plataforma"
           importButtonText="Importar"
-          addButtonText="Añadir departamento"
+          addButtonText="Añadir departamentos"
           onImport={() => setShowImportModal(true)}
           onAdd={() => setIsDepartmentModalOpen(true)}
         />
       ) : null}
-      {data && !isEmptyData ? (
+      {departmentsData ? (
         <DepartmentsTable
-          items={searchChain !== "" ? searchedDepartments : departmentsData}
+          departments={departmentsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
-          onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
+          onDeleteMany={(departmentsId) =>
+            handleOpenPopup(departmentsId, DeleteType.MANY)
+          }
           onEdit={onEdit}
         />
       ) : null}

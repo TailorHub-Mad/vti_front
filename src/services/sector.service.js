@@ -9,7 +9,7 @@ const SectorService = () => {
   const createSector = (data) => execute(instance.post(`/sector/create`, data))
   const updateSector = (id, data) =>
     execute(instance.put(`/sector/update/${id}`, data))
-  const deleteSector = (id) => execute(instance.delete(`/sector/${id}`))
+  const deleteSector = (id) => execute(instance.delete(`/sector/delete/${id}`))
 
   return { getSectors, getSector, createSector, updateSector, deleteSector }
 }

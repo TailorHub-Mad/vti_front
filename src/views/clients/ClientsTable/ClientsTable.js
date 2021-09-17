@@ -6,6 +6,7 @@ import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
+import { PATHS } from "../../../utils/constants/paths"
 
 export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
   const {
@@ -21,23 +22,22 @@ export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
   }, [clients.length])
 
   const handleOnDelete = () => {
-    if (Object.keys(selectedRows).length > 1) return onDeleteMany(selectedRows)
-    return onDelete(clients[selectedRows[0]].id)
+    const clientsId = Object.keys(selectedRows)
+    if (Object.keys(selectedRows).length > 1) return onDeleteMany(clientsId)
+    return onDelete(clientsId[0])
   }
 
-  const _clients =
-    clients &&
-    clients.map((client) => {
-      return {
-        actions: "",
-        id: client._id,
-        alias: client.alias,
-        name: { label: client.name, link: `/clientes/${client.id}` },
-        testSystems: client.testSystems?.map((testSystem) => testSystem.alias),
-        projects: client.projects?.map((project) => project.alias),
-        options: "",
-      }
-    })
+  const _clients = clients?.map((client) => {
+    return {
+      actions: "",
+      id: client._id,
+      alias: client.alias,
+      name: { label: client.name, link: `${PATHS.clients}/${client._id}` },
+      testSystems: client.testSystems?.map((testSystem) => testSystem.alias),
+      projects: client.projects?.map((project) => project.alias),
+      options: "",
+    }
+  })
 
   const projects_table = {
     components: {
@@ -103,9 +103,9 @@ export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
       content={_clients}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
+      tableHeight={"calc(100vh - 190px)"}
       p="32px"
       pb="0"
-      tableHeight={"calc(100vh - 190px)"}
     />
   )
 }

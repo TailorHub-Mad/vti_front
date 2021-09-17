@@ -4,22 +4,19 @@ import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { Spinner } from "../../components/spinner/Spinner"
-import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
-import useClientApi from "../../hooks/api/useClientApi"
+import { ProjectsTable } from "../../views/projects/ProjectTable/ProjectTable"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
-import useFetchSWR from "../../hooks/useFetchSWR"
+import { clientFetchHandler } from "../../swr/client.swr"
+import { fetchOption, fetchType } from "../../utils/constants/global_config"
 
 const client = () => {
   const router = useRouter()
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { getClient } = useClientApi()
 
-  const { data, error, isLoading, isValidating } = useFetchSWR(
-    [SWR_CACHE_KEYS.department, router.query.id],
-    getClient
-  )
+  const { data, error, isLoading, isValidating } = clientFetchHandler(fetchType.ID, {
+    [fetchOption.ID]: router.query.id,
+  })
 
   const notFound = !isValidating && !data
 

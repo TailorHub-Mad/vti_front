@@ -5,7 +5,7 @@ import useClientApi from "../../../../hooks/api/useClientApi"
 import useFetchSWR from "../../../../hooks/useFetchSWR"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 
-export const NewTestSystemForm = ({ value, onChange }) => {
+export const NewTestSystemForm = ({ value, onChange, systemToUpdate }) => {
   const { getClients } = useClientApi()
   // TODO -> manage errors & loading state
   const { data } = useFetchSWR(SWR_CACHE_KEYS.clients, getClients)
@@ -36,6 +36,7 @@ export const NewTestSystemForm = ({ value, onChange }) => {
       config: {
         placeholder: "Cod",
         label: "Cod VTI*",
+        disabled: Boolean(!systemToUpdate),
       },
     },
     clientAlias: {
@@ -44,6 +45,7 @@ export const NewTestSystemForm = ({ value, onChange }) => {
         placeholder: "AliasCL",
         label: "Cliente*",
         options: clientsOptions,
+        disabled: Boolean(!systemToUpdate),
       },
     },
     alias: {
@@ -67,6 +69,15 @@ export const NewTestSystemForm = ({ value, onChange }) => {
     select: <InputSelect />,
   }
 
+  // useEffect(() => {
+  //   if (systemToUpdate && clientsOptions?.length > 0) {
+  //     const [cl] = clientsOptions.filter(
+  //       (_client) => _client.label === systemToUpdate?.clientAlias
+  //     )
+  //     handleFormChange("client", cl.value)
+  //   }
+  // }, [clientsOptions])
+
   return (
     <>
       {Object.entries(formInputs).map(([name, { type, config }], index) => {
@@ -74,7 +85,9 @@ export const NewTestSystemForm = ({ value, onChange }) => {
           value: value[name],
           onChange: (val) => handleFormChange(name, val),
           marginBottom: name === "name" ? "0" : "24px",
-          isDisabled: index !== 0 && !value[Object.keys(value)[index - 1]],
+          isDisabled:
+            config.disabled ||
+            (index !== 0 && !value[Object.keys(value)[index - 1]]),
           key: `${name}-${index}`,
           ...config,
         })

@@ -6,13 +6,9 @@ import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
+import { PATHS } from "../../../utils/constants/paths"
 
-export const TestSystemsTable = ({
-  items: systems,
-  onDelete,
-  onEdit,
-  onDeleteMany,
-}) => {
+export const TestSystemsTable = ({ systems, onDelete, onEdit, onDeleteMany }) => {
   const {
     selectedRows,
     setSelectedRows,
@@ -26,18 +22,19 @@ export const TestSystemsTable = ({
   }, [systems.length])
 
   const handleOnDelete = () => {
-    if (Object.keys(selectedRows).length > 1) return onDeleteMany(selectedRows)
-    return onDelete(systems[selectedRows[0]].id)
+    const systemsId = Object.keys(selectedRows)
+    if (Object.keys(selectedRows).length > 1) return onDeleteMany(systemsId)
+    return onDelete(systemsId[0])
   }
 
   const _systems = systems?.map((system) => {
     return {
       actions: "",
       id: system._id,
-      alias: { label: system.alias, link: `/sistemas/${system.id}` },
+      alias: { label: system.alias, link: `${PATHS.testSystems}/${system.id}` },
       client: system.clientAlias,
       code: system.vtiCode,
-      year: system.date.year,
+      year: system.date?.year,
       projects: system.projects,
       notes: system.notes,
       options: "",

@@ -8,10 +8,10 @@ import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { NewClientForm } from "../NewClientForm/NewClientForm"
 
-export const NewClientModal = ({ isOpen, onClose, clientToUpdate, ...props }) => {
+export const NewClientModal = ({ isOpen, onClose, clientToUpdate }) => {
   const { showToast } = useContext(ToastContext)
   const { createClient, updateClient } = useClientApi()
-  const { mutate, cache } = useSWRConfig()
+  const { mutate } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -41,16 +41,9 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate, ...props }) =>
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
-
-    const updatedClientsList = isUpdate
-      ? await handleUpdateClient()
-      : await handleCreateClient()
-
-    updatedClientsList
-      ? await mutate(SWR_CACHE_KEYS.clients, updatedClientsList, false)
-      : await mutate(SWR_CACHE_KEYS.clients)
-
-    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
+    isUpdate ? await handleUpdateClient() : await handleCreateClient()
+    await mutate(SWR_CACHE_KEYS.clients)
+    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s cliente/s!")
     setIsSubmitting(false)
     onClose()
   }
@@ -59,12 +52,6 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate, ...props }) =>
     try {
       const clientsToCreate = [...values]
       await createClient(clientsToCreate)
-
-      if (!cache.has(SWR_CACHE_KEYS.clients)) return null
-
-      const cacheClients = cache.get(SWR_CACHE_KEYS.clients)
-      const updatedClients = [...clientsToCreate, ...cacheClients]
-      return updatedClients
     } catch (error) {
       // TODO -> manage errors
       console.log("ERROR")
@@ -72,24 +59,20 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate, ...props }) =>
   }
 
   const handleUpdateClient = async () => {
-    const { id } = clientToUpdate
-    const [formatedClient] = [...values]
-
-    const response = await updateClient(id, formatedClient)
-
-    // TODO -> manage errors
-    if (response?.error) {
+    try {
+      const { _id } = clientToUpdate
+      const [data] = [...values]
+      await updateClient(_id, data)
+    } catch (error) {
+      // TODO -> manage errors
       console.log("ERROR")
     }
-
-    // TODO -> optimize cache request (update cache with updated client)
-    return null
   }
 
   useEffect(() => {
     if (!clientToUpdate) return
-    const { id, alias, name } = clientToUpdate
-    setValues([{ alias, name, id }])
+    const { alias, name } = clientToUpdate
+    setValues([{ alias, name }])
   }, [clientToUpdate])
 
   useEffect(() => {
@@ -98,7 +81,7 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate, ...props }) =>
   }, [isOpen])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} {...props}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
@@ -125,6 +108,7 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate, ...props }) =>
         >
           Guardar
         </Button>
+
         {!isUpdate ? (
           <Button
             variant="text_only"

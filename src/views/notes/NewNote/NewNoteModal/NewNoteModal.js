@@ -93,10 +93,10 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
   }
 
   const handleUpdateNote = async () => {
-    const { id } = noteToUpdate
+    const { _id } = noteToUpdate
     const [formatedNote] = [...values]
 
-    const response = await updateNote(id, formatedNote)
+    const response = await updateNote(_id, formatedNote)
 
     // TODO -> manage errors
     if (response?.error) {

@@ -5,20 +5,20 @@ import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { Spinner } from "../../components/spinner/Spinner"
-import useDepartmentApi from "../../hooks/api/useDepartmentApi"
-import useFetchSWR from "../../hooks/useFetchSWR"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
-import { ProjectsTable } from "../../views/projects/ProjectsTable/ProjectsTable"
+import { departmentFetchHandler } from "../../swr/department.swr"
+import { fetchOption, fetchType } from "../../utils/constants/global_config"
+import { ProjectsTable } from "../../views/projects/ProjectTable/ProjectTable"
 
 const department = () => {
   const router = useRouter()
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { getDepartment } = useDepartmentApi()
 
-  const { data, error, isLoading, isValidating } = useFetchSWR(
-    [SWR_CACHE_KEYS.department, router.query.id],
-    getDepartment
+  const { data, error, isLoading, isValidating } = departmentFetchHandler(
+    fetchType.ID,
+    {
+      [fetchOption.ID]: router.query.id,
+    }
   )
 
   const notFound = !isValidating && !data

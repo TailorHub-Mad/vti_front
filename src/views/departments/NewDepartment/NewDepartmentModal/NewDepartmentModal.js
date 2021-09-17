@@ -16,7 +16,7 @@ export const NewDepartmentModal = ({
 }) => {
   const { showToast } = useContext(ToastContext)
   const { createDepartment, updateDepartment } = useDepartmentApi()
-  const { mutate, cache } = useSWRConfig()
+  const { mutate } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -46,85 +46,40 @@ export const NewDepartmentModal = ({
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
-
-    const updatedDepartmentsList = isUpdate
-      ? await handleUpdateDepartment()
-      : await handleCreateDepartment()
-
-    updatedDepartmentsList
-      ? await mutate(SWR_CACHE_KEYS.departments, updatedDepartmentsList, false)
-      : await mutate(SWR_CACHE_KEYS.departments)
-
-    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
+    isUpdate ? await handleUpdateDepartment() : await handleCreateDepartment()
+    await mutate(SWR_CACHE_KEYS.departments)
+    showToast(
+      isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s departamentos/s!"
+    )
     setIsSubmitting(false)
     onClose()
   }
 
   const handleCreateDepartment = async () => {
-    const departmentsToCreate = [...values]
-    const departmentsQueue = departmentsToCreate.map((department) =>
-      createDepartment(department)
-    )
-    const response = await Promise.all(departmentsQueue)
-
-    const [departmentsSuccessfull, departmentsError] = response.reduce(
-      ([succ, error], e, index) => {
-        e?.error
-          ? error.push(departmentsToCreate[index])
-          : succ.push(departmentsToCreate[index])
-        return [succ, error]
-      },
-      [[], []]
-    )
-
-    // // TODO -> manage errors
-    if (departmentsError.length > 0) {
+    try {
+      const departmentsToCreate = [...values]
+      await createDepartment(departmentsToCreate)
+    } catch (error) {
+      // TODO -> manage errors
       console.log("ERROR")
     }
-
-    if (cache.has(SWR_CACHE_KEYS.departments)) {
-      const cacheDepartments = cache.get(SWR_CACHE_KEYS.departments)
-      const updatedDepartments = []
-      const formatDepartmentsSuccessfull = departmentsSuccessfull.map(
-        (department) => {
-          return {
-            ...department,
-            projects: [],
-            notes: [],
-          }
-        }
-      )
-      updatedDepartments.push({
-        testDepartments: [
-          ...formatDepartmentsSuccessfull,
-          ...cacheDepartments[0]?.testDepartments,
-        ],
-      })
-      return updatedDepartments
-    }
-
-    return null
   }
 
   const handleUpdateDepartment = async () => {
-    const { id } = departmentToUpdate
-    const [formatedDepartment] = [...values]
-
-    const response = await updateDepartment(id, { name: formatedDepartment.name })
-
-    // // TODO -> manage errors
-    if (response?.error) {
+    try {
+      const { _id } = departmentToUpdate
+      const [data] = [...values]
+      await updateDepartment(_id, data)
+    } catch (error) {
+      // TODO -> manage errors
       console.log("ERROR")
     }
-
-    // TODO -> optimize cache request (update cache with updated department)
-    return null
   }
 
   useEffect(() => {
     if (!departmentToUpdate) return
-    const { id, name } = departmentToUpdate || {}
-    setValues([{ name, id }])
+    const { name } = departmentToUpdate || {}
+    setValues([{ name }])
   }, [departmentToUpdate])
 
   useEffect(() => {
