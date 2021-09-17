@@ -8,7 +8,6 @@ import { PageHeader } from "../components/layout/Pages/PageHeader/PageHeader"
 import { ToolBar } from "../components/navigation/ToolBar/ToolBar"
 import { Spinner } from "../components/spinner/Spinner"
 import { PROJECT_TAGS_MOCK } from "../mock/tags"
-import { NotesEmptyState } from "../views/notes/NotesEmptyState/NotesEmptyState"
 import { ProjectsTagsHeader } from "../views/project_tags/ProjectTagsHeader/ProjectTagsHeader"
 
 const tagsDeProyecto = () => {
@@ -29,7 +28,7 @@ const tagsDeProyecto = () => {
         {areNotes && !isFetching ? <ToolBar /> : null}
       </PageHeader>
       {isFetching ? <Spinner /> : null}
-      {!areNotes ? <NotesEmptyState /> : null}
+      {/* {!areNotes ? <NotesEmptyState /> : null} */}
       <PageBody
         p="32px"
         bgColor="white"
