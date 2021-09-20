@@ -5,48 +5,47 @@ import { FormController } from "../FormItemWrapper/FormController"
 import { SelectMenu } from "../SelectMenu/SelectMenu"
 
 export const InputSelect = ({
-  value = "",
-  onChange,
-  placeholder,
+  value = null,
   options = [],
+  onChange,
   label,
+  placeholder,
   helper,
   onHelperClick,
-  isDisabled,
+  isDisabled = false,
   ...props
 }) => {
   const [inputValue, setInputValue] = useState(value)
   const [showSelectMenu, setShowSelectMenu] = useState(false)
   const [availableOptions, setAvailableOptions] = useState(options)
+  const [disabledInput, setDisabledInput] = useState(isDisabled)
+
   const ref = useRef(null)
+
   const handleChange = (e) => {
-    onChange && onChange(e.target.value)
-    setInputValue(e.target.value)
-    filterOptions(e.target.value)
+    const value = e.target.value
+    setInputValue(value)
+
+    if (value === "") return setAvailableOptions(options)
+    return filterOptions(value)
   }
 
   const handleSelect = (_value) => {
     const [selected] = availableOptions?.filter((option) => option.value === _value)
-    onChange && onChange(selected?.value)
+
+    onChange(selected)
     setInputValue(selected?.label)
+    setAvailableOptions(options)
     setShowSelectMenu(false)
   }
-
-  useEffect(() => {
-    if (value && !inputValue && availableOptions) {
-      const [selected] = availableOptions?.filter((option) => option.value === value)
-      setInputValue(selected?.label)
-    }
-  }, [value, availableOptions])
 
   const filterOptions = (_value) => {
     const nextOptions = [...options]?.filter((option) =>
       option.label.toLowerCase().includes(_value.toLowerCase())
     )
+
     setAvailableOptions(nextOptions)
   }
-
-  const handleOnClickInput = () => setShowSelectMenu(!showSelectMenu)
 
   useOutsideClick({
     ref: ref,
@@ -54,7 +53,16 @@ export const InputSelect = ({
   })
 
   useEffect(() => {
-    if (!options.length > 0) return
+    if (!value) return
+
+    const { label } = value
+
+    if (!label || label === "") return setInputValue("")
+    setInputValue(label)
+  }, [])
+
+  useEffect(() => {
+    if (options.length === 0) return setDisabledInput(true)
     setAvailableOptions(options)
   }, [options])
 
@@ -63,21 +71,21 @@ export const InputSelect = ({
       label={label}
       helper={helper}
       onHelperClick={onHelperClick}
-      isDisabled={isDisabled}
+      isDisabled={disabledInput}
       {...props}
     >
       <Box
         position="relative"
         ref={ref}
         {...props}
-        pointerEvents={isDisabled ? "none" : "all"}
+        pointerEvents={disabledInput ? "none" : "all"}
       >
         <Input
           placeholder={placeholder}
           onChange={handleChange}
+          onClick={() => setShowSelectMenu(true)}
           value={inputValue}
-          onClick={handleOnClickInput}
-          isDisabled={isDisabled}
+          isDisabled={disabledInput}
           _loading
         />
         <ChevronDownIcon
@@ -85,10 +93,10 @@ export const InputSelect = ({
           right="16px"
           top="10px"
           width="24px"
-          opacity={isDisabled ? 0.3 : 1}
+          opacity={disabledInput ? 0.3 : 1}
           transform={`rotateZ(${showSelectMenu ? "180" : "0"}deg)`}
           cursor="pointer"
-          onClick={handleOnClickInput}
+          onClick={() => setShowSelectMenu(!showSelectMenu)}
         />
 
         {showSelectMenu && (
