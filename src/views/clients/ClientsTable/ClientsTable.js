@@ -14,7 +14,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
     setSelectedRows,
     handleRowSelect,
     handleSelectAllRows,
-    calcColWidth,
+    calcColWidth
   } = useTableActions()
 
   useMemo(() => {
@@ -35,7 +35,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
       name: { label: client.name, link: `${PATHS.clients}/${client._id}` },
       testSystems: client.testSystems?.map((testSystem) => testSystem.alias),
       projects: client.projects?.map((project) => project.alias),
-      options: "",
+      options: ""
     }
   })
 
@@ -47,45 +47,45 @@ export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       testSystems: <TagGroup variant="light_blue" max={3} />,
       projects: <TagGroup variant="pale_yellow" max={7} />,
-      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />,
+      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />
     },
     head: {
       actions: {
         label: "",
         width: calcColWidth(32),
-        type: "selector",
+        type: "selector"
       },
       id: {
         label: "ID",
         width: calcColWidth(80),
-        type: "text",
+        type: "text"
       },
       alias: {
         label: "Alias",
         width: calcColWidth(80),
-        type: "text",
+        type: "text"
       },
       name: {
         label: "Nombre",
         width: calcColWidth(300),
-        type: "link",
+        type: "link"
       },
       testSystems: {
         label: "Sistemas de ensayo",
         width: calcColWidth(250),
-        type: "tagGroup",
+        type: "tagGroup"
       },
       projects: {
         label: "Proyectos",
         width: calcColWidth(300),
-        type: "tagGroup",
+        type: "tagGroup"
       },
       options: {
         label: "",
         width: calcColWidth(20),
-        type: "component",
-      },
-    },
+        type: "component"
+      }
+    }
   }
 
   return (

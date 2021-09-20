@@ -10,12 +10,12 @@ export const Button = {
     bgColor: "blue.500",
     color: "white",
     _hover: {
-      opacity: 0.8,
+      opacity: 0.8
     },
     _disabled: {
       opacity: 0.1,
-      pointerEvents: "none",
-    },
+      pointerEvents: "none"
+    }
   },
 
   variants: {
@@ -23,34 +23,34 @@ export const Button = {
       minW: "194px",
       fontSize: "17px",
       lineHeight: "18.7px",
-      alignItems: "center",
+      alignItems: "center"
     },
     icon_only: {
       minW: "48px",
       w: "48px",
-      h: "48px",
+      h: "48px"
     },
     icon_only_secondary: {
       bg: "white",
       color: "blue.500",
       minW: "48px",
       w: "48px",
-      h: "48px",
+      h: "48px"
     },
     secondary: {
       minW: "194px",
       bg: "white",
       color: "blue.500",
       _hover: {
-        bg: "#E1E5E8",
+        bg: "#E1E5E8"
       },
       _active: {
-        bg: "#B1BCC7",
+        bg: "#B1BCC7"
       },
       _disabled: {
         opacity: 0.3,
-        pointerEvents: "none",
-      },
+        pointerEvents: "none"
+      }
     },
     tool_button: {
       borderColor: "white",
@@ -62,15 +62,15 @@ export const Button = {
       _hover: {
         bg: "blue.500",
         borderColor: "blue.500",
-        color: "white",
+        color: "white"
       },
       _active: {
-        bg: "#B1BCC7",
+        bg: "#B1BCC7"
       },
       _disabled: {
         opacity: 0.3,
-        pointerEvents: "none",
-      },
+        pointerEvents: "none"
+      }
     },
     filter_button: {
       fontFamily: "Noway-Medium",
@@ -82,12 +82,12 @@ export const Button = {
       color: "white",
       borderColor: "start",
       _hover: {
-        opacity: 0.6,
+        opacity: 0.6
       },
       _disabled: {
         opacity: 0.3,
-        pointerEvents: "none",
-      },
+        pointerEvents: "none"
+      }
     },
     note_content: {
       fontFamily: "Noway-Regular",
@@ -100,12 +100,12 @@ export const Button = {
       padding: "8px 24px",
       border: "1px solid",
       _hover: {
-        opacity: 0.6,
+        opacity: 0.6
       },
       _disabled: {
         opacity: 0.3,
-        pointerEvents: "none",
-      },
+        pointerEvents: "none"
+      }
     },
     text_only: {
       fontFamily: "Noway-Regular",
@@ -115,10 +115,10 @@ export const Button = {
       color: "blue.500",
       width: "fit-content",
       margin: "0 auto",
-      display: "block",
-    },
+      display: "block"
+    }
   },
   defaultProps: {
-    variant: "primary",
-  },
+    variant: "primary"
+  }
 }

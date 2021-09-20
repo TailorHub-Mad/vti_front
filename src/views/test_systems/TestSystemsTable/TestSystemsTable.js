@@ -14,7 +14,7 @@ export const TestSystemsTable = ({ systems, onDelete, onEdit, onDeleteMany }) =>
     setSelectedRows,
     handleSelectAllRows,
     handleRowSelect,
-    calcColWidth,
+    calcColWidth
   } = useTableActions()
 
   useMemo(() => {
@@ -37,7 +37,7 @@ export const TestSystemsTable = ({ systems, onDelete, onEdit, onDeleteMany }) =>
       year: system.date?.year,
       projects: system.projects,
       notes: system.notes,
-      options: "",
+      options: ""
     }
   })
 
@@ -49,55 +49,55 @@ export const TestSystemsTable = ({ systems, onDelete, onEdit, onDeleteMany }) =>
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       notes: <TagGroup variant="testSystem" max={4} />,
       projects: <TagGroup variant="project" max={3} />,
-      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />,
+      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />
     },
     head: {
       actions: {
         label: "",
         width: calcColWidth(32),
-        type: "selector",
+        type: "selector"
       },
       id: {
         label: "ID",
         width: calcColWidth(88),
-        type: "text",
+        type: "text"
       },
       alias: {
         label: "Alias",
         width: calcColWidth(88),
-        type: "link",
+        type: "link"
       },
       client: {
         label: "Cliente",
         width: calcColWidth(80),
-        type: "text",
+        type: "text"
       },
       code: {
         label: "Código",
         width: calcColWidth(75),
-        type: "text",
+        type: "text"
       },
       year: {
         label: "Año",
         width: calcColWidth(45),
-        type: "text",
+        type: "text"
       },
       projects: {
         label: "Proyectos",
         width: calcColWidth(260),
-        type: "tagGroup",
+        type: "tagGroup"
       },
       notes: {
         label: "Apuntes",
         width: calcColWidth(350),
-        type: "tagGroup",
+        type: "tagGroup"
       },
       options: {
         label: "",
         width: calcColWidth(20),
-        type: "component",
-      },
-    },
+        type: "component"
+      }
+    }
   }
   return (
     <Table

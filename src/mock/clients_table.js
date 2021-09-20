@@ -17,7 +17,7 @@ export const MOCK_CLIENTS_TABLE_DATA = new Array(30).fill({
     "Proyecto X",
     "Proyecto X",
     "Proyecto X",
-    "Proyecto X",
+    "Proyecto X"
   ],
-  options: "",
+  options: ""
 })

@@ -22,7 +22,7 @@ const ApiAuthProvider = ({ children }) => {
     isLoggedIn,
     setUser: useCallback((userData) => _setUser(userData), []),
     setRole: useCallback((role) => _setRole(role), []),
-    setIsLoggedIn: useCallback((value) => _setIsLoggedIn(value), []),
+    setIsLoggedIn: useCallback((value) => _setIsLoggedIn(value), [])
   }
 
   useEffect(() => {

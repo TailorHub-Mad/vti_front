@@ -13,24 +13,24 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
         options: MOCK_SELECT_OPTIONS,
         label: "Proyecto",
         helper: "Abrir ventana de ayuda",
-        onHelperClick: () => openAuxModal("project"),
-      },
+        onHelperClick: () => openAuxModal("project")
+      }
     },
     test_system: {
       type: "select",
       config: {
         placeholder: "Sistema",
         options: MOCK_SELECT_OPTIONS,
-        label: "Sistema de ensayo",
-      },
+        label: "Sistema de ensayo"
+      }
     },
     client: {
       type: "select",
       config: {
         placeholder: "Cliente",
         options: MOCK_SELECT_OPTIONS,
-        label: "Cliente",
-      },
+        label: "Cliente"
+      }
     },
     dates: {
       type: "add_select",
@@ -39,8 +39,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
         options: MOCK_SELECT_OPTIONS,
         label: "Fechas",
         additemlabel: "Añadir ",
-        removeitemlabel: "Eliminar ",
-      },
+        removeitemlabel: "Eliminar "
+      }
     },
     users: {
       type: "add_select",
@@ -49,8 +49,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
         options: MOCK_SELECT_OPTIONS,
         label: "Usuarios",
         additemlabel: "Añadir ",
-        removeitemlabel: "Eliminar ",
-      },
+        removeitemlabel: "Eliminar "
+      }
     },
     vti_code: {
       type: "add_select",
@@ -59,8 +59,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
         options: MOCK_SELECT_OPTIONS,
         label: "Códigos VTI",
         additemlabel: "Añadir ",
-        removeitemlabel: "Añadir ",
-      },
+        removeitemlabel: "Añadir "
+      }
     },
     project_tags: {
       type: "add_select",
@@ -71,8 +71,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
         additemlabel: "Añadir ",
         removeitemlabel: "Eliminar ",
         helper: "Abrir ventana de ayuda",
-        onHelperClick: () => openAuxModal("project_tags"),
-      },
+        onHelperClick: () => openAuxModal("project_tags")
+      }
     },
     note_tags: {
       type: "add_select",
@@ -83,8 +83,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
         additemlabel: "Añadir ",
         removeitemlabel: "Eliminar ",
         helper: "Abrir ventana de ayuda",
-        onHelperClick: () => openAuxModal("note_tags"),
-      },
+        onHelperClick: () => openAuxModal("note_tags")
+      }
     },
     only_suscribed: {
       type: "checkbox",
@@ -92,8 +92,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
         children: "Suscritos",
         marginBottom: "12px",
         display: "flex",
-        variant: "filter",
-      },
+        variant: "filter"
+      }
     },
     only_favs: {
       type: "checkbox",
@@ -101,8 +101,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
         children: "Favoritos",
         marginBottom: "12px",
         display: "flex",
-        variant: "filter",
-      },
+        variant: "filter"
+      }
     },
     only_unread: {
       type: "checkbox",
@@ -110,49 +110,49 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
         children: "No leídos",
         marginBottom: "24px",
         variant: "filter",
-        display: "flex",
-      },
+        display: "flex"
+      }
     },
     with_links: {
       type: "switch",
       config: {
         children: "Adjunto Link No/Sí",
-        marginBottom: "12px",
-      },
+        marginBottom: "12px"
+      }
     },
     formalized: {
       type: "switch",
       config: {
         children: "Formalizado No/Sí",
-        marginBottom: "12px",
-      },
+        marginBottom: "12px"
+      }
     },
     closed: {
       type: "switch",
       config: {
         children: "Cerrado No/Sí",
-        marginBottom: "12px",
-      },
+        marginBottom: "12px"
+      }
     },
     with_responses: {
       type: "switch",
       config: {
-        children: "Con respuestas No/Sí",
-      },
-    },
+        children: "Con respuestas No/Sí"
+      }
+    }
   }
 
   const inputRefObj = {
     select: <InputSelect />,
     add_select: <AddSelect />,
     checkbox: <Checkbox />,
-    switch: <Switch />,
+    switch: <Switch />
   }
 
   const handleFilterChange = (input, _value) => {
     onChange({
       ...value,
-      [input]: _value?.target?.checked ? _value.target.checked : _value,
+      [input]: _value?.target?.checked ? _value.target.checked : _value
     })
   }
 
@@ -164,7 +164,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
           onChange: (val) => handleFilterChange(name, val),
           marginBottom: "24px",
           key: `${name}-${idx}`,
-          ...config,
+          ...config
         })
       })}
     </>

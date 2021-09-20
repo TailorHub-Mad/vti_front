@@ -5,7 +5,7 @@ export const NewNoteForm = ({ value, onChange }) => {
   const handleFormChange = (input, _value) => {
     onChange({
       ...value,
-      [input]: _value,
+      [input]: _value
     })
   }
 
@@ -22,20 +22,20 @@ export const NewNoteForm = ({ value, onChange }) => {
       type: "text",
       config: {
         placeholder: "Alias",
-        label: "Alias",
-      },
+        label: "Alias"
+      }
     },
     name: {
       type: "text",
       config: {
         placeholder: "Nombre",
-        label: "Nombre",
-      },
-    },
+        label: "Nombre"
+      }
+    }
   }
 
   const inputRefObj = {
-    text: <SimpleInput />,
+    text: <SimpleInput />
   }
 
   return (
@@ -47,7 +47,7 @@ export const NewNoteForm = ({ value, onChange }) => {
           marginBottom: name === "name" ? "0" : "24px",
           isDisabled: index !== 0 && !value[Object.keys(value)[index - 1]],
           key: `${name}-${index}`,
-          ...config,
+          ...config
         })
       })}
     </>

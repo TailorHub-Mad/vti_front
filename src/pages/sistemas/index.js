@@ -12,7 +12,7 @@ import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModa
 import {
   DeleteType,
   fetchOption,
-  fetchType,
+  fetchType
 } from "../../utils/constants/global_config"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
@@ -90,7 +90,7 @@ const sistemas = () => {
       const updatedSystems = []
       const filteredSystems = systems.filter((system) => system._id !== id)
       updatedSystems.push({
-        testSystems: filteredSystems,
+        testSystems: filteredSystems
       })
       return updatedSystems
     } catch (error) {
@@ -125,7 +125,7 @@ const sistemas = () => {
   const onSearch = (search) => {
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: search,
+      [fetchOption.SEARCH]: search
     })
   }
 

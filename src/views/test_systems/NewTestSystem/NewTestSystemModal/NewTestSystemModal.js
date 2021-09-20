@@ -46,9 +46,9 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
         vtiCode,
         alias,
         date: {
-          year,
+          year
         },
-        client,
+        client
       }
     })
   }
@@ -59,8 +59,8 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
       return {
         alias,
         date: {
-          year,
-        },
+          year
+        }
       }
     })
   }
@@ -102,7 +102,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
       vtiCode,
       clientAlias,
       alias,
-      date: { year },
+      date: { year }
     } = systemToUpdate
     setValues([{ vtiCode, clientAlias, alias, year }])
   }, [systemToUpdate])

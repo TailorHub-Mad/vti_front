@@ -128,6 +128,6 @@ export const icons = {
         />
       </svg>
     ),
-    viewBox: "0 0 280 83",
-  },
+    viewBox: "0 0 280 83"
+  }
 }

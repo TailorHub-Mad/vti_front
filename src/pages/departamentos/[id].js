@@ -17,7 +17,7 @@ const department = () => {
   const { data, error, isLoading, isValidating } = departmentFetchHandler(
     fetchType.ID,
     {
-      [fetchOption.ID]: router.query.id,
+      [fetchOption.ID]: router.query.id
     }
   )
 

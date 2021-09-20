@@ -12,14 +12,14 @@ export const DepartmentsTable = ({
   departments,
   onDelete,
   onEdit,
-  onDeleteMany,
+  onDeleteMany
 }) => {
   const {
     selectedRows,
     setSelectedRows,
     handleRowSelect,
     handleSelectAllRows,
-    calcColWidth,
+    calcColWidth
   } = useTableActions()
 
   useMemo(() => {
@@ -38,10 +38,10 @@ export const DepartmentsTable = ({
       id: department._id,
       name: {
         label: department.name,
-        link: `${PATHS.departments}/${department._id}`,
+        link: `${PATHS.departments}/${department._id}`
       },
       users: [], // TODO
-      options: "",
+      options: ""
     }
   })
 
@@ -51,35 +51,35 @@ export const DepartmentsTable = ({
       link: <LinkItem />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       users: <TagGroup variant="pale_yellow" max={7} />,
-      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />,
+      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />
     },
     head: {
       actions: {
         label: "",
         width: calcColWidth(32),
-        type: "selector",
+        type: "selector"
       },
       id: {
         label: "id",
         width: calcColWidth(80),
-        type: "text",
+        type: "text"
       },
       name: {
         label: "Departamento",
         width: calcColWidth(120),
-        type: "link",
+        type: "link"
       },
       users: {
         label: "Usuarios",
         width: calcColWidth(815),
-        type: "tagGroup",
+        type: "tagGroup"
       },
       options: {
         label: "",
         width: calcColWidth(20),
-        type: "component",
-      },
-    },
+        type: "component"
+      }
+    }
   }
 
   return (

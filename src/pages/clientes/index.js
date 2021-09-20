@@ -11,7 +11,7 @@ import { ToastContext } from "../../provider/ToastProvider"
 import {
   DeleteType,
   fetchOption,
-  fetchType,
+  fetchType
 } from "../../utils/constants/global_config"
 import { ClientsTable } from "../../views/clients/ClientsTable/ClientsTable"
 import { NewClientModal } from "../../views/clients/NewClient/NewClientModal/NewClientModal"
@@ -115,7 +115,7 @@ const clientes = () => {
   const onSearch = (search) => {
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: search,
+      [fetchOption.SEARCH]: search
     })
   }
 

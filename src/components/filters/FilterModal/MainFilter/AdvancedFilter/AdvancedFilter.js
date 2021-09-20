@@ -8,7 +8,7 @@ export const AdvancedFilter = () => {
     { value: "project", label: "Proyecto" },
     { value: "test_system", label: "Sistema de ensayo" },
     { value: "project_tag", label: "Tag de proyecto" },
-    { value: "note_tag", label: "Tag de apunte" },
+    { value: "note_tag", label: "Tag de apunte" }
   ]
   return (
     <>

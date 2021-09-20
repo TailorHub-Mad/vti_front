@@ -2,7 +2,7 @@ import axios from "axios"
 import { getSessioncookie } from "../utils/functions/cookies"
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL
 })
 
 axiosInstance.interceptors.request.use(async (config) => {
@@ -22,9 +22,9 @@ export const ServiceConstructor = {
       return {
         error: {
           status: error.response.status,
-          message: error.message,
-        },
+          message: error.message
+        }
       }
     }
-  },
+  }
 }

@@ -12,7 +12,7 @@ export const departmentFetchHandler = (state, options) => {
       useFetchSWR(
         [SWR_CACHE_KEYS.department, options[fetchOption.ID]],
         getDepartment
-      ),
+      )
   }
 
   return fetchHandler[state]()

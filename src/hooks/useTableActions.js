@@ -36,7 +36,7 @@ const useTableActions = () => {
     setSelectedRows,
     handleRowSelect,
     calcColWidth,
-    handleSelectAllRows,
+    handleSelectAllRows
   }
 }
 

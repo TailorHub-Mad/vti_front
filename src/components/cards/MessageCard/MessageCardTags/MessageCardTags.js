@@ -13,7 +13,7 @@ export const MessageCardTags = ({ tags }) => {
   const variantByTagName = {
     test_system_tags: "pale_yellow",
     project_tags: "violete",
-    notes_tags: "light_blue",
+    notes_tags: "light_blue"
   }
 
   return (

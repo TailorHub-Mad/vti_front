@@ -7,7 +7,7 @@ export const projectFetchHandler = (state) => {
 
   const fetchHandler = {
     all: () => useFetchSWR(SWR_CACHE_KEYS.projects, getProjects),
-    grouped: () => useFetchSWR(SWR_CACHE_KEYS.groupedProjects, getGroupedProjects),
+    grouped: () => useFetchSWR(SWR_CACHE_KEYS.groupedProjects, getGroupedProjects)
   }
 
   return fetchHandler[state]()

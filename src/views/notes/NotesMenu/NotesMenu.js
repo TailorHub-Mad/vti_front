@@ -13,28 +13,28 @@ export const NotesMenu = ({
     all: {
       label: "Todos",
       active_icon: ICONS_REFERENCE.notes,
-      icon: ICONS_REFERENCE.notes,
+      icon: ICONS_REFERENCE.notes
     },
     favs: {
       label: "Favoritos",
       active_icon: ICONS_REFERENCE.heart,
-      icon: ICONS_REFERENCE.heart_line,
+      icon: ICONS_REFERENCE.heart_line
     },
     suscribed: {
       label: "Suscritos",
       active_icon: ICONS_REFERENCE.subscribe,
-      icon: ICONS_REFERENCE.subscribe_line,
+      icon: ICONS_REFERENCE.subscribe_line
     },
     unread: {
       label: "No leídos",
       active_icon: ICONS_REFERENCE.hide,
-      icon: ICONS_REFERENCE.hide_line,
+      icon: ICONS_REFERENCE.hide_line
     },
     active: {
       label: "Activos",
       active_icon: ICONS_REFERENCE.active,
-      icon: ICONS_REFERENCE.active,
-    },
+      icon: ICONS_REFERENCE.active
+    }
   }
 
   return (

@@ -31,7 +31,7 @@ export const MessageCardHeader = ({
 
   useOutsideClick({
     ref: ref,
-    handler: () => setShowOptions(false),
+    handler: () => setShowOptions(false)
   })
 
   return (

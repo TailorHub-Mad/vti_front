@@ -7,7 +7,7 @@ export const TableHeader = ({
   countLabel = "",
   selectedRows,
   onDelete,
-  selectAllRows = () => {},
+  selectAllRows = () => {}
 }) => {
   return (
     <Flex justify="space-between" align="center" pb="32px">

@@ -49,7 +49,7 @@ export const InputSelect = ({
 
   useOutsideClick({
     ref: ref,
-    handler: () => setShowSelectMenu(false),
+    handler: () => setShowSelectMenu(false)
   })
 
   useEffect(() => {

@@ -14,7 +14,7 @@ export const NewProjectForm = ({
   openAuxModal,
   value,
   onChange,
-  projectToUpdate,
+  projectToUpdate
 }) => {
   const { getClients } = useClientApi()
   const { getSectors } = useSectorApi()
@@ -47,7 +47,7 @@ export const NewProjectForm = ({
   const handleFormChange = (input, _value) => {
     onChange({
       ...value,
-      [input]: _value,
+      [input]: _value
     })
   }
 
@@ -64,8 +64,8 @@ export const NewProjectForm = ({
       type: "input",
       config: {
         placeholder: "Alias",
-        label: "Alias",
-      },
+        label: "Alias"
+      }
     },
     client: {
       type: "select",
@@ -73,32 +73,32 @@ export const NewProjectForm = ({
         placeholder: "Cliente",
         options: clientsOptions,
         label: "Cliente",
-        disabled: Boolean(projectToUpdate),
-      },
+        disabled: Boolean(projectToUpdate)
+      }
     },
     sector: {
       type: "select",
       config: {
         placeholder: "Sector",
         options: sectorsOptions,
-        label: "Sector",
-      },
+        label: "Sector"
+      }
     },
     year: {
       type: "select",
       config: {
         placeholder: "2021",
         options: MOCK_YEAR_OPTIONS,
-        label: "Año",
-      },
+        label: "Año"
+      }
     },
     focusPoint: {
       type: "select",
       config: {
         placeholder: "Punto focal inicio",
         options: usersOptions,
-        label: "Punto focal inicio",
-      },
+        label: "Punto focal inicio"
+      }
     },
     testSystems: {
       type: "add_select",
@@ -107,8 +107,8 @@ export const NewProjectForm = ({
         options: systemsOptions,
         label: "Sistemas de ensayo",
         additemlabel: "Añadir ",
-        removeitemlabel: "Eliminar ",
-      },
+        removeitemlabel: "Eliminar "
+      }
     },
     tags: {
       type: "add_select",
@@ -120,9 +120,9 @@ export const NewProjectForm = ({
         removeitemlabel: "Eliminar ",
         helper: "Abrir ventana de ayuda",
         onHelperClick: () => openAuxModal(),
-        isDisabled: true, // TODO -> provisional
-      },
-    },
+        isDisabled: true // TODO -> provisional
+      }
+    }
   }
 
   // TODO REVIEW
@@ -151,7 +151,7 @@ export const NewProjectForm = ({
   const inputRefObj = {
     input: <SimpleInput />,
     select: <InputSelect />,
-    add_select: <AddSelect />,
+    add_select: <AddSelect />
   }
 
   return (
@@ -165,7 +165,7 @@ export const NewProjectForm = ({
             config.disabled ||
             (index !== 0 && !value[Object.keys(value)[index - 1]]),
           key: `${name}-${index}`,
-          ...config,
+          ...config
         })
       })}
     </>

@@ -19,7 +19,7 @@ export const MenuLink = ({
       w="100%"
       role="group"
       _hover={{
-        cursor: "pointer",
+        cursor: "pointer"
       }}
       pointerEvents={props.isDisabled ? "none" : "auto"}
       opacity={props.isDisabled ? "0.3" : "1"}

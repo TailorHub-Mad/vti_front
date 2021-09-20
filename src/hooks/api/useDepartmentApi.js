@@ -14,7 +14,7 @@ const useDepartmentApi = () => {
     getDepartment,
     createDepartment,
     updateDepartment,
-    deleteDepartment,
+    deleteDepartment
   }
 }
 

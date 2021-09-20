@@ -14,7 +14,7 @@ import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import {
   DeleteType,
   fetchOption,
-  fetchType,
+  fetchType
 } from "../../utils/constants/global_config"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
@@ -115,7 +115,7 @@ const sectores = () => {
   const onSearch = (search) => {
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: search,
+      [fetchOption.SEARCH]: search
     })
   }
 

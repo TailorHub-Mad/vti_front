@@ -11,8 +11,8 @@ const generateResponse = () => ({
   message: faker.lorem.words(80),
   files: new Array(faker.datatype.number(10)).fill("").map(() => ({
     type: faker.datatype.boolean() ? "image" : "pdf",
-    name: `${faker.lorem.word()}.pdf`,
-  })),
+    name: `${faker.lorem.word()}.pdf`
+  }))
 })
 
 export const NOTE_MOCK = {
@@ -32,8 +32,8 @@ export const NOTE_MOCK = {
   message: faker.lorem.words(80),
   files: new Array(faker.datatype.number(10)).fill("").map(() => ({
     type: faker.datatype.boolean() ? "image" : "pdf",
-    name: `${faker.lorem.word()}.pdf`,
+    name: `${faker.lorem.word()}.pdf`
   })),
   responses: new Array(faker.datatype.number(12)).fill("").map(generateResponse),
-  id: faker.datatype.uuid(),
+  id: faker.datatype.uuid()
 }

@@ -15,7 +15,7 @@ const client = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
 
   const { data, error, isLoading, isValidating } = clientFetchHandler(fetchType.ID, {
-    [fetchOption.ID]: router.query.id,
+    [fetchOption.ID]: router.query.id
   })
 
   const notFound = !isValidating && !data

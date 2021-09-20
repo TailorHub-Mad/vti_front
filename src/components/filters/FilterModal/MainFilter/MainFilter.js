@@ -7,7 +7,7 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  Text,
+  Text
 } from "@chakra-ui/react"
 import React from "react"
 import { AdvancedFilterIcon } from "../../../icons/AdvancedFilterIcon"

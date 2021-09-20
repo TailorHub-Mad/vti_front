@@ -4,5 +4,5 @@ export const PATHS = {
   testSystems: "/sistemas",
   departments: "/departamentos",
   sectors: "/sectores",
-  notes: "/apuntes",
+  notes: "/apuntes"
 }

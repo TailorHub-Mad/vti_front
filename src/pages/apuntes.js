@@ -84,7 +84,7 @@ const apuntes = () => {
 
   const onSearch = (search) =>
     setFetchOptions({
-      [fetchOption.SEARCH]: search,
+      [fetchOption.SEARCH]: search
     })
 
   if (error) return <>ERROR...</>

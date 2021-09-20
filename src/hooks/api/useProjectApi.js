@@ -15,7 +15,7 @@ const useProjectApi = () => {
     getProject,
     createProject,
     updateProject,
-    deleteProject,
+    deleteProject
   }
 }
 

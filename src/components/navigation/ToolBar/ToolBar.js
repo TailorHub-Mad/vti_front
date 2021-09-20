@@ -19,7 +19,7 @@ export const ToolBar = ({
   searchPlaceholder,
   noFilter,
   noGroup,
-  icon,
+  icon
 }) => {
   const { role } = useContext(ApiAuthContext)
 
@@ -55,7 +55,7 @@ export const ToolBar = ({
           <Button onClick={onAdd}>
             {icon ? (
               React.cloneElement(icon, {
-                marginRight: "8px",
+                marginRight: "8px"
               })
             ) : (
               <AddProjectIcon marginRight="8px" />

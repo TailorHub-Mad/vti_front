@@ -9,14 +9,14 @@ const visibility_menu = {
     label: "Todos",
     value: fetchType.ALL,
     active_icon: ICONS_REFERENCE.notes,
-    icon: ICONS_REFERENCE.notes,
+    icon: ICONS_REFERENCE.notes
   },
   active: {
     label: "Activos",
     value: fetchType.ACTIVE,
     active_icon: ICONS_REFERENCE.active,
-    icon: ICONS_REFERENCE.active,
-  },
+    icon: ICONS_REFERENCE.active
+  }
 }
 
 export const ProjectsTableHeader = ({
@@ -25,7 +25,7 @@ export const ProjectsTableHeader = ({
   activeItem = fetchType.ALL,
   selectedRows,
   onDelete,
-  selectAllRows = () => {},
+  selectAllRows = () => {}
 }) => {
   return (
     <Flex justify="space-between" align="center" pb="32px">
