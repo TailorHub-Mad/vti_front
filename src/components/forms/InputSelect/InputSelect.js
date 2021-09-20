@@ -5,7 +5,7 @@ import { FormController } from "../FormItemWrapper/FormController"
 import { SelectMenu } from "../SelectMenu/SelectMenu"
 
 export const InputSelect = ({
-  value = null,
+  value = undefined,
   options = [],
   onChange,
   label,
@@ -20,14 +20,16 @@ export const InputSelect = ({
   const [availableOptions, setAvailableOptions] = useState(options)
   const [disabledInput, setDisabledInput] = useState(isDisabled)
 
+  console.log("inputValue", inputValue)
+
   const ref = useRef(null)
 
   const handleChange = (e) => {
-    const value = e.target.value
-    setInputValue(value)
+    const targetValue = e.target.value
+    setInputValue(targetValue)
 
-    if (value === "") return setAvailableOptions(options)
-    return filterOptions(value)
+    if (targetValue === "") return setAvailableOptions(options)
+    return filterOptions(targetValue)
   }
 
   const handleSelect = (_value) => {
@@ -54,15 +56,11 @@ export const InputSelect = ({
 
   useEffect(() => {
     if (!value) return
-
-    const { label } = value
-
-    if (!label || label === "") return setInputValue("")
-    setInputValue(label)
-  }, [])
+    setInputValue(value)
+  }, [value])
 
   useEffect(() => {
-    if (options.length === 0) return setDisabledInput(true)
+    if (value && options.length === 0) return setDisabledInput(true)
     setAvailableOptions(options)
   }, [options])
 

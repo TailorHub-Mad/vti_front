@@ -36,7 +36,7 @@ const ApiAuthProvider = ({ children }) => {
         setIsLoggedIn(true)
       } catch (error) {
         setIsLoggedIn(false)
-        if (error.response.status === 401 && router.route !== "/login")
+        if (error.response?.status === 401 && router.route !== "/login")
           return router.push("/login")
       }
     }

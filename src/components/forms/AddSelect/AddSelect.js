@@ -4,43 +4,56 @@ import React, { useEffect, useState } from "react"
 import { FormController } from "../FormItemWrapper/FormController"
 import { InputSelect } from "../InputSelect/InputSelect"
 
-//TODO los botones de añadir y eliminar items podrían ser una variant de Button "aux"
 export const AddSelect = ({
-  values = [],
+  values = [undefined],
   options = [],
   onChange,
   label,
   placeholder,
   additemlabel,
   deleteItemLabel,
-  isDisabled,
+  isDisabled = false,
   ...props
 }) => {
   const [inputValues, setInputValues] = useState(values)
-  const [availableOptions, setAvailableOptions] = useState(options)
   const [disabledInput, setDisabledInput] = useState(isDisabled)
 
-  // const handleAvailableOptions = (current) =>
-  //   options.filter(
-  //     (option) => option.value === current || !values.includes(option.value)
-  //   )
+  console.log("inputValues", inputValues)
+
+  const handleAvailableOptions = () => {
+    const availableOptions = options.filter(
+      (option) => !inputValues.includes(option)
+    )
+
+    return availableOptions
+  }
 
   const handleChange = (option, idx) => {
-    const selected = options?.find(({ value }) => value == option)
-    onChange && onChange(selected?.value)
-    const nextOptions = [...values]
-    nextOptions[idx] = selected.label
-    setInputValues(nextOptions)
+    const selected = options?.find(({ value }) => value == option.value)
+
+    const newInputValues = [...inputValues]
+
+    newInputValues[idx] = selected
+    setInputValues(newInputValues)
+
+    onChange(newInputValues)
   }
 
   useEffect(() => {
     if (options.length === 0) return setDisabledInput(true)
-    setAvailableOptions(options)
   }, [options])
 
   const renderDeleteItem = (itemPosition) => {
-    const handleOnClick = () =>
-      setInputValues([...values].filter((_, index) => itemPosition !== index))
+    if (inputValues.length === 1 && itemPosition === 0) return null
+    if (inputValues.length > 1 && itemPosition === inputValues.length - 1)
+      return null
+
+    const handleOnClick = () => {
+      const newValues = [...inputValues].filter((_, index) => itemPosition !== index)
+
+      setInputValues(newValues)
+      onChange(newValues)
+    }
 
     return (
       <Box
@@ -58,10 +71,12 @@ export const AddSelect = ({
     )
   }
 
-  const renderAddItem = () => {
-    const handleOnClick = () => setInputValues(["", ...inputValues])
+  const renderAddItem = (itemPosition) => {
+    if (inputValues.length > 1 && itemPosition !== inputValues.length - 1)
+      return null
+    if (inputValues.length === options.length) return null
 
-    const conditionalStyle = inputValues.length >= 1 && inputValues[0] !== ""
+    const handleOnClick = () => setInputValues([undefined, ...inputValues])
 
     return (
       <>
@@ -70,9 +85,7 @@ export const AddSelect = ({
           alignItems="center"
           marginTop="8px"
           cursor="pointer"
-          pointerEvents={conditionalStyle ? "auto" : "none"}
           onClick={handleOnClick}
-          opacity={conditionalStyle !== "" ? "1" : "0.3"}
         >
           <AddIcon marginRight="4px" width="16px" color="blue.500" />
           <Text
@@ -94,16 +107,16 @@ export const AddSelect = ({
         {inputValues.map((value, idx) => (
           <Box key={`${value}-${idx}`} marginBottom="16px">
             <InputSelect
-              value={value}
+              value={value?.label}
               onChange={(selected) => handleChange(selected, idx)}
               placeholder={placeholder}
-              options={availableOptions}
+              options={handleAvailableOptions()}
               isDisabled={disabledInput}
             />
-            {idx !== 0 && renderDeleteItem(idx)}
-            {idx === 0 &&
-              inputValues.length < options.length &&
-              renderAddItem(inputValues)}
+            <>
+              {renderDeleteItem(idx)}
+              {renderAddItem(idx)}
+            </>
           </Box>
         ))}
       </Box>
