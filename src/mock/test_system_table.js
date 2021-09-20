@@ -12,7 +12,7 @@ export const MOCK_TEST_SYSTEM_TABLE = new Array(30).fill({
     "Proyecto X",
     "Proyecto X",
     "Proyecto X",
-    "Proyecto X",
+    "Proyecto X"
   ],
   notes: [
     "Apunte proX",
@@ -21,8 +21,8 @@ export const MOCK_TEST_SYSTEM_TABLE = new Array(30).fill({
     "Apunte proX",
     "Apunte proX",
     "Apunte proX",
-    "Apunte proX",
+    "Apunte proX"
   ],
 
-  options: "",
+  options: ""
 })

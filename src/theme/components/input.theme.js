@@ -12,20 +12,20 @@ export const Input = {
         lineHeight: ["21px", "18.70px"],
         _disabled: {
           _hover: {
-            borderColor: "light_grey",
+            borderColor: "light_grey"
           },
-          opacity: 0.6,
+          opacity: 0.6
         },
         _focus: {
-          borderColor: "blue.500",
+          borderColor: "blue.500"
         },
         _invalid: {
-          borderColor: "error",
+          borderColor: "error"
         },
         _hover: {
-          borderColor: "blue.500",
-        },
-      },
+          borderColor: "blue.500"
+        }
+      }
     },
     white: {
       field: {
@@ -38,18 +38,18 @@ export const Input = {
         fontSize: ["16px", "14px"],
         lineHeight: ["21px", "18.70px"],
         _focus: {
-          borderColor: "blue.500",
+          borderColor: "blue.500"
         },
         _invalid: {
-          borderColor: "error",
+          borderColor: "error"
         },
         _hover: {
-          borderColor: "blue.500",
-        },
-      },
-    },
+          borderColor: "blue.500"
+        }
+      }
+    }
   },
   defaultProps: {
-    variant: "base",
-  },
+    variant: "base"
+  }
 }

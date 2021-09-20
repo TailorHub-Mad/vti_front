@@ -11,7 +11,7 @@ export const MessageCard = ({
   isSubscribe,
   isFavorite,
   handleDelete,
-  handleFavorite,
+  handleFavorite
 }) => {
   const handleOnFavorite = () => {
     if (isFavorite) return

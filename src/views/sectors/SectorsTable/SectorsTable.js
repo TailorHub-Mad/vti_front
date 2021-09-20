@@ -14,7 +14,7 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
     setSelectedRows,
     handleRowSelect,
     handleSelectAllRows,
-    calcColWidth,
+    calcColWidth
   } = useTableActions()
 
   useMemo(() => {
@@ -33,7 +33,7 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
       id: sector._id,
       name: { label: sector.title, link: `${PATHS.sectors}/${sector._id}` },
       projects: sector.projects,
-      options: "",
+      options: ""
     }
   })
 
@@ -43,35 +43,35 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
       link: <LinkItem />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       projects: <TagGroup variant="pale_yellow" max={7} />,
-      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />,
+      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />
     },
     head: {
       actions: {
         label: "",
         width: calcColWidth(32),
-        type: "selector",
+        type: "selector"
       },
       id: {
         label: "ID",
         width: calcColWidth(80),
-        type: "text",
+        type: "text"
       },
       name: {
         label: "Nombre",
         width: calcColWidth(120),
-        type: "link",
+        type: "link"
       },
       projects: {
         label: "Proyectos",
         width: calcColWidth(815),
-        type: "tagGroup",
+        type: "tagGroup"
       },
       options: {
         label: "",
         width: calcColWidth(20),
-        type: "component",
-      },
-    },
+        type: "component"
+      }
+    }
   }
 
   return (

@@ -3,7 +3,7 @@ import {
   Modal,
   ModalOverlay,
   Button,
-  ModalContent,
+  ModalContent
 } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
@@ -20,7 +20,7 @@ const initialValues = {
   sector: null,
   year: null,
   focusPoint: null,
-  testSystems: null,
+  testSystems: null
   // tags: [""], // provisioanl
 }
 
@@ -63,7 +63,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
       const projectToCreate = {
         ...values,
         date: { year: values.year.toString(), month: "02", day: "25" },
-        testSystems: [values.testSystems],
+        testSystems: [values.testSystems]
       }
       delete projectToCreate.year
       delete projectToCreate.id
@@ -83,7 +83,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
       // TODO -> provisional
       const data = {
         ...values,
-        date: { year: values.year.toString(), month: "02", day: "25" },
+        date: { year: values.year.toString(), month: "02", day: "25" }
       }
       delete data.year
       delete data.id
@@ -104,7 +104,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
       client: projectToUpdate?.clientAlias,
       focusPoint: projectToUpdate?.focusPoint.map((fp) => fp.alias)[0],
       testSystems: projectToUpdate?.testSystems.map((ts) => ts.alias),
-      year: +projectToUpdate?.date?.year,
+      year: +projectToUpdate?.date?.year
     }
     setValues(_project)
   }, [projectToUpdate])

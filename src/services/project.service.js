@@ -22,7 +22,7 @@ const ProjectService = () => {
     getProject,
     createProject,
     updateProject,
-    deleteProject,
+    deleteProject
   }
 }
 

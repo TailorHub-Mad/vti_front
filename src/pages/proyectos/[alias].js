@@ -22,7 +22,7 @@ const project = () => {
   const { data, error, isLoading, isValidating } = projectFetchHandler(
     fetchType.ID,
     {
-      [fetchOption.ID]: router.query.id,
+      [fetchOption.ID]: router.query.id
     }
   )
 
@@ -46,7 +46,7 @@ const project = () => {
                 data?.alias,
                 data?.clientAlias,
                 data?.sector[0].title,
-                data?.date?.year,
+                data?.date?.year
               ]}
               updatedAt={new Date(data?.updatedAt)}
             />

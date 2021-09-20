@@ -35,14 +35,14 @@ export const TableRow = ({
             children: element?.length.toString(),
             textAlign: "left",
             key: `${name}-${idx}`,
-            ...colorConfig,
+            ...colorConfig
           })
         }
         if (head[name]?.type === "text") {
           return React.cloneElement(components.text, {
             children: element?.toString(),
             key: `${name}-${idx}`,
-            ...colorConfig,
+            ...colorConfig
           })
         }
         if (head[name]?.type === "link") {
@@ -51,21 +51,21 @@ export const TableRow = ({
             alias: element?.link,
             key: `${name}-${idx}`,
             url: element?.link,
-            ...colorConfig,
+            ...colorConfig
           })
         }
         if (head[name]?.type === "selector") {
           return React.cloneElement(components[name], {
             isChecked: isSelected,
             onChange: () => onRowSelect(idx),
-            key: `${name}-${idx}`,
+            key: `${name}-${idx}`
           })
         }
         if (head[name]?.type === "tagGroup") {
           return React.cloneElement(components[name], {
             tagsArr: element,
             key: `${name}-${idx}`,
-            ...bgColorConfig,
+            ...bgColorConfig
           })
         }
         if (components[name] !== undefined) {
@@ -74,7 +74,7 @@ export const TableRow = ({
             id: item.id,
             alias: element?.alias,
             disabled: Object.keys(selectedRows).length > 1,
-            key: `${name}-${idx}`,
+            key: `${name}-${idx}`
           })
         }
         return <Text key={`${name}-${idx}`} />

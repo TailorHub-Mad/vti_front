@@ -16,14 +16,14 @@ export const ProjectsTable = ({
   onDelete,
   onDeleteMany,
   onEdit,
-  isGrouped,
+  isGrouped
 }) => {
   const {
     selectedRows,
     setSelectedRows,
     handleSelectAllRows,
     handleRowSelect,
-    calcColWidth,
+    calcColWidth
   } = useTableActions()
 
   useMemo(() => {
@@ -54,7 +54,7 @@ export const ProjectsTable = ({
     users: project.tag?.map((ts) => ts.alias),
     notes: project.notes?.map((note) => note.title),
     options: "",
-    config: { isFinished: project.close },
+    config: { isFinished: project.close }
   })
 
   const _projects = projects
@@ -76,60 +76,60 @@ export const ProjectsTable = ({
       sector: <NoteTag />,
       testSystems: <TagGroup variant="light_blue" max={3} />,
       tags: <TagGroup variant="pale_yellow" max={3} />,
-      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />,
+      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />
     },
     head: {
       actions: {
         label: "",
         width: calcColWidth(32),
-        type: "selector",
+        type: "selector"
       },
       id: {
         label: "id",
         width: calcColWidth(90),
-        type: "text",
+        type: "text"
       },
       alias: {
         label: "Alias",
         width: calcColWidth(100),
-        type: "link",
+        type: "link"
       },
       sector: {
         label: "Sector",
         width: calcColWidth(120),
-        type: "text",
+        type: "text"
       },
       focusPoint: {
         label: "Punto Focal",
         width: calcColWidth(120),
-        type: "text",
+        type: "text"
       },
       testSystems: {
         label: "sistemas de ensayo",
         width: calcColWidth(220),
-        type: "tagGroup",
+        type: "tagGroup"
       },
       tags: {
         label: "Tags de proyecto",
         width: calcColWidth(220),
-        type: "tagGroup",
+        type: "tagGroup"
       },
       users: {
         label: "Usuarios",
         width: calcColWidth(60),
-        type: "count",
+        type: "count"
       },
       notes: {
         label: "Apuntes",
         width: calcColWidth(55),
-        type: "count",
+        type: "count"
       },
       options: {
         label: "",
         width: calcColWidth(20),
-        type: "component",
-      },
-    },
+        type: "component"
+      }
+    }
   }
 
   return (

@@ -4,7 +4,7 @@ import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 import { RoleType } from "../../../utils/constants/global_config"
 import {
   TABBAR_ADMIN_LINKS,
-  TABBAR_USER_LINKS,
+  TABBAR_USER_LINKS
 } from "../../../utils/constants/tabbar_links"
 import { LogoFull } from "../../images/LogoFull"
 import { TabBarFooter } from "./TabBarFooter/TabBarFooter"

@@ -34,7 +34,7 @@ export const FilterModal = ({
     with_links: false,
     formalized: false,
     closed: false,
-    with_responses: false,
+    with_responses: false
   }
   const [filterValues, setFilterValues] = useState(initialValues)
 

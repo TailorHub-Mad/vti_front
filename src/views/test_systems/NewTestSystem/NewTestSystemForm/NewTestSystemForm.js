@@ -18,7 +18,7 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
   const handleFormChange = (input, _value) => {
     onChange({
       ...value,
-      [input]: _value,
+      [input]: _value
     })
   }
 
@@ -36,8 +36,8 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
       config: {
         placeholder: "Cod",
         label: "Cod VTI*",
-        disabled: Boolean(objectToUpdate),
-      },
+        disabled: Boolean(objectToUpdate)
+      }
     },
     clientAlias: {
       type: "select",
@@ -45,28 +45,28 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
         placeholder: "AliasCL",
         label: "Cliente*",
         options: clientsOptions,
-        disabled: Boolean(objectToUpdate),
-      },
+        disabled: Boolean(objectToUpdate)
+      }
     },
     alias: {
       type: "text",
       config: {
         placeholder: "Alias",
-        label: "Alias*",
-      },
+        label: "Alias*"
+      }
     },
     year: {
       type: "text",
       config: {
         placeholder: new Date().getFullYear(),
-        label: "Año*",
-      },
-    },
+        label: "Año*"
+      }
+    }
   }
 
   const inputRefObj = {
     text: <SimpleInput />,
-    select: <InputSelect />,
+    select: <InputSelect />
   }
 
   // useEffect(() => {
@@ -89,7 +89,7 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
             config.disabled ||
             (index !== 0 && !value[Object.keys(value)[index - 1]]),
           key: `${name}-${index}`,
-          ...config,
+          ...config
         })
       })}
     </>

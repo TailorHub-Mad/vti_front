@@ -9,7 +9,7 @@ export const TableGroup = ({
   components,
   onRowSelect,
   selectedRows,
-  head,
+  head
 }) => {
   const { isOpen, onToggle } = useDisclosure()
   const isSelected = (idx) => selectedRows?.includes(idx)

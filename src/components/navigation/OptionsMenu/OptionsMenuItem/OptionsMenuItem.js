@@ -12,7 +12,7 @@ export const OptionsMenuItem = ({ isLast, children, ...props }) => {
       cursor="pointer"
       padding="8px"
       _hover={{
-        opacity: "0.8",
+        opacity: "0.8"
       }}
       {...props}
     >

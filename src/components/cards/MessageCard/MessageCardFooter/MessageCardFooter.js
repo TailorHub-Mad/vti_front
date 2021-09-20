@@ -12,7 +12,7 @@ const icon_props = {
   width: "16px",
   height: "16px",
   color: "grey",
-  cursor: "default",
+  cursor: "default"
 }
 
 export const MessageCardFooter = ({

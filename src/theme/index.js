@@ -18,7 +18,7 @@ const theme = extendTheme({
   colors,
   fonts: {
     heading: "Noway-Medium",
-    body: "Noway-Regular",
+    body: "Noway-Regular"
   },
   textStyles,
   breakpoints,
@@ -30,9 +30,9 @@ const theme = extendTheme({
     IconButton,
     Icon,
     Checkbox,
-    Switch,
+    Switch
   },
-  icons,
+  icons
 })
 
 export default theme

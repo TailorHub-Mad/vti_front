@@ -16,7 +16,7 @@ const useFetchSWR = (key, fetcher, refreshInterval) => {
     },
     dedupingInterval: 5000,
     errorRetryCount: 10,
-    refreshInterval: refreshInterval || 30000,
+    refreshInterval: refreshInterval || 30000
   })
 
   const isUnauthorize = error?.response.status === 401

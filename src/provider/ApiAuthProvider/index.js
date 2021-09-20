@@ -22,7 +22,7 @@ const ApiAuthProvider = ({ children }) => {
     isLoggedIn,
     setUser: useCallback((userData) => _setUser(userData), []),
     setRole: useCallback((role) => _setRole(role), []),
-    setIsLoggedIn: useCallback((value) => _setIsLoggedIn(value), []),
+    setIsLoggedIn: useCallback((value) => _setIsLoggedIn(value), [])
   }
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const ApiAuthProvider = ({ children }) => {
         setIsLoggedIn(true)
       } catch (error) {
         setIsLoggedIn(false)
-        if (error.response.status === 401 && router.route !== "/login")
+        if (error.response?.status === 401 && router.route !== "/login")
           return router.push("/login")
       }
     }

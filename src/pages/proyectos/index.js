@@ -12,7 +12,7 @@ import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModa
 import {
   DeleteType,
   fetchOption,
-  fetchType,
+  fetchType
 } from "../../utils/constants/global_config"
 import { projectFetchHandler } from "../../swr/project.swr"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
@@ -90,7 +90,7 @@ const proyectos = () => {
       const updatedProjects = []
       const filteredProjects = projects.filter((system) => system._id !== id)
       updatedProjects.push({
-        testProjects: filteredProjects,
+        testProjects: filteredProjects
       })
       return updatedProjects
     } catch (error) {
@@ -124,7 +124,7 @@ const proyectos = () => {
 
   const onSearch = (search) =>
     setFetchOptions({
-      [fetchOption.SEARCH]: search,
+      [fetchOption.SEARCH]: search
     })
 
   const handleOnGroup = () => {

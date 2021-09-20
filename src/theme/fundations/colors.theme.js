@@ -9,7 +9,7 @@ export const colors = {
     600: "#052E57",
     700: "#052E57",
     800: "#052E57",
-    900: "#052E57",
+    900: "#052E57"
   },
   yellow: "#F3D30C",
   pale_yellow: "#FAEFAE",
@@ -23,9 +23,9 @@ export const colors = {
   error: "#F95C5C",
   correct: {
     300: "#27794830",
-    500: "#277948",
+    500: "#277948"
   },
   alert: "#E98535",
   start: "#0085FF",
-  blue_alt: "#18548F",
+  blue_alt: "#18548F"
 }

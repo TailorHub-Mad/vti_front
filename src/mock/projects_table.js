@@ -18,7 +18,7 @@ export const MOCK_TABLE_DATA = new Array(30).fill({
     "Tag asdfa",
     "Tag asdfa",
     "Tag asdfa",
-    "Tag asdfa",
+    "Tag asdfa"
   ],
   usuarios: [
     "TagProyecto2",
@@ -27,7 +27,7 @@ export const MOCK_TABLE_DATA = new Array(30).fill({
     "TagProyecto2",
     "TagProyecto2",
     "TagProyecto2",
-    "TagProyecto2",
+    "TagProyecto2"
   ],
   apuntes: [
     "TagProyecto2",
@@ -36,9 +36,9 @@ export const MOCK_TABLE_DATA = new Array(30).fill({
     "TagProyecto2",
     "TagProyecto2",
     "TagProyecto2",
-    "TagProyecto2",
+    "TagProyecto2"
   ],
-  options: "",
+  options: ""
 })
 
 export const MOCK_BACK_PROJECTS_DATA = new Array(30).fill({
@@ -51,5 +51,5 @@ export const MOCK_BACK_PROJECTS_DATA = new Array(30).fill({
   tags: ["Tag1", "Tag2"],
   users: ["Pere", "Gom", "Anabel", "Leonardo"],
   notes: ["Nota1", "Nota2", "Nota3"],
-  options: "",
+  options: ""
 })

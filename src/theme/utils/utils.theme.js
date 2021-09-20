@@ -12,16 +12,16 @@ export const CUSTOM_SCROLLBAR = {
     width: "8px",
     height: "8px",
     borderRadius: "8px",
-    backgroundColor: `transparent`,
+    backgroundColor: `transparent`
   },
   "&::-webkit-scrollbar-thumb": {
     backgroundColor: `blue.400`,
     width: "8px",
     borderRadius: "8px",
     border: "0px solid transparent",
-    backgroundClip: "content-box",
+    backgroundClip: "content-box"
   },
   "&::-webkit-scrollbar-thumb:hover": {
-    backgroundColor: `blue.500`,
-  },
+    backgroundColor: `blue.500`
+  }
 }

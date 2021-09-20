@@ -13,5 +13,5 @@ export const SWR_CACHE_KEYS = {
   notes: "notes/",
   note: "note/",
   users: "users/",
-  user: "user/",
+  user: "user/"
 }

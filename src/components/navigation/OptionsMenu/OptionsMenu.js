@@ -5,7 +5,7 @@ export const OptionsMenu = ({ isOpen, onClose, children, ...props }) => {
   const ref = useRef(null)
   useOutsideClick({
     ref: ref,
-    handler: () => onClose(),
+    handler: () => onClose()
   })
   return isOpen ? (
     <Box

@@ -19,7 +19,7 @@ const ToastProvider = ({ children }) => {
   const contextValue = {
     message,
     showToast: (message, time) => showToast(message, time),
-    isToastOpen,
+    isToastOpen
   }
 
   return (

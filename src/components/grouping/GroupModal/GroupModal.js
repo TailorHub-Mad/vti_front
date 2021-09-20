@@ -6,7 +6,7 @@ import {
   Flex,
   Button,
   Radio,
-  RadioGroup,
+  RadioGroup
 } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { CustomModalContent } from "../../overlay/Modal/CustomModalContent/CustomModalContent"
@@ -17,20 +17,20 @@ export const GroupModal = ({ isOpen, onClose, onGroup, ...props }) => {
   const options = [
     {
       label: "Proyecto",
-      value: "project",
+      value: "project"
     },
     {
       label: "Año",
-      value: "year",
+      value: "year"
     },
     {
       label: "Sector",
-      value: "sector",
+      value: "sector"
     },
     {
       label: "Tag de apunte",
-      value: "note_tag",
-    },
+      value: "note_tag"
+    }
   ]
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>

@@ -9,7 +9,7 @@ export const MOCK_SELECT_OPTIONS = [
   { label: "Actuación", value: "tag8" },
   { label: "Tag 9", value: "tag9" },
   { label: "Tag 10", value: "tag10" },
-  { label: "Tag 11", value: "tag11" },
+  { label: "Tag 11", value: "tag11" }
 ]
 
 export const MOCK_YEAR_OPTIONS = new Array(40).fill("").map((_, idx) => {

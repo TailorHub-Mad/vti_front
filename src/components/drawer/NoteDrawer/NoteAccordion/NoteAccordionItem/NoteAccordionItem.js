@@ -3,7 +3,7 @@ import {
   AccordionItem,
   AccordionPanel,
   Flex,
-  Text,
+  Text
 } from "@chakra-ui/react"
 import React from "react"
 import { ChevronDownIcon } from "../../../../icons/ChevronDownIcon"

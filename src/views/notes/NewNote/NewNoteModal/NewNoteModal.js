@@ -80,11 +80,11 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
         return {
           ...note,
           projects: [],
-          notes: [],
+          notes: []
         }
       })
       updatedNotes.push({
-        testNotes: [...formatNotesSuccessfull, ...cacheNotes[0].testNotes],
+        testNotes: [...formatNotesSuccessfull, ...cacheNotes[0].testNotes]
       })
       return updatedNotes
     }

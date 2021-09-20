@@ -5,20 +5,20 @@ import { ICONS_REFERENCE } from "../../../utils/constants/icons_reference"
 export const ProjectsTagsHeader = ({
   tagsCount = 0,
   onChange,
-  activeItem = "inheritance",
+  activeItem = "inheritance"
 }) => {
   //TODO Refactor para unificar componentes entre todos los headers de las páginas de proyectos, tags, etc
   const visibility_menu = {
     inheritance: {
       label: "Herencia",
       active_icon: ICONS_REFERENCE.tag_link,
-      icon: ICONS_REFERENCE.tag_link,
+      icon: ICONS_REFERENCE.tag_link
     },
     alphabetic: {
       label: "Alfabético",
       active_icon: ICONS_REFERENCE.list,
-      icon: ICONS_REFERENCE.list,
-    },
+      icon: ICONS_REFERENCE.list
+    }
   }
 
   return (
