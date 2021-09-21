@@ -7,26 +7,15 @@ import { InputSelect } from "../InputSelect/InputSelect"
 export const AddSelect = ({
   values = [undefined],
   options = [],
-  onChange,
+  onChange = () => {},
   label,
   placeholder,
   additemlabel,
   deleteItemLabel,
-  isDisabled = false,
   ...props
 }) => {
   const [inputValues, setInputValues] = useState(values)
-  const [disabledInput, setDisabledInput] = useState(isDisabled)
-
-  console.log("inputValues", inputValues)
-
-  const handleAvailableOptions = () => {
-    const availableOptions = options.filter(
-      (option) => !inputValues.includes(option)
-    )
-
-    return availableOptions
-  }
+  const [availableOptions, setAvailableOptions] = useState([])
 
   const handleChange = (option, idx) => {
     const selected = options?.find(({ value }) => value == option.value)
@@ -40,8 +29,13 @@ export const AddSelect = ({
   }
 
   useEffect(() => {
-    if (options.length === 0) return setDisabledInput(true)
-  }, [options])
+    const valuesSelected = inputValues.map((inputValue) => inputValue?.value)
+    const availableOptions = options.filter(
+      (option) => !valuesSelected.includes(option.value)
+    )
+
+    setAvailableOptions(availableOptions)
+  }, [inputValues])
 
   const renderDeleteItem = (itemPosition) => {
     if (inputValues.length === 1 && itemPosition === 0) return null
@@ -102,23 +96,24 @@ export const AddSelect = ({
   }
 
   return (
-    <FormController label={label} isDisabled={disabledInput} {...props}>
+    <FormController label={label} {...props}>
       <Box>
-        {inputValues.map((value, idx) => (
-          <Box key={`${value}-${idx}`} marginBottom="16px">
-            <InputSelect
-              value={value?.label}
-              onChange={(selected) => handleChange(selected, idx)}
-              placeholder={placeholder}
-              options={handleAvailableOptions()}
-              isDisabled={disabledInput}
-            />
-            <>
-              {renderDeleteItem(idx)}
-              {renderAddItem(idx)}
-            </>
-          </Box>
-        ))}
+        {inputValues.map((value, idx) => {
+          return (
+            <Box key={`${value}-${idx}`} marginBottom="16px">
+              <InputSelect
+                value={value?.label}
+                onChange={(selected) => handleChange(selected, idx)}
+                placeholder={placeholder}
+                options={availableOptions}
+              />
+              <>
+                {renderDeleteItem(idx)}
+                {renderAddItem(idx)}
+              </>
+            </Box>
+          )
+        })}
       </Box>
     </FormController>
   )
