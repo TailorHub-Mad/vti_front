@@ -5,7 +5,7 @@ import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import { Spinner } from "../../components/spinner/Spinner"
-import useClientApi from "../../hooks/api/useClientApi"
+import useUserApi from "../../hooks/api/useUserApi"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { ToastContext } from "../../provider/ToastProvider"
 import {
@@ -13,23 +13,23 @@ import {
   fetchOption,
   fetchType
 } from "../../utils/constants/global_config"
-import { ClientsTable } from "../../views/clients/ClientsTable/ClientsTable"
-import { NewClientModal } from "../../views/clients/NewClient/NewClientModal/NewClientModal"
+import { UsersTable } from "../../views/users/UsersTable/UsersTable"
+import { NewUserModal } from "../../views/users/NewUser/NewUserModal/NewUserModal"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
-import { AddClientIcon } from "../../components/icons/AddClientIcon"
+import { UsersLineIcon } from "../../components/icons/UsersLineIcon"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
-import { clientFetchHandler } from "../../swr/client.swr"
+import { userFetchHandler } from "../../swr/user.swr"
 
-const clientes = () => {
+const usuarios = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { deleteClient } = useClientApi()
+  const { deleteUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
 
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
 
-  const { data, error, isLoading, mutate } = clientFetchHandler(
+  const { data, error, isLoading, mutate } = userFetchHandler(
     fetchState,
     fetchOptions
   )
@@ -37,66 +37,66 @@ const clientes = () => {
   const [showImportModal, setShowImportModal] = useState(false)
 
   // Create - Update state
-  const [isClientModalOpen, setIsClientModalOpen] = useState(false)
-  const [clientToUpdate, setClientToUpdate] = useState(null)
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false)
+  const [userToUpdate, setUserToUpdate] = useState(null)
 
   // Delete state
   const [deleteType, setDeleteType] = useState(null)
-  const [clientsToDelete, setClientsToDelete] = useState(null)
+  const [usersToDelete, setUsersToDelete] = useState(null)
 
   const isEmptyData = checkDataIsEmpty(data)
-  const clientsData = data && !isEmptyData ? data : null
+  const usersData = data && !isEmptyData ? data : null
 
   // TODO
   const handleExport = () => {}
 
-  const handleOpenPopup = (clientsToDelete, type) => {
+  const handleOpenPopup = (usersToDelete, type) => {
     setDeleteType(type)
-    setClientsToDelete(clientsToDelete)
+    setUsersToDelete(usersToDelete)
   }
 
   const handleClosePopup = () => {
     setDeleteType(null)
-    setClientsToDelete(null)
+    setUsersToDelete(null)
   }
 
   const handleOnCloseModal = () => {
-    setClientToUpdate(null)
-    setIsClientModalOpen(false)
+    setUserToUpdate(null)
+    setIsUserModalOpen(false)
   }
 
   const handleDeleteMessage = () => {
     if (deleteType === DeleteType.MANY)
-      return "¿Desea eliminar los clientes seleccionados?"
-    const label = getFieldObjectById(clientsData, "alias", clientsToDelete)
+      return "¿Desea eliminar los usuarios seleccionados?"
+    const label = getFieldObjectById(usersData, "alias", usersToDelete)
     return `¿Desea eliminar ${label}?`
   }
 
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
-    const updated = await f(clientsToDelete, clientsData)
+    const updated = await f(usersToDelete, usersData)
     updated.length > 0 ? await mutate(updated, false) : await mutate()
     setDeleteType(null)
-    setClientsToDelete(null)
+    setUsersToDelete(null)
   }
 
-  const deleteOne = async (id, clients) => {
+  const deleteOne = async (id, users) => {
     try {
-      await deleteClient(id)
-      showToast("Cliente borrado correctamente")
-      return clients.filter((client) => client._id !== id)
+      await deleteUser(id)
+      showToast("Usuario borrado correctamente")
+      return users.filter((user) => user._id !== id)
     } catch (error) {
       // TODO -> manage erros
       console.log("ERROR")
     }
   }
 
-  const deleteMany = async (clientsId, clients) => {
+  const deleteMany = async (usersId, users) => {
     try {
-      const clientsQueue = clientsId.map((id) => deleteClient(id))
-      await Promise.all(clientsQueue)
-      showToast("Clientes borrados correctamente")
-      return clients.filter((client) => !clientsId.includes(client._id))
+      const usersQueue = usersId.map((id) => deleteUser(id))
+      await Promise.all(usersQueue)
+      showToast("Useres borrados correctamente")
+      return users.filter((user) => !usersId.includes(user._id))
     } catch (error) {
       // TODO -> manage erros
       console.log("ERROR")
@@ -104,9 +104,9 @@ const clientes = () => {
   }
 
   const onEdit = (id) => {
-    const client = clientsData.find((client) => client._id === id)
-    setClientToUpdate(client)
-    setIsClientModalOpen(true)
+    const user = usersData.find((user) => user._id === id)
+    setUserToUpdate(user)
+    setIsUserModalOpen(true)
   }
 
   const onSearch = (search) => {
@@ -133,9 +133,9 @@ const clientes = () => {
         {handleDeleteMessage()}
       </Popup>
 
-      <NewClientModal
-        clientToUpdate={clientToUpdate}
-        isOpen={isClientModalOpen}
+      <NewUserModal
+        userToUpdate={userToUpdate}
+        isOpen={isUserModalOpen}
         onClose={handleOnCloseModal}
       />
 
@@ -146,35 +146,35 @@ const clientes = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {clientsData ? (
+        {usersData ? (
           <ToolBar
-            onAdd={() => setIsClientModalOpen(true)}
+            onAdd={() => setIsUserModalOpen(true)}
             onSearch={onSearch}
             onImport={() => setShowImportModal(true)}
             onExport={handleExport}
-            addLabel="Añadir cliente"
+            addLabel="Añadir usuario"
             searchPlaceholder="Busqueda por ID, Alias"
             withoutFilter
             withoutGroup
-            icon={<AddClientIcon />}
+            icon={<UsersLineIcon />}
           />
         ) : null}
       </PageHeader>
       {isLoading ? <Spinner /> : null}
       {isEmptyData ? (
         <ViewEmptyState
-          message="Añadir clientes a la plataforma"
+          message="Añadir useres a la plataforma"
           importButtonText="Importar"
-          addButtonText="Añadir cliente"
+          addButtonText="Añadir usuario"
           onImport={() => setShowImportModal(true)}
-          onAdd={() => setIsClientModalOpen(true)}
+          onAdd={() => setIsUserModalOpen(true)}
         />
       ) : null}
-      {clientsData ? (
-        <ClientsTable
-          clients={clientsData}
+      {usersData ? (
+        <UsersTable
+          users={usersData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
-          onDeleteMany={(clientsId) => handleOpenPopup(clientsId, DeleteType.MANY)}
+          onDeleteMany={(usersId) => handleOpenPopup(usersId, DeleteType.MANY)}
           onEdit={onEdit}
         />
       ) : null}
@@ -182,4 +182,4 @@ const clientes = () => {
   )
 }
 
-export default clientes
+export default usuarios

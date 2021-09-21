@@ -20,7 +20,6 @@ import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 
 const proyectos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -68,7 +67,7 @@ const proyectos = () => {
 
   const handleDeleteMessage = () => {
     if (deleteType === DeleteType.MANY)
-      return "¿Desea eliminar los sectores seleccionados?"
+      return "¿Desea eliminar los proyectos seleccionados?"
     const label = getFieldObjectById(projectsData, "alias", projectToDelete)
     return `¿Desea eliminar ${label}?`
   }
@@ -76,9 +75,7 @@ const proyectos = () => {
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(projectToDelete, projectsData)
-    updated.length > 0
-      ? await mutate(updated, false)
-      : await mutate(SWR_CACHE_KEYS.projects)
+    updated.length > 0 ? await mutate(updated, false) : await mutate()
     setDeleteType(null)
     setProjectsToDelete(null)
   }

@@ -91,6 +91,7 @@ export const DepartmentsTable = ({
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
           selectAllRows={() => handleSelectAllRows(_departments)}
+          checked={Object.keys(selectedRows).length === _departments?.length}
         />
       }
       config={departments_table}

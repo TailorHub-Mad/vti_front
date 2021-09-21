@@ -20,7 +20,6 @@ import { AddDepartmentIcon } from "../../components/icons/AddDepartmentIcon"
 import { departmentFetchHandler } from "../../swr/department.swr"
 import { checkDataIsEmpty } from "../../utils/functions/common"
 import useDepartmentApi from "../../hooks/api/useDepartmentApi"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 
 const departamentos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -48,6 +47,8 @@ const departamentos = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const departmentsData = data && !isEmptyData ? data : null
 
+  console.log(departmentsData)
+
   // TODO
   const handleExport = () => {}
 
@@ -74,9 +75,7 @@ const departamentos = () => {
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(departmentsToDelete, departmentsData)
-    updated.length > 0
-      ? await mutate(updated, false)
-      : await mutate(SWR_CACHE_KEYS.departments)
+    updated.length > 0 ? await mutate(updated, false) : await mutate()
     setDeleteType(null)
     setDepartmentsToDelete(null)
   }

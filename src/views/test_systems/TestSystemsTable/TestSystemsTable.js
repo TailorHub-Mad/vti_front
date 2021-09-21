@@ -108,6 +108,7 @@ export const TestSystemsTable = ({ systems, onDelete, onEdit, onDeleteMany }) =>
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
           selectAllRows={() => handleSelectAllRows(_systems)}
+          checked={Object.keys(selectedRows).length === _systems?.length}
         />
       }
       config={test_systems_table}

@@ -8,7 +8,7 @@ import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
 import { PATHS } from "../../../utils/constants/paths"
 
-export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
+export const ClientsTable = ({ clients = [], onDelete, onEdit, onDeleteMany }) => {
   const {
     selectedRows,
     setSelectedRows,
@@ -97,6 +97,7 @@ export const ClientsTable = ({ clients, onDelete, onEdit, onDeleteMany }) => {
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
           selectAllRows={() => handleSelectAllRows(_clients)}
+          checked={Object.keys(selectedRows).length === _clients?.length}
         />
       }
       config={projects_table}

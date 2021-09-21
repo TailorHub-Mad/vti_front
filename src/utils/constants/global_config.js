@@ -23,4 +23,4 @@ export const RoleType = {
   ADMIN: "admin"
 }
 
-export const TOAST_DEFAULT_TIME = 3000
+export const TOAST_DEFAULT_TIME = 2000

@@ -20,7 +20,6 @@ import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import { AddSectorIcon } from "../../components/icons/AddSectorIcon"
 import { sectorFetchHandler } from "../../swr/sector.swr"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 
 const sectores = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -76,9 +75,7 @@ const sectores = () => {
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(sectorsToDelete, sectorsData)
-    updated.length > 0
-      ? await mutate(updated, false)
-      : await mutate(SWR_CACHE_KEYS.sectors)
+    updated.length > 0 ? await mutate(updated, false) : await mutate()
     setDeleteType(null)
     setSectorsToDelete(null)
   }

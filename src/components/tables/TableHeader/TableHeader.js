@@ -1,18 +1,24 @@
 import { DeleteIcon } from "@chakra-ui/icons"
 import { Checkbox, Flex, Text } from "@chakra-ui/react"
-import React from "react"
+import React, { useEffect, useState } from "react"
 
 export const TableHeader = ({
   count = 0,
   countLabel = "",
+  checked = false,
   selectedRows,
   onDelete,
   selectAllRows = () => {}
 }) => {
+  const [isChecked, setIsChecked] = useState(checked)
+
+  useEffect(() => {
+    setIsChecked(checked)
+  }, [checked])
   return (
     <Flex justify="space-between" align="center" pb="32px">
       <Flex>
-        <Checkbox mr="8px" onChange={selectAllRows} />
+        <Checkbox mr="8px" onChange={selectAllRows} isChecked={isChecked} />
         {Object.keys(selectedRows)?.length > 0 ? (
           <Flex
             alignItems="center"

@@ -7,6 +7,7 @@ import { ActionLink } from "../../../../components/buttons/ActionLink/ActionLink
 import { ArrowRightIcon } from "../../../../components/icons/ArrowRightIcon"
 import { FinishIcon } from "../../../../components/icons/FinishIcon"
 import { PageHeader } from "../../../../components/layout/Pages/PageHeader/PageHeader"
+import { PATHS } from "../../../../utils/constants/paths"
 
 export const ProjectHeader = () => {
   //TODO Conectar las acciones con la main page
@@ -14,7 +15,7 @@ export const ProjectHeader = () => {
   return (
     <PageHeader mb="0">
       <Flex>
-        <Link href="/proyectos" passHref>
+        <Link href={PATHS.projects} passHref>
           <Text variant="d_l_medium" color="blue.400" cursor="pointer">
             Proyectos
           </Text>

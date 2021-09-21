@@ -142,6 +142,7 @@ export const ProjectsTable = ({
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
           selectAllRows={() => handleSelectAllRows(_projects)}
+          checked={Object.keys(selectedRows).length === _projects?.length}
         />
       }
       config={projects_table}

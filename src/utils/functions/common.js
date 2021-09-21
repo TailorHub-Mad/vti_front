@@ -18,7 +18,7 @@ export const getPercentage = (full, size) => ((size / full) * 100).toFixed(2)
 export const getFieldObjectById = (collection, field, id) => {
   if (!Array.isArray(collection)) return
   const item = collection?.find((item) => item._id === id)
-  return !item ?? item[field]
+  return item ? item[field] : null
 }
 
 export const checkDataIsEmpty = (data) => {

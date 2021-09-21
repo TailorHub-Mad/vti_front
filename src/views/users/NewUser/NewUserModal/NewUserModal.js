@@ -3,20 +3,20 @@ import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
 import { MultipleFormContent } from "../../../../components/forms/MultipleFormContent/MultipleFormContent"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
-import useSystemApi from "../../../../hooks/api/useSystemApi"
+import useUserApi from "../../../../hooks/api/useUserApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
-import { NewTestSystemForm } from "../NewTestSystemForm/NewTestSystemForm"
+import { NewUserForm } from "../NewUserForm/NewUserForm"
 
-export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
+export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
   const { showToast } = useContext(ToastContext)
-  const { createSystem, updateSystem } = useSystemApi()
+  const { createUser, updateUser } = useUserApi()
   const { mutate } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const isUpdate = Boolean(systemToUpdate)
+  const isUpdate = Boolean(userToUpdate)
 
   const handleChange = (val, idx) => {
     const _values = [...values]
@@ -35,61 +35,38 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
       (value) =>
         // TODO -> autogenerate ID
         // !value.id ||
-        !value.vtiCode || !value.clientAlias || !value.alias || !value.year
+        !value.alias ||
+        !value.fullName ||
+        !value.email ||
+        !value.department ||
+        !value.fullName
     )
-  }
-
-  const formatCreateSystems = (systems) => {
-    return systems.map((value) => {
-      const { clientAlias, year, vtiCode, alias } = value
-      return {
-        vtiCode,
-        alias,
-        date: {
-          year
-        },
-        client: clientAlias.value
-      }
-    })
-  }
-
-  const formatUpdateSystems = (systems) => {
-    return systems.map((value) => {
-      const { year, alias } = value
-      return {
-        alias,
-        date: {
-          year
-        }
-      }
-    })
   }
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
-    isUpdate ? await handleUpdateSystem() : await handleCreateSystem()
-    await mutate(SWR_CACHE_KEYS.systems)
-    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
+    isUpdate ? await handleUpdateUser() : await handleCreateUser()
+    await mutate(SWR_CACHE_KEYS.users)
+    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s usuario/s!")
     setIsSubmitting(false)
     onClose()
   }
 
-  const handleCreateSystem = async () => {
+  const handleCreateUser = async () => {
     try {
-      const systemsToCreate = formatCreateSystems(values)
-      const systemsQueue = systemsToCreate.map((system) => createSystem(system))
-      await Promise.all(systemsQueue)
+      const usersToCreate = [...values]
+      await createUser(usersToCreate)
     } catch (error) {
       // TODO -> manage errors
       console.log("ERROR")
     }
   }
 
-  const handleUpdateSystem = async () => {
+  const handleUpdateUser = async () => {
     try {
-      const { _id } = systemToUpdate
-      const [data] = formatUpdateSystems(values)
-      await updateSystem(_id, data)
+      const { _id } = userToUpdate
+      const [data] = [...values]
+      await updateUser(_id, data)
     } catch (error) {
       // TODO -> manage errors
       console.log("ERROR")
@@ -97,15 +74,10 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
   }
 
   useEffect(() => {
-    if (!systemToUpdate) return
-    const {
-      vtiCode,
-      clientAlias,
-      alias,
-      date: { year }
-    } = systemToUpdate
-    setValues([{ vtiCode, clientAlias, alias, year }])
-  }, [systemToUpdate])
+    if (!userToUpdate) return
+    const { alias, name } = userToUpdate
+    setValues([{ alias, name }])
+  }, [userToUpdate])
 
   useEffect(() => {
     if (isOpen) return
@@ -117,7 +89,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
-          title={isUpdate ? "Editar sistema" : "Añadir nuevo sistema"}
+          title={isUpdate ? "Editar usuario" : "Añadir nuevo usuario"}
           onClose={onClose}
           pb="24px"
         />
@@ -125,10 +97,9 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
           values={values}
           onChange={handleChange}
           onDelete={handleDelete}
-          objectToUpdate={systemToUpdate}
-          addTitle="Añadir nuevo sistema"
+          addTitle="Añadir nuevo usuario"
         >
-          <NewTestSystemForm />
+          <NewUserForm />
         </MultipleFormContent>
         <Button
           w="194px"
@@ -142,15 +113,15 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
           Guardar
         </Button>
 
-        {isUpdate || (
+        {!isUpdate ? (
           <Button
             variant="text_only"
             onClick={() => setValues([...values, {}])}
             disabled={checkInputsAreEmpty()}
           >
-            Añadir nuevo sistema
+            Añadir nuevo usuario
           </Button>
-        )}
+        ) : null}
       </ModalContent>
     </Modal>
   )

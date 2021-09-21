@@ -1,5 +1,5 @@
 import { Checkbox, Text } from "@chakra-ui/react"
-import React, { useMemo } from "react"
+import { useMemo } from "react"
 import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
 import { OptionsMenuRow } from "../../../components/navigation/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
 import { Table } from "../../../components/tables/Table/Table"
@@ -8,7 +8,7 @@ import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
 import { PATHS } from "../../../utils/constants/paths"
 
-export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
+export const UsersTable = ({ users = [], onDelete, onEdit, onDeleteMany }) => {
   const {
     selectedRows,
     setSelectedRows,
@@ -19,29 +19,33 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
 
   useMemo(() => {
     setSelectedRows([])
-  }, [sectors.length])
+  }, [users.length])
 
   const handleOnDelete = () => {
-    const sectorsId = Object.keys(selectedRows)
-    if (Object.keys(selectedRows).length > 1) return onDeleteMany(sectorsId)
-    return onDelete(sectorsId[0])
+    const usersId = Object.keys(selectedRows)
+    if (Object.keys(selectedRows).length > 1) return onDeleteMany(usersId)
+    return onDelete(usersId[0])
   }
 
-  const _sectors = sectors?.map((sector) => {
+  const _users = users?.map((user) => {
     return {
       actions: "",
-      id: sector._id,
-      name: { label: sector.title, link: `${PATHS.sectors}/${sector._id}` },
-      projects: sector.projects,
+      id: user._id,
+      alias: user.alias,
+      name: { label: user.name, link: `${PATHS.users}/${user._id}` },
+      testSystems: user.testSystems?.map((testSystem) => testSystem.alias),
+      projects: user.projects?.map((project) => project.alias),
       options: ""
     }
   })
 
-  const sectors_table = {
+  const projects_table = {
     components: {
       text: <Text />,
       link: <LinkItem />,
+      count: <Text />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
+      testSystems: <TagGroup variant="light_blue" max={3} />,
       projects: <TagGroup variant="pale_yellow" max={7} />,
       options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />
     },
@@ -56,14 +60,24 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
         width: calcColWidth(80),
         type: "text"
       },
+      alias: {
+        label: "Alias",
+        width: calcColWidth(80),
+        type: "text"
+      },
       name: {
         label: "Nombre",
-        width: calcColWidth(120),
+        width: calcColWidth(300),
         type: "link"
+      },
+      testSystems: {
+        label: "Sistemas de ensayo",
+        width: calcColWidth(250),
+        type: "tagGroup"
       },
       projects: {
         label: "Proyectos",
-        width: calcColWidth(815),
+        width: calcColWidth(300),
         type: "tagGroup"
       },
       options: {
@@ -78,21 +92,21 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
     <Table
       header={
         <TableHeader
-          count={_sectors?.length}
-          countLabel="Sectores"
+          count={_users?.length}
+          countLabel="Useres"
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
-          selectAllRows={() => handleSelectAllRows(_sectors)}
-          checked={Object.keys(selectedRows).length === _sectors?.length}
+          selectAllRows={() => handleSelectAllRows(_users)}
+          checked={Object.keys(selectedRows).length === _users?.length}
         />
       }
-      config={sectors_table}
-      content={_sectors}
+      config={projects_table}
+      content={_users}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
+      tableHeight={"calc(100vh - 190px)"}
       p="32px"
       pb="0"
-      tableHeight={"calc(100vh - 190px)"}
     />
   )
 }

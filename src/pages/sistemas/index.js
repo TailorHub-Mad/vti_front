@@ -20,7 +20,6 @@ import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddTestSystemIcon } from "../../components/icons/AddTestSystemIcon"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import { systemFetchHandler } from "../../swr/systems.swr"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 
 const sistemas = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -67,8 +66,10 @@ const sistemas = () => {
   }
 
   const handleDeleteMessage = () => {
+    if (!systemsToDelete) return
+
     if (deleteType === DeleteType.MANY)
-      return "¿Desea eliminar los sectores seleccionados?"
+      return "¿Desea eliminar los sistemas seleccionados?"
     const label = getFieldObjectById(systemsData, "alias", systemsToDelete)
     return `¿Desea eliminar ${label}?`
   }
@@ -76,9 +77,7 @@ const sistemas = () => {
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(systemsToDelete, systemsData)
-    updated.length > 0
-      ? await mutate(updated, false)
-      : await mutate(SWR_CACHE_KEYS.systems)
+    updated.length > 0 ? await mutate(updated, false) : await mutate()
     setDeleteType(null)
     setSystemsToDelete(null)
   }

@@ -1,8 +1,14 @@
 export const PATHS = {
+  notes: "/apuntes",
+  newNote: "/apuntes/nuevo",
   projects: "/proyectos",
-  clients: "/clientes",
-  testSystems: "/sistemas",
-  departments: "/departamentos",
   sectors: "/sectores",
-  notes: "/apuntes"
+  testSystems: "/sistemas",
+  projectTags: "/tags-proyecto",
+  noteTags: "/tags-apuntes",
+  clients: "/clientes",
+  departments: "/departamentos",
+  users: "/usuarios",
+  help: "/ayuda",
+  subscription: "/suscripciones"
 }
