@@ -10,7 +10,7 @@ import { Spinner } from "../components/spinner/Spinner"
 import { PROJECT_TAGS_MOCK } from "../mock/tags"
 import { ProjectsTagsHeader } from "../views/project_tags/ProjectTagsHeader/ProjectTagsHeader"
 
-const tagsDeProyecto = () => {
+const tagsProyecto = () => {
   // TODO fetch notes
   // const notes = null
   const isFetching = false
@@ -88,4 +88,4 @@ const tagsDeProyecto = () => {
   )
 }
 
-export default tagsDeProyecto
+export default tagsProyecto

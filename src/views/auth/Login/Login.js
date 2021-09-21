@@ -11,6 +11,7 @@ import { useRouter } from "next/dist/client/router"
 import { setSessioncookie } from "../../../utils/functions/cookies"
 import { checkFormIsEmpty } from "../../../utils/functions/forms"
 import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
+import { PATHS } from "../../../utils/constants/paths"
 
 export const Login = () => {
   const { login } = useAuthApi()
@@ -23,7 +24,7 @@ export const Login = () => {
   const handleOnClickShowPassword = () =>
     setPasswordInputType(passwordInputType == "password" ? "text" : "password")
 
-  const handleOnClickForgotPassword = () => router.push("/recuperar")
+  const handleOnClickForgotPassword = () => router.push(PATHS.recover)
 
   const handleSubmit = async (values) => {
     const response = await login({ ...values })
@@ -41,7 +42,7 @@ export const Login = () => {
     setIsLoggedIn(true)
     setSessioncookie(token)
 
-    router.push("/")
+    router.push(PATHS.root)
   }
 
   return (

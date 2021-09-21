@@ -18,6 +18,8 @@ export const TabBarMenu = ({ navMenuItems, ...props }) => {
           href={item.href}
           icon={<item.icon />}
           submenu={item.submenu}
+          disabled={item.disabled}
+          openMenu={item.openMenu}
         />
       ))}
     </Box>
