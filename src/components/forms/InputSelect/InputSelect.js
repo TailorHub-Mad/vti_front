@@ -18,9 +18,6 @@ export const InputSelect = ({
   const [inputValue, setInputValue] = useState(value)
   const [showSelectMenu, setShowSelectMenu] = useState(false)
   const [availableOptions, setAvailableOptions] = useState(options)
-  const [disabledInput, setDisabledInput] = useState(isDisabled)
-
-  console.log("inputValue", inputValue)
 
   const ref = useRef(null)
 
@@ -60,7 +57,6 @@ export const InputSelect = ({
   }, [value])
 
   useEffect(() => {
-    if (value && options.length === 0) return setDisabledInput(true)
     setAvailableOptions(options)
   }, [options])
 
@@ -69,21 +65,21 @@ export const InputSelect = ({
       label={label}
       helper={helper}
       onHelperClick={onHelperClick}
-      isDisabled={disabledInput}
+      isDisabled={isDisabled}
       {...props}
     >
       <Box
         position="relative"
         ref={ref}
         {...props}
-        pointerEvents={disabledInput ? "none" : "all"}
+        pointerEvents={isDisabled ? "none" : "all"}
       >
         <Input
           placeholder={placeholder}
           onChange={handleChange}
           onClick={() => setShowSelectMenu(true)}
           value={inputValue}
-          isDisabled={disabledInput}
+          isDisabled={isDisabled}
           _loading
         />
         <ChevronDownIcon
@@ -91,7 +87,7 @@ export const InputSelect = ({
           right="16px"
           top="10px"
           width="24px"
-          opacity={disabledInput ? 0.3 : 1}
+          opacity={isDisabled ? 0.3 : 1}
           transform={`rotateZ(${showSelectMenu ? "180" : "0"}deg)`}
           cursor="pointer"
           onClick={() => setShowSelectMenu(!showSelectMenu)}
