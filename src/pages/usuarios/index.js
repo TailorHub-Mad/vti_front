@@ -95,7 +95,7 @@ const usuarios = () => {
     try {
       const usersQueue = usersId.map((id) => deleteUser(id))
       await Promise.all(usersQueue)
-      showToast("Useres borrados correctamente")
+      showToast("Usuarios borrados correctamente")
       return users.filter((user) => !usersId.includes(user._id))
     } catch (error) {
       // TODO -> manage erros
@@ -163,7 +163,7 @@ const usuarios = () => {
       {isLoading ? <Spinner /> : null}
       {isEmptyData ? (
         <ViewEmptyState
-          message="Añadir useres a la plataforma"
+          message="Añadir usuarios a la plataforma"
           importButtonText="Importar"
           addButtonText="Añadir usuario"
           onImport={() => setShowImportModal(true)}

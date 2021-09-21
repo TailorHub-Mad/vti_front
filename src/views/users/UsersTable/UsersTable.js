@@ -45,8 +45,9 @@ export const UsersTable = ({ users = [], onDelete, onEdit, onDeleteMany }) => {
       link: <LinkItem />,
       count: <Text />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
-      testSystems: <TagGroup variant="light_blue" max={3} />,
+      department: <TagGroup variant="light_blue" max={1} />,
       projects: <TagGroup variant="pale_yellow" max={7} />,
+      focalPoints: <TagGroup variant="pale_yellow" max={7} />,
       options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />
     },
     head: {
@@ -65,24 +66,34 @@ export const UsersTable = ({ users = [], onDelete, onEdit, onDeleteMany }) => {
         width: calcColWidth(80),
         type: "text"
       },
-      name: {
+      fullName: {
         label: "Nombre",
-        width: calcColWidth(300),
+        width: calcColWidth(80),
         type: "link"
       },
-      testSystems: {
-        label: "Sistemas de ensayo",
-        width: calcColWidth(250),
+      email: {
+        label: "Email",
+        width: calcColWidth(80),
+        type: "text"
+      },
+      department: {
+        label: "Departamento",
+        width: calcColWidth(80),
+        type: "tagGroup"
+      },
+      focalPoints: {
+        label: "Punto focal proyectos",
+        width: calcColWidth(200),
         type: "tagGroup"
       },
       projects: {
         label: "Proyectos",
-        width: calcColWidth(300),
+        width: calcColWidth(250),
         type: "tagGroup"
       },
       options: {
         label: "",
-        width: calcColWidth(20),
+        width: calcColWidth(2),
         type: "component"
       }
     }
@@ -93,7 +104,7 @@ export const UsersTable = ({ users = [], onDelete, onEdit, onDeleteMany }) => {
       header={
         <TableHeader
           count={_users?.length}
-          countLabel="Useres"
+          countLabel="Usuarios"
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
           selectAllRows={() => handleSelectAllRows(_users)}
