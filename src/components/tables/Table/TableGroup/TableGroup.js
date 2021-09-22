@@ -21,19 +21,21 @@ export const TableGroup = ({
         <ChevronDownIcon />
       </Flex>
       {isOpen
-        ? item[1].map((row, idx) => (
-            <TableRow
-              key={row._id || row.id || `it-${idx}`}
-              item={row}
-              templateColumns={templateColumns}
-              isSelected={isSelected(row._id || row.id)}
-              idx={idx}
-              components={components}
-              onRowSelect={() => onRowSelect(row._id || row.id)}
-              selectedRows={selectedRows}
-              head={head}
-            />
-          ))
+        ? item[1].map((row, idx) => {
+            return (
+              <TableRow
+                key={row._id || `it-${idx}`}
+                item={row}
+                templateColumns={templateColumns}
+                isSelected={isSelected(row._id)}
+                idx={idx}
+                components={components}
+                onRowSelect={() => onRowSelect(row._id)}
+                selectedRows={selectedRows}
+                head={head}
+              />
+            )
+          })
         : null}
     </Box>
   )

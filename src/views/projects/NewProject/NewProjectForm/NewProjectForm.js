@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { AddSelect } from "../../../../components/forms/AddSelect/AddSelect"
 import { InputSelect } from "../../../../components/forms/InputSelect/InputSelect"
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
@@ -7,7 +7,6 @@ import useSectorApi from "../../../../hooks/api/useSectorApi"
 import useUserApi from "../../../../hooks/api/useUserApi"
 import useSystemApi from "../../../../hooks/api/useSystemApi"
 import useFetchSWR from "../../../../hooks/useFetchSWR"
-import { MOCK_YEAR_OPTIONS } from "../../../../mock/mock"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 
 export const NewProjectForm = ({
@@ -53,14 +52,6 @@ export const NewProjectForm = ({
   }
 
   const formInputs = {
-    // TODO -> autogenerate ID
-    // id: {
-    //   type: "text",
-    //   config: {
-    //     placeholder: "ID",
-    //     label: "ID",
-    //   },
-    // },
     alias: {
       type: "input",
       config: {
@@ -90,8 +81,8 @@ export const NewProjectForm = ({
       config: {
         type: "date",
         placeholder: "00/00/0000",
-        options: MOCK_YEAR_OPTIONS,
-        label: "Fecha"
+        label: "Fecha",
+        disabled: Boolean(projectToUpdate)
       }
     },
     focusPoint: {
@@ -99,7 +90,8 @@ export const NewProjectForm = ({
       config: {
         placeholder: "Punto focal inicio",
         options: usersOptions,
-        label: "Punto focal inicio"
+        label: "Punto focal inicio",
+        disabled: Boolean(projectToUpdate)
       }
     },
     testSystems: {
@@ -127,28 +119,27 @@ export const NewProjectForm = ({
     // }
   }
 
-  // TODO REVIEW
-  useEffect(() => {
-    if (!projectToUpdate) return
-    const client = clientsOptions?.find(
-      (_client) => _client.label === projectToUpdate?.clientAlias
-    )
-    if (client) handleFormChange("client", client.value)
-  }, [])
+  // useEffect(() => {
+  //   if (!projectToUpdate) return
+  //   const client = clientsOptions?.find(
+  //     (_client) => _client.label === projectToUpdate?.clientAlias
+  //   )
+  //   if (client) handleFormChange("client", client.value)
+  // }, [])
 
-  useEffect(() => {
-    if (!projectToUpdate) return
-    const sector = sectorsOptions?.find(
-      (_sector) => _sector.label === projectToUpdate?.sector
-    )
-    if (sector) handleFormChange("sector", sector.value)
-  }, [])
+  // useEffect(() => {
+  //   if (!projectToUpdate) return
+  //   const sector = sectorsOptions?.find(
+  //     (_sector) => _sector.label === projectToUpdate?.sector
+  //   )
+  //   if (sector) handleFormChange("sector", sector.value)
+  // }, [])
 
-  useEffect(() => {
-    if (!projectToUpdate) return
-    const user = usersOptions?.find((_user) => _user.label === projectToUpdate?.user)
-    if (user) handleFormChange("focusPoint", user.value)
-  }, [])
+  // useEffect(() => {
+  //   if (!projectToUpdate) return
+  //   const user = usersOptions?.find((_user) => _user.label === projectToUpdate?.user)
+  //   if (user) handleFormChange("focusPoint", user.value)
+  // }, [])
 
   const inputRefObj = {
     input: <SimpleInput />,

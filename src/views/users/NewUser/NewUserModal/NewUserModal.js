@@ -36,12 +36,20 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
       (value) =>
         // TODO -> autogenerate ID
         // !value.id ||
-        !value.alias ||
-        !value.fullName ||
-        !value.email ||
-        !value.department ||
-        !value.fullName
+        !value.alias || !value.fullName || !value.email || !value.department
     )
+  }
+
+  const formatCreateUsers = (users) => {
+    return users.map((user) => {
+      return {
+        alias: user.alias,
+        name: user.fullName,
+        email: user.email,
+        department: user.department.value,
+        password: Math.random().toString(8)
+      }
+    })
   }
 
   const handleSubmit = async () => {
@@ -55,8 +63,9 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
 
   const handleCreateUser = async () => {
     try {
-      const usersToCreate = [...values]
-      await createUser(usersToCreate)
+      const usersToCreate = formatCreateUsers(values)
+      const usersQueue = usersToCreate.map((user) => createUser(user))
+      await Promise.all(usersQueue)
     } catch (error) {
       errorHandler(error)
     }

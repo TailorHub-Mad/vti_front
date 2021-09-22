@@ -23,14 +23,6 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
   }
 
   const formInputs = {
-    // TODO -> autogenerate ID
-    // id: {
-    //   type: "text",
-    //   config: {
-    //     placeholder: "ID",
-    //     label: "ID",
-    //   },
-    // },
     vtiCode: {
       type: "text",
       config: {

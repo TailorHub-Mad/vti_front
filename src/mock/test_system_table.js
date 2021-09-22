@@ -1,5 +1,5 @@
 export const MOCK_TEST_SYSTEM_TABLE = new Array(30).fill({
-  actions: "",
+  selector: "",
   id: "ID001",
   alias: "US0001",
   client: "CL002",

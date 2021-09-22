@@ -17,7 +17,7 @@ import {
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { AddDepartmentIcon } from "../../components/icons/AddDepartmentIcon"
 import { departmentFetchHandler } from "../../swr/department.swr"
-import { checkDataIsEmpty } from "../../utils/functions/common"
+import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import useDepartmentApi from "../../hooks/api/useDepartmentApi"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
@@ -66,9 +66,13 @@ const departamentos = () => {
     setIsDepartmentModalOpen(false)
   }
 
-  const getAliasByIdDepartment = (id) => {
-    const department = departmentsData.find((department) => department._id === id)
-    return department?.alias
+  const handleDeleteMessage = () => {
+    if (!departmentsToDelete) return
+
+    if (deleteType === DeleteType.MANY)
+      return "¿Desea eliminar los departamentos seleccionados?"
+    const label = getFieldObjectById(departmentsData, "name", departmentsToDelete)
+    return `¿Desea eliminar ${label}?`
   }
 
   const handleDeleteFunction = async () => {
@@ -128,9 +132,7 @@ const departamentos = () => {
         onConfirm={handleDeleteFunction}
         onClose={handleClosePopup}
       >
-        {deleteType === DeleteType.ONE
-          ? `¿Desea eliminar ${getAliasByIdDepartment(departmentsToDelete)}?`
-          : "¿Desea eliminar los departamentos seleccionados?"}
+        {handleDeleteMessage()}
       </Popup>
 
       <NewDepartmentModal

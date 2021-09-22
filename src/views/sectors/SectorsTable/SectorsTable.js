@@ -1,21 +1,13 @@
-import { Checkbox, Text } from "@chakra-ui/react"
 import React, { useMemo } from "react"
-import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
-import { OptionsMenuRow } from "../../../components/navigation/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
-import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
-import { PATHS } from "../../../utils/constants/paths"
+import { TABLE_COMPONENTS } from "../../../utils/constants/tables"
+import { formatSector, TABLE_SECTORS_HEAD } from "./utils"
 
 export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
-  const {
-    selectedRows,
-    setSelectedRows,
-    handleRowSelect,
-    handleSelectAllRows,
-    calcColWidth
-  } = useTableActions()
+  const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
+    useTableActions()
 
   useMemo(() => {
     setSelectedRows([])
@@ -27,50 +19,12 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
     return onDelete(sectorsId[0])
   }
 
-  const _sectors = sectors?.map((sector) => {
-    return {
-      actions: "",
-      id: sector.ref,
-      name: { label: sector.title, link: `${PATHS.sectors}/${sector._id}` },
-      projects: sector.projects,
-      options: ""
-    }
-  })
-
-  const sectors_table = {
-    components: {
-      text: <Text />,
-      link: <LinkItem />,
-      actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
-      projects: <TagGroup variant="pale_yellow" max={7} />,
-      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />
-    },
+  const sectorsData = formatSector(sectors)
+  const configTable = {
+    components: TABLE_COMPONENTS,
     head: {
-      actions: {
-        label: "",
-        width: calcColWidth(32),
-        type: "selector"
-      },
-      id: {
-        label: "ID",
-        width: calcColWidth(80),
-        type: "text"
-      },
-      name: {
-        label: "Nombre",
-        width: calcColWidth(120),
-        type: "link"
-      },
-      projects: {
-        label: "Proyectos",
-        width: calcColWidth(815),
-        type: "tagGroup"
-      },
-      options: {
-        label: "",
-        width: calcColWidth(20),
-        type: "component"
-      }
+      ...TABLE_SECTORS_HEAD,
+      options: { ...TABLE_SECTORS_HEAD.options, onDelete, onEdit }
     }
   }
 
@@ -78,16 +32,16 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
     <Table
       header={
         <TableHeader
-          count={_sectors?.length}
+          count={sectorsData?.length}
           countLabel="Sectores"
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
-          selectAllRows={() => handleSelectAllRows(_sectors)}
-          checked={Object.keys(selectedRows).length === _sectors?.length}
+          selectAllRows={() => handleSelectAllRows(sectorsData)}
+          checked={Object.keys(selectedRows).length === sectorsData?.length}
         />
       }
-      config={sectors_table}
-      content={_sectors}
+      config={configTable}
+      content={sectorsData}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
       p="32px"

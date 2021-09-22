@@ -56,7 +56,7 @@ export const NewUserForm = ({ value, onChange }) => {
       type: "select",
       config: {
         placeholder: "Ingeniero",
-        label: "Selecciona departamementos",
+        label: "Departamento",
         options: departmentsOptions
       }
     }

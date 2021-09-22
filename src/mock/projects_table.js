@@ -1,5 +1,5 @@
 export const MOCK_TABLE_DATA = new Array(30).fill({
-  actions: "",
+  selector: "",
   id: "ID001",
   alias: { label: "US001", link: "ALIAS01R" },
   sector: "Aeroespacial",
@@ -42,7 +42,7 @@ export const MOCK_TABLE_DATA = new Array(30).fill({
 })
 
 export const MOCK_BACK_PROJECTS_DATA = new Array(30).fill({
-  actions: "",
+  selector: "",
   _id: "ABC001",
   alias: "AL-DEV01",
   sector: "AUTOMOCION",

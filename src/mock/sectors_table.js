@@ -1,5 +1,5 @@
 export const MOCK_SECTORS_TABLE = new Array(5).fill({
-  actions: "",
+  selector: "",
   id: "ID001",
   name: "Sector Test",
   projects: [

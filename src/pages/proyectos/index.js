@@ -45,7 +45,6 @@ const proyectos = () => {
   const [deleteType, setDeleteType] = useState(null)
   const [projectToDelete, setProjectsToDelete] = useState(null)
 
-  const isGrouped = fetchState === fetchType.GROUPED
   const isEmptyData = checkDataIsEmpty(data)
   const projectsData = data && !isEmptyData ? data[0].projects : null
 
@@ -91,7 +90,7 @@ const proyectos = () => {
       const updatedProjects = []
       const filteredProjects = projects.filter((system) => system._id !== id)
       updatedProjects.push({
-        testProjects: filteredProjects
+        projects: filteredProjects
       })
       return updatedProjects
     } catch (error) {
@@ -108,7 +107,7 @@ const proyectos = () => {
       const filteredProjects = projects.filter(
         (project) => !projectsId.includes(project._id)
       )
-      updatedProjects.push({ project: filteredProjects })
+      updatedProjects.push({ projects: filteredProjects })
       return filteredProjects
     } catch (error) {
       errorHandler(error)
@@ -189,7 +188,7 @@ const proyectos = () => {
       ) : null}
       {projectsData ? (
         <ProjectsTable
-          isGrouped={isGrouped}
+          fetchState={fetchState}
           projects={projectsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}

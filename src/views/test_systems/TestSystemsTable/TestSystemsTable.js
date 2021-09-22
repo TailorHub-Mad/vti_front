@@ -1,21 +1,13 @@
-import { Checkbox, Text } from "@chakra-ui/react"
 import { useMemo } from "react"
-import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
-import { OptionsMenuRow } from "../../../components/navigation/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
-import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
-import { PATHS } from "../../../utils/constants/paths"
+import { TABLE_COMPONENTS } from "../../../utils/constants/tables"
+import { formatSystem, TABLE_SYSTEMS_HEAD } from "./utils"
 
 export const TestSystemsTable = ({ systems, onDelete, onEdit, onDeleteMany }) => {
-  const {
-    selectedRows,
-    setSelectedRows,
-    handleSelectAllRows,
-    handleRowSelect,
-    calcColWidth
-  } = useTableActions()
+  const { selectedRows, setSelectedRows, handleSelectAllRows, handleRowSelect } =
+    useTableActions()
 
   useMemo(() => {
     setSelectedRows([])
@@ -27,92 +19,29 @@ export const TestSystemsTable = ({ systems, onDelete, onEdit, onDeleteMany }) =>
     return onDelete(systemsId[0])
   }
 
-  const _systems = systems?.map((system) => {
-    return {
-      actions: "",
-      id: system.ref,
-      alias: { label: system.alias, link: `${PATHS.testSystems}/${system._id}` },
-      client: system.clientAlias,
-      code: system.vtiCode,
-      year: system.date?.year,
-      projects: system.projects,
-      notes: system.notes,
-      options: ""
-    }
-  })
-
-  const test_systems_table = {
-    components: {
-      text: <Text />,
-      link: <LinkItem />,
-      count: <Text />,
-      actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
-      notes: <TagGroup variant="testSystem" max={4} />,
-      projects: <TagGroup variant="project" max={3} />,
-      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />
-    },
+  const systemsData = formatSystem(systems)
+  const configTable = {
+    components: TABLE_COMPONENTS,
     head: {
-      actions: {
-        label: "",
-        width: calcColWidth(32),
-        type: "selector"
-      },
-      id: {
-        label: "ID",
-        width: calcColWidth(88),
-        type: "text"
-      },
-      alias: {
-        label: "Alias",
-        width: calcColWidth(88),
-        type: "link"
-      },
-      client: {
-        label: "Cliente",
-        width: calcColWidth(80),
-        type: "text"
-      },
-      code: {
-        label: "Código",
-        width: calcColWidth(75),
-        type: "text"
-      },
-      year: {
-        label: "Año",
-        width: calcColWidth(45),
-        type: "text"
-      },
-      projects: {
-        label: "Proyectos",
-        width: calcColWidth(260),
-        type: "tagGroup"
-      },
-      notes: {
-        label: "Apuntes",
-        width: calcColWidth(350),
-        type: "tagGroup"
-      },
-      options: {
-        label: "",
-        width: calcColWidth(20),
-        type: "component"
-      }
+      ...TABLE_SYSTEMS_HEAD,
+      options: { ...TABLE_SYSTEMS_HEAD.options, onDelete, onEdit }
     }
   }
+
   return (
     <Table
       header={
         <TableHeader
-          count={_systems?.length}
+          count={systemsData?.length}
           countLabel="Sistemas de ensayo"
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
-          selectAllRows={() => handleSelectAllRows(_systems)}
-          checked={Object.keys(selectedRows).length === _systems?.length}
+          selectAllRows={() => handleSelectAllRows(systemsData)}
+          checked={Object.keys(selectedRows).length === systemsData?.length}
         />
       }
-      config={test_systems_table}
-      content={_systems}
+      config={configTable}
+      content={systemsData}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
       tableHeight="calc(100vh - 190px)"

@@ -29,12 +29,14 @@ export const UsersTable = ({ users = [], onDelete, onEdit, onDeleteMany }) => {
 
   const _users = users?.map((user) => {
     return {
-      actions: "",
+      selector: "",
       id: user.ref,
       alias: user.alias,
-      name: { label: user.name, link: `${PATHS.users}/${user._id}` },
-      testSystems: user.testSystems?.map((testSystem) => testSystem.alias),
-      projects: user.projects?.map((project) => project.alias),
+      fullName: { label: user.name, link: `${PATHS.users}/${user._id}` },
+      email: user.email,
+      department: user.department?.name,
+      focusPoint: user.focusPoint,
+      projects: user.projects,
       options: ""
     }
   })
@@ -46,8 +48,8 @@ export const UsersTable = ({ users = [], onDelete, onEdit, onDeleteMany }) => {
       count: <Text />,
       actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
       department: <TagGroup variant="light_blue" max={1} />,
-      projects: <TagGroup variant="pale_yellow" max={7} />,
-      focalPoints: <TagGroup variant="pale_yellow" max={7} />,
+      projects: <TagGroup variant="pale_yellow" max={2} />,
+      focusPoint: <TagGroup variant="pale_yellow" max={2} />,
       options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />
     },
     head: {
@@ -68,32 +70,32 @@ export const UsersTable = ({ users = [], onDelete, onEdit, onDeleteMany }) => {
       },
       fullName: {
         label: "Nombre",
-        width: calcColWidth(80),
+        width: calcColWidth(120),
         type: "link"
       },
       email: {
         label: "Email",
-        width: calcColWidth(80),
+        width: calcColWidth(150),
         type: "text"
       },
       department: {
         label: "Departamento",
         width: calcColWidth(80),
-        type: "tagGroup"
+        type: "tags"
       },
-      focalPoints: {
+      focusPoint: {
         label: "Punto focal proyectos",
         width: calcColWidth(200),
-        type: "tagGroup"
+        type: "tags"
       },
       projects: {
         label: "Proyectos",
         width: calcColWidth(250),
-        type: "tagGroup"
+        type: "tags"
       },
       options: {
         label: "",
-        width: calcColWidth(2),
+        width: calcColWidth(20),
         type: "component"
       }
     }

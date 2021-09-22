@@ -1,6 +1,6 @@
 import { DeleteIcon } from "@chakra-ui/icons"
 import { chakra, Checkbox, Flex, Text } from "@chakra-ui/react"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { fetchType } from "../../../utils/constants/global_config"
 import { ICONS_REFERENCE } from "../../../utils/constants/icons_reference"
 
@@ -25,13 +25,20 @@ export const ProjectsTableHeader = ({
   activeItem = fetchType.ALL,
   selectedRows,
   onDelete,
-  selectAllRows = () => {}
+  selectAllRows = () => {},
+  checked = false
 }) => {
+  const [isChecked, setIsChecked] = useState(checked)
+
+  useEffect(() => {
+    setIsChecked(checked)
+  }, [checked])
+
   return (
     <Flex justify="space-between" align="center" pb="32px">
       <Flex>
         <Flex mr="15px">
-          <Checkbox mr="8px" onChange={selectAllRows} />
+          <Checkbox mr="8px" onChange={selectAllRows} isChecked={isChecked} />
           {Object.keys(selectedRows)?.length > 0 ? (
             <Flex
               alignItems="center"

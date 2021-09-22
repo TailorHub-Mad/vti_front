@@ -83,7 +83,7 @@ export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
       const updatedProjects = []
       const filteredProjects = projects.filter((system) => system._id !== id)
       updatedProjects.push({
-        testProjects: filteredProjects
+        projects: filteredProjects
       })
       return updatedProjects
     } catch (error) {
@@ -100,7 +100,7 @@ export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
       const filteredProjects = projects.filter(
         (project) => !projectsId.includes(project._id)
       )
-      updatedProjects.push({ project: filteredProjects })
+      updatedProjects.push({ projects: filteredProjects })
       return filteredProjects
     } catch (error) {
       errorHandler(error)
