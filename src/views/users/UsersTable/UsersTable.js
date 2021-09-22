@@ -1,21 +1,13 @@
-import { Checkbox, Text } from "@chakra-ui/react"
 import { useMemo } from "react"
-import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
-import { OptionsMenuRow } from "../../../components/navigation/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
-import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
-import { PATHS } from "../../../utils/constants/paths"
+import { TABLE_COMPONENTS } from "../../../utils/constants/tables"
+import { formatUser, TABLE_USERS_HEAD } from "./utils"
 
 export const UsersTable = ({ users = [], onDelete, onEdit, onDeleteMany }) => {
-  const {
-    selectedRows,
-    setSelectedRows,
-    handleRowSelect,
-    handleSelectAllRows,
-    calcColWidth
-  } = useTableActions()
+  const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
+    useTableActions()
 
   useMemo(() => {
     setSelectedRows([])
@@ -27,77 +19,12 @@ export const UsersTable = ({ users = [], onDelete, onEdit, onDeleteMany }) => {
     return onDelete(usersId[0])
   }
 
-  const _users = users?.map((user) => {
-    return {
-      selector: "",
-      id: user.ref,
-      alias: user.alias,
-      fullName: { label: user.name, link: `${PATHS.users}/${user._id}` },
-      email: user.email,
-      department: user.department?.name,
-      focusPoint: user.focusPoint,
-      projects: user.projects,
-      options: ""
-    }
-  })
-
-  const projects_table = {
-    components: {
-      text: <Text />,
-      link: <LinkItem />,
-      count: <Text />,
-      actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
-      department: <TagGroup variant="light_blue" max={1} />,
-      projects: <TagGroup variant="pale_yellow" max={2} />,
-      focusPoint: <TagGroup variant="pale_yellow" max={2} />,
-      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />
-    },
+  const usersData = formatUser(users)
+  const configTable = {
+    components: TABLE_COMPONENTS,
     head: {
-      actions: {
-        label: "",
-        width: calcColWidth(32),
-        type: "selector"
-      },
-      id: {
-        label: "ID",
-        width: calcColWidth(80),
-        type: "text"
-      },
-      alias: {
-        label: "Alias",
-        width: calcColWidth(80),
-        type: "text"
-      },
-      fullName: {
-        label: "Nombre",
-        width: calcColWidth(120),
-        type: "link"
-      },
-      email: {
-        label: "Email",
-        width: calcColWidth(150),
-        type: "text"
-      },
-      department: {
-        label: "Departamento",
-        width: calcColWidth(80),
-        type: "tags"
-      },
-      focusPoint: {
-        label: "Punto focal proyectos",
-        width: calcColWidth(200),
-        type: "tags"
-      },
-      projects: {
-        label: "Proyectos",
-        width: calcColWidth(250),
-        type: "tags"
-      },
-      options: {
-        label: "",
-        width: calcColWidth(20),
-        type: "component"
-      }
+      ...TABLE_USERS_HEAD,
+      options: { ...TABLE_USERS_HEAD.options, onDelete, onEdit }
     }
   }
 
@@ -105,16 +32,16 @@ export const UsersTable = ({ users = [], onDelete, onEdit, onDeleteMany }) => {
     <Table
       header={
         <TableHeader
-          count={_users?.length}
+          count={usersData?.length}
           countLabel="Usuarios"
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
-          selectAllRows={() => handleSelectAllRows(_users)}
-          checked={Object.keys(selectedRows).length === _users?.length}
+          selectAllRows={() => handleSelectAllRows(usersData)}
+          checked={Object.keys(selectedRows).length === usersData?.length}
         />
       }
-      config={projects_table}
-      content={_users}
+      config={configTable}
+      content={usersData}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
       tableHeight={"calc(100vh - 190px)"}
