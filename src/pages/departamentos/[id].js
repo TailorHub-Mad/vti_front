@@ -1,15 +1,13 @@
 import { useRouter } from "next/dist/client/router"
 import { useContext } from "react"
 import { Page } from "../../components/layout/Pages/Page"
-import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
-import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
-import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { departmentFetchHandler } from "../../swr/department.swr"
 import { fetchOption, fetchType } from "../../utils/constants/global_config"
+import { PATHS } from "../../utils/constants/paths"
 import { errorHandler } from "../../utils/errors"
 import { LoadingView } from "../../views/common/LoadingView"
-import { ProjectsTable } from "../../views/projects/ProjectTable/ProjectTable"
+import { ProjectsByObject } from "../../views/projects/ProjectsByObject/ProjectsByObject"
 
 const department = () => {
   const router = useRouter()
@@ -31,13 +29,10 @@ const department = () => {
       {isLoading || !data ? <LoadingView mt="-200px" /> : null}
       {notFound && <>Error. No se ha encontrado el departamento.</>}
       {data && (
-        <>
-          <PageHeader>
-            <BreadCrumbs lastText="Proyectos" />
-            <ToolBar />
-          </PageHeader>
-          <ProjectsTable items={data.projects} />
-        </>
+        <ProjectsByObject
+          projects={data.projects}
+          customURL={`${PATHS.departments}/${data.ref}`}
+        />
       )}
     </Page>
   )

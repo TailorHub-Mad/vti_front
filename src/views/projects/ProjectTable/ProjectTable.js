@@ -11,7 +11,7 @@ import { PATHS } from "../../../utils/constants/paths"
 import { ProjectsTableHeader } from "./ProjectsTableHeader"
 
 export const ProjectsTable = ({
-  items: projects,
+  projects,
   onTabChange,
   onDelete,
   onDeleteMany,
@@ -45,7 +45,7 @@ export const ProjectsTable = ({
 
   const transformProjectData = (project) => ({
     actions: "",
-    id: project._id,
+    id: project.ref,
     alias: { label: project.alias, link: `${PATHS.projects}/${project._id}` },
     sector: project.sector[0]?.title || "---",
     focusPoint: project.focusPoint?.map((fp) => fp.alias).join(", ") || "---",

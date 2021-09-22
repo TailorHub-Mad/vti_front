@@ -30,7 +30,7 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
   const _sectors = sectors?.map((sector) => {
     return {
       actions: "",
-      id: sector._id,
+      id: sector.ref,
       name: { label: sector.title, link: `${PATHS.sectors}/${sector._id}` },
       projects: sector.projects,
       options: ""

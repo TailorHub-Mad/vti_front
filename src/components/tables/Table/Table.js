@@ -72,6 +72,7 @@ export const Table = ({
                     onRowSelect={() => onRowSelect(item._id || item.id)}
                     selectedRows={selectedRows}
                     head={head}
+                    isLastOne={idx === content.length - 1}
                   />
                 )
               })}

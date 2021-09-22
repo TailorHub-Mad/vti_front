@@ -1,15 +1,13 @@
 import { useRouter } from "next/dist/client/router"
 import { useContext } from "react"
 import { Page } from "../../components/layout/Pages/Page"
-import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
-import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
-import { ProjectsTable } from "../../views/projects/ProjectTable/ProjectTable"
-import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { clientFetchHandler } from "../../swr/client.swr"
 import { fetchOption, fetchType } from "../../utils/constants/global_config"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
+import { PATHS } from "../../utils/constants/paths"
+import { ProjectsByObject } from "../../views/projects/ProjectsByObject/ProjectsByObject"
 
 const client = () => {
   const router = useRouter()
@@ -28,13 +26,10 @@ const client = () => {
       {isLoading || !data ? <LoadingView mt="-200px" /> : null}
       {notFound && <>Error. No se ha encontrado el cliente.</>}
       {data && (
-        <>
-          <PageHeader>
-            <BreadCrumbs lastText="Proyectos" />
-            <ToolBar />
-          </PageHeader>
-          <ProjectsTable items={data.projects} />
-        </>
+        <ProjectsByObject
+          projects={data.projects}
+          customURL={`${PATHS.clients}/${data.ref}`}
+        />
       )}
     </Page>
   )

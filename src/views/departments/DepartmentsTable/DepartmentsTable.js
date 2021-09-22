@@ -35,7 +35,7 @@ export const DepartmentsTable = ({
   const _departments = departments?.map((department) => {
     return {
       actions: "",
-      id: department._id,
+      id: department.ref,
       name: {
         label: department.name,
         link: `${PATHS.departments}/${department._id}`

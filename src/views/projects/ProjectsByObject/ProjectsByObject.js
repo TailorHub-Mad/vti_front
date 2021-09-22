@@ -1,38 +1,33 @@
 import { useContext, useState } from "react"
-import useProjectApi from "../../hooks/api/useProjectApi"
-import { ProjectsTable } from "../../views/projects/ProjectTable/ProjectTable"
-import { Popup } from "../../components/overlay/Popup/Popup"
-import { ApiAuthContext } from "../../provider/ApiAuthProvider"
-import { NewProjectModal } from "../../views/projects/NewProject/NewProjectModal/NewProjectModal"
-import { Page } from "../../components/layout/Pages/Page"
-import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
-import { ToastContext } from "../../provider/ToastProvider"
-import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
+import { useSWRConfig } from "swr"
+import { AddProjectIcon } from "../../../components/icons/AddProjectIcon"
+import { PageHeader } from "../../../components/layout/Pages/PageHeader/PageHeader"
+import { BreadCrumbs } from "../../../components/navigation/BreadCrumbs/BreadCrumbs"
+import { ToolBar } from "../../../components/navigation/ToolBar/ToolBar"
+import { ImportFilesModal } from "../../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
+import { Popup } from "../../../components/overlay/Popup/Popup"
+import useProjectApi from "../../../hooks/api/useProjectApi"
+import { ToastContext } from "../../../provider/ToastProvider"
 import {
   DeleteType,
   fetchOption,
   fetchType
-} from "../../utils/constants/global_config"
-import { projectFetchHandler } from "../../swr/project.swr"
-import { ViewEmptyState } from "../../views/common/ViewEmptyState"
-import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
-import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
-import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
-import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
-import { LoadingView } from "../../views/common/LoadingView"
-import { errorHandler } from "../../utils/errors"
+} from "../../../utils/constants/global_config"
+import { SWR_CACHE_KEYS } from "../../../utils/constants/swr"
+import { errorHandler } from "../../../utils/errors"
+import { getFieldObjectById } from "../../../utils/functions/common"
+import { ViewEmptyState } from "../../common/ViewEmptyState"
+import { NewProjectModal } from "../NewProject/NewProjectModal/NewProjectModal"
+import { ProjectsTable } from "../ProjectTable/ProjectTable"
 
-const proyectos = () => {
-  const { isLoggedIn } = useContext(ApiAuthContext)
+export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
   const { deleteProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
 
-  const [fetchState, setFetchState] = useState(fetchType.ALL)
-  const [fetchOptions, setFetchOptions] = useState({})
-  const { data, error, isLoading, mutate } = projectFetchHandler(
-    fetchState,
-    fetchOptions
-  )
+  const { mutate } = useSWRConfig()
+  // TODO review
+  const [, setFetchState] = useState(fetchType.ALL)
+  const [, setFetchOptions] = useState({})
 
   const [showImportModal, setShowImportModal] = useState(false)
 
@@ -43,10 +38,6 @@ const proyectos = () => {
   // Delete state
   const [deleteType, setDeleteType] = useState(null)
   const [projectToDelete, setProjectsToDelete] = useState(null)
-
-  const isGrouped = fetchState === fetchType.GROUPED
-  const isEmptyData = checkDataIsEmpty(data)
-  const projectsData = data ? data[0]?.projects : []
 
   // TODO
   const handleExport = () => {}
@@ -76,7 +67,9 @@ const proyectos = () => {
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(projectToDelete, projectsData)
-    updated.length > 0 ? await mutate(updated, false) : await mutate()
+    updated.length > 0
+      ? await mutate(SWR_CACHE_KEYS.projects, updated, false)
+      : await mutate(SWR_CACHE_KEYS.projects)
     setDeleteType(null)
     setProjectsToDelete(null)
   }
@@ -131,10 +124,10 @@ const proyectos = () => {
     setFetchState(fetchType.FILTERED)
   }
 
-  if (!isLoggedIn) return null
-  if (error) return errorHandler(error)
+  const isEmptyData = projectsData.length === 0
+
   return (
-    <Page>
+    <>
       <Popup
         variant="twoButtons"
         confirmText="Eliminar"
@@ -159,7 +152,7 @@ const proyectos = () => {
       />
 
       <PageHeader>
-        <BreadCrumbs />
+        <BreadCrumbs customURL={customURL} lastElement="Proyectos" />
         {projectsData ? (
           <ToolBar
             onAdd={() => setIsProjectModalOpen(true)}
@@ -174,7 +167,6 @@ const proyectos = () => {
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData ? (
         <ViewEmptyState
           message="Añadir proyectos a la plataforma"
@@ -183,19 +175,15 @@ const proyectos = () => {
           onImport={() => setShowImportModal(true)}
           onAdd={() => setIsProjectModalOpen(true)}
         />
-      ) : null}
-      {projectsData ? (
+      ) : (
         <ProjectsTable
-          isGrouped={isGrouped}
           projects={projectsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
           onEdit={onEdit}
           onTabChange={(state) => setFetchState(state)}
         />
-      ) : null}
-    </Page>
+      )}
+    </>
   )
 }
-
-export default proyectos

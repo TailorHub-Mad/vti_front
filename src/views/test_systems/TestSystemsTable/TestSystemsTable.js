@@ -30,8 +30,8 @@ export const TestSystemsTable = ({ systems, onDelete, onEdit, onDeleteMany }) =>
   const _systems = systems?.map((system) => {
     return {
       actions: "",
-      id: system._id,
-      alias: { label: system.alias, link: `${PATHS.testSystems}/${system.id}` },
+      id: system.ref,
+      alias: { label: system.alias, link: `${PATHS.testSystems}/${system._id}` },
       client: system.clientAlias,
       code: system.vtiCode,
       year: system.date?.year,

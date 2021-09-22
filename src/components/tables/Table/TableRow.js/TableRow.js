@@ -9,6 +9,7 @@ export const TableRow = ({
   onRowSelect,
   selectedRows,
   head,
+  isLastOne,
   ...props
 }) => {
   const { isFinished } = item?.config || {}
@@ -17,7 +18,7 @@ export const TableRow = ({
   return (
     <Grid
       templateColumns={templateColumns}
-      borderBottom="1px"
+      borderBottom={isLastOne ? "none" : "1px"}
       borderColor="grey"
       height="fit-content"
       width="100%"
