@@ -12,6 +12,7 @@ import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomMo
 import useProjectApi from "../../../../hooks/api/useProjectApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
+import { errorHandler } from "../../../../utils/errors"
 import { NewProjectForm } from "../NewProjectForm/NewProjectForm"
 
 const initialValues = {
@@ -71,8 +72,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
 
       await createProject(projectToCreate)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -91,8 +91,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
 
       await updateProject(_id, data)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 

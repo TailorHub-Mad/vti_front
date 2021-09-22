@@ -4,10 +4,11 @@ import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
-import { Spinner } from "../../components/spinner/Spinner"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { departmentFetchHandler } from "../../swr/department.swr"
 import { fetchOption, fetchType } from "../../utils/constants/global_config"
+import { errorHandler } from "../../utils/errors"
+import { LoadingView } from "../../views/common/LoadingView"
 import { ProjectsTable } from "../../views/projects/ProjectTable/ProjectTable"
 
 const department = () => {
@@ -23,11 +24,11 @@ const department = () => {
 
   const notFound = !isValidating && !data
 
-  if (error) return <>ERROR...</>
-  if (!isLoggedIn) return <>Loading...</>
+  if (!isLoggedIn) return null
+  if (error) return errorHandler(error)
   return (
     <Page>
-      {isLoading || !data ? <Spinner /> : null}
+      {isLoading || !data ? <LoadingView mt="-200px" /> : null}
       {notFound && <>Error. No se ha encontrado el departamento.</>}
       {data && (
         <>

@@ -2,10 +2,11 @@ import { useRouter } from "next/dist/note/router"
 import { useContext } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
-import { Spinner } from "../../components/spinner/Spinner"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { noteFetchHandler } from "../../swr/note.swr"
 import { fetchOption, fetchType } from "../../utils/constants/global_config"
+import { errorHandler } from "../../utils/errors"
+import { LoadingView } from "../../views/common/LoadingView"
 
 const apunte = () => {
   const router = useRouter()
@@ -17,11 +18,11 @@ const apunte = () => {
 
   const notFound = !isValidating && !data
 
-  if (error) return <>ERROR...</>
-  if (!isLoggedIn) return <>Loading...</>
+  if (!isLoggedIn) return null
+  if (error) return errorHandler(error)
   return (
     <Page>
-      {isLoading || !data ? <Spinner /> : null}
+      {isLoading || !data ? <LoadingView mt="-200px" /> : null}
       {notFound && <>Error. No se ha encontrado el apunte.</>}
       {data && (
         <>

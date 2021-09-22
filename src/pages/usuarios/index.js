@@ -4,7 +4,6 @@ import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { Popup } from "../../components/overlay/Popup/Popup"
-import { Spinner } from "../../components/spinner/Spinner"
 import useUserApi from "../../hooks/api/useUserApi"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { ToastContext } from "../../provider/ToastProvider"
@@ -20,6 +19,8 @@ import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { UsersLineIcon } from "../../components/icons/UsersLineIcon"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import { userFetchHandler } from "../../swr/user.swr"
+import { LoadingView } from "../../views/common/LoadingView"
+import { errorHandler } from "../../utils/errors"
 
 const usuarios = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -86,8 +87,7 @@ const usuarios = () => {
       showToast("Usuario borrado correctamente")
       return users.filter((user) => user._id !== id)
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -98,8 +98,7 @@ const usuarios = () => {
       showToast("Usuarios borrados correctamente")
       return users.filter((user) => !usersId.includes(user._id))
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -116,10 +115,9 @@ const usuarios = () => {
     })
   }
 
-  if (error) return <>ERROR...</>
-  return !isLoggedIn ? (
-    <>Loading...</>
-  ) : (
+  if (!isLoggedIn) return null
+  if (error) return errorHandler(error)
+  return (
     <Page>
       <Popup
         variant="twoButtons"
@@ -160,7 +158,7 @@ const usuarios = () => {
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <Spinner /> : null}
+      {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData ? (
         <ViewEmptyState
           message="Añadir usuarios a la plataforma"

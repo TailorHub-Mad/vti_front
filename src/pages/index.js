@@ -2,6 +2,7 @@ import { useRouter } from "next/dist/client/router"
 import { useContext, useEffect } from "react"
 import { ApiAuthContext } from "../provider/ApiAuthProvider"
 import { PATHS } from "../utils/constants/paths"
+import { LoadingView } from "../views/common/LoadingView"
 
 const Index = () => {
   const router = useRouter()
@@ -12,7 +13,7 @@ const Index = () => {
     router.push(PATHS.notes)
   }, [isLoggedIn])
 
-  return <>Loading...</>
+  return <LoadingView />
 }
 
 export default Index

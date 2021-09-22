@@ -6,7 +6,6 @@ import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { NewProjectModal } from "../../views/projects/NewProject/NewProjectModal/NewProjectModal"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
-import { Spinner } from "../../components/spinner/Spinner"
 import { ToastContext } from "../../provider/ToastProvider"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import {
@@ -20,6 +19,8 @@ import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
+import { LoadingView } from "../../views/common/LoadingView"
+import { errorHandler } from "../../utils/errors"
 
 const proyectos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -91,8 +92,7 @@ const proyectos = () => {
       })
       return updatedProjects
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -108,8 +108,7 @@ const proyectos = () => {
       updatedProjects.push({ project: filteredProjects })
       return filteredProjects
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -132,10 +131,9 @@ const proyectos = () => {
     setFetchState(fetchType.FILTERED)
   }
 
-  if (error) return <>ERROR...</>
-  return !isLoggedIn ? (
-    <>Loading...</>
-  ) : (
+  if (!isLoggedIn) return null
+  if (error) return errorHandler(error)
+  return (
     <Page>
       <Popup
         variant="twoButtons"
@@ -176,7 +174,7 @@ const proyectos = () => {
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <Spinner /> : null}
+      {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData ? (
         <ViewEmptyState
           message="Añadir proyectos a la plataforma"

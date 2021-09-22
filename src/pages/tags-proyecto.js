@@ -6,8 +6,8 @@ import { Page } from "../components/layout/Pages/Page"
 import { PageBody } from "../components/layout/Pages/PageBody/PageBody"
 import { PageHeader } from "../components/layout/Pages/PageHeader/PageHeader"
 import { ToolBar } from "../components/navigation/ToolBar/ToolBar"
-import { Spinner } from "../components/spinner/Spinner"
 import { PROJECT_TAGS_MOCK } from "../mock/tags"
+import { LoadingView } from "../views/common/LoadingView"
 import { ProjectsTagsHeader } from "../views/project_tags/ProjectTagsHeader/ProjectTagsHeader"
 
 const tagsProyecto = () => {
@@ -27,7 +27,7 @@ const tagsProyecto = () => {
       <PageHeader title="Tags de Proyecto">
         {areNotes && !isFetching ? <ToolBar /> : null}
       </PageHeader>
-      {isFetching ? <Spinner /> : null}
+      {isFetching ? <LoadingView mt="-200px" /> : null}
       {/* {!areNotes ? <NotesEmptyState /> : null} */}
       <PageBody
         p="32px"

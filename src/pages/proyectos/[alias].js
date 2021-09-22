@@ -1,17 +1,17 @@
 import { Page } from "../../components/layout/Pages/Page"
 import { ProjectInfoBar } from "../../views/notes/Project/ProjectInfoBar/ProjectInfoBar"
-import faker from "faker"
 import { useContext, useState } from "react"
 import { NoteDrawer } from "../../components/drawer/NoteDrawer/NoteDrawer"
 import { ProjectDetails } from "../../views/notes/Project/ProjectDetails/ProjectDetails"
 import { ProjectNotes } from "../../views/notes/Project/ProjectNotes/ProjectNotes"
 import { ProjectHeader } from "../../views/notes/Project/ProjectHeader/ProjectHeader"
-import { Spinner, Box } from "@chakra-ui/react"
+import { Box } from "@chakra-ui/react"
 import { useRouter } from "next/dist/client/router"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { projectFetchHandler } from "../../swr/project.swr"
 import { fetchOption, fetchType } from "../../utils/constants/global_config"
-faker.locale = "es"
+import { LoadingView } from "../../views/common/LoadingView"
+import { errorHandler } from "../../utils/errors"
 
 const project = () => {
   const router = useRouter()
@@ -28,11 +28,11 @@ const project = () => {
 
   const notFound = !isValidating && !data
 
-  if (error) return <>ERROR...</>
-  if (!isLoggedIn) return <>Loading...</>
+  if (!isLoggedIn) return null
+  if (error) return errorHandler(error)
   return (
     <Page>
-      {isLoading || !data ? <Spinner /> : null}
+      {isLoading || !data ? <LoadingView mt="-200px" /> : null}
       {notFound && <>Error. No se ha encontrado el sector.</>}
       {data && (
         <>

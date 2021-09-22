@@ -6,7 +6,7 @@ import { PATHS } from "../utils/constants/paths"
 
 const useFetchSWR = (key, fetcher, refreshInterval) => {
   const router = useRouter()
-  const { setIsLoggedIn } = useContext(ApiAuthContext)
+  const authContext = useContext(ApiAuthContext)
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -31,7 +31,7 @@ const useFetchSWR = (key, fetcher, refreshInterval) => {
 
   useEffect(() => {
     if (!isUnauthorize) return
-    setIsLoggedIn(false)
+    authContext && authContext.setIsLoggedIn(false)
     router.push(PATHS.login)
   }, [isUnauthorize])
 

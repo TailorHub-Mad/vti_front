@@ -4,7 +4,6 @@ import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { Popup } from "../../components/overlay/Popup/Popup"
-import { Spinner } from "../../components/spinner/Spinner"
 import useClientApi from "../../hooks/api/useClientApi"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { ToastContext } from "../../provider/ToastProvider"
@@ -20,6 +19,8 @@ import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { AddClientIcon } from "../../components/icons/AddClientIcon"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import { clientFetchHandler } from "../../swr/client.swr"
+import { LoadingView } from "../../views/common/LoadingView"
+import { errorHandler } from "../../utils/errors"
 
 const clientes = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -86,8 +87,7 @@ const clientes = () => {
       showToast("Cliente borrado correctamente")
       return clients.filter((client) => client._id !== id)
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -98,8 +98,7 @@ const clientes = () => {
       showToast("Clientes borrados correctamente")
       return clients.filter((client) => !clientsId.includes(client._id))
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -116,10 +115,9 @@ const clientes = () => {
     })
   }
 
-  if (error) return <>ERROR...</>
-  return !isLoggedIn ? (
-    <>Loading...</>
-  ) : (
+  if (!isLoggedIn) return null
+  if (error) return errorHandler(error)
+  return (
     <Page>
       <Popup
         variant="twoButtons"
@@ -160,7 +158,7 @@ const clientes = () => {
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <Spinner /> : null}
+      {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData ? (
         <ViewEmptyState
           message="Añadir clientes a la plataforma"

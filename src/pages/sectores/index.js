@@ -2,7 +2,6 @@ import { useContext, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { Popup } from "../../components/overlay/Popup/Popup"
-import { Spinner } from "../../components/spinner/Spinner"
 import { ToastContext } from "../../provider/ToastProvider"
 import { SectorsTable } from "../../views/sectors/SectorsTable/SectorsTable"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
@@ -20,6 +19,8 @@ import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import { AddSectorIcon } from "../../components/icons/AddSectorIcon"
 import { sectorFetchHandler } from "../../swr/sector.swr"
+import { LoadingView } from "../../views/common/LoadingView"
+import { errorHandler } from "../../utils/errors"
 
 const sectores = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -86,8 +87,7 @@ const sectores = () => {
       showToast("Sector borrado correctamente")
       return sectors.filter((sector) => sector._id !== id)
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -98,8 +98,7 @@ const sectores = () => {
       showToast("Clientes borrados correctamente")
       return sectors.filter((sector) => !sectorsId.includes(sector._id))
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -116,10 +115,9 @@ const sectores = () => {
     })
   }
 
-  if (error) return <>ERROR...</>
-  return !isLoggedIn ? (
-    <>Loading...</>
-  ) : (
+  if (!isLoggedIn) return null
+  if (error) return errorHandler(error)
+  return (
     <Page>
       <Popup
         variant="twoButtons"
@@ -158,7 +156,7 @@ const sectores = () => {
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <Spinner /> : null}
+      {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData ? (
         <ViewEmptyState
           message="Añadir sectores a la plataforma"

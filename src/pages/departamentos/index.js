@@ -2,7 +2,6 @@ import { useContext, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { Popup } from "../../components/overlay/Popup/Popup"
-import { Spinner } from "../../components/spinner/Spinner"
 import { ToastContext } from "../../provider/ToastProvider"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { DepartmentsTable } from "../../views/departments/DepartmentsTable/DepartmentsTable"
@@ -20,6 +19,8 @@ import { AddDepartmentIcon } from "../../components/icons/AddDepartmentIcon"
 import { departmentFetchHandler } from "../../swr/department.swr"
 import { checkDataIsEmpty } from "../../utils/functions/common"
 import useDepartmentApi from "../../hooks/api/useDepartmentApi"
+import { LoadingView } from "../../views/common/LoadingView"
+import { errorHandler } from "../../utils/errors"
 
 const departamentos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -46,8 +47,6 @@ const departamentos = () => {
 
   const isEmptyData = checkDataIsEmpty(data)
   const departmentsData = data && !isEmptyData ? data : null
-
-  console.log(departmentsData)
 
   // TODO
   const handleExport = () => {}
@@ -86,8 +85,7 @@ const departamentos = () => {
       showToast("Departamento borrado correctamente")
       return departments.filter((department) => department._id !== id)
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -100,8 +98,7 @@ const departamentos = () => {
         (department) => !departmentsId.includes(department._id)
       )
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -118,10 +115,9 @@ const departamentos = () => {
     })
   }
 
-  if (error) return <>ERROR...</>
-  return !isLoggedIn ? (
-    <>Loading...</>
-  ) : (
+  if (!isLoggedIn) return null
+  if (error) return errorHandler(error)
+  return (
     <Page>
       <Popup
         variant="twoButtons"
@@ -162,7 +158,7 @@ const departamentos = () => {
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <Spinner /> : null}
+      {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData ? (
         <ViewEmptyState
           message="Añadir departamentos a la plataforma"

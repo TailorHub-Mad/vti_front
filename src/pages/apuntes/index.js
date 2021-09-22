@@ -12,13 +12,14 @@ import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { Popup } from "../../components/overlay/Popup/Popup"
-import { Spinner } from "../../components/spinner/Spinner"
 import useNoteApi from "../../hooks/api/useNoteApi"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { ToastContext } from "../../provider/ToastProvider"
 import { noteFetchHandler } from "../../swr/note.swr"
 import { fetchOption, fetchType } from "../../utils/constants/global_config"
+import { errorHandler } from "../../utils/errors"
 import { checkDataIsEmpty } from "../../utils/functions/common"
+import { LoadingView } from "../../views/common/LoadingView"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { NewNoteModal } from "../../views/notes/NewNote/NewNoteModal/NewNoteModal"
 import { NotesMenu } from "../../views/notes/NotesMenu/NotesMenu"
@@ -87,10 +88,9 @@ const apuntes = () => {
       [fetchOption.SEARCH]: search
     })
 
-  if (error) return <>ERROR...</>
-  return !isLoggedIn ? (
-    <>Loading...</>
-  ) : (
+  if (!isLoggedIn) return null
+  if (error) return errorHandler(error)
+  return (
     <Page>
       <Popup
         variant="twoButtons"
@@ -146,7 +146,7 @@ const apuntes = () => {
         ) : null}
       </PageMenu>
       <PageBody height="calc(100vh - 140px)">
-        {isLoading ? <Spinner /> : null}
+        {isLoading ? <LoadingView mt="-200px" /> : null}
         {isEmptyData ? (
           <ViewEmptyState
             message="Añadir apuntes a la plataforma"

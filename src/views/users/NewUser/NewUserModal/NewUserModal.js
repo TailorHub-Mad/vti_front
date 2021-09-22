@@ -6,6 +6,7 @@ import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomMo
 import useUserApi from "../../../../hooks/api/useUserApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
+import { errorHandler } from "../../../../utils/errors"
 import { NewUserForm } from "../NewUserForm/NewUserForm"
 
 export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
@@ -57,8 +58,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
       const usersToCreate = [...values]
       await createUser(usersToCreate)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -68,8 +68,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
       const [data] = [...values]
       await updateUser(_id, data)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 

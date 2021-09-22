@@ -1,7 +1,6 @@
 import { useContext, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
-import { Spinner } from "../../components/spinner/Spinner"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { TestSystemsTable } from "../../views/test_systems/TestSystemsTable/TestSystemsTable"
 import useSystemApi from "../../hooks/api/useSystemApi"
@@ -20,6 +19,8 @@ import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddTestSystemIcon } from "../../components/icons/AddTestSystemIcon"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import { systemFetchHandler } from "../../swr/systems.swr"
+import { LoadingView } from "../../views/common/LoadingView"
+import { errorHandler } from "../../utils/errors"
 
 const sistemas = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -93,8 +94,7 @@ const sistemas = () => {
       })
       return updatedSystems
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -110,8 +110,7 @@ const sistemas = () => {
       updatedSystems.push({ testSystems: filteredSystems })
       return filteredSystems
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -128,10 +127,9 @@ const sistemas = () => {
     })
   }
 
-  if (error) return <>ERROR...</>
-  return !isLoggedIn ? (
-    <>Loading...</>
-  ) : (
+  if (!isLoggedIn) return null
+  if (error) return errorHandler(error)
+  return (
     <Page>
       <Popup
         variant="twoButtons"
@@ -169,7 +167,7 @@ const sistemas = () => {
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <Spinner /> : null}
+      {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData ? (
         <ViewEmptyState
           message="Añadir sistemas a la plataforma"

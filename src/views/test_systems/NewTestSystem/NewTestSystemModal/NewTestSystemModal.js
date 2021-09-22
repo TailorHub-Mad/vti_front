@@ -6,6 +6,7 @@ import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomMo
 import useSystemApi from "../../../../hooks/api/useSystemApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
+import { errorHandler } from "../../../../utils/errors"
 import { NewTestSystemForm } from "../NewTestSystemForm/NewTestSystemForm"
 
 export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
@@ -80,8 +81,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
       const systemsQueue = systemsToCreate.map((system) => createSystem(system))
       await Promise.all(systemsQueue)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -91,8 +91,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
       const [data] = formatUpdateSystems(values)
       await updateSystem(_id, data)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 

@@ -6,6 +6,7 @@ import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomMo
 import useDepartmentApi from "../../../../hooks/api/useDepartmentApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
+import { errorHandler } from "../../../../utils/errors"
 import { NewDepartmentForm } from "../NewDepartmentForm/NewDepartmentForm"
 
 export const NewDepartmentModal = ({
@@ -60,8 +61,7 @@ export const NewDepartmentModal = ({
       const departmentsToCreate = [...values]
       await createDepartment(departmentsToCreate)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -71,8 +71,7 @@ export const NewDepartmentModal = ({
       const [data] = [...values]
       await updateDepartment(_id, data)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
