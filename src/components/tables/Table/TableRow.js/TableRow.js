@@ -94,8 +94,6 @@ export const TableRow = ({
           })
         }
 
-        console.log("ESTA NO TIENE GRUPO", head[name]?.type)
-
         // DEFAULT
         if (head[name]?.type !== undefined) {
           return React.cloneElement(components[head[name]?.type], {

@@ -1,19 +1,26 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { InputSelect } from "../../../../components/forms/InputSelect/InputSelect"
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
 import useClientApi from "../../../../hooks/api/useClientApi"
-import useFetchSWR from "../../../../hooks/useFetchSWR"
-import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 
 export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
   const { getClients } = useClientApi()
-  // TODO -> manage errors & loading state
-  const { data } = useFetchSWR(SWR_CACHE_KEYS.clients, getClients)
+
+  const [clientOptions, setClientOptions] = useState([])
+
+  const isObject = typeof value.clientAlias === "object"
+
+  const formatValues = !objectToUpdate
+    ? { ...value }
+    : {
+        ...value,
+        clientAlias: isObject
+          ? value.clientAlias
+          : { label: value.clientAlias, value: "" }
+      }
 
   const formatClients = (_clients) =>
     _clients.map((cl) => ({ label: cl.alias, value: cl._id }))
-
-  const clientsOptions = data ? formatClients(data) : []
 
   const handleFormChange = (input, _value) => {
     onChange({
@@ -27,7 +34,7 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
       type: "text",
       config: {
         placeholder: "Cod",
-        label: "Cod VTI*",
+        label: "Cod VTI",
         disabled: Boolean(objectToUpdate)
       }
     },
@@ -35,23 +42,23 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
       type: "select",
       config: {
         placeholder: "AliasCL",
-        label: "Cliente*",
-        options: clientsOptions,
-        disabled: Boolean(objectToUpdate)
+        label: "Cliente",
+        disabled: Boolean(objectToUpdate),
+        options: clientOptions
       }
     },
     alias: {
       type: "text",
       config: {
         placeholder: "Alias",
-        label: "Alias*"
+        label: "Alias"
       }
     },
     year: {
       type: "text",
       config: {
         placeholder: new Date().getFullYear(),
-        label: "Año*"
+        label: "Año"
       }
     }
   }
@@ -61,20 +68,29 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
     select: <InputSelect />
   }
 
-  // useEffect(() => {
-  //   if (objectToUpdate && clientsOptions?.length > 0) {
-  //     const [cl] = clientsOptions.filter(
-  //       (_client) => _client.label === objectToUpdate?.clientAlias
-  //     )
-  //     handleFormChange("client", cl.value)
-  //   }
-  // }, [clientsOptions])
+  useEffect(() => {
+    const _getClients = async () => {
+      const clients = await getClients()
+      setClientOptions(formatClients(clients))
+    }
+    _getClients()
+  }, [])
+
+  useEffect(() => {
+    if (!objectToUpdate || clientOptions.length === 0) return
+
+    const client = clientOptions.find(
+      (_client) => _client.label === objectToUpdate?.clientAlias
+    )
+
+    handleFormChange("clientAlias", client)
+  }, [objectToUpdate, clientOptions])
 
   return (
     <>
       {Object.entries(formInputs).map(([name, { type, config }], index) => {
         return React.cloneElement(inputRefObj[type], {
-          value: value[name],
+          value: formatValues[name],
           onChange: (val) => handleFormChange(name, val),
           marginBottom: name === "name" ? "0" : "24px",
           isDisabled:

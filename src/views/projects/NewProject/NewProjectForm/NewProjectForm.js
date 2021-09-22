@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { AddSelect } from "../../../../components/forms/AddSelect/AddSelect"
 import { InputSelect } from "../../../../components/forms/InputSelect/InputSelect"
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
@@ -6,8 +6,6 @@ import useClientApi from "../../../../hooks/api/useClientApi"
 import useSectorApi from "../../../../hooks/api/useSectorApi"
 import useUserApi from "../../../../hooks/api/useUserApi"
 import useSystemApi from "../../../../hooks/api/useSystemApi"
-import useFetchSWR from "../../../../hooks/useFetchSWR"
-import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 
 export const NewProjectForm = ({
   // openAuxModal,
@@ -20,11 +18,31 @@ export const NewProjectForm = ({
   const { getUsers } = useUserApi()
   const { getSystems } = useSystemApi()
 
-  // TODO -> manage errors & loading state
-  const { data: clients } = useFetchSWR(SWR_CACHE_KEYS.clients, getClients)
-  const { data: sectors } = useFetchSWR(SWR_CACHE_KEYS.sectors, getSectors)
-  const { data: users } = useFetchSWR(SWR_CACHE_KEYS.users, getUsers)
-  const { data: systems } = useFetchSWR(SWR_CACHE_KEYS.systems, getSystems)
+  const [clientOptions, setClientOptions] = useState([])
+  const [sectorOptions, setSectorOptions] = useState([])
+  const [userOptions, setUserOptions] = useState([])
+  const [systemOptions, setSystemOptions] = useState([])
+
+  const isClientObject = typeof value.client === "object"
+  const isSectorObject = typeof value.sector === "object"
+  const isUserObject = typeof value.user === "object"
+  const isSystemObject = typeof value.testSystems === "object"
+
+  let formatValues = { ...value }
+
+  if (projectToUpdate) {
+    formatValues = {
+      ...value,
+      client: isClientObject ? value.client : { label: value.client, value: "" },
+      sector: isSectorObject ? value.sector : { label: value.sector, value: "" },
+      user: isUserObject ? value.user : { label: value.user, value: "" },
+      testSystems: isSystemObject
+        ? value.testSystems
+        : { label: value.testSystems, value: "" }
+    }
+  }
+
+  console.log("formatValues", formatValues)
 
   const formatClients = (_clients) =>
     _clients.map((client) => ({ label: client.alias, value: client._id }))
@@ -38,11 +56,6 @@ export const NewProjectForm = ({
   const formatSystems = (_systems) => {
     return _systems.map((system) => ({ label: system.alias, value: system._id }))
   }
-
-  const clientsOptions = clients ? formatClients(clients) : []
-  const sectorsOptions = sectors ? formatSectors(sectors) : []
-  const usersOptions = users ? formatUsers(users) : []
-  const systemsOptions = systems ? formatSystems(systems[0].testSystems) : []
 
   const handleFormChange = (input, _value) => {
     onChange({
@@ -63,7 +76,7 @@ export const NewProjectForm = ({
       type: "select",
       config: {
         placeholder: "Cliente",
-        options: clientsOptions,
+        options: clientOptions,
         label: "Cliente",
         disabled: Boolean(projectToUpdate)
       }
@@ -72,7 +85,7 @@ export const NewProjectForm = ({
       type: "select",
       config: {
         placeholder: "Sector",
-        options: sectorsOptions,
+        options: sectorOptions,
         label: "Sector"
       }
     },
@@ -89,7 +102,7 @@ export const NewProjectForm = ({
       type: "select",
       config: {
         placeholder: "Punto focal inicio",
-        options: usersOptions,
+        options: userOptions,
         label: "Punto focal inicio",
         disabled: Boolean(projectToUpdate)
       }
@@ -98,7 +111,7 @@ export const NewProjectForm = ({
       type: "add_select",
       config: {
         placeholder: "Sistemas de ensayo",
-        options: systemsOptions,
+        options: systemOptions,
         label: "Sistemas de ensayo",
         additemlabel: "Añadir ",
         removeitemlabel: "Eliminar "
@@ -119,27 +132,70 @@ export const NewProjectForm = ({
     // }
   }
 
-  // useEffect(() => {
-  //   if (!projectToUpdate) return
-  //   const client = clientsOptions?.find(
-  //     (_client) => _client.label === projectToUpdate?.clientAlias
-  //   )
-  //   if (client) handleFormChange("client", client.value)
-  // }, [])
+  useEffect(() => {
+    const _getClients = async () => {
+      const clients = await getClients()
+      setClientOptions(formatClients(clients))
+    }
+    const _getSectors = async () => {
+      const clients = await getSectors()
+      setSectorOptions(formatSectors(clients))
+    }
+    const _getUsers = async () => {
+      const clients = await getUsers()
+      setUserOptions(formatUsers(clients))
+    }
+    const _getSystems = async () => {
+      const clients = await getSystems()
+      setSystemOptions(formatSystems(clients))
+    }
+    _getClients()
+    _getSectors()
+    _getUsers()
+    _getSystems()
+  }, [])
 
-  // useEffect(() => {
-  //   if (!projectToUpdate) return
-  //   const sector = sectorsOptions?.find(
-  //     (_sector) => _sector.label === projectToUpdate?.sector
-  //   )
-  //   if (sector) handleFormChange("sector", sector.value)
-  // }, [])
+  // Clients
+  useEffect(() => {
+    if (!projectToUpdate || clientOptions.length === 0) return
 
-  // useEffect(() => {
-  //   if (!projectToUpdate) return
-  //   const user = usersOptions?.find((_user) => _user.label === projectToUpdate?.user)
-  //   if (user) handleFormChange("focusPoint", user.value)
-  // }, [])
+    const client = clientOptions.find(
+      (_client) => _client.label === projectToUpdate?.client
+    )
+
+    handleFormChange("client", client)
+  }, [projectToUpdate, clientOptions])
+
+  // Sectors
+  useEffect(() => {
+    if (!projectToUpdate || sectorOptions.length === 0) return
+
+    const sector = sectorOptions.find(
+      (_sector) => _sector.label === projectToUpdate?.sector
+    )
+
+    handleFormChange("sector", sector)
+  }, [projectToUpdate, sectorOptions])
+
+  // Users
+  useEffect(() => {
+    if (!projectToUpdate || userOptions.length === 0) return
+
+    const user = userOptions.find((_user) => _user.label === projectToUpdate?.user)
+
+    handleFormChange("user", user)
+  }, [projectToUpdate, userOptions])
+
+  // Systems
+  useEffect(() => {
+    if (!projectToUpdate || systemOptions.length === 0) return
+
+    const system = systemOptions.find(
+      (_system) => _system.label === projectToUpdate?.testSystems
+    )
+
+    handleFormChange("testSystems", system)
+  }, [projectToUpdate, systemOptions])
 
   const inputRefObj = {
     input: <SimpleInput />,
@@ -151,7 +207,7 @@ export const NewProjectForm = ({
     <>
       {Object.entries(formInputs).map(([name, { type, config }], index) => {
         return React.cloneElement(inputRefObj[type], {
-          value: value[name],
+          value: formatValues[name],
           onChange: (val) => handleFormChange(name, val),
           marginBottom: "24px",
           isDisabled:

@@ -22,7 +22,7 @@ export const NewSectorForm = ({ value, onChange }) => {
       type: "text",
       config: {
         placeholder: "Nombre",
-        label: "Nombre*"
+        label: "Nombre"
       }
     }
   }
