@@ -58,6 +58,8 @@ export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
   }
 
   const handleDeleteMessage = () => {
+    if (!projectToDelete) return
+
     if (deleteType === DeleteType.MANY)
       return "¿Desea eliminar los proyectos seleccionados?"
     const label = getFieldObjectById(projectsData, "alias", projectToDelete)

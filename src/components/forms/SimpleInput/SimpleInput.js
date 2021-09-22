@@ -10,6 +10,7 @@ export const SimpleInput = ({
   helper,
   onHelperClick,
   isDisabled = false,
+  type = "text",
   ...props
 }) => {
   return (
@@ -24,6 +25,7 @@ export const SimpleInput = ({
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
         value={value}
+        type={type}
       />
     </FormController>
   )

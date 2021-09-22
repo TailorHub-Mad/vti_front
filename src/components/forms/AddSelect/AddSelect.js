@@ -5,28 +5,30 @@ import { FormController } from "../FormItemWrapper/FormController"
 import { InputSelect } from "../InputSelect/InputSelect"
 
 export const AddSelect = ({
-  values = [undefined],
+  values = [{ label: "", value: "" }],
   options = [],
   onChange = () => {},
   label,
   placeholder,
   additemlabel,
   deleteItemLabel,
+  isDisabled,
   ...props
 }) => {
   const [inputValues, setInputValues] = useState(values)
   const [availableOptions, setAvailableOptions] = useState([])
 
   const handleChange = (option, idx) => {
-    const selected = options?.find(({ value }) => value == option.value)
-
     const newInputValues = [...inputValues]
+    newInputValues[idx] = option
 
-    newInputValues[idx] = selected
     setInputValues(newInputValues)
-
     onChange(newInputValues)
   }
+
+  useEffect(() => {
+    setAvailableOptions(options)
+  }, [options])
 
   useEffect(() => {
     const valuesSelected = inputValues.map((inputValue) => inputValue?.value)
@@ -102,10 +104,11 @@ export const AddSelect = ({
           return (
             <Box key={`${value}-${idx}`} marginBottom="16px">
               <InputSelect
-                value={value?.label}
+                value={value}
                 onChange={(selected) => handleChange(selected, idx)}
                 placeholder={placeholder}
                 options={availableOptions}
+                isDisabled={isDisabled}
               />
               <>
                 {renderDeleteItem(idx)}

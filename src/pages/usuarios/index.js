@@ -67,6 +67,8 @@ const usuarios = () => {
   }
 
   const handleDeleteMessage = () => {
+    if (!usersToDelete) return
+
     if (deleteType === DeleteType.MANY)
       return "¿Desea eliminar los usuarios seleccionados?"
     const label = getFieldObjectById(usersData, "alias", usersToDelete)

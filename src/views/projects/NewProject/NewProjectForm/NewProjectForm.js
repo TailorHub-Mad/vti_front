@@ -7,11 +7,11 @@ import useSectorApi from "../../../../hooks/api/useSectorApi"
 import useUserApi from "../../../../hooks/api/useUserApi"
 import useSystemApi from "../../../../hooks/api/useSystemApi"
 import useFetchSWR from "../../../../hooks/useFetchSWR"
-import { MOCK_SELECT_OPTIONS, MOCK_YEAR_OPTIONS } from "../../../../mock/mock"
+import { MOCK_YEAR_OPTIONS } from "../../../../mock/mock"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 
 export const NewProjectForm = ({
-  openAuxModal,
+  // openAuxModal,
   value,
   onChange,
   projectToUpdate
@@ -36,8 +36,9 @@ export const NewProjectForm = ({
   const formatUsers = (_users) =>
     _users.map((user) => ({ label: user.alias, value: user._id }))
 
-  const formatSystems = (_systems) =>
-    _systems.map((system) => ({ label: system.alias, value: system._id }))
+  const formatSystems = (_systems) => {
+    return _systems.map((system) => ({ label: system.alias, value: system._id }))
+  }
 
   const clientsOptions = clients ? formatClients(clients) : []
   const sectorsOptions = sectors ? formatSectors(sectors) : []
@@ -84,12 +85,13 @@ export const NewProjectForm = ({
         label: "Sector"
       }
     },
-    year: {
-      type: "select",
+    date: {
+      type: "input",
       config: {
-        placeholder: "2021",
+        type: "date",
+        placeholder: "00/00/0000",
         options: MOCK_YEAR_OPTIONS,
-        label: "Año"
+        label: "Fecha"
       }
     },
     focusPoint: {
@@ -109,20 +111,20 @@ export const NewProjectForm = ({
         additemlabel: "Añadir ",
         removeitemlabel: "Eliminar "
       }
-    },
-    tags: {
-      type: "add_select",
-      config: {
-        placeholder: "Proyecto",
-        options: MOCK_SELECT_OPTIONS,
-        label: "Tags de proyecto",
-        additemlabel: "Añadir ",
-        removeitemlabel: "Eliminar ",
-        helper: "Abrir ventana de ayuda",
-        onHelperClick: () => openAuxModal(),
-        isDisabled: true // TODO -> provisional
-      }
     }
+    // tags: {
+    //   type: "add_select",
+    //   config: {
+    //     placeholder: "Proyecto",
+    //     options: MOCK_SELECT_OPTIONS,
+    //     label: "Tags de proyecto",
+    //     additemlabel: "Añadir ",
+    //     removeitemlabel: "Eliminar ",
+    //     helper: "Abrir ventana de ayuda",
+    //     onHelperClick: () => openAuxModal(),
+    //     isDisabled: true // TODO -> provisional
+    //   }
+    // }
   }
 
   // TODO REVIEW

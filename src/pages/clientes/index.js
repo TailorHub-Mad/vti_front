@@ -67,6 +67,8 @@ const clientes = () => {
   }
 
   const handleDeleteMessage = () => {
+    if (!clientsToDelete) return
+
     if (deleteType === DeleteType.MANY)
       return "¿Desea eliminar los clientes seleccionados?"
     const label = getFieldObjectById(clientsData, "alias", clientsToDelete)

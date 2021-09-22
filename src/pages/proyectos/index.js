@@ -29,6 +29,7 @@ const proyectos = () => {
 
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
+
   const { data, error, isLoading, mutate } = projectFetchHandler(
     fetchState,
     fetchOptions
@@ -46,7 +47,7 @@ const proyectos = () => {
 
   const isGrouped = fetchState === fetchType.GROUPED
   const isEmptyData = checkDataIsEmpty(data)
-  const projectsData = data ? data[0]?.projects : []
+  const projectsData = data && !isEmptyData ? data[0].projects : null
 
   // TODO
   const handleExport = () => {}
@@ -67,6 +68,8 @@ const proyectos = () => {
   }
 
   const handleDeleteMessage = () => {
+    if (!projectToDelete) return
+
     if (deleteType === DeleteType.MANY)
       return "¿Desea eliminar los proyectos seleccionados?"
     const label = getFieldObjectById(projectsData, "alias", projectToDelete)

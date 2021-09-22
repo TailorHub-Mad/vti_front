@@ -13,15 +13,16 @@ import useProjectApi from "../../../../hooks/api/useProjectApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
+import { destructuringDate } from "../../../../utils/functions/date"
 import { NewProjectForm } from "../NewProjectForm/NewProjectForm"
 
 const initialValues = {
-  alias: null,
-  client: null,
-  sector: null,
-  year: null,
-  focusPoint: null,
-  testSystems: null
+  alias: undefined,
+  client: undefined,
+  sector: undefined,
+  date: undefined,
+  focusPoint: undefined,
+  testSystems: undefined
   // tags: [""], // provisioanl
 }
 
@@ -41,11 +42,35 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
       !values.alias ||
       !values.client ||
       !values.sector ||
-      !values.year ||
+      !values.date ||
       !values.focusPoint ||
       !values.testSystems
+      // || !value.tags // TODO -> provisional
     )
   }
+
+  const formatCreateProject = (project) => {
+    return {
+      alias: project.alias,
+      client: project.client.value,
+      sector: project.sector.value,
+      focusPoint: project.focusPoint.value,
+      testSystems: project.testSystems.map((system) => system.value),
+      date: destructuringDate(project.date)
+    }
+  }
+
+  // const formatUpdateProject = (project) => {
+  //   return project.map((value) => {
+  //     const { year, alias } = value
+  //     return {
+  //       alias,
+  //       date: {
+  //         year
+  //       }
+  //     }
+  //   })
+  // }
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
@@ -60,15 +85,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
 
   const handleCreateProject = async () => {
     try {
-      // TODO -> provisional
-      const projectToCreate = {
-        ...values,
-        date: { year: values.year.toString(), month: "02", day: "25" },
-        testSystems: [values.testSystems]
-      }
-      delete projectToCreate.year
-      delete projectToCreate.id
-      delete projectToCreate.tags
+      const projectToCreate = formatCreateProject(values)
 
       await createProject(projectToCreate)
     } catch (error) {
@@ -103,14 +120,14 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
       client: projectToUpdate?.clientAlias,
       focusPoint: projectToUpdate?.focusPoint.map((fp) => fp.alias)[0],
       testSystems: projectToUpdate?.testSystems.map((ts) => ts.alias),
-      year: +projectToUpdate?.date?.year
+      date: projectToUpdate?.date?.date
     }
     setValues(_project)
   }, [projectToUpdate])
 
   useEffect(() => {
     if (isOpen) return
-    setValues({})
+    setValues(initialValues)
   }, [isOpen])
 
   return (
@@ -120,8 +137,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
         <ModalContent
           width="460px"
           height="fit-content"
-          position="absolute"
-          top="50px"
+          position="static"
           left={showSecondaryContent ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}
           transition="left 0.18s ease-in-out"
           bgColor="white"

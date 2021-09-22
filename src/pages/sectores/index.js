@@ -67,6 +67,8 @@ const sectores = () => {
   }
 
   const handleDeleteMessage = () => {
+    if (!sectorsToDelete) return
+
     if (deleteType === DeleteType.MANY)
       return "¿Desea eliminar los sectores seleccionados?"
     const label = getFieldObjectById(sectorsData, "title", sectorsToDelete)
