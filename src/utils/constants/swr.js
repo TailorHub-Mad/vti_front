@@ -30,5 +30,9 @@ export const SWR_CACHE_KEYS = {
 
   // USERS
   users: "users/",
-  user: "user/"
+  user: "user/",
+
+  // TAGS
+  projectTags: "projectTags/",
+  noteTags: "noteTags/"
 }

@@ -29,10 +29,9 @@ export const TagCard = ({
         <Text variant="d_xs_regular" color="grey">
           ID
         </Text>
-        <Text
-          variant="d_xs_regular"
-          color="grey"
-        >{`últ. actualización ${updatedAt.toLocaleDateString()}`}</Text>
+        <Text variant="d_xs_regular" color="grey">{`últ. actualización ${new Date(
+          updatedAt
+        ).toLocaleDateString()}`}</Text>
       </Flex>
     </Box>
   )
