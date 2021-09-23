@@ -1,4 +1,4 @@
-import { useRouter } from "next/dist/note/router"
+import { useRouter } from "next/router"
 import { useContext } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"

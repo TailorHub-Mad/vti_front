@@ -19,3 +19,9 @@ export const TABLE_COMPONENTS = {
 }
 
 export const calcColWidth = (width) => `${getPercentage(MIN_TABLE_WIDTH, width)}%`
+
+export const TABLE_STYLE = {
+  tableHeight: "calc(100vh - 190px)",
+  p: "32px",
+  pb: "0"
+}

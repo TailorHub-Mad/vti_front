@@ -32,12 +32,7 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToUpdate, ...props }) =>
   }
 
   const checkInputsAreEmpty = () => {
-    return values.some(
-      (value) =>
-        // TODO -> autogenerate ID
-        // !value.id ||
-        !value.title
-    )
+    return values.some((value) => !value.title)
   }
 
   const handleSubmit = async () => {

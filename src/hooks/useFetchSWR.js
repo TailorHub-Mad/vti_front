@@ -1,4 +1,4 @@
-import { useRouter } from "next/dist/client/router"
+import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import useSWR from "swr"
 import { ApiAuthContext } from "../provider/ApiAuthProvider"
@@ -20,7 +20,7 @@ const useFetchSWR = (key, fetcher, refreshInterval) => {
     refreshInterval: refreshInterval || 30000
   })
 
-  const isUnauthorize = error?.response.status === 401
+  const isUnauthorize = error?.response?.status === 401
 
   useEffect(() => {
     if (data && isLoading) {

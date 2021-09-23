@@ -13,7 +13,7 @@ export const transformSystemData = (system) => ({
   client: system.clientAlias,
   code: system.vtiCode,
   year: system.date?.year,
-  projects: system.projects,
+  projects: system.projects.map((project) => project.alias),
   notes: system.notes,
   options: ""
 })

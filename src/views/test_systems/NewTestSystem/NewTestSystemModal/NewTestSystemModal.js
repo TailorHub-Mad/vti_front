@@ -33,10 +33,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
 
   const checkInputsAreEmpty = () => {
     return values.some(
-      (value) =>
-        // TODO -> autogenerate ID
-        // !value.id ||
-        !value.vtiCode || !value.clientAlias || !value.alias || !value.year
+      (value) => !value.vtiCode || !value.clientAlias || !value.alias || !value.year
     )
   }
 
@@ -110,8 +107,6 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
     if (isOpen) return
     setValues([{}])
   }, [isOpen])
-
-  console.log("MODAL SYSTEM", values)
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

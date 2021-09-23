@@ -3,9 +3,8 @@ import React from "react"
 import { MessageCard } from "../../../../components/cards/MessageCard/MessageCard"
 import { PageBody } from "../../../../components/layout/Pages/PageBody/PageBody"
 import { ToolBar } from "../../../../components/navigation/ToolBar/ToolBar"
-import { NOTES_MOCK } from "../../../../mock/notes"
 
-export const ProjectNotes = ({ showNoteDetails }) => {
+export const ProjectNotes = ({ showNoteDetails, notes = [] }) => {
   //TODO pasar notes por props
   return (
     <>
@@ -22,9 +21,9 @@ export const ProjectNotes = ({ showNoteDetails }) => {
           width="100%"
           marginBottom="32px"
         >
-          {[...NOTES_MOCK].slice(0, 12).map((mock, idx) => (
+          {notes.slice(0, 12).map((note, idx) => (
             <MessageCard
-              {...mock}
+              {...note}
               key={idx}
               onSeeDetails={() => showNoteDetails(idx)}
               _hover={{ border: "1px solid", borderColor: "start" }}

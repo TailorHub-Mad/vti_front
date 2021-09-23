@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import useTableActions from "../../../hooks/useTableActions"
 import { fetchType } from "../../../utils/constants/global_config"
-import { TABLE_COMPONENTS } from "../../../utils/constants/tables"
+import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
 import { ProjectsTableHeader } from "./ProjectsTableHeader"
 import { formatProject, TABLE_PROJECTS_HEAD } from "./utils"
 
@@ -16,6 +16,8 @@ export const ProjectsTable = ({
 }) => {
   const { selectedRows, setSelectedRows, handleSelectAllRows, handleRowSelect } =
     useTableActions()
+
+  const selectedRowsKeys = Object.keys(selectedRows)
 
   const [activeItem, setActiveItem] = useState(fetchType.ALL)
 
@@ -42,6 +44,7 @@ export const ProjectsTable = ({
       options: { ...TABLE_PROJECTS_HEAD.options, onDelete, onEdit }
     }
   }
+  const allRowsAreSelected = selectedRowsKeys.length === projectsData?.length
 
   return (
     <Table
@@ -53,16 +56,15 @@ export const ProjectsTable = ({
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
           selectAllRows={() => handleSelectAllRows(projectsData)}
-          checked={Object.keys(selectedRows).length === projectsData?.length}
+          checked={allRowsAreSelected}
         />
       }
+      {...TABLE_STYLE}
       config={configTable}
       content={projectsData}
       selectedRows={selectedRows}
       onRowSelect={(id) => handleRowSelect(id)}
-      tableHeight="calc(100vh - 195px)"
-      p="32px"
-      pb="0"
+      optionsDisabled={selectedRowsKeys.length > 1}
       isGrouped={fetchState === fetchType.GROUPED}
     />
   )

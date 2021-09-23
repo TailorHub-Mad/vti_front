@@ -37,12 +37,7 @@ export const NewDepartmentModal = ({
   }
 
   const checkInputsAreEmpty = () => {
-    return values.some(
-      (value) =>
-        // TODO -> autogenerate ID
-        // !value.id ||
-        !value.name
-    )
+    return values.some((value) => !value.name)
   }
 
   const handleSubmit = async () => {

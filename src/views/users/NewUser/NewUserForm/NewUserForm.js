@@ -23,14 +23,6 @@ export const NewUserForm = ({ value, onChange }) => {
   }
 
   const formInputs = {
-    // TODO -> autogenerate ID
-    // id: {
-    //   type: "text",
-    //   config: {
-    //     placeholder: "ID",
-    //     label: "ID",
-    //   },
-    // },
     alias: {
       type: "text",
       config: {

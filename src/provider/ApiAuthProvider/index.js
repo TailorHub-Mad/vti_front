@@ -1,4 +1,4 @@
-import { useRouter } from "next/dist/client/router"
+import { useRouter } from "next/router"
 import React, { useState, useEffect, useCallback } from "react"
 import useAuthApi from "../../hooks/api/useAuthApi"
 import useFetchSWR from "../../hooks/useFetchSWR"

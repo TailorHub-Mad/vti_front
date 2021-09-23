@@ -1,5 +1,5 @@
 import { Flex, Text } from "@chakra-ui/react"
-import { useRouter } from "next/dist/client/router"
+import { useRouter } from "next/router"
 import Link from "next/link"
 import React from "react"
 import { capitalize } from "../../../utils/functions/common"

@@ -98,7 +98,7 @@ export const AddSelect = ({
   }
 
   return (
-    <FormController label={label} {...props}>
+    <FormController label={label} {...props} isDisabled={isDisabled}>
       <Box>
         {inputValues.map((value, idx) => {
           return (

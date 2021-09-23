@@ -2,7 +2,7 @@ import { Card } from "../Card"
 import { MessageCardFooter } from "./MessageCardFooter/MessageCardFooter"
 import { MessageCardHeader } from "./MessageCardHeader/MessageCardHeader"
 import { MessageCardInfo } from "./MessageCardInfo/MessageCardInfo"
-import { MessageCardTags } from "./MessageCardTags/MessageCardTags"
+// import { MessageCardTags } from "./MessageCardTags/MessageCardTags"
 
 export const MessageCard = ({
   note,
@@ -10,7 +10,7 @@ export const MessageCard = ({
   subscribedUsers,
   isSubscribe,
   isFavorite,
-  handleDelete,
+  onDelete,
   handleFavorite
 }) => {
   const handleOnFavorite = () => {
@@ -24,17 +24,17 @@ export const MessageCard = ({
         isFavorite={isFavorite}
         title={note?.title}
         onClick={onSeeDetails}
-        onDelele={handleDelete}
+        onDelele={onDelete}
         onFavorite={handleOnFavorite}
       />
       <MessageCardInfo
-        id={note?._id}
+        id={note?.ref}
         author={note?.owner}
         updatedAt={new Date(note?.updatedAt).toLocaleDateString()}
         marginBottom="18px"
         marginTop="6px"
       />
-      <MessageCardTags tags={note?.tags} />
+      {/* <MessageCardTags tags={note?.tags} /> */}
       <MessageCardFooter
         isClosed={note?.lock}
         isSubscribe={isSubscribe}

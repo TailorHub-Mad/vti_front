@@ -23,26 +23,15 @@ export const NewProjectForm = ({
   const [userOptions, setUserOptions] = useState([])
   const [systemOptions, setSystemOptions] = useState([])
 
-  const isClientObject = typeof value.client === "object"
-
-  console.log(projectToUpdate)
-
   const formatValues = !projectToUpdate
     ? { ...value }
     : {
         ...value,
-        client: isClientObject ? value.client : { label: value.client, value: "" },
         focusPoint: {
-          label: projectToUpdate.focusPoint[0].alias,
-          value: projectToUpdate.focusPoint[0]._id
-        },
-        sector: {
-          label: projectToUpdate.sector[0].title,
-          value: projectToUpdate.sector[0]._id
+          label: projectToUpdate.focusPoint[0].alias
         },
         testSystems: projectToUpdate.testSystems.map((system) => ({
-          label: system.alias,
-          value: system._id
+          label: system.alias
         }))
       }
 
@@ -72,7 +61,7 @@ export const NewProjectForm = ({
 
   const formInputs = {
     alias: {
-      type: "input",
+      type: "text",
       config: {
         placeholder: "Alias",
         label: "Alias"
@@ -96,7 +85,7 @@ export const NewProjectForm = ({
       }
     },
     date: {
-      type: "input",
+      type: "text",
       config: {
         type: "date",
         placeholder: "00/00/0000",
@@ -125,16 +114,7 @@ export const NewProjectForm = ({
     }
     // tags: {
     //   type: "add_select",
-    //   config: {
-    //     placeholder: "Proyecto",
-    //     options: MOCK_SELECT_OPTIONS,
-    //     label: "Tags de proyecto",
-    //     additemlabel: "Añadir ",
-    //     removeitemlabel: "Eliminar ",
-    //     helper: "Abrir ventana de ayuda",
-    //     onHelperClick: () => openAuxModal(),
-    //     isDisabled: true // TODO -> provisional
-    //   }
+    //   config: {}
     // }
   }
 
@@ -172,8 +152,42 @@ export const NewProjectForm = ({
     handleFormChange("client", client)
   }, [projectToUpdate, clientOptions])
 
+  // Sector
+  useEffect(() => {
+    if (!projectToUpdate || sectorOptions.length === 0) return
+
+    const sector = sectorOptions.find(
+      (_sector) => _sector.label === projectToUpdate?.sector[0].title
+    )
+
+    handleFormChange("sector", sector)
+  }, [projectToUpdate, sectorOptions])
+
+  // Focus point
+  useEffect(() => {
+    if (!projectToUpdate || userOptions.length === 0) return
+
+    const user = userOptions.find(
+      (_user) => _user.label === projectToUpdate?.focusPoint[0].alias
+    )
+
+    handleFormChange("focusPoint", user)
+  }, [projectToUpdate, userOptions])
+
+  // System
+  useEffect(() => {
+    if (!projectToUpdate || systemOptions.length === 0) return
+
+    const _systemsFormat = projectToUpdate?.testSystems.map((s) => s.alias)
+    const system = systemOptions.filter((_system) =>
+      _systemsFormat.includes(_system.label)
+    )
+
+    handleFormChange("testSystems", system)
+  }, [projectToUpdate, systemOptions])
+
   const inputRefObj = {
-    input: <SimpleInput />,
+    text: <SimpleInput />,
     select: <InputSelect />,
     add_select: <AddSelect />
   }

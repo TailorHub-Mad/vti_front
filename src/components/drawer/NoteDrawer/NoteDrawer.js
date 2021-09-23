@@ -1,14 +1,16 @@
 import { Box, Flex, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { CloseIcon } from "../../icons/CloseIcon"
-import { NOTE_MOCK } from "../../../mock/note"
+// import { NOTE_MOCK } from "../../../mock/note"
 import { NoteMainInfo } from "./NoteMainInfo/NoteMainInfo"
 import { NoteDetailsAccordion } from "./NoteAccordion/NoteDetailsAccordion"
 import { CollapseIconHor } from "../../icons/CollapseIconHor"
 
-export const NoteDrawer = ({ isOpen, note = NOTE_MOCK, onClose, ...props }) => {
+export const NoteDrawer = ({ isOpen, note, onClose, ...props }) => {
   //TODO fecth detalle del proyecto o por props
   const [isExpanded, setIsExpanded] = useState(false)
+
+  if (!note) return null
   return (
     <>
       {isOpen ? (
@@ -62,38 +64,37 @@ export const NoteDrawer = ({ isOpen, note = NOTE_MOCK, onClose, ...props }) => {
             <NoteMainInfo updatedAt={note.updatedAt} project={note.project} />
             <NoteDetailsAccordion
               name={note.name}
-              noteTags={note.note_tags}
-              testSystems={note.test_systems}
-              links={note.links}
-              message={note.message}
-              files={note.files}
+              // noteTags={note.tags}
+              // testSystems={note.test_systems}
+              link={note.link}
+              // message={note.messages}
+              files={note.document}
             />
           </Box>
-          {note.responses
-            ? note.responses.map((res, idx) => (
-                <Box
-                  key={`${res.id}-${idx}`}
-                  bgColor="white"
-                  mt="24px"
-                  p="32px"
-                  borderRadius="2px"
-                  boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
-                >
-                  <NoteMainInfo
-                    updatedAt={res.updatedAt}
-                    project={res.project}
-                    isResponse
-                  />
-                  <NoteDetailsAccordion
-                    isResponse
-                    name={res.name}
-                    links={res.links}
-                    message={res.message}
-                    files={res.files}
-                  />
-                </Box>
-              ))
-            : null}
+          {note.messages &&
+            note.messages.map((msg, idx) => (
+              <Box
+                key={`${msg.id}-${idx}`}
+                bgColor="white"
+                mt="24px"
+                p="32px"
+                borderRadius="2px"
+                boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
+              >
+                <NoteMainInfo
+                  updatedAt={msg.updatedAt}
+                  project={msg.project}
+                  isResponse
+                />
+                <NoteDetailsAccordion
+                  isResponse
+                  name={msg.name}
+                  links={msg.links}
+                  message={msg.message}
+                  files={msg.files}
+                />
+              </Box>
+            ))}
         </Box>
       </Box>
     </>

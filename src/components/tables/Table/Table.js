@@ -16,6 +16,7 @@ export const Table = ({
   content,
   tableHeight,
   isGrouped,
+  optionsDisabled,
   ...props
 }) => {
   const { head, components } = config
@@ -71,6 +72,7 @@ export const Table = ({
                 selectedRows={selectedRows}
                 head={head}
                 isLastOne={idx === content.length - 1}
+                optionsDisabled={optionsDisabled}
               />
             )
           })}
