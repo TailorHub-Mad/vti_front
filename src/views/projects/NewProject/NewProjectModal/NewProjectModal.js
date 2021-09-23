@@ -3,7 +3,7 @@ import {
   Modal,
   ModalOverlay,
   Button,
-  ModalContent,
+  ModalContent
 } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
@@ -12,15 +12,20 @@ import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomMo
 import useProjectApi from "../../../../hooks/api/useProjectApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
+import { errorHandler } from "../../../../utils/errors"
+import {
+  destructuringDate,
+  formatDateToInput
+} from "../../../../utils/functions/date"
 import { NewProjectForm } from "../NewProjectForm/NewProjectForm"
 
 const initialValues = {
-  alias: null,
-  client: null,
-  sector: null,
-  year: null,
-  focusPoint: null,
-  testSystems: null,
+  alias: undefined,
+  client: undefined,
+  sector: undefined,
+  date: undefined,
+  focusPoint: undefined,
+  testSystems: undefined
   // tags: [""], // provisioanl
 }
 
@@ -40,10 +45,39 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
       !values.alias ||
       !values.client ||
       !values.sector ||
-      !values.year ||
-      !values.focusPoint ||
-      !values.testSystems
+      !values.date ||
+      !values.focusPoint
+      // || !value.tags // TODO -> provisional
     )
+  }
+
+  const formatCreateProject = (project) => {
+    const formatData = {
+      alias: project.alias,
+      client: project.client.value,
+      sector: project.sector.value,
+      focusPoint: project.focusPoint.value,
+      date: destructuringDate(project.date)
+    }
+
+    if (!project.testSystems) return formatData
+    return {
+      ...formatData,
+      testSystems: project.testSystems?.map((system) => system.value)
+    }
+  }
+
+  const formatUpdateProject = (project) => {
+    const formatData = {
+      alias: project.alias,
+      sector: project.sector.value
+    }
+
+    if (!project.testSystems) return formatData
+    return {
+      ...formatData,
+      testSystems: project.testSystems?.map((system) => system.value)
+    }
   }
 
   const handleSubmit = async () => {
@@ -59,40 +93,20 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
 
   const handleCreateProject = async () => {
     try {
-      // TODO -> provisional
-      const projectToCreate = {
-        ...values,
-        date: { year: values.year.toString(), month: "02", day: "25" },
-        testSystems: [values.testSystems],
-      }
-      delete projectToCreate.year
-      delete projectToCreate.id
-      delete projectToCreate.tags
-
-      await createProject(projectToCreate)
+      const project = formatCreateProject(values)
+      await createProject(project)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
   const handleUpdateProject = async () => {
     try {
       const { _id } = projectToUpdate
-
-      // TODO -> provisional
-      const data = {
-        ...values,
-        date: { year: values.year.toString(), month: "02", day: "25" },
-      }
-      delete data.year
-      delete data.id
-      delete data.tags
-
-      await updateProject(_id, data)
+      const project = formatUpdateProject(values)
+      await updateProject(_id, project)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -104,14 +118,14 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
       client: projectToUpdate?.clientAlias,
       focusPoint: projectToUpdate?.focusPoint.map((fp) => fp.alias)[0],
       testSystems: projectToUpdate?.testSystems.map((ts) => ts.alias),
-      year: +projectToUpdate?.date?.year,
+      date: formatDateToInput(projectToUpdate?.date)
     }
     setValues(_project)
   }, [projectToUpdate])
 
   useEffect(() => {
     if (isOpen) return
-    setValues({})
+    setValues(initialValues)
   }, [isOpen])
 
   return (
@@ -121,8 +135,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
         <ModalContent
           width="460px"
           height="fit-content"
-          position="absolute"
-          top="50px"
+          position="static"
           left={showSecondaryContent ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}
           transition="left 0.18s ease-in-out"
           bgColor="white"

@@ -22,8 +22,8 @@ export const generateRandomNote = () => ({
       .map(() => faker.lorem.word()),
     notes_tags: new Array(faker.datatype.number(10))
       .fill("")
-      .map(() => faker.lorem.word(10)),
-  },
+      .map(() => faker.lorem.word(10))
+  }
 })
 
 export const NOTES_MOCK = new Array(100).fill("").map(generateRandomNote)

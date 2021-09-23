@@ -5,30 +5,22 @@ export const NewDepartmentForm = ({ value, onChange }) => {
   const handleFormChange = (input, _value) => {
     onChange({
       ...value,
-      [input]: _value,
+      [input]: _value
     })
   }
 
   const formInputs = {
-    // TODO -> autogenerate ID
-    // id: {
-    //   type: "text",
-    //   config: {
-    //     placeholder: "ID",
-    //     label: "ID",
-    //   },
-    // },
     name: {
       type: "text",
       config: {
         placeholder: "Departamento",
-        label: "Departamento",
-      },
-    },
+        label: "Departamento"
+      }
+    }
   }
 
   const inputRefObj = {
-    text: <SimpleInput />,
+    text: <SimpleInput />
   }
 
   return (
@@ -40,7 +32,7 @@ export const NewDepartmentForm = ({ value, onChange }) => {
           marginBottom: name === "name" ? "0" : "24px",
           isDisabled: index !== 0 && !value[Object.keys(value)[index - 1]],
           key: `${name}-${index}`,
-          ...config,
+          ...config
         })
       })}
     </>

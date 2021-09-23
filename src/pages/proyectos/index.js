@@ -6,13 +6,12 @@ import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { NewProjectModal } from "../../views/projects/NewProject/NewProjectModal/NewProjectModal"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
-import { Spinner } from "../../components/spinner/Spinner"
 import { ToastContext } from "../../provider/ToastProvider"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import {
   DeleteType,
   fetchOption,
-  fetchType,
+  fetchType
 } from "../../utils/constants/global_config"
 import { projectFetchHandler } from "../../swr/project.swr"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
@@ -20,7 +19,8 @@ import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
+import { LoadingView } from "../../views/common/LoadingView"
+import { errorHandler } from "../../utils/errors"
 
 const proyectos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -29,6 +29,7 @@ const proyectos = () => {
 
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
+
   const { data, error, isLoading, mutate } = projectFetchHandler(
     fetchState,
     fetchOptions
@@ -44,9 +45,8 @@ const proyectos = () => {
   const [deleteType, setDeleteType] = useState(null)
   const [projectToDelete, setProjectsToDelete] = useState(null)
 
-  const isGrouped = fetchState === fetchType.GROUPED
   const isEmptyData = checkDataIsEmpty(data)
-  const projectsData = data ? data[0]?.projects : []
+  const projectsData = data && !isEmptyData ? data[0].projects : null
 
   // TODO
   const handleExport = () => {}
@@ -67,8 +67,10 @@ const proyectos = () => {
   }
 
   const handleDeleteMessage = () => {
+    if (!projectToDelete) return
+
     if (deleteType === DeleteType.MANY)
-      return "¿Desea eliminar los sectores seleccionados?"
+      return "¿Desea eliminar los proyectos seleccionados?"
     const label = getFieldObjectById(projectsData, "alias", projectToDelete)
     return `¿Desea eliminar ${label}?`
   }
@@ -76,9 +78,7 @@ const proyectos = () => {
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(projectToDelete, projectsData)
-    updated.length > 0
-      ? await mutate(updated, false)
-      : await mutate(SWR_CACHE_KEYS.projects)
+    updated.length > 0 ? await mutate(updated, false) : await mutate()
     setDeleteType(null)
     setProjectsToDelete(null)
   }
@@ -90,12 +90,11 @@ const proyectos = () => {
       const updatedProjects = []
       const filteredProjects = projects.filter((system) => system._id !== id)
       updatedProjects.push({
-        testProjects: filteredProjects,
+        projects: filteredProjects
       })
       return updatedProjects
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -108,11 +107,10 @@ const proyectos = () => {
       const filteredProjects = projects.filter(
         (project) => !projectsId.includes(project._id)
       )
-      updatedProjects.push({ project: filteredProjects })
+      updatedProjects.push({ projects: filteredProjects })
       return filteredProjects
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -124,7 +122,7 @@ const proyectos = () => {
 
   const onSearch = (search) =>
     setFetchOptions({
-      [fetchOption.SEARCH]: search,
+      [fetchOption.SEARCH]: search
     })
 
   const handleOnGroup = () => {
@@ -135,10 +133,9 @@ const proyectos = () => {
     setFetchState(fetchType.FILTERED)
   }
 
-  if (error) return <>ERROR...</>
-  return !isLoggedIn ? (
-    <>Loading...</>
-  ) : (
+  if (!isLoggedIn) return null
+  if (error) return errorHandler(error)
+  return (
     <Page>
       <Popup
         variant="twoButtons"
@@ -179,7 +176,7 @@ const proyectos = () => {
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <Spinner /> : null}
+      {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData ? (
         <ViewEmptyState
           message="Añadir proyectos a la plataforma"
@@ -191,8 +188,8 @@ const proyectos = () => {
       ) : null}
       {projectsData ? (
         <ProjectsTable
-          isGrouped={isGrouped}
-          items={projectsData}
+          fetchState={fetchState}
+          projects={projectsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
           onEdit={onEdit}

@@ -1,121 +1,94 @@
 import { Modal, ModalOverlay, ModalContent, Button } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
-import { MultipleFormContent } from "../../../../components/forms/MultipleFormContent/MultipleFormContent"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import useNoteApi from "../../../../hooks/api/useNoteApi"
+// import useNoteApi from "../../../../hooks/api/useNoteApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
+import { errorHandler } from "../../../../utils/errors"
 import { NewNoteForm } from "../NewNoteForm/NewNoteForm"
+
+const initialValues = {
+  project: undefined,
+  system: undefined,
+  title: undefined,
+  description: undefined,
+  link: undefined,
+  docuement: undefined
+  // tags: [""], // provisioanl
+}
 
 export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
   const { showToast } = useContext(ToastContext)
-  const { createNote, updateNote } = useNoteApi()
-  const { mutate, cache } = useSWRConfig()
+  const { createNote } = useNoteApi()
+  const { mutate } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isUpdate = Boolean(noteToUpdate)
 
-  const handleChange = (val, idx) => {
-    const _values = [...values]
-    _values[idx] = val
-    setValues(_values)
-  }
-
-  const handleDelete = (index) => {
-    const _values = [...values]
-    _values.splice(index, 1)
-    setValues(_values)
-  }
-
   const checkInputsAreEmpty = () => {
-    return values.some(
-      (value) =>
-        // TODO -> autogenerate ID
-        // !value.id ||
-        !value.alias || !value.name
+    return (
+      !values.project || !values.system || !values.title || !values.description
+      // || !value.tags // TODO -> provisional
     )
+  }
+
+  const formatCreateNote = (note) => {
+    const formatData = {
+      project: note.project.value,
+      testSystems: note.system.map((s) => s.value),
+      title: note.title,
+      description: note.description,
+      tags: ["60e71fb6b872c54560f16820"] // TODO -> provisional
+    }
+
+    if (note?.link) formatData["link"] = note.link
+
+    return formatData
   }
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
-
-    const updatedNotesList = isUpdate
-      ? await handleUpdateNote()
-      : await handleCreateNote()
-
-    updatedNotesList
-      ? await mutate(SWR_CACHE_KEYS.notes, updatedNotesList, false)
-      : await mutate(SWR_CACHE_KEYS.notes)
-
-    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
+    isUpdate ? await handleUpdateNote() : await handleCreateNote()
+    await mutate(SWR_CACHE_KEYS.projects)
+    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s apunte/s!")
     setIsSubmitting(false)
     onClose()
   }
 
   const handleCreateNote = async () => {
-    const notesToCreate = [...values]
-    const notesQueue = notesToCreate.map((note) => createNote(note))
-    const response = await Promise.all(notesQueue)
-
-    const [notesSuccessfull, notesError] = response.reduce(
-      ([succ, error], e, index) => {
-        e?.error ? error.push(notesToCreate[index]) : succ.push(notesToCreate[index])
-        return [succ, error]
-      },
-      [[], []]
-    )
-
-    // TODO -> manage errors
-    if (notesError.length > 0) {
-      console.log("ERROR")
+    try {
+      const note = formatCreateNote(values)
+      console.log("NOTE QUE LLEGA", note)
+      await createNote(note)
+    } catch (error) {
+      errorHandler(error)
     }
-
-    if (cache.has(SWR_CACHE_KEYS.notes)) {
-      const cacheNotes = cache.get(SWR_CACHE_KEYS.notes)
-      const updatedNotes = []
-      const formatNotesSuccessfull = notesSuccessfull.map((note) => {
-        return {
-          ...note,
-          projects: [],
-          notes: [],
-        }
-      })
-      updatedNotes.push({
-        testNotes: [...formatNotesSuccessfull, ...cacheNotes[0].testNotes],
-      })
-      return updatedNotes
-    }
-
-    return null
   }
 
   const handleUpdateNote = async () => {
-    const { _id } = noteToUpdate
-    const [formatedNote] = [...values]
-
-    const response = await updateNote(_id, formatedNote)
-
-    // TODO -> manage errors
-    if (response?.error) {
-      console.log("ERROR")
-    }
-
-    // TODO -> optimize cache request (update cache with updated note)
     return null
   }
 
   useEffect(() => {
     if (!noteToUpdate) return
-    const { id, alias, name } = noteToUpdate
-    setValues([{ alias, name, id }])
+    const _note = {
+      project: noteToUpdate.project,
+      system: noteToUpdate.system,
+      title: noteToUpdate.title,
+      description: noteToUpdate.description,
+      link: noteToUpdate.link,
+      attachment: noteToUpdate.attachment
+    }
+    setValues(_note)
   }, [noteToUpdate])
 
   useEffect(() => {
     if (isOpen) return
-    setValues([{}])
+    setValues(initialValues)
   }, [isOpen])
 
   return (
@@ -127,14 +100,11 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
           onClose={onClose}
           pb="24px"
         />
-        <MultipleFormContent
-          values={values}
-          onChange={handleChange}
-          onDelete={handleDelete}
-          addTitle="Añadir nuevo apunte"
-        >
-          <NewNoteForm />
-        </MultipleFormContent>
+        <NewNoteForm
+          value={values}
+          onChange={(val) => setValues(val)}
+          noteToUpdate={noteToUpdate}
+        />
         <Button
           w="194px"
           margin="0 auto"
@@ -146,15 +116,6 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
         >
           Guardar
         </Button>
-        {!isUpdate ? (
-          <Button
-            variant="text_only"
-            onClick={() => setValues([...values, {}])}
-            disabled={checkInputsAreEmpty()}
-          >
-            Añadir nuevo apunte
-          </Button>
-        ) : null}
       </ModalContent>
     </Modal>
   )

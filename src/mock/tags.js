@@ -15,7 +15,7 @@ const generateRandomTag = () => {
     relatedTags: hasParent
       ? new Array(faker.datatype.number(10)).fill("").map(() => faker.lorem.word(10))
       : [],
-    parentTag: hasParent ? faker.lorem.word(10) : null,
+    parentTag: hasParent ? faker.lorem.word(10) : null
   }
 }
 export const PROJECT_TAGS_MOCK = new Array(20).fill("").map(generateRandomTag)

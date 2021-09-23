@@ -1,7 +1,8 @@
-import { useRouter } from "next/dist/client/router"
+import { useRouter } from "next/router"
 import { useContext, useEffect } from "react"
 import { ApiAuthContext } from "../provider/ApiAuthProvider"
 import { PATHS } from "../utils/constants/paths"
+import { LoadingView } from "../views/common/LoadingView"
 
 const Index = () => {
   const router = useRouter()
@@ -9,10 +10,10 @@ const Index = () => {
 
   useEffect(() => {
     if (!isLoggedIn) return
-    router.push(PATHS.projects)
+    router.push(PATHS.notes)
   }, [isLoggedIn])
 
-  return <>Loading...</>
+  return <LoadingView />
 }
 
 export default Index

@@ -1,36 +1,29 @@
-import { Checkbox, Text } from "@chakra-ui/react"
 import React, { useMemo, useState } from "react"
-import { LinkItem } from "../../../components/navigation/LinkItem/LinkItem"
-import { OptionsMenuRow } from "../../../components/navigation/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
 import { Table } from "../../../components/tables/Table/Table"
-import { NoteTag } from "../../../components/tags/NoteTag/NoteTag"
-import { TagGroup } from "../../../components/tags/TagGroup/TagGroup"
 import useTableActions from "../../../hooks/useTableActions"
 import { fetchType } from "../../../utils/constants/global_config"
-import { PATHS } from "../../../utils/constants/paths"
+import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
 import { ProjectsTableHeader } from "./ProjectsTableHeader"
+import { formatProject, TABLE_PROJECTS_HEAD } from "./utils"
 
 export const ProjectsTable = ({
-  items: projects,
+  projects,
   onTabChange,
   onDelete,
   onDeleteMany,
   onEdit,
-  isGrouped,
+  fetchState
 }) => {
-  const {
-    selectedRows,
-    setSelectedRows,
-    handleSelectAllRows,
-    handleRowSelect,
-    calcColWidth,
-  } = useTableActions()
+  const { selectedRows, setSelectedRows, handleSelectAllRows, handleRowSelect } =
+    useTableActions()
+
+  const selectedRowsKeys = Object.keys(selectedRows)
+
+  const [activeItem, setActiveItem] = useState(fetchType.ALL)
 
   useMemo(() => {
     setSelectedRows([])
   }, [projects?.length])
-
-  const [activeItem, setActiveItem] = useState(fetchType.ALL)
 
   const handleOnTabChange = (state) => {
     setActiveItem(state)
@@ -43,94 +36,15 @@ export const ProjectsTable = ({
     return onDelete(projectsId[0])
   }
 
-  const transformProjectData = (project) => ({
-    actions: "",
-    id: project._id,
-    alias: { label: project.alias, link: `${PATHS.projects}/${project._id}` },
-    sector: project.sector[0]?.title || "---",
-    focusPoint: project.focusPoint?.map((fp) => fp.alias).join(", ") || "---",
-    testSystems: project.testSystems?.map((ts) => ts.alias) || "---",
-    tags: project.tag?.map((ts) => ts.name),
-    users: project.tag?.map((ts) => ts.alias),
-    notes: project.notes?.map((note) => note.title),
-    options: "",
-    config: { isFinished: project.close },
-  })
-
-  const _projects = projects
-    ? !isGrouped
-      ? projects?.map(transformProjectData)
-      : projects.map((it) => {
-          const _it = [...it]
-          _it[1] = it[1].map(transformProjectData)
-          return _it
-        })
-    : null
-
-  const projects_table = {
-    components: {
-      text: <Text />,
-      link: <LinkItem />,
-      count: <Text />,
-      actions: <Checkbox marginLeft="8px" colorScheme="blue" defaultIsChecked />,
-      sector: <NoteTag />,
-      testSystems: <TagGroup variant="light_blue" max={3} />,
-      tags: <TagGroup variant="pale_yellow" max={3} />,
-      options: <OptionsMenuRow onDelete={onDelete} onEdit={onEdit} />,
-    },
+  const projectsData = formatProject(projects)
+  const configTable = {
+    components: TABLE_COMPONENTS,
     head: {
-      actions: {
-        label: "",
-        width: calcColWidth(32),
-        type: "selector",
-      },
-      id: {
-        label: "id",
-        width: calcColWidth(90),
-        type: "text",
-      },
-      alias: {
-        label: "Alias",
-        width: calcColWidth(100),
-        type: "link",
-      },
-      sector: {
-        label: "Sector",
-        width: calcColWidth(120),
-        type: "text",
-      },
-      focusPoint: {
-        label: "Punto Focal",
-        width: calcColWidth(120),
-        type: "text",
-      },
-      testSystems: {
-        label: "sistemas de ensayo",
-        width: calcColWidth(220),
-        type: "tagGroup",
-      },
-      tags: {
-        label: "Tags de proyecto",
-        width: calcColWidth(220),
-        type: "tagGroup",
-      },
-      users: {
-        label: "Usuarios",
-        width: calcColWidth(60),
-        type: "count",
-      },
-      notes: {
-        label: "Apuntes",
-        width: calcColWidth(55),
-        type: "count",
-      },
-      options: {
-        label: "",
-        width: calcColWidth(20),
-        type: "component",
-      },
-    },
+      ...TABLE_PROJECTS_HEAD,
+      options: { ...TABLE_PROJECTS_HEAD.options, onDelete, onEdit }
+    }
   }
+  const allRowsAreSelected = selectedRowsKeys.length === projectsData?.length
 
   return (
     <Table
@@ -138,20 +52,20 @@ export const ProjectsTable = ({
         <ProjectsTableHeader
           activeItem={activeItem}
           onChange={handleOnTabChange}
-          projectsCount={_projects?.length}
+          projectsCount={projectsData?.length}
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
-          selectAllRows={() => handleSelectAllRows(_projects)}
+          selectAllRows={() => handleSelectAllRows(projectsData)}
+          checked={allRowsAreSelected}
         />
       }
-      config={projects_table}
-      content={_projects}
+      {...TABLE_STYLE}
+      config={configTable}
+      content={projectsData}
       selectedRows={selectedRows}
       onRowSelect={(id) => handleRowSelect(id)}
-      tableHeight="calc(100vh - 195px)"
-      p="32px"
-      pb="0"
-      isGrouped={isGrouped}
+      optionsDisabled={selectedRowsKeys.length > 1}
+      isGrouped={fetchState === fetchType.GROUPED}
     />
   )
 }

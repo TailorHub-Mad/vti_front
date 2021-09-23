@@ -9,7 +9,7 @@ export const clientFetchHandler = (state, options) => {
   const fetchHandler = {
     all: () => useFetchSWR(SWR_CACHE_KEYS.clients, getClients),
     id: () =>
-      useFetchSWR([SWR_CACHE_KEYS.client, options[fetchOption.ID]], getClient),
+      useFetchSWR([SWR_CACHE_KEYS.client, options[fetchOption.ID]], getClient)
   }
 
   return fetchHandler[state]()

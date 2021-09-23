@@ -1,5 +1,6 @@
 import { Flex, Icon, Text, useBoolean } from "@chakra-ui/react"
 import Link from "next/link"
+import { PATHS } from "../../../../utils/constants/paths"
 import { ArrowDownIcon } from "../../../icons/ArrowDownIcon"
 
 export const MenuLink = ({
@@ -9,6 +10,7 @@ export const MenuLink = ({
   submenu,
   setShowSubmenu,
   showSubmenu,
+  disabled,
   ...props
 }) => {
   return (
@@ -19,15 +21,20 @@ export const MenuLink = ({
       w="100%"
       role="group"
       _hover={{
-        cursor: "pointer",
+        cursor: "pointer"
       }}
-      pointerEvents={props.isDisabled ? "none" : "auto"}
-      opacity={props.isDisabled ? "0.3" : "1"}
+      pointerEvents={disabled ? "none" : "auto"}
+      opacity={disabled ? "0.3" : "1"}
       {...props}
     >
-      <Link href={href || "/apuntes"} passHref>
+      <Link href={href || PATHS.notes} passHref>
         <Flex>
-          <Icon color="white" marginRight="8px" _groupHover={{ color: "yellow" }}>
+          <Icon
+            color="white"
+            marginRight="8px"
+            _groupHover={{ color: "yellow" }}
+            pointerEvents={true}
+          >
             {icon}
           </Icon>
           <Text
@@ -52,8 +59,15 @@ export const MenuLink = ({
   )
 }
 
-export const MenuItem = ({ label, icon, href, submenu, ...props }) => {
-  //TODO link, detectar active y submenu
+export const MenuItem = ({
+  label,
+  icon,
+  href,
+  submenu,
+  disabled,
+
+  ...props
+}) => {
   const [showSubmenu, setShowSubmenu] = useBoolean(false)
   return (
     <>
@@ -64,6 +78,7 @@ export const MenuItem = ({ label, icon, href, submenu, ...props }) => {
         submenu={submenu}
         setShowSubmenu={setShowSubmenu}
         showSubmenu={showSubmenu}
+        disabled={disabled}
         {...props}
       />
       {submenu && showSubmenu
@@ -73,6 +88,7 @@ export const MenuItem = ({ label, icon, href, submenu, ...props }) => {
               label={link.label}
               icon={link.icon()}
               href={link.href}
+              disabled={disabled}
               pl="16px"
               mb={idx === submenu.length - 1 ? "16px" : "0"}
             />

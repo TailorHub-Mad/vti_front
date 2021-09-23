@@ -1,13 +1,36 @@
 import useProjectApi from "../hooks/api/useProjectApi"
 import useFetchSWR from "../hooks/useFetchSWR"
+import { fetchOption } from "../utils/constants/global_config"
 import { SWR_CACHE_KEYS } from "../utils/constants/swr"
 
-export const projectFetchHandler = (state) => {
-  const { getProjects, getGroupedProjects } = useProjectApi()
+export const projectFetchHandler = (state, options) => {
+  const {
+    getProjects,
+    getProject,
+    getGroupedProjects,
+    getFilteredProjects,
+    getSearchProjects
+  } = useProjectApi()
 
   const fetchHandler = {
     all: () => useFetchSWR(SWR_CACHE_KEYS.projects, getProjects),
-    grouped: () => useFetchSWR(SWR_CACHE_KEYS.groupedProjects, getGroupedProjects),
+    id: () =>
+      useFetchSWR([SWR_CACHE_KEYS.project, options[fetchOption.ID]], getProject),
+    grouped: () =>
+      useFetchSWR(
+        [SWR_CACHE_KEYS.groupedProjects, options[fetchOption.GROUP]],
+        getGroupedProjects
+      ),
+    filtered: () =>
+      useFetchSWR(
+        [SWR_CACHE_KEYS.filterProjects, options[fetchOption.FILTER]],
+        getFilteredProjects
+      ),
+    search: () =>
+      useFetchSWR(
+        [SWR_CACHE_KEYS.searchProjects, options[fetchOption.SEARCH]],
+        getSearchProjects
+      )
   }
 
   return fetchHandler[state]()

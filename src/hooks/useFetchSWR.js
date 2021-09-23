@@ -1,11 +1,12 @@
-import { useRouter } from "next/dist/client/router"
+import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import useSWR from "swr"
 import { ApiAuthContext } from "../provider/ApiAuthProvider"
+import { PATHS } from "../utils/constants/paths"
 
 const useFetchSWR = (key, fetcher, refreshInterval) => {
   const router = useRouter()
-  const { setIsLoggedIn } = useContext(ApiAuthContext)
+  const authContext = useContext(ApiAuthContext)
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -16,10 +17,10 @@ const useFetchSWR = (key, fetcher, refreshInterval) => {
     },
     dedupingInterval: 5000,
     errorRetryCount: 10,
-    refreshInterval: refreshInterval || 30000,
+    refreshInterval: refreshInterval || 30000
   })
 
-  const isUnauthorize = error?.response.status === 401
+  const isUnauthorize = error?.response?.status === 401
 
   useEffect(() => {
     if (data && isLoading) {
@@ -30,8 +31,8 @@ const useFetchSWR = (key, fetcher, refreshInterval) => {
 
   useEffect(() => {
     if (!isUnauthorize) return
-    setIsLoggedIn(false)
-    router.push("/login")
+    authContext && authContext.setIsLoggedIn(false)
+    router.push(PATHS.login)
   }, [isUnauthorize])
 
   if (isUnauthorize) return { unauthorize: true }

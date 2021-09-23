@@ -16,6 +16,7 @@ export const Table = ({
   content,
   tableHeight,
   isGrouped,
+  optionsDisabled,
   ...props
 }) => {
   const { head, components } = config
@@ -45,36 +46,36 @@ export const Table = ({
       >
         <Grid minWidth={MIN_TABLE_WIDTH} maxWidth={MAX_TABLE_WIDTH} width="100%">
           <TableHead templateColumns={templateColumns} head={head} />
-          {isGrouped
-            ? content.map((item, idx) => {
-                return (
-                  <TableGroup
-                    key={`it-${idx}`}
-                    item={item}
-                    templateColumns={templateColumns}
-                    idx={idx}
-                    components={components}
-                    onRowSelect={(id) => onRowSelect(id)}
-                    selectedRows={selectedRows}
-                    head={head}
-                  />
-                )
-              })
-            : content.map((item, idx) => {
-                return (
-                  <TableRow
-                    key={item._id || item.id || `it-${idx}`}
-                    item={item}
-                    templateColumns={templateColumns}
-                    isSelected={isSelected(item._id || item.id)}
-                    idx={idx}
-                    components={components}
-                    onRowSelect={() => onRowSelect(item._id || item.id)}
-                    selectedRows={selectedRows}
-                    head={head}
-                  />
-                )
-              })}
+          {content.map((item, idx) => {
+            if (isGrouped)
+              return (
+                <TableGroup
+                  key={`it-${idx}`}
+                  item={item}
+                  templateColumns={templateColumns}
+                  idx={idx}
+                  components={components}
+                  onRowSelect={(id) => onRowSelect(id)}
+                  selectedRows={selectedRows}
+                  head={head}
+                />
+              )
+            return (
+              <TableRow
+                key={`${item.id.value}-${idx}`}
+                item={item}
+                templateColumns={templateColumns}
+                isSelected={isSelected(item.id.value)}
+                idx={idx}
+                components={components}
+                onRowSelect={() => onRowSelect(item.id.value)}
+                selectedRows={selectedRows}
+                head={head}
+                isLastOne={idx === content.length - 1}
+                optionsDisabled={optionsDisabled}
+              />
+            )
+          })}
         </Grid>
       </Flex>
     </Card>

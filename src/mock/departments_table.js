@@ -1,5 +1,5 @@
 export const MOCK_DEPARTMENTS_TABLE = new Array(5).fill({
-  actions: "",
+  selector: "",
   id: "DP0001",
   name: "Departamento DEV",
   users: [
@@ -9,7 +9,7 @@ export const MOCK_DEPARTMENTS_TABLE = new Array(5).fill({
     { alias: "Proyecto DEV" },
     { alias: "Proyecto DEV" },
     { alias: "Proyecto DEV" },
-    { alias: "Proyecto DEV" },
+    { alias: "Proyecto DEV" }
   ],
-  options: "",
+  options: ""
 })

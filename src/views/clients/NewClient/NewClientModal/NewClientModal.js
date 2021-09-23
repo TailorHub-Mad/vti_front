@@ -6,6 +6,7 @@ import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomMo
 import useClientApi from "../../../../hooks/api/useClientApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
+import { errorHandler } from "../../../../utils/errors"
 import { NewClientForm } from "../NewClientForm/NewClientForm"
 
 export const NewClientModal = ({ isOpen, onClose, clientToUpdate }) => {
@@ -31,12 +32,7 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate }) => {
   }
 
   const checkInputsAreEmpty = () => {
-    return values.some(
-      (value) =>
-        // TODO -> autogenerate ID
-        // !value.id ||
-        !value.alias || !value.name
-    )
+    return values.some((value) => !value.alias || !value.name)
   }
 
   const handleSubmit = async () => {
@@ -53,8 +49,7 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate }) => {
       const clientsToCreate = [...values]
       await createClient(clientsToCreate)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -64,8 +59,7 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate }) => {
       const [data] = [...values]
       await updateClient(_id, data)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 

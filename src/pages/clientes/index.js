@@ -4,14 +4,13 @@ import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { Popup } from "../../components/overlay/Popup/Popup"
-import { Spinner } from "../../components/spinner/Spinner"
 import useClientApi from "../../hooks/api/useClientApi"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { ToastContext } from "../../provider/ToastProvider"
 import {
   DeleteType,
   fetchOption,
-  fetchType,
+  fetchType
 } from "../../utils/constants/global_config"
 import { ClientsTable } from "../../views/clients/ClientsTable/ClientsTable"
 import { NewClientModal } from "../../views/clients/NewClient/NewClientModal/NewClientModal"
@@ -20,7 +19,8 @@ import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { AddClientIcon } from "../../components/icons/AddClientIcon"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import { clientFetchHandler } from "../../swr/client.swr"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
+import { LoadingView } from "../../views/common/LoadingView"
+import { errorHandler } from "../../utils/errors"
 
 const clientes = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -67,8 +67,10 @@ const clientes = () => {
   }
 
   const handleDeleteMessage = () => {
+    if (!clientsToDelete) return
+
     if (deleteType === DeleteType.MANY)
-      return "¿Desea eliminar los sectores seleccionados?"
+      return "¿Desea eliminar los clientes seleccionados?"
     const label = getFieldObjectById(clientsData, "alias", clientsToDelete)
     return `¿Desea eliminar ${label}?`
   }
@@ -76,9 +78,7 @@ const clientes = () => {
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(clientsToDelete, clientsData)
-    updated.length > 0
-      ? await mutate(updated, false)
-      : await mutate(SWR_CACHE_KEYS.clients)
+    updated.length > 0 ? await mutate(updated, false) : await mutate()
     setDeleteType(null)
     setClientsToDelete(null)
   }
@@ -89,8 +89,7 @@ const clientes = () => {
       showToast("Cliente borrado correctamente")
       return clients.filter((client) => client._id !== id)
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -101,8 +100,7 @@ const clientes = () => {
       showToast("Clientes borrados correctamente")
       return clients.filter((client) => !clientsId.includes(client._id))
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -115,14 +113,13 @@ const clientes = () => {
   const onSearch = (search) => {
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: search,
+      [fetchOption.SEARCH]: search
     })
   }
 
-  if (error) return <>ERROR...</>
-  return !isLoggedIn ? (
-    <>Loading...</>
-  ) : (
+  if (!isLoggedIn) return null
+  if (error) return errorHandler(error)
+  return (
     <Page>
       <Popup
         variant="twoButtons"
@@ -157,13 +154,13 @@ const clientes = () => {
             onExport={handleExport}
             addLabel="Añadir cliente"
             searchPlaceholder="Busqueda por ID, Alias"
-            withoutFilter
-            withoutGroup
+            noFilter
+            noGroup
             icon={<AddClientIcon />}
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <Spinner /> : null}
+      {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData ? (
         <ViewEmptyState
           message="Añadir clientes a la plataforma"

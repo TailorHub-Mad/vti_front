@@ -1,10 +1,7 @@
 import { useState } from "react"
-import { MIN_TABLE_WIDTH } from "../utils/constants/layout"
-import { getPercentage } from "../utils/functions/common"
 
 const useTableActions = () => {
   const [selectedRows, setSelectedRows] = useState({})
-  const calcColWidth = (width) => `${getPercentage(MIN_TABLE_WIDTH, width)}%`
 
   const handleRowSelect = (id) => {
     if (selectedRows[id]) {
@@ -23,7 +20,7 @@ const useTableActions = () => {
     }
 
     const nextValues = items.reduce((obj, cv) => {
-      const itemId = cv.id
+      const itemId = cv.id.value
       const _next = { ...obj, [itemId]: true }
       return _next
     }, {})
@@ -35,8 +32,7 @@ const useTableActions = () => {
     selectedRows,
     setSelectedRows,
     handleRowSelect,
-    calcColWidth,
-    handleSelectAllRows,
+    handleSelectAllRows
   }
 }
 

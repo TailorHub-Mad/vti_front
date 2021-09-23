@@ -2,7 +2,6 @@ import { useContext, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { Popup } from "../../components/overlay/Popup/Popup"
-import { Spinner } from "../../components/spinner/Spinner"
 import { ToastContext } from "../../provider/ToastProvider"
 import { SectorsTable } from "../../views/sectors/SectorsTable/SectorsTable"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
@@ -14,13 +13,14 @@ import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import {
   DeleteType,
   fetchOption,
-  fetchType,
+  fetchType
 } from "../../utils/constants/global_config"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import { AddSectorIcon } from "../../components/icons/AddSectorIcon"
 import { sectorFetchHandler } from "../../swr/sector.swr"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
+import { LoadingView } from "../../views/common/LoadingView"
+import { errorHandler } from "../../utils/errors"
 
 const sectores = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -67,6 +67,8 @@ const sectores = () => {
   }
 
   const handleDeleteMessage = () => {
+    if (!sectorsToDelete) return
+
     if (deleteType === DeleteType.MANY)
       return "¿Desea eliminar los sectores seleccionados?"
     const label = getFieldObjectById(sectorsData, "title", sectorsToDelete)
@@ -76,9 +78,7 @@ const sectores = () => {
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(sectorsToDelete, sectorsData)
-    updated.length > 0
-      ? await mutate(updated, false)
-      : await mutate(SWR_CACHE_KEYS.sectors)
+    updated.length > 0 ? await mutate(updated, false) : await mutate()
     setDeleteType(null)
     setSectorsToDelete(null)
   }
@@ -89,8 +89,7 @@ const sectores = () => {
       showToast("Sector borrado correctamente")
       return sectors.filter((sector) => sector._id !== id)
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -101,8 +100,7 @@ const sectores = () => {
       showToast("Clientes borrados correctamente")
       return sectors.filter((sector) => !sectorsId.includes(sector._id))
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -115,14 +113,13 @@ const sectores = () => {
   const onSearch = (search) => {
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: search,
+      [fetchOption.SEARCH]: search
     })
   }
 
-  if (error) return <>ERROR...</>
-  return !isLoggedIn ? (
-    <>Loading...</>
-  ) : (
+  if (!isLoggedIn) return null
+  if (error) return errorHandler(error)
+  return (
     <Page>
       <Popup
         variant="twoButtons"
@@ -158,10 +155,12 @@ const sectores = () => {
             addLabel="Añadir sector"
             searchPlaceholder="Busqueda por ID, Alias"
             icon={<AddSectorIcon />}
+            noFilter
+            noGroup
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <Spinner /> : null}
+      {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData ? (
         <ViewEmptyState
           message="Añadir sectores a la plataforma"

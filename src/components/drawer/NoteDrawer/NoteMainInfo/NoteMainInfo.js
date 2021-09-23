@@ -14,7 +14,7 @@ export const NoteMainInfo = ({ updatedAt, project, isResponse }) => {
     <>
       <Flex justify="space-between" h="16px">
         <Text variant="d_xs_regular" color="grey">
-          {updatedAt?.toLocaleDateString()}
+          {new Date(updatedAt)?.toLocaleDateString()}
         </Text>
         <Flex>
           <ActionLink color="grey" icon={<EditIcon />} label="Editar" />

@@ -6,6 +6,7 @@ import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomMo
 import useSystemApi from "../../../../hooks/api/useSystemApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
+import { errorHandler } from "../../../../utils/errors"
 import { NewTestSystemForm } from "../NewTestSystemForm/NewTestSystemForm"
 
 export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
@@ -32,23 +33,20 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
 
   const checkInputsAreEmpty = () => {
     return values.some(
-      (value) =>
-        // TODO -> autogenerate ID
-        // !value.id ||
-        !value.vtiCode || !value.clientAlias || !value.alias || !value.year
+      (value) => !value.vtiCode || !value.clientAlias || !value.alias || !value.year
     )
   }
 
   const formatCreateSystems = (systems) => {
     return systems.map((value) => {
-      const { clientAlias: client, year, vtiCode, alias } = value
+      const { clientAlias, year, vtiCode, alias } = value
       return {
         vtiCode,
         alias,
         date: {
-          year,
+          year
         },
-        client,
+        client: clientAlias.value
       }
     })
   }
@@ -59,8 +57,8 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
       return {
         alias,
         date: {
-          year,
-        },
+          year
+        }
       }
     })
   }
@@ -80,8 +78,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
       const systemsQueue = systemsToCreate.map((system) => createSystem(system))
       await Promise.all(systemsQueue)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -91,8 +88,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
       const [data] = formatUpdateSystems(values)
       await updateSystem(_id, data)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -102,7 +98,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
       vtiCode,
       clientAlias,
       alias,
-      date: { year },
+      date: { year }
     } = systemToUpdate
     setValues([{ vtiCode, clientAlias, alias, year }])
   }, [systemToUpdate])

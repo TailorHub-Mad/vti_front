@@ -9,7 +9,7 @@ export const sectorFetchHandler = (state, options) => {
   const fetchHandler = {
     all: () => useFetchSWR(SWR_CACHE_KEYS.sectors, getSectors),
     id: () =>
-      useFetchSWR([SWR_CACHE_KEYS.sector, options[fetchOption.ID]], getSector),
+      useFetchSWR([SWR_CACHE_KEYS.sector, options[fetchOption.ID]], getSector)
   }
 
   return fetchHandler[state]()

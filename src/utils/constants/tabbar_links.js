@@ -1,82 +1,114 @@
 import { ICONS_REFERENCE } from "./icons_reference"
+import { PATHS } from "./paths"
 
 const TABBAR_LINKS = {
+  // NOTES
   new_note: {
     label: "Nuevo apunte",
     icon: ICONS_REFERENCE.new_note,
-    href: "/notas/nueva",
+    href: PATHS.newNote,
+    disabled: true // TODO -> provisional
   },
   notes: {
     label: "Apuntes",
     icon: ICONS_REFERENCE.notes,
-    href: "/apuntes/",
+    href: PATHS.notes,
+    disabled: false
   },
+
+  // PROJECTS
   projects: {
     label: "Proyectos",
     icon: ICONS_REFERENCE.project_line,
-    href: "/proyectos",
+    href: PATHS.projects,
+    disabled: true // TODO -> provisional
   },
   projects_admin: {
     label: "Proyectos",
     icon: ICONS_REFERENCE.project_line,
-    href: "/proyectos",
+    href: PATHS.projects,
+    disabled: false,
     submenu: [
       {
         label: "Sectores",
         icon: ICONS_REFERENCE.sector,
-        href: "/sectores",
-      },
-    ],
+        href: PATHS.sectors,
+        disabled: false
+      }
+    ]
   },
+
+  // TEST SYSTEMS
   test_systems: {
     label: "Sistemas ensayo",
     icon: ICONS_REFERENCE.machine_line,
-    href: "/sistemas",
+    href: PATHS.testSystems,
+    disabled: false
   },
+
+  // TAGS
   tags: {
     label: "Tags",
     icon: ICONS_REFERENCE.tag_line,
+    href: PATHS.projectTags,
+    disabled: true, // TODO -> provisional
     submenu: [
       {
         label: "Proyecto",
         icon: ICONS_REFERENCE.tag_line,
-        href: "/tags-de-proyecto",
+        href: PATHS.projectTags,
+        disabled: true // TODO -> provisional
       },
       {
         label: "Apunte",
         icon: ICONS_REFERENCE.tag_line,
-        href: "/tags-de-apunte",
-      },
-    ],
+        href: PATHS.noteTags,
+        disabled: true // TODO -> provisional
+      }
+    ]
   },
+
+  // CLIENTS
   clients: {
     label: "Clientes",
     icon: ICONS_REFERENCE.clients_line,
-    href: "/clientes",
+    href: PATHS.clients,
+    disabled: false
   },
+
+  // USERS
   users: {
     label: "Usuarios",
     icon: ICONS_REFERENCE.users_line,
-    href: "/",
+    href: PATHS.users,
+    disabled: false,
     submenu: [
       {
         label: "Departamentos",
         icon: ICONS_REFERENCE.departments,
-        href: "/departamentos",
-      },
-    ],
+        href: PATHS.departments,
+        disabled: true
+      }
+    ]
   },
+
+  // HELP
   help: {
     label: "Apoyo",
     icon: ICONS_REFERENCE.help_line,
-    href: "/",
+    href: PATHS.help,
+    disabled: true // TODO -> provisional
   },
+
+  // SUBSCRIPTION
   subscription: {
     label: "Subscripción",
     icon: ICONS_REFERENCE.subscribe_line,
-    href: "/",
-  },
+    href: PATHS.subscription,
+    disabled: true // TODO -> provisional
+  }
 }
+
 const {
   new_note,
   notes,
@@ -87,7 +119,7 @@ const {
   clients,
   users,
   help,
-  subscription,
+  subscription
 } = TABBAR_LINKS
 
 export const TABBAR_USER_LINKS = [
@@ -96,7 +128,7 @@ export const TABBAR_USER_LINKS = [
   projects,
   test_systems,
   tags,
-  subscription,
+  subscription
 ]
 
 export const TABBAR_ADMIN_LINKS = [
@@ -107,5 +139,5 @@ export const TABBAR_ADMIN_LINKS = [
   clients,
   users,
   help,
-  subscription,
+  subscription
 ]

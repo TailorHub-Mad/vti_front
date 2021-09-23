@@ -1,5 +1,5 @@
 export const MOCK_SECTORS_TABLE = new Array(5).fill({
-  actions: "",
+  selector: "",
   id: "ID001",
   name: "Sector Test",
   projects: [
@@ -9,7 +9,7 @@ export const MOCK_SECTORS_TABLE = new Array(5).fill({
     { alias: "Proyecto DEV" },
     { alias: "Proyecto DEV" },
     { alias: "Proyecto DEV" },
-    { alias: "Proyecto DEV" },
+    { alias: "Proyecto DEV" }
   ],
-  options: "",
+  options: ""
 })

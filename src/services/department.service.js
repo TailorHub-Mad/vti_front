@@ -17,7 +17,7 @@ const DepartmentService = () => {
     getDepartment,
     createDepartment,
     updateDepartment,
-    deleteDepartment,
+    deleteDepartment
   }
 }
 

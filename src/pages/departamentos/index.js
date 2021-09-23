@@ -2,7 +2,6 @@ import { useContext, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { Popup } from "../../components/overlay/Popup/Popup"
-import { Spinner } from "../../components/spinner/Spinner"
 import { ToastContext } from "../../provider/ToastProvider"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { DepartmentsTable } from "../../views/departments/DepartmentsTable/DepartmentsTable"
@@ -13,14 +12,15 @@ import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import {
   DeleteType,
   fetchOption,
-  fetchType,
+  fetchType
 } from "../../utils/constants/global_config"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { AddDepartmentIcon } from "../../components/icons/AddDepartmentIcon"
 import { departmentFetchHandler } from "../../swr/department.swr"
-import { checkDataIsEmpty } from "../../utils/functions/common"
+import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import useDepartmentApi from "../../hooks/api/useDepartmentApi"
-import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
+import { LoadingView } from "../../views/common/LoadingView"
+import { errorHandler } from "../../utils/errors"
 
 const departamentos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -66,17 +66,19 @@ const departamentos = () => {
     setIsDepartmentModalOpen(false)
   }
 
-  const getAliasByIdDepartment = (id) => {
-    const department = departmentsData.find((department) => department._id === id)
-    return department?.alias
+  const handleDeleteMessage = () => {
+    if (!departmentsToDelete) return
+
+    if (deleteType === DeleteType.MANY)
+      return "¿Desea eliminar los departamentos seleccionados?"
+    const label = getFieldObjectById(departmentsData, "name", departmentsToDelete)
+    return `¿Desea eliminar ${label}?`
   }
 
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(departmentsToDelete, departmentsData)
-    updated.length > 0
-      ? await mutate(updated, false)
-      : await mutate(SWR_CACHE_KEYS.departments)
+    updated.length > 0 ? await mutate(updated, false) : await mutate()
     setDeleteType(null)
     setDepartmentsToDelete(null)
   }
@@ -87,8 +89,7 @@ const departamentos = () => {
       showToast("Departamento borrado correctamente")
       return departments.filter((department) => department._id !== id)
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -101,8 +102,7 @@ const departamentos = () => {
         (department) => !departmentsId.includes(department._id)
       )
     } catch (error) {
-      // TODO -> manage erros
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -115,14 +115,13 @@ const departamentos = () => {
   const onSearch = (search) => {
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: search,
+      [fetchOption.SEARCH]: search
     })
   }
 
-  if (error) return <>ERROR...</>
-  return !isLoggedIn ? (
-    <>Loading...</>
-  ) : (
+  if (!isLoggedIn) return null
+  if (error) return errorHandler(error)
+  return (
     <Page>
       <Popup
         variant="twoButtons"
@@ -133,9 +132,7 @@ const departamentos = () => {
         onConfirm={handleDeleteFunction}
         onClose={handleClosePopup}
       >
-        {deleteType === DeleteType.ONE
-          ? `¿Desea eliminar ${getAliasByIdDepartment(departmentsToDelete)}?`
-          : "¿Desea eliminar los departamentos seleccionados?"}
+        {handleDeleteMessage()}
       </Popup>
 
       <NewDepartmentModal
@@ -160,10 +157,12 @@ const departamentos = () => {
             addLabel="Añadir departamentos"
             searchPlaceholder="Busqueda por ID, Alias"
             icon={<AddDepartmentIcon />}
+            noFilter
+            noGroup
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <Spinner /> : null}
+      {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData ? (
         <ViewEmptyState
           message="Añadir departamentos a la plataforma"

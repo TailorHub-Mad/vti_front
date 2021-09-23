@@ -6,6 +6,7 @@ import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomMo
 import useSectorApi from "../../../../hooks/api/useSectorApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
+import { errorHandler } from "../../../../utils/errors"
 import { NewSectorForm } from "../NewSectorForm/NewSectorForm"
 
 export const NewSectorModal = ({ isOpen, onClose, sectorToUpdate, ...props }) => {
@@ -31,12 +32,7 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToUpdate, ...props }) =>
   }
 
   const checkInputsAreEmpty = () => {
-    return values.some(
-      (value) =>
-        // TODO -> autogenerate ID
-        // !value.id ||
-        !value.title
-    )
+    return values.some((value) => !value.title)
   }
 
   const handleSubmit = async () => {
@@ -53,8 +49,7 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToUpdate, ...props }) =>
       const sectorsToCreate = [...values]
       await createSector(sectorsToCreate)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 
@@ -64,8 +59,7 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToUpdate, ...props }) =>
       const [data] = [...values]
       await updateSector(_id, data)
     } catch (error) {
-      // TODO -> manage errors
-      console.log("ERROR")
+      errorHandler(error)
     }
   }
 

@@ -1,6 +1,6 @@
 export const DeleteType = {
   ONE: "deleteOne",
-  MANY: "deleteMany",
+  MANY: "deleteMany"
 }
 
 export const fetchType = {
@@ -9,18 +9,19 @@ export const fetchType = {
   ACTIVE: "active",
   GROUPED: "grouped",
   FILTERED: "filtered",
-  SEARCH: "search",
+  SEARCH: "search"
 }
 
 export const fetchOption = {
   ID: "id",
+  GROUP: "group",
   FILTER: "filter",
-  SEARCH: "search",
+  SEARCH: "search"
 }
 
 export const RoleType = {
   USER: "user",
-  ADMIN: "admin",
+  ADMIN: "admin"
 }
 
-export const TOAST_DEFAULT_TIME = 3000
+export const TOAST_DEFAULT_TIME = 2000

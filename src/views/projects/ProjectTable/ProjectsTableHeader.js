@@ -1,6 +1,6 @@
 import { DeleteIcon } from "@chakra-ui/icons"
 import { chakra, Checkbox, Flex, Text } from "@chakra-ui/react"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { fetchType } from "../../../utils/constants/global_config"
 import { ICONS_REFERENCE } from "../../../utils/constants/icons_reference"
 
@@ -9,14 +9,14 @@ const visibility_menu = {
     label: "Todos",
     value: fetchType.ALL,
     active_icon: ICONS_REFERENCE.notes,
-    icon: ICONS_REFERENCE.notes,
+    icon: ICONS_REFERENCE.notes
   },
   active: {
     label: "Activos",
     value: fetchType.ACTIVE,
     active_icon: ICONS_REFERENCE.active,
-    icon: ICONS_REFERENCE.active,
-  },
+    icon: ICONS_REFERENCE.active
+  }
 }
 
 export const ProjectsTableHeader = ({
@@ -26,12 +26,19 @@ export const ProjectsTableHeader = ({
   selectedRows,
   onDelete,
   selectAllRows = () => {},
+  checked = false
 }) => {
+  const [isChecked, setIsChecked] = useState(checked)
+
+  useEffect(() => {
+    setIsChecked(checked)
+  }, [checked])
+
   return (
     <Flex justify="space-between" align="center" pb="32px">
       <Flex>
         <Flex mr="15px">
-          <Checkbox mr="8px" onChange={selectAllRows} />
+          <Checkbox mr="8px" onChange={selectAllRows} isChecked={isChecked} />
           {Object.keys(selectedRows)?.length > 0 ? (
             <Flex
               alignItems="center"

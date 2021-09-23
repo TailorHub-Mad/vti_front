@@ -9,7 +9,7 @@ export const systemFetchHandler = (state, options) => {
   const fetchHandler = {
     all: () => useFetchSWR(SWR_CACHE_KEYS.systems, getSystems),
     id: () =>
-      useFetchSWR([SWR_CACHE_KEYS.client, options[fetchOption.ID]], getSystem),
+      useFetchSWR([SWR_CACHE_KEYS.client, options[fetchOption.ID]], getSystem)
   }
 
   return fetchHandler[state]()
