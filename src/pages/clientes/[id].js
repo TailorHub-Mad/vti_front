@@ -1,4 +1,4 @@
-import { useRouter } from "next/dist/client/router"
+import { useRouter } from "next/router"
 import { useContext } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"

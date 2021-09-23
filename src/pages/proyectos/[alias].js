@@ -6,7 +6,7 @@ import { ProjectDetails } from "../../views/notes/Project/ProjectDetails/Project
 import { ProjectNotes } from "../../views/notes/Project/ProjectNotes/ProjectNotes"
 import { ProjectHeader } from "../../views/notes/Project/ProjectHeader/ProjectHeader"
 import { Box } from "@chakra-ui/react"
-import { useRouter } from "next/dist/client/router"
+import { useRouter } from "next/router"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { projectFetchHandler } from "../../swr/project.swr"
 import { fetchOption, fetchType } from "../../utils/constants/global_config"

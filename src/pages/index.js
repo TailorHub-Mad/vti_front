@@ -1,4 +1,4 @@
-import { useRouter } from "next/dist/client/router"
+import { useRouter } from "next/router"
 import { useContext, useEffect } from "react"
 import { ApiAuthContext } from "../provider/ApiAuthProvider"
 import { PATHS } from "../utils/constants/paths"
