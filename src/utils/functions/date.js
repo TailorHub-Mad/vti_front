@@ -7,3 +7,10 @@ export const destructuringDate = (value) => {
 
   return { year, month, day }
 }
+
+export const formatDateToInput = ({ year, month, day }) => {
+  return `${year}-${String(month).padStart(2, "0")}-${String(+day + 1).padStart(
+    2,
+    "0"
+  )}`
+}

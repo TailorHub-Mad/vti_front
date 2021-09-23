@@ -111,6 +111,8 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
     setValues([{}])
   }, [isOpen])
 
+  console.log("MODAL SYSTEM", values)
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />

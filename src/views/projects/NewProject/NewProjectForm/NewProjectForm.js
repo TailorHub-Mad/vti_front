@@ -24,25 +24,27 @@ export const NewProjectForm = ({
   const [systemOptions, setSystemOptions] = useState([])
 
   const isClientObject = typeof value.client === "object"
-  const isSectorObject = typeof value.sector === "object"
-  const isUserObject = typeof value.user === "object"
-  const isSystemObject = typeof value.testSystems === "object"
 
-  let formatValues = { ...value }
+  console.log(projectToUpdate)
 
-  if (projectToUpdate) {
-    formatValues = {
-      ...value,
-      client: isClientObject ? value.client : { label: value.client, value: "" },
-      sector: isSectorObject ? value.sector : { label: value.sector, value: "" },
-      user: isUserObject ? value.user : { label: value.user, value: "" },
-      testSystems: isSystemObject
-        ? value.testSystems
-        : { label: value.testSystems, value: "" }
-    }
-  }
-
-  console.log("formatValues", formatValues)
+  const formatValues = !projectToUpdate
+    ? { ...value }
+    : {
+        ...value,
+        client: isClientObject ? value.client : { label: value.client, value: "" },
+        focusPoint: {
+          label: projectToUpdate.focusPoint[0].alias,
+          value: projectToUpdate.focusPoint[0]._id
+        },
+        sector: {
+          label: projectToUpdate.sector[0].title,
+          value: projectToUpdate.sector[0]._id
+        },
+        testSystems: projectToUpdate.testSystems.map((system) => ({
+          label: system.alias,
+          value: system._id
+        }))
+      }
 
   const formatClients = (_clients) =>
     _clients.map((client) => ({ label: client.alias, value: client._id }))
@@ -54,7 +56,11 @@ export const NewProjectForm = ({
     _users.map((user) => ({ label: user.alias, value: user._id }))
 
   const formatSystems = (_systems) => {
-    return _systems.map((system) => ({ label: system.alias, value: system._id }))
+    if (_systems.length === 0) return []
+    return _systems[0].testSystems.map((system) => ({
+      label: system.alias,
+      value: system._id
+    }))
   }
 
   const handleFormChange = (input, _value) => {
@@ -138,16 +144,16 @@ export const NewProjectForm = ({
       setClientOptions(formatClients(clients))
     }
     const _getSectors = async () => {
-      const clients = await getSectors()
-      setSectorOptions(formatSectors(clients))
+      const sectors = await getSectors()
+      setSectorOptions(formatSectors(sectors))
     }
     const _getUsers = async () => {
-      const clients = await getUsers()
-      setUserOptions(formatUsers(clients))
+      const users = await getUsers()
+      setUserOptions(formatUsers(users))
     }
     const _getSystems = async () => {
-      const clients = await getSystems()
-      setSystemOptions(formatSystems(clients))
+      const systems = await getSystems()
+      setSystemOptions(formatSystems(systems))
     }
     _getClients()
     _getSectors()
@@ -160,42 +166,11 @@ export const NewProjectForm = ({
     if (!projectToUpdate || clientOptions.length === 0) return
 
     const client = clientOptions.find(
-      (_client) => _client.label === projectToUpdate?.client
+      (_client) => _client.label === projectToUpdate?.clientAlias
     )
 
     handleFormChange("client", client)
   }, [projectToUpdate, clientOptions])
-
-  // Sectors
-  useEffect(() => {
-    if (!projectToUpdate || sectorOptions.length === 0) return
-
-    const sector = sectorOptions.find(
-      (_sector) => _sector.label === projectToUpdate?.sector
-    )
-
-    handleFormChange("sector", sector)
-  }, [projectToUpdate, sectorOptions])
-
-  // Users
-  useEffect(() => {
-    if (!projectToUpdate || userOptions.length === 0) return
-
-    const user = userOptions.find((_user) => _user.label === projectToUpdate?.user)
-
-    handleFormChange("user", user)
-  }, [projectToUpdate, userOptions])
-
-  // Systems
-  useEffect(() => {
-    if (!projectToUpdate || systemOptions.length === 0) return
-
-    const system = systemOptions.find(
-      (_system) => _system.label === projectToUpdate?.testSystems
-    )
-
-    handleFormChange("testSystems", system)
-  }, [projectToUpdate, systemOptions])
 
   const inputRefObj = {
     input: <SimpleInput />,

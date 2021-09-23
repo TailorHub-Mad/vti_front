@@ -13,7 +13,10 @@ import useProjectApi from "../../../../hooks/api/useProjectApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
-import { destructuringDate } from "../../../../utils/functions/date"
+import {
+  destructuringDate,
+  formatDateToInput
+} from "../../../../utils/functions/date"
 import { NewProjectForm } from "../NewProjectForm/NewProjectForm"
 
 const initialValues = {
@@ -28,7 +31,7 @@ const initialValues = {
 
 export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) => {
   const { showToast } = useContext(ToastContext)
-  const { createProject, updateProject } = useProjectApi()
+  const { createProject } = useProjectApi()
   const { mutate } = useSWRConfig()
 
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
@@ -61,15 +64,11 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
   }
 
   // const formatUpdateProject = (project) => {
-  //   return project.map((value) => {
-  //     const { year, alias } = value
-  //     return {
-  //       alias,
-  //       date: {
-  //         year
-  //       }
-  //     }
-  //   })
+  //   return {
+  //     alias: project.alias,
+  //     sector: project.sector.value,
+  //     testSystems: project.testSystems.map((system) => system.value)
+  //   }
   // }
 
   const handleSubmit = async () => {
@@ -85,9 +84,8 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
 
   const handleCreateProject = async () => {
     try {
-      const projectToCreate = formatCreateProject(values)
-
-      await createProject(projectToCreate)
+      const project = formatCreateProject(values)
+      await createProject(project)
     } catch (error) {
       errorHandler(error)
     }
@@ -95,18 +93,8 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
 
   const handleUpdateProject = async () => {
     try {
-      const { _id } = projectToUpdate
-
-      // TODO -> provisional
-      const data = {
-        ...values,
-        date: { year: values.year.toString(), month: "02", day: "25" }
-      }
-      delete data.year
-      delete data.id
-      delete data.tags
-
-      await updateProject(_id, data)
+      // const project = formatUpdateProject(values)
+      //await updateProject(projectToUpdate)
     } catch (error) {
       errorHandler(error)
     }
@@ -120,7 +108,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
       client: projectToUpdate?.clientAlias,
       focusPoint: projectToUpdate?.focusPoint.map((fp) => fp.alias)[0],
       testSystems: projectToUpdate?.testSystems.map((ts) => ts.alias),
-      date: projectToUpdate?.date?.date
+      date: formatDateToInput(projectToUpdate?.date)
     }
     setValues(_project)
   }, [projectToUpdate])

@@ -5,7 +5,7 @@ import { FormController } from "../FormItemWrapper/FormController"
 import { InputSelect } from "../InputSelect/InputSelect"
 
 export const AddSelect = ({
-  values = [{ label: "", value: "" }],
+  value = [{ label: "", value: "" }],
   options = [],
   onChange = () => {},
   label,
@@ -15,7 +15,7 @@ export const AddSelect = ({
   isDisabled,
   ...props
 }) => {
-  const [inputValues, setInputValues] = useState(values)
+  const [inputValues, setInputValues] = useState(value)
   const [availableOptions, setAvailableOptions] = useState([])
 
   const handleChange = (option, idx) => {
