@@ -2,21 +2,22 @@ import React, { useMemo } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import useTableActions from "../../../hooks/useTableActions"
-import { TABLE_COMPONENTS } from "../../../utils/constants/tables"
+import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
 import { formatSector, TABLE_SECTORS_HEAD } from "./utils"
 
 export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
   const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
     useTableActions()
 
+  const selectedRowsKeys = Object.keys(selectedRows)
+
   useMemo(() => {
     setSelectedRows([])
   }, [sectors.length])
 
   const handleOnDelete = () => {
-    const sectorsId = Object.keys(selectedRows)
-    if (Object.keys(selectedRows).length > 1) return onDeleteMany(sectorsId)
-    return onDelete(sectorsId[0])
+    if (selectedRowsKeys.length > 1) return onDeleteMany(selectedRowsKeys)
+    return onDelete(selectedRowsKeys[0])
   }
 
   const sectorsData = formatSector(sectors)
@@ -28,6 +29,8 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
     }
   }
 
+  const allRowsAreSelected = selectedRowsKeys.length === sectorsData?.length
+
   return (
     <Table
       header={
@@ -37,16 +40,15 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
           selectAllRows={() => handleSelectAllRows(sectorsData)}
-          checked={Object.keys(selectedRows).length === sectorsData?.length}
+          checked={allRowsAreSelected}
         />
       }
+      {...TABLE_STYLE}
       config={configTable}
       content={sectorsData}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
-      p="32px"
-      pb="0"
-      tableHeight={"calc(100vh - 190px)"}
+      optionsDisabled={selectedRowsKeys.length > 1}
     />
   )
 }

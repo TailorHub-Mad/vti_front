@@ -10,14 +10,6 @@ export const NewSectorForm = ({ value, onChange }) => {
   }
 
   const formInputs = {
-    // TODO -> autogenerate ID
-    // id: {
-    //   type: "text",
-    //   config: {
-    //     placeholder: "ID",
-    //     label: "ID",
-    //   },
-    // },
     title: {
       type: "text",
       config: {

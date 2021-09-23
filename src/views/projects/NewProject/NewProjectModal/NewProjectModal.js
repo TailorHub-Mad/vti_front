@@ -31,7 +31,7 @@ const initialValues = {
 
 export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) => {
   const { showToast } = useContext(ToastContext)
-  const { createProject } = useProjectApi()
+  const { createProject, updateProject } = useProjectApi()
   const { mutate } = useSWRConfig()
 
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
@@ -46,30 +46,39 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
       !values.client ||
       !values.sector ||
       !values.date ||
-      !values.focusPoint ||
-      !values.testSystems
+      !values.focusPoint
       // || !value.tags // TODO -> provisional
     )
   }
 
   const formatCreateProject = (project) => {
-    return {
+    const formatData = {
       alias: project.alias,
       client: project.client.value,
       sector: project.sector.value,
       focusPoint: project.focusPoint.value,
-      testSystems: project.testSystems.map((system) => system.value),
       date: destructuringDate(project.date)
+    }
+
+    if (!project.testSystems) return formatData
+    return {
+      ...formatData,
+      testSystems: project.testSystems?.map((system) => system.value)
     }
   }
 
-  // const formatUpdateProject = (project) => {
-  //   return {
-  //     alias: project.alias,
-  //     sector: project.sector.value,
-  //     testSystems: project.testSystems.map((system) => system.value)
-  //   }
-  // }
+  const formatUpdateProject = (project) => {
+    const formatData = {
+      alias: project.alias,
+      sector: project.sector.value
+    }
+
+    if (!project.testSystems) return formatData
+    return {
+      ...formatData,
+      testSystems: project.testSystems?.map((system) => system.value)
+    }
+  }
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
@@ -93,8 +102,9 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
 
   const handleUpdateProject = async () => {
     try {
-      // const project = formatUpdateProject(values)
-      //await updateProject(projectToUpdate)
+      const { _id } = projectToUpdate
+      const project = formatUpdateProject(values)
+      await updateProject(_id, project)
     } catch (error) {
       errorHandler(error)
     }

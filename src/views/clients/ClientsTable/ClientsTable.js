@@ -2,21 +2,22 @@ import { useMemo } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import useTableActions from "../../../hooks/useTableActions"
-import { TABLE_COMPONENTS } from "../../../utils/constants/tables"
+import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
 import { formatClient, TABLE_CLIENT_HEAD } from "./utils"
 
 export const ClientsTable = ({ clients = [], onDelete, onEdit, onDeleteMany }) => {
   const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
     useTableActions()
 
+  const selectedRowsKeys = Object.keys(selectedRows)
+
   useMemo(() => {
     setSelectedRows([])
   }, [clients.length])
 
   const handleOnDelete = () => {
-    const clientsId = Object.keys(selectedRows)
-    if (Object.keys(selectedRows).length > 1) return onDeleteMany(clientsId)
-    return onDelete(clientsId[0])
+    if (selectedRowsKeys.length > 1) return onDeleteMany(selectedRowsKeys)
+    return onDelete(selectedRowsKeys[0])
   }
 
   const clientsData = formatClient(clients)
@@ -28,6 +29,8 @@ export const ClientsTable = ({ clients = [], onDelete, onEdit, onDeleteMany }) =
     }
   }
 
+  const allRowsAreSelected = selectedRowsKeys.length === clientsData?.length
+
   return (
     <Table
       header={
@@ -37,16 +40,14 @@ export const ClientsTable = ({ clients = [], onDelete, onEdit, onDeleteMany }) =
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
           selectAllRows={() => handleSelectAllRows(clientsData)}
-          checked={Object.keys(selectedRows).length === clientsData?.length}
+          checked={allRowsAreSelected}
         />
       }
+      {...TABLE_STYLE}
       config={configTable}
       content={clientsData}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
-      tableHeight={"calc(100vh - 190px)"}
-      p="32px"
-      pb="0"
     />
   )
 }

@@ -10,14 +10,6 @@ export const NewDepartmentForm = ({ value, onChange }) => {
   }
 
   const formInputs = {
-    // TODO -> autogenerate ID
-    // id: {
-    //   type: "text",
-    //   config: {
-    //     placeholder: "ID",
-    //     label: "ID",
-    //   },
-    // },
     name: {
       type: "text",
       config: {

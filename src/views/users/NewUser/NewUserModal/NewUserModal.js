@@ -33,10 +33,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
 
   const checkInputsAreEmpty = () => {
     return values.some(
-      (value) =>
-        // TODO -> autogenerate ID
-        // !value.id ||
-        !value.alias || !value.fullName || !value.email || !value.department
+      (value) => !value.alias || !value.fullName || !value.email || !value.department
     )
   }
 

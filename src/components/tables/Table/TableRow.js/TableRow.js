@@ -10,6 +10,7 @@ export const TableRow = ({
   selectedRows,
   head,
   isLastOne,
+  optionsDisabled,
   ...props
 }) => {
   const { isFinished } = item?.config || {}
@@ -90,7 +91,8 @@ export const TableRow = ({
           return React.cloneElement(components[head[name]?.type], {
             ...head[name],
             id: item.id.value,
-            key: `${name}-${idx}`
+            key: `${name}-${idx}`,
+            disabled: optionsDisabled
           })
         }
 

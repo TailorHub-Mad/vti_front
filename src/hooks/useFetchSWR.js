@@ -20,7 +20,7 @@ const useFetchSWR = (key, fetcher, refreshInterval) => {
     refreshInterval: refreshInterval || 30000
   })
 
-  const isUnauthorize = error?.response.status === 401
+  const isUnauthorize = error?.response?.status === 401
 
   useEffect(() => {
     if (data && isLoading) {

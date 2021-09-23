@@ -31,12 +31,7 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
   }
 
   const checkInputsAreEmpty = () => {
-    return values.some(
-      (value) =>
-        // TODO -> autogenerate ID
-        // !value.id ||
-        !value.alias || !value.name
-    )
+    return values.some((value) => !value.alias || !value.name)
   }
 
   const handleSubmit = async () => {
