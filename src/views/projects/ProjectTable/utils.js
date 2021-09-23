@@ -10,7 +10,7 @@ export const transformProjectData = (project) => ({
   selector: "",
   id: { label: project.ref, value: project._id },
   alias: { label: project.alias, link: `${PATHS.projects}/${project._id}` },
-  sector: project.sector[0]?.title || "---",
+  sector: project?.sector[0]?.title || "---",
   focusPoint: project.focusPoint?.map((fp) => fp.alias).join(", ") || "---",
   testSystems: project.testSystems?.map((ts) => ts.alias) || "---",
   tags: project.tag?.map((ts) => ts.name),

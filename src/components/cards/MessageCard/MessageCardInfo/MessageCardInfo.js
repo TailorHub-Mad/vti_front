@@ -4,7 +4,7 @@ import { getAcronym } from "../../../../utils/functions/common"
 
 export const MessageCardInfo = ({ id, author, updatedAt, ...props }) => {
   return (
-    <Flex {...props} width="100%">
+    <Flex {...props} width="100%" justifyContent="space-between">
       <Text color="grey" variant="d_xs_regular">
         {id}
       </Text>

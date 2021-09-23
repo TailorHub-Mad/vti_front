@@ -61,7 +61,7 @@ export const NewProjectForm = ({
 
   const formInputs = {
     alias: {
-      type: "input",
+      type: "text",
       config: {
         placeholder: "Alias",
         label: "Alias"
@@ -85,7 +85,7 @@ export const NewProjectForm = ({
       }
     },
     date: {
-      type: "input",
+      type: "text",
       config: {
         type: "date",
         placeholder: "00/00/0000",
@@ -114,16 +114,7 @@ export const NewProjectForm = ({
     }
     // tags: {
     //   type: "add_select",
-    //   config: {
-    //     placeholder: "Proyecto",
-    //     options: MOCK_SELECT_OPTIONS,
-    //     label: "Tags de proyecto",
-    //     additemlabel: "Añadir ",
-    //     removeitemlabel: "Eliminar ",
-    //     helper: "Abrir ventana de ayuda",
-    //     onHelperClick: () => openAuxModal(),
-    //     isDisabled: true // TODO -> provisional
-    //   }
+    //   config: {}
     // }
   }
 
@@ -196,7 +187,7 @@ export const NewProjectForm = ({
   }, [projectToUpdate, systemOptions])
 
   const inputRefObj = {
-    input: <SimpleInput />,
+    text: <SimpleInput />,
     select: <InputSelect />,
     add_select: <AddSelect />
   }

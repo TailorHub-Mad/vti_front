@@ -10,6 +10,7 @@ export const FileInput = ({
   label,
   maxSize = 10000000,
   onChange,
+  isDisabled = false,
   ...props
 }) => {
   const [fileError, setFileError] = useState(null)
@@ -42,7 +43,7 @@ export const FileInput = ({
   const { getRootProps, getInputProps } = useDropzone({ onDrop })
 
   return (
-    <Box {...props}>
+    <Box {...props} pointerEvents={isDisabled ? "none" : "all"}>
       <Flex
         background="#EBEEF2"
         border="1px dashed #052E57"

@@ -15,7 +15,7 @@ export const NoteDetailsAccordion = ({
   name,
   noteTags,
   testSystems,
-  links,
+  link,
   message,
   files,
   isResponse,
@@ -54,14 +54,12 @@ export const NoteDetailsAccordion = ({
           {message}
         </NoteAccordionItem>
       ) : null}
-      {links ? (
+      {link ? (
         <NoteAccordionItem title="Link" icon={<LinkLineIcon mr="8px" />}>
-          {links.map((link, idx) => (
-            <Button key={`${link}-${idx}`} variant="note_content" mr="8px" mb="8px">
-              <LinkLineIcon width="16px" />
-              {link}
-            </Button>
-          ))}
+          <Button variant="note_content" mr="8px" mb="8px">
+            <LinkLineIcon width="16px" />
+            {link}
+          </Button>
         </NoteAccordionItem>
       ) : null}
       {files ? (
