@@ -157,6 +157,8 @@ const departamentos = () => {
             addLabel="Añadir departamentos"
             searchPlaceholder="Busqueda por ID, Alias"
             icon={<AddDepartmentIcon />}
+            noFilter
+            noGroup
           />
         ) : null}
       </PageHeader>

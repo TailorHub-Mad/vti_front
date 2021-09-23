@@ -130,8 +130,8 @@ const apuntes = () => {
             onExport={handleExport}
             addLabel="Añadir apunte"
             searchPlaceholder="Busqueda por ID, Proyecto"
-            withoutFilter
-            withoutGroup
+            noFilter
+            noGroup
             icon={<AddNoteIcon />}
           />
         )}

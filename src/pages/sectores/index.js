@@ -155,6 +155,8 @@ const sectores = () => {
             addLabel="Añadir sector"
             searchPlaceholder="Busqueda por ID, Alias"
             icon={<AddSectorIcon />}
+            noFilter
+            noGroup
           />
         ) : null}
       </PageHeader>

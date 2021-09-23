@@ -154,8 +154,8 @@ const clientes = () => {
             onExport={handleExport}
             addLabel="Añadir cliente"
             searchPlaceholder="Busqueda por ID, Alias"
-            withoutFilter
-            withoutGroup
+            noFilter
+            noGroup
             icon={<AddClientIcon />}
           />
         ) : null}
