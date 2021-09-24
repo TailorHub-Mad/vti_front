@@ -73,7 +73,7 @@ export const TableRow = ({
         if (head[name]?.type === "selector") {
           return React.cloneElement(components[head[name]?.type], {
             isChecked: isSelected,
-            onChange: () => onRowSelect(idx),
+            onChange: onRowSelect,
             key: `${name}-${idx}`
           })
         }

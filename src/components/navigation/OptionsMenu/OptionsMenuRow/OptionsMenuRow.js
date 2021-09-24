@@ -4,7 +4,7 @@ import React from "react"
 import { EditIcon } from "../../../icons/EditIcon"
 import { OptionsMenuItem } from "../OptionsMenuItem/OptionsMenuItem"
 import { TableOptionsMenu } from "../../../tables/TableOptionsMenu/TableOptionsMenu"
-import { ICONS_PROPS_16 } from "../../../../utils/constants/icons_props"
+import { ICONS_PROPS_16 } from "../../../../utils/constants/icons"
 
 export const OptionsMenuRow = ({ onEdit, onDelete, disabled, id }) => {
   return (

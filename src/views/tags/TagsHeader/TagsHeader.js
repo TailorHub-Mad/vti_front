@@ -1,13 +1,12 @@
 import { Flex, Text } from "@chakra-ui/react"
 import React from "react"
-import { ICONS_REFERENCE } from "../../../utils/constants/icons_reference"
+import { ICONS_REFERENCE } from "../../../utils/constants/icons"
 
-export const ProjectsTagsHeader = ({
+export const TagsHeader = ({
   tagsCount = 0,
   onChange,
   activeItem = "inheritance"
 }) => {
-  //TODO Refactor para unificar componentes entre todos los headers de las páginas de proyectos, tags, etc
   const visibility_menu = {
     inheritance: {
       label: "Herencia",

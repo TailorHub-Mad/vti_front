@@ -12,25 +12,26 @@ export const TableGroup = ({
   head
 }) => {
   const { isOpen, onToggle } = useDisclosure()
-  const isSelected = (idx) => selectedRows?.includes(idx)
-  //TODO Row selection
+
+  const isSelected = (id) => !!selectedRows[id]
+
   return (
     <Box pb={isOpen ? "20px" : "10px"}>
       <Flex onClick={onToggle} cursor="pointer" align="center" padding="10px 0">
-        <Text variant="d_s_medium">{item[0]}</Text>
+        <Text variant="d_s_medium">{item.key}</Text>
         <ChevronDownIcon />
       </Flex>
       {isOpen
-        ? item[1].map((row, idx) => {
+        ? item.value.map((row, idx) => {
             return (
               <TableRow
-                key={row._id || `it-${idx}`}
+                key={`${row.id.value}-${idx}`}
                 item={row}
                 templateColumns={templateColumns}
-                isSelected={isSelected(row._id)}
+                isSelected={isSelected(row.id.value)}
                 idx={idx}
                 components={components}
-                onRowSelect={() => onRowSelect(row._id)}
+                onRowSelect={() => onRowSelect(row.id.value)}
                 selectedRows={selectedRows}
                 head={head}
               />

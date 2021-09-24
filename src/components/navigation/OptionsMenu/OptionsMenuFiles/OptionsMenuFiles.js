@@ -3,7 +3,7 @@ import React from "react"
 import { UploadCloudIcon } from "../../../icons/UploadCloudIcon"
 import { FolderCloseIcon } from "../../../icons/FolderCloseIcon"
 import { OptionsMenuItem } from "../OptionsMenuItem/OptionsMenuItem"
-import { ICONS_PROPS_16 } from "../../../../utils/constants/icons_props"
+import { ICONS_PROPS_16 } from "../../../../utils/constants/icons"
 import { OptionsMenu } from "../OptionsMenu"
 
 export const OptionsMenuFiles = ({ onImport, onExport }) => {

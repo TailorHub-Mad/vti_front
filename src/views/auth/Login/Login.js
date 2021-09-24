@@ -11,7 +11,7 @@ import { useRouter } from "next/router"
 import { setSessioncookie } from "../../../utils/functions/cookies"
 import { checkFormIsEmpty } from "../../../utils/functions/forms"
 import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
-import { PATHS } from "../../../utils/constants/paths"
+import { PATHS } from "../../../utils/constants/global"
 
 export const Login = () => {
   const { login } = useAuthApi()

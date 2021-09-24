@@ -1,7 +1,7 @@
 import { DeleteIcon } from "@chakra-ui/icons"
 import { Box, Flex, Text, useOutsideClick } from "@chakra-ui/react"
 import React, { useRef, useState } from "react"
-import { ICONS_PROPS_16 } from "../../../../utils/constants/icons_props"
+import { ICONS_PROPS_16 } from "../../../../utils/constants/icons"
 import { HeartIcon } from "../../../icons/HeartIcon"
 import { OptionsIcon } from "../../../icons/OptionsIcon"
 import { OptionsMenu } from "../../../navigation/OptionsMenu/OptionsMenu"

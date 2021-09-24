@@ -2,7 +2,7 @@ import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import useSWR from "swr"
 import { ApiAuthContext } from "../provider/ApiAuthProvider"
-import { PATHS } from "../utils/constants/paths"
+import { PATHS } from "../utils/constants/global"
 
 const useFetchSWR = (key, fetcher, refreshInterval) => {
   const router = useRouter()

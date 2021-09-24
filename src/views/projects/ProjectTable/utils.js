@@ -1,9 +1,19 @@
-import { PATHS } from "../../../utils/constants/paths"
+import { fetchType } from "../../../utils/constants/swr"
+import { PATHS } from "../../../utils/constants/global"
 import { calcColWidth } from "../../../utils/constants/tables"
 
-export const formatProject = (projects) => {
-  // projects && !isGrouped ? projects?.map(transformProjectData) : groupTable(projects)
-  return projects && projects?.map(transformProjectData)
+export const formatProject = (projects, fetchState) => {
+  if (fetchState === fetchType.GROUP) return groupTable(projects)
+  return projects?.map(transformProjectData)
+}
+
+export const groupTable = (projects) => {
+  return Object.entries(projects).map(([key, value]) => {
+    return {
+      key,
+      value: value.map(transformProjectData)
+    }
+  })
 }
 
 export const transformProjectData = (project) => ({
@@ -19,14 +29,6 @@ export const transformProjectData = (project) => ({
   options: "",
   config: { isFinished: project.close }
 })
-
-export const groupTable = (projects) => {
-  return projects.map((it) => {
-    const _it = [...it]
-    _it[1] = it[1].map(transformProjectData)
-    return _it
-  })
-}
 
 export const TABLE_PROJECTS_HEAD = {
   selector: {

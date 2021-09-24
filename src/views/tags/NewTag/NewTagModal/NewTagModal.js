@@ -3,21 +3,31 @@ import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
 import { MultipleFormContent } from "../../../../components/forms/MultipleFormContent/MultipleFormContent"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
-import useUserApi from "../../../../hooks/api/useUserApi"
+import useTagApi from "../../../../hooks/api/useTagApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
-import { NewUserForm } from "../NewUserForm/NewUserForm"
+import { NewTagForm } from "../NewTagForm/NewTagForm"
 
-export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
+export const NewTagModal = ({
+  isOpen,
+  onClose,
+  tagToUpdate,
+  isProjectTag,
+  addTitle,
+  addSuccessMsg,
+  editTitle,
+  editSuccessMsg
+}) => {
   const { showToast } = useContext(ToastContext)
-  const { createUser, updateUser } = useUserApi()
+  const { createProjectTag, updateProjectTag, createNoteTag, updateNoteTag } =
+    useTagApi()
   const { mutate } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const isUpdate = Boolean(userToUpdate)
+  const isUpdate = Boolean(tagToUpdate)
 
   const handleChange = (val, idx) => {
     const _values = [...values]
@@ -33,56 +43,49 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
 
   const checkInputsAreEmpty = () => {
     return values.some(
-      (value) => !value.alias || !value.fullName || !value.email || !value.department
+      (value) =>
+        // TODO -> autogenerate ID
+        // !value.id ||
+        !value.name
     )
-  }
-
-  const formatCreateUsers = (users) => {
-    return users.map((user) => {
-      return {
-        alias: user.alias,
-        name: user.fullName,
-        email: user.email,
-        department: user.department.value,
-        password: Math.random().toString(8) // TODO -> provisional
-      }
-    })
   }
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
-    isUpdate ? await handleUpdateUser() : await handleCreateUser()
-    await mutate(SWR_CACHE_KEYS.users)
-    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s usuario/s!")
+    isUpdate ? await handleUpdateTag() : await handleCreateTag()
+    await mutate(SWR_CACHE_KEYS.projectTags)
+    showToast(isUpdate ? editSuccessMsg : addSuccessMsg)
     setIsSubmitting(false)
     onClose()
   }
 
-  const handleCreateUser = async () => {
+  const handleCreateTag = async () => {
     try {
-      const usersToCreate = formatCreateUsers(values)
-      const usersQueue = usersToCreate.map((user) => createUser(user))
-      await Promise.all(usersQueue)
+      const projectTagsToCreate = [...values].map((pTag) =>
+        isProjectTag ? createProjectTag(pTag) : createNoteTag(pTag)
+      )
+      await Promise.all(projectTagsToCreate)
     } catch (error) {
       errorHandler(error)
     }
   }
 
-  const handleUpdateUser = async () => {
+  const handleUpdateTag = async () => {
     try {
-      const { _id } = userToUpdate
-      const [data] = [...values]
-      await updateUser(_id, data)
+      const { _id } = tagToUpdate
+      ;(await isProjectTag)
+        ? updateProjectTag(_id, values[0])
+        : updateNoteTag(_id, values[0])
     } catch (error) {
       errorHandler(error)
     }
   }
 
   useEffect(() => {
-    if (!userToUpdate) return
-    const { alias, name } = userToUpdate
-    setValues([{ alias, name }])
-  }, [userToUpdate])
+    if (!tagToUpdate) return
+    const { parent, name } = tagToUpdate
+    setValues([{ parent, name }])
+  }, [tagToUpdate])
 
   useEffect(() => {
     if (isOpen) return
@@ -94,7 +97,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
-          title={isUpdate ? "Editar usuario" : "Añadir nuevo usuario"}
+          title={isUpdate ? editTitle : addTitle}
           onClose={onClose}
           pb="24px"
         />
@@ -102,9 +105,9 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
           values={values}
           onChange={handleChange}
           onDelete={handleDelete}
-          addTitle="Añadir nuevo usuario"
+          addTitle="Añadir nuevo tag"
         >
-          <NewUserForm />
+          <NewTagForm isProjectTag={isProjectTag} />
         </MultipleFormContent>
         <Button
           w="194px"
@@ -124,7 +127,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
             onClick={() => setValues([...values, {}])}
             disabled={checkInputsAreEmpty()}
           >
-            Añadir nuevo usuario
+            {addTitle}
           </Button>
         ) : null}
       </ModalContent>

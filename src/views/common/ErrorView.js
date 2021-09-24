@@ -1,7 +1,7 @@
 import { Flex, Text, Button } from "@chakra-ui/react"
 import React from "react"
 import Link from "next/link"
-import { PATHS } from "../../utils/constants/paths"
+import { PATHS } from "../../utils/constants/global"
 import { Page } from "../../components/layout/Pages/Page"
 
 export const ErrorView = ({ ...props }) => {

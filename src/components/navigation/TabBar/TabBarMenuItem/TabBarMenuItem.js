@@ -1,6 +1,6 @@
 import { Flex, Icon, Text, useBoolean } from "@chakra-ui/react"
 import Link from "next/link"
-import { PATHS } from "../../../../utils/constants/paths"
+import { PATHS } from "../../../../utils/constants/global"
 import { ArrowDownIcon } from "../../../icons/ArrowDownIcon"
 
 export const MenuLink = ({

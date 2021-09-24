@@ -1,6 +1,6 @@
 import { Flex, Text } from "@chakra-ui/react"
 import React from "react"
-import { getAcronym } from "../../../../utils/functions/common"
+import { getAcronym } from "../../../../utils/functions/global"
 
 export const MessageCardInfo = ({ id, author, updatedAt, ...props }) => {
   return (
