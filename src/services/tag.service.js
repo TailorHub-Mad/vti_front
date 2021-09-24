@@ -11,8 +11,7 @@ const TagService = () => {
 
   const updateProjectTag = (id, data) =>
     execute(instance.put(`/tag/projects/${id}`, data))
-  const updateNoteTag = (id, data) =>
-    execute(instance.put(`/tag/notes/${id}`, data))
+  const updateNoteTag = (id, data) => execute(instance.put(`/tag/notes/${id}`, data))
 
   const deleteProjectTag = (id) => execute(instance.delete(`/tag/projects/${id}`))
   const deleteNoteTag = (id) => execute(instance.delete(`/tag/notes/${id}`))

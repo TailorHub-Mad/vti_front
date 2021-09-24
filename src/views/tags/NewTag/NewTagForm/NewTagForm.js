@@ -5,7 +5,7 @@ import useTagApi from "../../../../hooks/api/useTagApi"
 
 export const NewTagForm = ({ value, onChange, isProjectTag }) => {
   const [tagOptions, setTagOptions] = useState([])
-  const { getProjectTags , getNoteTags } = useTagApi()
+  const { getProjectTags, getNoteTags } = useTagApi()
 
   const handleFormChange = (input, _value) => {
     onChange({

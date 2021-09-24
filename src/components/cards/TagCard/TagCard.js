@@ -14,7 +14,6 @@ export const TagCard = ({
   onDelete,
   ...props
 }) => {
-
   return (
     <Box
       bgColor="white"

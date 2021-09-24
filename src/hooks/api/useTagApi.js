@@ -7,8 +7,8 @@ const useTagApi = () => {
   const getProjectTags = () => tagService.getProjectTags()
   const createProjectTag = (data) => tagService.createProjectTag(data)
   const createNoteTag = (data) => tagService.createNoteTag(data)
-  const updateProjectTag = (_id,data) => tagService.updateProjectTag(_id, data)
-  const updateNoteTag = (_id,data) => tagService.updateNoteTag(_id, data)
+  const updateProjectTag = (_id, data) => tagService.updateProjectTag(_id, data)
+  const updateNoteTag = (_id, data) => tagService.updateNoteTag(_id, data)
   const deleteProjectTag = (id) => tagService.deleteProjectTag(id)
   const deleteNoteTag = (id) => tagService.deleteNoteTag(id)
 

@@ -7,7 +7,6 @@ export const TagsHeader = ({
   onChange,
   activeItem = "inheritance"
 }) => {
-  
   const visibility_menu = {
     inheritance: {
       label: "Herencia",

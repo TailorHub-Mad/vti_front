@@ -3,7 +3,6 @@ import { useRouter } from "next/dist/client/router"
 import React, { useContext, useEffect, useState } from "react"
 import { TagCard } from "../../components/cards/TagCard/TagCard"
 import { NoteDrawer } from "../../components/drawer/NoteDrawer/NoteDrawer"
-import { AddClientIcon } from "../../components/icons/AddClientIcon"
 import { AddTagIcon } from "../../components/icons/AddTagIcon"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageBody } from "../../components/layout/Pages/PageBody/PageBody"
@@ -25,7 +24,6 @@ import { TagsHeader } from "../../views/tags/TagsHeader/TagsHeader"
 const tagsProyecto = () => {
   const router = useRouter()
   const { type } = router.query
-  console.log(router.query)
   const isProjectTag = type === "proyecto"
 
   const infoByType = {
@@ -46,13 +44,15 @@ const tagsProyecto = () => {
       fetchKey: "notes"
     }
   }
-  console.log("TYPE", type)
+
   const [activeTab, setActiveTab] = useState("inheritance")
   const [showNoteDetails, setShowNoteDetails] = useState(null)
   const { isLoggedIn } = useContext(ApiAuthContext)
   const { showToast } = useContext(ToastContext)
   const { deleteProjectTag, deleteNoteTag } = useTagApi()
-  const { data, error, isLoading, mutate } = tagFetchHandler(infoByType[type].fetchKey)
+  const { data, error, isLoading, mutate } = tagFetchHandler(
+    infoByType[type].fetchKey
+  )
 
   const [showImportModal, setShowImportModal] = useState(false)
 
@@ -132,7 +132,7 @@ const tagsProyecto = () => {
     setIsTagModalOpen(true)
   }
 
-  const onSearch = (search) => {
+  const onSearch = () => {
     // setFetchState(fetchType.SEARCH)
     // setFetchOptions({
     //   [fetchOption.SEARCH]: search
