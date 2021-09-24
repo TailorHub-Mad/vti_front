@@ -7,17 +7,27 @@ import useTagApi from "../../../../hooks/api/useTagApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
-import { NewProjectTagForm } from "../NewProjectTagForm/NewProjectTagForm"
+import { NewTagForm } from "../NewTagForm/NewTagForm"
 
-export const NewProjectTagModal = ({ isOpen, onClose, projectTagToUpdate }) => {
+export const NewTagModal = ({
+  isOpen,
+  onClose,
+  tagToUpdate,
+  isProjectTag,
+  addTitle,
+  addSuccessMsg,
+  editTitle,
+  editSuccessMsg
+}) => {
   const { showToast } = useContext(ToastContext)
-  const { createProjectTag, updateProjectTag } = useTagApi()
+  const { createProjectTag, updateProjectTag, createNoteTag, updateNoteTag } =
+    useTagApi()
   const { mutate } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const isUpdate = Boolean(projectTagToUpdate)
+  const isUpdate = Boolean(tagToUpdate)
 
   const handleChange = (val, idx) => {
     const _values = [...values]
@@ -42,39 +52,40 @@ export const NewProjectTagModal = ({ isOpen, onClose, projectTagToUpdate }) => {
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
-    isUpdate ? await handleUpdateProjectTag() : await handleCreateProjectTag()
+    isUpdate ? await handleUpdateTag() : await handleCreateTag()
     await mutate(SWR_CACHE_KEYS.projectTags)
-    showToast(
-      isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s tag de proyecto/s!"
-    )
+    showToast(isUpdate ? editSuccessMsg : addSuccessMsg)
     setIsSubmitting(false)
     onClose()
   }
 
-  const handleCreateProjectTag = async () => {
+  const handleCreateTag = async () => {
     try {
-      const projectTagsToCreate = [...values]
-      await createProjectTag(projectTagsToCreate)
+      const projectTagsToCreate = [...values].map((pTag) =>
+        isProjectTag ? createProjectTag(pTag) : createNoteTag(pTag)
+      )
+      await Promise.all(projectTagsToCreate)
     } catch (error) {
       errorHandler(error)
     }
   }
 
-  const handleUpdateProjectTag = async () => {
+  const handleUpdateTag = async () => {
     try {
-      const { _id } = projectTagToUpdate
-      const [data] = [...values]
-      await updateProjectTag(_id, data)
+      const { _id } = tagToUpdate
+      ;(await isProjectTag)
+        ? updateProjectTag(_id, values[0])
+        : updateNoteTag(_id, values[0])
     } catch (error) {
       errorHandler(error)
     }
   }
 
   useEffect(() => {
-    if (!projectTagToUpdate) return
-    const { parent, name } = projectTagToUpdate
+    if (!tagToUpdate) return
+    const { parent, name } = tagToUpdate
     setValues([{ parent, name }])
-  }, [projectTagToUpdate])
+  }, [tagToUpdate])
 
   useEffect(() => {
     if (isOpen) return
@@ -86,9 +97,7 @@ export const NewProjectTagModal = ({ isOpen, onClose, projectTagToUpdate }) => {
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
-          title={
-            isUpdate ? "Editar tag de proyecto" : "Añadir nuevo tag de proyecto"
-          }
+          title={isUpdate ? editTitle : addTitle}
           onClose={onClose}
           pb="24px"
         />
@@ -96,9 +105,9 @@ export const NewProjectTagModal = ({ isOpen, onClose, projectTagToUpdate }) => {
           values={values}
           onChange={handleChange}
           onDelete={handleDelete}
-          addTitle="Añadir nuevo tag de proyecto"
+          addTitle="Añadir nuevo tag"
         >
-          <NewProjectTagForm />
+          <NewTagForm isProjectTag={isProjectTag} />
         </MultipleFormContent>
         <Button
           w="194px"
@@ -118,7 +127,7 @@ export const NewProjectTagModal = ({ isOpen, onClose, projectTagToUpdate }) => {
             onClick={() => setValues([...values, {}])}
             disabled={checkInputsAreEmpty()}
           >
-            Añadir nuevo Tag de proyecto
+            {addTitle}
           </Button>
         ) : null}
       </ModalContent>

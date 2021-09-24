@@ -10,8 +10,11 @@ export const TagCard = ({
   parentTag,
   relatedTags,
   category,
+  onEdit,
+  onDelete,
   ...props
 }) => {
+
   return (
     <Box
       bgColor="white"
@@ -22,7 +25,13 @@ export const TagCard = ({
       p="16px"
       {...props}
     >
-      <TagCardHeader title={name} parentTag={parentTag} category={category} />
+      <TagCardHeader
+        title={name}
+        parentTag={parentTag}
+        category={category}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
 
       <TagCardTags projects={projects} relatedTags={relatedTags} />
       <Flex justify="space-between">

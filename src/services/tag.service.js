@@ -6,16 +6,16 @@ const TagService = () => {
   const getNoteTags = () => execute(instance.get("/tag/notes"))
   const getProjectTags = () => execute(instance.get("/tag/projects"))
 
-  const createProjectTag = (data) => execute(instance.post(`/tag/notes`, data))
-  const createNoteTag = (data) => execute(instance.post(`/tag/projects`, data))
+  const createProjectTag = (data) => execute(instance.post(`/tag/projects`, data))
+  const createNoteTag = (data) => execute(instance.post(`/tag/notes`, data))
 
   const updateProjectTag = (id, data) =>
-    execute(instance.put(`/tag/notes/${id}`, data))
-  const updateNoteTag = (id, data) =>
     execute(instance.put(`/tag/projects/${id}`, data))
+  const updateNoteTag = (id, data) =>
+    execute(instance.put(`/tag/notes/${id}`, data))
 
-  const deleteProjectTag = (id) => execute(instance.delete(`/tag/notes/${id}`))
-  const deleteNotetag = (id) => execute(instance.delete(`/tag/projects/${id}`))
+  const deleteProjectTag = (id) => execute(instance.delete(`/tag/projects/${id}`))
+  const deleteNoteTag = (id) => execute(instance.delete(`/tag/notes/${id}`))
 
   return {
     getNoteTags,
@@ -25,7 +25,7 @@ const TagService = () => {
     updateProjectTag,
     updateNoteTag,
     deleteProjectTag,
-    deleteNotetag
+    deleteNoteTag
   }
 }
 

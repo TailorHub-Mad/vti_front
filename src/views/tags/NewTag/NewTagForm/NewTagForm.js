@@ -3,9 +3,9 @@ import { InputSelect } from "../../../../components/forms/InputSelect/InputSelec
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
 import useTagApi from "../../../../hooks/api/useTagApi"
 
-export const NewProjectTagForm = ({ value, onChange }) => {
-  const [projectTagOptions, setProjectTagOptions] = useState([])
-  const { getProjectTags } = useTagApi()
+export const NewTagForm = ({ value, onChange, isProjectTag }) => {
+  const [tagOptions, setTagOptions] = useState([])
+  const { getProjectTags , getNoteTags } = useTagApi()
 
   const handleFormChange = (input, _value) => {
     onChange({
@@ -14,7 +14,7 @@ export const NewProjectTagForm = ({ value, onChange }) => {
     })
   }
 
-  const formatProjectTags = (tags) => {
+  const formatTags = (tags) => {
     return tags.map(({ name, _id }) => ({ label: name, value: _id }))
   }
 
@@ -38,8 +38,8 @@ export const NewProjectTagForm = ({ value, onChange }) => {
       type: "select",
       config: {
         placeholder: "Padre",
-        label: "Escriba el nombre del Padre (opcional)",
-        options: projectTagOptions
+        label: "Escriba el nombre del padre (opcional)",
+        options: tagOptions
       }
     }
   }
@@ -50,11 +50,11 @@ export const NewProjectTagForm = ({ value, onChange }) => {
   }
 
   useEffect(() => {
-    const _getProjectTags = async () => {
-      const projectTags = await getProjectTags()
-      setProjectTagOptions(formatProjectTags(projectTags))
+    const _getTags = async () => {
+      const tags = isProjectTag ? await getProjectTags() : await getNoteTags()
+      setTagOptions(formatTags(tags))
     }
-    _getProjectTags()
+    _getTags()
   }, [])
 
   return (
@@ -63,7 +63,7 @@ export const NewProjectTagForm = ({ value, onChange }) => {
         return React.cloneElement(inputRefObj[type], {
           value: value[name],
           onChange: (val) => handleFormChange(name, val),
-          marginBottom: name === "name" ? "0" : "24px",
+          marginBottom: "24px",
           isDisabled: index !== 0 && !value[Object.keys(value)[index - 1]],
           key: `${name}-${index}`,
           ...config
