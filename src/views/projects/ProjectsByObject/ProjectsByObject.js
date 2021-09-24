@@ -119,7 +119,7 @@ export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
     })
 
   const handleOnGroup = () => {
-    setFetchState(fetchType.GROUPED)
+    setFetchState(fetchType.GROUP)
   }
 
   const handleOnFilter = () => {

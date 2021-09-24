@@ -6,7 +6,7 @@ import { Filter } from "../../filters/Filter"
 import { Group } from "../../grouping/Group"
 import { AddProjectIcon } from "../../icons/AddProjectIcon"
 import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
-import { RoleType } from "../../../utils/constants/global_config"
+import { fetchType, RoleType } from "../../../utils/constants/global_config"
 
 export const ToolBar = ({
   onAdd,
@@ -17,8 +17,10 @@ export const ToolBar = ({
   onExport,
   addLabel,
   searchPlaceholder,
+  groupOptions,
   noFilter,
   noGroup,
+  fetchState,
   icon
 }) => {
   const { role } = useContext(ApiAuthContext)
@@ -29,7 +31,13 @@ export const ToolBar = ({
   return (
     <Flex>
       {noFilter || <Filter onFilter={handleOnFilter} />}
-      {noGroup || <Group onGroup={handleOnGroup} />}
+      {noGroup || (
+        <Group
+          onGroup={handleOnGroup}
+          options={groupOptions}
+          active={fetchState === fetchType.GROUP}
+        />
+      )}
       <InputGroup
         width="196px"
         marginRight="16px"

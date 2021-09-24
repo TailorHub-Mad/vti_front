@@ -44,7 +44,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
         name: user.fullName,
         email: user.email,
         department: user.department.value,
-        password: Math.random().toString(8)
+        password: Math.random().toString(8) // TODO -> provisional
       }
     })
   }

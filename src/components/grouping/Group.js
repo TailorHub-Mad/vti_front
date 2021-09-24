@@ -3,16 +3,27 @@ import React from "react"
 import { NotesIcon } from "../icons/NotesIcon"
 import { GroupModal } from "./GroupModal/GroupModal"
 
-export const Group = ({ onGroup }) => {
+export const Group = ({ onGroup, options, active }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
+
+  const handleOnGroup = (activeItem) => {
+    onGroup(activeItem)
+    onClose()
+  }
+
+  const handleOnClick = () => {
+    if (active) return onGroup(null)
+    onOpen()
+  }
 
   return (
     <>
       <Button
         variant="tool_button"
         mr="16px"
-        onClick={onOpen}
-        isDisabled={true} /* provisional */
+        onClick={handleOnClick}
+        background={active ? "#052E57" : "#FFF"}
+        color={active ? "#FFF" : "#052E57"}
       >
         <NotesIcon mr={["8px", "8px"]} />
         Agrupar
@@ -20,7 +31,8 @@ export const Group = ({ onGroup }) => {
       <GroupModal
         isOpen={isOpen}
         onClose={onClose}
-        onGroup={(activeItem) => onGroup(activeItem)}
+        onGroup={handleOnGroup}
+        options={options}
       />
     </>
   )

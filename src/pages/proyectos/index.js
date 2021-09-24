@@ -21,6 +21,7 @@ import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
+import { PROJECTS_GROUP_OPTIONS } from "./utils"
 
 const proyectos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -45,8 +46,14 @@ const proyectos = () => {
   const [deleteType, setDeleteType] = useState(null)
   const [projectToDelete, setProjectsToDelete] = useState(null)
 
+  const handleProjectsData = (isEmptyData) => {
+    if (!data || isEmptyData) return null
+    if (fetchState === fetchType.ALL) return data[0].projects
+    if (fetchState == fetchType.GROUP) return data
+  }
+
   const isEmptyData = checkDataIsEmpty(data)
-  const projectsData = data && !isEmptyData ? data[0].projects : null
+  const projectsData = handleProjectsData(isEmptyData)
 
   // TODO
   const handleExport = () => {}
@@ -120,17 +127,33 @@ const proyectos = () => {
     setIsProjectModalOpen(true)
   }
 
-  const onSearch = (search) =>
+  const onSearch = (search) => {
+    setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
     })
-
-  const handleOnGroup = () => {
-    setFetchState(fetchType.GROUPED)
   }
 
-  const handleOnFilter = () => {
+  const handleOnGroup = (group) => {
+    if (!group) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.GROUP]: null
+      })
+      return
+    }
+
+    setFetchState(fetchType.GROUP)
+    setFetchOptions({
+      [fetchOption.GROUP]: group
+    })
+  }
+
+  const handleOnFilter = (filter) => {
     setFetchState(fetchType.FILTERED)
+    setFetchOptions({
+      [fetchOption.FILTER]: filter
+    })
   }
 
   if (!isLoggedIn) return null
@@ -172,7 +195,9 @@ const proyectos = () => {
             onExport={handleExport}
             addLabel="Añadir proyecto"
             searchPlaceholder="Busqueda por ID, Alias"
+            groupOptions={PROJECTS_GROUP_OPTIONS}
             icon={<AddProjectIcon />}
+            fetchState={fetchState}
           />
         ) : null}
       </PageHeader>

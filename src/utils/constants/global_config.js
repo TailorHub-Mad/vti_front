@@ -7,7 +7,7 @@ export const fetchType = {
   ALL: "all",
   ID: "id",
   ACTIVE: "active",
-  GROUPED: "grouped",
+  GROUP: "grouped",
   FILTERED: "filtered",
   SEARCH: "search"
 }

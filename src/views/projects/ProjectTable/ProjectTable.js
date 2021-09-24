@@ -36,7 +36,7 @@ export const ProjectsTable = ({
     return onDelete(projectsId[0])
   }
 
-  const projectsData = formatProject(projects)
+  const projectsData = formatProject(projects, fetchState)
   const configTable = {
     components: TABLE_COMPONENTS,
     head: {
@@ -65,7 +65,7 @@ export const ProjectsTable = ({
       selectedRows={selectedRows}
       onRowSelect={(id) => handleRowSelect(id)}
       optionsDisabled={selectedRowsKeys.length > 1}
-      isGrouped={fetchState === fetchType.GROUPED}
+      isGrouped={fetchState === fetchType.GROUP}
     />
   )
 }
