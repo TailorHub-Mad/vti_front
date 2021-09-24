@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react"
 import React, { useState } from "react"
-import { ICONS_PROPS_16 } from "../../../utils/constants/icons_props"
+import { ICONS_PROPS_16 } from "../../../utils/constants/icons"
 import { OptionsIcon } from "../../icons/OptionsIcon"
 import { OptionsMenu } from "../../navigation/OptionsMenu/OptionsMenu"
 

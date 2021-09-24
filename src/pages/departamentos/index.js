@@ -9,15 +9,11 @@ import { NewDepartmentModal } from "../../views/departments/NewDepartment/NewDep
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
-import {
-  DeleteType,
-  fetchOption,
-  fetchType
-} from "../../utils/constants/global_config"
+import { DeleteType, fetchOption, fetchType } from "../../utils/constants/global"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { AddDepartmentIcon } from "../../components/icons/AddDepartmentIcon"
 import { departmentFetchHandler } from "../../swr/department.swr"
-import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
+import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
 import useDepartmentApi from "../../hooks/api/useDepartmentApi"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"

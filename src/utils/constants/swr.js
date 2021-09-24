@@ -32,3 +32,19 @@ export const SWR_CACHE_KEYS = {
   users: "users/",
   user: "user/"
 }
+
+export const fetchType = {
+  ALL: "all",
+  ID: "id",
+  ACTIVE: "active",
+  GROUP: "group",
+  FILTER: "filter",
+  SEARCH: "search"
+}
+
+export const fetchOption = {
+  ID: "id",
+  GROUP: "group",
+  FILTER: "filter",
+  SEARCH: "search"
+}

@@ -9,10 +9,10 @@ import { Box } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { projectFetchHandler } from "../../swr/project.swr"
-import { fetchOption, fetchType } from "../../utils/constants/global_config"
+import { fetchOption, fetchType } from "../../utils/constants/global"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
-import { checkDataIsEmpty } from "../../utils/functions/common"
+import { checkDataIsEmpty } from "../../utils/functions/global"
 
 const project = () => {
   const router = useRouter()

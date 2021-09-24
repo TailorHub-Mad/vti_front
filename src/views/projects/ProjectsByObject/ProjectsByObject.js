@@ -8,14 +8,10 @@ import { ImportFilesModal } from "../../../components/overlay/Modal/ImportFilesM
 import { Popup } from "../../../components/overlay/Popup/Popup"
 import useProjectApi from "../../../hooks/api/useProjectApi"
 import { ToastContext } from "../../../provider/ToastProvider"
-import {
-  DeleteType,
-  fetchOption,
-  fetchType
-} from "../../../utils/constants/global_config"
+import { DeleteType, fetchOption, fetchType } from "../../../utils/constants/global"
 import { SWR_CACHE_KEYS } from "../../../utils/constants/swr"
 import { errorHandler } from "../../../utils/errors"
-import { getFieldObjectById } from "../../../utils/functions/common"
+import { getFieldObjectById } from "../../../utils/functions/global"
 import { ViewEmptyState } from "../../common/ViewEmptyState"
 import { NewProjectModal } from "../NewProject/NewProjectModal/NewProjectModal"
 import { ProjectsTable } from "../ProjectTable/ProjectTable"
@@ -123,7 +119,7 @@ export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
   }
 
   const handleOnFilter = () => {
-    setFetchState(fetchType.FILTERED)
+    setFetchState(fetchType.FILTER)
   }
 
   const isEmptyData = projectsData.length === 0

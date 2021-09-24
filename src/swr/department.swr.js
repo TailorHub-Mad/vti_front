@@ -1,6 +1,6 @@
 import useDepartmentApi from "../hooks/api/useDepartmentApi"
 import useFetchSWR from "../hooks/useFetchSWR"
-import { fetchOption } from "../utils/constants/global_config"
+import { fetchOption } from "../utils/constants/global"
 import { SWR_CACHE_KEYS } from "../utils/constants/swr"
 
 export const departmentFetchHandler = (state, options) => {

@@ -7,7 +7,7 @@ import { TestSystemLineIcon } from "../../../../components/icons/TestSystemLineI
 import { NoteTag } from "../../../../components/tags/NoteTag/NoteTag"
 import { ProjectTag } from "../../../../components/tags/ProjectTag/ProjectTag"
 import { TestSystemTag } from "../../../../components/tags/TestSystemTag/TestSystemTag"
-import { PATHS } from "../../../../utils/constants/paths"
+import { PATHS } from "../../../../utils/constants/global"
 import Link from "next/link"
 
 export const ProjectDetails = ({ focusPoint, testSystems, tags, users }) => {

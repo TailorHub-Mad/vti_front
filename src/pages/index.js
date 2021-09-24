@@ -1,7 +1,7 @@
 import { useRouter } from "next/router"
 import { useContext, useEffect } from "react"
 import { ApiAuthContext } from "../provider/ApiAuthProvider"
-import { PATHS } from "../utils/constants/paths"
+import { PATHS } from "../utils/constants/global"
 import { LoadingView } from "../views/common/LoadingView"
 
 const Index = () => {

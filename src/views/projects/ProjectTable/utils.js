@@ -1,5 +1,5 @@
-import { fetchType } from "../../../utils/constants/global_config"
-import { PATHS } from "../../../utils/constants/paths"
+import { fetchType } from "../../../utils/constants/global"
+import { PATHS } from "../../../utils/constants/global"
 import { calcColWidth } from "../../../utils/constants/tables"
 
 export const formatProject = (projects, fetchState) => {

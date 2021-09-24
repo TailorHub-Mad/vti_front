@@ -3,10 +3,10 @@ import { useContext } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { clientFetchHandler } from "../../swr/client.swr"
-import { fetchOption, fetchType } from "../../utils/constants/global_config"
+import { fetchOption, fetchType } from "../../utils/constants/global"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
-import { PATHS } from "../../utils/constants/paths"
+import { PATHS } from "../../utils/constants/global"
 import { ProjectsByObject } from "../../views/projects/ProjectsByObject/ProjectsByObject"
 
 const user = () => {

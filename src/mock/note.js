@@ -1,4 +1,4 @@
-import { capitalize } from "../utils/functions/common"
+import { capitalize } from "../utils/functions/global"
 import faker from "faker"
 faker.locale = "es"
 

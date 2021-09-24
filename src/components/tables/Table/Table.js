@@ -1,7 +1,7 @@
 import { Box, Flex, Grid } from "@chakra-ui/react"
 import React from "react"
 import { CUSTOM_SCROLLBAR } from "../../../theme/utils/utils.theme"
-import { MAX_TABLE_WIDTH, MIN_TABLE_WIDTH } from "../../../utils/constants/layout"
+import { MAX_TABLE_WIDTH, MIN_TABLE_WIDTH } from "../../../utils/constants/global"
 import { Card } from "../../cards/Card"
 
 import { TableGroup } from "./TableGroup/TableGroup"

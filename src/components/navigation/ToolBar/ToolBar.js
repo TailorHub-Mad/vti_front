@@ -6,7 +6,7 @@ import { Filter } from "../../filters/Filter"
 import { Group } from "../../grouping/Group"
 import { AddProjectIcon } from "../../icons/AddProjectIcon"
 import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
-import { fetchType, RoleType } from "../../../utils/constants/global_config"
+import { fetchType, RoleType } from "../../../utils/constants/global"
 
 export const ToolBar = ({
   onAdd,

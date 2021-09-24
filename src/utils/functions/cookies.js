@@ -10,12 +10,3 @@ export const setSessioncookie = (token) =>
 
 export const destroySessionCookie = () =>
   nookies.destroy(undefined, "vti", { path: "/" })
-
-export const setRefreshCookie = (token) =>
-  nookies.set(undefined, "vti_rt", token, {
-    maxAge: 30 * 24 * 60 * 60,
-    path: "/"
-  })
-
-export const destroyRefreshCookie = () =>
-  nookies.destroy(undefined, "vti_rt", { path: "/" })

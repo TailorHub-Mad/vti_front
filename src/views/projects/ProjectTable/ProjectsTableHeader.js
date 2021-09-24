@@ -1,8 +1,8 @@
 import { DeleteIcon } from "@chakra-ui/icons"
 import { chakra, Checkbox, Flex, Text } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
-import { fetchType } from "../../../utils/constants/global_config"
-import { ICONS_REFERENCE } from "../../../utils/constants/icons_reference"
+import { fetchType } from "../../../utils/constants/global"
+import { ICONS_REFERENCE } from "../../../utils/constants/icons"
 
 const visibility_menu = {
   all: {

@@ -10,13 +10,9 @@ import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModa
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import useSectorApi from "../../hooks/api/useSectorApi"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
-import {
-  DeleteType,
-  fetchOption,
-  fetchType
-} from "../../utils/constants/global_config"
+import { DeleteType, fetchOption, fetchType } from "../../utils/constants/global"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
-import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
+import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
 import { AddSectorIcon } from "../../components/icons/AddSectorIcon"
 import { sectorFetchHandler } from "../../swr/sector.swr"
 import { LoadingView } from "../../views/common/LoadingView"

@@ -8,17 +8,13 @@ import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { ToastContext } from "../../provider/ToastProvider"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
-import {
-  DeleteType,
-  fetchOption,
-  fetchType
-} from "../../utils/constants/global_config"
+import { DeleteType, fetchOption, fetchType } from "../../utils/constants/global"
 import { projectFetchHandler } from "../../swr/project.swr"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
-import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
+import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 import { PROJECTS_GROUP_OPTIONS } from "./utils"
@@ -150,7 +146,7 @@ const proyectos = () => {
   }
 
   const handleOnFilter = (filter) => {
-    setFetchState(fetchType.FILTERED)
+    setFetchState(fetchType.FILTER)
     setFetchOptions({
       [fetchOption.FILTER]: filter
     })

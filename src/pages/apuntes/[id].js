@@ -4,7 +4,7 @@ import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { noteFetchHandler } from "../../swr/note.swr"
-import { fetchOption, fetchType } from "../../utils/constants/global_config"
+import { fetchOption, fetchType } from "../../utils/constants/global"
 import { errorHandler } from "../../utils/errors"
 import { LoadingView } from "../../views/common/LoadingView"
 

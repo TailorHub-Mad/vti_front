@@ -1,3 +1,15 @@
+export const RoleType = {
+  USER: "user",
+  ADMIN: "admin"
+}
+
+export const DeleteType = {
+  ONE: "deleteOne",
+  MANY: "deleteMany"
+}
+
+export const TOAST_DEFAULT_TIME = 2000
+
 export const PATHS = {
   root: "/",
   login: "/login",

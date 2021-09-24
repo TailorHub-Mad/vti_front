@@ -8,16 +8,12 @@ import { ToastContext } from "../../provider/ToastProvider"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import { NewTestSystemModal } from "../../views/test_systems/NewTestSystem/NewTestSystemModal/NewTestSystemModal"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
-import {
-  DeleteType,
-  fetchOption,
-  fetchType
-} from "../../utils/constants/global_config"
+import { DeleteType, fetchOption, fetchType } from "../../utils/constants/global"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddTestSystemIcon } from "../../components/icons/AddTestSystemIcon"
-import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
+import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
 import { systemFetchHandler } from "../../swr/systems.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
