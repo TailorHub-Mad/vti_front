@@ -81,8 +81,8 @@ const apuntes = () => {
 
   // TODO
   const handleFavorite = async (/*id*/) => {}
-  const checkIsFavorite = (id) => user.favorites?.notes?.includes(id)
-  const checkIsSubscribe = (id) => user.subscribed?.notes?.includes(id)
+  const checkIsFavorite = (id) => user?.favorites?.notes?.includes(id)
+  const checkIsSubscribe = (id) => user?.subscribed?.notes?.includes(id)
 
   // const onEdit = (id) => {
   //   const note = notesData.find((note) => note._id === id)
