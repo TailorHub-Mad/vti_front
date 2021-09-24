@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { TagCard } from "../../components/cards/TagCard/TagCard"
 import { NoteDrawer } from "../../components/drawer/NoteDrawer/NoteDrawer"
 import { AddClientIcon } from "../../components/icons/AddClientIcon"
+import { AddTagIcon } from "../../components/icons/AddTagIcon"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageBody } from "../../components/layout/Pages/PageBody/PageBody"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
@@ -11,13 +12,12 @@ import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import useTagApi from "../../hooks/api/useTagApi"
-// import { data } from "../../mock/tags"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { ToastContext } from "../../provider/ToastProvider"
 import { tagFetchHandler } from "../../swr/tag.swr"
-import { DeleteType } from "../../utils/constants/global_config"
+import { DeleteType } from "../../utils/constants/global"
 import { errorHandler } from "../../utils/errors"
-import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
+import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
 import { LoadingView } from "../../views/common/LoadingView"
 import { NewTagModal } from "../../views/tags/NewTag/NewTagModal/NewTagModal"
 import { TagsHeader } from "../../views/tags/TagsHeader/TagsHeader"
@@ -188,7 +188,7 @@ const tagsProyecto = () => {
             searchPlaceholder="Busqueda por ID, Alias"
             noFilter
             noGroup
-            icon={<AddClientIcon />}
+            icon={<AddTagIcon />}
           />
         ) : null}
       </PageHeader>

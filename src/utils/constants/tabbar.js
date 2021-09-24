@@ -50,20 +50,20 @@ const TABBAR_LINKS = {
   tags: {
     label: "Tags",
     icon: ICONS_REFERENCE.tag_line,
-    href: PATHS.projectTags,
-    disabled: true, // TODO -> provisional
+    // href: PATHS.projectTags,
+    disabled: false, // TODO -> provisional
     submenu: [
       {
         label: "Proyecto",
         icon: ICONS_REFERENCE.tag_line,
         href: PATHS.projectTags,
-        disabled: true // TODO -> provisional
+        disabled: false // TODO -> provisional
       },
       {
         label: "Apunte",
         icon: ICONS_REFERENCE.tag_line,
         href: PATHS.noteTags,
-        disabled: true // TODO -> provisional
+        disabled: false // TODO -> provisional
       }
     ]
   },
