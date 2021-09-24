@@ -2,7 +2,7 @@ import { Flex, Text } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import React from "react"
-import { capitalize } from "../../../utils/functions/common"
+import { capitalize } from "../../../utils/functions/global"
 import { ArrowRight } from "../../icons/ArrowRight"
 
 export const BreadCrumbs = ({ customURL, lastElement }) => {

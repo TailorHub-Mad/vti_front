@@ -1,7 +1,7 @@
 import { Box, Flex, Grid } from "@chakra-ui/react"
 import React from "react"
 import { CUSTOM_SCROLLBAR } from "../../../theme/utils/utils.theme"
-import { MAX_TABLE_WIDTH, MIN_TABLE_WIDTH } from "../../../utils/constants/layout"
+import { MAX_TABLE_WIDTH, MIN_TABLE_WIDTH } from "../../../utils/constants/tables"
 import { Card } from "../../cards/Card"
 
 import { TableGroup } from "./TableGroup/TableGroup"
@@ -55,9 +55,11 @@ export const Table = ({
                   templateColumns={templateColumns}
                   idx={idx}
                   components={components}
-                  onRowSelect={(id) => onRowSelect(id)}
+                  onRowSelect={onRowSelect}
                   selectedRows={selectedRows}
                   head={head}
+                  isLastOne={idx === content.length - 1}
+                  optionsDisabled={optionsDisabled}
                 />
               )
             return (

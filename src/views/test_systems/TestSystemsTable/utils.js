@@ -1,4 +1,4 @@
-import { PATHS } from "../../../utils/constants/paths"
+import { PATHS } from "../../../utils/constants/global"
 import { calcColWidth } from "../../../utils/constants/tables"
 
 export const formatSystem = (data) => {

@@ -1,6 +1,6 @@
 import { Grid, Text } from "@chakra-ui/react"
 import React from "react"
-import { MAX_TABLE_WIDTH, MIN_TABLE_WIDTH } from "../../../../utils/constants/layout"
+import { MAX_TABLE_WIDTH, MIN_TABLE_WIDTH } from "../../../../utils/constants/tables"
 
 export const TableHead = ({ templateColumns, head }) => {
   return (

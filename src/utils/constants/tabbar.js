@@ -1,5 +1,5 @@
-import { ICONS_REFERENCE } from "./icons_reference"
-import { PATHS } from "./paths"
+import { ICONS_REFERENCE } from "./icons"
+import { PATHS } from "./global"
 
 const TABBAR_LINKS = {
   // NOTES

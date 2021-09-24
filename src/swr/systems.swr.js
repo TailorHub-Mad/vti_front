@@ -1,6 +1,6 @@
 import useSystemApi from "../hooks/api/useSystemApi"
 import useFetchSWR from "../hooks/useFetchSWR"
-import { fetchOption } from "../utils/constants/global_config"
+import { fetchOption } from "../utils/constants/swr"
 import { SWR_CACHE_KEYS } from "../utils/constants/swr"
 
 export const systemFetchHandler = (state, options) => {

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import useTableActions from "../../../hooks/useTableActions"
-import { fetchType } from "../../../utils/constants/global_config"
+import { fetchType } from "../../../utils/constants/swr"
 import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
 import { ProjectsTableHeader } from "./ProjectsTableHeader"
 import { formatProject, TABLE_PROJECTS_HEAD } from "./utils"
@@ -36,7 +36,7 @@ export const ProjectsTable = ({
     return onDelete(projectsId[0])
   }
 
-  const projectsData = formatProject(projects)
+  const projectsData = formatProject(projects, fetchState)
   const configTable = {
     components: TABLE_COMPONENTS,
     head: {
@@ -65,7 +65,7 @@ export const ProjectsTable = ({
       selectedRows={selectedRows}
       onRowSelect={(id) => handleRowSelect(id)}
       optionsDisabled={selectedRowsKeys.length > 1}
-      isGrouped={fetchState === fetchType.GROUPED}
+      isGrouped={fetchState === fetchType.GROUP}
     />
   )
 }

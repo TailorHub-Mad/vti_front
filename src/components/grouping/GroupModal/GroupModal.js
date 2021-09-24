@@ -8,30 +8,18 @@ import {
   Radio,
   RadioGroup
 } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { CustomModalContent } from "../../overlay/Modal/CustomModalContent/CustomModalContent"
 import { CustomModalHeader } from "../../overlay/Modal/CustomModalHeader/CustomModalHeader"
 
-export const GroupModal = ({ isOpen, onClose, onGroup, ...props }) => {
+export const GroupModal = ({ isOpen, onClose, onGroup, options = [], ...props }) => {
   const [activeItem, setActiveItem] = useState(null)
-  const options = [
-    {
-      label: "Proyecto",
-      value: "project"
-    },
-    {
-      label: "Año",
-      value: "year"
-    },
-    {
-      label: "Sector",
-      value: "sector"
-    },
-    {
-      label: "Tag de apunte",
-      value: "note_tag"
-    }
-  ]
+
+  useEffect(() => {
+    if (isOpen) return
+    setActiveItem(null)
+  }, [isOpen])
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
       <ModalOverlay />

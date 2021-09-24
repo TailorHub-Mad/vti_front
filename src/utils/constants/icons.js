@@ -63,3 +63,9 @@ export const ICONS_REFERENCE = {
   tag_link: TagLinkIcon,
   users_line: UsersLineIcon
 }
+
+export const ICONS_PROPS_16 = {
+  width: "16px",
+  height: "16px",
+  cursor: "pointer"
+}

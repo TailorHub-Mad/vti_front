@@ -7,17 +7,14 @@ import { Popup } from "../../components/overlay/Popup/Popup"
 import useClientApi from "../../hooks/api/useClientApi"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { ToastContext } from "../../provider/ToastProvider"
-import {
-  DeleteType,
-  fetchOption,
-  fetchType
-} from "../../utils/constants/global_config"
+import { fetchOption, fetchType } from "../../utils/constants/swr"
+import { DeleteType } from "../../utils/constants/global"
 import { ClientsTable } from "../../views/clients/ClientsTable/ClientsTable"
 import { NewClientModal } from "../../views/clients/NewClient/NewClientModal/NewClientModal"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { AddClientIcon } from "../../components/icons/AddClientIcon"
-import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/common"
+import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
 import { clientFetchHandler } from "../../swr/client.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"

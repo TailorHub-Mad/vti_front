@@ -1,11 +1,11 @@
 import { Box, Flex } from "@chakra-ui/react"
 import React, { useContext } from "react"
 import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
-import { RoleType } from "../../../utils/constants/global_config"
+import { RoleType } from "../../../utils/constants/global"
 import {
   TABBAR_ADMIN_LINKS,
   TABBAR_USER_LINKS
-} from "../../../utils/constants/tabbar_links"
+} from "../../../utils/constants/tabbar"
 import { LogoFull } from "../../images/LogoFull"
 import { TabBarFooter } from "./TabBarFooter/TabBarFooter"
 import { TabBarMenu } from "./TabBarMenu/TabBarMenu"

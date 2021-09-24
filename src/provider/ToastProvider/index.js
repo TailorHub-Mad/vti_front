@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { TOAST_DEFAULT_TIME } from "../../utils/constants/global_config"
+import { TOAST_DEFAULT_TIME } from "../../utils/constants/global"
 
 export const ToastContext = React.createContext()
 

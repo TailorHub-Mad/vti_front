@@ -1,7 +1,7 @@
 import { AttachmentIcon } from "@chakra-ui/icons"
 import { Box, Circle, Text } from "@chakra-ui/react"
 import React from "react"
-import { getAcronym } from "../../../../utils/functions/common"
+import { getAcronym } from "../../../../utils/functions/global"
 import { BadgeIcon } from "../../../icons/BadgeIcon"
 import { LockCloseIcon } from "../../../icons/LockCloseIcon"
 import { LockOpenIcon } from "../../../icons/LockOpenIcon"

@@ -1,7 +1,7 @@
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons"
 import { Box, Flex, Text } from "@chakra-ui/react"
 import { useState } from "react"
-import { ICONS_PROPS_16 } from "../../../../utils/constants/icons_props"
+import { ICONS_PROPS_16 } from "../../../../utils/constants/icons"
 import { OptionsIcon } from "../../../icons/OptionsIcon"
 import { OptionsMenu } from "../../../navigation/OptionsMenu/OptionsMenu"
 import { OptionsMenuItem } from "../../../navigation/OptionsMenu/OptionsMenuItem/OptionsMenuItem"

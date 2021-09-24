@@ -62,7 +62,7 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
   const handleCreateNote = async () => {
     try {
       const note = formatCreateNote(values)
-      console.log("NOTE QUE LLEGA", note)
+
       await createNote(note)
     } catch (error) {
       errorHandler(error)

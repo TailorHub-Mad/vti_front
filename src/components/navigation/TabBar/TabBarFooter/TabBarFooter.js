@@ -1,7 +1,7 @@
 import { Box, Flex, Icon, Text } from "@chakra-ui/react"
 import React, { useContext } from "react"
 import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
-import { PATHS } from "../../../../utils/constants/paths"
+import { PATHS } from "../../../../utils/constants/global"
 import { NotificationActiveLineIcon } from "../../../icons/NotificationActiveLineIcon"
 import { NotificationLineIcon } from "../../../icons/NotificationLineIcon"
 import { SignOutLineIcon } from "../../../icons/SignOutLineIcon"
