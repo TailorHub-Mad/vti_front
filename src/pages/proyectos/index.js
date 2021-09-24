@@ -8,7 +8,8 @@ import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { ToastContext } from "../../provider/ToastProvider"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
-import { DeleteType, fetchOption, fetchType } from "../../utils/constants/global"
+import { fetchOption, fetchType } from "../../utils/constants/swr"
+import { DeleteType } from "../../utils/constants/global"
 import { projectFetchHandler } from "../../swr/project.swr"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
@@ -17,7 +18,21 @@ import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
-import { PROJECTS_GROUP_OPTIONS } from "./utils"
+
+const PROJECTS_GROUP_OPTIONS = [
+  {
+    label: "Cliente",
+    value: "client"
+  },
+  {
+    label: "Año",
+    value: "date.year"
+  },
+  {
+    label: "Sector",
+    value: "sector"
+  }
+]
 
 const proyectos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)

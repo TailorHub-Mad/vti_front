@@ -1,4 +1,4 @@
-import { fetchType } from "../../../utils/constants/global"
+import { fetchType } from "../../../utils/constants/swr"
 import { PATHS } from "../../../utils/constants/global"
 import { calcColWidth } from "../../../utils/constants/tables"
 

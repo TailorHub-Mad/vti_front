@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import useTableActions from "../../../hooks/useTableActions"
-import { fetchType } from "../../../utils/constants/global"
+import { fetchType } from "../../../utils/constants/swr"
 import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
 import { ProjectsTableHeader } from "./ProjectsTableHeader"
 import { formatProject, TABLE_PROJECTS_HEAD } from "./utils"
