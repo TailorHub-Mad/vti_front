@@ -5,6 +5,7 @@ import { GeneralTag } from "../../../tags/GeneralTag/GeneralTag"
 
 export const TagCardTags = ({ projects, relatedTags }) => {
   const getRemainingTags = (tags) => {
+    if (!tags) return 0
     if (tags.length <= 2) {
       return 0
     } else {

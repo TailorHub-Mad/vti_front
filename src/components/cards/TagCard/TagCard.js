@@ -10,6 +10,8 @@ export const TagCard = ({
   parentTag,
   relatedTags,
   category,
+  onEdit,
+  onDelete,
   ...props
 }) => {
   return (
@@ -22,17 +24,22 @@ export const TagCard = ({
       p="16px"
       {...props}
     >
-      <TagCardHeader title={name} parentTag={parentTag} category={category} />
+      <TagCardHeader
+        title={name}
+        parentTag={parentTag}
+        category={category}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
 
       <TagCardTags projects={projects} relatedTags={relatedTags} />
       <Flex justify="space-between">
         <Text variant="d_xs_regular" color="grey">
           ID
         </Text>
-        <Text
-          variant="d_xs_regular"
-          color="grey"
-        >{`últ. actualización ${updatedAt.toLocaleDateString()}`}</Text>
+        <Text variant="d_xs_regular" color="grey">{`últ. actualización ${new Date(
+          updatedAt
+        ).toLocaleDateString()}`}</Text>
       </Flex>
     </Box>
   )
