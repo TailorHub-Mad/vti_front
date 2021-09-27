@@ -19,7 +19,7 @@ export const MessageCard = ({
   }
 
   return (
-    <Card bgColor="white">
+    <Card>
       <MessageCardHeader
         isFavorite={isFavorite}
         title={note?.title}
@@ -36,9 +36,9 @@ export const MessageCard = ({
       />
       {/* <MessageCardTags tags={note?.tags} /> */}
       <MessageCardFooter
-        isClosed={note?.lock}
+        isClosed={note?.isClosed}
         isSubscribe={isSubscribe}
-        isValidate={note?.approved}
+        isFormalized={note?.formalized}
         messagesCount={note?.messages?.length}
         attachmentsCount={note?.documents?.length}
         subscribedUsers={subscribedUsers}

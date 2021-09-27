@@ -23,7 +23,7 @@ export const Popup = ({
   ...props
 }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} {...props}>
+    <Modal isOpen={isOpen} onClose={onClose} {...props} zIndex="9999">
       <ModalOverlay />
       <ModalContent
         w={["343px", null, null, "502px"]}
@@ -32,6 +32,7 @@ export const Popup = ({
         borderRadius="2px"
         boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
         padding="40px 0"
+        zIndex="9999"
       >
         <ModalBody padding="0 24px">
           <Text textAlign="center" color={color}>

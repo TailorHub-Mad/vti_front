@@ -1,13 +1,18 @@
 import { Box, Flex, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { CloseIcon } from "../../icons/CloseIcon"
-// import { NOTE_MOCK } from "../../../mock/note"
 import { NoteMainInfo } from "./NoteMainInfo/NoteMainInfo"
 import { NoteDetailsAccordion } from "./NoteAccordion/NoteDetailsAccordion"
 import { CollapseIconHor } from "../../icons/CollapseIconHor"
 
-export const NoteDrawer = ({ isOpen, note, onClose, ...props }) => {
-  //TODO fecth detalle del proyecto o por props
+export const NoteDrawer = ({
+  note,
+  isOpen,
+  onClose,
+  onEdit,
+  onDelete,
+  ...props
+}) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
   if (!note) return null
@@ -21,7 +26,7 @@ export const NoteDrawer = ({ isOpen, note, onClose, ...props }) => {
           w="100vw"
           h="100vh"
           bgColor="blue.500"
-          zIndex="9980"
+          zIndex="998"
           opacity="0.8"
         />
       ) : null}
@@ -33,7 +38,7 @@ export const NoteDrawer = ({ isOpen, note, onClose, ...props }) => {
         position="fixed"
         width={isExpanded && isOpen ? "100vw" : "536.5px"}
         transition="all 0.3s ease-in"
-        zIndex="9990"
+        zIndex="999"
         {...props}
       >
         <Box p="38.25px" bgColor="light_grey" h="100vh" overflowY="scroll">
@@ -61,7 +66,7 @@ export const NoteDrawer = ({ isOpen, note, onClose, ...props }) => {
             borderRadius="2px"
             boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
           >
-            <NoteMainInfo updatedAt={note.updatedAt} project={note.project} />
+            <NoteMainInfo note={note} onEdit={onEdit} onDelete={onDelete} />
             <NoteDetailsAccordion
               name={note.name}
               // noteTags={note.tags}

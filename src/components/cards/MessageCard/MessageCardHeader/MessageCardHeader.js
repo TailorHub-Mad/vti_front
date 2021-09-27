@@ -8,7 +8,7 @@ import { OptionsMenu } from "../../../navigation/OptionsMenu/OptionsMenu"
 import { OptionsMenuItem } from "../../../navigation/OptionsMenu/OptionsMenuItem/OptionsMenuItem"
 
 export const MessageCardHeader = ({
-  isFavourite,
+  isFavorite,
   title,
   onClick,
   onDelele,
@@ -18,13 +18,13 @@ export const MessageCardHeader = ({
   const [showOptions, setShowOptions] = useState(false)
 
   const handleOnDelete = () => {
-    onDelele()
     setShowOptions(false)
+    onDelele()
   }
 
   const handleOnFavorite = () => {
-    onFavorite()
     setShowOptions(false)
+    onFavorite()
   }
 
   const ref = useRef(null)
@@ -37,7 +37,7 @@ export const MessageCardHeader = ({
   return (
     <Flex height="32px" justify="space-between" {...props}>
       <Flex maxWidth="80%" height="32px" onClick={onClick} cursor="pointer">
-        {isFavourite ? (
+        {isFavorite ? (
           <HeartIcon color="error" {...ICONS_PROPS_16} marginRight="4px" />
         ) : null}
         <Text marginTop="2px" variant="d_s_medium" noOfLines={2}>
@@ -50,8 +50,8 @@ export const MessageCardHeader = ({
           color="grey"
           onClick={() => setShowOptions(true)}
         />
-        <OptionsMenu isOpen={showOptions} onClose={handleOnFavorite}>
-          <OptionsMenuItem onClick={() => setShowOptions(true)}>
+        <OptionsMenu isOpen={showOptions} onClose={() => setShowOptions(false)}>
+          <OptionsMenuItem onClick={handleOnFavorite}>
             <HeartIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
             <Text variant="d_xs_regular" marginRight="2px">
               Favorito

@@ -6,7 +6,7 @@ export const noteFetchHandler = (state /*options*/) => {
   const { notes } = useNoteApi()
 
   const fetchHandler = {
-    all: () => useFetchSWR(SWR_CACHE_KEYS.projects, notes)
+    all: () => useFetchSWR(SWR_CACHE_KEYS.notes, notes)
   }
 
   return fetchHandler[state]()

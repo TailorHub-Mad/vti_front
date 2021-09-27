@@ -7,7 +7,7 @@ const NoteService = () => {
     execute(instance.get(`/notes?limit=${limit}&offset=${offset}`))
   const note = (id) => execute(instance.get(`/notes/${id}`))
   const createNote = (data) => execute(instance.post(`/notes/create`, data))
-  const updateNote = (data) => execute(instance.put(`/notes/${data.id}`, data))
+  const updateNote = (id, data) => execute(instance.put(`/notes/${id}`, data))
   const deleteNote = (id) => execute(instance.delete(`/notes/${id}`))
 
   return { notes, note, createNote, updateNote, deleteNote }

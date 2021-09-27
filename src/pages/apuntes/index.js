@@ -67,28 +67,32 @@ const apuntes = () => {
   }
 
   const handleDelete = async () => {
+    console.log("HandleDelete", noteToDelete)
+    setNoteToDelete(null)
     return null
     // try {
     //   await deleteNote(noteToDelete)
     //   showToast("Apunte borrado correctamente")
     //   const updatedNotes = notesData.filter((system) => system._id !== noteToDelete)
     //   updatedNotes.length > 0 ? await mutate(updatedNotes, false) : await mutate()
-    //   setNoteToDelete(null)
     // } catch (error) {
     //   errorHandler(error)
     // }
   }
 
   // TODO
-  const handleFavorite = async (/*id*/) => {}
+  const handleFavorite = async (id) => {
+    console.log("HandleFavorite", id)
+  }
   const checkIsFavorite = (id) => user?.favorites?.notes?.includes(id)
   const checkIsSubscribe = (id) => user?.subscribed?.notes?.includes(id)
 
-  // const onEdit = (id) => {
-  //   const note = notesData.find((note) => note._id === id)
-  //   setNoteToUpdate(note)
-  //   setIsNoteModalOpen(true)
-  // }
+  const onEdit = (id) => {
+    const note = notesData.find((note) => note._id === id)
+    console.log("handleEdit", id, note)
+    setNoteToUpdate(note)
+    setIsNoteModalOpen(true)
+  }
 
   const onSearch = (search) =>
     setFetchOptions({
@@ -123,9 +127,11 @@ const apuntes = () => {
       />
 
       <NoteDrawer
-        isOpen={showNoteDetails}
         note={noteToDetail}
+        isOpen={showNoteDetails}
         onClose={() => setShowNoteDetails(false)}
+        onDelete={() => handleOpenPopup(noteToDetail._id)}
+        onEdit={() => onEdit(noteToDetail._id)}
       />
 
       <PageHeader>
@@ -178,7 +184,7 @@ const apuntes = () => {
                 isSubscribe={checkIsSubscribe(note._id)}
                 isFavorite={checkIsFavorite(note._id)}
                 onDelete={() => handleOpenPopup(note._id)}
-                handleFavorite={() => handleFavorite(idx)}
+                handleFavorite={() => handleFavorite(note._id)}
               />
             ))}
           </Grid>

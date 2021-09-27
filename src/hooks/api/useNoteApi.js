@@ -6,7 +6,7 @@ const useNoteApi = () => {
   const notes = () => noteService.notes()
   const note = (id) => noteService.note(id)
   const createNote = (data) => noteService.createNote(data)
-  const updateNote = (data) => noteService.updateNote(data)
+  const updateNote = (id, data) => noteService.updateNote(id, data)
   const deleteNote = (id) => noteService.deleteNote(id)
 
   return { notes, note, createNote, updateNote, deleteNote }

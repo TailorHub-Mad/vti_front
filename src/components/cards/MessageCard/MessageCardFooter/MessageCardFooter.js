@@ -18,7 +18,7 @@ const icon_props = {
 export const MessageCardFooter = ({
   isClosed,
   isSubscribe,
-  isValidate,
+  isFormalized,
   messagesCount = 0,
   attachmentsCount = 0,
   subscribedUsers,
@@ -41,7 +41,7 @@ export const MessageCardFooter = ({
 
       {isSubscribe ? <SubscribeIcon {...icon_props} color={"blue.500"} /> : null}
 
-      {isValidate ? <BadgeIcon {...icon_props} color={"blue.500"} /> : null}
+      {isFormalized ? <BadgeIcon {...icon_props} color={"blue.500"} /> : null}
 
       <Box display="flex" alignItems="center">
         <Text color="grey" variant="d_xs_regular" marginRight="2px">
