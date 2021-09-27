@@ -53,7 +53,7 @@ const tagsProyecto = () => {
   const { data, error, isLoading, mutate } = tagFetchHandler(
     infoByType[type].fetchKey
   )
-
+  console.log("DATA", data)
   const [showImportModal, setShowImportModal] = useState(false)
 
   // Create - Update state
@@ -90,7 +90,7 @@ const tagsProyecto = () => {
 
     if (deleteType === DeleteType.MANY)
       return "¿Desea eliminar los tags seleccionados?"
-    const label = getFieldObjectById(tagData, "alias", tagToDelete)
+    const label = getFieldObjectById(tagData, "name", tagToDelete)
     return `¿Desea eliminar ${label}?`
   }
 
@@ -105,7 +105,7 @@ const tagsProyecto = () => {
 
   const deleteOne = async (id, projectTag) => {
     try {
-      ;(await isProjectTag) ? deleteProjectTag(id) : deleteNoteTag(id)
+      await isProjectTag ? deleteProjectTag(id) : deleteNoteTag(id)
       showToast("Tag borrada correctamente")
       return projectTag.filter((projectTag) => projectTag._id !== id)
     } catch (error) {
@@ -218,7 +218,7 @@ const tagsProyecto = () => {
               mb="24px"
             >
               {data
-                .filter((tag) => tag.parentTag)
+                .filter((tag) => tag?.relatedTags?.length > 0)
                 .map((tag) => (
                   <TagCard
                     onEdit={() => onEdit(tag._id)}
@@ -237,7 +237,7 @@ const tagsProyecto = () => {
               mb="24px"
             >
               {data
-                .filter((tag) => !tag.parentTag)
+                .filter((tag) => tag?.relatedTags?.length === 0)
                 .map((tag) => (
                   <TagCard
                     onEdit={() => onEdit(tag._id)}

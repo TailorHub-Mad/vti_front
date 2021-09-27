@@ -34,7 +34,7 @@ export const NewTagForm = ({ value, onChange, isProjectTag }) => {
         label: "Tag"
       }
     },
-    parent: {
+    relatedTag: {
       type: "select",
       config: {
         placeholder: "Padre",

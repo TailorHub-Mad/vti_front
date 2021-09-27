@@ -24,7 +24,7 @@ export const TagCardTags = ({ projects, relatedTags }) => {
       mb="16px"
     >
       <TagRow
-        tags={relatedTags}
+        tags={relatedTags.map(tags => tags.name)}
         tagComponent={<GeneralTag />}
         remainingTagsCount={getRemainingTags(relatedTags)}
         variant="pale_yellow"

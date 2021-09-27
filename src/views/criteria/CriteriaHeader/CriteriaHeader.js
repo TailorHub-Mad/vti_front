@@ -2,19 +2,29 @@ import { Flex, Text, Box } from "@chakra-ui/react"
 import React from "react"
 import { ICONS_REFERENCE } from "../../../utils/constants/icons"
 
-export const TagsHeader = ({
+export const CriteriaHeader = ({
   tagsCount = 0,
   onChange,
-  activeItem = "inheritance"
+  activeItem = "projects_board"
 }) => {
   const visibility_menu = {
-    inheritance: {
-      label: "Herencia",
-      active_icon: ICONS_REFERENCE.tag_link,
-      icon: ICONS_REFERENCE.tag_link
+    projects_board: {
+      label: "Tablero Tag Proyecto",
+      active_icon: ICONS_REFERENCE.departments,
+      icon: ICONS_REFERENCE.departments
     },
-    alphabetic: {
-      label: "Alfabético",
+    projects_alphabetic: {
+      label: "Alfabético Tag Proyecto",
+      active_icon: ICONS_REFERENCE.list,
+      icon: ICONS_REFERENCE.list
+    },
+    notes_board: {
+      label: "Tablero Tag Apunte",
+      active_icon: ICONS_REFERENCE.departments,
+      icon: ICONS_REFERENCE.departments
+    },
+    notes_alphabetic: {
+      label: "Alfabético Tag Apunte",
       active_icon: ICONS_REFERENCE.list,
       icon: ICONS_REFERENCE.list
     }
@@ -48,6 +58,15 @@ export const TagsHeader = ({
               >
                 {item.label}
               </Text>
+              {idx === 1 ? (
+                <Box
+                  width="2px"
+                  height="16px"
+                  bgColor="yellow"
+                  display="block"
+                  margin="4px 0px 4px 20px"
+                />
+              ) : null}
             </Flex>
           )
         })}
