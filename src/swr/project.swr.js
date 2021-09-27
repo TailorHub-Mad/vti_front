@@ -16,12 +16,12 @@ export const projectFetchHandler = (state, options) => {
     all: () => useFetchSWR(SWR_CACHE_KEYS.projects, getProjects),
     id: () =>
       useFetchSWR([SWR_CACHE_KEYS.project, options[fetchOption.ID]], getProject),
-    grouped: () =>
+    group: () =>
       useFetchSWR(
         [SWR_CACHE_KEYS.groupedProjects, options[fetchOption.GROUP]],
         getGroupedProjects
       ),
-    filtered: () =>
+    filter: () =>
       useFetchSWR(
         [SWR_CACHE_KEYS.filterProjects, options[fetchOption.FILTER]],
         getFilteredProjects
