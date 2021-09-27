@@ -18,12 +18,12 @@ export const NoteDetailsAccordion = ({
   link,
   message,
   files,
-  isResponse,
+  isMessage,
   ...props
 }) => {
   return (
     <Accordion allowToggle allowMultiple {...props}>
-      {testSystems ? (
+      {!isMessage && testSystems ? (
         <NoteAccordionItem
           title="Sistema de ensayo del proyecto"
           icon={<TestSystemLineIcon mr="8px" />}
@@ -35,7 +35,7 @@ export const NoteDetailsAccordion = ({
           ))}
         </NoteAccordionItem>
       ) : null}
-      {noteTags ? (
+      {!isMessage && noteTags ? (
         <NoteAccordionItem title="Tags de apunte" icon={<TagLineIcon mr="8px" />}>
           {noteTags.map((note, idx) => (
             <TestSystemTag key={`${note}-${idx}`} mr="8px" mb="8px">
@@ -46,9 +46,9 @@ export const NoteDetailsAccordion = ({
       ) : null}
       {message ? (
         <NoteAccordionItem
-          title={`${isResponse ? "Respuesta" : "Mensaje creado"} por ${name}`}
+          title={`${isMessage ? "Respuesta" : "Mensaje creado"} por ${name}`}
           icon={
-            isResponse ? <ConversationIcon mr="8px" /> : <PageLineIcon mr="8px" />
+            isMessage ? <ConversationIcon mr="8px" /> : <PageLineIcon mr="8px" />
           }
         >
           {message}

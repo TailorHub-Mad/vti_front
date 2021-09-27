@@ -3,6 +3,7 @@ import SystemService from "../../services/systems.service"
 const useSystemApi = () => {
   const systemService = SystemService()
 
+  // CRUD
   const getSystems = () => systemService.getSystems()
   const getSystem = (_, id) => systemService.getSystem(id)
   const createSystem = (system) => systemService.createSystem(system)

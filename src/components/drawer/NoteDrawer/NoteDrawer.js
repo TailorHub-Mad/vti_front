@@ -9,12 +9,16 @@ export const NoteDrawer = ({
   note,
   isOpen,
   onClose,
-  handleUpdate,
+  onEdit,
   onDelete,
   ...props
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
+  const formatMessage = (msg) => ({
+    ...msg,
+    isClosed: msg.approved
+  })
   if (!note) return null
   return (
     <>
@@ -66,7 +70,7 @@ export const NoteDrawer = ({
             borderRadius="2px"
             boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
           >
-            <NoteMainInfo note={note} onEdit={handleUpdate} onDelete={onDelete} />
+            <NoteMainInfo item={note} onEdit={onEdit} onDelete={onDelete} />
             <NoteDetailsAccordion
               name={note.name}
               // noteTags={note.tags}
@@ -86,17 +90,12 @@ export const NoteDrawer = ({
                 borderRadius="2px"
                 boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
               >
-                <NoteMainInfo
-                  updatedAt={msg.updatedAt}
-                  project={msg.project}
-                  isResponse
-                />
+                <NoteMainInfo item={formatMessage(msg)} isMessage />
                 <NoteDetailsAccordion
-                  isResponse
-                  name={msg.name}
-                  links={msg.links}
-                  message={msg.message}
-                  files={msg.files}
+                  isMessage
+                  name={msg.owner.name}
+                  link={msg.link}
+                  files={msg.document}
                 />
               </Box>
             ))}

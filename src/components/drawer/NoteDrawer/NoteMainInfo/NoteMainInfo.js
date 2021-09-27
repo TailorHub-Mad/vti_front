@@ -17,50 +17,55 @@ const actionType = {
   FORMALIZED: "formalized"
 }
 
-export const NoteMainInfo = ({ note, onEdit, onDelete }) => {
+export const NoteMainInfo = ({ item, onEdit, onDelete, isMessage = false }) => {
   const { updateNote } = useNoteApi()
   const { mutate } = useSWRConfig()
 
-  const [closed, setClosed] = useState(note.isClosed)
-  const [fomalized, setFomalized] = useState(note.fomalized)
+  const [closed, setClosed] = useState(item.isClosed)
+  const [fomalized, setFomalized] = useState(item.fomalized)
 
   const handleUpdateNote = async (action) => {
+    // TODO -> update states message
+    if (isMessage) return
+
     switch (action) {
       case actionType.CLOSE:
         setClosed(!closed)
-        await updateNote(note._id, { isClosed: !closed })
+        await updateNote(item._id, { isClosed: !closed })
         break
 
       case actionType.FORMALIZED:
         setFomalized(!fomalized)
-        await updateNote(note._id, { formalized: !fomalized })
+        await updateNote(item._id, { formalized: !fomalized })
         break
 
       default:
         return null
     }
 
-    await mutate(SWR_CACHE_KEYS.notes)
+    await mutate(SWR_CACHE_KEYS.items)
   }
 
   const handleGoToProject = () => {
     // TODO handle go to project detail
-    console.log("GO_PROJECT", note.project)
+    console.log("GO_PROJECT", item.project)
   }
 
   return (
     <>
       <Flex justify="space-between" h="16px">
         <Text variant="d_xs_regular" color="grey">
-          {new Date(note.updatedAt)?.toLocaleDateString()}
+          {new Date(item.updatedAt)?.toLocaleDateString()}
         </Text>
         <Flex>
-          <ActionLink
-            onClick={onEdit}
-            color="grey"
-            icon={<EditIcon />}
-            label="Editar"
-          />
+          {isMessage || (
+            <ActionLink
+              onClick={onEdit}
+              color="grey"
+              icon={<EditIcon />}
+              label="Editar"
+            />
+          )}
 
           <ActionLink
             onClick={() => handleUpdateNote(actionType.CLOSE)}
@@ -76,29 +81,33 @@ export const NoteMainInfo = ({ note, onEdit, onDelete }) => {
             label={fomalized ? "Formalizado" : "Formalizar"}
           />
 
-          <ActionLink
-            onClick={onDelete}
-            color="error"
-            icon={<DeleteIcon />}
-            label="Eliminar"
-          />
+          {isMessage || (
+            <ActionLink
+              onClick={onDelete}
+              color="error"
+              icon={<DeleteIcon />}
+              label="Eliminar"
+            />
+          )}
         </Flex>
       </Flex>
 
-      <Box mt="24px">
-        <Flex justify="space-between">
-          <Flex align="center">
-            <FolderCloseIcon mr="8px" />
-            <Text variant="d_s_medium" mt="4px">
-              Proyecto
-            </Text>
+      {isMessage || (
+        <Box mt="24px">
+          <Flex justify="space-between">
+            <Flex align="center">
+              <FolderCloseIcon mr="8px" />
+              <Text variant="d_s_medium" mt="4px">
+                Proyecto
+              </Text>
+            </Flex>
+            <GoToButton label="Ver proyecto" onClick={handleGoToProject} />
           </Flex>
-          <GoToButton label="Ver proyecto" onClick={handleGoToProject} />
-        </Flex>
-        <ProjectTag mt="8px" ml="32px">
-          {/* // TODO -> detail project */}
-        </ProjectTag>
-      </Box>
+          <ProjectTag mt="8px" ml="32px">
+            {/* // TODO -> detail project */}
+          </ProjectTag>
+        </Box>
+      )}
     </>
   )
 }

@@ -69,11 +69,6 @@ const tags = () => {
   // TODO
   const handleExport = () => {}
 
-  const handleOpenPopup = (tagToDelete, type) => {
-    setDeleteType(type)
-    setTagsToDelete(tagToDelete)
-  }
-
   const handleClosePopup = () => {
     setDeleteType(null)
     setTagsToDelete(null)
@@ -206,7 +201,7 @@ const tags = () => {
                   .map((tag) => (
                     <TagCard
                       onEdit={() => handleUpdate(tag._id)}
-                      onDelete={() => handleOpenPopup(tag._id, DeleteType.ONE)}
+                      onDelete={() => setTagsToDelete(tag._id, DeleteType.ONE)}
                       key={tag.name}
                       {...tag}
                     />
@@ -225,7 +220,7 @@ const tags = () => {
                   .map((tag) => (
                     <TagCard
                       onEdit={() => handleUpdate(tag._id)}
-                      onDelete={() => handleOpenPopup(tag._id, DeleteType.ONE)}
+                      onDelete={() => setTagsToDelete(tag._id, DeleteType.ONE)}
                       key={tag.name}
                       {...tag}
                     />
@@ -247,7 +242,7 @@ const tags = () => {
                 .map((tag) => (
                   <TagCard
                     onEdit={() => handleUpdate(tag._id)}
-                    onDelete={() => handleOpenPopup(tag._id, DeleteType.ONE)}
+                    onDelete={() => setTagsToDelete(tag._id, DeleteType.ONE)}
                     key={tag.name}
                     {...tag}
                   />

@@ -50,7 +50,7 @@ const TABBAR_LINKS = {
   tags: {
     label: "Tags",
     icon: ICONS_REFERENCE.tag_line,
-    // href: PATHS.projectTags,
+    noEvents: true,
     disabled: false, // TODO -> provisional
     submenu: [
       {

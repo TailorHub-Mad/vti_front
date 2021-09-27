@@ -3,6 +3,7 @@ import { ServiceConstructor } from "."
 const SystemService = () => {
   const { instance, execute } = ServiceConstructor
 
+  // CRUD
   const getSystems = (limit = 50, offset = 0) =>
     execute(instance.get(`/testSystem?limit=${limit}&offset=${offset}`))
   const getSystem = (id) => execute(instance.get(`/testSystem/${id}`))
