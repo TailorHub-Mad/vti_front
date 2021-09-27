@@ -12,7 +12,7 @@ const NoteService = () => {
   const createMessage = (id, data) =>
     execute(instance.post(`/notes/${id}/message/create`, data))
   const updateMessage = (id, messageId, data) =>
-    execute(instance.post(`/notes/${id}/message/${messageId}`, data))
+    execute(instance.put(`/notes/${id}/message/${messageId}`, data))
 
   return {
     notes,
