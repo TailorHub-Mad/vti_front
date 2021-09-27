@@ -22,6 +22,7 @@ import { LoadingView } from "../../views/common/LoadingView"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { NewNoteModal } from "../../views/notes/NewNote/NewNoteModal/NewNoteModal"
 import { NotesMenu } from "../../views/notes/NotesMenu/NotesMenu"
+import { ResponseModal } from "../../views/notes/Response/ResponseModal/ResponseModal"
 
 const apuntes = () => {
   const { isLoggedIn, user } = useContext(ApiAuthContext)
@@ -46,6 +47,9 @@ const apuntes = () => {
 
   const [noteToDelete, setNoteToDelete] = useState(null)
 
+  const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
+  const [messageToUpdate, setMessageToUpdate] = useState(null)
+
   const isEmptyData = checkDataIsEmpty(data)
   const notesData = data ? data[0]?.notes : []
 
@@ -66,6 +70,14 @@ const apuntes = () => {
     setShowNoteDetails(true)
   }
 
+  const handleEditResponse = (messageId) => {
+    console.log("MID", messageId)
+    const [_message] = noteToDetail.messages.filter((msg) => msg._id === messageId)
+    setMessageToUpdate(_message)
+    setIsResponseModalOpen(true)
+  }
+
+  console.log(noteToDetail, messageToUpdate)
   const handleDelete = async () => {
     console.log("HandleDelete", noteToDelete)
     setNoteToDelete(null)
@@ -115,6 +127,13 @@ const apuntes = () => {
         {`¿Desea eliminar ${getFieldObjectById(notesData, "ref", noteToDelete)}?`}
       </Popup>
 
+      <ResponseModal
+        messageToUpdate={messageToUpdate}
+        isOpen={isResponseModalOpen}
+        onClose={() => setIsResponseModalOpen(false)}
+        noteId={noteToDetail?._id}
+      />
+
       <NewNoteModal
         clientToUpdate={noteToUpdate}
         isOpen={isNoteModalOpen}
@@ -132,6 +151,8 @@ const apuntes = () => {
         onClose={() => setShowNoteDetails(false)}
         onDelete={() => handleOpenPopup(noteToDetail._id)}
         onEdit={() => onEdit(noteToDetail._id)}
+        onResponse={() => setIsResponseModalOpen(true)}
+        onEditResponse={(messageId) => handleEditResponse(messageId)}
       />
 
       <PageHeader>

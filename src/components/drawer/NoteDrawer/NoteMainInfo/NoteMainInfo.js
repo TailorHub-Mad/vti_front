@@ -17,23 +17,23 @@ const actionType = {
   FORMALIZED: "formalized"
 }
 
-export const NoteMainInfo = ({ note, onEdit, onDelete }) => {
+export const NoteMainInfo = ({ note, updatedAt, onEdit, onDelete, isResponse }) => {
   const { updateNote } = useNoteApi()
   const { mutate } = useSWRConfig()
 
-  const [closed, setClosed] = useState(note.isClosed)
-  const [fomalized, setFomalized] = useState(note.fomalized)
+  const [closed, setClosed] = useState(note?.isClosed)
+  const [fomalized, setFomalized] = useState(note?.fomalized)
 
   const handleUpdateNote = async (action) => {
     switch (action) {
       case actionType.CLOSE:
         setClosed(!closed)
-        await updateNote(note._id, { isClosed: !closed })
+        await updateNote(note?._id, { isClosed: !closed })
         break
 
       case actionType.FORMALIZED:
         setFomalized(!fomalized)
-        await updateNote(note._id, { formalized: !fomalized })
+        await updateNote(note?._id, { formalized: !fomalized })
         break
 
       default:
@@ -45,14 +45,14 @@ export const NoteMainInfo = ({ note, onEdit, onDelete }) => {
 
   const handleGoToProject = () => {
     // TODO handle go to project detail
-    console.log("GO_PROJECT", note.project)
+    console.log("GO_PROJECT", note?.project)
   }
 
   return (
     <>
       <Flex justify="space-between" h="16px">
         <Text variant="d_xs_regular" color="grey">
-          {new Date(note.updatedAt)?.toLocaleDateString()}
+          {new Date(updatedAt)?.toLocaleDateString()}
         </Text>
         <Flex>
           <ActionLink
@@ -85,20 +85,22 @@ export const NoteMainInfo = ({ note, onEdit, onDelete }) => {
         </Flex>
       </Flex>
 
-      <Box mt="24px">
-        <Flex justify="space-between">
-          <Flex align="center">
-            <FolderCloseIcon mr="8px" />
-            <Text variant="d_s_medium" mt="4px">
-              Proyecto
-            </Text>
+      {!isResponse && (
+        <Box mt="24px">
+          <Flex justify="space-between">
+            <Flex align="center">
+              <FolderCloseIcon mr="8px" />
+              <Text variant="d_s_medium" mt="4px">
+                Proyecto
+              </Text>
+            </Flex>
+            <GoToButton label="Ver proyecto" onClick={handleGoToProject} />
           </Flex>
-          <GoToButton label="Ver proyecto" onClick={handleGoToProject} />
-        </Flex>
-        <ProjectTag mt="8px" ml="32px">
-          {/* // TODO -> detail project */}
-        </ProjectTag>
-      </Box>
+          <ProjectTag mt="8px" ml="32px">
+            {/* // TODO -> detail project */}
+          </ProjectTag>
+        </Box>
+      )}
     </>
   )
 }

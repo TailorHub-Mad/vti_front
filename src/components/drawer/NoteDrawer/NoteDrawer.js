@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/react"
+import { Box, Button, Flex, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { CloseIcon } from "../../icons/CloseIcon"
 import { NoteMainInfo } from "./NoteMainInfo/NoteMainInfo"
@@ -11,6 +11,8 @@ export const NoteDrawer = ({
   onClose,
   onEdit,
   onDelete,
+  onResponse,
+  onEditResponse,
   ...props
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -66,7 +68,12 @@ export const NoteDrawer = ({
             borderRadius="2px"
             boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
           >
-            <NoteMainInfo note={note} onEdit={onEdit} onDelete={onDelete} />
+            <NoteMainInfo
+              note={note}
+              onEdit={onEdit}
+              onDelete={onDelete}
+              updatedAt={note.updatedAt}
+            />
             <NoteDetailsAccordion
               name={note.name}
               // noteTags={note.tags}
@@ -79,7 +86,7 @@ export const NoteDrawer = ({
           {note.messages &&
             note.messages.map((msg, idx) => (
               <Box
-                key={`${msg.id}-${idx}`}
+                key={`${msg._id}-${idx}`}
                 bgColor="white"
                 mt="24px"
                 p="32px"
@@ -87,8 +94,8 @@ export const NoteDrawer = ({
                 boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
               >
                 <NoteMainInfo
-                  updatedAt={msg.updatedAt}
-                  project={msg.project}
+                  updatedAt={msg.createdAt}
+                  onEdit={() => onEditResponse(msg._id)}
                   isResponse
                 />
                 <NoteDetailsAccordion
@@ -100,6 +107,9 @@ export const NoteDrawer = ({
                 />
               </Box>
             ))}
+          <Button mt="24px" onClick={onResponse}>
+            Escribir respuesta
+          </Button>
         </Box>
       </Box>
     </>
