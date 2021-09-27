@@ -18,7 +18,7 @@ export const TagCardHeader = ({
   const [showOptions, setShowOptions] = useState(false)
   return (
     <Flex height="32px" justify="space-between" {...props}>
-      <Box maxWidth="80%" height="32px" onClick={onClick} cursor="pointer">
+      <Box maxWidth="80%" height="32px" onClick={onClick} cursor="default">
         <Text marginTop="2px" variant="d_m_medium">
           {title}
         </Text>

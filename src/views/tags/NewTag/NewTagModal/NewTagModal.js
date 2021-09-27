@@ -46,12 +46,7 @@ export const NewTagModal = ({
   }
 
   const checkInputsAreEmpty = () => {
-    return values.some(
-      (value) =>
-        // TODO -> autogenerate ID
-        // !value.id ||
-        !value.name
-    )
+    return values.some((value) => !value.name)
   }
 
   const handleSubmit = async () => {
@@ -109,6 +104,7 @@ export const NewTagModal = ({
           values={values}
           onChange={handleChange}
           onDelete={handleDelete}
+          objectToUpdate={tagToUpdate}
           addTitle="Añadir nuevo tag"
         >
           <NewTagForm isProjectTag={isProjectTag} />

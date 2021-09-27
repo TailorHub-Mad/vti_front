@@ -1,4 +1,4 @@
-import { Flex, Text, Box } from "@chakra-ui/react"
+import { Flex, Text } from "@chakra-ui/react"
 import React from "react"
 import { ICONS_REFERENCE } from "../../../utils/constants/icons"
 

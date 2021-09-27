@@ -11,8 +11,7 @@ export const TagCard = ({
   relatedTags,
   category,
   onEdit,
-  onDelete,
-  ...props
+  onDelete
 }) => {
   return (
     <Box
@@ -22,7 +21,6 @@ export const TagCard = ({
       w="266px"
       h="159px"
       p="16px"
-      {...props}
     >
       <TagCardHeader
         title={name}

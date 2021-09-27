@@ -12,6 +12,7 @@ export const TOAST_DEFAULT_TIME = 2000
 
 export const PATHS = {
   root: "/",
+  notFound: "/404",
   login: "/login",
   recover: "/recuperar",
   notes: "/apuntes",

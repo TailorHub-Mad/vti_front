@@ -1,6 +1,5 @@
 import { Box, Flex, Grid, Text } from "@chakra-ui/react"
-import { useRouter } from "next/dist/client/router"
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import { Page } from "../components/layout/Pages/Page"
 import { PageBody } from "../components/layout/Pages/PageBody/PageBody"
 import { PageHeader } from "../components/layout/Pages/PageHeader/PageHeader"
@@ -8,11 +7,8 @@ import { ToolBar } from "../components/navigation/ToolBar/ToolBar"
 import { ImportFilesModal } from "../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { Popup } from "../components/overlay/Popup/Popup"
 import { ApiAuthContext } from "../provider/ApiAuthProvider"
-import { ToastContext } from "../provider/ToastProvider"
 import { DeleteType } from "../utils/constants/global"
-import { errorHandler } from "../utils/errors"
-import { checkDataIsEmpty, getFieldObjectById } from "../utils/functions/global"
-import { LoadingView } from "../views/common/LoadingView"
+import { getFieldObjectById } from "../utils/functions/global"
 import { AddCriterionIcon } from "../components/icons/AddCriterionIcon"
 import { CriteriaHeader } from "../views/criteria/CriteriaHeader/CriteriaHeader"
 import faker from "faker"
@@ -21,32 +17,32 @@ import { CriterionTitleCard } from "../components/cards/CriterionTitleCard/Crite
 const tagsMock = new Array(50).fill("").map(() => faker.random.word())
 
 const apoyo = () => {
-  const router = useRouter()
-  const { type } = router.query
+  // const router = useRouter()
+  // const { type } = router.query
   // const isProjectTag = type === "proyecto"
 
-  const infoByType = {
-    proyecto: {
-      title: "Tags de proyecto",
-      addTitle: "Añadir tag de proyecto",
-      editSuccessMsg: "Editado correctamente",
-      editTitle: "Editar tag e proyecto",
-      addSuccessMsg: "¡Has añadido nuevo/s tag de proyecto/s!",
-      fetchKey: "projects"
-    },
-    apunte: {
-      title: "Tags de apunte",
-      addTitle: "Añadir tag de apunte",
-      editSuccessMsg: "Editado correctamente",
-      editTitle: "Editar tag de apunte",
-      addSuccessMsg: "¡Has añadido nuevo/s tag de apunte/s!",
-      fetchKey: "notes"
-    }
-  }
+  // const infoByType = {
+  //   proyecto: {
+  //     title: "Tags de proyecto",
+  //     addTitle: "Añadir tag de proyecto",
+  //     editSuccessMsg: "Editado correctamente",
+  //     editTitle: "Editar tag e proyecto",
+  //     addSuccessMsg: "¡Has añadido nuevo/s tag de proyecto/s!",
+  //     fetchKey: "projects"
+  //   },
+  //   apunte: {
+  //     title: "Tags de apunte",
+  //     addTitle: "Añadir tag de apunte",
+  //     editSuccessMsg: "Editado correctamente",
+  //     editTitle: "Editar tag de apunte",
+  //     addSuccessMsg: "¡Has añadido nuevo/s tag de apunte/s!",
+  //     fetchKey: "notes"
+  //   }
+  // }
 
   const [activeTab, setActiveTab] = useState("board")
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { showToast } = useContext(ToastContext)
+  // const { showToast } = useContext(ToastContext)
   //TODO Meter la api de criterio
   // const { deleteProjectTag, deleteNoteTag } = useTagApi()
   // const { data, error, isLoading, mutate } = tagFetchHandler(
@@ -56,15 +52,18 @@ const apoyo = () => {
   const [showImportModal, setShowImportModal] = useState(false)
 
   // Create - Update state
-  const [isCriterioModalOpen, setIsCriterioModalOpen] = useState(false)
-  const [criterioToUpdate, setCriterioToUpdate] = useState(null)
+  const [, setIsCriterioModalOpen] = useState(false)
+  const [, setCriterioToUpdate] = useState(null)
 
   // Delete state
   const [deleteType, setDeleteType] = useState(null)
   const [criterioToDelete, setCriteriosToDelete] = useState(null)
 
+  // TODO -> provisonal
   // const isEmptyData = checkDataIsEmpty(data)
   // const criterioData = data && !isEmptyData ? data : null
+  const isEmptyData = true
+  const criterioData = isEmptyData && null
 
   const handleExport = () => {}
 
@@ -78,10 +77,10 @@ const apoyo = () => {
     setCriteriosToDelete(null)
   }
 
-  const handleOnCloseModal = () => {
-    setCriterioToUpdate(null)
-    setIsCriterioModalOpen(false)
-  }
+  // const handleOnCloseModal = () => {
+  //   setCriterioToUpdate(null)
+  //   setIsCriterioModalOpen(false)
+  // }
 
   const handleDeleteMessage = () => {
     if (!criterioToDelete) return
@@ -95,21 +94,21 @@ const apoyo = () => {
   const handleDeleteFunction = async () => {
     // const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     // const updated = await f(criterioToDelete, criterioData)
-    const updated = await deleteOne(criterioToDelete, criterioData)
-    updated.length > 0 ? await mutate(updated, false) : await mutate()
-    setDeleteType(null)
-    setCriteriosToDelete(null)
+    // const updated = await deleteOne(criterioToDelete, criterioData)
+    // updated.length > 0 ? await mutate(updated, false) : await mutate()
+    // setDeleteType(null)
+    // setCriteriosToDelete(null)
   }
 
-  const deleteOne = async (id, projectTag) => {
-    try {
-      ;(await isProjectTag) ? deleteProjectTag(id) : deleteNoteTag(id)
-      showToast("Tag borrada correctamente")
-      return projectTag.filter((projectTag) => projectTag._id !== id)
-    } catch (error) {
-      errorHandler(error)
-    }
-  }
+  // const deleteOne = async () => {
+  //   try {
+  //     ;(await isProjectTag) ? deleteProjectTag(id) : deleteNoteTag(id)
+  //     showToast("Tag borrada correctamente")
+  //     return projectTag.filter((projectTag) => projectTag._id !== id)
+  //   } catch (error) {
+  //     errorHandler(error)
+  //   }
+  // }
 
   //   const deleteMany = async (projectTagId, projectTag) => {
   //     try {
@@ -136,7 +135,7 @@ const apoyo = () => {
     //   [fetchOption.SEARCH]: search
     // })
   }
-  console.log(tagsMock)
+
   if (!isLoggedIn) return null
   // if (error) return errorHandler(error)
   return (
@@ -217,16 +216,14 @@ const apoyo = () => {
           mt="8px"
           mb="24px"
         >
-          {
-            tagsMock.map((tag) => (
+          {tagsMock.map((tag) => (
             <CriterionTitleCard
-            onEdit={() => onEdit(tag._id)}
-            onDelete={() => handleOpenPopup(tag._id, DeleteType.ONE)}
-                key={tag.name}
-                {...tag}
-              />
-            ))
-          }
+              onEdit={() => onEdit(tag._id)}
+              onDelete={() => handleOpenPopup(tag._id, DeleteType.ONE)}
+              key={tag.name}
+              {...tag}
+            />
+          ))}
         </Grid>
       </PageBody>
     </Page>

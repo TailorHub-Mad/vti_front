@@ -8,7 +8,6 @@ import { ChevronUpIcon } from "../../icons/ChevronUpIcon"
 import { GeneralTag } from "../../tags/GeneralTag/GeneralTag"
 import { CriterionTitleCardHeader } from "./CriterionTitleCardHeader/CriterionTitleCardHeader"
 
-
 export const CriterionTitleCard = ({
   selectAllTags,
   onSelect,
@@ -58,7 +57,7 @@ export const CriterionTitleCard = ({
               <Checkbox mr="8px" onChange={onSelect} isChecked={isChecked} />
               <GeneralTag variant="pale_yellow">hola k dise</GeneralTag>
             </Flex>
-            <DeleteIcon color="grey" onClick={onDelete} cursor="pointer"/>
+            <DeleteIcon color="grey" onClick={onDelete} cursor="pointer" />
           </Flex>
         ))}
       <Text variant="d_xs_regular" as="a" cursor="pointer">
