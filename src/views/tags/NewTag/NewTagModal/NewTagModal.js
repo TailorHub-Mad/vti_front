@@ -32,6 +32,10 @@ export const NewTagModal = ({
   const handleChange = (val, idx) => {
     const _values = [...values]
     _values[idx] = val
+    if (val.relatedTag) {
+      _values[idx].relatedTag = val.relatedTag.value
+    }
+
     setValues(_values)
   }
 
@@ -42,12 +46,7 @@ export const NewTagModal = ({
   }
 
   const checkInputsAreEmpty = () => {
-    return values.some(
-      (value) =>
-        // TODO -> autogenerate ID
-        // !value.id ||
-        !value.name
-    )
+    return values.some((value) => !value.name)
   }
 
   const handleSubmit = async () => {
@@ -73,9 +72,9 @@ export const NewTagModal = ({
   const handleUpdateTag = async () => {
     try {
       const { _id } = tagToUpdate
-      ;(await isProjectTag)
-        ? updateProjectTag(_id, values[0])
-        : updateNoteTag(_id, values[0])
+      isProjectTag
+        ? await updateProjectTag(_id, values[0])
+        : await updateNoteTag(_id, values[0])
     } catch (error) {
       errorHandler(error)
     }
@@ -83,8 +82,8 @@ export const NewTagModal = ({
 
   useEffect(() => {
     if (!tagToUpdate) return
-    const { parent, name } = tagToUpdate
-    setValues([{ parent, name }])
+    const { relatedTag, name } = tagToUpdate
+    setValues([{ relatedTag, name }])
   }, [tagToUpdate])
 
   useEffect(() => {
@@ -105,6 +104,7 @@ export const NewTagModal = ({
           values={values}
           onChange={handleChange}
           onDelete={handleDelete}
+          objectToUpdate={tagToUpdate}
           addTitle="Añadir nuevo tag"
         >
           <NewTagForm isProjectTag={isProjectTag} />

@@ -6,24 +6,19 @@ import { OptionsIcon } from "../../../icons/OptionsIcon"
 import { OptionsMenu } from "../../../navigation/OptionsMenu/OptionsMenu"
 import { OptionsMenuItem } from "../../../navigation/OptionsMenu/OptionsMenuItem/OptionsMenuItem"
 
-export const TagCardHeader = ({
-  title,
+export const CriterionTitleCardHeader = ({
+  title = "Título",
   onClick,
   onEdit,
   onDelete,
-  category,
-  parentTag,
   ...props
 }) => {
   const [showOptions, setShowOptions] = useState(false)
   return (
     <Flex height="32px" justify="space-between" {...props}>
-      <Box maxWidth="80%" height="32px" onClick={onClick} cursor="default">
+      <Box maxWidth="80%" height="32px" onClick={onClick} cursor="pointer">
         <Text marginTop="2px" variant="d_m_medium">
           {title}
-        </Text>
-        <Text marginTop="2px" variant="d_xs_regular" casing="uppercase">
-          {parentTag ? `${parentTag} · ${category}` : category}
         </Text>
       </Box>
       <Box position="relative">

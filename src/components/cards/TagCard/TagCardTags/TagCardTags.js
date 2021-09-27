@@ -24,14 +24,14 @@ export const TagCardTags = ({ projects, relatedTags }) => {
       mb="16px"
     >
       <TagRow
-        tags={relatedTags}
-        tagComponent={<GeneralTag />}
+        tags={relatedTags.map((tags) => tags.name)}
+        tagcomponent={<GeneralTag />}
         remainingTagsCount={getRemainingTags(relatedTags)}
         variant="pale_yellow"
       />
       <TagRow
         tags={projects}
-        tagComponent={<GeneralTag />}
+        tagcomponent={<GeneralTag />}
         remainingTagsCount={getRemainingTags(projects)}
         variant="light_blue"
       />

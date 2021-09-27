@@ -3,9 +3,10 @@ import { InputSelect } from "../../../../components/forms/InputSelect/InputSelec
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
 import useTagApi from "../../../../hooks/api/useTagApi"
 
-export const NewTagForm = ({ value, onChange, isProjectTag }) => {
-  const [tagOptions, setTagOptions] = useState([])
+export const NewTagForm = ({ value, onChange, objectToUpdate, isProjectTag }) => {
   const { getProjectTags, getNoteTags } = useTagApi()
+
+  const [tagOptions, setTagOptions] = useState([])
 
   const handleFormChange = (input, _value) => {
     onChange({
@@ -19,14 +20,6 @@ export const NewTagForm = ({ value, onChange, isProjectTag }) => {
   }
 
   const formInputs = {
-    // TODO -> autogenerate ID
-    // id: {
-    //   type: "text",
-    //   config: {
-    //     placeholder: "ID",
-    //     label: "ID",
-    //   },
-    // },
     name: {
       type: "text",
       config: {
@@ -34,7 +27,7 @@ export const NewTagForm = ({ value, onChange, isProjectTag }) => {
         label: "Tag"
       }
     },
-    parent: {
+    relatedTag: {
       type: "select",
       config: {
         placeholder: "Padre",
@@ -56,6 +49,15 @@ export const NewTagForm = ({ value, onChange, isProjectTag }) => {
     }
     _getTags()
   }, [])
+
+  useEffect(() => {
+    if (!objectToUpdate || tagOptions.length === 0) return
+
+    // TODO -> for update
+    // const tag = tagOptions.find((_tag) => _tag.label === objectToUpdate?.tagAlias)
+
+    // handleFormChange("relatedTag", tag)
+  }, [objectToUpdate, tagOptions])
 
   return (
     <>
