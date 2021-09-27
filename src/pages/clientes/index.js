@@ -101,7 +101,7 @@ const clientes = () => {
     }
   }
 
-  const onEdit = (id) => {
+  const handleUpdate = (id) => {
     const client = clientsData.find((client) => client._id === id)
     setClientToUpdate(client)
     setIsClientModalOpen(true)
@@ -172,7 +172,7 @@ const clientes = () => {
           clients={clientsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(clientsId) => handleOpenPopup(clientsId, DeleteType.MANY)}
-          onEdit={onEdit}
+          onEdit={handleUpdate}
         />
       ) : null}
     </Page>

@@ -108,7 +108,7 @@ const tags = () => {
     }
   }
 
-  const onEdit = (id) => {
+  const handleUpdate = (id) => {
     const tag = tagData.find((tag) => tag._id === id)
     setTagToUpdate(tag)
     setIsTagModalOpen(true)
@@ -205,7 +205,7 @@ const tags = () => {
                   .filter((tag) => tag?.relatedTags?.length > 0)
                   .map((tag) => (
                     <TagCard
-                      onEdit={() => onEdit(tag._id)}
+                      onEdit={() => handleUpdate(tag._id)}
                       onDelete={() => handleOpenPopup(tag._id, DeleteType.ONE)}
                       key={tag.name}
                       {...tag}
@@ -224,7 +224,7 @@ const tags = () => {
                   .filter((tag) => tag?.relatedTags?.length === 0)
                   .map((tag) => (
                     <TagCard
-                      onEdit={() => onEdit(tag._id)}
+                      onEdit={() => handleUpdate(tag._id)}
                       onDelete={() => handleOpenPopup(tag._id, DeleteType.ONE)}
                       key={tag.name}
                       {...tag}
@@ -246,7 +246,7 @@ const tags = () => {
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((tag) => (
                   <TagCard
-                    onEdit={() => onEdit(tag._id)}
+                    onEdit={() => handleUpdate(tag._id)}
                     onDelete={() => handleOpenPopup(tag._id, DeleteType.ONE)}
                     key={tag.name}
                     {...tag}

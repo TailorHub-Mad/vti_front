@@ -9,7 +9,7 @@ export const NoteDrawer = ({
   note,
   isOpen,
   onClose,
-  onEdit,
+  handleUpdate,
   onDelete,
   ...props
 }) => {
@@ -66,7 +66,7 @@ export const NoteDrawer = ({
             borderRadius="2px"
             boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
           >
-            <NoteMainInfo note={note} onEdit={onEdit} onDelete={onDelete} />
+            <NoteMainInfo note={note} onEdit={handleUpdate} onDelete={onDelete} />
             <NoteDetailsAccordion
               name={note.name}
               // noteTags={note.tags}

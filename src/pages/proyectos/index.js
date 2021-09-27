@@ -35,38 +35,37 @@ const PROJECTS_GROUP_OPTIONS = [
 ]
 
 const proyectos = () => {
+  // Hooks
   const { isLoggedIn } = useContext(ApiAuthContext)
   const { deleteProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
 
+  // States
+  const [showImportModal, setShowImportModal] = useState(false)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
+  const [projectToUpdate, setProjectToUpdate] = useState(null)
+  const [deleteType, setDeleteType] = useState(null)
+  const [projectToDelete, setProjectsToDelete] = useState(null)
 
+  // Fetch
   const { data, error, isLoading, mutate } = projectFetchHandler(
     fetchState,
     fetchOptions
   )
 
-  const [showImportModal, setShowImportModal] = useState(false)
-
-  // Create - Update state
-  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
-  const [projectToUpdate, setProjectToUpdate] = useState(null)
-
-  // Delete state
-  const [deleteType, setDeleteType] = useState(null)
-  const [projectToDelete, setProjectsToDelete] = useState(null)
-
   const handleProjectsData = (isEmptyData) => {
     if (!data || isEmptyData) return null
     if (fetchState === fetchType.ALL) return data[0].projects
     if (fetchState == fetchType.GROUP) return data
+    // TODO FILTER
   }
 
   const isEmptyData = checkDataIsEmpty(data)
   const projectsData = handleProjectsData(isEmptyData)
 
-  // TODO
+  // Handlers views
   const handleExport = () => {}
 
   const handleOpenPopup = (projectToDelete, type) => {
@@ -84,6 +83,7 @@ const proyectos = () => {
     setIsProjectModalOpen(false)
   }
 
+  // Handlers CRUD
   const handleDeleteMessage = () => {
     if (!projectToDelete) return
 
@@ -106,9 +106,9 @@ const proyectos = () => {
       await deleteProject(id)
       showToast("Proyecto borrado correctamente")
       const updatedProjects = []
-      const filteredProjects = projects.filter((system) => system._id !== id)
+      const filterProjects = projects.filter((system) => system._id !== id)
       updatedProjects.push({
-        projects: filteredProjects
+        projects: filterProjects
       })
       return updatedProjects
     } catch (error) {
@@ -122,22 +122,23 @@ const proyectos = () => {
       await Promise.all(projectsQueue)
       showToast("Clientes borrados correctamente")
       const updatedProjects = []
-      const filteredProjects = projects.filter(
+      const filterProjects = projects.filter(
         (project) => !projectsId.includes(project._id)
       )
-      updatedProjects.push({ projects: filteredProjects })
-      return filteredProjects
+      updatedProjects.push({ projects: filterProjects })
+      return filterProjects
     } catch (error) {
       errorHandler(error)
     }
   }
 
-  const onEdit = (id) => {
+  const handleUpdate = (id) => {
     const project = projectsData.find((project) => project._id === id)
     setProjectToUpdate(project)
     setIsProjectModalOpen(true)
   }
 
+  // Filters
   const onSearch = (search) => {
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
@@ -228,7 +229,7 @@ const proyectos = () => {
           projects={projectsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
-          onEdit={onEdit}
+          onEdit={handleUpdate}
           onTabChange={(state) => setFetchState(state)}
         />
       ) : null}

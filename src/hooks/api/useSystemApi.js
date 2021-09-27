@@ -9,7 +9,22 @@ const useSystemApi = () => {
   const updateSystem = (id, system) => systemService.updateSystem(id, system)
   const deleteSystem = (id) => systemService.deleteSystem(id)
 
-  return { getSystems, getSystem, createSystem, updateSystem, deleteSystem }
+  // GROUP & FILTER
+  const getGroupSystems = (_, data) => systemService.getGroupSystems(data)
+  const getFilterSystems = (_, data) => systemService.createSystem(data)
+  const getSearchSystems = (_, data) => systemService.createSystem(data)
+
+  return {
+    getSystems,
+    getSystem,
+    createSystem,
+    updateSystem,
+    deleteSystem,
+
+    getGroupSystems,
+    getFilterSystems,
+    getSearchSystems
+  }
 }
 
 export default useSystemApi

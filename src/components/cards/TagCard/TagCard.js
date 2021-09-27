@@ -10,7 +10,7 @@ export const TagCard = ({
   parentTag,
   relatedTags,
   category,
-  onEdit,
+  handleUpdate,
   onDelete
 }) => {
   return (
@@ -26,7 +26,7 @@ export const TagCard = ({
         title={name}
         parentTag={parentTag}
         category={category}
-        onEdit={onEdit}
+        onEdit={handleUpdate}
         onDelete={onDelete}
       />
 

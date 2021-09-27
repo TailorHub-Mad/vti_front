@@ -19,33 +19,58 @@ import { systemFetchHandler } from "../../swr/systems.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 
+const SYSTEMS_GROUP_OPTIONS = [
+  {
+    label: "Cliente",
+    value: "client "
+  },
+  {
+    label: "Año",
+    value: "date.year"
+  },
+  {
+    label: "CodVTI",
+    value: "CodVTI"
+  },
+  {
+    label: "Sector",
+    value: "sector"
+  }
+]
+
 const sistemas = () => {
+  // Hooks
   const { isLoggedIn } = useContext(ApiAuthContext)
   const { deleteSystem } = useSystemApi()
   const { showToast } = useContext(ToastContext)
 
+  // States
+
+  const [showImportModal, setShowImportModal] = useState(false)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
+  const [isSystemModalOpen, setIsSystemModalOpen] = useState(false)
+  const [systemToUpdate, setSystemToUpdate] = useState(null)
+  const [deleteType, setDeleteType] = useState(null)
+  const [systemsToDelete, setSystemsToDelete] = useState(null)
 
+  // Fetch
   const { data, error, isLoading, mutate } = systemFetchHandler(
     fetchState,
     fetchOptions
   )
 
-  const [showImportModal, setShowImportModal] = useState(false)
-
-  // Create - Update state
-  const [isSystemModalOpen, setIsSystemModalOpen] = useState(false)
-  const [systemToUpdate, setSystemToUpdate] = useState(null)
-
-  // Delete state
-  const [deleteType, setDeleteType] = useState(null)
-  const [systemsToDelete, setSystemsToDelete] = useState(null)
+  const handleSystemsData = (isEmptyData) => {
+    if (!data || isEmptyData) return null
+    if (fetchState === fetchType.ALL) return data[0].testSystems
+    if (fetchState == fetchType.GROUP) return data
+    // TODO FILTER
+  }
 
   const isEmptyData = checkDataIsEmpty(data)
-  const systemsData = data && !isEmptyData ? data[0].testSystems : null
+  const systemsData = handleSystemsData(isEmptyData)
 
-  // TODO
+  // Handlers views
   const handleExport = () => {}
 
   const handleOpenPopup = (systemsToDelete, type) => {
@@ -63,6 +88,7 @@ const sistemas = () => {
     setIsSystemModalOpen(false)
   }
 
+  // Handlers CRUD
   const handleDeleteMessage = () => {
     if (!systemsToDelete) return
 
@@ -85,9 +111,9 @@ const sistemas = () => {
       await deleteSystem(id)
       showToast("Sistema borrado correctamente")
       const updatedSystems = []
-      const filteredSystems = systems.filter((system) => system._id !== id)
+      const filterSystems = systems.filter((system) => system._id !== id)
       updatedSystems.push({
-        testSystems: filteredSystems
+        testSystems: filterSystems
       })
       return updatedSystems
     } catch (error) {
@@ -101,26 +127,49 @@ const sistemas = () => {
       await Promise.all(systemsQueue)
       showToast("Clientes borrados correctamente")
       const updatedSystems = []
-      const filteredSystems = systems.filter(
+      const filterSystems = systems.filter(
         (system) => !systemsId.includes(system._id)
       )
-      updatedSystems.push({ testSystems: filteredSystems })
-      return filteredSystems
+      updatedSystems.push({ testSystems: filterSystems })
+      return filterSystems
     } catch (error) {
       errorHandler(error)
     }
   }
 
-  const onEdit = (id) => {
+  const handleUpdate = (id) => {
     const system = systemsData.find((system) => system._id === id)
     setSystemToUpdate(system)
     setIsSystemModalOpen(true)
   }
 
+  // Filters
   const onSearch = (search) => {
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
+    })
+  }
+
+  const handleOnGroup = (group) => {
+    if (!group) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.GROUP]: null
+      })
+      return
+    }
+
+    setFetchState(fetchType.GROUP)
+    setFetchOptions({
+      [fetchOption.GROUP]: group
+    })
+  }
+
+  const handleOnFilter = (filter) => {
+    setFetchState(fetchType.FILTER)
+    setFetchOptions({
+      [fetchOption.FILTER]: filter
     })
   }
 
@@ -156,11 +205,15 @@ const sistemas = () => {
           <ToolBar
             onAdd={() => setIsSystemModalOpen(true)}
             onSearch={onSearch}
+            onGroup={handleOnGroup}
+            onFilter={handleOnFilter}
             onImport={() => setShowImportModal(true)}
             onExport={handleExport}
             addLabel="Añadir sistema"
             searchPlaceholder="Busqueda por ID, Código"
+            groupOptions={SYSTEMS_GROUP_OPTIONS}
             icon={<AddTestSystemIcon />}
+            fetchState={fetchState}
           />
         ) : null}
       </PageHeader>
@@ -176,10 +229,11 @@ const sistemas = () => {
       ) : null}
       {systemsData ? (
         <TestSystemsTable
+          fetchState={fetchState}
           systems={systemsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(systemsId) => handleOpenPopup(systemsId, DeleteType.MANY)}
-          onEdit={onEdit}
+          onEdit={handleUpdate}
         />
       ) : null}
     </Page>

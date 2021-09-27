@@ -82,14 +82,16 @@ const apuntes = () => {
 
   // TODO
   const handleFavorite = async (id) => {
+    // TOD -> update users
     console.log("HandleFavorite", id)
   }
   const checkIsFavorite = (id) => user?.favorites?.notes?.includes(id)
   const checkIsSubscribe = (id) => user?.subscribed?.notes?.includes(id)
 
-  const onEdit = (id) => {
+  const handleUpdate = (id) => {
+    // TODO -> create full notes
     const note = notesData.find((note) => note._id === id)
-    console.log("handleEdit", id, note)
+    console.log("HandleEdit", id, note)
     setNoteToUpdate(note)
     setIsNoteModalOpen(true)
   }
@@ -131,7 +133,7 @@ const apuntes = () => {
         isOpen={showNoteDetails}
         onClose={() => setShowNoteDetails(false)}
         onDelete={() => handleOpenPopup(noteToDetail._id)}
-        onEdit={() => onEdit(noteToDetail._id)}
+        onEdit={() => handleUpdate(noteToDetail._id)}
       />
 
       <PageHeader>

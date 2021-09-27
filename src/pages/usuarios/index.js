@@ -101,7 +101,7 @@ const usuarios = () => {
     }
   }
 
-  const onEdit = (id) => {
+  const handleUpdate = (id) => {
     const user = usersData.find((user) => user._id === id)
     setUserToUpdate(user)
     setIsUserModalOpen(true)
@@ -172,7 +172,7 @@ const usuarios = () => {
           users={usersData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(usersId) => handleOpenPopup(usersId, DeleteType.MANY)}
-          onEdit={onEdit}
+          onEdit={handleUpdate}
         />
       ) : null}
     </Page>

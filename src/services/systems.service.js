@@ -11,7 +11,25 @@ const SystemService = () => {
     execute(instance.put(`/testSystem/${id}`, system))
   const deleteSystem = (id) => execute(instance.delete(`/testSystem/${id}`))
 
-  return { getSystems, getSystem, createSystem, updateSystem, deleteSystem }
+  // GROUP & FILTER
+  const getGroupSystems = (data) =>
+    execute(instance.get(`/testSystem/group?group=${data}&real=true`))
+  const getFilterSystems = (data) =>
+    execute(instance.get(`/testSystem/filter?${data}`))
+  const getSearchSystems = (data) =>
+    execute(instance.get(`/testSystem/group?${data}`))
+
+  return {
+    getSystems,
+    getSystem,
+    createSystem,
+    updateSystem,
+    deleteSystem,
+
+    getGroupSystems,
+    getFilterSystems,
+    getSearchSystems
+  }
 }
 
 export default SystemService

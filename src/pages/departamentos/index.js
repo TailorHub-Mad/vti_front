@@ -103,7 +103,7 @@ const departamentos = () => {
     }
   }
 
-  const onEdit = (id) => {
+  const handleUpdate = (id) => {
     const department = departmentsData.find((department) => department._id === id)
     setDepartmentToUpdate(department)
     setIsDepartmentModalOpen(true)
@@ -176,7 +176,7 @@ const departamentos = () => {
           onDeleteMany={(departmentsId) =>
             handleOpenPopup(departmentsId, DeleteType.MANY)
           }
-          onEdit={onEdit}
+          onEdit={handleUpdate}
         />
       ) : null}
     </Page>

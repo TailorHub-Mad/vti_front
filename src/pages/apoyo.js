@@ -123,7 +123,7 @@ const apoyo = () => {
   //     }
   //   }
 
-  const onEdit = (id) => {
+  const handleUpdate = (id) => {
     const tag = criterioData.find((tag) => tag._id === id)
     setCriterioToUpdate(tag)
     setIsCriterioModalOpen(true)
@@ -218,7 +218,7 @@ const apoyo = () => {
         >
           {tagsMock.map((tag) => (
             <CriterionTitleCard
-              onEdit={() => onEdit(tag._id)}
+              onEdit={() => handleUpdate(tag._id)}
               onDelete={() => handleOpenPopup(tag._id, DeleteType.ONE)}
               key={tag.name}
               {...tag}
