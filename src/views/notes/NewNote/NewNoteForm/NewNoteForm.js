@@ -80,7 +80,7 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate }) => {
   useEffect(() => {
     const _getProjects = async () => {
       const data = await getProjects()
-      const _projects = data[0].projects
+      const _projects = data[0]?.projects || []
       setProjectData(_projects)
       setProjectOptions(formatSelectOption(_projects))
     }
