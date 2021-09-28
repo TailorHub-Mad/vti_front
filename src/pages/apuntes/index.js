@@ -1,6 +1,4 @@
-import { Grid } from "@chakra-ui/react"
 import React, { useContext, useState } from "react"
-import { MessageCard } from "../../components/cards/MessageCard/MessageCard"
 import { NoteDrawer } from "../../components/drawer/NoteDrawer/NoteDrawer"
 import { AddNoteIcon } from "../../components/icons/AddNoteIcon"
 import { Page } from "../../components/layout/Pages/Page"
@@ -21,6 +19,8 @@ import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/glob
 import { LoadingView } from "../../views/common/LoadingView"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { NewNoteModal } from "../../views/notes/NewNote/NewNoteModal/NewNoteModal"
+import { NotesGrid } from "../../views/notes/NotesGrid/NotesGrid"
+import { NotesGroup } from "../../views/notes/NotesGroup/NotesGroup"
 import { NotesMenu } from "../../views/notes/NotesMenu/NotesMenu"
 
 const NOTES_GROUP_OPTIONS = [
@@ -218,26 +218,31 @@ const apuntes = () => {
             onAdd={() => setIsNoteModalOpen(true)}
           />
         ) : null}
-        {notesData && !isEmptyData ? (
-          <Grid
-            templateColumns="repeat(auto-fill, 282px)"
-            gap="16px"
-            width="100%"
-            marginBottom="32px"
-          >
-            {notesData.map((note, idx) => (
-              <MessageCard
-                key={`${note.title}-${idx}`}
-                note={note}
-                onSeeDetails={() => handleOpenDetail(note)}
+
+        {notesData ? (
+          <>
+            {fetchState === fetchType.GROUP ? (
+              <NotesGroup
+                notes={notesData}
+                onSeeDetails={handleOpenDetail}
                 subscribedUsers={null} // TOPO -> review
-                isSubscribe={checkIsSubscribe(note._id)}
-                isFavorite={checkIsFavorite(note._id)}
-                onDelete={() => setNoteToDelete(note._id)}
-                handleFavorite={() => handleFavorite(note._id)}
+                checkIsSubscribe={checkIsSubscribe}
+                checkIsFavorite={checkIsFavorite}
+                onDelete={setNoteToDelete}
+                handleFavorite={handleFavorite}
               />
-            ))}
-          </Grid>
+            ) : (
+              <NotesGrid
+                notes={notesData}
+                onSeeDetails={handleOpenDetail}
+                subscribedUsers={null} // TOPO -> review
+                checkIsSubscribe={checkIsSubscribe}
+                checkIsFavorite={checkIsFavorite}
+                onDelete={setNoteToDelete}
+                handleFavorite={handleFavorite}
+              />
+            )}
+          </>
         ) : null}
       </PageBody>
     </Page>

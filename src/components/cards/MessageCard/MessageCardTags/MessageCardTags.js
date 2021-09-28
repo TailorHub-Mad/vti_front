@@ -11,7 +11,10 @@ const variantByTagName = {
 export const MessageCardTags = ({ note }) => {
   const getRemainingTags = (tags) => (tags.length <= 2 ? 0 : tags.length - 2)
 
-  const formatTags = (tags, field) => tags.map((tag) => tag[field])
+  const formatTags = (tags, field) => {
+    const data = Array.isArray(tags) ? tags : [{ ...tags }]
+    return data.map((tag) => tag[field])
+  }
 
   return (
     <Box
