@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import useNoteApi from "../../../../hooks/api/useNoteApi"
-// import useNoteApi from "../../../../hooks/api/useNoteApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
@@ -15,8 +14,8 @@ const initialValues = {
   title: undefined,
   description: undefined,
   link: undefined,
-  docuement: undefined
-  // tags: [""], // provisioanl
+  docuement: undefined,
+  tags: undefined
 }
 
 export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
@@ -31,8 +30,11 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
 
   const checkInputsAreEmpty = () => {
     return (
-      !values.project || !values.system || !values.title || !values.description
-      // || !value.tags // TODO -> provisional
+      !values.project ||
+      !values.system ||
+      !values.title ||
+      !values.description ||
+      !values.tags
     )
   }
 
@@ -42,7 +44,8 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
       testSystems: note.system.map((s) => s.value),
       title: note.title,
       description: note.description,
-      tags: ["60e71fb6b872c54560f16820"] // TODO -> provisional
+      tags: note.tags.map((t) => t.value) // TODO
+      //TODO gestionar la subida de doc con el formData
     }
 
     if (note?.link) formatData["link"] = note.link
@@ -53,7 +56,7 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateNote() : await handleCreateNote()
-    await mutate(SWR_CACHE_KEYS.projects)
+    await mutate(SWR_CACHE_KEYS.notes)
     showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s apunte/s!")
     setIsSubmitting(false)
     onClose()

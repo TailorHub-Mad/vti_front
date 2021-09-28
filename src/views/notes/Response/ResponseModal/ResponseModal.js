@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import useNoteApi from "../../../../hooks/api/useNoteApi"
-// import useNoteApi from "../../../../hooks/api/useNoteApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
@@ -31,10 +30,7 @@ export const ResponseModal = ({
 
   const isUpdate = Boolean(messageToUpdate)
 
-  const checkInputsAreEmpty = () => {
-    return !values.message
-    // || !value.tags // TODO -> provisional
-  }
+  const checkInputsAreEmpty = () => !values.message
 
   const formatCreateMessage = (note) => {
     const formatData = {
@@ -49,7 +45,7 @@ export const ResponseModal = ({
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateMessage() : await handleCreateMessage()
-    await mutate(SWR_CACHE_KEYS.projects)
+    await mutate(SWR_CACHE_KEYS.notes)
     showToast(isUpdate ? "Editado correctamente" : "¡Mensaje enviado!")
     setIsSubmitting(false)
     onClose()
@@ -75,12 +71,14 @@ export const ResponseModal = ({
 
   useEffect(() => {
     if (!messageToUpdate) return
-    const _note = {
+
+    const message = {
       message: messageToUpdate.message,
       link: messageToUpdate.link,
       attachment: messageToUpdate.attachment
     }
-    setValues(_note)
+
+    setValues(message)
   }, [messageToUpdate])
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { NoteDrawer } from "../../components/drawer/NoteDrawer/NoteDrawer"
 import { AddNoteIcon } from "../../components/icons/AddNoteIcon"
 import { Page } from "../../components/layout/Pages/Page"
@@ -50,6 +50,8 @@ const apuntes = () => {
   const { showToast } = useContext(ToastContext)
 
   // States
+  const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
+  const [messageToUpdate, setMessageToUpdate] = useState(null)
   const [showImportModal, setShowImportModal] = useState(false)
   const [showNoteDetails, setShowNoteDetails] = useState(false)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
@@ -72,9 +74,6 @@ const apuntes = () => {
     // TODO FILTER
   }
 
-  const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
-  const [messageToUpdate, setMessageToUpdate] = useState(null)
-
   const isEmptyData = checkDataIsEmpty(data)
   const notesData = handleNotesData(isEmptyData)
 
@@ -94,10 +93,8 @@ const apuntes = () => {
     setShowNoteDetails(true)
   }
 
-  const handleEditResponse = (messageId) => {
-    console.log("MID", messageId)
-    const [_message] = noteToDetail.messages.filter((msg) => msg._id === messageId)
-    setMessageToUpdate(_message)
+  const handleOpenEditResponse = (message) => {
+    setMessageToUpdate(message)
     setIsResponseModalOpen(true)
   }
 
@@ -156,6 +153,16 @@ const apuntes = () => {
     })
   }
 
+  useEffect(() => {
+    if (!noteToDetail) return
+
+    const newNoteToDetail = notesData.find((note) => note._id === noteToDetail._id)
+
+    if (!newNoteToDetail) return
+
+    setNoteToDetail(newNoteToDetail)
+  }, [notesData])
+
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (
@@ -197,7 +204,7 @@ const apuntes = () => {
         onDelete={() => setNoteToDelete(noteToDetail._id)}
         onEdit={() => handleUpdate(noteToDetail._id)}
         onResponse={() => setIsResponseModalOpen(true)}
-        onEditResponse={(messageId) => handleEditResponse(messageId)}
+        onEditResponse={(message) => handleOpenEditResponse(message)}
       />
 
       <PageHeader>
