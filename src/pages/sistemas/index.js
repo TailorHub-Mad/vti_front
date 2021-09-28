@@ -98,7 +98,7 @@ const sistemas = () => {
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(systemsToDelete, systemsData)
-    updated.length > 0 ? await mutate(updated, false) : await mutate()
+    updated.testSystems.length > 0 ? await mutate(updated, false) : await mutate()
     setDeleteType(null)
     setSystemsToDelete(null)
   }
@@ -122,13 +122,13 @@ const sistemas = () => {
     try {
       const systemsQueue = systemsId.map((id) => deleteSystem(id))
       await Promise.all(systemsQueue)
-      showToast("Clientes borrados correctamente")
+      showToast("Sistemas borrados correctamente")
       const updatedSystems = []
       const filterSystems = systems.filter(
         (system) => !systemsId.includes(system._id)
       )
       updatedSystems.push({ testSystems: filterSystems })
-      return filterSystems
+      return updatedSystems
     } catch (error) {
       errorHandler(error)
     }
