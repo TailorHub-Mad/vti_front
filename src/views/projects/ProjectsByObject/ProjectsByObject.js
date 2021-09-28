@@ -78,9 +78,9 @@ export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
       await deleteProject(id)
       showToast("Proyecto borrado correctamente")
       const updatedProjects = []
-      const filteredProjects = projects.filter((system) => system._id !== id)
+      const filterProjects = projects.filter((system) => system._id !== id)
       updatedProjects.push({
-        projects: filteredProjects
+        projects: filterProjects
       })
       return updatedProjects
     } catch (error) {
@@ -94,17 +94,17 @@ export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
       await Promise.all(projectsQueue)
       showToast("Clientes borrados correctamente")
       const updatedProjects = []
-      const filteredProjects = projects.filter(
+      const filterProjects = projects.filter(
         (project) => !projectsId.includes(project._id)
       )
-      updatedProjects.push({ projects: filteredProjects })
-      return filteredProjects
+      updatedProjects.push({ projects: filterProjects })
+      return filterProjects
     } catch (error) {
       errorHandler(error)
     }
   }
 
-  const onEdit = (id) => {
+  const handleUpdate = (id) => {
     const project = projectsData.find((project) => project._id === id)
     setProjectToUpdate(project)
     setIsProjectModalOpen(true)
@@ -179,7 +179,7 @@ export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
           projects={projectsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
-          onEdit={onEdit}
+          onEdit={handleUpdate}
           onTabChange={(state) => setFetchState(state)}
         />
       )}

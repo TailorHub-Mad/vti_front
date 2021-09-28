@@ -69,11 +69,6 @@ const tags = () => {
   // TODO
   const handleExport = () => {}
 
-  const handleOpenPopup = (tagToDelete, type) => {
-    setDeleteType(type)
-    setTagsToDelete(tagToDelete)
-  }
-
   const handleClosePopup = () => {
     setDeleteType(null)
     setTagsToDelete(null)
@@ -108,7 +103,7 @@ const tags = () => {
     }
   }
 
-  const onEdit = (id) => {
+  const handleUpdate = (id) => {
     const tag = tagData.find((tag) => tag._id === id)
     setTagToUpdate(tag)
     setIsTagModalOpen(true)
@@ -205,8 +200,8 @@ const tags = () => {
                   .filter((tag) => tag?.relatedTags?.length > 0)
                   .map((tag) => (
                     <TagCard
-                      onEdit={() => onEdit(tag._id)}
-                      onDelete={() => handleOpenPopup(tag._id, DeleteType.ONE)}
+                      onEdit={() => handleUpdate(tag._id)}
+                      onDelete={() => setTagsToDelete(tag._id, DeleteType.ONE)}
                       key={tag.name}
                       {...tag}
                     />
@@ -224,8 +219,8 @@ const tags = () => {
                   .filter((tag) => tag?.relatedTags?.length === 0)
                   .map((tag) => (
                     <TagCard
-                      onEdit={() => onEdit(tag._id)}
-                      onDelete={() => handleOpenPopup(tag._id, DeleteType.ONE)}
+                      onEdit={() => handleUpdate(tag._id)}
+                      onDelete={() => setTagsToDelete(tag._id, DeleteType.ONE)}
                       key={tag.name}
                       {...tag}
                     />
@@ -246,8 +241,8 @@ const tags = () => {
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((tag) => (
                   <TagCard
-                    onEdit={() => onEdit(tag._id)}
-                    onDelete={() => handleOpenPopup(tag._id, DeleteType.ONE)}
+                    onEdit={() => handleUpdate(tag._id)}
+                    onDelete={() => setTagsToDelete(tag._id, DeleteType.ONE)}
                     key={tag.name}
                     {...tag}
                   />

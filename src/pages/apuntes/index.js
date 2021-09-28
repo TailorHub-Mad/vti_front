@@ -1,6 +1,4 @@
-import { Grid } from "@chakra-ui/react"
 import React, { useContext, useState } from "react"
-import { MessageCard } from "../../components/cards/MessageCard/MessageCard"
 import { NoteDrawer } from "../../components/drawer/NoteDrawer/NoteDrawer"
 import { AddNoteIcon } from "../../components/icons/AddNoteIcon"
 import { Page } from "../../components/layout/Pages/Page"
@@ -13,7 +11,7 @@ import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModa
 import { Popup } from "../../components/overlay/Popup/Popup"
 import useNoteApi from "../../hooks/api/useNoteApi"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
-// import { ToastContext } from "../../provider/ToastProvider"
+import { ToastContext } from "../../provider/ToastProvider"
 import { noteFetchHandler } from "../../swr/note.swr"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
 import { errorHandler } from "../../utils/errors"
@@ -21,44 +19,70 @@ import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/glob
 import { LoadingView } from "../../views/common/LoadingView"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { NewNoteModal } from "../../views/notes/NewNote/NewNoteModal/NewNoteModal"
+import { NotesGrid } from "../../views/notes/NotesGrid/NotesGrid"
+import { NotesGroup } from "../../views/notes/NotesGroup/NotesGroup"
 import { NotesMenu } from "../../views/notes/NotesMenu/NotesMenu"
 import { ResponseModal } from "../../views/notes/Response/ResponseModal/ResponseModal"
 
-const apuntes = () => {
-  const { isLoggedIn, user } = useContext(ApiAuthContext)
-  const { notes /*deleteNote*/ } = useNoteApi()
-  // const { showToast } = useContext(ToastContext)
+const NOTES_GROUP_OPTIONS = [
+  {
+    label: "Proyecto",
+    value: "title"
+  },
+  {
+    label: "Año",
+    value: "date.year"
+  },
+  {
+    label: "Sector",
+    value: "sector"
+  },
+  {
+    label: "Tags de apunte",
+    value: "notes.tags.name"
+  }
+]
 
+const apuntes = () => {
+  // Hooks
+  const { isLoggedIn, user } = useContext(ApiAuthContext)
+  const { deleteNote } = useNoteApi()
+  const { showToast } = useContext(ToastContext)
+
+  // States
+  const [showImportModal, setShowImportModal] = useState(false)
+  const [showNoteDetails, setShowNoteDetails] = useState(false)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
+  const [isNoteModalOpen, setIsNoteModalOpen] = useState(false)
+  const [noteToUpdate, setNoteToUpdate] = useState(null)
+  const [noteToDetail, setNoteToDetail] = useState(null)
+  const [noteToDelete, setNoteToDelete] = useState(null)
 
-  const { data, error, isLoading /*mutate*/ } = noteFetchHandler(
+  // Fetch
+  const { data, error, isLoading, mutate } = noteFetchHandler(
     fetchState,
     fetchOptions
   )
 
-  const [showImportModal, setShowImportModal] = useState(false)
-  const [showNoteDetails, setShowNoteDetails] = useState(false)
-
-  // Create - Update state
-  const [isNoteModalOpen, setIsNoteModalOpen] = useState(false)
-  const [noteToUpdate, setNoteToUpdate] = useState(null)
-  const [noteToDetail, setNoteToDetail] = useState(null)
-
-  const [noteToDelete, setNoteToDelete] = useState(null)
+  const handleNotesData = (isEmptyData) => {
+    if (!data || isEmptyData) return null
+    if (fetchState === fetchType.ALL) return data[0].notes
+    if (fetchState == fetchType.GROUP) return data
+    // TODO FILTER
+  }
 
   const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
   const [messageToUpdate, setMessageToUpdate] = useState(null)
 
   const isEmptyData = checkDataIsEmpty(data)
-  const notesData = data ? data[0]?.notes : []
+  const notesData = handleNotesData(isEmptyData)
 
-  // TODO
+  const checkIsFavorite = (id) => user?.favorites?.notes?.includes(id)
+  const checkIsSubscribe = (id) => user?.subscribed?.notes?.includes(id)
+
+  // Handlers views
   const handleExport = () => {}
-
-  const handleOpenPopup = (noteToDelete) => {
-    setNoteToDelete(noteToDelete)
-  }
 
   const handleOnCloseModal = () => {
     setNoteToUpdate(null)
@@ -77,39 +101,60 @@ const apuntes = () => {
     setIsResponseModalOpen(true)
   }
 
-  console.log(noteToDetail, messageToUpdate)
+  // Handlers CRUD
   const handleDelete = async () => {
-    console.log("HandleDelete", noteToDelete)
-    setNoteToDelete(null)
-    return null
-    // try {
-    //   await deleteNote(noteToDelete)
-    //   showToast("Apunte borrado correctamente")
-    //   const updatedNotes = notesData.filter((system) => system._id !== noteToDelete)
-    //   updatedNotes.length > 0 ? await mutate(updatedNotes, false) : await mutate()
-    // } catch (error) {
-    //   errorHandler(error)
-    // }
+    try {
+      await deleteNote(noteToDelete)
+      showToast("Apunte borrado correctamente")
+      const updatedNotes = notesData.filter((system) => system._id !== noteToDelete)
+      updatedNotes.length > 0 ? await mutate(updatedNotes, false) : await mutate()
+    } catch (error) {
+      errorHandler(error)
+    }
   }
 
-  // TODO
-  const handleFavorite = async (id) => {
-    console.log("HandleFavorite", id)
-  }
-  const checkIsFavorite = (id) => user?.favorites?.notes?.includes(id)
-  const checkIsSubscribe = (id) => user?.subscribed?.notes?.includes(id)
-
-  const onEdit = (id) => {
+  const handleUpdate = (id) => {
+    // TODO -> create full notes
     const note = notesData.find((note) => note._id === id)
-    console.log("handleEdit", id, note)
+    console.log("HandleEdit", id, note)
     setNoteToUpdate(note)
     setIsNoteModalOpen(true)
   }
 
-  const onSearch = (search) =>
+  const handleFavorite = async (id) => {
+    // TOD -> update users
+    console.log("HandleFavorite", id)
+  }
+
+  // Filters
+  const onSearch = (search) => {
+    setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
     })
+  }
+
+  const handleOnGroup = (group) => {
+    if (!group) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.GROUP]: null
+      })
+      return
+    }
+
+    setFetchState(fetchType.GROUP)
+    setFetchOptions({
+      [fetchOption.GROUP]: group
+    })
+  }
+
+  const handleOnFilter = (filter) => {
+    setFetchState(fetchType.FILTER)
+    setFetchOptions({
+      [fetchOption.FILTER]: filter
+    })
+  }
 
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
@@ -149,8 +194,8 @@ const apuntes = () => {
         note={noteToDetail}
         isOpen={showNoteDetails}
         onClose={() => setShowNoteDetails(false)}
-        onDelete={() => handleOpenPopup(noteToDetail._id)}
-        onEdit={() => onEdit(noteToDetail._id)}
+        onDelete={() => setNoteToDelete(noteToDetail._id)}
+        onEdit={() => handleUpdate(noteToDetail._id)}
         onResponse={() => setIsResponseModalOpen(true)}
         onEditResponse={(messageId) => handleEditResponse(messageId)}
       />
@@ -161,11 +206,15 @@ const apuntes = () => {
           <ToolBar
             onAdd={() => setIsNoteModalOpen(true)}
             onSearch={onSearch}
+            onGroup={handleOnGroup}
+            onFilter={handleOnFilter}
             onImport={() => setShowImportModal(true)}
             onExport={handleExport}
             addLabel="Añadir apunte"
             searchPlaceholder="Busqueda por ID, Proyecto"
+            groupOptions={NOTES_GROUP_OPTIONS}
             icon={<AddNoteIcon />}
+            fetchState={fetchState}
           />
         )}
       </PageHeader>
@@ -173,7 +222,7 @@ const apuntes = () => {
         {notesData && !isEmptyData ? (
           <NotesMenu
             activeItem={fetchState}
-            notesCount={notes?.length}
+            notesCount={notesData?.length}
             onChange={(state) => setFetchState(state)}
           />
         ) : null}
@@ -189,26 +238,31 @@ const apuntes = () => {
             onAdd={() => setIsNoteModalOpen(true)}
           />
         ) : null}
-        {notesData && !isEmptyData ? (
-          <Grid
-            templateColumns="repeat(auto-fill, 282px)"
-            gap="16px"
-            width="100%"
-            marginBottom="32px"
-          >
-            {notesData.map((note, idx) => (
-              <MessageCard
-                key={`${note.title}-${idx}`}
-                note={note}
-                onSeeDetails={() => handleOpenDetail(note)}
+
+        {notesData ? (
+          <>
+            {fetchState === fetchType.GROUP ? (
+              <NotesGroup
+                notes={notesData}
+                onSeeDetails={handleOpenDetail}
                 subscribedUsers={null} // TOPO -> review
-                isSubscribe={checkIsSubscribe(note._id)}
-                isFavorite={checkIsFavorite(note._id)}
-                onDelete={() => handleOpenPopup(note._id)}
-                handleFavorite={() => handleFavorite(note._id)}
+                checkIsSubscribe={checkIsSubscribe}
+                checkIsFavorite={checkIsFavorite}
+                onDelete={setNoteToDelete}
+                handleFavorite={handleFavorite}
               />
-            ))}
-          </Grid>
+            ) : (
+              <NotesGrid
+                notes={notesData}
+                onSeeDetails={handleOpenDetail}
+                subscribedUsers={null} // TOPO -> review
+                checkIsSubscribe={checkIsSubscribe}
+                checkIsFavorite={checkIsFavorite}
+                onDelete={setNoteToDelete}
+                handleFavorite={handleFavorite}
+              />
+            )}
+          </>
         ) : null}
       </PageBody>
     </Page>

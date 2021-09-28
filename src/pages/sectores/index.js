@@ -20,32 +20,30 @@ import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 
 const sectores = () => {
+  // Hooks
   const { isLoggedIn } = useContext(ApiAuthContext)
   const { deleteSector } = useSectorApi()
   const { showToast } = useContext(ToastContext)
 
+  // States
+  const [showImportModal, setShowImportModal] = useState(false)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
+  const [isSectorModalOpen, setIsSectorModalOpen] = useState(false)
+  const [sectorToUpdate, setSectorToUpdate] = useState(null)
+  const [deleteType, setDeleteType] = useState(null)
+  const [sectorsToDelete, setSectorsToDelete] = useState(null)
 
+  // Fetch
   const { data, error, isLoading, mutate } = sectorFetchHandler(
     fetchState,
     fetchOptions
   )
 
-  const [showImportModal, setShowImportModal] = useState(false)
-
-  // Create - Update state
-  const [isSectorModalOpen, setIsSectorModalOpen] = useState(false)
-  const [sectorToUpdate, setSectorToUpdate] = useState(null)
-
-  // Delete state
-  const [deleteType, setDeleteType] = useState(null)
-  const [sectorsToDelete, setSectorsToDelete] = useState(null)
-
   const isEmptyData = checkDataIsEmpty(data)
   const sectorsData = data && !isEmptyData ? data : null
 
-  // TODO
+  // Handlers views
   const handleExport = () => {}
 
   const handleOpenPopup = (sectorsToDelete, type) => {
@@ -63,6 +61,7 @@ const sectores = () => {
     setIsSectorModalOpen(false)
   }
 
+  // Handlers CRUD
   const handleDeleteMessage = () => {
     if (!sectorsToDelete) return
 
@@ -101,12 +100,13 @@ const sectores = () => {
     }
   }
 
-  const onEdit = (id) => {
+  const handleUpdate = (id) => {
     const sector = sectorsData.find((sector) => sector._id === id)
     setSectorToUpdate(sector)
     setIsSectorModalOpen(true)
   }
 
+  // Filters
   const onSearch = (search) => {
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
@@ -172,7 +172,7 @@ const sectores = () => {
           sectors={sectorsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
-          onEdit={onEdit}
+          onEdit={handleUpdate}
         />
       ) : null}
     </Page>

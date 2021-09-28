@@ -2,7 +2,7 @@ import { Card } from "../Card"
 import { MessageCardFooter } from "./MessageCardFooter/MessageCardFooter"
 import { MessageCardHeader } from "./MessageCardHeader/MessageCardHeader"
 import { MessageCardInfo } from "./MessageCardInfo/MessageCardInfo"
-// import { MessageCardTags } from "./MessageCardTags/MessageCardTags"
+import { MessageCardTags } from "./MessageCardTags/MessageCardTags"
 
 export const MessageCard = ({
   note,
@@ -34,7 +34,7 @@ export const MessageCard = ({
         marginBottom="18px"
         marginTop="6px"
       />
-      {/* <MessageCardTags tags={note?.tags} /> */}
+      <MessageCardTags note={note} />
       <MessageCardFooter
         isClosed={note?.isClosed}
         isSubscribe={isSubscribe}

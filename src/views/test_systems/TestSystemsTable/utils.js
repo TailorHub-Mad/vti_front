@@ -1,9 +1,19 @@
 import { PATHS } from "../../../utils/constants/global"
+import { fetchType } from "../../../utils/constants/swr"
 import { calcColWidth } from "../../../utils/constants/tables"
 
-export const formatSystem = (data) => {
-  // data && !isGrouped ? data?.map(transformSystemData) : groupTable(data)
-  return data && data?.map(transformSystemData)
+export const formatSystem = (systems, fetchState) => {
+  if (fetchState === fetchType.GROUP) return groupTable(systems)
+  return systems?.map(transformSystemData)
+}
+
+export const groupTable = (systems) => {
+  return Object.entries(systems).map(([key, value]) => {
+    return {
+      key,
+      value: value.map(transformSystemData)
+    }
+  })
 }
 
 export const transformSystemData = (system) => ({
@@ -14,17 +24,9 @@ export const transformSystemData = (system) => ({
   code: system.vtiCode,
   year: system.date?.year,
   projects: system.projects.map((project) => project.alias),
-  notes: system.notes,
+  notes: system.notes.map((note) => note.title),
   options: ""
 })
-
-export const groupTable = (data) => {
-  return data.map((it) => {
-    const _it = [...it]
-    _it[1] = it[1].map(transformSystemData)
-    return _it
-  })
-}
 
 export const TABLE_SYSTEMS_HEAD = {
   selector: {
