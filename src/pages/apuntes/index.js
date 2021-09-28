@@ -22,6 +22,7 @@ import { NewNoteModal } from "../../views/notes/NewNote/NewNoteModal/NewNoteModa
 import { NotesGrid } from "../../views/notes/NotesGrid/NotesGrid"
 import { NotesGroup } from "../../views/notes/NotesGroup/NotesGroup"
 import { NotesMenu } from "../../views/notes/NotesMenu/NotesMenu"
+import { ResponseModal } from "../../views/notes/Response/ResponseModal/ResponseModal"
 
 const NOTES_GROUP_OPTIONS = [
   {
@@ -71,6 +72,9 @@ const apuntes = () => {
     // TODO FILTER
   }
 
+  const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
+  const [messageToUpdate, setMessageToUpdate] = useState(null)
+
   const isEmptyData = checkDataIsEmpty(data)
   const notesData = handleNotesData(isEmptyData)
 
@@ -88,6 +92,13 @@ const apuntes = () => {
   const handleOpenDetail = (note) => {
     setNoteToDetail(note)
     setShowNoteDetails(true)
+  }
+
+  const handleEditResponse = (messageId) => {
+    console.log("MID", messageId)
+    const [_message] = noteToDetail.messages.filter((msg) => msg._id === messageId)
+    setMessageToUpdate(_message)
+    setIsResponseModalOpen(true)
   }
 
   // Handlers CRUD
@@ -161,6 +172,13 @@ const apuntes = () => {
         {`¿Desea eliminar ${getFieldObjectById(notesData, "ref", noteToDelete)}?`}
       </Popup>
 
+      <ResponseModal
+        messageToUpdate={messageToUpdate}
+        isOpen={isResponseModalOpen}
+        onClose={() => setIsResponseModalOpen(false)}
+        noteId={noteToDetail?._id}
+      />
+
       <NewNoteModal
         clientToUpdate={noteToUpdate}
         isOpen={isNoteModalOpen}
@@ -178,6 +196,8 @@ const apuntes = () => {
         onClose={() => setShowNoteDetails(false)}
         onDelete={() => setNoteToDelete(noteToDetail._id)}
         onEdit={() => handleUpdate(noteToDetail._id)}
+        onResponse={() => setIsResponseModalOpen(true)}
+        onEditResponse={(messageId) => handleEditResponse(messageId)}
       />
 
       <PageHeader>

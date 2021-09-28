@@ -9,6 +9,9 @@ const useNoteApi = () => {
   const createNote = (data) => noteService.createNote(data)
   const updateNote = (id, data) => noteService.updateNote(id, data)
   const deleteNote = (id) => noteService.deleteNote(id)
+  const createMessage = (id, data) => noteService.createMessage(id, data)
+  const updateMessage = (id, messageId, data) =>
+    noteService.updateMessage(id, messageId, data)
 
   // GROUP & FILTER
   const getgroupNotes = (_, data) => noteService.getgroupNotes(data)
@@ -21,6 +24,8 @@ const useNoteApi = () => {
     createNote,
     updateNote,
     deleteNote,
+    createMessage,
+    updateMessage,
 
     getgroupNotes,
     getfilterNotes,

@@ -10,6 +10,10 @@ const NoteService = () => {
   const createNote = (data) => execute(instance.post(`/notes/create`, data))
   const updateNote = (id, data) => execute(instance.put(`/notes/${id}`, data))
   const deleteNote = (id) => execute(instance.delete(`/notes/${id}`))
+  const createMessage = (id, data) =>
+    execute(instance.post(`/notes/${id}/message/create`, data))
+  const updateMessage = (id, messageId, data) =>
+    execute(instance.put(`/notes/${id}/message/${messageId}`, data))
 
   // GROUP & FILTER
   const getgroupNotes = (data) =>
@@ -23,6 +27,8 @@ const NoteService = () => {
     createNote,
     updateNote,
     deleteNote,
+    createMessage,
+    updateMessage,
 
     getgroupNotes,
     getfilterNotes,
