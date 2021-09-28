@@ -1,6 +1,6 @@
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons"
 import { Box, Flex, Text } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React from "react"
 import { useSWRConfig } from "swr"
 import useNoteApi from "../../../../hooks/api/useNoteApi"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
@@ -21,29 +21,24 @@ export const NoteMainInfo = ({ item, onEdit, onDelete, isMessage = false }) => {
   const { updateNote } = useNoteApi()
   const { mutate } = useSWRConfig()
 
-  const [closed, setClosed] = useState(item.isClosed)
-  const [fomalized, setFomalized] = useState(item.fomalized)
-
   const handleUpdateNote = async (action) => {
     // TODO -> update states message
     if (isMessage) return
 
     switch (action) {
       case actionType.CLOSE:
-        setClosed(!closed)
-        await updateNote(item._id, { isClosed: !closed })
+        await updateNote(item._id, { isClosed: !item.isClosed })
         break
 
       case actionType.FORMALIZED:
-        setFomalized(!fomalized)
-        await updateNote(item._id, { formalized: !fomalized })
+        await updateNote(item._id, { formalized: !item.formalized })
         break
 
       default:
         return null
     }
 
-    await mutate(SWR_CACHE_KEYS.items)
+    await mutate(SWR_CACHE_KEYS.notes)
   }
 
   const handleGoToProject = () => {
@@ -69,16 +64,18 @@ export const NoteMainInfo = ({ item, onEdit, onDelete, isMessage = false }) => {
 
           <ActionLink
             onClick={() => handleUpdateNote(actionType.CLOSE)}
-            color={closed ? "blue.500" : "#C9C9C9"}
-            icon={closed ? <LockCloseIcon /> : <LockOpenIcon fill="#C9C9C9" />}
-            label={closed ? "Cerrado" : "Cerrar"}
+            color={item.isClosed ? "blue.500" : "#C9C9C9"}
+            icon={
+              item.isClosed ? <LockCloseIcon /> : <LockOpenIcon fill="#C9C9C9" />
+            }
+            label={item.isClosed ? "Cerrado" : "Cerrar"}
           />
 
           <ActionLink
             onClick={() => handleUpdateNote(actionType.FORMALIZED)}
-            color={fomalized ? "#0085FF" : "#C9C9C9"}
-            icon={<FormalizedIcon fill={fomalized ? "#0085FF" : "#C9C9C9"} />}
-            label={fomalized ? "Formalizado" : "Formalizar"}
+            color={item.formalized ? "#0085FF" : "#C9C9C9"}
+            icon={<FormalizedIcon fill={item.formalized ? "#0085FF" : "#C9C9C9"} />}
+            label={item.formalized ? "Formalizado" : "Formalizar"}
           />
 
           {isMessage || (

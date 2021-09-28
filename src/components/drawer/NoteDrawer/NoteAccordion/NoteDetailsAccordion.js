@@ -35,6 +35,7 @@ export const NoteDetailsAccordion = ({
           ))}
         </NoteAccordionItem>
       ) : null}
+
       {!isMessage && noteTags ? (
         <NoteAccordionItem title="Tags de apunte" icon={<TagLineIcon mr="8px" />}>
           {noteTags.map((note, idx) => (
@@ -44,6 +45,7 @@ export const NoteDetailsAccordion = ({
           ))}
         </NoteAccordionItem>
       ) : null}
+
       {message ? (
         <NoteAccordionItem
           title={`${isMessage ? "Respuesta" : "Mensaje creado"} por ${name}`}
@@ -54,6 +56,7 @@ export const NoteDetailsAccordion = ({
           {message}
         </NoteAccordionItem>
       ) : null}
+
       {link ? (
         <NoteAccordionItem title="Link" icon={<LinkLineIcon mr="8px" />}>
           <Button variant="note_content" mr="8px" mb="8px">
@@ -62,6 +65,7 @@ export const NoteDetailsAccordion = ({
           </Button>
         </NoteAccordionItem>
       ) : null}
+
       {files ? (
         <NoteAccordionItem title="Adjuntos" icon={<CloudLineIcon mr="8px" />}>
           {files.map((file, idx) => (

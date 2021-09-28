@@ -17,6 +17,8 @@ export const NoteDrawer = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
+  console.log("NOTE", note)
+
   const formatMessage = (msg) => ({
     ...msg,
     isClosed: msg.approved
@@ -82,8 +84,9 @@ export const NoteDrawer = ({
               files={note.document}
             />
           </Box>
-          {note.messages &&
-            note.messages.map((msg, idx) => (
+          {note.messages.map((msg, idx) => {
+            if (!msg.owner[0]) return null
+            return (
               <Box
                 key={`${msg._id}-${idx}`}
                 bgColor="white"
@@ -94,17 +97,19 @@ export const NoteDrawer = ({
               >
                 <NoteMainInfo
                   item={formatMessage(msg)}
-                  onEdit={() => onEditResponse(msg._id)}
+                  onEdit={() => onEditResponse(msg)}
                   isMessage
                 />
                 <NoteDetailsAccordion
                   isMessage
-                  name={msg.owner.name}
+                  name={msg.owner[0]?.alias}
                   link={msg.link}
                   files={msg.document}
+                  message={msg.message}
                 />
               </Box>
-            ))}
+            )
+          })}
           <Button mt="24px" onClick={onResponse}>
             Escribir respuesta
           </Button>
