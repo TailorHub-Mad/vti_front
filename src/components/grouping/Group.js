@@ -1,3 +1,4 @@
+import { CloseIcon } from "@chakra-ui/icons"
 import { Button, useDisclosure } from "@chakra-ui/react"
 import React from "react"
 import { NotesIcon } from "../icons/NotesIcon"
@@ -25,7 +26,11 @@ export const Group = ({ onGroup, options, active }) => {
         background={active ? "#052E57" : "#FFF"}
         color={active ? "#FFF" : "#052E57"}
       >
-        <NotesIcon mr={["8px", "8px"]} />
+        {active ? (
+          <CloseIcon h="14px" mr={["8px", "8px"]} />
+        ) : (
+          <NotesIcon mr={["8px", "8px"]} />
+        )}
         Agrupar
       </Button>
       <GroupModal

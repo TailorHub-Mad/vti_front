@@ -11,7 +11,9 @@ export const TestSystemsTable = ({
   onDelete,
   onEdit,
   onDeleteMany,
-  fetchState
+  fetchState,
+  onGroup,
+  groupOption
 }) => {
   const { selectedRows, setSelectedRows, handleSelectAllRows, handleRowSelect } =
     useTableActions()
@@ -48,6 +50,9 @@ export const TestSystemsTable = ({
           onDelete={handleOnDelete}
           selectAllRows={() => handleSelectAllRows(systemsData)}
           checked={allRowsAreSelected}
+          fetchState={fetchState}
+          onGroup={onGroup}
+          groupOption={groupOption}
         />
       }
       {...TABLE_STYLE}

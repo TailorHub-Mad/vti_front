@@ -18,11 +18,12 @@ import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/glob
 import { systemFetchHandler } from "../../swr/systems.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
+import { getGroupOptionLabel } from "../../utils/functions/objects"
 
 const SYSTEMS_GROUP_OPTIONS = [
   {
     label: "Cliente",
-    value: "client "
+    value: "client"
   },
   {
     label: "Año",
@@ -30,11 +31,7 @@ const SYSTEMS_GROUP_OPTIONS = [
   },
   {
     label: "CodVTI",
-    value: "CodVTI"
-  },
-  {
-    label: "Sector",
-    value: "sector"
+    value: "vtiCode"
   }
 ]
 
@@ -234,6 +231,11 @@ const sistemas = () => {
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(systemsId) => handleOpenPopup(systemsId, DeleteType.MANY)}
           onEdit={handleUpdate}
+          onGroup={handleOnGroup}
+          groupOption={getGroupOptionLabel(
+            SYSTEMS_GROUP_OPTIONS,
+            fetchOptions[fetchOption.GROUP]
+          )}
         />
       ) : null}
     </Page>

@@ -35,7 +35,7 @@ const NOTES_GROUP_OPTIONS = [
   },
   {
     label: "Sector",
-    value: "sector"
+    value: "sector.0.title"
   },
   {
     label: "Tags de apunte",

@@ -18,6 +18,7 @@ import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
+import { getGroupOptionLabel } from "../../utils/functions/objects"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -30,7 +31,7 @@ const PROJECTS_GROUP_OPTIONS = [
   },
   {
     label: "Sector",
-    value: "sector"
+    value: "sector.0.title"
   }
 ]
 
@@ -231,6 +232,11 @@ const proyectos = () => {
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
           onEdit={handleUpdate}
           onTabChange={(state) => setFetchState(state)}
+          onGroup={handleOnGroup}
+          groupOption={getGroupOptionLabel(
+            PROJECTS_GROUP_OPTIONS,
+            fetchOptions[fetchOption.GROUP]
+          )}
         />
       ) : null}
     </Page>
