@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react"
 import React from "react"
-import { GeneralTag } from "../GeneralTag/GeneralTag"
+import { Tag } from "../Tag/Tag"
 
 export const TagGroup = ({ tagsArr = [], variant, max, ...props }) => {
   if (!max || tagsArr?.length <= max) {
@@ -8,14 +8,14 @@ export const TagGroup = ({ tagsArr = [], variant, max, ...props }) => {
       <Flex width="100%" maxWidth="100%">
         {tagsArr.map((tag, idx) => {
           return (
-            <GeneralTag
+            <Tag
               key={`${tag}-${idx}`}
               variant={variant}
               {...props}
               marginRight="4px"
             >
               {tag}
-            </GeneralTag>
+            </Tag>
           )
         })}
       </Flex>
@@ -26,18 +26,13 @@ export const TagGroup = ({ tagsArr = [], variant, max, ...props }) => {
     <Flex width="100%" maxWidth="100%">
       {[...tagsArr]?.slice(0, max)?.map((tag, idx) => {
         return (
-          <GeneralTag
-            key={`${tag}-${idx}`}
-            variant={variant}
-            {...props}
-            marginRight="4px"
-          >
+          <Tag key={`${tag}-${idx}`} variant={variant} {...props} marginRight="4px">
             {tag}
-          </GeneralTag>
+          </Tag>
         )
       })}
       {remaining > 0 ? (
-        <GeneralTag
+        <Tag
           variant={variant}
           {...props}
           width="32px"
@@ -46,7 +41,7 @@ export const TagGroup = ({ tagsArr = [], variant, max, ...props }) => {
           minWidth="28px"
         >
           {`+${[...tagsArr].slice(max).length}`}
-        </GeneralTag>
+        </Tag>
       ) : null}
     </Flex>
   )

@@ -16,7 +16,8 @@ import { ProjectsIcon } from "../../../icons/ProjectsIcon"
 import { CustomModalHeader } from "../../../overlay/Modal/CustomModalHeader/CustomModalHeader"
 import faker from "faker"
 import { sortAlphabetic } from "../../../../utils/functions/sorting"
-import { TestSystemTag } from "../../../tags/TestSystemTag/TestSystemTag"
+import { Tag } from "../../../tags/Tag/Tag"
+import { variantGeneralTag } from "../../../../utils/constants/tabs"
 export const AuxFilter = ({ onClose, ...props }) => {
   const project_tags = new Array(80)
     .fill("")
@@ -67,7 +68,7 @@ export const AuxFilter = ({ onClose, ...props }) => {
                       {group.map((tag) => (
                         <Flex key="">
                           <Radio>
-                            <TestSystemTag label={tag} />
+                            <Tag variant={variantGeneralTag.SYSTEM}>{tag}</Tag>
                           </Radio>
                         </Flex>
                       ))}

@@ -1,5 +1,10 @@
 import { Accordion, Button } from "@chakra-ui/react"
 import React from "react"
+import {
+  formatTags,
+  getRemainingTags,
+  variantGeneralTag
+} from "../../../../utils/constants/tabs"
 import { CloudLineIcon } from "../../../icons/CloudLineIcon"
 import { ConversationIcon } from "../../../icons/ConversationIcon"
 import { ImageTypeIcon } from "../../../icons/ImageTypeIcon"
@@ -8,7 +13,7 @@ import { PageLineIcon } from "../../../icons/PageLineIcon"
 import { PdfTypeIcon } from "../../../icons/PdfTypeIcon"
 import { TagLineIcon } from "../../../icons/TagLineIcon"
 import { TestSystemLineIcon } from "../../../icons/TestSystemLineIcon"
-import { TestSystemTag } from "../../../tags/TestSystemTag/TestSystemTag"
+import { TagRow } from "../../../tags/TagRow/TagRow"
 import { NoteAccordionItem } from "./NoteAccordionItem/NoteAccordionItem"
 
 export const NoteDetailsAccordion = ({
@@ -38,11 +43,11 @@ export const NoteDetailsAccordion = ({
 
       {!isMessage && noteTags ? (
         <NoteAccordionItem title="Tags de apunte" icon={<TagLineIcon mr="8px" />}>
-          {noteTags.map((note, idx) => (
-            <TestSystemTag key={`${note}-${idx}`} mr="8px" mb="8px">
-              {note}
-            </TestSystemTag>
-          ))}
+          <TagRow
+            tags={formatTags(noteTags, "name")}
+            variant={variantGeneralTag.NOTE}
+            remainingTagsCount={getRemainingTags(noteTags)}
+          />
         </NoteAccordionItem>
       ) : null}
 

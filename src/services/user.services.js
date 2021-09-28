@@ -3,7 +3,7 @@ import { ServiceConstructor } from "."
 const UserService = () => {
   const { instance, execute } = ServiceConstructor
 
-  const getUsers = (limit = 50, offset = 0) =>
+  const getUsers = (limit = 0, offset = 0) =>
     execute(instance.get(`/user?limit=${limit}&offset=${offset}`))
   const getUser = (id) => execute(instance.get(`/user/${id}`))
   const createUser = (data) => execute(instance.post(`/user/signup`, data))

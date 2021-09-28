@@ -12,7 +12,7 @@ import { getFieldObjectById } from "../utils/functions/global"
 import { AddCriterionIcon } from "../components/icons/AddCriterionIcon"
 import { CriteriaHeader } from "../views/criteria/CriteriaHeader/CriteriaHeader"
 import faker from "faker"
-import { GeneralTag } from "../components/tags/GeneralTag/GeneralTag"
+import { Tag } from "../components/tags/Tag/Tag"
 import { CriterionTitleCard } from "../components/cards/CriterionTitleCard/Criterion"
 const tagsMock = new Array(50).fill("").map(() => faker.random.word())
 
@@ -202,9 +202,9 @@ const apoyo = () => {
           </Text>
           <Flex width="100%" wrap="wrap">
             {tagsMock.map((tag, idx) => (
-              <GeneralTag key={`${tag}-${idx}`} variant="violete" mr="8px" mb="8px">
+              <Tag key={`${tag}-${idx}`} variant="violete" mr="8px" mb="8px">
                 {tag}
-              </GeneralTag>
+              </Tag>
             ))}
           </Flex>
         </Box>

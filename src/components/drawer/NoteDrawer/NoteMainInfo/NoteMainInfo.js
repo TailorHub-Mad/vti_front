@@ -4,13 +4,14 @@ import React from "react"
 import { useSWRConfig } from "swr"
 import useNoteApi from "../../../../hooks/api/useNoteApi"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
+import { variantGeneralTag } from "../../../../utils/constants/tabs"
 import { ActionLink } from "../../../buttons/ActionLink/ActionLink"
 import { GoToButton } from "../../../buttons/GoToButton/GoToButton"
 import { FolderCloseIcon } from "../../../icons/FolderCloseIcon"
 import { FormalizedIcon } from "../../../icons/FormalizedIcon"
 import { LockCloseIcon } from "../../../icons/LockCloseIcon"
 import { LockOpenIcon } from "../../../icons/LockOpenIcon"
-import { ProjectTag } from "../../../tags/ProjectTag/ProjectTag"
+import { Tag } from "../../../tags/Tag/Tag"
 
 const actionType = {
   CLOSE: "close",
@@ -100,9 +101,9 @@ export const NoteMainInfo = ({ item, onEdit, onDelete, isMessage = false }) => {
             </Flex>
             <GoToButton label="Ver proyecto" onClick={handleGoToProject} />
           </Flex>
-          <ProjectTag mt="8px" ml="32px">
+          <Tag variant={variantGeneralTag.PROJECT} mt="8px" ml="32px">
             {/* // TODO -> detail project */}
-          </ProjectTag>
+          </Tag>
         </Box>
       )}
     </>

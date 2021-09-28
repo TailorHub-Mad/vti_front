@@ -17,12 +17,11 @@ export const NoteDrawer = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
-  console.log("NOTE", note)
-
   const formatMessage = (msg) => ({
     ...msg,
     isClosed: msg.approved
   })
+
   if (!note) return null
   return (
     <>
@@ -77,7 +76,7 @@ export const NoteDrawer = ({
             <NoteMainInfo item={note} onEdit={onEdit} onDelete={onDelete} />
             <NoteDetailsAccordion
               name={note.name}
-              // noteTags={note.tags}
+              noteTags={note.tags}
               // testSystems={note.test_systems}
               link={note.link}
               // message={note.messages}

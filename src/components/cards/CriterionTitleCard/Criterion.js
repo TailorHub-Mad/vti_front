@@ -5,7 +5,7 @@ import { Box, Flex, Text } from "@chakra-ui/layout"
 import React, { useState } from "react"
 import { ChevronDownIcon } from "../../icons/ChevronDownIcon"
 import { ChevronUpIcon } from "../../icons/ChevronUpIcon"
-import { GeneralTag } from "../../tags/GeneralTag/GeneralTag"
+import { Tag } from "../../tags/Tag/Tag"
 import { CriterionTitleCardHeader } from "./CriterionTitleCardHeader/CriterionTitleCardHeader"
 
 export const CriterionTitleCard = ({
@@ -39,7 +39,7 @@ export const CriterionTitleCard = ({
         <Flex key={idx} align="center" width="100%" justify="space-between" mb="8px">
           <Flex align="center">
             <Checkbox mr="8px" onChange={onSelect} isChecked={isChecked} />
-            <GeneralTag variant="pale_yellow">hola k dise</GeneralTag>
+            <Tag variant="pale_yellow">hola k dise</Tag>
           </Flex>
           <DeleteIcon color="grey" onClick={onDelete} />
         </Flex>
@@ -55,7 +55,7 @@ export const CriterionTitleCard = ({
           >
             <Flex align="center">
               <Checkbox mr="8px" onChange={onSelect} isChecked={isChecked} />
-              <GeneralTag variant="pale_yellow">hola k dise</GeneralTag>
+              <Tag variant="pale_yellow">hola k dise</Tag>
             </Flex>
             <DeleteIcon color="grey" onClick={onDelete} cursor="pointer" />
           </Flex>

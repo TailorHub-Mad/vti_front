@@ -4,11 +4,10 @@ import { CollapseIconVert } from "../../../../components/icons/CollapseIconVert"
 import { PeopleLineIcon } from "../../../../components/icons/PeopleLineIcon"
 import { TagLineIcon } from "../../../../components/icons/TagLineIcon"
 import { TestSystemLineIcon } from "../../../../components/icons/TestSystemLineIcon"
-import { NoteTag } from "../../../../components/tags/NoteTag/NoteTag"
-import { ProjectTag } from "../../../../components/tags/ProjectTag/ProjectTag"
-import { TestSystemTag } from "../../../../components/tags/TestSystemTag/TestSystemTag"
 import { PATHS } from "../../../../utils/constants/global"
 import Link from "next/link"
+import { Tag } from "../../../../components/tags/Tag/Tag"
+import { variantGeneralTag } from "../../../../utils/constants/tabs"
 
 export const ProjectDetails = ({ focusPoint, testSystems, tags, users }) => {
   const [showProjectDetails, setShowProjectDetails] = useState(false)
@@ -30,7 +29,11 @@ export const ProjectDetails = ({ focusPoint, testSystems, tags, users }) => {
             <PeopleLineIcon mr="8px" />
             <Text variant="d_m_regular">Punto focal del proyecto</Text>
           </Flex>
-          {focusPoint && <ProjectTag ml="32px">{focusPoint}</ProjectTag>}
+          {focusPoint && (
+            <Tag variant={variantGeneralTag.PROJECT} ml="32px">
+              {focusPoint}
+            </Tag>
+          )}
         </Box>
         <Box mt="16px" mb="32px">
           <Flex align="center" mb="8px">
@@ -40,9 +43,13 @@ export const ProjectDetails = ({ focusPoint, testSystems, tags, users }) => {
           <Flex ml="32px">
             {users &&
               users.map((user, idx) => (
-                <NoteTag key={`${user}-${idx}`} mr="8px">
+                <Tag
+                  key={`${user}-${idx}`}
+                  mr="8px"
+                  variant={variantGeneralTag.NOTE}
+                >
                   {user}
-                </NoteTag>
+                </Tag>
               ))}
           </Flex>
         </Box>
@@ -54,9 +61,13 @@ export const ProjectDetails = ({ focusPoint, testSystems, tags, users }) => {
           <Flex ml="32px">
             {tags?.length > 0 &&
               tags.map((tag, idx) => (
-                <TestSystemTag key={`${tag}-${idx}`} mr="8px">
+                <Tag
+                  variant={variantGeneralTag.SYSTEM}
+                  key={`${tag}-${idx}`}
+                  mr="8px"
+                >
                   {tag}
-                </TestSystemTag>
+                </Tag>
               ))}
           </Flex>
         </Box>
