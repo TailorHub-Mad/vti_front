@@ -154,8 +154,8 @@ export const NewProjectForm = ({
       setSystemOptions(formatSystems(systems))
     }
     const _getTags = async () => {
-      const systems = await getProjectTags()
-      setTagOptions(formatTags(systems))
+      const tags = await getProjectTags()
+      setTagOptions(formatTags(tags))
     }
 
     _getClients()
