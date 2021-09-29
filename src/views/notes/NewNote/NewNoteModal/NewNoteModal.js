@@ -30,11 +30,8 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
 
   const checkInputsAreEmpty = () => {
     return (
-      !values.project ||
-      !values.system ||
-      !values.title ||
-      !values.description ||
-      !values.tags
+      !values.project || !values.system || !values.title || !values.description
+      // ||     !values.tags
     )
   }
 

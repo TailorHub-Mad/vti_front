@@ -88,7 +88,7 @@ const tags = () => {
     return `¿Desea eliminar ${label}?`
   }
 
-  const handleDeleteFunction = async () => {
+  const handleDelete = async () => {
     try {
       isProjectTag
         ? await deleteProjectTag(tagToDelete)
@@ -103,8 +103,7 @@ const tags = () => {
     }
   }
 
-  const handleUpdate = (id) => {
-    const tag = tagData.find((tag) => tag._id === id)
+  const handleUpdate = (tag) => {
     setTagToUpdate(tag)
     setIsTagModalOpen(true)
   }
@@ -125,8 +124,8 @@ const tags = () => {
         confirmText="Eliminar"
         cancelText="Cancelar"
         color="error"
-        isOpen={deleteType}
-        onConfirm={handleDeleteFunction}
+        isOpen={tagToDelete}
+        onConfirm={handleDelete}
         onClose={handleClosePopup}
       >
         {handleDeleteMessage()}
@@ -200,13 +199,14 @@ const tags = () => {
                   .filter((tag) => tag?.relatedTags?.length > 0)
                   .map((tag) => (
                     <TagCard
-                      onEdit={() => handleUpdate(tag._id)}
-                      onDelete={() => setTagsToDelete(tag._id, DeleteType.ONE)}
+                      onEdit={() => handleUpdate(tag)}
+                      onDelete={() => setTagsToDelete(tag._id)}
                       key={tag.name}
                       {...tag}
                     />
                   ))}
               </Grid>
+
               <Text variant="d_s_medium">Grado Cero</Text>
               <Grid
                 templateColumns="repeat(auto-fill, 266px)"
@@ -219,8 +219,8 @@ const tags = () => {
                   .filter((tag) => tag?.relatedTags?.length === 0)
                   .map((tag) => (
                     <TagCard
-                      onEdit={() => handleUpdate(tag._id)}
-                      onDelete={() => setTagsToDelete(tag._id, DeleteType.ONE)}
+                      onEdit={() => handleUpdate(tag)}
+                      onDelete={() => setTagsToDelete(tag._id)}
                       key={tag.name}
                       {...tag}
                     />
@@ -241,8 +241,8 @@ const tags = () => {
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((tag) => (
                   <TagCard
-                    onEdit={() => handleUpdate(tag._id)}
-                    onDelete={() => setTagsToDelete(tag._id, DeleteType.ONE)}
+                    onEdit={() => handleUpdate(tag)}
+                    onDelete={() => setTagsToDelete(tag._id)}
                     key={tag.name}
                     {...tag}
                   />

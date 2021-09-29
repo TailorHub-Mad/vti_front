@@ -6,6 +6,7 @@ import useClientApi from "../../../../hooks/api/useClientApi"
 import useSectorApi from "../../../../hooks/api/useSectorApi"
 import useUserApi from "../../../../hooks/api/useUserApi"
 import useSystemApi from "../../../../hooks/api/useSystemApi"
+import useTagApi from "../../../../hooks/api/useTagApi"
 
 export const NewProjectForm = ({
   // openAuxModal,
@@ -17,11 +18,13 @@ export const NewProjectForm = ({
   const { getSectors } = useSectorApi()
   const { getUsers } = useUserApi()
   const { getSystems } = useSystemApi()
+  const { getProjectTags } = useTagApi()
 
   const [clientOptions, setClientOptions] = useState([])
   const [sectorOptions, setSectorOptions] = useState([])
   const [userOptions, setUserOptions] = useState([])
   const [systemOptions, setSystemOptions] = useState([])
+  const [tagOptions, setTagOptions] = useState([])
 
   const formatValues = !projectToUpdate
     ? { ...value }
@@ -32,7 +35,13 @@ export const NewProjectForm = ({
         },
         testSystems: projectToUpdate.testSystems.map((system) => ({
           label: system.alias
-        }))
+        })),
+        tags:
+          projectToUpdate.tags.length > 0
+            ? projectToUpdate.tags.map((tag) => ({
+                label: tag.name
+              }))
+            : undefined
       }
 
   const formatClients = (_clients) =>
@@ -51,6 +60,9 @@ export const NewProjectForm = ({
       value: system._id
     }))
   }
+
+  const formatTags = (_tags) =>
+    _tags.map((tag) => ({ label: tag.name, value: tag._id }))
 
   const handleFormChange = (input, _value) => {
     onChange({
@@ -111,11 +123,17 @@ export const NewProjectForm = ({
         additemlabel: "Añadir ",
         removeitemlabel: "Eliminar "
       }
+    },
+    tags: {
+      type: "add_select",
+      config: {
+        placeholder: "Tags de proyecto",
+        options: tagOptions,
+        label: "Tags de proyecto",
+        additemlabel: "Añadir ",
+        removeitemlabel: "Eliminar "
+      }
     }
-    // tags: {
-    //   type: "add_select",
-    //   config: {}
-    // }
   }
 
   useEffect(() => {
@@ -135,10 +153,16 @@ export const NewProjectForm = ({
       const systems = await getSystems()
       setSystemOptions(formatSystems(systems))
     }
+    const _getTags = async () => {
+      const systems = await getProjectTags()
+      setTagOptions(formatTags(systems))
+    }
+
     _getClients()
     _getSectors()
     _getUsers()
     _getSystems()
+    _getTags()
   }, [])
 
   // Clients
@@ -185,6 +209,18 @@ export const NewProjectForm = ({
 
     handleFormChange("testSystems", system)
   }, [projectToUpdate, systemOptions])
+
+  // Tags
+  useEffect(() => {
+    if (!projectToUpdate || tagOptions.length === 0) return
+
+    const tags = tagOptions.filter(
+      (_tag) => _tag.label === projectToUpdate?.tags.name
+    )
+
+    if (tags.length === 0) return
+    handleFormChange("tags", tags)
+  }, [projectToUpdate, tagOptions])
 
   const inputRefObj = {
     text: <SimpleInput />,

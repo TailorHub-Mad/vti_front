@@ -10,7 +10,7 @@ export const TagCard = ({
   parentTag,
   relatedTags,
   category,
-  handleUpdate,
+  onEdit,
   onDelete
 }) => {
   return (
@@ -26,11 +26,14 @@ export const TagCard = ({
         title={name}
         parentTag={parentTag}
         category={category}
-        onEdit={handleUpdate}
+        onEdit={onEdit}
         onDelete={onDelete}
       />
 
-      <TagCardTags projects={projects} relatedTags={relatedTags} />
+      <TagCardTags
+        projects={projects.map((p) => p.alias)}
+        relatedTags={relatedTags}
+      />
       <Flex justify="space-between">
         <Text variant="d_xs_regular" color="grey">
           ID

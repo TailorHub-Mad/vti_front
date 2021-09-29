@@ -24,7 +24,7 @@ export const transformSystemData = (system) => ({
     link: `${PATHS.testSystems}/${system._id}`
   },
   alias: system.alias,
-  client: system.clientAlias,
+  client: system.clientAlias || system.client,
   code: system.vtiCode,
   year: system.date?.year,
   projects: system.projects.filter((p) => !Array.isArray(p)).map((p) => p.alias),

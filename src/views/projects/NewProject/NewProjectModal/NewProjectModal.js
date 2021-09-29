@@ -25,8 +25,8 @@ const initialValues = {
   sector: undefined,
   date: undefined,
   focusPoint: undefined,
-  testSystems: undefined
-  // tags: [""], // provisioanl
+  testSystems: undefined,
+  tags: undefined
 }
 
 export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) => {
@@ -47,7 +47,6 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
       !values.sector ||
       !values.date ||
       !values.focusPoint
-      // || !value.tags // TODO -> provisional
     )
   }
 
@@ -60,11 +59,12 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
       date: destructuringDate(project.date)
     }
 
-    if (!project.testSystems) return formatData
-    return {
-      ...formatData,
-      testSystems: project.testSystems?.map((system) => system.value)
-    }
+    if (project.testSystems)
+      formatData["testSystems"] = project.testSystems?.map((system) => system.value)
+
+    if (project.tags) formatData["tags"] = project.tags?.map((tag) => tag.value)
+
+    return formatData
   }
 
   const formatUpdateProject = (project) => {
@@ -73,11 +73,12 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
       sector: project.sector.value
     }
 
-    if (!project.testSystems) return formatData
-    return {
-      ...formatData,
-      testSystems: project.testSystems?.map((system) => system.value)
-    }
+    if (project.testSystems)
+      formatData["testSystems"] = project.testSystems?.map((system) => system.value)
+
+    if (project.tags) formatData["tags"] = project.tags?.map((tag) => tag.value)
+
+    return formatData
   }
 
   const handleSubmit = async () => {
@@ -118,6 +119,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
       client: projectToUpdate?.clientAlias,
       focusPoint: projectToUpdate?.focusPoint.map((fp) => fp.alias)[0],
       testSystems: projectToUpdate?.testSystems.map((ts) => ts.alias),
+      tags: projectToUpdate?.tags.map((tg) => tg.name),
       date: formatDateToInput(projectToUpdate?.date)
     }
     setValues(_project)

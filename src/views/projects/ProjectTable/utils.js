@@ -27,9 +27,9 @@ export const transformProjectData = (project) => ({
   sector: project?.sector[0]?.title || "---",
   focusPoint: project.focusPoint?.map((fp) => fp.alias).join(", ") || "---",
   testSystems: project.testSystems?.map((ts) => ts.alias) || "---",
-  tags: project.tag?.map((ts) => ts.name),
-  users: project.tag?.map((ts) => ts.alias),
-  notes: project.notes?.map((note) => note.title),
+  tags: project.tags?.map((t) => t.name),
+  users: project.users?.filter((u) => !Array.isArray(u)),
+  notes: project.notes?.filter((n) => !Array.isArray(n)),
   options: "",
   config: { isFinished: project.close }
 })
