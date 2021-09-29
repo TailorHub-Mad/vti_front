@@ -8,9 +8,9 @@ export const formatUser = (data) => {
 
 export const transformUserData = (user) => ({
   selector: "",
-  id: { label: user.ref, value: user._id },
+  id: { label: user.ref, value: user._id, link: `${PATHS.users}/${user._id}` },
   alias: user.alias,
-  fullName: { label: user.name, link: `${PATHS.users}/${user._id}` },
+  fullName: user.name,
   email: user.email,
   department: user.department?.name,
   focusPoint: user.focusPoint,
@@ -35,7 +35,7 @@ export const TABLE_USERS_HEAD = {
   id: {
     label: "ID",
     width: calcColWidth(80),
-    type: "mapText"
+    type: "link"
   },
   alias: {
     label: "Alias",
@@ -45,7 +45,7 @@ export const TABLE_USERS_HEAD = {
   fullName: {
     label: "Nombre",
     width: calcColWidth(120),
-    type: "link"
+    type: "text"
   },
   email: {
     label: "Email",

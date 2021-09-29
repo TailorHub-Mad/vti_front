@@ -18,8 +18,12 @@ export const groupTable = (projects) => {
 
 export const transformProjectData = (project) => ({
   selector: "",
-  id: { label: project.ref, value: project._id },
-  alias: { label: project.alias, link: `${PATHS.projects}/${project._id}` },
+  id: {
+    label: project.ref,
+    value: project._id,
+    link: `${PATHS.projects}/${project._id}`
+  },
+  alias: project.alias,
   sector: project?.sector[0]?.title || "---",
   focusPoint: project.focusPoint?.map((fp) => fp.alias).join(", ") || "---",
   testSystems: project.testSystems?.map((ts) => ts.alias) || "---",
@@ -38,32 +42,32 @@ export const TABLE_PROJECTS_HEAD = {
   },
   id: {
     label: "ID",
-    width: calcColWidth(90),
-    type: "mapText"
+    width: calcColWidth(60),
+    type: "link"
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(100),
-    type: "link"
+    width: calcColWidth(220),
+    type: "text"
   },
   sector: {
     label: "Sector",
-    width: calcColWidth(120),
+    width: calcColWidth(90),
     type: "text"
   },
   focusPoint: {
     label: "Punto Focal",
-    width: calcColWidth(120),
+    width: calcColWidth(90),
     type: "text"
   },
   testSystems: {
     label: "Sistemas de ensayo",
-    width: calcColWidth(220),
+    width: calcColWidth(210),
     type: "tags"
   },
   tags: {
     label: "Tags de proyecto",
-    width: calcColWidth(220),
+    width: calcColWidth(210),
     type: "tags"
   },
   users: {

@@ -18,13 +18,17 @@ export const groupTable = (systems) => {
 
 export const transformSystemData = (system) => ({
   selector: "",
-  id: { label: system.ref, value: system._id },
-  alias: { label: system.alias, link: `${PATHS.testSystems}/${system._id}` },
+  id: {
+    label: system.ref,
+    value: system._id,
+    link: `${PATHS.testSystems}/${system._id}`
+  },
+  alias: system.alias,
   client: system.clientAlias,
   code: system.vtiCode,
   year: system.date?.year,
-  projects: system.projects.map((project) => project.alias),
-  notes: system.notes.map((note) => note.title),
+  projects: system.projects.filter((p) => !Array.isArray(p)).map((p) => p.alias),
+  notes: system.notes.filter((n) => !Array.isArray(n)).map((n) => n.title),
   options: ""
 })
 
@@ -36,22 +40,22 @@ export const TABLE_SYSTEMS_HEAD = {
   },
   id: {
     label: "ID",
-    width: calcColWidth(88),
-    type: "mapText"
+    width: calcColWidth(60),
+    type: "link"
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(88),
-    type: "link"
+    width: calcColWidth(180),
+    type: "text"
   },
   client: {
     label: "Cliente",
-    width: calcColWidth(80),
+    width: calcColWidth(120),
     type: "text"
   },
   code: {
     label: "Código",
-    width: calcColWidth(75),
+    width: calcColWidth(158),
     type: "text"
   },
   year: {
@@ -61,12 +65,12 @@ export const TABLE_SYSTEMS_HEAD = {
   },
   projects: {
     label: "Proyectos",
-    width: calcColWidth(260),
+    width: calcColWidth(220),
     type: "tags"
   },
   notes: {
     label: "Apuntes",
-    width: calcColWidth(350),
+    width: calcColWidth(220),
     type: "tags"
   },
   options: {

@@ -5,15 +5,6 @@ import { Tag } from "../../../tags/Tag/Tag"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
 
 export const TagCardTags = ({ projects, relatedTags }) => {
-  const getRemainingTags = (tags) => {
-    if (!tags) return 0
-    if (tags.length <= 2) {
-      return 0
-    } else {
-      return tags.length - 2
-    }
-  }
-
   return (
     <Box
       display="grid"
@@ -27,15 +18,9 @@ export const TagCardTags = ({ projects, relatedTags }) => {
       <TagRow
         tags={relatedTags.map((tags) => tags.name)}
         tagcomponent={<Tag />}
-        remainingTagsCount={getRemainingTags(relatedTags)}
         variant={variantGeneralTag.NOTE}
       />
-      <TagRow
-        tags={projects}
-        tagcomponent={<Tag />}
-        remainingTagsCount={getRemainingTags(projects)}
-        variant="light_blue"
-      />
+      <TagRow tags={projects} tagcomponent={<Tag />} variant="light_blue" />
     </Box>
   )
 }

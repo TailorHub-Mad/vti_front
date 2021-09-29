@@ -1,19 +1,17 @@
 import { PATHS } from "../../../utils/constants/global"
 import { calcColWidth } from "../../../utils/constants/tables"
 
-export const formatDepartment = (data) => {
-  // data && !isGrouped ? data?.map(transformDepartmentData) : groupTable(data)
-  return data && data?.map(transformDepartmentData)
-}
+export const formatDepartment = (data) => data && data?.map(transformDepartmentData)
 
 export const transformDepartmentData = (department) => ({
   selector: "",
-  id: { label: department.ref, value: department._id },
-  name: {
-    label: department.name,
+  id: {
+    label: department.ref,
+    value: department._id,
     link: `${PATHS.departments}/${department._id}`
   },
-  users: [], // TODO
+  name: department.name,
+  users: department.users.map((u) => u.alias),
   options: ""
 })
 
@@ -34,12 +32,12 @@ export const TABLE_DEPARTMENT_HEAD = {
   id: {
     label: "ID",
     width: calcColWidth(80),
-    type: "mapText"
+    type: "link"
   },
   name: {
     label: "Departamento",
     width: calcColWidth(120),
-    type: "link"
+    type: "text"
   },
   users: {
     label: "Usuarios",

@@ -1,10 +1,6 @@
 import { Accordion, Button } from "@chakra-ui/react"
 import React from "react"
-import {
-  formatTags,
-  getRemainingTags,
-  variantGeneralTag
-} from "../../../../utils/constants/tabs"
+import { formatTags, variantGeneralTag } from "../../../../utils/constants/tabs"
 import { CloudLineIcon } from "../../../icons/CloudLineIcon"
 import { ConversationIcon } from "../../../icons/ConversationIcon"
 import { ImageTypeIcon } from "../../../icons/ImageTypeIcon"
@@ -46,7 +42,6 @@ export const NoteDetailsAccordion = ({
           <TagRow
             tags={formatTags(noteTags, "name")}
             variant={variantGeneralTag.NOTE}
-            remainingTagsCount={getRemainingTags(noteTags)}
           />
         </NoteAccordionItem>
       ) : null}

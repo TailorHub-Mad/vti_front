@@ -25,7 +25,7 @@ export const TableRow = ({
       height="fit-content"
       width="100%"
       alignItems="center"
-      padding="21px 0"
+      padding="16px 0"
       bgColor={isSelected ? "blue.100" : "white"}
       _hover={{ bgColor: "blue.100" }}
       gridColumnGap="8px"
@@ -36,13 +36,9 @@ export const TableRow = ({
         if (head[name]?.type === "text") {
           return React.cloneElement(components[head[name]?.type], {
             children: element?.toString(),
-            key: `${name}-${idx}`,
-            ...colorConfig
-          })
-        }
-        if (head[name]?.type === "mapText") {
-          return React.cloneElement(components[head[name]?.type], {
-            children: element?.label?.toString(),
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
             key: `${name}-${idx}`,
             ...colorConfig
           })
@@ -61,10 +57,14 @@ export const TableRow = ({
         // LINK ITEM
         if (head[name]?.type === "link") {
           return React.cloneElement(components[head[name]?.type], {
-            children: element?.label,
-            alias: element?.link,
-            key: `${name}-${idx}`,
+            children: element?.label?.toString(),
             url: element?.link,
+            key: `${name}-${idx}`,
+
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            paddingRight: "10px",
             ...colorConfig
           })
         }
@@ -81,7 +81,7 @@ export const TableRow = ({
         // TAGS
         if (head[name]?.type === "tags") {
           return React.cloneElement(components[head[name]?.type], {
-            tagsArr: element,
+            tags: element,
             key: `${name}-${idx}`,
             ...bgColorConfig
           })

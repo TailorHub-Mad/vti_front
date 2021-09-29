@@ -1,16 +1,17 @@
 import { PATHS } from "../../../utils/constants/global"
 import { calcColWidth } from "../../../utils/constants/tables"
 
-export const formatClient = (data) => {
-  // data && !isGrouped ? data?.map(transformClientData) : groupTable(data)
-  return data && data?.map(transformClientData)
-}
+export const formatClient = (data) => data && data?.map(transformClientData)
 
 export const transformClientData = (client) => ({
   selector: "",
-  id: { label: client.ref, value: client._id },
+  id: {
+    label: client.ref,
+    value: client._id,
+    link: `${PATHS.clients}/${client._id}`
+  },
   alias: client.alias,
-  name: { label: client.name, link: `${PATHS.clients}/${client._id}` },
+  name: client.name,
   testSystems: client.testSystems?.map((testSystem) => testSystem.alias),
   projects: client.projects?.map((project) => project.alias),
   options: ""
@@ -32,27 +33,27 @@ export const TABLE_CLIENT_HEAD = {
   },
   id: {
     label: "ID",
-    width: calcColWidth(80),
-    type: "mapText"
+    width: calcColWidth(60),
+    type: "link"
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(80),
+    width: calcColWidth(100),
     type: "text"
   },
   name: {
     label: "Nombre",
-    width: calcColWidth(300),
-    type: "link"
+    width: calcColWidth(408),
+    type: "text"
   },
   testSystems: {
     label: "Sistemas de ensayo",
-    width: calcColWidth(250),
+    width: calcColWidth(220),
     type: "tags"
   },
   projects: {
     label: "Proyectos",
-    width: calcColWidth(300),
+    width: calcColWidth(220),
     type: "tags"
   },
   options: {
