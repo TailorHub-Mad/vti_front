@@ -16,10 +16,15 @@ const NoteService = () => {
     execute(instance.put(`/notes/${id}/message/${messageId}`, data))
 
   // GROUP & FILTER
-  const getgroupNotes = (data) =>
+  const getGroupNotes = (data) =>
     execute(instance.get(`/notes/group?group=${data}&real=true`))
-  const getfilterNotes = (data) => execute(instance.get(`/notes/filter?${data}`))
+  const getFilterNotes = (data) => execute(instance.get(`/notes/filter?${data}`))
   const getSearchNotes = (data) => execute(instance.get(`/notes/group?${data}`))
+
+  const getFavsNotes = (data) => execute(instance.get(`/notes/group?${data}`)) // TODO -> pending
+  const getSubscribeNotes = (data) => execute(instance.get(`/notes/group?${data}`)) // TODO -> pending
+  const getUnreadNotes = (data) => execute(instance.get(`/notes/group?${data}`)) // TODO -> pending
+  const getActiveNotes = (data) => execute(instance.get(`/notes/group?${data}`)) // TODO -> pending
 
   return {
     getNotes,
@@ -30,9 +35,14 @@ const NoteService = () => {
     createMessage,
     updateMessage,
 
-    getgroupNotes,
-    getfilterNotes,
-    getSearchNotes
+    getGroupNotes,
+    getFilterNotes,
+    getSearchNotes,
+
+    getFavsNotes,
+    getSubscribeNotes,
+    getUnreadNotes,
+    getActiveNotes
   }
 }
 

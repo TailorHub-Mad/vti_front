@@ -11,9 +11,9 @@ const ProjectService = () => {
   const deleteProject = (id) => execute(instance.delete(`/projects/${id}`))
 
   // GROUP & FILTER
-  const getgroupProjects = (data) =>
+  const getGroupProjects = (data) =>
     execute(instance.get(`/projects/group?group=${data}&real=true`))
-  const getfilterProjects = (data) =>
+  const getFilterProjects = (data) =>
     execute(instance.get(`/projects/filter?${data}`))
   const getSearchProjects = (data) =>
     execute(instance.get(`/projects/group?${data}`))
@@ -25,8 +25,8 @@ const ProjectService = () => {
     updateProject,
     deleteProject,
 
-    getgroupProjects,
-    getfilterProjects,
+    getGroupProjects,
+    getFilterProjects,
     getSearchProjects
   }
 }

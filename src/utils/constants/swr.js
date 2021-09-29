@@ -8,6 +8,10 @@ export const SWR_CACHE_KEYS = {
   groupNotes: "notes/group",
   filterNotes: "notes/filter",
   searchNotes: "notes/search",
+  favsNotes: "notes/favs",
+  subscribeNotes: "notes/subscribe",
+  unreadNotes: "notes/unread",
+  activeNotes: "notes/active",
 
   // PROJECTS
   projects: "projects/",

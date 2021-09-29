@@ -7,8 +7,8 @@ export const projectFetchHandler = (state, options) => {
   const {
     getProjects,
     getProject,
-    getgroupProjects,
-    getfilterProjects,
+    getGroupProjects,
+    getFilterProjects,
     getSearchProjects
   } = useProjectApi()
 
@@ -19,12 +19,12 @@ export const projectFetchHandler = (state, options) => {
     group: () =>
       useFetchSWR(
         [SWR_CACHE_KEYS.groupProjects, options[fetchOption.GROUP]],
-        getgroupProjects
+        getGroupProjects
       ),
     filter: () =>
       useFetchSWR(
         [SWR_CACHE_KEYS.filterProjects, options[fetchOption.FILTER]],
-        getfilterProjects
+        getFilterProjects
       ),
     search: () =>
       useFetchSWR(

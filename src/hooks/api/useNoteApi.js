@@ -5,7 +5,7 @@ const useNoteApi = () => {
 
   // CRUD
   const getNotes = () => noteService.getNotes()
-  const getNote = (id) => noteService.getNote(id)
+  const getNote = (_, id) => noteService.getNote(id)
   const createNote = (data) => noteService.createNote(data)
   const updateNote = (id, data) => noteService.updateNote(id, data)
   const deleteNote = (id) => noteService.deleteNote(id)
@@ -14,9 +14,14 @@ const useNoteApi = () => {
     noteService.updateMessage(id, messageId, data)
 
   // GROUP & FILTER
-  const getgroupNotes = (_, data) => noteService.getgroupNotes(data)
-  const getfilterNotes = (_, data) => noteService.getfilterNotes(data)
+  const getGroupNotes = (_, data) => noteService.getGroupNotes(data)
+  const getFilterNotes = (_, data) => noteService.getFilterNotes(data)
   const getSearchNotes = (_, data) => noteService.getSearchNotes(data)
+
+  const getFavsNotes = (_, data) => noteService.getSearchNotes(data)
+  const getSubscribeNotes = (_, data) => noteService.getSearchNotes(data)
+  const getUnreadNotes = (_, data) => noteService.getSearchNotes(data)
+  const getActiveNotes = (_, data) => noteService.getSearchNotes(data)
 
   return {
     getNotes,
@@ -27,9 +32,14 @@ const useNoteApi = () => {
     createMessage,
     updateMessage,
 
-    getgroupNotes,
-    getfilterNotes,
-    getSearchNotes
+    getGroupNotes,
+    getFilterNotes,
+    getSearchNotes,
+
+    getFavsNotes,
+    getSubscribeNotes,
+    getUnreadNotes,
+    getActiveNotes
   }
 }
 

@@ -226,9 +226,9 @@ const apuntes = () => {
         )}
       </PageHeader>
       <PageMenu>
-        {notesData && !isEmptyData ? (
+        {notesData ? (
           <NotesMenu
-            activeItem={fetchState}
+            fetchState={fetchState}
             notesCount={notesData?.length}
             onChange={(state) => setFetchState(state)}
           />
