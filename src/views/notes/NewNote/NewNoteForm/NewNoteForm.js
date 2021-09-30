@@ -10,7 +10,7 @@ import useTagApi from "../../../../hooks/api/useTagApi"
 
 export const NewNoteForm = ({ value, onChange, noteToUpdate, submitIsDisabled }) => {
   const { getProjects } = useProjectApi()
-  const { getProjectTags } = useTagApi()
+  const { getNoteTags } = useTagApi()
 
   const [projectOptions, setProjectOptions] = useState([])
   const [projectData, setProjectData] = useState([])
@@ -96,7 +96,7 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate, submitIsDisabled })
       setProjectOptions(formatSelectOption(_projects))
     }
     const _getTags = async () => {
-      const tags = await getProjectTags()
+      const tags = await getNoteTags()
       setTagOptions(formatTags(tags))
     }
 

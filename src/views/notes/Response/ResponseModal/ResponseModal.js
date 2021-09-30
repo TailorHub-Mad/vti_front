@@ -11,7 +11,7 @@ import { ResponseForm } from "../ResponseForm/ResponseForm"
 const initialValues = {
   message: undefined,
   link: undefined,
-  documents: undefined
+  file: undefined
 }
 
 export const ResponseModal = ({
@@ -32,14 +32,24 @@ export const ResponseModal = ({
 
   const checkInputsAreEmpty = () => !values.message
 
+  const submitIsDisabled = checkInputsAreEmpty()
+
   const formatCreateMessage = (note) => {
     const formatData = {
       message: note.message
     }
     if (note?.link) formatData["link"] = note.link
-    if (note?.documents) formatData["documents"] = note.link
-    //TODO gestionar la subida de doc con el formData
-    return formatData
+    if (note?.file) formatData["file"] = note.file
+
+    const formData = new FormData()
+
+    Object.entries(formatData).forEach(([key, value]) => {
+      Array.isArray(value)
+        ? value.forEach((v) => formData.set(key, v))
+        : formData.set(key, value)
+    })
+
+    return formData
   }
 
   const handleSubmit = async () => {
@@ -95,12 +105,16 @@ export const ResponseModal = ({
           onClose={onClose}
           pb="24px"
         />
-        <ResponseForm value={values} onChange={(val) => setValues(val)} />
+        <ResponseForm
+          value={values}
+          onChange={(val) => setValues(val)}
+          submitIsDisabled={submitIsDisabled}
+        />
         <Button
           w="194px"
           margin="0 auto"
           mt="24px"
-          disabled={checkInputsAreEmpty()}
+          disabled={submitIsDisabled}
           onClick={handleSubmit}
           isLoading={isSubmitting}
           pointerEvents={isSubmitting ? "none" : "all"}

@@ -1,8 +1,10 @@
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons"
 import { Box, Flex, Text } from "@chakra-ui/react"
+import { useRouter } from "next/router"
 import React from "react"
 import { useSWRConfig } from "swr"
 import useNoteApi from "../../../../hooks/api/useNoteApi"
+import { PATHS } from "../../../../utils/constants/global"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
 import { ActionLink } from "../../../buttons/ActionLink/ActionLink"
@@ -18,33 +20,40 @@ const actionType = {
   FORMALIZED: "formalized"
 }
 
-export const NoteMainInfo = ({ item, onEdit, onDelete, isMessage = false }) => {
-  const { updateNote } = useNoteApi()
+export const NoteMainInfo = ({
+  item,
+  onEdit,
+  onDelete,
+  isMessage = false,
+  note
+}) => {
+  const router = useRouter()
+  const { updateNote, updateMessage } = useNoteApi()
   const { mutate } = useSWRConfig()
 
   const handleUpdateNote = async (action) => {
-    // TODO -> update states message
-    if (isMessage) return
-
     switch (action) {
-      case actionType.CLOSE:
-        await updateNote(item._id, { isClosed: !item.isClosed })
-        break
+      case actionType.CLOSE: {
+        isMessage
+          ? await updateMessage(note._id, item._id, { approved: !item.approved })
+          : await updateNote(item._id, { isClosed: !item.isClosed })
 
-      case actionType.FORMALIZED:
-        await updateNote(item._id, { formalized: !item.formalized })
         break
+      }
+
+      case actionType.FORMALIZED: {
+        const data = { formalized: !item.formalized }
+        isMessage
+          ? await updateMessage(note._id, item._id, data)
+          : await updateNote(item._id, data)
+        break
+      }
 
       default:
         return null
     }
 
     await mutate(SWR_CACHE_KEYS.notes)
-  }
-
-  const handleGoToProject = () => {
-    // TODO handle go to project detail
-    console.log("GO_PROJECT", item.project)
   }
 
   return (
@@ -90,7 +99,7 @@ export const NoteMainInfo = ({ item, onEdit, onDelete, isMessage = false }) => {
         </Flex>
       </Flex>
 
-      {isMessage || !item.project || (
+      {isMessage || !item.proyects[0] || (
         <Box mt="24px">
           <Flex justify="space-between">
             <Flex align="center">
@@ -99,11 +108,16 @@ export const NoteMainInfo = ({ item, onEdit, onDelete, isMessage = false }) => {
                 Proyectos
               </Text>
             </Flex>
-            <GoToButton label="Ver proyecto" onClick={handleGoToProject} />
+            <GoToButton
+              label="Ver proyecto"
+              onClick={() =>
+                router.push(`${PATHS.projects}/${item.proyects[0]._id}`)
+              }
+            />
           </Flex>
 
           <Tag variant={variantGeneralTag.PROJECT} mt="8px" ml="32px">
-            {item.project?.alias}
+            {item.proyects[0].alias}
           </Tag>
         </Box>
       )}

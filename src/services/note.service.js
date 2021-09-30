@@ -19,6 +19,9 @@ const NoteService = () => {
     execute(instance.post(`/notes/${id}/message/create`, data))
   const updateMessage = (id, messageId, data) =>
     execute(instance.put(`/notes/${id}/message/${messageId}`, data))
+  const downloadDocument = (id) => execute(instance.get(`/notes/download/${id}`))
+  const downloadMessageDocument = (id) =>
+    execute(instance.get(`/notes/message/download/${id}`))
 
   // GROUP & FILTER
   const getGroupNotes = (data) =>
@@ -43,6 +46,8 @@ const NoteService = () => {
     deleteNote,
     createMessage,
     updateMessage,
+    downloadDocument,
+    downloadMessageDocument,
 
     getGroupNotes,
     getFilterNotes,

@@ -29,7 +29,7 @@ export const MessageCard = ({
       />
       <MessageCardInfo
         id={note?.ref}
-        author={note?.owner}
+        author={note?.clientAlias}
         updatedAt={new Date(note?.updatedAt).toLocaleDateString()}
         marginBottom="18px"
         marginTop="6px"

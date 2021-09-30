@@ -46,11 +46,11 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
       testSystems: note.system.map((s) => s.value),
       title: note.title,
       description: note.description,
-      tags: note.tags.map((t) => t.value),
-      file: note.document
+      tags: note.tags.map((t) => t.value)
     }
 
     if (note?.link) formatData["link"] = note.link
+    if (note?.document) formatData["file"] = note.document
 
     const formData = new FormData()
 

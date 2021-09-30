@@ -77,10 +77,8 @@ export const NoteDrawer = ({
             <NoteDetailsAccordion
               name={note.name}
               noteTags={note.tags.length > 0 && note.tags}
-              // testSystems={note.test_systems}
-              link={note.link}
-              // message={note.messages}
-              files={note.document}
+              testSystems={note.testSystems}
+              files={note.documents?.length > 0 ? note.documents : null}
             />
           </Box>
           {note.messages.map((msg, idx) => {
@@ -98,12 +96,13 @@ export const NoteDrawer = ({
                   item={formatMessage(msg)}
                   onEdit={() => onEditResponse(msg)}
                   isMessage
+                  note={note}
                 />
                 <NoteDetailsAccordion
                   isMessage
                   name={msg.owner[0]?.alias}
                   link={msg.link}
-                  files={msg.document}
+                  files={msg.documents?.length > 0 ? msg.documents : null}
                   message={msg.message}
                 />
               </Box>

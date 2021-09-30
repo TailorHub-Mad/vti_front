@@ -104,8 +104,16 @@ const apuntes = () => {
     try {
       await deleteNote(noteToDelete)
       showToast("Apunte borrado correctamente")
-      const updatedNotes = notesData.filter((system) => system._id !== noteToDelete)
+
+      const updatedNotes = []
+      const filterNotes = notesData.filter((note) => note._id !== noteToDelete)
+      updatedNotes.push({
+        notes: filterNotes
+      })
       updatedNotes.length > 0 ? await mutate(updatedNotes, false) : await mutate()
+
+      if (showNoteDetails) setShowNoteDetails(false)
+      setNoteToDelete(null)
     } catch (error) {
       errorHandler(error)
     }

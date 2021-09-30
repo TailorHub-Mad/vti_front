@@ -12,19 +12,19 @@ export const MessageCardTags = ({ note }) => {
       gridTemplateColumns="100%"
       width="100%"
     >
-      {note.projects && (
+      {note.proyects?.length > 0 && (
         <TagRow
-          tags={formatTags(note.projects, "alias")}
+          tags={formatTags(note.proyects, "alias")}
           variant={variantGeneralTag.PROJECT}
         />
       )}
-      {note.testSystems && (
+      {note.testSystems?.length > 0 && (
         <TagRow
           tags={formatTags(note.testSystems, "alias")}
           variant={variantGeneralTag.SYSTEM}
         />
       )}
-      {note.tags && (
+      {note.tags?.length > 0 && (
         <TagRow
           tags={formatTags(note.tags, "name")}
           variant={variantGeneralTag.NOTE}

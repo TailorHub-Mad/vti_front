@@ -1,9 +1,11 @@
 import { FormLabel } from "@chakra-ui/form-control"
+import { Flex } from "@chakra-ui/layout"
 import React from "react"
 import { FileInput } from "../../../../components/forms/FileInput/FileInput"
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
+import { TextAreaInput } from "../../../../components/forms/TextAreaInput/TextAreaInput"
 
-export const ResponseForm = ({ value, onChange }) => {
+export const ResponseForm = ({ value, onChange, submitIsDisabled }) => {
   const handleFormChange = (input, _value) => {
     onChange({
       ...value,
@@ -13,7 +15,7 @@ export const ResponseForm = ({ value, onChange }) => {
 
   const formInputs = {
     message: {
-      type: "text",
+      type: "textArea",
       config: {
         placeholder: "Escribe la respuesta",
         label: "Mensaje*"
@@ -26,21 +28,17 @@ export const ResponseForm = ({ value, onChange }) => {
         label: "Link (opcional)"
       }
     },
-    document: {
+    file: {
       type: "attachment",
       config: {
-        label: "Adjunta tus documentos",
-        isDisabled: true // TODO -> provisional
+        label: "Adjunta tus documentos"
       }
     }
-    // tags: {
-    //   type: "add_select",
-    //   config: {}
-    // }
   }
 
   const inputRefObj = {
     text: <SimpleInput />,
+    textArea: <TextAreaInput />,
     attachment: <FileInputForm />
   }
 
@@ -51,7 +49,8 @@ export const ResponseForm = ({ value, onChange }) => {
           value: value[name],
           onChange: (val) => handleFormChange(name, val),
           marginBottom: name === "name" ? "0" : "24px",
-          isDisabled: index !== 0 && !value[Object.keys(value)[index - 1]],
+          isDisabled:
+            index !== 0 && submitIsDisabled && !value[Object.keys(value)[index - 1]],
           key: `${name}-${index}`,
           ...config
         })
@@ -62,7 +61,7 @@ export const ResponseForm = ({ value, onChange }) => {
 
 const FileInputForm = ({ value, onChange, isDisabled }) => {
   return (
-    <>
+    <Flex flexDirection="column" mb="24px">
       <FormLabel
         margin="0"
         marginRight="4px"
@@ -74,6 +73,6 @@ const FileInputForm = ({ value, onChange, isDisabled }) => {
         Adjunta tus documentos (opcional)
       </FormLabel>
       <FileInput value={value} onChange={onChange} isDisabled={isDisabled} />
-    </>
+    </Flex>
   )
 }
