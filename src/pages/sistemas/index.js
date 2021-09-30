@@ -42,7 +42,6 @@ const sistemas = () => {
   const { showToast } = useContext(ToastContext)
 
   // States
-
   const [showImportModal, setShowImportModal] = useState(false)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})

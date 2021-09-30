@@ -18,34 +18,40 @@ import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/glob
 import { userFetchHandler } from "../../swr/user.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
+import { getGroupOptionLabel } from "../../utils/functions/objects"
+
+const USERS_GROUP_OPTIONS = [
+  {
+    label: "Departamento",
+    value: "department"
+  }
+]
 
 const usuarios = () => {
+  // Hooks
   const { isLoggedIn } = useContext(ApiAuthContext)
   const { deleteUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
 
+  // States
+  const [showImportModal, setShowImportModal] = useState(false)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false)
+  const [userToUpdate, setUserToUpdate] = useState(null)
+  const [deleteType, setDeleteType] = useState(null)
+  const [usersToDelete, setUsersToDelete] = useState(null)
 
+  // Fetch
   const { data, error, isLoading, mutate } = userFetchHandler(
     fetchState,
     fetchOptions
   )
 
-  const [showImportModal, setShowImportModal] = useState(false)
-
-  // Create - Update state
-  const [isUserModalOpen, setIsUserModalOpen] = useState(false)
-  const [userToUpdate, setUserToUpdate] = useState(null)
-
-  // Delete state
-  const [deleteType, setDeleteType] = useState(null)
-  const [usersToDelete, setUsersToDelete] = useState(null)
-
   const isEmptyData = checkDataIsEmpty(data)
   const usersData = data && !isEmptyData ? data : null
 
-  // TODO
+  // Handlers views
   const handleExport = () => {}
 
   const handleOpenPopup = (usersToDelete, type) => {
@@ -63,6 +69,7 @@ const usuarios = () => {
     setIsUserModalOpen(false)
   }
 
+  // Handlers CRUD
   const handleDeleteMessage = () => {
     if (!usersToDelete) return
 
@@ -107,10 +114,26 @@ const usuarios = () => {
     setIsUserModalOpen(true)
   }
 
+  // Filters
   const onSearch = (search) => {
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
+    })
+  }
+
+  const handleOnGroup = (group) => {
+    if (!group) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.GROUP]: null
+      })
+      return
+    }
+
+    setFetchState(fetchType.GROUP)
+    setFetchOptions({
+      [fetchOption.GROUP]: group
     })
   }
 
@@ -147,13 +170,15 @@ const usuarios = () => {
           <ToolBar
             onAdd={() => setIsUserModalOpen(true)}
             onSearch={onSearch}
+            onGroup={handleOnGroup}
             onImport={() => setShowImportModal(true)}
             onExport={handleExport}
             addLabel="Añadir usuario"
             searchPlaceholder="Busqueda por ID, Alias"
             noFilter
-            noGroup
             icon={<UsersLineIcon />}
+            fetchState={fetchState}
+            groupOptions={USERS_GROUP_OPTIONS}
           />
         ) : null}
       </PageHeader>
@@ -169,10 +194,16 @@ const usuarios = () => {
       ) : null}
       {usersData ? (
         <UsersTable
+          fetchState={fetchState}
           users={usersData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(usersId) => handleOpenPopup(usersId, DeleteType.MANY)}
           onEdit={handleUpdate}
+          onGroup={handleOnGroup}
+          groupOption={getGroupOptionLabel(
+            USERS_GROUP_OPTIONS,
+            fetchOptions[fetchOption.GROUP]
+          )}
         />
       ) : null}
     </Page>
