@@ -7,7 +7,12 @@ const NoteService = () => {
   const getNotes = (limit = 0, offset = 0) =>
     execute(instance.get(`/notes?limit=${limit}&offset=${offset}`))
   const getNote = (id) => execute(instance.get(`/notes/${id}`))
-  const createNote = (data) => execute(instance.post(`/notes/create`, data))
+  const createNote = (data) =>
+    execute(
+      instance.post(`/notes/create`, data, {
+        headers: { "content-type": "multipart/form-data" }
+      })
+    )
   const updateNote = (id, data) => execute(instance.put(`/notes/${id}`, data))
   const deleteNote = (id) => execute(instance.delete(`/notes/${id}`))
   const createMessage = (id, data) =>
@@ -21,10 +26,14 @@ const NoteService = () => {
   const getFilterNotes = (data) => execute(instance.get(`/notes/filter?${data}`))
   const getSearchNotes = (data) => execute(instance.get(`/notes/group?${data}`))
 
-  const getFavsNotes = (data) => execute(instance.get(`/notes/group?${data}`)) // TODO -> pending
-  const getSubscribeNotes = (data) => execute(instance.get(`/notes/group?${data}`)) // TODO -> pending
-  const getUnreadNotes = (data) => execute(instance.get(`/notes/group?${data}`)) // TODO -> pending
-  const getActiveNotes = (data) => execute(instance.get(`/notes/group?${data}`)) // TODO -> pending
+  const getFavsNotes = (/*data*/) =>
+    execute(instance.get(`/notes?limit=${0}&offset=${0}`)) // TODO -> pending
+  const getSubscribeNotes = (/*data*/) =>
+    execute(instance.get(`/notes?limit=${0}&offset=${0}`)) // TODO -> pending
+  const getUnreadNotes = (/*data*/) =>
+    execute(instance.get(`/notes?limit=${0}&offset=${0}`)) // TODO -> pending
+  const getActiveNotes = (/*data*/) =>
+    execute(instance.get(`/notes?limit=${0}&offset=${0}`)) // TODO -> pending
 
   return {
     getNotes,

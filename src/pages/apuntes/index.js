@@ -69,8 +69,9 @@ const apuntes = () => {
 
   const handleNotesData = (isEmptyData) => {
     if (!data || isEmptyData) return null
-    if (fetchState === fetchType.ALL) return data[0].notes
     if (fetchState == fetchType.GROUP) return data
+    return data[0].notes
+
     // TODO FILTER
   }
 

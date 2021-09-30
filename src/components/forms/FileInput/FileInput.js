@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from "@chakra-ui/react"
-import React, { useCallback, useState } from "react"
+import React, { useState } from "react"
 import { useDropzone } from "react-dropzone"
 import { UploadFileIcon } from "../../icons/UploadFileIcon"
 
@@ -14,32 +14,31 @@ export const FileInput = ({
   ...props
 }) => {
   const [fileError, setFileError] = useState(null)
-  const onDrop = useCallback(
-    async (acceptedFiles) => {
-      const filteredFiles = acceptedFiles.filter(
-        (item) =>
-          item.size / 1000000 <= maxSize &&
-          (item.type === "application/pdf" ||
-            item.type === "image/jpg" ||
-            item.type === "image/png" ||
-            item.type === "image/jpeg")
-      )
-      if (filteredFiles.length === 0) {
-        setFileError("documentsError")
-      } else if (acceptedFiles.length !== filteredFiles.length) {
-        setFileError("someDocumentsError")
-      } else {
-        setFileError(null)
-      }
-      if (value?.length) {
-        filteredFiles.length + value.length <= maxFiles &&
-          onChange([...value, ...filteredFiles])
-      } else {
-        filteredFiles.length <= maxFiles && onChange(filteredFiles)
-      }
-    },
-    [value]
-  )
+
+  const onDrop = async (acceptedFiles) => {
+    const filteredFiles = acceptedFiles.filter(
+      (item) =>
+        item.size / 1000000 <= maxSize &&
+        (item.type === "application/pdf" ||
+          item.type === "image/jpg" ||
+          item.type === "image/png" ||
+          item.type === "image/jpeg")
+    )
+
+    if (filteredFiles.length === 0) return setFileError("documentsError")
+    if (acceptedFiles.length !== filteredFiles.length)
+      return setFileError("someDocumentsError")
+
+    setFileError(null)
+
+    if (value?.length) {
+      filteredFiles.length + value.length <= maxFiles &&
+        onChange([...value, ...filteredFiles])
+    } else {
+      filteredFiles.length <= maxFiles && onChange(filteredFiles)
+    }
+  }
+
   const { getRootProps, getInputProps } = useDropzone({ onDrop })
 
   return (
@@ -60,11 +59,28 @@ export const FileInput = ({
         <Box textAlign="center">
           <UploadFileIcon color="grey" mb="3px" />
           <Text variant="d_s_medium" color="grey">
-            {label || "Adjunte o arrastre EXCEL"}
+            {label || "Adjunte o arrastre un documento"}
           </Text>
         </Box>
       </Flex>
-      {fileError ? <Text color="error">Error en documentos</Text> : null}
+
+      {value ? (
+        <Flex>
+          {value.map((v, idx) => {
+            return (
+              <Text key={`${v.size}-${idx}`} mt="8px">
+                {idx !== 0 ? `- ${v.path}` : `${v.path} `}
+              </Text>
+            )
+          })}
+        </Flex>
+      ) : null}
+
+      {fileError ? (
+        <Text mt="8px" color="error">
+          Error en documentos
+        </Text>
+      ) : null}
     </Box>
   )
 }

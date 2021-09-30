@@ -13,9 +13,9 @@ const initialValues = {
   system: undefined,
   title: undefined,
   description: undefined,
+  tags: undefined,
   link: undefined,
-  docuement: undefined,
-  tags: undefined
+  document: undefined
 }
 
 export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
@@ -30,26 +30,37 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
 
   const checkInputsAreEmpty = () => {
     return (
-      !values.project || !values.system || !values.title || !values.description
-      // ||     !values.tags
+      !values.project ||
+      !values.system ||
+      !values.title ||
+      !values.description ||
+      !values.tags
     )
   }
 
-  const formatCreateNote = (note) => {
-    console.log("llega qui con la nota", note)
+  const submitIsDisabled = checkInputsAreEmpty()
 
+  const formatCreateNote = (note) => {
     const formatData = {
       project: note.project.value,
       testSystems: note.system.map((s) => s.value),
       title: note.title,
       description: note.description,
-      tags: note.tags.map((t) => t.value)
-      //TODO gestionar la subida de doc con el formData
+      tags: note.tags.map((t) => t.value),
+      file: note.document
     }
 
     if (note?.link) formatData["link"] = note.link
 
-    return formatData
+    const formData = new FormData()
+
+    Object.entries(formatData).forEach(([key, value]) => {
+      Array.isArray(value)
+        ? value.forEach((v) => formData.set(key, v))
+        : formData.set(key, value)
+    })
+
+    return formData
   }
 
   const handleSubmit = async () => {
@@ -64,7 +75,6 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
   const handleCreateNote = async () => {
     try {
       const note = formatCreateNote(values)
-
       await createNote(note)
     } catch (error) {
       errorHandler(error)
@@ -106,12 +116,13 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
           value={values}
           onChange={(val) => setValues(val)}
           noteToUpdate={noteToUpdate}
+          submitIsDisabled={submitIsDisabled}
         />
         <Button
           w="194px"
           margin="0 auto"
           mt="24px"
-          disabled={checkInputsAreEmpty()}
+          disabled={submitIsDisabled}
           onClick={handleSubmit}
           isLoading={isSubmitting}
           pointerEvents={isSubmitting ? "none" : "all"}

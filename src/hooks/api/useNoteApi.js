@@ -18,10 +18,10 @@ const useNoteApi = () => {
   const getFilterNotes = (_, data) => noteService.getFilterNotes(data)
   const getSearchNotes = (_, data) => noteService.getSearchNotes(data)
 
-  const getFavsNotes = (_, data) => noteService.getSearchNotes(data)
-  const getSubscribeNotes = (_, data) => noteService.getSearchNotes(data)
-  const getUnreadNotes = (_, data) => noteService.getSearchNotes(data)
-  const getActiveNotes = (_, data) => noteService.getSearchNotes(data)
+  const getFavsNotes = (_, data) => noteService.getFavsNotes(data)
+  const getSubscribeNotes = (_, data) => noteService.getSubscribeNotes(data)
+  const getUnreadNotes = (_, data) => noteService.getUnreadNotes(data)
+  const getActiveNotes = (_, data) => noteService.getActiveNotes(data)
 
   return {
     getNotes,

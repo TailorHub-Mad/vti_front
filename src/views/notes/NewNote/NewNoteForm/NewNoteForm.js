@@ -8,7 +8,7 @@ import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInpu
 import useProjectApi from "../../../../hooks/api/useProjectApi"
 import useTagApi from "../../../../hooks/api/useTagApi"
 
-export const NewNoteForm = ({ value, onChange, noteToUpdate }) => {
+export const NewNoteForm = ({ value, onChange, noteToUpdate, submitIsDisabled }) => {
   const { getProjects } = useProjectApi()
   const { getProjectTags } = useTagApi()
 
@@ -37,7 +37,6 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate }) => {
         placeholder: "Selecciona",
         label: "Selecciona el proyecto*",
         options: projectOptions
-        // disabled: Boolean(noteToUpdate)
       }
     },
     system: {
@@ -84,8 +83,7 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate }) => {
     document: {
       type: "attachment",
       config: {
-        label: "Adjunta tus documentos",
-        isDisabled: true // TODO -> provisional
+        label: "Adjunta tus documentos"
       }
     }
   }
@@ -151,7 +149,8 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate }) => {
           value: value[name],
           onChange: (val) => handleFormChange(name, val),
           marginBottom: name === "name" ? "0" : "24px",
-          isDisabled: index !== 0 && !value[Object.keys(value)[index - 1]],
+          isDisabled:
+            index !== 0 && submitIsDisabled && !value[Object.keys(value)[index - 1]],
           key: `${name}-${index}`,
           ...config
         })

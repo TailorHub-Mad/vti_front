@@ -76,7 +76,7 @@ export const NoteDrawer = ({
             <NoteMainInfo item={note} onEdit={onEdit} onDelete={onDelete} />
             <NoteDetailsAccordion
               name={note.name}
-              noteTags={note.tags}
+              noteTags={note.tags.length > 0 && note.tags}
               // testSystems={note.test_systems}
               link={note.link}
               // message={note.messages}

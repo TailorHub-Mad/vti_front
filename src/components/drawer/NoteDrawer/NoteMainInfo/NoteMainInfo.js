@@ -90,19 +90,20 @@ export const NoteMainInfo = ({ item, onEdit, onDelete, isMessage = false }) => {
         </Flex>
       </Flex>
 
-      {isMessage || (
+      {isMessage || !item.project || (
         <Box mt="24px">
           <Flex justify="space-between">
             <Flex align="center">
               <FolderCloseIcon mr="8px" />
               <Text variant="d_s_medium" mt="4px">
-                Proyecto
+                Proyectos
               </Text>
             </Flex>
             <GoToButton label="Ver proyecto" onClick={handleGoToProject} />
           </Flex>
+
           <Tag variant={variantGeneralTag.PROJECT} mt="8px" ml="32px">
-            {/* // TODO -> detail project */}
+            {item.project?.alias}
           </Tag>
         </Box>
       )}
