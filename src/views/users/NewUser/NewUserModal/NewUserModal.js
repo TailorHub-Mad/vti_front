@@ -33,7 +33,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
 
   const checkInputsAreEmpty = () => {
     return values.some(
-      (value) => !value.alias || !value.fullName || !value.email || !value.department
+      (value) => !value.alias || !value.name || !value.email || !value.department
     )
   }
 
@@ -41,7 +41,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
     return users.map((user) => {
       return {
         alias: user.alias,
-        name: user.fullName,
+        name: user.name,
         email: user.email,
         department: user.department.value,
         password: Math.random().toString(8) // TODO -> provisional
@@ -80,8 +80,8 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
 
   useEffect(() => {
     if (!userToUpdate) return
-    const { alias, name } = userToUpdate
-    setValues([{ alias, name }])
+    const { alias, name, email, department } = userToUpdate
+    setValues([{ alias, name, email, department: department.name }])
   }, [userToUpdate])
 
   useEffect(() => {
@@ -102,6 +102,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
           values={values}
           onChange={handleChange}
           onDelete={handleDelete}
+          objectToUpdate={userToUpdate}
           addTitle="Añadir nuevo usuario"
         >
           <NewUserForm />

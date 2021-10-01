@@ -96,8 +96,6 @@ export const NoteDetailsAccordion = ({
           {files.map((file, idx) => {
             const name = file.url?.split("-")[1]
 
-            console.log("FILE", file)
-
             return (
               <Button
                 key={`${file.name}-${idx}`}
