@@ -12,7 +12,15 @@ import { CustomModalHeader } from "../CustomModalHeader/CustomModalHeader"
 import { CSVReader } from "react-papaparse"
 import { UploadFileIcon } from "../../../icons/UploadFileIcon"
 
-export const ImportFilesModal = ({ title, isOpen, label, onClose, onUpload, onDropDataTransform, ...props }) => {
+export const ImportFilesModal = ({
+  title,
+  isOpen,
+  label,
+  onClose,
+  onUpload,
+  onDropDataTransform,
+  ...props
+}) => {
   const [data, setData] = useState(null)
 
   const handleSubmit = () => {
@@ -21,7 +29,7 @@ export const ImportFilesModal = ({ title, isOpen, label, onClose, onUpload, onDr
 
   const handleOnDrop = (jsonInfo) => {
     //TODO Gestión de errores al transformar la data
-   setData(onDropDataTransform(jsonInfo))
+    setData(onDropDataTransform(jsonInfo))
   }
 
   const handleOnError = (e) => {
@@ -61,35 +69,35 @@ export const ImportFilesModal = ({ title, isOpen, label, onClose, onUpload, onDr
             onRemoveFile={handleOnRemoveFile}
             style={{
               dropFile: {
-                marginTop:"16px",
+                marginTop: "16px",
                 width: 200,
                 height: 120,
-                background: '#EBEEF2',
-                borderRadius:"2px",
-                border:"1px solid grey"
+                background: "#EBEEF2",
+                borderRadius: "2px",
+                border: "1px solid grey"
               },
               fileSizeInfo: {
-                color: '#052E57',
-                backgroundColor: 'transparent',
+                color: "#052E57",
+                backgroundColor: "transparent",
                 borderRadius: 2,
                 lineHeight: 1,
-                marginBottom: '0.5em',
-                padding: '0 0.4em',
+                marginBottom: "0.5em",
+                padding: "0 0.4em"
               },
               fileNameInfo: {
-                color: '#052E57',
-                backgroundColor: 'transparent',
+                color: "#052E57",
+                backgroundColor: "transparent",
                 borderRadius: 2,
                 fontSize: 14,
                 lineHeight: 1,
-                padding: '0 16px',
+                padding: "0 16px"
               },
               removeButton: {
-                color: '#F95C5C',
+                color: "#F95C5C"
               },
               progressBar: {
-                backgroundColor: '#052E57',
-              },
+                backgroundColor: "#052E57"
+              }
             }}
           >
             <Flex

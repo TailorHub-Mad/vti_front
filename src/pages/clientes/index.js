@@ -52,10 +52,21 @@ const clientes = () => {
 
   const isEmptyData = checkDataIsEmpty(data)
   const clientsData = data && !isEmptyData ? data : null
-  // TODO
+
+
+  const handleImportClients = async (data) => {
+    //TODO Gestión de errores y update de SWR
+    try {
+      await createClient(data)
+      setShowImportModal(false)
+      showToast("Clientes importados correctamente")
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
+
   const handleExportClients = () => {
     setShowExportModal(false)
-    //Transformar info, parse a csv con jsonToCSV de papaparse, new file y download
     const _data = jsonToCSV(transformClientsToExport(clientsData))
     download(_data, `clients_export_${new Date().toLocaleDateString()}`, "text/csv")
   }
@@ -126,13 +137,7 @@ const clientes = () => {
     })
   }
 
-  const handleImportClients = async (data) => {
-    try {
-      await createClient(data)
-    } catch (error) {
-      errorHandler(error)
-    }
-  }
+
 
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
