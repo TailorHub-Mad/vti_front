@@ -24,7 +24,7 @@ export const MessageCardHeader = ({
 
   const handleOnFavorite = () => {
     setShowOptions(false)
-    onFavorite()
+    onFavorite(isFavorite)
   }
 
   const ref = useRef(null)
@@ -54,7 +54,7 @@ export const MessageCardHeader = ({
           <OptionsMenuItem onClick={handleOnFavorite}>
             <HeartIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
             <Text variant="d_xs_regular" marginRight="2px">
-              Favorito
+              {isFavorite ? "Eliminar favorito" : "Favorito"}
             </Text>
           </OptionsMenuItem>
           <OptionsMenuItem onClick={handleOnDelete} isLast>

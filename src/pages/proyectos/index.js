@@ -121,13 +121,13 @@ const proyectos = () => {
     try {
       const projectsQueue = projectsId.map((id) => deleteProject(id))
       await Promise.all(projectsQueue)
-      showToast("Clientes borrados correctamente")
+      showToast("Proyectos borrados correctamente")
       const updatedProjects = []
       const filterProjects = projects.filter(
         (project) => !projectsId.includes(project._id)
       )
       updatedProjects.push({ projects: filterProjects })
-      return filterProjects
+      return updatedProjects
     } catch (error) {
       errorHandler(error)
     }
