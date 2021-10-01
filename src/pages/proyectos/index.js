@@ -21,11 +21,9 @@ import { errorHandler } from "../../utils/errors"
 import { getGroupOptionLabel } from "../../utils/functions/objects"
 import download from "downloadjs"
 import { jsonToCSV } from "react-papaparse"
-import {
-  projectDataTransform,
-  transformProjectsToExport
-} from "../../utils/functions/import_export/projects_helper"
+
 import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
+import { projectDataTransform, transformProjectsToExport } from "../../utils/functions/import_export/projects_helper"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -76,9 +74,13 @@ const proyectos = () => {
 
   const handleImportProjects = async (data) => {
     //TODO Gestión de errores y update de SWR
+    console.log("DATA", data)
     try {
-      const projects = data.map((pro) => createProject(pro))
-      const projectsCreated = await Promise.all(projects)
+      const projectsCreated = []
+      for ( let index = 0 ; index < data.length ; index++){
+        const pro = await createProject(data[index])
+        projectsCreated.push(pro)
+      }
       console.log("Proyectos creados", projectsCreated)
       setShowImportModal(false)
       showToast("Proyectos importados correctamente")

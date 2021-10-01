@@ -16,11 +16,18 @@ export const projectDataTransform = (data) => {
       focusPoint: item.data[6]
     }
 
-    if (item.month) {
-      _item.year.month = item.month
+    if (item.data[4]) {
+      _item.date.month = item.data[4]
     }
-    if (item.day) {
-      _item.year.day = item.day
+    if (item.data[5]) {
+      _item.date.day = item.data[5]
+    }
+    if (item.data[7]) {
+      _item.testSystems = item.data[7].split(" ").map((el) => el.trim())
+    }
+
+    if (item.data[8]) {
+      _item.tags = item.data[8].split(" ").map((el) => el.trim())
     }
 
     return _item

@@ -22,7 +22,6 @@ export const ImportFilesModal = ({
   ...props
 }) => {
   const [data, setData] = useState(null)
-
   const handleSubmit = () => {
     onUpload(data)
   }
