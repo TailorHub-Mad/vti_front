@@ -53,7 +53,6 @@ const clientes = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const clientsData = data && !isEmptyData ? data : null
 
-
   const handleImportClients = async (data) => {
     //TODO Gestión de errores y update de SWR
     try {
@@ -136,8 +135,6 @@ const clientes = () => {
       [fetchOption.SEARCH]: search
     })
   }
-
-
 
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
