@@ -7,7 +7,7 @@ export default class Document extends NextDocument {
     return (
       <Html>
         <Head>
-          <link
+          {/* <link
             rel="preload"
             href="/fonts/noway/Noway-Regular.ttf"
             as="font"
@@ -18,7 +18,7 @@ export default class Document extends NextDocument {
             href="/fonts/noway/Noway-Medium.ttf"
             as="font"
             crossOrigin=""
-          />
+          /> */}
         </Head>
         <body>
           <ColorModeScript initialColorMode={theme.config.initialColorMode} />
@@ -29,3 +29,5 @@ export default class Document extends NextDocument {
     )
   }
 }
+
+

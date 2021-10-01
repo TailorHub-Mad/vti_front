@@ -13,7 +13,6 @@ export const CloudButton = ({ onImport, onExport }) => {
         variant="icon_only_secondary"
         marginRight="16px"
         onClick={onOpen}
-        isDisabled={true} /* provisional */
       >
         <UploadCloudIcon />
       </Button>
