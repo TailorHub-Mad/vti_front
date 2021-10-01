@@ -14,11 +14,14 @@ Estimaciones:
 ### Clientes:
 - [x] Crear uno
 - [x] Crear varios
-- [] Ver lista: Falta que aparezca la referencia
+- [] Ver lista: 
+- Falta que aparezca la referencia
 - [x] Select en la tabla
 - [] Ver detalle 
-- [] Buscar: Pendiente pero casi listo. En el back está. Comprobar que la ruta funciona. 
-- [x] Importar : Falta la gestión de errores
+- [] Buscar: 
+- Pendiente pero casi listo. En el back está. Comprobar que la ruta funciona. 
+- [x] Importar: 
+- Falta la gestión de errores
 - [x] Exportar
 
 - [x] Editar
@@ -50,7 +53,7 @@ Porcentaje de avance: 85%
 - [] Finalizar proyecto:
 	- Hay que meter la opción en el menú de la fila
 	- Falta crear el flujo de finalizar proyecto
-	-Para saber que está finalizado hay que ver si viene el campo `closed` dentro del proyecto.
+	- Para saber que está finalizado hay que ver si viene el campo `closed` dentro del proyecto.
 
 - [] Editar:
 - Revisar la carga de los tags existentes
@@ -123,7 +126,7 @@ Porcentaje de avance: 80%
 - [x] Eliminar
 
 - Tags vienen sin popular en las agrupaciones
--  Revisar estilos del textarea y parseo de los saltos de linea en los mensajes.
+- Revisar estilos del textarea y parseo de los saltos de linea en los mensajes.
 
 Porcentaje de avance: 85%
 Tiempo aprox restante: 2 horas
