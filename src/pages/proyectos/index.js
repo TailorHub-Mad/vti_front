@@ -19,6 +19,13 @@ import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/glob
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 import { getGroupOptionLabel } from "../../utils/functions/objects"
+import download from "downloadjs"
+import { jsonToCSV } from "react-papaparse"
+import {
+  projectDataTransform,
+  transformProjectsToExport
+} from "../../utils/functions/import_export/projects_helper"
+import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -38,23 +45,24 @@ const PROJECTS_GROUP_OPTIONS = [
 const proyectos = () => {
   // Hooks
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { deleteProject } = useProjectApi()
+  const { deleteProject, createProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
-
-  // States
-  const [showImportModal, setShowImportModal] = useState(false)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
-  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
-  const [projectToUpdate, setProjectToUpdate] = useState(null)
-  const [deleteType, setDeleteType] = useState(null)
-  const [projectToDelete, setProjectsToDelete] = useState(null)
 
-  // Fetch
   const { data, error, isLoading, mutate } = projectFetchHandler(
     fetchState,
     fetchOptions
   )
+
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
+  const [projectToUpdate, setProjectToUpdate] = useState(null)
+
+  const [deleteType, setDeleteType] = useState(null)
+  const [projectToDelete, setProjectsToDelete] = useState(null)
+
+  const [showImportModal, setShowImportModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
 
   const handleProjectsData = (isEmptyData) => {
     if (!data || isEmptyData) return null
@@ -66,9 +74,29 @@ const proyectos = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const projectsData = handleProjectsData(isEmptyData)
 
-  // Handlers views
-  const handleExport = () => {}
+  const handleImportProjects = async (data) => {
+    //TODO Gestión de errores y update de SWR
+    try {
+      const projects = data.map((pro) => createProject(pro))
+      const projectsCreated = await Promise.all(projects)
+      console.log("Proyectos creados", projectsCreated)
+      setShowImportModal(false)
+      showToast("Proyectos importados correctamente")
+    } catch (error) {
+      console.log("ERROR IMPORT", error)
+      errorHandler(error)
+    }
+  }
 
+  const handleExportProjects = () => {
+    setShowExportModal(false)
+    const _data = jsonToCSV(transformProjectsToExport(projectsData))
+    download(_data, `projects_export_${new Date().toLocaleDateString()}`, "text/csv")
+  }
+
+  console.log(projectsData)
+
+  // Handlers views
   const handleOpenPopup = (projectToDelete, type) => {
     setDeleteType(type)
     setProjectsToDelete(projectToDelete)
@@ -191,9 +219,17 @@ const proyectos = () => {
         onClose={handleOnCloseModal}
       />
 
+      <ExportFilesModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        onExport={() => handleExportProjects()}
+      />
+
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
+        onUpload={(data) => handleImportProjects(data)}
+        onDropDataTransform={(info) => projectDataTransform(info)}
       />
 
       <PageHeader>
@@ -205,7 +241,7 @@ const proyectos = () => {
             onGroup={handleOnGroup}
             onFilter={handleOnFilter}
             onImport={() => setShowImportModal(true)}
-            onExport={handleExport}
+            onExport={() => setShowExportModal(true)}
             addLabel="Añadir proyecto"
             searchPlaceholder="Busqueda por ID, Alias"
             groupOptions={PROJECTS_GROUP_OPTIONS}
