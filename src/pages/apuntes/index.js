@@ -141,6 +141,7 @@ const apuntes = () => {
 
   // state === true ? deleteFavorite : createFavorite
   const handleFavorite = async (id, state) => {
+    console.log("llega aqui")
     const { favorites, _id } = user
     const { notes: favoritesNotes } = favorites
 

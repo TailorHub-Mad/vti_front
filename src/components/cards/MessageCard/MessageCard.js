@@ -13,11 +13,6 @@ export const MessageCard = ({
   onDelete,
   handleFavorite
 }) => {
-  const handleOnFavorite = () => {
-    if (isFavorite) return
-    handleFavorite()
-  }
-
   return (
     <Card>
       <MessageCardHeader
@@ -25,7 +20,7 @@ export const MessageCard = ({
         title={note?.title}
         onClick={onSeeDetails}
         onDelele={onDelete}
-        onFavorite={handleOnFavorite}
+        onFavorite={handleFavorite}
       />
       <MessageCardInfo
         id={note?.ref}
