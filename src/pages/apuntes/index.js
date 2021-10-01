@@ -125,7 +125,7 @@ const apuntes = () => {
   const handleUpdate = (id) => {
     // TODO -> create full notes
     const note = notesData.find((note) => note._id === id)
-    console.log("HandleEdit", id, note)
+
     setNoteToUpdate(note)
     setIsNoteModalOpen(true)
   }
@@ -141,7 +141,6 @@ const apuntes = () => {
 
   // state === true ? deleteFavorite : createFavorite
   const handleFavorite = async (id, state) => {
-    console.log("llega aqui")
     const { favorites, _id } = user
     const { notes: favoritesNotes } = favorites
 

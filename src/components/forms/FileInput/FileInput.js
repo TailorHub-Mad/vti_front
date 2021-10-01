@@ -17,12 +17,10 @@ export const FileInput = ({
 
   const onDrop = async (acceptedFiles) => {
     const filteredFiles = acceptedFiles.filter(
-      (item) =>
-        item.size / 1000000 <= maxSize &&
-        (item.type === "application/pdf" ||
-          item.type === "image/jpg" ||
-          item.type === "image/png" ||
-          item.type === "image/jpeg")
+      (item) => item.size / 1000000 <= maxSize && item.type === "text/csv"
+      //   item.type === "image/jpg" ||
+      //   item.type === "image/png" ||
+      //   item.type === "image/jpeg")
     )
 
     if (filteredFiles.length === 0) return setFileError("documentsError")

@@ -18,12 +18,19 @@ import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/glob
 import { clientFetchHandler } from "../../swr/client.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
+import {
+  clientDataTransform,
+  transformClientsToExport
+} from "../../utils/functions/import_export/clients_helpers"
+import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
+import download from "downloadjs"
+import { jsonToCSV } from "react-papaparse"
 
 const clientes = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
   const { deleteClient } = useClientApi()
   const { showToast } = useContext(ToastContext)
-
+  const { createClient } = useClientApi()
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
 
@@ -33,6 +40,7 @@ const clientes = () => {
   )
 
   const [showImportModal, setShowImportModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
 
   // Create - Update state
   const [isClientModalOpen, setIsClientModalOpen] = useState(false)
@@ -45,8 +53,22 @@ const clientes = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const clientsData = data && !isEmptyData ? data : null
 
-  // TODO
-  const handleExport = () => {}
+  const handleImportClients = async (data) => {
+    //TODO Gestión de errores y update de SWR
+    try {
+      await createClient(data)
+      setShowImportModal(false)
+      showToast("Clientes importados correctamente")
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
+
+  const handleExportClients = () => {
+    setShowExportModal(false)
+    const _data = jsonToCSV(transformClientsToExport(clientsData))
+    download(_data, `clients_export_${new Date().toLocaleDateString()}`, "text/csv")
+  }
 
   const handleOpenPopup = (clientsToDelete, type) => {
     setDeleteType(type)
@@ -136,9 +158,17 @@ const clientes = () => {
         onClose={handleOnCloseModal}
       />
 
+      <ExportFilesModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        onExport={() => handleExportClients()}
+      />
+
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
+        onUpload={(data) => handleImportClients(data)}
+        onDropDataTransform={(info) => clientDataTransform(info)}
       />
 
       <PageHeader>
@@ -148,7 +178,7 @@ const clientes = () => {
             onAdd={() => setIsClientModalOpen(true)}
             onSearch={onSearch}
             onImport={() => setShowImportModal(true)}
-            onExport={handleExport}
+            onExport={() => setShowExportModal(true)}
             addLabel="Añadir cliente"
             searchPlaceholder="Busqueda por ID, Alias"
             noFilter

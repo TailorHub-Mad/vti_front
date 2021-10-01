@@ -9,12 +9,7 @@ export const CloudButton = ({ onImport, onExport }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <Box position="relative">
-      <Button
-        variant="icon_only_secondary"
-        marginRight="16px"
-        onClick={onOpen}
-        isDisabled={true} /* provisional */
-      >
+      <Button variant="icon_only_secondary" marginRight="16px" onClick={onOpen}>
         <UploadCloudIcon />
       </Button>
       <OptionsMenu
