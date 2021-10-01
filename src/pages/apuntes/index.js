@@ -1,3 +1,4 @@
+import { remove } from "lodash"
 import React, { useContext, useEffect, useState } from "react"
 import { NoteDrawer } from "../../components/drawer/NoteDrawer/NoteDrawer"
 import { AddNoteIcon } from "../../components/icons/AddNoteIcon"
@@ -10,6 +11,7 @@ import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import useNoteApi from "../../hooks/api/useNoteApi"
+import useUserApi from "../../hooks/api/useUserApi"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { ToastContext } from "../../provider/ToastProvider"
 import { noteFetchHandler } from "../../swr/note.swr"
@@ -27,15 +29,15 @@ import { ResponseModal } from "../../views/notes/Response/ResponseModal/Response
 const NOTES_GROUP_OPTIONS = [
   {
     label: "Proyecto",
-    value: "title"
+    value: "alias"
   },
   {
     label: "Año",
-    value: "date.year"
+    value: "year"
   },
   {
     label: "Sector",
-    value: "sector.0.title"
+    value: "sector"
   },
   {
     label: "Tags de apunte",
@@ -47,6 +49,7 @@ const apuntes = () => {
   // Hooks
   const { isLoggedIn, user } = useContext(ApiAuthContext)
   const { deleteNote } = useNoteApi()
+  const { updateUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
 
   // States
@@ -127,8 +130,31 @@ const apuntes = () => {
     setIsNoteModalOpen(true)
   }
 
-  const handleFavorite = async () => {
-    // TOD -> update users
+  const formatUpdateUsers = (user, favorites) => {
+    return {
+      alias: user.alias,
+      name: user.name,
+      favorites,
+      department: user.department
+    }
+  }
+
+  // state === true ? deleteFavorite : createFavorite
+  const handleFavorite = async (id, state) => {
+    const { favorites, _id } = user
+    const { notes: favoritesNotes } = favorites
+
+    if (state) {
+      const newFavoritesNotes = remove(favoritesNotes, (e) => e === id)
+      favorites.notes = newFavoritesNotes
+    } else {
+      favorites.notes.push(id)
+    }
+
+    const formatUser = formatUpdateUsers(user, favorites)
+
+    await updateUser(_id, formatUser)
+    await mutate()
   }
 
   // Filters

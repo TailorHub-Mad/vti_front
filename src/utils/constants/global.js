@@ -14,7 +14,7 @@ export const PATHS = {
   root: "/",
   notFound: "/404",
   login: "/login",
-  recover: "/recuperar",
+  recover: "/enviar-acceso",
   notes: "/apuntes",
   newNote: "/apuntes/nuevo",
   projects: "/proyectos",

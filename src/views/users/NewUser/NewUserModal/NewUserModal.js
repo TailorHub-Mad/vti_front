@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
 import { MultipleFormContent } from "../../../../components/forms/MultipleFormContent/MultipleFormContent"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
+import useAuthApi from "../../../../hooks/api/useAuthApi"
 import useUserApi from "../../../../hooks/api/useUserApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
@@ -12,6 +13,7 @@ import { NewUserForm } from "../NewUserForm/NewUserForm"
 export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
   const { showToast } = useContext(ToastContext)
   const { createUser, updateUser } = useUserApi()
+  const { sendCreatePassword } = useAuthApi()
   const { mutate } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
@@ -73,6 +75,11 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
       const usersToCreate = formatCreateUsers(values)
       const usersQueue = usersToCreate.map((user) => createUser(user))
       await Promise.all(usersQueue)
+
+      const sendEmailQueue = usersToCreate.map((u) =>
+        sendCreatePassword({ email: u.email })
+      )
+      await Promise.all(sendEmailQueue)
     } catch (error) {
       errorHandler(error)
     }
