@@ -12,71 +12,71 @@ Estimaciones:
 
 ***
 ### Clientes:
-[X] Crear uno
-[X] Crear varios
-[ ] Ver lista: Falta que aparezca la referencia
-[X] Select en la tabla
-[ ] Ver detalle 
-[ ] Buscar: Pendiente pero casi listo. En el back está. Comprobar que la ruta funciona. 
-[X] Importar : Falta la gestión de errores
-[X] Exportar
+[x] Crear uno
+[x] Crear varios
+[] Ver lista: Falta que aparezca la referencia
+[x] Select en la tabla
+[] Ver detalle 
+[] Buscar: Pendiente pero casi listo. En el back está. Comprobar que la ruta funciona. 
+[x] Importar : Falta la gestión de errores
+[x] Exportar
 
-[X] Editar
-[X] Borrar uno
-[X] Borrar many
+[x] Editar
+[x] Borrar uno
+[x] Borrar many
 
 Porcentaje de avance: 85%
 
 ***
 ### Proyectos:
-[X] Crear:
+[x] Crear:
 - Editar el datepicker con diseño que debe hacer Simón.
 
-[X] Ver lista:
+[x] Ver lista:
 - Los tags llegan sin popular
 
 
-[ ] Ver detalle 
-[ ] Buscar 
-[X] Agrupar
+[] Ver detalle 
+[] Buscar 
+[x] Agrupar
 - Falta cuadrar que en el back la info venga bien
 
-[ ] Filtrar 
-[ ] Filtrado de activos
+[] Filtrar 
+[] Filtrado de activos
 
-[ ] Importar 
-[ ] Exportar
+[] Importar 
+[] Exportar
 
-[ ] Finalizar proyecto:
+[] Finalizar proyecto:
 	- Hay que meter la opción en el menú de la fila
 	- Falta crear el flujo de finalizar proyecto
 	-Para saber que está finalizado hay que ver si viene el campo `closed` dentro del proyecto.
 
-[ ] Editar:
+[] Editar:
 - Revisar la carga de los tags existentes
 - No se puede editar el cliente la fecha ni el punto focal
 - Revisar porque no está bien la ruta y la info que llega. (Back y front)
 
-[X] Borrar uno
-[X]  Borrar many
+[x] Borrar uno
+[x]  Borrar many
 
 Porcentaje de avance: 60%
 ***
 ### Sistemas de ensayo:
-[X] Crear 
-[X] Crear varios
-[X] Ver lista: 
+[x] Crear 
+[x] Crear varios
+[x] Ver lista: 
 - Revisar los checkoxs en las vistas agrupadas (no parece necesario). Meter en rojo la opción elminar seleccionados.
 - ¿Tiene sentido agrupar por CodVTI? Son únicos.
 
-[ ] Ver detalle 
-[ ] Buscar 
-[X] Agrupar 
-[ ] Filtrar 
-[ ] Importar 
-[ ] Exportar
+[] Ver detalle 
+[] Buscar 
+[x] Agrupar 
+[] Filtrar 
+[] Importar 
+[] Exportar
 
-[X] Editar: 
+[x] Editar: 
 - Falta gestionarlo en la vista agrupada.
 
 [x] Borrar uno: 
@@ -92,35 +92,35 @@ Porcentaje de avance: 80%
 
 ***
 ### Apuntes:
-[X] Crear Apuntes
+[x] Crear Apuntes
 - Meter el textarea en la descripción
 
-[X] Crear mensaje
+[x] Crear mensaje
 
-[X] Ver lista
+[x] Ver lista
 - Falta meter las rutas desde que estén listas para filtrar por favoritos suscritos etc.
 
-[X] Ver detalle:
+[x] Ver detalle:
 - 
 
-[ ] Buscar 
-[X] Agrupar 
+[] Buscar 
+[x] Agrupar 
 
-[ ] Importar 
-[ ] Exportar
+[] Importar 
+[] Exportar
 
-[ ] Editar Apunte
-[ ] Editar mensaje de apunte:
+[] Editar Apunte
+[] Editar mensaje de apunte:
 - Los debe poder editar el autor durante un tiempo y el admin siempre
 
-[ ] Eliminar mensaje
+[] Eliminar mensaje
 
-[ ] Borrar uno
-[ ] Borrar many
+[] Borrar uno
+[] Borrar many
 
-[ ] Cerrar / Abtit
-[ ] Formalizar
-[X] Eliminar
+[] Cerrar / Abtit
+[] Formalizar
+[x] Eliminar
 
 - Tags vienen sin popular en las agrupaciones
 -  Revisar estilos del textarea y parseo de los saltos de linea en los mensajes.
@@ -130,53 +130,53 @@ Tiempo aprox restante: 2 horas
 
 ***
 ### Sectores:
-[X] Crear uno
-[X] Crear varios
-[X]  Ver lista: 
+[x] Crear uno
+[x] Crear varios
+[x]  Ver lista: 
 - Falta que cargue la referncia para ir al detalle
-[ ] Ver detalle 
-[ ] Buscar 
-[ ] Importar 
-[ ] Exportar
+[] Ver detalle 
+[] Buscar 
+[] Importar 
+[] Exportar
 
-[X] Editar
-[X] Borrar uno
-[X] Borrar many
+[x] Editar
+[x] Borrar uno
+[x] Borrar many
 
 Porcentaje de avance: 90%
 ***
 
 ### Departamentos:
-[X] Crear Uno
-[X] Crear varios
-[X] Ver lista:
+[x] Crear Uno
+[x] Crear varios
+[x] Ver lista:
 	- Falta la carga de los IDS
-[ ] Ver detalle 
-[ ] Buscar 
-[ ] Importar 
-[ ] Exportar
+[] Ver detalle 
+[] Buscar 
+[] Importar 
+[] Exportar
 
-[X] Editar
-[X] Borrar uno
-[X] Borrar many
+[x] Editar
+[x] Borrar uno
+[x] Borrar many
 
 Porcentaje de avance: 90%
 ***
 ### Usuarios:
-[X] Crear 
-[X] Ver lista
-[X] Flujo de la contraseña
-[ ] Ver detalle 
-[ ] Buscar 
-[ ] Agrupar :
+[x] Crear 
+[x] Ver lista
+[x] Flujo de la contraseña
+[] Ver detalle 
+[] Buscar 
+[] Agrupar :
 - Falta la agrupación por departamento (back)
 
-[ ] Importar 
-[ ] Exportar
+[] Importar 
+[] Exportar
 
-[X] Editar
-[X] Borrar uno
-[X] Borrar many
+[x] Editar
+[x] Borrar uno
+[x] Borrar many
 
 - Está todo pendiente de un arreglo en el back para la creación y edición
 
@@ -184,22 +184,22 @@ Porcentaje de avance 80%
 
 ***
 ### Tags:
-[X] Crear :
+[x] Crear :
 - Falta filter de los tags que no pueden ser padre de otros. (Un tag que tenga padre no puede ser padre)
 
-[X] Ver alfabetico
-[X] Ver herencia
+[x] Ver alfabetico
+[x] Ver herencia
 
-[ ] Ver detalle 
-[ ] Buscar 
+[] Ver detalle 
+[] Buscar 
 
-[ ] Importar 
-[ ] Exportar
+[] Importar 
+[] Exportar
 
-[X] Editar:
+[x] Editar:
 - Revisar editar el padre
 
-[X] Borrar uno
+[x] Borrar uno
 - Ojo con el refresco al borrar porque la tag no desaparece del tag padre si lo tiene
 
 
