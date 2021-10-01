@@ -99,8 +99,6 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
     setValues([{}])
   }, [isOpen])
 
-  console.log("VALORES MODAL", values)
-
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />

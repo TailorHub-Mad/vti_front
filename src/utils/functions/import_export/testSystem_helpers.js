@@ -1,6 +1,4 @@
-export const testSystemChecker = (data) => {
-  console.log(data)
-}
+export const testSystemChecker = () => {}
 
 export const testSystemDataTransform = (data) => {
   const items = [...data]

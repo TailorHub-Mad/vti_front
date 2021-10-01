@@ -23,7 +23,10 @@ import download from "downloadjs"
 import { jsonToCSV } from "react-papaparse"
 
 import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
-import { projectDataTransform, transformProjectsToExport } from "../../utils/functions/import_export/projects_helper"
+import {
+  projectDataTransform,
+  transformProjectsToExport
+} from "../../utils/functions/import_export/projects_helper"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -74,18 +77,17 @@ const proyectos = () => {
 
   const handleImportProjects = async (data) => {
     //TODO Gestión de errores y update de SWR
-    console.log("DATA", data)
+
     try {
       const projectsCreated = []
-      for ( let index = 0 ; index < data.length ; index++){
+      for (let index = 0; index < data.length; index++) {
         const pro = await createProject(data[index])
         projectsCreated.push(pro)
       }
-      console.log("Proyectos creados", projectsCreated)
+
       setShowImportModal(false)
       showToast("Proyectos importados correctamente")
     } catch (error) {
-      console.log("ERROR IMPORT", error)
       errorHandler(error)
     }
   }
@@ -95,8 +97,6 @@ const proyectos = () => {
     const _data = jsonToCSV(transformProjectsToExport(projectsData))
     download(_data, `projects_export_${new Date().toLocaleDateString()}`, "text/csv")
   }
-
-  console.log(projectsData)
 
   // Handlers views
   const handleOpenPopup = (projectToDelete, type) => {

@@ -122,14 +122,13 @@ const apuntes = () => {
   const handleUpdate = (id) => {
     // TODO -> create full notes
     const note = notesData.find((note) => note._id === id)
-    console.log("HandleEdit", id, note)
+
     setNoteToUpdate(note)
     setIsNoteModalOpen(true)
   }
 
-  const handleFavorite = async (id) => {
+  const handleFavorite = async () => {
     // TOD -> update users
-    console.log("HandleFavorite", id)
   }
 
   // Filters

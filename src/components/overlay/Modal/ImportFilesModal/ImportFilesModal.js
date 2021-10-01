@@ -11,6 +11,7 @@ import React, { useState } from "react"
 import { CustomModalHeader } from "../CustomModalHeader/CustomModalHeader"
 import { CSVReader } from "react-papaparse"
 import { UploadFileIcon } from "../../../icons/UploadFileIcon"
+import { errorHandler } from "../../../../utils/errors"
 
 export const ImportFilesModal = ({
   title,
@@ -31,9 +32,7 @@ export const ImportFilesModal = ({
     setData(onDropDataTransform(jsonInfo))
   }
 
-  const handleOnError = (e) => {
-    console.log("Error", e)
-  }
+  const handleOnError = (e) => errorHandler(e)
 
   const handleOnRemoveFile = () => {
     setData(null)

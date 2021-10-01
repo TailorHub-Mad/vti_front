@@ -1,6 +1,4 @@
-export const projectChecker = (data) => {
-  console.log(data)
-}
+export const projectChecker = () => {}
 
 export const projectDataTransform = (data) => {
   const items = [...data]
