@@ -49,6 +49,16 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
     })
   }
 
+  const formatUpdateUsers = (users) => {
+    return users.map((user) => {
+      return {
+        alias: user.alias,
+        name: user.name,
+        department: user.department.value
+      }
+    })
+  }
+
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateUser() : await handleCreateUser()
@@ -71,7 +81,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
   const handleUpdateUser = async () => {
     try {
       const { _id } = userToUpdate
-      const [data] = [...values]
+      const [data] = formatUpdateUsers(values)
       await updateUser(_id, data)
     } catch (error) {
       errorHandler(error)
@@ -88,6 +98,8 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
     if (isOpen) return
     setValues([{}])
   }, [isOpen])
+
+  console.log("VALORES MODAL", values)
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

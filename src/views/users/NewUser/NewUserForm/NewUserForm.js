@@ -8,16 +8,7 @@ export const NewUserForm = ({ value, onChange, objectToUpdate }) => {
 
   const [departmentOptions, setDepartmentOptions] = useState([])
 
-  const isObject = typeof value.clientAlias === "object"
-
-  const formatValues = !objectToUpdate
-    ? { ...value }
-    : {
-        ...value,
-        department: isObject
-          ? value.clientAlias.name
-          : { label: value.department, value: "" }
-      }
+  const _values = { ...value }
 
   const formatDepartments = (departments) =>
     departments.map((d) => ({ label: d.name, value: d._id }))
@@ -48,7 +39,8 @@ export const NewUserForm = ({ value, onChange, objectToUpdate }) => {
       type: "text",
       config: {
         placeholder: "Escrube tu email",
-        label: "Email"
+        label: "Email",
+        disabled: Boolean(objectToUpdate)
       }
     },
     department: {
@@ -88,10 +80,12 @@ export const NewUserForm = ({ value, onChange, objectToUpdate }) => {
     <>
       {Object.entries(formInputs).map(([name, { type, config }], index) => {
         return React.cloneElement(inputRefObj[type], {
-          value: formatValues[name],
+          value: _values[name],
           onChange: (val) => handleFormChange(name, val),
-          marginBottom: name === "name" ? "0" : "24px",
-          isDisabled: index !== 0 && !value[Object.keys(value)[index - 1]],
+          marginBottom: "24px",
+          isDisabled:
+            config.disabled ||
+            (index !== 0 && !value[Object.keys(value)[index - 1]]),
           key: `${name}-${index}`,
           ...config
         })
