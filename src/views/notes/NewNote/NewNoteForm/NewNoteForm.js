@@ -148,7 +148,7 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate, submitIsDisabled })
         return React.cloneElement(inputRefObj[type], {
           value: value[name],
           onChange: (val) => handleFormChange(name, val),
-          marginBottom: name === "name" ? "0" : "24px",
+          marginBottom: "24px",
           isDisabled:
             index !== 0 && submitIsDisabled && !value[Object.keys(value)[index - 1]],
           key: `${name}-${index}`,
