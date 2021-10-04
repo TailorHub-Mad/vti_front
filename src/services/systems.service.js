@@ -18,7 +18,11 @@ const SystemService = () => {
   const getFilterSystems = (data) =>
     execute(instance.get(`/testSystem/filter?${data}`))
   const getSearchSystems = (data) =>
-    execute(instance.get(`/testSystem/group?${data}`))
+    execute(
+      instance.get(
+        `/testSystem/filter?testSystems.vtiCode=${data}&testSystems.ref=${data}&testSystems.alias=${data}`
+      )
+    )
 
   return {
     getSystems,

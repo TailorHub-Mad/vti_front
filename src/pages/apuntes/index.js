@@ -20,6 +20,7 @@ import { errorHandler } from "../../utils/errors"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
 import { LoadingView } from "../../views/common/LoadingView"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
+import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 import { NewNoteModal } from "../../views/notes/NewNote/NewNoteModal/NewNoteModal"
 import { NotesGrid } from "../../views/notes/NotesGrid/NotesGrid"
 import { NotesGroup } from "../../views/notes/NotesGroup/NotesGroup"
@@ -52,7 +53,7 @@ const apuntes = () => {
   const { updateUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
 
-  // States
+  // Hooks
   const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
   const [messageToUpdate, setMessageToUpdate] = useState(null)
   const [showImportModal, setShowImportModal] = useState(false)
@@ -82,11 +83,20 @@ const apuntes = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const notesData = handleNotesData(isEmptyData)
 
+  const isSearch = fetchState == fetchType.SEARCH
+
   const checkIsFavorite = (id) => user?.favorites?.notes?.includes(id)
   const checkIsSubscribe = (id) => user?.subscribed?.notes?.includes(id)
 
   // Handlers views
   const handleExport = () => {}
+
+  const isToolbarHidden = () => {
+    if (isLoading) return false
+    if (isEmptyData && !isSearch) return false
+
+    return true
+  }
 
   const handleOnCloseModal = () => {
     setNoteToUpdate(null)
@@ -171,6 +181,14 @@ const apuntes = () => {
 
   // Filters
   const onSearch = (search) => {
+    if (!search) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.SEARCH]: null
+      })
+      return
+    }
+
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
@@ -273,7 +291,7 @@ const apuntes = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {!isLoading && !isEmptyData && (
+        {isToolbarHidden() && (
           <ToolBar
             onAdd={() => setIsNoteModalOpen(true)}
             onSearch={onSearch}
@@ -300,7 +318,9 @@ const apuntes = () => {
       </PageMenu>
       <PageBody height="calc(100vh - 140px)">
         {isLoading ? <LoadingView mt="-200px" /> : null}
-        {isEmptyData ? (
+        {isEmptyData && isSearch ? (
+          <ViewNotFoundState />
+        ) : isEmptyData ? (
           <ViewEmptyState
             message="Añadir apuntes a la plataforma"
             importButtonText="Importar"

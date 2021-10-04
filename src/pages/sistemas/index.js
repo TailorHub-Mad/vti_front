@@ -19,6 +19,7 @@ import { systemFetchHandler } from "../../swr/systems.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 import { getGroupOptionLabel } from "../../utils/functions/objects"
+import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 
 const SYSTEMS_GROUP_OPTIONS = [
   {
@@ -58,16 +59,26 @@ const sistemas = () => {
 
   const handleSystemsData = (isEmptyData) => {
     if (!data || isEmptyData) return null
-    if (fetchState === fetchType.ALL) return data[0].testSystems
     if (fetchState == fetchType.GROUP) return data
+    return data[0].testSystems
+
     // TODO FILTER
   }
 
   const isEmptyData = checkDataIsEmpty(data)
   const systemsData = handleSystemsData(isEmptyData)
 
+  const isSearch = fetchState == fetchType.SEARCH
+
   // Handlers views
   const handleExport = () => {}
+
+  const isToolbarHidden = () => {
+    if (isLoading) return false
+    if (isEmptyData && !isSearch) return false
+
+    return true
+  }
 
   const handleOpenPopup = (systemsToDelete, type) => {
     setDeleteType(type)
@@ -140,6 +151,14 @@ const sistemas = () => {
 
   // Filters
   const onSearch = (search) => {
+    if (!search) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.SEARCH]: null
+      })
+      return
+    }
+
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
@@ -196,7 +215,7 @@ const sistemas = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {systemsData ? (
+        {isToolbarHidden() ? (
           <ToolBar
             onAdd={() => setIsSystemModalOpen(true)}
             onSearch={onSearch}
@@ -213,7 +232,9 @@ const sistemas = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData ? (
+      {isEmptyData && isSearch ? (
+        <ViewNotFoundState />
+      ) : isEmptyData ? (
         <ViewEmptyState
           message="Añadir sistemas a la plataforma"
           importButtonText="Importar"

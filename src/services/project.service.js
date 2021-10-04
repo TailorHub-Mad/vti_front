@@ -17,7 +17,9 @@ const ProjectService = () => {
   const getFilterProjects = (data) =>
     execute(instance.get(`/projects/filter?${data}`))
   const getSearchProjects = (data) =>
-    execute(instance.get(`/projects/group?${data}`))
+    execute(
+      instance.get(`/projects/filter?projects.alias=${data}&projects.ref=${data}`)
+    )
 
   return {
     getProjects,
