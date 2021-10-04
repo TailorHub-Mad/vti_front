@@ -5,7 +5,7 @@ export const departmentDataTransform = (data) => {
   items.shift()
   const _items = items.map((item) => {
     const _item = {
-      name: item.data[0],
+      name: item.data[0]
     }
     return _item
   })
@@ -19,7 +19,7 @@ export const transformDepartmentsToExport = (data) => {
     return {
       _id,
       name,
-      users: users && users.map(us =>us.alias)
+      users: users && users.map((us) => us.alias)
     }
   })
   return _data
