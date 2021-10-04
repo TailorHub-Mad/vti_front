@@ -1,5 +1,6 @@
 import { PATHS } from "../../../utils/constants/global"
 import { calcColWidth } from "../../../utils/constants/tables"
+import { variantGeneralTag } from "../../../utils/constants/tabs"
 
 export const formatSector = (data) => data && data?.map(transformSectorData)
 
@@ -42,7 +43,10 @@ export const TABLE_SECTORS_HEAD = {
   projects: {
     label: "Proyectos",
     width: calcColWidth(815),
-    type: "tags"
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.NOTE
+    }
   },
   options: {
     label: "",

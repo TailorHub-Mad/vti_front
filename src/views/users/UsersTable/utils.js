@@ -1,5 +1,6 @@
 import { PATHS } from "../../../utils/constants/global"
 import { calcColWidth } from "../../../utils/constants/tables"
+import { variantGeneralTag } from "../../../utils/constants/tabs"
 
 export const formatUser = (data) => {
   // data && !isGrouped ? data?.map(transformUserData) : groupTable(data)
@@ -55,17 +56,26 @@ export const TABLE_USERS_HEAD = {
   department: {
     label: "Departamento",
     width: calcColWidth(80),
-    type: "tags"
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.SYSTEM
+    }
   },
   focusPoint: {
     label: "Punto focal proyectos",
     width: calcColWidth(220),
-    type: "tags"
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.NOTE
+    }
   },
   projects: {
     label: "Proyectos",
     width: calcColWidth(220),
-    type: "tags"
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.NOTE
+    }
   },
   options: {
     label: "",

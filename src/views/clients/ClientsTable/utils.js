@@ -1,5 +1,6 @@
 import { PATHS } from "../../../utils/constants/global"
 import { calcColWidth } from "../../../utils/constants/tables"
+import { variantGeneralTag } from "../../../utils/constants/tabs"
 
 export const formatClient = (data) => data && data?.map(transformClientData)
 
@@ -49,12 +50,18 @@ export const TABLE_CLIENT_HEAD = {
   testSystems: {
     label: "Sistemas de ensayo",
     width: calcColWidth(220),
-    type: "tags"
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.SYSTEM
+    }
   },
   projects: {
     label: "Proyectos",
     width: calcColWidth(220),
-    type: "tags"
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.NOTE
+    }
   },
   options: {
     label: "",
