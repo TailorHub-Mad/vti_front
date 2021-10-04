@@ -12,6 +12,7 @@ const useNoteApi = () => {
   const createMessage = (id, data) => noteService.createMessage(id, data)
   const updateMessage = (id, messageId, data) =>
     noteService.updateMessage(id, messageId, data)
+  const deleteMessage = (id, messageId) => noteService.deleteMessage(id, messageId)
   const downloadDocument = (id) => noteService.downloadDocument(id)
   const downloadMessageDocument = (id) => noteService.downloadMessageDocument(id)
 
@@ -33,6 +34,7 @@ const useNoteApi = () => {
     deleteNote,
     createMessage,
     updateMessage,
+    deleteMessage,
     downloadDocument,
     downloadMessageDocument,
 

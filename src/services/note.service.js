@@ -19,6 +19,8 @@ const NoteService = () => {
     execute(instance.post(`/notes/${id}/message/create`, data))
   const updateMessage = (id, messageId, data) =>
     execute(instance.put(`/notes/${id}/message/${messageId}`, data))
+  const deleteMessage = (id, messageId) =>
+    execute(instance.delete(`/notes/${id}/message/${messageId}`))
   const downloadDocument = (id) => execute(instance.get(`/notes/download/${id}`))
   const downloadMessageDocument = (id) =>
     execute(instance.get(`/notes/message/download/${id}`))
@@ -46,6 +48,7 @@ const NoteService = () => {
     deleteNote,
     createMessage,
     updateMessage,
+    deleteMessage,
     downloadDocument,
     downloadMessageDocument,
 

@@ -48,7 +48,7 @@ const NOTES_GROUP_OPTIONS = [
 const apuntes = () => {
   // Hooks
   const { isLoggedIn, user } = useContext(ApiAuthContext)
-  const { deleteNote } = useNoteApi()
+  const { deleteNote, deleteMessage } = useNoteApi()
   const { updateUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
 
@@ -63,6 +63,7 @@ const apuntes = () => {
   const [noteToUpdate, setNoteToUpdate] = useState(null)
   const [noteToDetail, setNoteToDetail] = useState(null)
   const [noteToDelete, setNoteToDelete] = useState(null)
+  const [messageToDelete, setMessageToDelete] = useState(null)
 
   // Fetch
   const { data, error, isLoading, mutate } = noteFetchHandler(
@@ -117,6 +118,17 @@ const apuntes = () => {
 
       if (showNoteDetails) setShowNoteDetails(false)
       setNoteToDelete(null)
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
+
+  const handleDeleteMessage = async () => {
+    try {
+      await deleteMessage(messageToDelete.noteId, messageToDelete.messageId)
+      showToast("Mensaje borrado correctamente")
+      await mutate()
+      setMessageToDelete(null)
     } catch (error) {
       errorHandler(error)
     }
@@ -213,6 +225,18 @@ const apuntes = () => {
         {`¿Desea eliminar ${getFieldObjectById(notesData, "ref", noteToDelete)}?`}
       </Popup>
 
+      <Popup
+        variant="twoButtons"
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        color="error"
+        isOpen={messageToDelete}
+        onConfirm={handleDeleteMessage}
+        onClose={() => setMessageToDelete(null)}
+      >
+        {`¿Deseas eliminar el mensaje seleccionado?`}
+      </Popup>
+
       <ResponseModal
         messageToUpdate={messageToUpdate}
         isOpen={isResponseModalOpen}
@@ -239,6 +263,12 @@ const apuntes = () => {
         onEdit={() => handleUpdate(noteToDetail._id)}
         onResponse={() => setIsResponseModalOpen(true)}
         onEditResponse={(message) => handleOpenEditResponse(message)}
+        onDeleteResponse={(noteId, messageId) =>
+          setMessageToDelete({
+            noteId,
+            messageId
+          })
+        }
       />
 
       <PageHeader>

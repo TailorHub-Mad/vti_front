@@ -13,6 +13,7 @@ export const NoteDrawer = ({
   onDelete,
   onResponse,
   onEditResponse,
+  onDeleteResponse,
   ...props
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -76,6 +77,7 @@ export const NoteDrawer = ({
             <NoteMainInfo item={note} onEdit={onEdit} onDelete={onDelete} />
             <NoteDetailsAccordion
               name={note.name}
+              link={note.link}
               noteTags={note.tags.length > 0 && note.tags}
               testSystems={note.testSystems}
               files={note.documents?.length > 0 ? note.documents : null}
@@ -95,6 +97,7 @@ export const NoteDrawer = ({
                 <NoteMainInfo
                   item={formatMessage(msg)}
                   onEdit={() => onEditResponse(msg)}
+                  onDelete={() => onDeleteResponse(note._id, msg._id)}
                   isMessage
                   note={note}
                 />
