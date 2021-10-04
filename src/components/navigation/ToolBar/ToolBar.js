@@ -53,8 +53,6 @@ export const ToolBar = ({
           paddingLeft="40px"
           variant="white"
           onChange={(e) => onSearch(e.target.value)}
-          isDisabled={true} /* provisional */
-          pointerEvents="none" /* provisional */
         />
       </InputGroup>
       {role === RoleType.ADMIN && (

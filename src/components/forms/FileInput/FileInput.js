@@ -11,16 +11,19 @@ export const FileInput = ({
   maxSize = 10000000,
   onChange,
   isDisabled = false,
+  isUpdate,
   ...props
 }) => {
   const [fileError, setFileError] = useState(null)
 
   const onDrop = async (acceptedFiles) => {
     const filteredFiles = acceptedFiles.filter(
-      (item) => item.size / 1000000 <= maxSize && item.type === "text/csv"
-      //   item.type === "image/jpg" ||
-      //   item.type === "image/png" ||
-      //   item.type === "image/jpeg")
+      (item) =>
+        (item.size / 1000000 <= maxSize && item.type === "text/csv") ||
+        item.type === "application/pdf" ||
+        item.type === "image/jpg" ||
+        item.type === "image/png" ||
+        item.type === "image/jpeg"
     )
 
     if (filteredFiles.length === 0) return setFileError("documentsError")
@@ -36,6 +39,9 @@ export const FileInput = ({
       filteredFiles.length <= maxFiles && onChange(filteredFiles)
     }
   }
+
+  const formatFileName = (file) =>
+    isUpdate ? file?.path || file.url.split("-")[1] : file.path
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop })
 
@@ -67,7 +73,7 @@ export const FileInput = ({
           {value.map((v, idx) => {
             return (
               <Text key={`${v.size}-${idx}`} mt="8px">
-                {idx !== 0 ? `- ${v.path}` : `${v.path} `}
+                {idx !== 0 ? `- ${formatFileName(v)}` : `${formatFileName(v)} `}
               </Text>
             )
           })}

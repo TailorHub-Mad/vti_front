@@ -26,7 +26,7 @@ export const NotesGrid = ({
           isSubscribe={checkIsSubscribe(note._id)}
           isFavorite={checkIsFavorite(note._id)}
           onDelete={() => onDelete(note._id)}
-          handleFavorite={() => handleFavorite(note._id)}
+          handleFavorite={(state) => handleFavorite(note._id, state)}
         />
       ))}
     </Grid>

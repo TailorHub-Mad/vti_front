@@ -1,3 +1,4 @@
+import { remove } from "lodash"
 import React, { useContext, useEffect, useState } from "react"
 import { NoteDrawer } from "../../components/drawer/NoteDrawer/NoteDrawer"
 import { AddNoteIcon } from "../../components/icons/AddNoteIcon"
@@ -10,6 +11,7 @@ import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import useNoteApi from "../../hooks/api/useNoteApi"
+import useUserApi from "../../hooks/api/useUserApi"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { ToastContext } from "../../provider/ToastProvider"
 import { noteFetchHandler } from "../../swr/note.swr"
@@ -18,6 +20,7 @@ import { errorHandler } from "../../utils/errors"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
 import { LoadingView } from "../../views/common/LoadingView"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
+import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 import { NewNoteModal } from "../../views/notes/NewNote/NewNoteModal/NewNoteModal"
 import { NotesGrid } from "../../views/notes/NotesGrid/NotesGrid"
 import { NotesGroup } from "../../views/notes/NotesGroup/NotesGroup"
@@ -27,15 +30,15 @@ import { ResponseModal } from "../../views/notes/Response/ResponseModal/Response
 const NOTES_GROUP_OPTIONS = [
   {
     label: "Proyecto",
-    value: "title"
+    value: "alias"
   },
   {
     label: "Año",
-    value: "date.year"
+    value: "year"
   },
   {
     label: "Sector",
-    value: "sector.0.title"
+    value: "sector"
   },
   {
     label: "Tags de apunte",
@@ -46,10 +49,11 @@ const NOTES_GROUP_OPTIONS = [
 const apuntes = () => {
   // Hooks
   const { isLoggedIn, user } = useContext(ApiAuthContext)
-  const { deleteNote } = useNoteApi()
+  const { deleteNote, deleteMessage } = useNoteApi()
+  const { updateUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
 
-  // States
+  // Hooks
   const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
   const [messageToUpdate, setMessageToUpdate] = useState(null)
   const [showImportModal, setShowImportModal] = useState(false)
@@ -60,6 +64,7 @@ const apuntes = () => {
   const [noteToUpdate, setNoteToUpdate] = useState(null)
   const [noteToDetail, setNoteToDetail] = useState(null)
   const [noteToDelete, setNoteToDelete] = useState(null)
+  const [messageToDelete, setMessageToDelete] = useState(null)
 
   // Fetch
   const { data, error, isLoading, mutate } = noteFetchHandler(
@@ -78,11 +83,20 @@ const apuntes = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const notesData = handleNotesData(isEmptyData)
 
+  const isSearch = fetchState == fetchType.SEARCH
+
   const checkIsFavorite = (id) => user?.favorites?.notes?.includes(id)
   const checkIsSubscribe = (id) => user?.subscribed?.notes?.includes(id)
 
   // Handlers views
   const handleExport = () => {}
+
+  const isToolbarHidden = () => {
+    if (isLoading) return false
+    if (isEmptyData && !isSearch) return false
+
+    return true
+  }
 
   const handleOnCloseModal = () => {
     setNoteToUpdate(null)
@@ -119,21 +133,62 @@ const apuntes = () => {
     }
   }
 
+  const handleDeleteMessage = async () => {
+    try {
+      await deleteMessage(messageToDelete.noteId, messageToDelete.messageId)
+      showToast("Mensaje borrado correctamente")
+      await mutate()
+      setMessageToDelete(null)
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
+
   const handleUpdate = (id) => {
     // TODO -> create full notes
     const note = notesData.find((note) => note._id === id)
-    console.log("HandleEdit", id, note)
+
     setNoteToUpdate(note)
     setIsNoteModalOpen(true)
   }
 
-  const handleFavorite = async (id) => {
-    // TOD -> update users
-    console.log("HandleFavorite", id)
+  const formatUpdateUsers = (user, favorites) => {
+    return {
+      alias: user.alias,
+      name: user.name,
+      favorites,
+      department: user.department
+    }
+  }
+
+  // state === true ? deleteFavorite : createFavorite
+  const handleFavorite = async (id, state) => {
+    const { favorites, _id } = user
+    const { notes: favoritesNotes } = favorites
+
+    if (state) {
+      remove(favoritesNotes, (e) => e === id)
+      favorites.notes = favoritesNotes
+    } else {
+      favorites.notes.push(id)
+    }
+
+    const formatUser = formatUpdateUsers(user, favorites)
+
+    await updateUser(_id, formatUser)
+    await mutate()
   }
 
   // Filters
   const onSearch = (search) => {
+    if (!search) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.SEARCH]: null
+      })
+      return
+    }
+
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
@@ -188,6 +243,18 @@ const apuntes = () => {
         {`¿Desea eliminar ${getFieldObjectById(notesData, "ref", noteToDelete)}?`}
       </Popup>
 
+      <Popup
+        variant="twoButtons"
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        color="error"
+        isOpen={messageToDelete}
+        onConfirm={handleDeleteMessage}
+        onClose={() => setMessageToDelete(null)}
+      >
+        {`¿Deseas eliminar el mensaje seleccionado?`}
+      </Popup>
+
       <ResponseModal
         messageToUpdate={messageToUpdate}
         isOpen={isResponseModalOpen}
@@ -214,11 +281,17 @@ const apuntes = () => {
         onEdit={() => handleUpdate(noteToDetail._id)}
         onResponse={() => setIsResponseModalOpen(true)}
         onEditResponse={(message) => handleOpenEditResponse(message)}
+        onDeleteResponse={(noteId, messageId) =>
+          setMessageToDelete({
+            noteId,
+            messageId
+          })
+        }
       />
 
       <PageHeader>
         <BreadCrumbs />
-        {!isLoading && !isEmptyData && (
+        {isToolbarHidden() && (
           <ToolBar
             onAdd={() => setIsNoteModalOpen(true)}
             onSearch={onSearch}
@@ -245,7 +318,9 @@ const apuntes = () => {
       </PageMenu>
       <PageBody height="calc(100vh - 140px)">
         {isLoading ? <LoadingView mt="-200px" /> : null}
-        {isEmptyData ? (
+        {isEmptyData && isSearch ? (
+          <ViewNotFoundState />
+        ) : isEmptyData ? (
           <ViewEmptyState
             message="Añadir apuntes a la plataforma"
             importButtonText="Importar"

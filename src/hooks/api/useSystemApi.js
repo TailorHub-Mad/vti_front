@@ -12,8 +12,8 @@ const useSystemApi = () => {
 
   // GROUP & FILTER
   const getGroupSystems = (_, data) => systemService.getGroupSystems(data)
-  const getFilterSystems = (_, data) => systemService.createSystem(data)
-  const getSearchSystems = (_, data) => systemService.createSystem(data)
+  const getFilterSystems = (_, data) => systemService.getFilterSystems(data)
+  const getSearchSystems = (_, data) => systemService.getSearchSystems(data)
 
   return {
     getSystems,

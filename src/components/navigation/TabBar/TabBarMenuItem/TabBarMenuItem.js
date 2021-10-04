@@ -27,7 +27,7 @@ export const MenuLink = ({
       {...props}
     >
       <Link href={noEvents ? "" : href || PATHS.notes} passHref>
-        <Flex>
+        <Flex alignItems="center">
           <Icon
             color="white"
             marginRight="8px"

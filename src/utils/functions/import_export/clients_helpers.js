@@ -1,6 +1,4 @@
-export const clientChecker = (data) => {
-  console.log(data)
-}
+export const clientChecker = () => {}
 
 export const clientDataTransform = (data) => {
   const items = [...data]

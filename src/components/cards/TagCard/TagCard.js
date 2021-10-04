@@ -7,7 +7,7 @@ export const TagCard = ({
   name,
   updatedAt,
   projects,
-  parentTag,
+  parent,
   relatedTags,
   category,
   onEdit,
@@ -24,7 +24,7 @@ export const TagCard = ({
     >
       <TagCardHeader
         title={name}
-        parentTag={parentTag}
+        parent={parent?.name}
         category={category}
         onEdit={onEdit}
         onDelete={onDelete}

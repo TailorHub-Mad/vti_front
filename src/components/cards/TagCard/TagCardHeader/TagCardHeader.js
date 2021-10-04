@@ -11,8 +11,7 @@ export const TagCardHeader = ({
   onClick,
   onEdit,
   onDelete,
-  category,
-  parentTag,
+  parent,
   ...props
 }) => {
   const [showOptions, setShowOptions] = useState(false)
@@ -24,7 +23,7 @@ export const TagCardHeader = ({
           {title}
         </Text>
         <Text marginTop="2px" variant="d_xs_regular" casing="uppercase">
-          {parentTag ? `${parentTag} · ${category}` : category}
+          {parent ? `${parent}` : null}
         </Text>
       </Box>
       <Box position="relative">

@@ -19,6 +19,8 @@ const NoteService = () => {
     execute(instance.post(`/notes/${id}/message/create`, data))
   const updateMessage = (id, messageId, data) =>
     execute(instance.put(`/notes/${id}/message/${messageId}`, data))
+  const deleteMessage = (id, messageId) =>
+    execute(instance.delete(`/notes/${id}/message/${messageId}`))
   const downloadDocument = (id) => execute(instance.get(`/notes/download/${id}`))
   const downloadMessageDocument = (id) =>
     execute(instance.get(`/notes/message/download/${id}`))
@@ -27,7 +29,8 @@ const NoteService = () => {
   const getGroupNotes = (data) =>
     execute(instance.get(`/notes/group?group=${data}&real=true`))
   const getFilterNotes = (data) => execute(instance.get(`/notes/filter?${data}`))
-  const getSearchNotes = (data) => execute(instance.get(`/notes/group?${data}`))
+  const getSearchNotes = (data) =>
+    execute(instance.get(`/notes/filter?notes.title=${data}&notes.ref=${data}`))
 
   const getFavsNotes = (/*data*/) =>
     execute(instance.get(`/notes?limit=${0}&offset=${0}`)) // TODO -> pending
@@ -46,6 +49,7 @@ const NoteService = () => {
     deleteNote,
     createMessage,
     updateMessage,
+    deleteMessage,
     downloadDocument,
     downloadMessageDocument,
 

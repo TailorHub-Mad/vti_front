@@ -93,7 +93,7 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
       title: noteToUpdate.title,
       description: noteToUpdate.description,
       link: noteToUpdate.link,
-      attachment: noteToUpdate.attachment
+      file: noteToUpdate.documents
     }
     setValues(_note)
   }, [noteToUpdate])

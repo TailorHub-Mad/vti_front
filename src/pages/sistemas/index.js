@@ -19,6 +19,7 @@ import { systemFetchHandler } from "../../swr/systems.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 import { getGroupOptionLabel } from "../../utils/functions/objects"
+import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 
 const SYSTEMS_GROUP_OPTIONS = [
   {
@@ -58,16 +59,26 @@ const sistemas = () => {
 
   const handleSystemsData = (isEmptyData) => {
     if (!data || isEmptyData) return null
-    if (fetchState === fetchType.ALL) return data[0].testSystems
     if (fetchState == fetchType.GROUP) return data
+    return data[0].testSystems
+
     // TODO FILTER
   }
 
   const isEmptyData = checkDataIsEmpty(data)
   const systemsData = handleSystemsData(isEmptyData)
 
+  const isSearch = fetchState == fetchType.SEARCH
+
   // Handlers views
   const handleExport = () => {}
+
+  const isToolbarHidden = () => {
+    if (isLoading) return false
+    if (isEmptyData && !isSearch) return false
+
+    return true
+  }
 
   const handleOpenPopup = (systemsToDelete, type) => {
     setDeleteType(type)
@@ -97,7 +108,7 @@ const sistemas = () => {
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(systemsToDelete, systemsData)
-    updated.testSystems.length > 0 ? await mutate(updated, false) : await mutate()
+    updated[0].testSystems.length > 0 ? await mutate(updated, false) : await mutate()
     setDeleteType(null)
     setSystemsToDelete(null)
   }
@@ -106,12 +117,13 @@ const sistemas = () => {
     try {
       await deleteSystem(id)
       showToast("Sistema borrado correctamente")
-      const updatedSystems = []
+
       const filterSystems = systems.filter((system) => system._id !== id)
-      updatedSystems.push({
-        testSystems: filterSystems
-      })
-      return updatedSystems
+      return [
+        {
+          testSystems: filterSystems
+        }
+      ]
     } catch (error) {
       errorHandler(error)
     }
@@ -122,12 +134,10 @@ const sistemas = () => {
       const systemsQueue = systemsId.map((id) => deleteSystem(id))
       await Promise.all(systemsQueue)
       showToast("Sistemas borrados correctamente")
-      const updatedSystems = []
       const filterSystems = systems.filter(
         (system) => !systemsId.includes(system._id)
       )
-      updatedSystems.push({ testSystems: filterSystems })
-      return updatedSystems
+      return [{ testSystems: filterSystems }]
     } catch (error) {
       errorHandler(error)
     }
@@ -141,6 +151,14 @@ const sistemas = () => {
 
   // Filters
   const onSearch = (search) => {
+    if (!search) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.SEARCH]: null
+      })
+      return
+    }
+
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
@@ -197,7 +215,7 @@ const sistemas = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {systemsData ? (
+        {isToolbarHidden() ? (
           <ToolBar
             onAdd={() => setIsSystemModalOpen(true)}
             onSearch={onSearch}
@@ -214,7 +232,9 @@ const sistemas = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData ? (
+      {isEmptyData && isSearch ? (
+        <ViewNotFoundState />
+      ) : isEmptyData ? (
         <ViewEmptyState
           message="Añadir sistemas a la plataforma"
           importButtonText="Importar"

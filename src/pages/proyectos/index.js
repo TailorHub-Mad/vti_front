@@ -27,6 +27,7 @@ import {
   projectDataTransform,
   transformProjectsToExport
 } from "../../utils/functions/import_export/projects_helper"
+import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -48,47 +49,57 @@ const proyectos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
   const { deleteProject, createProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
+
+  // Hooks
+  const [showImportModal, setShowImportModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
+  const [projectToUpdate, setProjectToUpdate] = useState(null)
+  const [deleteType, setDeleteType] = useState(null)
+  const [projectToDelete, setProjectsToDelete] = useState(null)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
 
+  // Fetch
   const { data, error, isLoading, mutate } = projectFetchHandler(
     fetchState,
     fetchOptions
   )
 
-  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
-  const [projectToUpdate, setProjectToUpdate] = useState(null)
-
-  const [deleteType, setDeleteType] = useState(null)
-  const [projectToDelete, setProjectsToDelete] = useState(null)
-
-  const [showImportModal, setShowImportModal] = useState(false)
-  const [showExportModal, setShowExportModal] = useState(false)
-
   const handleProjectsData = (isEmptyData) => {
     if (!data || isEmptyData) return null
-    if (fetchState === fetchType.ALL) return data[0].projects
     if (fetchState == fetchType.GROUP) return data
+    return data[0].projects
+
     // TODO FILTER
   }
 
   const isEmptyData = checkDataIsEmpty(data)
   const projectsData = handleProjectsData(isEmptyData)
 
+  const isSearch = fetchState == fetchType.SEARCH
+
+  // Handlers views
+  const isToolbarHidden = () => {
+    if (isLoading) return false
+    if (isEmptyData && !isSearch) return false
+
+    return true
+  }
+
   const handleImportProjects = async (data) => {
     //TODO Gestión de errores y update de SWR
-    console.log("DATA", data)
+
     try {
       const projectsCreated = []
       for (let index = 0; index < data.length; index++) {
         const pro = await createProject(data[index])
         projectsCreated.push(pro)
       }
-      console.log("Proyectos creados", projectsCreated)
+
       setShowImportModal(false)
       showToast("Proyectos importados correctamente")
     } catch (error) {
-      console.log("ERROR IMPORT", error)
       errorHandler(error)
     }
   }
@@ -98,8 +109,6 @@ const proyectos = () => {
     const _data = jsonToCSV(transformProjectsToExport(projectsData))
     download(_data, `projects_export_${new Date().toLocaleDateString()}`, "text/csv")
   }
-
-  console.log(projectsData)
 
   // Handlers views
   const handleOpenPopup = (projectToDelete, type) => {
@@ -154,13 +163,13 @@ const proyectos = () => {
     try {
       const projectsQueue = projectsId.map((id) => deleteProject(id))
       await Promise.all(projectsQueue)
-      showToast("Clientes borrados correctamente")
+      showToast("Proyectos borrados correctamente")
       const updatedProjects = []
       const filterProjects = projects.filter(
         (project) => !projectsId.includes(project._id)
       )
       updatedProjects.push({ projects: filterProjects })
-      return filterProjects
+      return updatedProjects
     } catch (error) {
       errorHandler(error)
     }
@@ -174,6 +183,14 @@ const proyectos = () => {
 
   // Filters
   const onSearch = (search) => {
+    if (!search) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.SEARCH]: null
+      })
+      return
+    }
+
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
@@ -239,7 +256,7 @@ const proyectos = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {projectsData ? (
+        {isToolbarHidden() ? (
           <ToolBar
             onAdd={() => setIsProjectModalOpen(true)}
             onSearch={onSearch}
@@ -256,7 +273,9 @@ const proyectos = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData ? (
+      {isEmptyData && isSearch ? (
+        <ViewNotFoundState />
+      ) : isEmptyData ? (
         <ViewEmptyState
           message="Añadir proyectos a la plataforma"
           importButtonText="Importar"
@@ -265,6 +284,7 @@ const proyectos = () => {
           onAdd={() => setIsProjectModalOpen(true)}
         />
       ) : null}
+
       {projectsData ? (
         <ProjectsTable
           fetchState={fetchState}

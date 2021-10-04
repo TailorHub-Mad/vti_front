@@ -63,14 +63,12 @@ export const NoteMainInfo = ({
           {new Date(item.updatedAt)?.toLocaleDateString()}
         </Text>
         <Flex>
-          {isMessage || (
-            <ActionLink
-              onClick={onEdit}
-              color="grey"
-              icon={<EditIcon />}
-              label="Editar"
-            />
-          )}
+          <ActionLink
+            onClick={onEdit}
+            color="grey"
+            icon={<EditIcon />}
+            label="Editar"
+          />
 
           <ActionLink
             onClick={() => handleUpdateNote(actionType.CLOSE)}
@@ -88,14 +86,12 @@ export const NoteMainInfo = ({
             label={item.formalized ? "Formalizado" : "Formalizar"}
           />
 
-          {isMessage || (
-            <ActionLink
-              onClick={onDelete}
-              color="error"
-              icon={<DeleteIcon />}
-              label="Eliminar"
-            />
-          )}
+          <ActionLink
+            onClick={onDelete}
+            color="error"
+            icon={<DeleteIcon />}
+            label="Eliminar"
+          />
         </Flex>
       </Flex>
 

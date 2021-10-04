@@ -1,6 +1,7 @@
 import { PATHS } from "../../../utils/constants/global"
 import { fetchType } from "../../../utils/constants/swr"
 import { calcColWidth } from "../../../utils/constants/tables"
+import { variantGeneralTag } from "../../../utils/constants/tabs"
 
 export const formatSystem = (systems, fetchState) => {
   if (fetchState === fetchType.GROUP) return groupTable(systems)
@@ -66,12 +67,18 @@ export const TABLE_SYSTEMS_HEAD = {
   projects: {
     label: "Proyectos",
     width: calcColWidth(220),
-    type: "tags"
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.SYSTEM
+    }
   },
   notes: {
     label: "Apuntes",
     width: calcColWidth(220),
-    type: "tags"
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.NOTE
+    }
   },
   options: {
     label: "",

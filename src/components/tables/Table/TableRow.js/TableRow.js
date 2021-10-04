@@ -15,13 +15,11 @@ export const TableRow = ({
 }) => {
   const { isFinished } = item?.config || {}
   const colorConfig = { color: isFinished ? "correct.500" : "blue.500" }
-  const bgColorConfig = isFinished ? { variant: "green" } : {}
 
   return (
     <Grid
       templateColumns={templateColumns}
-      borderBottom={isLastOne ? "none" : "1px"}
-      borderColor="grey"
+      borderBottom={isLastOne ? "none" : "1px solid rgba(201, 201, 201, 0.16)"}
       height="fit-content"
       width="100%"
       alignItems="center"
@@ -83,7 +81,7 @@ export const TableRow = ({
           return React.cloneElement(components[head[name]?.type], {
             tags: element,
             key: `${name}-${idx}`,
-            ...bgColorConfig
+            ...head[name].config
           })
         }
 

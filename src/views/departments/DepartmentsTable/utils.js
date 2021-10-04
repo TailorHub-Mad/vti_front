@@ -1,5 +1,6 @@
 import { PATHS } from "../../../utils/constants/global"
 import { calcColWidth } from "../../../utils/constants/tables"
+import { variantGeneralTag } from "../../../utils/constants/tabs"
 
 export const formatDepartment = (data) => data && data?.map(transformDepartmentData)
 
@@ -42,7 +43,10 @@ export const TABLE_DEPARTMENT_HEAD = {
   users: {
     label: "Usuarios",
     width: calcColWidth(815),
-    type: "tags"
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.NOTE
+    }
   },
   options: {
     label: "",

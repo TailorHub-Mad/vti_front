@@ -8,12 +8,6 @@ import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
 import { ResponseForm } from "../ResponseForm/ResponseForm"
 
-const initialValues = {
-  message: undefined,
-  link: undefined,
-  file: undefined
-}
-
 export const ResponseModal = ({
   isOpen,
   noteId,
@@ -85,16 +79,11 @@ export const ResponseModal = ({
     const message = {
       message: messageToUpdate.message,
       link: messageToUpdate.link,
-      attachment: messageToUpdate.attachment
+      file: messageToUpdate.documents
     }
 
     setValues(message)
   }, [messageToUpdate])
-
-  useEffect(() => {
-    if (isOpen) return
-    setValues(initialValues)
-  }, [isOpen])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
@@ -109,6 +98,7 @@ export const ResponseModal = ({
           value={values}
           onChange={(val) => setValues(val)}
           submitIsDisabled={submitIsDisabled}
+          isUpdate={Boolean(messageToUpdate)}
         />
         <Button
           w="194px"

@@ -79,7 +79,7 @@ export const Login = () => {
               >
                 <Input
                   name="email"
-                  placeholder="juan@vtisl.com"
+                  placeholder="Escribe tu email"
                   onChange={props.handleChange}
                   value={props.values.email}
                   isInvalid={hasError}
@@ -90,13 +90,13 @@ export const Login = () => {
 
               <ForgotPassword onClick={handleOnClickForgotPassword}>
                 <Text variant="d_s_regular" color="#052E57" cursor="pointer">
-                  ¿No recuerda su contraseña?
+                  ¿No recuerdas tu contraseña?
                 </Text>
               </ForgotPassword>
               <FormController label="Contraseña" mb="24px" error={hasError}>
                 <Input
                   name="password"
-                  placeholder="Escriba su contraseña"
+                  placeholder="Escribe tu contraseña"
                   type={passwordInputType}
                   isInvalid={hasError}
                   onChange={props.handleChange}
