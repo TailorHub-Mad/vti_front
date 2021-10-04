@@ -18,15 +18,23 @@ import { AddSectorIcon } from "../../components/icons/AddSectorIcon"
 import { sectorFetchHandler } from "../../swr/sector.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
+import download from "downloadjs"
+import { jsonToCSV } from "react-papaparse"
+import {
+  sectorDataTransform,
+  transformSectorsToExport
+} from "../../utils/functions/import_export/sectors_helper"
+import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
 
 const sectores = () => {
   // Hooks
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { deleteSector } = useSectorApi()
+  const { deleteSector, createSector } = useSectorApi()
   const { showToast } = useContext(ToastContext)
 
   // States
   const [showImportModal, setShowImportModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
   const [isSectorModalOpen, setIsSectorModalOpen] = useState(false)
@@ -44,7 +52,29 @@ const sectores = () => {
   const sectorsData = data && !isEmptyData ? data : null
 
   // Handlers views
-  const handleExport = () => {}
+
+  const handleImportSectors = async (data) => {
+    //TODO Gestión de errores y update de SWR
+
+    try {
+      const projectsCreated = []
+      for (let index = 0; index < data.length; index++) {
+        const pro = await createSector([data[index]])
+        projectsCreated.push(pro)
+      }
+
+      setShowImportModal(false)
+      showToast("Sectores importados correctamente")
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
+
+  const handleExportSectors = () => {
+    setShowExportModal(false)
+    const _data = jsonToCSV(transformSectorsToExport(sectorsData))
+    download(_data, `sectores_export_${new Date().toLocaleDateString()}`, "text/csv")
+  }
 
   const handleOpenPopup = (sectorsToDelete, type) => {
     setDeleteType(type)
@@ -93,7 +123,7 @@ const sectores = () => {
     try {
       const sectorsQueue = sectorsId.map((id) => deleteSector(id))
       await Promise.all(sectorsQueue)
-      showToast("Clientes borrados correctamente")
+      showToast("Sectores borrados correctamente")
       return sectors.filter((sector) => !sectorsId.includes(sector._id))
     } catch (error) {
       errorHandler(error)
@@ -136,9 +166,17 @@ const sectores = () => {
         onClose={handleOnCloseModal}
       />
 
+      <ExportFilesModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        onExport={() => handleExportSectors()}
+      />
+
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
+        onUpload={(data) => handleImportSectors(data)}
+        onDropDataTransform={(info) => sectorDataTransform(info)}
       />
 
       <PageHeader>
@@ -148,7 +186,7 @@ const sectores = () => {
             onAdd={() => setIsSectorModalOpen(true)}
             onSearch={onSearch}
             onImport={() => setShowImportModal(true)}
-            onExport={handleExport}
+            onExport={() => setShowExportModal(true)}
             addLabel="Añadir sector"
             searchPlaceholder="Busqueda por ID, Alias"
             icon={<AddSectorIcon />}
