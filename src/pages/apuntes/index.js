@@ -1,5 +1,6 @@
 import { remove } from "lodash"
 import React, { useContext, useEffect, useState } from "react"
+import { jsonToCSV } from "react-papaparse"
 import { NoteDrawer } from "../../components/drawer/NoteDrawer/NoteDrawer"
 import { AddNoteIcon } from "../../components/icons/AddNoteIcon"
 import { Page } from "../../components/layout/Pages/Page"
@@ -8,6 +9,7 @@ import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { PageMenu } from "../../components/layout/Pages/PageMenu/PageMenu"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
+import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import useNoteApi from "../../hooks/api/useNoteApi"
@@ -18,6 +20,10 @@ import { noteFetchHandler } from "../../swr/note.swr"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
 import { errorHandler } from "../../utils/errors"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
+import {
+  noteDataTransform,
+  transformNotesToExport
+} from "../../utils/functions/import_export/notes_helpers"
 import { LoadingView } from "../../views/common/LoadingView"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
@@ -26,6 +32,7 @@ import { NotesGrid } from "../../views/notes/NotesGrid/NotesGrid"
 import { NotesGroup } from "../../views/notes/NotesGroup/NotesGroup"
 import { NotesMenu } from "../../views/notes/NotesMenu/NotesMenu"
 import { ResponseModal } from "../../views/notes/Response/ResponseModal/ResponseModal"
+import download from "downloadjs"
 
 const NOTES_GROUP_OPTIONS = [
   {
@@ -49,14 +56,16 @@ const NOTES_GROUP_OPTIONS = [
 const apuntes = () => {
   // Hooks
   const { isLoggedIn, user } = useContext(ApiAuthContext)
-  const { deleteNote, deleteMessage } = useNoteApi()
+  const { deleteNote, deleteMessage, createNote } = useNoteApi()
   const { updateUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
+
+  const [showImportModal, setShowImportModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
 
   // Hooks
   const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
   const [messageToUpdate, setMessageToUpdate] = useState(null)
-  const [showImportModal, setShowImportModal] = useState(false)
   const [showNoteDetails, setShowNoteDetails] = useState(false)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
@@ -80,6 +89,29 @@ const apuntes = () => {
     // TODO FILTER
   }
 
+  const handleImportNotes = async (data) => {
+    //TODO Gestión de errores y update de SWR
+
+    try {
+      const projectsCreated = []
+      for (let index = 0; index < data.length; index++) {
+        const pro = await createNote(data[index])
+        projectsCreated.push(pro)
+      }
+
+      setShowImportModal(false)
+      showToast("Proyectos importados correctamente")
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
+
+  const handleExportNotes = () => {
+    setShowExportModal(false)
+    const _data = jsonToCSV(transformNotesToExport(notesData))
+    download(_data, `apuntes_export_${new Date().toLocaleDateString()}`, "text/csv")
+  }
+
   const isEmptyData = checkDataIsEmpty(data)
   const notesData = handleNotesData(isEmptyData)
 
@@ -89,7 +121,6 @@ const apuntes = () => {
   const checkIsSubscribe = (id) => user?.subscribed?.notes?.includes(id)
 
   // Handlers views
-  const handleExport = () => {}
 
   const isToolbarHidden = () => {
     if (isLoading) return false
@@ -268,9 +299,17 @@ const apuntes = () => {
         onClose={handleOnCloseModal}
       />
 
+      <ExportFilesModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        onExport={() => handleExportNotes()}
+      />
+
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
+        onUpload={(data) => handleImportNotes(data)}
+        onDropDataTransform={(info) => noteDataTransform(info)}
       />
 
       <NoteDrawer
@@ -298,7 +337,7 @@ const apuntes = () => {
             onGroup={handleOnGroup}
             onFilter={handleOnFilter}
             onImport={() => setShowImportModal(true)}
-            onExport={handleExport}
+            onExport={() => setShowExportModal(true)}
             addLabel="Añadir apunte"
             searchPlaceholder="Busqueda por ID, Proyecto"
             groupOptions={NOTES_GROUP_OPTIONS}

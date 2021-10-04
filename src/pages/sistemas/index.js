@@ -20,6 +20,13 @@ import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 import { getGroupOptionLabel } from "../../utils/functions/objects"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
+import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
+import download from "downloadjs"
+import { jsonToCSV } from "react-papaparse"
+import {
+  testSystemDataTransform,
+  transformTestSystemsToExport
+} from "../../utils/functions/import_export/testSystem_helpers"
 
 const SYSTEMS_GROUP_OPTIONS = [
   {
@@ -39,11 +46,12 @@ const SYSTEMS_GROUP_OPTIONS = [
 const sistemas = () => {
   // Hooks
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { deleteSystem } = useSystemApi()
+  const { deleteSystem, createSystem } = useSystemApi()
   const { showToast } = useContext(ToastContext)
 
   // States
   const [showImportModal, setShowImportModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
   const [isSystemModalOpen, setIsSystemModalOpen] = useState(false)
@@ -71,13 +79,35 @@ const sistemas = () => {
   const isSearch = fetchState == fetchType.SEARCH
 
   // Handlers views
-  const handleExport = () => {}
 
   const isToolbarHidden = () => {
     if (isLoading) return false
     if (isEmptyData && !isSearch) return false
 
     return true
+  }
+
+  const handleImportProjects = async (data) => {
+    //TODO Gestión de errores y update de SWR
+
+    try {
+      const systemsCreated = []
+      for (let index = 0; index < data.length; index++) {
+        const pro = await createSystem(data[index])
+        systemsCreated.push(pro)
+      }
+
+      setShowImportModal(false)
+      showToast("Sistemas importados correctamente")
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
+
+  const handleExportProjects = () => {
+    setShowExportModal(false)
+    const _data = jsonToCSV(transformTestSystemsToExport(systemsData))
+    download(_data, `sistemas_export_${new Date().toLocaleDateString()}`, "text/csv")
   }
 
   const handleOpenPopup = (systemsToDelete, type) => {
@@ -208,9 +238,18 @@ const sistemas = () => {
         isOpen={isSystemModalOpen}
         onClose={handleOnCloseModal}
       />
+
+      <ExportFilesModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        onExport={() => handleExportProjects()}
+      />
+
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
+        onUpload={(data) => handleImportProjects(data)}
+        onDropDataTransform={(info) => testSystemDataTransform(info)}
       />
 
       <PageHeader>
@@ -222,7 +261,7 @@ const sistemas = () => {
             onGroup={handleOnGroup}
             onFilter={handleOnFilter}
             onImport={() => setShowImportModal(true)}
-            onExport={handleExport}
+            onExport={() => setShowExportModal(true)}
             addLabel="Añadir sistema"
             searchPlaceholder="Busqueda por ID, Código"
             groupOptions={SYSTEMS_GROUP_OPTIONS}

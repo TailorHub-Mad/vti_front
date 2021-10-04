@@ -29,7 +29,18 @@ export const noteDataTransform = (data) => {
 
 export const transformNotesToExport = (data) => {
   const _data = data.map((note) => {
-    const { _id, ref, title, link, description, clientAlias, createdAt, documents, testSystems, tags } = note
+    const {
+      _id,
+      ref,
+      title,
+      link,
+      description,
+      clientAlias,
+      createdAt,
+      documents,
+      testSystems,
+      tags
+    } = note
     return {
       _id,
       ref,
@@ -38,7 +49,7 @@ export const transformNotesToExport = (data) => {
       clientAlias,
       createdAt: new Date(createdAt).toLocaleDateString(),
       link,
-      documents: documents && documents.map(dc => dc.url),
+      documents: documents && documents.map((dc) => dc.url),
       testSystems: testSystems.map((ts) => ts.alias),
       tags: tags.map((tag) => tag.name)
     }
