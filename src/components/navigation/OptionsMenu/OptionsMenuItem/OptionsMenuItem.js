@@ -11,6 +11,8 @@ export const OptionsMenuItem = ({ isLast, children, ...props }) => {
       borderBottom={isLast ? "none" : "1px solid"}
       cursor="pointer"
       padding="12px"
+      position="relative"
+      zIndex="1000"
       _hover={{
         opacity: "0.8"
       }}
