@@ -8,9 +8,13 @@ import { FinishIcon } from "../../../../components/icons/FinishIcon"
 import { PageHeader } from "../../../../components/layout/Pages/PageHeader/PageHeader"
 import { PATHS } from "../../../../utils/constants/global"
 
-export const ProjectHeader = ({ idProject }) => {
-  //TODO Conectar las acciones con la main page
-
+export const ProjectHeader = ({
+  idProject,
+  onEdit,
+  onClose,
+  onDelete,
+  isClosed
+}) => {
   return (
     <PageHeader mb="0">
       <Flex>
@@ -23,9 +27,19 @@ export const ProjectHeader = ({ idProject }) => {
         <Text variant="d_l_medium">{idProject}</Text>
       </Flex>
       <Flex>
-        <ActionLink label="Editar" isDisabled icon={<EditIcon />} />
-        <ActionLink label="Finalizar" color="start" icon={<FinishIcon />} />
-        <ActionLink label="Eliminar" color="error" icon={<DeleteIcon />} />
+        <ActionLink onClick={onEdit} label="Editar" icon={<EditIcon />} />
+        <ActionLink
+          onClick={onClose}
+          label={isClosed ? "Finalizado" : "Finalizar"}
+          color={isClosed ? "green" : "start"}
+          icon={<FinishIcon />}
+        />
+        <ActionLink
+          onClick={onDelete}
+          label="Eliminar"
+          color="error"
+          icon={<DeleteIcon />}
+        />
       </Flex>
     </PageHeader>
   )

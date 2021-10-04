@@ -81,7 +81,5 @@ export const Table = ({
         </Grid>
       </Flex>
     </Card>
-  ) : (
-    <></>
-  )
+  ) : null
 }

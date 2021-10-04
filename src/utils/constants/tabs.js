@@ -1,7 +1,8 @@
 export const variantGeneralTag = {
   NOTE: "pale_yellow",
   PROJECT: "violete",
-  SYSTEM: "light_blue"
+  SYSTEM: "light_blue",
+  FINISH: "green_finish"
 }
 
 export const formatTags = (tags, field) => {

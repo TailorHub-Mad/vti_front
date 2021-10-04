@@ -23,6 +23,12 @@ export const Tag = {
         borderRadius: "50px"
       }
     },
+    green_finish: {
+      container: {
+        backgroundColor: "rgba(39, 121, 72, 0.3)",
+        borderRadius: "50px"
+      }
+    },
     light_blue: {
       container: {
         backgroundColor: "light_blue",

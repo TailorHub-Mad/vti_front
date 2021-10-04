@@ -24,7 +24,7 @@ export const Login = () => {
   const handleOnClickShowPassword = () =>
     setPasswordInputType(passwordInputType == "password" ? "text" : "password")
 
-  const handleOnClickForgotPassword = () => router.push(PATHS.recover)
+  const handleOnClickForgotPassword = () => router.push(PATHS.sendAccess)
 
   const handleSubmit = async (values) => {
     const response = await login({ ...values })

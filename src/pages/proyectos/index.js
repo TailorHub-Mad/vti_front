@@ -28,6 +28,7 @@ import {
   transformProjectsToExport
 } from "../../utils/functions/import_export/projects_helper"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
+import { FinishProjectModal } from "../../views/projects/NewProject/FinishProjectModal/FinishProjectModal"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -56,7 +57,9 @@ const proyectos = () => {
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
   const [projectToUpdate, setProjectToUpdate] = useState(null)
   const [deleteType, setDeleteType] = useState(null)
-  const [projectToDelete, setProjectsToDelete] = useState(null)
+  const [projectsToDelete, setProjectsToDelete] = useState(null)
+  const [projectToFinish, setProjectToFinish] = useState(null)
+  const [isFinishProjectModalOpen, setIsFinishProjectModalOpen] = useState(null)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
 
@@ -111,9 +114,9 @@ const proyectos = () => {
   }
 
   // Handlers views
-  const handleOpenPopup = (projectToDelete, type) => {
+  const handleOpenPopup = (projectsToDelete, type) => {
     setDeleteType(type)
-    setProjectsToDelete(projectToDelete)
+    setProjectsToDelete(projectsToDelete)
   }
 
   const handleClosePopup = () => {
@@ -126,19 +129,30 @@ const proyectos = () => {
     setIsProjectModalOpen(false)
   }
 
+  const handleOnOpenFinishProjectModal = (id) => {
+    const project = projectsData.find((p) => (p._id = id))
+    setProjectToFinish(project)
+    setIsFinishProjectModalOpen(true)
+  }
+
+  const handleOnCloseFinishProjectModal = () => {
+    setProjectToFinish(null)
+    setIsFinishProjectModalOpen(null)
+  }
+
   // Handlers CRUD
   const handleDeleteMessage = () => {
-    if (!projectToDelete) return
+    if (!projectsToDelete) return
 
     if (deleteType === DeleteType.MANY)
       return "¿Desea eliminar los proyectos seleccionados?"
-    const label = getFieldObjectById(projectsData, "alias", projectToDelete)
+    const label = getFieldObjectById(projectsData, "alias", projectsToDelete)
     return `¿Desea eliminar ${label}?`
   }
 
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
-    const updated = await f(projectToDelete, projectsData)
+    const updated = await f(projectsToDelete, projectsData)
     updated.length > 0 ? await mutate(updated, false) : await mutate()
     setDeleteType(null)
     setProjectsToDelete(null)
@@ -241,6 +255,12 @@ const proyectos = () => {
         onClose={handleOnCloseModal}
       />
 
+      <FinishProjectModal
+        project={projectToFinish}
+        isOpen={isFinishProjectModalOpen}
+        onClose={handleOnCloseFinishProjectModal}
+      />
+
       <ExportFilesModal
         isOpen={showExportModal}
         onClose={() => setShowExportModal(false)}
@@ -284,11 +304,11 @@ const proyectos = () => {
           onAdd={() => setIsProjectModalOpen(true)}
         />
       ) : null}
-
       {projectsData ? (
         <ProjectsTable
           fetchState={fetchState}
           projects={projectsData}
+          onClose={handleOnOpenFinishProjectModal}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
           onEdit={handleUpdate}
