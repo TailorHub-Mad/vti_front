@@ -1,10 +1,10 @@
 import { Page } from "../../components/layout/Pages/Page"
-import { ProjectInfoBar } from "../../views/notes/Project/ProjectInfoBar/ProjectInfoBar"
+import { ProjectInfoBar } from "../../views/projects/ProjectDetail/ProjectInfoBar/ProjectInfoBar"
 import { useContext, useState } from "react"
 import { NoteDrawer } from "../../components/drawer/NoteDrawer/NoteDrawer"
-import { ProjectDetails } from "../../views/notes/Project/ProjectDetails/ProjectDetails"
-import { ProjectNotes } from "../../views/notes/Project/ProjectNotes/ProjectNotes"
-import { ProjectHeader } from "../../views/notes/Project/ProjectHeader/ProjectHeader"
+import { ProjectDetails } from "../../views/projects/ProjectDetail/ProjectDetails/ProjectDetails"
+import { ProjectNotes } from "../../views/projects/ProjectDetail/ProjectNotes/ProjectNotes"
+import { ProjectHeader } from "../../views/projects/ProjectDetail/ProjectHeader/ProjectHeader"
 import { Box } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
@@ -19,6 +19,7 @@ const project = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
 
   const [showNoteDetails, setShowNoteDetails] = useState(false)
+  const [noteToDetail, setNoteToDetail] = useState(null)
 
   const { data, error, isLoading, isValidating } = projectFetchHandler(
     fetchType.ID,
@@ -29,6 +30,11 @@ const project = () => {
 
   const notFound = !isValidating && !data
   const projectData = data && !checkDataIsEmpty(data) ? data[0].projects[0] : null
+
+  const handleOpenDetails = (note) => {
+    setNoteToDetail(note)
+    setShowNoteDetails(true)
+  }
 
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
@@ -60,12 +66,23 @@ const project = () => {
             />
             <ProjectNotes
               notes={projectData?.notes}
-              showNoteDetails={(idx) => setShowNoteDetails(idx)}
+              showNoteDetails={handleOpenDetails}
             />
           </Box>
           <NoteDrawer
+            note={noteToDetail}
             isOpen={showNoteDetails}
             onClose={() => setShowNoteDetails(false)}
+            // onDelete={() => setNoteToDelete(noteToDetail._id)}
+            // onEdit={() => handleUpdate(noteToDetail._id)}
+            // onResponse={() => setIsResponseModalOpen(true)}
+            // onEditResponse={(message) => handleOpenEditResponse(message)}
+            // onDeleteResponse={(noteId, messageId) =>
+            //   setMessageToDelete({
+            //     noteId,
+            //     messageId
+            //   })
+            // }
           />
         </>
       )}

@@ -2,7 +2,7 @@ import { useRouter } from "next/router"
 import React, { useState, useEffect, useCallback } from "react"
 import useAuthApi from "../../hooks/api/useAuthApi"
 import useFetchSWR from "../../hooks/useFetchSWR"
-import { PATHS } from "../../utils/constants/global"
+import { PATHS, WHITE_LIST } from "../../utils/constants/global"
 import { SWR_CACHE_KEYS } from "../../utils/constants/swr"
 import { destroySessionCookie } from "../../utils/functions/cookies"
 import { LoadingView } from "../../views/common/LoadingView"
@@ -44,7 +44,8 @@ const ApiAuthProvider = ({ children }) => {
     if (!error) return
 
     setIsLoggedIn(false)
-    if (error.response?.status === 401 && router.route !== PATHS.login)
+
+    if (error.response?.status === 401 && !WHITE_LIST.includes(router.route))
       return router.push(PATHS.login)
   }, [error])
 

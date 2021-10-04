@@ -5,7 +5,6 @@ import { PageBody } from "../../../../components/layout/Pages/PageBody/PageBody"
 import { ToolBar } from "../../../../components/navigation/ToolBar/ToolBar"
 
 export const ProjectNotes = ({ showNoteDetails, notes = [] }) => {
-  //TODO pasar notes por props
   return (
     <>
       <Flex justify="space-between" align="center" mt="24px" mb="24px">
@@ -23,10 +22,14 @@ export const ProjectNotes = ({ showNoteDetails, notes = [] }) => {
         >
           {notes.slice(0, 12).map((note, idx) => (
             <MessageCard
-              {...note}
-              key={idx}
-              onSeeDetails={() => showNoteDetails(idx)}
-              _hover={{ border: "1px solid", borderColor: "start" }}
+              key={`${note.title}-${idx}`}
+              note={note}
+              onSeeDetails={() => showNoteDetails(note)}
+              // subscribedUsers={null} // TOPO -> review
+              // isSubscribe={checkIsSubscribe(note._id)}
+              // isFavorite={checkIsFavorite(note._id)}
+              // onDelete={() => onDelete(note._id)}
+              // handleFavorite={(state) => handleFavorite(note._id, state)}
             />
           ))}
         </Grid>

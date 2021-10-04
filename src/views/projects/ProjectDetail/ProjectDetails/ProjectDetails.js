@@ -10,7 +10,7 @@ import { Tag } from "../../../../components/tags/Tag/Tag"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
 
 export const ProjectDetails = ({ focusPoint, testSystems, tags, users }) => {
-  const [showProjectDetails, setShowProjectDetails] = useState(false)
+  const [showProjectDetails, setShowProjectDetails] = useState(true)
 
   return (
     <Box mt="32px">

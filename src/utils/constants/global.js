@@ -14,7 +14,9 @@ export const PATHS = {
   root: "/",
   notFound: "/404",
   login: "/login",
-  recover: "/enviar-acceso",
+  sendAccess: "/enviar-acceso",
+  createAccess: "/crear-acceso",
+  recoveryAccess: "/recuperar-acceso",
   notes: "/apuntes",
   newNote: "/apuntes/nuevo",
   projects: "/proyectos",
@@ -29,3 +31,10 @@ export const PATHS = {
   subscription: "/suscripciones",
   notifications: "/notificaciones"
 }
+
+export const WHITE_LIST = [
+  PATHS.login,
+  PATHS.sendAccess,
+  "/crear-acceso/[id]",
+  "/recuperar-acceso/[id]"
+]
