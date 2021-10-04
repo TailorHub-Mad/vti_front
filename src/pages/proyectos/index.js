@@ -23,7 +23,10 @@ import download from "downloadjs"
 import { jsonToCSV } from "react-papaparse"
 
 import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
-import { projectDataTransform, transformProjectsToExport } from "../../utils/functions/import_export/projects_helper"
+import {
+  projectDataTransform,
+  transformProjectsToExport
+} from "../../utils/functions/import_export/projects_helper"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -77,7 +80,7 @@ const proyectos = () => {
     console.log("DATA", data)
     try {
       const projectsCreated = []
-      for ( let index = 0 ; index < data.length ; index++){
+      for (let index = 0; index < data.length; index++) {
         const pro = await createProject(data[index])
         projectsCreated.push(pro)
       }
