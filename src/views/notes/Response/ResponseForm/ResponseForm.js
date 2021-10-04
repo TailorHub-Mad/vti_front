@@ -5,7 +5,7 @@ import { FileInput } from "../../../../components/forms/FileInput/FileInput"
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
 import { TextAreaInput } from "../../../../components/forms/TextAreaInput/TextAreaInput"
 
-export const ResponseForm = ({ value, onChange, submitIsDisabled }) => {
+export const ResponseForm = ({ value, onChange, submitIsDisabled, isUpdate }) => {
   const handleFormChange = (input, _value) => {
     onChange({
       ...value,
@@ -39,7 +39,7 @@ export const ResponseForm = ({ value, onChange, submitIsDisabled }) => {
   const inputRefObj = {
     text: <SimpleInput />,
     textArea: <TextAreaInput />,
-    attachment: <FileInputForm />
+    attachment: <FileInputForm isUpdate={isUpdate} />
   }
 
   return (
@@ -59,7 +59,7 @@ export const ResponseForm = ({ value, onChange, submitIsDisabled }) => {
   )
 }
 
-const FileInputForm = ({ value, onChange, isDisabled }) => {
+const FileInputForm = ({ value, onChange, isDisabled, isUpdate }) => {
   return (
     <Flex flexDirection="column" mb="24px">
       <FormLabel
@@ -72,7 +72,12 @@ const FileInputForm = ({ value, onChange, isDisabled }) => {
       >
         Adjunta tus documentos (opcional)
       </FormLabel>
-      <FileInput value={value} onChange={onChange} isDisabled={isDisabled} />
+      <FileInput
+        value={value}
+        onChange={onChange}
+        isDisabled={isDisabled}
+        isUpdate={isUpdate}
+      />
     </Flex>
   )
 }

@@ -79,7 +79,7 @@ export const ResponseModal = ({
     const message = {
       message: messageToUpdate.message,
       link: messageToUpdate.link,
-      attachment: messageToUpdate.attachment
+      file: messageToUpdate.documents
     }
 
     setValues(message)
@@ -98,6 +98,7 @@ export const ResponseModal = ({
           value={values}
           onChange={(val) => setValues(val)}
           submitIsDisabled={submitIsDisabled}
+          isUpdate={Boolean(messageToUpdate)}
         />
         <Button
           w="194px"
