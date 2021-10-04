@@ -5,7 +5,7 @@ export const sectorDataTransform = (data) => {
   items.shift()
   const _items = items.map((item) => {
     const _item = {
-      title: item.data[0],
+      title: item.data[0]
     }
     return _item
   })
@@ -15,7 +15,7 @@ export const sectorDataTransform = (data) => {
 
 export const transformSectorsToExport = (data) => {
   const _data = data.map((sector) => {
-    const { _id, title,  projects } = sector
+    const { _id, title, projects } = sector
     return {
       _id,
       title,

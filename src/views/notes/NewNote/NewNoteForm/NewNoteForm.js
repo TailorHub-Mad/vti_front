@@ -24,6 +24,7 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate, submitIsDisabled })
     _tags.map((tag) => ({ label: tag.name, value: tag._id }))
 
   const handleFormChange = (input, _value) => {
+    console.log("INPUT", input, _value)
     onChange({
       ...value,
       [input]: _value
