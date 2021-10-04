@@ -10,6 +10,7 @@ export const ProjectsTable = ({
   projects,
   // onTabChange,
   onDelete,
+  onClose,
   onDeleteMany,
   onEdit,
   fetchState,
@@ -43,7 +44,7 @@ export const ProjectsTable = ({
     components: TABLE_COMPONENTS,
     head: {
       ...TABLE_PROJECTS_HEAD,
-      options: { ...TABLE_PROJECTS_HEAD.options, onDelete, onEdit }
+      options: { ...TABLE_PROJECTS_HEAD.options, onDelete, onEdit, onClose }
     }
   }
   const allRowsAreSelected = selectedRowsKeys.length === projectsData?.length

@@ -31,7 +31,7 @@ export const transformProjectData = (project) => ({
   users: project.users?.filter((u) => !Array.isArray(u)),
   notes: project.notes?.filter((n) => !Array.isArray(n)),
   options: "",
-  config: { isFinished: project.close }
+  config: { isFinished: Boolean(project.closed) }
 })
 
 export const TABLE_PROJECTS_HEAD = {
@@ -83,6 +83,9 @@ export const TABLE_PROJECTS_HEAD = {
   options: {
     label: "",
     width: calcColWidth(20),
-    type: "options"
+    type: "options",
+    config: {
+      close: true
+    }
   }
 }

@@ -1,5 +1,6 @@
 import { Grid } from "@chakra-ui/react"
 import React from "react"
+import { variantGeneralTag } from "../../../../utils/constants/tabs"
 
 export const TableRow = ({
   item,
@@ -47,8 +48,7 @@ export const TableRow = ({
           return React.cloneElement(components[head[name]?.type], {
             children: element?.length.toString(),
             textAlign: "left",
-            key: `${name}-${idx}`,
-            ...colorConfig
+            key: `${name}-${idx}`
           })
         }
 
@@ -81,7 +81,9 @@ export const TableRow = ({
           return React.cloneElement(components[head[name]?.type], {
             tags: element,
             key: `${name}-${idx}`,
-            ...head[name].config
+            variant: isFinished
+              ? variantGeneralTag.FINISH
+              : head[name].config?.variant
           })
         }
 
@@ -90,7 +92,8 @@ export const TableRow = ({
             ...head[name],
             id: item.id.value,
             key: `${name}-${idx}`,
-            disabled: optionsDisabled
+            disabled: optionsDisabled,
+            ...head[name].config
           })
         }
 
