@@ -15,7 +15,7 @@ import { TagLineIcon } from "../../../icons/TagLineIcon"
 import { TestSystemLineIcon } from "../../../icons/TestSystemLineIcon"
 import { TagRow } from "../../../tags/TagRow/TagRow"
 import { NoteAccordionItem } from "./NoteAccordionItem/NoteAccordionItem"
-
+import {chakra} from "@chakra-ui/react"
 export const NoteDetailsAccordion = ({
   name,
   noteTags,
@@ -73,7 +73,11 @@ export const NoteDetailsAccordion = ({
             isMessage ? <ConversationIcon mr="8px" /> : <PageLineIcon mr="8px" />
           }
         >
-          {message}
+          {message.split("\n").map((ms) => (
+            <chakra.p key={ms} display="block">
+              {ms}
+            </chakra.p>
+          ))}
         </NoteAccordionItem>
       ) : null}
 

@@ -5,6 +5,7 @@ import { AddSelect } from "../../../../components/forms/AddSelect/AddSelect"
 import { FileInput } from "../../../../components/forms/FileInput/FileInput"
 import { InputSelect } from "../../../../components/forms/InputSelect/InputSelect"
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
+import { TextAreaInput } from "../../../../components/forms/TextAreaInput/TextAreaInput"
 import useProjectApi from "../../../../hooks/api/useProjectApi"
 import useTagApi from "../../../../hooks/api/useTagApi"
 
@@ -24,7 +25,6 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate, submitIsDisabled })
     _tags.map((tag) => ({ label: tag.name, value: tag._id }))
 
   const handleFormChange = (input, _value) => {
-    console.log("INPUT", input, _value)
     onChange({
       ...value,
       [input]: _value
@@ -58,7 +58,7 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate, submitIsDisabled })
       }
     },
     description: {
-      type: "text",
+      type: "textarea",
       config: {
         placeholder: "Describe el apunte",
         label: "Descripción*"
@@ -138,6 +138,7 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate, submitIsDisabled })
 
   const inputRefObj = {
     text: <SimpleInput />,
+    textarea: <TextAreaInput />,
     select: <InputSelect />,
     add_select: <AddSelect />,
     attachment: <FileInputForm />
