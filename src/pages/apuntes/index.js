@@ -157,8 +157,8 @@ const apuntes = () => {
     const { notes: favoritesNotes } = favorites
 
     if (state) {
-      const newFavoritesNotes = remove(favoritesNotes, (e) => e === id)
-      favorites.notes = newFavoritesNotes
+      remove(favoritesNotes, (e) => e === id)
+      favorites.notes = favoritesNotes
     } else {
       favorites.notes.push(id)
     }

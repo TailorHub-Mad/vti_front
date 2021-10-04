@@ -8,12 +8,6 @@ import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
 import { ResponseForm } from "../ResponseForm/ResponseForm"
 
-const initialValues = {
-  message: undefined,
-  link: undefined,
-  file: undefined
-}
-
 export const ResponseModal = ({
   isOpen,
   noteId,
@@ -90,11 +84,6 @@ export const ResponseModal = ({
 
     setValues(message)
   }, [messageToUpdate])
-
-  useEffect(() => {
-    if (isOpen) return
-    setValues(initialValues)
-  }, [isOpen])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
