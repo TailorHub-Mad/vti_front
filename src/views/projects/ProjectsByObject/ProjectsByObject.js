@@ -125,6 +125,8 @@ export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
 
   const isEmptyData = projectsData.length === 0
 
+  console.log(projectsData)
+
   return (
     <>
       <Popup

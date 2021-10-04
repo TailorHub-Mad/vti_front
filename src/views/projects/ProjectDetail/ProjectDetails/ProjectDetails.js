@@ -66,7 +66,7 @@ export const ProjectDetails = ({ focusPoint, testSystems, tags, users }) => {
                   key={`${tag}-${idx}`}
                   mr="8px"
                 >
-                  {tag}
+                  {tag.name}
                 </Tag>
               ))}
           </Flex>

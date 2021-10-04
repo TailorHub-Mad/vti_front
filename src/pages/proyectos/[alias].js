@@ -1,7 +1,6 @@
 import { Page } from "../../components/layout/Pages/Page"
 import { ProjectInfoBar } from "../../views/projects/ProjectDetail/ProjectInfoBar/ProjectInfoBar"
 import { useContext, useState } from "react"
-import { NoteDrawer } from "../../components/drawer/NoteDrawer/NoteDrawer"
 import { ProjectDetails } from "../../views/projects/ProjectDetail/ProjectDetails/ProjectDetails"
 import { ProjectNotes } from "../../views/projects/ProjectDetail/ProjectNotes/ProjectNotes"
 import { ProjectHeader } from "../../views/projects/ProjectDetail/ProjectHeader/ProjectHeader"
@@ -13,13 +12,22 @@ import { fetchOption, fetchType } from "../../utils/constants/swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 import { checkDataIsEmpty } from "../../utils/functions/global"
+import { Popup } from "../../components/overlay/Popup/Popup"
+import { FinishProjectModal } from "../../views/projects/NewProject/FinishProjectModal/FinishProjectModal"
+import useProjectApi from "../../hooks/api/useProjectApi"
+import { ToastContext } from "../../provider/ToastProvider"
+import { PATHS } from "../../utils/constants/global"
+import { NewProjectModal } from "../../views/projects/NewProject/NewProjectModal/NewProjectModal"
 
 const project = () => {
   const router = useRouter()
   const { isLoggedIn } = useContext(ApiAuthContext)
+  const { deleteProject } = useProjectApi()
+  const { showToast } = useContext(ToastContext)
 
-  const [showNoteDetails, setShowNoteDetails] = useState(false)
-  const [noteToDetail, setNoteToDetail] = useState(null)
+  const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [openUpdateModal, setOpenUpdateModal] = useState(false)
+  const [openFinishModal, setOpenFinishModal] = useState(false)
 
   const { data, error, isLoading, isValidating } = projectFetchHandler(
     fetchType.ID,
@@ -31,9 +39,14 @@ const project = () => {
   const notFound = !isValidating && !data
   const projectData = data && !checkDataIsEmpty(data) ? data[0].projects[0] : null
 
-  const handleOpenDetails = (note) => {
-    setNoteToDetail(note)
-    setShowNoteDetails(true)
+  const handleOnDelete = async () => {
+    try {
+      await deleteProject(projectData._id)
+      showToast("Proyecto borrado correctamente")
+      router.push(PATHS.projects)
+    } catch (error) {
+      errorHandler(error)
+    }
   }
 
   if (!isLoggedIn) return null
@@ -44,11 +57,38 @@ const project = () => {
       {notFound && <>Error. No se ha encontrado el sector.</>}
       {projectData && (
         <>
-          <Box
-            width={showNoteDetails ? `calc(100% - 536.5px)` : "100%"}
-            transition="width 0.3s ease-in-out"
+          <Popup
+            variant="twoButtons"
+            confirmText="Eliminar"
+            cancelText="Cancelar"
+            color="error"
+            isOpen={openDeleteModal}
+            onConfirm={handleOnDelete}
+            onClose={() => setOpenDeleteModal(false)}
           >
-            <ProjectHeader idProject={projectData.ref} />
+            {`¿Desea eliminar ${projectData.alias}?`}
+          </Popup>
+
+          <NewProjectModal
+            projectToUpdate={projectData}
+            isOpen={openUpdateModal}
+            onClose={() => setOpenUpdateModal(false)}
+          />
+
+          <FinishProjectModal
+            project={projectData}
+            isOpen={openFinishModal}
+            onClose={() => setOpenFinishModal(false)}
+          />
+
+          <Box width="100%" transition="width 0.3s ease-in-out">
+            <ProjectHeader
+              idProject={projectData.ref}
+              onEdit={() => setOpenUpdateModal(true)}
+              onClose={() => setOpenFinishModal(true)}
+              onDelete={() => setOpenDeleteModal(true)}
+              isClosed={Boolean(projectData.closed)}
+            />
             <ProjectInfoBar
               projectInfo={[
                 projectData?.alias,
@@ -65,25 +105,10 @@ const project = () => {
               users={projectData?.users}
             />
             <ProjectNotes
-              notes={projectData?.notes}
-              showNoteDetails={handleOpenDetails}
+              notesData={projectData?.notes.filter((n) => n?._id)}
+              project={projectData}
             />
           </Box>
-          <NoteDrawer
-            note={noteToDetail}
-            isOpen={showNoteDetails}
-            onClose={() => setShowNoteDetails(false)}
-            // onDelete={() => setNoteToDelete(noteToDetail._id)}
-            // onEdit={() => handleUpdate(noteToDetail._id)}
-            // onResponse={() => setIsResponseModalOpen(true)}
-            // onEditResponse={(message) => handleOpenEditResponse(message)}
-            // onDeleteResponse={(noteId, messageId) =>
-            //   setMessageToDelete({
-            //     noteId,
-            //     messageId
-            //   })
-            // }
-          />
         </>
       )}
     </Page>

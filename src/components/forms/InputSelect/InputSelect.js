@@ -79,7 +79,7 @@ export const InputSelect = ({
           onClick={() => setShowSelectMenu(true)}
           value={inputValue}
           isDisabled={isDisabled}
-          _loading
+          autoComplete="off"
         />
         <ChevronDownIcon
           position="absolute"
