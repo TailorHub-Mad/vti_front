@@ -1,12 +1,14 @@
 import { Grid, Text } from "@chakra-ui/react"
 import { useRouter } from "next/dist/client/router"
 import React, { useContext, useEffect, useState } from "react"
+import { jsonToCSV } from "react-papaparse"
 import { TagCard } from "../../components/cards/TagCard/TagCard"
 import { AddTagIcon } from "../../components/icons/AddTagIcon"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageBody } from "../../components/layout/Pages/PageBody/PageBody"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
+import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { Popup } from "../../components/overlay/Popup/Popup"
 import useTagApi from "../../hooks/api/useTagApi"
@@ -16,10 +18,15 @@ import { tagFetchHandler } from "../../swr/tag.swr"
 import { DeleteType, PATHS } from "../../utils/constants/global"
 import { errorHandler } from "../../utils/errors"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
+import {
+  tagDataTransform,
+  transformTagsToExport
+} from "../../utils/functions/import_export/tags_helper"
 import { LoadingView } from "../../views/common/LoadingView"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { NewTagModal } from "../../views/tags/NewTag/NewTagModal/NewTagModal"
 import { TagsHeader } from "../../views/tags/TagsHeader/TagsHeader"
+import download from "downloadjs"
 
 const infoByType = {
   proyecto: {
@@ -47,12 +54,14 @@ const tags = () => {
 
   const { isLoggedIn } = useContext(ApiAuthContext)
   const { showToast } = useContext(ToastContext)
-  const { deleteProjectTag, deleteNoteTag } = useTagApi()
+  const { deleteProjectTag, deleteNoteTag, createNoteTag, createProjectTag } =
+    useTagApi()
   const { data, error, isLoading, mutate } = tagFetchHandler(
     infoByType[type].fetchKey
   )
 
   const [showImportModal, setShowImportModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
   const [activeTab, setActiveTab] = useState("inheritance")
 
   // Create - Update state
@@ -67,8 +76,30 @@ const tags = () => {
   const tagData = data && !isEmptyData ? data : null
 
   // TODO
-  const handleExport = () => {}
+  const handleImportTags = async (data) => {
+    //TODO Gestión de errores y update de SWR
 
+    try {
+      const tagsCreated = []
+      for (let index = 0; index < data.length; index++) {
+        const pro = isProjectTag
+          ? await createProjectTag(data[index])
+          : await createNoteTag(data[index])
+        tagsCreated.push(pro)
+      }
+
+      setShowImportModal(false)
+      showToast("Tags importadas correctamente")
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
+
+  const handleExportTags = () => {
+    setShowExportModal(false)
+    const _data = jsonToCSV(transformTagsToExport(tagData))
+    download(_data, `tags_export_${new Date().toLocaleDateString()}`, "text/csv")
+  }
   const handleClosePopup = () => {
     setDeleteType(null)
     setTagsToDelete(null)
@@ -142,9 +173,17 @@ const tags = () => {
         addTitle={infoByType[type].addTitle}
       />
 
+      <ExportFilesModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        onExport={() => handleExportTags()}
+      />
+
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
+        onUpload={(data) => handleImportTags(data)}
+        onDropDataTransform={(info) => tagDataTransform(info)}
       />
 
       <PageHeader title={infoByType[type].title}>
@@ -153,7 +192,7 @@ const tags = () => {
             onAdd={() => setIsTagModalOpen(true)}
             onSearch={onSearch}
             onImport={() => setShowImportModal(true)}
-            onExport={handleExport}
+            onExport={() => setShowExportModal(true)}
             addLabel={infoByType[type].addTitle}
             searchPlaceholder="Busqueda por ID, Alias"
             noFilter

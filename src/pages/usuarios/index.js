@@ -19,6 +19,13 @@ import { userFetchHandler } from "../../swr/user.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 import { getGroupOptionLabel } from "../../utils/functions/objects"
+import download from "downloadjs"
+import { jsonToCSV } from "react-papaparse"
+import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
+import {
+  transformUsersToExport,
+  userDataTransform
+} from "../../utils/functions/import_export/users_helpers"
 
 const USERS_GROUP_OPTIONS = [
   {
@@ -30,11 +37,12 @@ const USERS_GROUP_OPTIONS = [
 const usuarios = () => {
   // Hooks
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { deleteUser } = useUserApi()
+  const { deleteUser, createUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
 
   // States
   const [showImportModal, setShowImportModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
   const [isUserModalOpen, setIsUserModalOpen] = useState(false)
@@ -52,7 +60,29 @@ const usuarios = () => {
   const usersData = data && !isEmptyData ? data : null
 
   // Handlers views
-  const handleExport = () => {}
+
+  const handleImportProjects = async (data) => {
+    //TODO Gestión de errores y update de SWR
+
+    try {
+      const usersCreated = []
+      for (let index = 0; index < data.length; index++) {
+        const pro = await createUser(data[index])
+        usersCreated.push(pro)
+      }
+
+      setShowImportModal(false)
+      showToast("Proyectos importados correctamente")
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
+
+  const handleExportProjects = () => {
+    setShowExportModal(false)
+    const _data = jsonToCSV(transformUsersToExport(usersData))
+    download(_data, `users_export_${new Date().toLocaleDateString()}`, "text/csv")
+  }
 
   const handleOpenPopup = (usersToDelete, type) => {
     setDeleteType(type)
@@ -159,9 +189,17 @@ const usuarios = () => {
         onClose={handleOnCloseModal}
       />
 
+      <ExportFilesModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        onExport={() => handleExportProjects()}
+      />
+
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
+        onUpload={(data) => handleImportProjects(data)}
+        onDropDataTransform={(info) => userDataTransform(info)}
       />
 
       <PageHeader>
@@ -172,7 +210,7 @@ const usuarios = () => {
             onSearch={onSearch}
             onGroup={handleOnGroup}
             onImport={() => setShowImportModal(true)}
-            onExport={handleExport}
+            onExport={() => setShowExportModal(true)}
             addLabel="Añadir usuario"
             searchPlaceholder="Busqueda por ID, Alias"
             noFilter

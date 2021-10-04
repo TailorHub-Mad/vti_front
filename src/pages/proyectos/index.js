@@ -100,6 +100,8 @@ const proyectos = () => {
         projectsCreated.push(pro)
       }
 
+      await mutate()
+
       setShowImportModal(false)
       showToast("Proyectos importados correctamente")
     } catch (error) {

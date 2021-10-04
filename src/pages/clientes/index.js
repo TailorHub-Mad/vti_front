@@ -68,6 +68,7 @@ const clientes = () => {
     //TODO Gestión de errores y update de SWR
     try {
       await createClient(data)
+      await mutate()
       setShowImportModal(false)
       showToast("Clientes importados correctamente")
     } catch (error) {
