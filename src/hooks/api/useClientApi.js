@@ -9,7 +9,18 @@ const useClientApi = () => {
   const updateClient = (id, data) => clientService.updateClient(id, data)
   const deleteClient = (id) => clientService.deleteClient(id)
 
-  return { getClients, getClient, createClient, updateClient, deleteClient }
+  // GROUP & FILTER
+  const getSearchClients = (_, data) => clientService.getSearchClients(data)
+
+  return {
+    getClients,
+    getClient,
+    createClient,
+    updateClient,
+    deleteClient,
+
+    getSearchClients
+  }
 }
 
 export default useClientApi
