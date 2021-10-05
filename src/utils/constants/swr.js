@@ -47,7 +47,9 @@ export const SWR_CACHE_KEYS = {
 
   // TAGS
   projectTags: "projectTags/",
-  noteTags: "noteTags/"
+  noteTags: "noteTags/",
+  searchProjectTags: "projectTags/search",
+  searchNoteTags: "noteTags/search"
 }
 
 export const fetchType = {

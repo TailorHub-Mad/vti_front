@@ -5,18 +5,13 @@ import { PATHS } from "../../../utils/constants/global"
 import { TagCardHeader } from "./TagCardHeader/TagCardHeader"
 import { TagCardTags } from "./TagCardTags/TagCardTags"
 
-export const TagCard = ({
-  _id,
-  name,
-  updatedAt,
-  projects,
-  parent,
-  relatedTags,
-  category,
-  onEdit,
-  onDelete
-}) => {
+export const TagCard = ({ tag, onEdit, onDelete, isProjectTag }) => {
   const router = useRouter()
+
+  const handleItemTags = () => {
+    if (isProjectTag) return tag?.projects?.map((p) => p.alias)
+    return tag?.notes?.map((p) => p.name)
+  }
 
   return (
     <Box
@@ -28,24 +23,21 @@ export const TagCard = ({
       p="16px"
     >
       <TagCardHeader
-        title={name}
-        parent={parent?.name}
-        category={category}
+        title={tag?.name}
+        parent={tag?.parent?.name}
+        category={tag?.category}
         onEdit={onEdit}
         onDelete={onDelete}
-        onClick={() => router.push(`${PATHS.projectTags}/${_id}`)}
+        onClick={() => router.push(`${PATHS.projectTags}/${tag?._id}`)}
       />
 
-      <TagCardTags
-        projects={projects.map((p) => p.alias)}
-        relatedTags={relatedTags}
-      />
+      <TagCardTags items={handleItemTags()} relatedTags={tag?.relatedTags} />
       <Flex justify="space-between">
         <Text variant="d_xs_regular" color="grey">
           ID
         </Text>
         <Text variant="d_xs_regular" color="grey">{`últ. actualización ${new Date(
-          updatedAt
+          tag?.updatedAt
         ).toLocaleDateString()}`}</Text>
       </Flex>
     </Box>
