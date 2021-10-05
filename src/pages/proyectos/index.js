@@ -15,7 +15,11 @@ import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
-import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
+import {
+  checkDataIsEmpty,
+  getFieldGRoupObjectById,
+  getFieldObjectById
+} from "../../utils/functions/global"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 import { getGroupOptionLabel } from "../../utils/functions/objects"
@@ -81,6 +85,7 @@ const proyectos = () => {
   const projectsData = handleProjectsData(isEmptyData)
 
   const isSearch = fetchState == fetchType.SEARCH
+  const isGrouped = fetchState == fetchType.GROUP
 
   // Handlers views
   const isToolbarHidden = () => {
@@ -118,7 +123,12 @@ const proyectos = () => {
   // Handlers views
   const handleOpenPopup = (projectsToDelete, type) => {
     setDeleteType(type)
-    setProjectsToDelete(projectsToDelete)
+
+    if (type === DeleteType.ONE && isGrouped) {
+      const [id, { key }] = Object.entries(projectsToDelete)[0]
+      return setProjectsToDelete({ id, key })
+    }
+    return setProjectsToDelete(projectsToDelete)
   }
 
   const handleClosePopup = () => {
@@ -148,24 +158,40 @@ const proyectos = () => {
 
     if (deleteType === DeleteType.MANY)
       return "¿Desea eliminar los proyectos seleccionados?"
-    const label = getFieldObjectById(projectsData, "alias", projectsToDelete)
+
+    const label = isGrouped
+      ? getFieldGRoupObjectById(
+          projectsData,
+          "alias",
+          projectsToDelete.id,
+          projectsToDelete.key
+        )
+      : getFieldObjectById(projectsData, "alias", projectsToDelete)
     return `¿Desea eliminar ${label}?`
   }
 
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(projectsToDelete, projectsData)
-    updated.length > 0 ? await mutate(updated, false) : await mutate()
+
     setDeleteType(null)
     setProjectsToDelete(null)
+    if (isGrouped || updated?.length === 0) return await mutate()
+    await mutate(updated, false)
   }
 
-  const deleteOne = async (id, projects) => {
+  const deleteOne = async (data, projects) => {
     try {
-      await deleteProject(id)
+      if (isGrouped) {
+        await deleteProject(data.id)
+        showToast("Proyecto borrado correctamente")
+        return
+      }
+
+      await deleteProject(data)
       showToast("Proyecto borrado correctamente")
       const updatedProjects = []
-      const filterProjects = projects.filter((system) => system._id !== id)
+      const filterProjects = projects.filter((system) => system._id !== data)
       updatedProjects.push({
         projects: filterProjects
       })

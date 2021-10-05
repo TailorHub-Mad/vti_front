@@ -25,12 +25,27 @@ export const TableHeader = ({
   return (
     <Flex justify="space-between" align="center" pb="32px">
       {fetchState === fetchType.GROUP ? (
-        <Flex alignItems="center">
-          <CloseIcon mr="8px" h="12px" cursor="pointer" onClick={handleOnClick} />
-          <Text marginTop="6px">{`Filtrado por ${groupOption
-            .toString()
-            .toUpperCase()}`}</Text>
-        </Flex>
+        <>
+          <Flex alignItems="center">
+            <CloseIcon mr="8px" h="12px" cursor="pointer" onClick={handleOnClick} />
+            <Text marginTop="6px">{`Filtrado por ${groupOption
+              .toString()
+              .toUpperCase()}`}</Text>
+          </Flex>
+          {Object.keys(selectedRows)?.length > 0 ? (
+            <Flex
+              alignItems="center"
+              justifyContent="center"
+              onClick={() => onDelete(selectedRows)}
+              cursor="pointer"
+            >
+              <DeleteIcon mr="8px" color="error" />
+              <Text color="error" marginTop="6px">
+                Eliminar
+              </Text>
+            </Flex>
+          ) : null}
+        </>
       ) : (
         <Flex>
           <Checkbox mr="8px" onChange={selectAllRows} isChecked={isChecked} />

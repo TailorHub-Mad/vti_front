@@ -59,7 +59,7 @@ const apoyo = () => {
   const [helpToUpdate, setHelpToUpdate] = useState(null)
   const [helpToDelete, setHelpToDelete] = useState(null)
   const [tagsNotWork, setTagsNotWork] = useState([])
-  const [isProjectHelp, setIsProjectHelp] = useState(false)
+  const [isProjectHelp, setIsProjectHelp] = useState(true)
 
   // Fetch
   const { data, error, isLoading, mutate } = helpFetchHandler(

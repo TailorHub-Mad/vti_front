@@ -54,7 +54,7 @@ export const Table = ({
                   templateColumns={templateColumns}
                   idx={idx}
                   components={components}
-                  onRowSelect={onRowSelect}
+                  onRowSelect={(value) => onRowSelect(value, item.key)}
                   selectedRows={selectedRows}
                   head={head}
                   isLastOne={idx === content.length - 1}

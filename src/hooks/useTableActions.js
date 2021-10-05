@@ -1,16 +1,21 @@
 import { useState } from "react"
 
-const useTableActions = () => {
+const useTableActions = (isGrouped) => {
   const [selectedRows, setSelectedRows] = useState({})
 
-  const handleRowSelect = (id) => {
+  const handleRowSelect = (id, key) => {
     if (selectedRows[id]) {
       const _nextSelected = { ...selectedRows }
       delete _nextSelected[id]
       setSelectedRows(_nextSelected)
       return
     }
-    setSelectedRows({ ...selectedRows, [id]: true })
+
+    console.log("esto llega", id, key)
+
+    isGrouped
+      ? setSelectedRows({ ...selectedRows, [id]: { active: true, key } })
+      : setSelectedRows({ ...selectedRows, [id]: true })
   }
 
   const handleSelectAllRows = (items) => {

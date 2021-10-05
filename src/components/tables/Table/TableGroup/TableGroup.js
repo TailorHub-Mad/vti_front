@@ -17,8 +17,6 @@ export const TableGroup = ({
 
   const isSelected = (id) => !!selectedRows[id]
 
-  // TODO -> review
-  if (item.key === "undefined") return null
   return (
     <Box pb={isOpen ? "20px" : "10px"}>
       <Flex onClick={onToggle} cursor="pointer" align="center" padding="10px 0">
