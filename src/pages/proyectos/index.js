@@ -337,7 +337,10 @@ const proyectos = () => {
           fetchState={fetchState}
           projects={projectsData}
           onClose={handleOnOpenFinishProjectModal}
-          onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
+          onDelete={(id) => {
+            console.log(id)
+            handleOpenPopup(id, DeleteType.ONE)
+          }}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
           onEdit={handleUpdate}
           onTabChange={(state) => setFetchState(state)}
