@@ -1,6 +1,4 @@
-export const noteChecker = (data) => {
-  console.log(data)
-}
+export const noteChecker = () => {}
 
 export const noteDataTransform = (data) => {
   const items = [...data]

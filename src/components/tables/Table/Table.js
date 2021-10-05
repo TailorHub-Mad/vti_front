@@ -38,7 +38,6 @@ export const Table = ({
       {header ? <Box>{header}</Box> : null}
 
       <Flex
-        overflow="scroll"
         width="100%"
         maxHeight={tableHeight || `calc(100vh - ${header ? "310px" : "230px"})`}
         position="relative"

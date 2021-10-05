@@ -51,7 +51,7 @@ const proyectos = () => {
   const { deleteProject, createProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
 
-  // Hooks
+  // States
   const [showImportModal, setShowImportModal] = useState(false)
   const [showExportModal, setShowExportModal] = useState(false)
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
