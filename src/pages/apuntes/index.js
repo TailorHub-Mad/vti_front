@@ -121,7 +121,6 @@ const apuntes = () => {
   const checkIsSubscribe = (id) => user?.subscribed?.notes?.includes(id)
 
   // Handlers views
-
   const isToolbarHidden = () => {
     if (isLoading) return false
     if (isEmptyData && !isSearch) return false

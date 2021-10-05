@@ -15,7 +15,7 @@ import useTagApi from "../../hooks/api/useTagApi"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { ToastContext } from "../../provider/ToastProvider"
 import { tagFetchHandler } from "../../swr/tag.swr"
-import { DeleteType, PATHS } from "../../utils/constants/global"
+import { PATHS } from "../../utils/constants/global"
 import { errorHandler } from "../../utils/errors"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
 import {
@@ -67,8 +67,7 @@ const tags = () => {
   const [showExportModal, setShowExportModal] = useState(false)
   const [isTagModalOpen, setIsTagModalOpen] = useState(false)
   const [tagToUpdate, setTagToUpdate] = useState(null)
-  const [deleteType, setDeleteType] = useState(null)
-  const [tagToDelete, setTagsToDelete] = useState(null)
+  const [tagToDelete, setTagToDelete] = useState(null)
   // TODO -> review order in back & ENUM
   const [activeTab, setActiveTab] = useState(ORDER.inheritance)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
@@ -95,11 +94,6 @@ const tags = () => {
     if (isEmptyData && !isSearch) return false
 
     return true
-  }
-
-  const handleClosePopup = () => {
-    setDeleteType(null)
-    setTagsToDelete(null)
   }
 
   const handleOnCloseModal = () => {
@@ -133,15 +127,6 @@ const tags = () => {
     download(_data, `tags_export_${new Date().toLocaleDateString()}`, "text/csv")
   }
 
-  const handleDeleteMessage = () => {
-    if (!tagToDelete) return
-
-    if (deleteType === DeleteType.MANY)
-      return "¿Desea eliminar los tags seleccionados?"
-    const label = getFieldObjectById(tagData, "name", tagToDelete)
-    return `¿Desea eliminar ${label}?`
-  }
-
   const handleDelete = async () => {
     try {
       isProjectTag
@@ -149,8 +134,7 @@ const tags = () => {
         : await deleteNoteTag(tagToDelete)
       await mutate()
       showToast("Tag borrada correctamente")
-      setDeleteType(null)
-      setTagsToDelete(null)
+      setTagToDelete(null)
     } catch (error) {
       errorHandler(error)
     }
@@ -196,9 +180,9 @@ const tags = () => {
         color="error"
         isOpen={tagToDelete}
         onConfirm={handleDelete}
-        onClose={handleClosePopup}
+        onClose={() => setTagToDelete(null)}
       >
-        {handleDeleteMessage()}
+        {`¿Desea eliminar ${getFieldObjectById(tagData, "name", tagToDelete)}?`}
       </Popup>
 
       <NewTagModal
@@ -279,7 +263,7 @@ const tags = () => {
                   .map((tag) => (
                     <TagCard
                       onEdit={() => handleUpdate(tag)}
-                      onDelete={() => setTagsToDelete(tag._id)}
+                      onDelete={() => setTagToDelete(tag._id)}
                       key={tag.name}
                       tag={tag}
                       isProjectTag={isProjectTag}
@@ -300,7 +284,7 @@ const tags = () => {
                   .map((tag) => (
                     <TagCard
                       onEdit={() => handleUpdate(tag)}
-                      onDelete={() => setTagsToDelete(tag._id)}
+                      onDelete={() => setTagToDelete(tag._id)}
                       key={tag.name}
                       tag={tag}
                       isProjectTag={isProjectTag}
@@ -321,7 +305,7 @@ const tags = () => {
               {sortTags(tagData).map((tag) => (
                 <TagCard
                   onEdit={() => handleUpdate(tag)}
-                  onDelete={() => setTagsToDelete(tag._id)}
+                  onDelete={() => setTagToDelete(tag._id)}
                   key={tag.name}
                   tag={tag}
                   isProjectTag={isProjectTag}

@@ -2,38 +2,38 @@ import { Flex, Text, Box } from "@chakra-ui/react"
 import React from "react"
 import { ICONS_REFERENCE } from "../../../utils/constants/icons"
 
-export const CriteriaHeader = ({
+const HELP_MENU = {
+  projects_board: {
+    label: "Tablero Tag Proyecto",
+    active_icon: ICONS_REFERENCE.departments,
+    icon: ICONS_REFERENCE.departments
+  },
+  projects_alphabetic: {
+    label: "Alfabético Tag Proyecto",
+    active_icon: ICONS_REFERENCE.list,
+    icon: ICONS_REFERENCE.list
+  },
+  notes_board: {
+    label: "Tablero Tag Apunte",
+    active_icon: ICONS_REFERENCE.departments,
+    icon: ICONS_REFERENCE.departments
+  },
+  notes_alphabetic: {
+    label: "Alfabético Tag Apunte",
+    active_icon: ICONS_REFERENCE.list,
+    icon: ICONS_REFERENCE.list
+  }
+}
+
+export const HelpHeader = ({
   tagsCount = 0,
   onChange,
   activeItem = "projects_board"
 }) => {
-  const visibility_menu = {
-    projects_board: {
-      label: "Tablero Tag Proyecto",
-      active_icon: ICONS_REFERENCE.departments,
-      icon: ICONS_REFERENCE.departments
-    },
-    projects_alphabetic: {
-      label: "Alfabético Tag Proyecto",
-      active_icon: ICONS_REFERENCE.list,
-      icon: ICONS_REFERENCE.list
-    },
-    notes_board: {
-      label: "Tablero Tag Apunte",
-      active_icon: ICONS_REFERENCE.departments,
-      icon: ICONS_REFERENCE.departments
-    },
-    notes_alphabetic: {
-      label: "Alfabético Tag Apunte",
-      active_icon: ICONS_REFERENCE.list,
-      icon: ICONS_REFERENCE.list
-    }
-  }
-
   return (
     <Flex justify="space-between" align="center" pb="32px">
       <Flex>
-        {Object.entries(visibility_menu).map(([name, item], idx) => {
+        {Object.entries(HELP_MENU).map(([name, item], idx) => {
           const isActive = name === activeItem
           return (
             <Flex

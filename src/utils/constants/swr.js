@@ -29,7 +29,7 @@ export const SWR_CACHE_KEYS = {
   searchSystems: "systems/search",
 
   // CLIENTS
-  clients: "clietns/",
+  clients: "clients/",
   client: "client/",
 
   // SECTORS
@@ -49,7 +49,13 @@ export const SWR_CACHE_KEYS = {
   projectTags: "projectTags/",
   noteTags: "noteTags/",
   searchProjectTags: "projectTags/search",
-  searchNoteTags: "noteTags/search"
+  searchNoteTags: "noteTags/search",
+
+  // HELPS
+  projectHelps: "projectHelps/",
+  noteHelps: "noteHelps/",
+  searchProjectHelps: "projectHelps/search",
+  searchNoteHelps: "noteHelps/search"
 }
 
 export const fetchType = {

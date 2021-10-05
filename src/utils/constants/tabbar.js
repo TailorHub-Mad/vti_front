@@ -96,8 +96,7 @@ const TABBAR_LINKS = {
   help: {
     label: "Apoyo",
     icon: ICONS_REFERENCE.help_line,
-    href: PATHS.help,
-    disabled: true // TODO -> provisional
+    href: PATHS.help
   },
 
   // SUBSCRIPTION

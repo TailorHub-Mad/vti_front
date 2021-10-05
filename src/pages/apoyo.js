@@ -1,5 +1,5 @@
 import { Box, Flex, Grid, Text } from "@chakra-ui/react"
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Page } from "../components/layout/Pages/Page"
 import { PageBody } from "../components/layout/Pages/PageBody/PageBody"
 import { PageHeader } from "../components/layout/Pages/PageHeader/PageHeader"
@@ -7,137 +7,163 @@ import { ToolBar } from "../components/navigation/ToolBar/ToolBar"
 import { ImportFilesModal } from "../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { Popup } from "../components/overlay/Popup/Popup"
 import { ApiAuthContext } from "../provider/ApiAuthProvider"
-import { DeleteType } from "../utils/constants/global"
-import { getFieldObjectById } from "../utils/functions/global"
+import { checkDataIsEmpty, getFieldObjectById } from "../utils/functions/global"
 import { AddCriterionIcon } from "../components/icons/AddCriterionIcon"
-import { CriteriaHeader } from "../views/criteria/CriteriaHeader/CriteriaHeader"
-import faker from "faker"
+import { HelpHeader } from "../views/helps/HelpHeader/HelpHeader"
 import { Tag } from "../components/tags/Tag/Tag"
 import { CriterionTitleCard } from "../components/cards/CriterionTitleCard/Criterion"
-const tagsMock = new Array(50).fill("").map(() => faker.random.word())
+import { fetchOption, fetchType } from "../utils/constants/swr"
+import { errorHandler } from "../utils/errors"
+import download from "downloadjs"
+import { jsonToCSV } from "react-papaparse"
+import {
+  helpDataTransform,
+  transformHelpsToExport
+} from "../utils/functions/import_export/help_helpers"
+import { helpFetchHandler } from "../swr/help.swr"
+import useHelpApi from "../hooks/api/useHelpApi"
+import { ToastContext } from "../provider/ToastProvider"
+import { NewHelpModal } from "../views/helps/NewHelp/NewHelpModal/NewHelpModal"
+import { ExportFilesModal } from "../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
+import { BreadCrumbs } from "../components/navigation/BreadCrumbs/BreadCrumbs"
+import { LoadingView } from "../views/common/LoadingView"
+import { ViewNotFoundState } from "../views/common/ViewNotFoundState"
+import { ViewEmptyState } from "../views/common/ViewEmptyState"
+
+const HELP_MENU_TABS = {
+  projects_board: "projects_board",
+  projects_alphabetic: "projects_alphabetic",
+  notes_board: "notes_board",
+  notes_alphabetic: "notes_alphabetic"
+}
+
+const ORDER = {
+  board: "board",
+  alphabetic: "alphabetic"
+}
 
 const apoyo = () => {
-  // const router = useRouter()
-  // const { type } = router.query
-  // const isProjectTag = type === "proyecto"
-
-  // const infoByType = {
-  //   proyecto: {
-  //     title: "Tags de proyecto",
-  //     addTitle: "Añadir tag de proyecto",
-  //     editSuccessMsg: "Editado correctamente",
-  //     editTitle: "Editar tag e proyecto",
-  //     addSuccessMsg: "¡Has añadido nuevo/s tag de proyecto/s!",
-  //     fetchKey: "projects"
-  //   },
-  //   apunte: {
-  //     title: "Tags de apunte",
-  //     addTitle: "Añadir tag de apunte",
-  //     editSuccessMsg: "Editado correctamente",
-  //     editTitle: "Editar tag de apunte",
-  //     addSuccessMsg: "¡Has añadido nuevo/s tag de apunte/s!",
-  //     fetchKey: "notes"
-  //   }
-  // }
-
-  const [activeTab, setActiveTab] = useState("board")
+  // Hooks
   const { isLoggedIn } = useContext(ApiAuthContext)
-  // const { showToast } = useContext(ToastContext)
-  //TODO Meter la api de criterio
-  // const { deleteProjectTag, deleteNoteTag } = useTagApi()
-  // const { data, error, isLoading, mutate } = tagFetchHandler(
-  //   infoByType[type].fetchKey
-  // )
+  const { deleteProjectHelp, deleteNoteHelp, createNoteHelp, createProjectHelp } =
+    useHelpApi()
+  const { showToast } = useContext(ToastContext)
 
+  // States
+  const [activeTab, setActiveTab] = useState(HELP_MENU_TABS.projects_board)
+  const [fetchState, setFetchState] = useState(fetchType.ALL)
+  const [fetchOptions, setFetchOptions] = useState({})
   const [showImportModal, setShowImportModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false)
+  const [helpToUpdate, setHelpToUpdate] = useState(null)
+  const [helpToDelete, setHelpToDelete] = useState(null)
+  const [tagsNotWork, setTagsNotWork] = useState([])
+  const [isProjectHelp, setIsProjectHelp] = useState(false)
 
-  // Create - Update state
-  const [, setIsCriterioModalOpen] = useState(false)
-  const [, setCriterioToUpdate] = useState(null)
+  // Fetch
+  const { data, error, isLoading, mutate } = helpFetchHandler(
+    fetchState,
+    fetchOptions,
+    isProjectHelp
+  )
 
-  // Delete state
-  const [deleteType, setDeleteType] = useState(null)
-  const [criterioToDelete, setCriteriosToDelete] = useState(null)
+  const isEmptyData = checkDataIsEmpty(data)
+  const helpsData = data && !isEmptyData ? data : null
 
-  // TODO -> provisonal
-  // const isEmptyData = checkDataIsEmpty(data)
-  // const criterioData = data && !isEmptyData ? data : null
-  const isEmptyData = true
-  const criterioData = isEmptyData && null
+  const isSearch = fetchState == fetchType.SEARCH
 
-  const handleExport = () => {}
+  // Handlers views
+  const isToolbarHidden = () => {
+    if (isLoading) return false
+    if (isEmptyData && !isSearch) return false
 
-  const handleOpenPopup = (criterioToDelete, type) => {
-    setDeleteType(type)
-    setCriteriosToDelete(criterioToDelete)
+    return true
   }
 
-  const handleClosePopup = () => {
-    setDeleteType(null)
-    setCriteriosToDelete(null)
+  const handleActiveTab = (value) => {
+    setActiveTab(value)
+
+    if (value.includes(HELP_MENU_TABS.projects_board)) setIsProjectHelp(true)
+    else setIsProjectHelp(false)
   }
 
-  // const handleOnCloseModal = () => {
-  //   setCriterioToUpdate(null)
-  //   setIsCriterioModalOpen(false)
-  // }
-
-  const handleDeleteMessage = () => {
-    if (!criterioToDelete) return
-
-    if (deleteType === DeleteType.MANY)
-      return "¿Desea eliminar los tags seleccionados?"
-    const label = getFieldObjectById(criterioData, "alias", criterioToDelete)
-    return `¿Desea eliminar ${label}?`
+  const handleOnCloseModal = () => {
+    setHelpToUpdate(null)
+    setIsHelpModalOpen(false)
   }
 
-  const handleDeleteFunction = async () => {
-    // const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
-    // const updated = await f(criterioToDelete, criterioData)
-    // const updated = await deleteOne(criterioToDelete, criterioData)
-    // updated.length > 0 ? await mutate(updated, false) : await mutate()
-    // setDeleteType(null)
-    // setCriteriosToDelete(null)
+  // Handlers CRUD
+  const sortTags = (data) => {
+    return data.sort((a, b) => a.name.localeCompare(b.name))
   }
 
-  // const deleteOne = async () => {
-  //   try {
-  //     ;(await isProjectTag) ? deleteProjectTag(id) : deleteNoteTag(id)
-  //     showToast("Tag borrada correctamente")
-  //     return projectTag.filter((projectTag) => projectTag._id !== id)
-  //   } catch (error) {
-  //     errorHandler(error)
-  //   }
-  // }
+  const handleImportHelps = async (data) => {
+    //TODO Gestión de errores y update de SWR
 
-  //   const deleteMany = async (projectTagId, projectTag) => {
-  //     try {
-  //       const projectTagQueue = projectTagId.map((id) => deleteProjectTag(id))
-  //       await Promise.all(projectTagQueue)
-  //       showToast("Tags borradas correctamente")
-  //       return projectTag.filter(
-  //         (projectTag) => !projectTagId.includes(projectTag._id)
-  //       )
-  //     } catch (error) {
-  //       errorHandler(error)
-  //     }
-  //   }
+    try {
+      const tagsCreated = []
+      for (let index = 0; index < data.length; index++) {
+        const pro = isProjectHelp
+          ? await createProjectHelp(data[index])
+          : await createNoteHelp(data[index])
+        tagsCreated.push(pro)
+      }
+
+      setShowImportModal(false)
+      showToast("Criterios importadas correctamente")
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
+
+  const handleExportHelps = () => {
+    setShowExportModal(false)
+    const _data = jsonToCSV(transformHelpsToExport(helpsData))
+    download(_data, `helps_export_${new Date().toLocaleDateString()}`, "text/csv")
+  }
+
+  const handleDelete = async () => {
+    try {
+      isProjectHelp
+        ? await deleteProjectHelp(helpToDelete)
+        : await deleteNoteHelp(helpToDelete)
+      await mutate()
+      showToast("Help borrada correctamente")
+      setHelpToDelete(null)
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
 
   const handleUpdate = (id) => {
-    const tag = criterioData.find((tag) => tag._id === id)
-    setCriterioToUpdate(tag)
-    setIsCriterioModalOpen(true)
+    const help = helpsData.find((help) => help._id === id)
+    setHelpToUpdate(help)
+    setIsHelpModalOpen(true)
   }
 
-  const onSearch = () => {
-    // setFetchState(fetchType.SEARCH)
-    // setFetchOptions({
-    //   [fetchOption.SEARCH]: search
-    // })
+  const onSearch = (search) => {
+    if (!search) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.SEARCH]: null
+      })
+      return
+    }
+
+    setFetchState(fetchType.SEARCH)
+    setFetchOptions({
+      [fetchOption.SEARCH]: search
+    })
   }
+
+  // TODO
+  useEffect(() => {
+    setTagsNotWork([])
+  }, [])
 
   if (!isLoggedIn) return null
-  // if (error) return errorHandler(error)
+  if (error) return errorHandler(error)
   return (
     <Page>
       <Popup
@@ -145,86 +171,126 @@ const apoyo = () => {
         confirmText="Eliminar"
         cancelText="Cancelar"
         color="error"
-        isOpen={deleteType}
-        onConfirm={handleDeleteFunction}
-        onClose={handleClosePopup}
+        isOpen={helpToDelete}
+        onConfirm={handleDelete}
+        onClose={() => setHelpToDelete(null)}
       >
-        {handleDeleteMessage()}
+        {`¿Desea eliminar ${getFieldObjectById(helpsData, "ref", helpToDelete)}?`}
       </Popup>
+
+      <NewHelpModal
+        helpToUpdate={helpToUpdate}
+        isOpen={isHelpModalOpen}
+        onClose={handleOnCloseModal}
+        addTitle="Añadir nuevo criterio"
+      />
+
+      <ExportFilesModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        onExport={() => handleExportHelps()}
+      />
+
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
+        onUpload={(data) => handleImportHelps(data)}
+        onDropDataTransform={(info) => helpDataTransform(info)}
       />
-      {/* <NewTagModal
-        criterioToUpdate={criterioToUpdate}
-        isOpen={isCriterioModalOpen}
-        onClose={handleOnCloseModal}
-        isProjectTag={isProjectTag}
-        editSuccessMsg={infoByType[type].editSuccessMsg}
-        editTitle={infoByType[type].editTitle}
-        addSuccessMsg={infoByType[type].addSuccessMsg}
-        addTitle="Añadir criterio"
-      /> */}
-      <PageHeader title="Apoyo">
-        {/* {data && !isLoading ? ( */}
-        <ToolBar
-          onAdd={() => setIsCriterioModalOpen(true)}
-          onSearch={onSearch}
-          onImport={() => setShowImportModal(true)}
-          onExport={handleExport}
-          addLabel="Añadir criterio"
-          searchPlaceholder="Busqueda por tag, Título..."
-          noFilter
-          noGroup
-          icon={<AddCriterionIcon />}
-        />
-        {/* ) : null} */}
+
+      <PageHeader>
+        <BreadCrumbs />
+        {isToolbarHidden() && (
+          <ToolBar
+            onAdd={() => setIsHelpModalOpen(true)}
+            onSearch={onSearch}
+            onImport={() => setShowImportModal(true)}
+            onExport={() => setShowExportModal(true)}
+            addLabel="Añadir criterio"
+            searchPlaceholder="Busqueda por ID, Proyecto"
+            icon={<AddCriterionIcon />}
+            fetchState={fetchState}
+            noGroup
+            noFilter
+          />
+        )}
       </PageHeader>
-      {/* {isLoading ? <LoadingView mt="-200px" /> : null} */}
-      {/* {!data ? <NotesEmptyState /> : null} */}
+
       <PageBody
         p="32px"
         bgColor="white"
         boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
         height="calc(100vh - 105px)"
       >
-        {/* {data && !isLoading && ( */}
-        <CriteriaHeader
-          activeItem={activeTab}
-          onChange={(value) => setActiveTab(value)}
-          // tagsCount={data.length}
-          tagsCount={55}
-        />
-        {/* )} */}
-        <Box mb="40px">
-          <Text variant="d_m_medium" mb="8px">
-            Tags no utilizados
-          </Text>
-          <Flex width="100%" wrap="wrap">
-            {tagsMock.map((tag, idx) => (
-              <Tag key={`${tag}-${idx}`} variant="violete" mr="8px" mb="8px">
-                {tag}
-              </Tag>
-            ))}
-          </Flex>
-        </Box>
+        {isLoading ? <LoadingView mt="-200px" /> : null}
+        {isEmptyData && isSearch ? (
+          <ViewNotFoundState />
+        ) : isEmptyData ? (
+          <ViewEmptyState
+            message="Añadir criterios a la plataforma"
+            importButtonText="Importar"
+            addButtonText="Añadir criterio"
+            onImport={() => setShowImportModal(true)}
+            onAdd={() => setIsHelpModalOpen(true)}
+          />
+        ) : null}
 
-        <Grid
-          templateColumns="repeat(auto-fill, 266px)"
-          gap="16px"
-          width="100%"
-          mt="8px"
-          mb="24px"
-        >
-          {tagsMock.map((tag) => (
-            <CriterionTitleCard
-              onEdit={() => handleUpdate(tag._id)}
-              onDelete={() => handleOpenPopup(tag._id, DeleteType.ONE)}
-              key={tag.name}
-              {...tag}
+        {helpsData ? (
+          <>
+            <HelpHeader
+              activeItem={activeTab}
+              onChange={handleActiveTab}
+              tagsCount={helpsData.length}
             />
-          ))}
-        </Grid>
+
+            {tagsNotWork.length > 0 ? (
+              <Box mb="40px">
+                <Text variant="d_m_medium" mb="8px">
+                  Tags no utilizados
+                </Text>
+                <Flex width="100%" wrap="wrap">
+                  {tagsNotWork.map((tag, idx) => (
+                    <Tag key={`${tag}-${idx}`} variant="violete" mr="8px" mb="8px">
+                      {tag.name}
+                    </Tag>
+                  ))}
+                </Flex>
+              </Box>
+            ) : null}
+
+            <Grid
+              templateColumns="repeat(auto-fill, 266px)"
+              gap="16px"
+              width="100%"
+              mt="8px"
+              mb="24px"
+            >
+              {activeTab.includes(ORDER.board)
+                ? helpsData.map((help) => (
+                    <CriterionTitleCard
+                      help={help}
+                      onAdd={() => setIsHelpModalOpen(true)}
+                      onEdit={() => handleUpdate(help._id)}
+                      onDelete={() => setHelpToDelete(help._id)}
+                      key={help.name}
+                    />
+                  ))
+                : null}
+
+              {activeTab.includes(ORDER.alphabetic)
+                ? sortTags(helpsData).map((help) => (
+                    <CriterionTitleCard
+                      help={help}
+                      onAdd={() => setIsHelpModalOpen(true)}
+                      onEdit={() => handleUpdate(help._id)}
+                      onDelete={() => setHelpToDelete(help._id)}
+                      key={help.name}
+                    />
+                  ))
+                : null}
+            </Grid>
+          </>
+        ) : null}
       </PageBody>
     </Page>
   )
