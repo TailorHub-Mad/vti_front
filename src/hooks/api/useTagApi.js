@@ -3,6 +3,7 @@ import TagService from "../../services/tag.service"
 const useTagApi = () => {
   const tagService = TagService()
 
+  // CRUD
   const getNoteTags = () => tagService.getNoteTags()
   const getProjectTags = () => tagService.getProjectTags()
   const createProjectTag = (data) => tagService.createProjectTag(data)
@@ -12,6 +13,10 @@ const useTagApi = () => {
   const deleteProjectTag = (id) => tagService.deleteProjectTag(id)
   const deleteNoteTag = (id) => tagService.deleteNoteTag(id)
 
+  // GROUP & FILTER
+  const getSearchProjectTags = (_, data) => tagService.getSearchProjectTags(data)
+  const getSearchNotesTags = (_, data) => tagService.getSearchNotesTags(data)
+
   return {
     getNoteTags,
     getProjectTags,
@@ -20,7 +25,10 @@ const useTagApi = () => {
     updateProjectTag,
     updateNoteTag,
     deleteProjectTag,
-    deleteNoteTag
+    deleteNoteTag,
+
+    getSearchProjectTags,
+    getSearchNotesTags
   }
 }
 
