@@ -1,15 +1,17 @@
 import { PATHS } from "../../../utils/constants/global"
 import { calcColWidth } from "../../../utils/constants/tables"
+import { variantGeneralTag } from "../../../utils/constants/tabs"
 
-export const formatSector = (data) => {
-  // data && !isGrouped ? data?.map(transformSectorData) : groupTable(data)
-  return data && data?.map(transformSectorData)
-}
+export const formatSector = (data) => data && data?.map(transformSectorData)
 
 export const transformSectorData = (sector) => ({
   selector: "",
-  id: { label: sector.ref, value: sector._id },
-  name: { label: sector.title, link: `${PATHS.sectors}/${sector._id}` },
+  id: {
+    label: sector.ref,
+    value: sector._id,
+    link: `${PATHS.sectors}/${sector._id}`
+  },
+  name: sector.title,
   projects: sector.projects,
   options: ""
 })
@@ -31,17 +33,20 @@ export const TABLE_SECTORS_HEAD = {
   id: {
     label: "ID",
     width: calcColWidth(80),
-    type: "mapText"
+    type: "link"
   },
   name: {
     label: "Nombre",
     width: calcColWidth(120),
-    type: "link"
+    type: "text"
   },
   projects: {
     label: "Proyectos",
     width: calcColWidth(815),
-    type: "tags"
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.NOTE
+    }
   },
   options: {
     label: "",

@@ -6,6 +6,7 @@ export const ActionLink = ({
   color = "blue.500",
   icon,
   isDisabled,
+  onClick = () => {},
   ...props
 }) => {
   return (
@@ -15,6 +16,7 @@ export const ActionLink = ({
       cursor="pointer"
       opacity={isDisabled ? 0.6 : 1}
       pointerEvents={isDisabled ? "none" : "auto"}
+      onClick={onClick}
       {...props}
     >
       {icon

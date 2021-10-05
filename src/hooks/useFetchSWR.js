@@ -2,7 +2,7 @@ import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import useSWR from "swr"
 import { ApiAuthContext } from "../provider/ApiAuthProvider"
-import { PATHS } from "../utils/constants/global"
+import { PATHS, WHITE_LIST } from "../utils/constants/global"
 
 const useFetchSWR = (key, fetcher, refreshInterval) => {
   const router = useRouter()
@@ -31,6 +31,7 @@ const useFetchSWR = (key, fetcher, refreshInterval) => {
 
   useEffect(() => {
     if (!isUnauthorize) return
+    if (WHITE_LIST.includes(router.route)) return
     authContext && authContext.setIsLoggedIn(false)
     router.push(PATHS.login)
   }, [isUnauthorize])

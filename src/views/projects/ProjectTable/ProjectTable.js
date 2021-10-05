@@ -10,16 +10,19 @@ export const ProjectsTable = ({
   projects,
   onTabChange,
   onDelete,
+  onClose,
   onDeleteMany,
   onEdit,
-  fetchState
+  fetchState = fetchType.ALL,
+  onGroup,
+  groupOption
 }) => {
   const { selectedRows, setSelectedRows, handleSelectAllRows, handleRowSelect } =
     useTableActions()
 
   const selectedRowsKeys = Object.keys(selectedRows)
 
-  const [activeItem, setActiveItem] = useState(fetchType.ALL)
+  const [activeItem, setActiveItem] = useState(fetchState)
 
   useMemo(() => {
     setSelectedRows([])
@@ -41,7 +44,7 @@ export const ProjectsTable = ({
     components: TABLE_COMPONENTS,
     head: {
       ...TABLE_PROJECTS_HEAD,
-      options: { ...TABLE_PROJECTS_HEAD.options, onDelete, onEdit }
+      options: { ...TABLE_PROJECTS_HEAD.options, onDelete, onEdit, onClose }
     }
   }
   const allRowsAreSelected = selectedRowsKeys.length === projectsData?.length
@@ -57,6 +60,9 @@ export const ProjectsTable = ({
           onDelete={handleOnDelete}
           selectAllRows={() => handleSelectAllRows(projectsData)}
           checked={allRowsAreSelected}
+          fetchState={fetchState}
+          onGroup={onGroup}
+          groupOption={groupOption}
         />
       }
       {...TABLE_STYLE}

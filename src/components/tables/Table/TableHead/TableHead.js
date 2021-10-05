@@ -6,8 +6,7 @@ export const TableHead = ({ templateColumns, head }) => {
   return (
     <Grid
       templateColumns={templateColumns}
-      borderBottom="1px"
-      borderColor="grey"
+      borderBottom="1px solid #C9C9C9"
       padding="8px 0"
       width="100%"
       position="sticky"

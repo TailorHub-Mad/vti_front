@@ -3,7 +3,7 @@ import { ServiceConstructor } from "."
 const SectorService = () => {
   const { instance, execute } = ServiceConstructor
 
-  const getSectors = (limit = 50, offset = 0) =>
+  const getSectors = (limit = 0, offset = 0) =>
     execute(instance.get(`/sector?limit=${limit}&offset=${offset}`))
   const getSector = (id) => execute(instance.get(`/sector/${id}`))
   const createSector = (data) => execute(instance.post(`/sector/create`, data))

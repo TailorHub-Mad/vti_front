@@ -1,5 +1,6 @@
 import { Grid } from "@chakra-ui/react"
 import React from "react"
+import { variantGeneralTag } from "../../../../utils/constants/tabs"
 
 export const TableRow = ({
   item,
@@ -15,17 +16,15 @@ export const TableRow = ({
 }) => {
   const { isFinished } = item?.config || {}
   const colorConfig = { color: isFinished ? "correct.500" : "blue.500" }
-  const bgColorConfig = isFinished ? { variant: "green" } : {}
 
   return (
     <Grid
       templateColumns={templateColumns}
-      borderBottom={isLastOne ? "none" : "1px"}
-      borderColor="grey"
+      borderBottom={isLastOne ? "none" : "1px solid rgba(201, 201, 201, 0.16)"}
       height="fit-content"
       width="100%"
       alignItems="center"
-      padding="21px 0"
+      padding="16px 0"
       bgColor={isSelected ? "blue.100" : "white"}
       _hover={{ bgColor: "blue.100" }}
       gridColumnGap="8px"
@@ -36,13 +35,9 @@ export const TableRow = ({
         if (head[name]?.type === "text") {
           return React.cloneElement(components[head[name]?.type], {
             children: element?.toString(),
-            key: `${name}-${idx}`,
-            ...colorConfig
-          })
-        }
-        if (head[name]?.type === "mapText") {
-          return React.cloneElement(components[head[name]?.type], {
-            children: element?.label?.toString(),
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
             key: `${name}-${idx}`,
             ...colorConfig
           })
@@ -53,18 +48,21 @@ export const TableRow = ({
           return React.cloneElement(components[head[name]?.type], {
             children: element?.length.toString(),
             textAlign: "left",
-            key: `${name}-${idx}`,
-            ...colorConfig
+            key: `${name}-${idx}`
           })
         }
 
         // LINK ITEM
         if (head[name]?.type === "link") {
           return React.cloneElement(components[head[name]?.type], {
-            children: element?.label,
-            alias: element?.link,
-            key: `${name}-${idx}`,
+            children: element?.label?.toString(),
             url: element?.link,
+            key: `${name}-${idx}`,
+
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            paddingRight: "10px",
             ...colorConfig
           })
         }
@@ -81,9 +79,11 @@ export const TableRow = ({
         // TAGS
         if (head[name]?.type === "tags") {
           return React.cloneElement(components[head[name]?.type], {
-            tagsArr: element,
+            tags: element,
             key: `${name}-${idx}`,
-            ...bgColorConfig
+            variant: isFinished
+              ? variantGeneralTag.FINISH
+              : head[name].config?.variant
           })
         }
 
@@ -92,7 +92,8 @@ export const TableRow = ({
             ...head[name],
             id: item.id.value,
             key: `${name}-${idx}`,
-            disabled: optionsDisabled
+            disabled: optionsDisabled,
+            ...head[name].config
           })
         }
 

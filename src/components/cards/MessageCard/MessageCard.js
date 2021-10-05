@@ -2,7 +2,7 @@ import { Card } from "../Card"
 import { MessageCardFooter } from "./MessageCardFooter/MessageCardFooter"
 import { MessageCardHeader } from "./MessageCardHeader/MessageCardHeader"
 import { MessageCardInfo } from "./MessageCardInfo/MessageCardInfo"
-// import { MessageCardTags } from "./MessageCardTags/MessageCardTags"
+import { MessageCardTags } from "./MessageCardTags/MessageCardTags"
 
 export const MessageCard = ({
   note,
@@ -13,33 +13,28 @@ export const MessageCard = ({
   onDelete,
   handleFavorite
 }) => {
-  const handleOnFavorite = () => {
-    if (isFavorite) return
-    handleFavorite()
-  }
-
   return (
-    <Card bgColor="white">
+    <Card>
       <MessageCardHeader
         isFavorite={isFavorite}
         title={note?.title}
         onClick={onSeeDetails}
         onDelele={onDelete}
-        onFavorite={handleOnFavorite}
+        onFavorite={handleFavorite}
       />
       <MessageCardInfo
         id={note?.ref}
-        author={note?.owner}
+        author={note?.clientAlias}
         updatedAt={new Date(note?.updatedAt).toLocaleDateString()}
         marginBottom="18px"
         marginTop="6px"
       />
-      {/* <MessageCardTags tags={note?.tags} /> */}
+      <MessageCardTags note={note} />
       <MessageCardFooter
-        isClosed={note?.lock}
+        isClosed={note?.isClosed}
         isSubscribe={isSubscribe}
-        isValidate={note?.approved}
-        messagesCount={note?.messages?.length}
+        isFormalized={note?.formalized}
+        messagesCount={note?.messages?.filter((m) => m?.createdAt).length}
         attachmentsCount={note?.documents?.length}
         subscribedUsers={subscribedUsers}
         marginTop="16px"

@@ -13,6 +13,7 @@ export const TableOptionsMenu = ({ children, disabled, ...props }) => {
       justifyContent="flex-end"
       pointerEvents={disabled ? "none" : "all"}
       cursor={disabled ? "not-allowed" : "pointer"}
+      zIndex="9999"
     >
       <OptionsIcon
         {...ICONS_PROPS_16}

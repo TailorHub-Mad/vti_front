@@ -1,9 +1,12 @@
+import download from "downloadjs"
 import { useContext, useState } from "react"
+import { jsonToCSV } from "react-papaparse"
 import { useSWRConfig } from "swr"
 import { AddProjectIcon } from "../../../components/icons/AddProjectIcon"
 import { PageHeader } from "../../../components/layout/Pages/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../../components/navigation/ToolBar/ToolBar"
+import { ExportFilesModal } from "../../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
 import { ImportFilesModal } from "../../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { Popup } from "../../../components/overlay/Popup/Popup"
 import useProjectApi from "../../../hooks/api/useProjectApi"
@@ -13,31 +16,80 @@ import { fetchOption, fetchType } from "../../../utils/constants/swr"
 import { SWR_CACHE_KEYS } from "../../../utils/constants/swr"
 import { errorHandler } from "../../../utils/errors"
 import { getFieldObjectById } from "../../../utils/functions/global"
+import {
+  projectDataTransform,
+  transformProjectsToExport
+} from "../../../utils/functions/import_export/projects_helper"
+import { getGroupOptionLabel } from "../../../utils/functions/objects"
 import { ViewEmptyState } from "../../common/ViewEmptyState"
+import { FinishProjectModal } from "../NewProject/FinishProjectModal/FinishProjectModal"
 import { NewProjectModal } from "../NewProject/NewProjectModal/NewProjectModal"
 import { ProjectsTable } from "../ProjectTable/ProjectTable"
 
-export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
-  const { deleteProject } = useProjectApi()
+const PROJECTS_GROUP_OPTIONS = [
+  {
+    label: "Cliente",
+    value: "client"
+  },
+  {
+    label: "Año",
+    value: "date.year"
+  },
+  {
+    label: "Sector",
+    value: "sector.0.title"
+  }
+]
+
+export const ProjectsByObject = ({
+  projects: projectsData,
+  customURL,
+  fetchState,
+  setFetchState,
+  fetchOptions,
+  setFetchOptions
+}) => {
+  // Hooks
+  const { deleteProject, createProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
-
   const { mutate } = useSWRConfig()
-  // TODO review
-  const [, setFetchState] = useState(fetchType.ALL)
-  const [, setFetchOptions] = useState({})
 
-  const [showImportModal, setShowImportModal] = useState(false)
+  // States
 
-  // Create - Update state
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
   const [projectToUpdate, setProjectToUpdate] = useState(null)
-
-  // Delete state
   const [deleteType, setDeleteType] = useState(null)
   const [projectToDelete, setProjectsToDelete] = useState(null)
+  const [showImportModal, setShowImportModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
+  const [projectToFinish, setProjectToFinish] = useState(null)
+  const [isFinishProjectModalOpen, setIsFinishProjectModalOpen] = useState(null)
 
-  // TODO
-  const handleExport = () => {}
+  // Handlers views
+  const handleImportProjects = async (data) => {
+    //TODO Gestión de errores y update de SWR
+
+    try {
+      const projectsCreated = []
+      for (let index = 0; index < data.length; index++) {
+        const pro = await createProject(data[index])
+        projectsCreated.push(pro)
+      }
+
+      await mutate()
+
+      setShowImportModal(false)
+      showToast("Proyectos importados correctamente")
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
+
+  const handleExportProjects = () => {
+    setShowExportModal(false)
+    const _data = jsonToCSV(transformProjectsToExport(projectsData))
+    download(_data, `projects_export_${new Date().toLocaleDateString()}`, "text/csv")
+  }
 
   const handleOpenPopup = (projectToDelete, type) => {
     setDeleteType(type)
@@ -54,6 +106,18 @@ export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
     setIsProjectModalOpen(false)
   }
 
+  const handleOnOpenFinishProjectModal = (id) => {
+    const project = projectsData.find((p) => (p._id = id))
+    setProjectToFinish(project)
+    setIsFinishProjectModalOpen(true)
+  }
+
+  const handleOnCloseFinishProjectModal = () => {
+    setProjectToFinish(null)
+    setIsFinishProjectModalOpen(null)
+  }
+
+  // Handle CRUD
   const handleDeleteMessage = () => {
     if (!projectToDelete) return
 
@@ -78,9 +142,9 @@ export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
       await deleteProject(id)
       showToast("Proyecto borrado correctamente")
       const updatedProjects = []
-      const filteredProjects = projects.filter((system) => system._id !== id)
+      const filterProjects = projects.filter((system) => system._id !== id)
       updatedProjects.push({
-        projects: filteredProjects
+        projects: filterProjects
       })
       return updatedProjects
     } catch (error) {
@@ -94,17 +158,17 @@ export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
       await Promise.all(projectsQueue)
       showToast("Clientes borrados correctamente")
       const updatedProjects = []
-      const filteredProjects = projects.filter(
+      const filterProjects = projects.filter(
         (project) => !projectsId.includes(project._id)
       )
-      updatedProjects.push({ projects: filteredProjects })
-      return filteredProjects
+      updatedProjects.push({ projects: filterProjects })
+      return filterProjects
     } catch (error) {
       errorHandler(error)
     }
   }
 
-  const onEdit = (id) => {
+  const handleUpdate = (id) => {
     const project = projectsData.find((project) => project._id === id)
     setProjectToUpdate(project)
     setIsProjectModalOpen(true)
@@ -139,15 +203,29 @@ export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
         {handleDeleteMessage()}
       </Popup>
 
+      <FinishProjectModal
+        project={projectToFinish}
+        isOpen={isFinishProjectModalOpen}
+        onClose={handleOnCloseFinishProjectModal}
+      />
+
       <NewProjectModal
         projectToUpdate={projectToUpdate}
         isOpen={isProjectModalOpen}
         onClose={handleOnCloseModal}
       />
 
+      <ExportFilesModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        onExport={() => handleExportProjects()}
+      />
+
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
+        onUpload={(data) => handleImportProjects(data)}
+        onDropDataTransform={(info) => projectDataTransform(info)}
       />
 
       <PageHeader>
@@ -159,10 +237,12 @@ export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
             onGroup={handleOnGroup}
             onFilter={handleOnFilter}
             onImport={() => setShowImportModal(true)}
-            onExport={handleExport}
+            onExport={() => setShowExportModal(true)}
             addLabel="Añadir proyecto"
             searchPlaceholder="Busqueda por ID, Alias"
+            groupOptions={PROJECTS_GROUP_OPTIONS}
             icon={<AddProjectIcon />}
+            fetchState={fetchState}
           />
         ) : null}
       </PageHeader>
@@ -176,11 +256,18 @@ export const ProjectsByObject = ({ projects: projectsData, customURL }) => {
         />
       ) : (
         <ProjectsTable
+          fetchState={fetchState}
           projects={projectsData}
+          onClose={handleOnOpenFinishProjectModal}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
-          onEdit={onEdit}
+          onEdit={handleUpdate}
           onTabChange={(state) => setFetchState(state)}
+          onGroup={handleOnGroup}
+          groupOption={getGroupOptionLabel(
+            PROJECTS_GROUP_OPTIONS,
+            fetchOptions[fetchOption.GROUP]
+          )}
         />
       )}
     </>

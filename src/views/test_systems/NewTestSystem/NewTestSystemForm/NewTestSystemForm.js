@@ -92,7 +92,7 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
         return React.cloneElement(inputRefObj[type], {
           value: formatValues[name],
           onChange: (val) => handleFormChange(name, val),
-          marginBottom: name === "name" ? "0" : "24px",
+          marginBottom: "24px",
           isDisabled:
             config.disabled ||
             (index !== 0 && !value[Object.keys(value)[index - 1]]),

@@ -1,23 +1,19 @@
 import { Box } from "@chakra-ui/react"
 import React from "react"
-import { GeneralTag } from "../GeneralTag/GeneralTag"
+import { Tag } from "../Tag/Tag"
 
-export const TagRow = ({ remainingTagsCount, tags = {}, variant, ...props }) => {
-  //TODO A lo mejor hay que refactorizar las tags para que sólo sea una prop "color" y evitar por tipo
+export const TagRow = ({ tags = [], max = 3, variant, ...props }) => {
+  const remainingTagsCount = tags.length < max ? 0 : tags.length - max
 
   return (
     <Box display="flex" alignItems="center" {...props} height="28px">
-      {tags?.length > 0 &&
-        [...tags].slice(0, 3).map((tag, idx) => (
-          <GeneralTag key={`${tag}-${idx}`} variant={variant} mr="8px">
-            {tag}
-          </GeneralTag>
-        ))}
+      {[...tags].slice(0, max).map((tag, idx) => (
+        <Tag key={`${tag}-${idx}`} variant={variant} mr="8px">
+          {tag}
+        </Tag>
+      ))}
       {remainingTagsCount > 0 ? (
-        <GeneralTag
-          variant={variant}
-          mr="8px"
-        >{`+${remainingTagsCount}`}</GeneralTag>
+        <Tag variant={variant} mr="8px">{`+${remainingTagsCount}`}</Tag>
       ) : null}
     </Box>
   )

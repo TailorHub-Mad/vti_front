@@ -18,10 +18,17 @@ import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/glob
 import useDepartmentApi from "../../hooks/api/useDepartmentApi"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
+import download from "downloadjs"
+import { jsonToCSV } from "react-papaparse"
+import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
+import {
+  departmentDataTransform,
+  transformDepartmentsToExport
+} from "../../utils/functions/import_export/departments_helpers.js"
 
 const departamentos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { deleteDepartment } = useDepartmentApi()
+  const { deleteDepartment, createDepartment } = useDepartmentApi()
   const { showToast } = useContext(ToastContext)
 
   const [fetchState, setFetchState] = useState(fetchType.ALL)
@@ -33,6 +40,7 @@ const departamentos = () => {
   )
 
   const [showImportModal, setShowImportModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
 
   // Create - Update state
   const [isDepartmentModalOpen, setIsDepartmentModalOpen] = useState(false)
@@ -46,7 +54,33 @@ const departamentos = () => {
   const departmentsData = data && !isEmptyData ? data : null
 
   // TODO
-  const handleExport = () => {}
+
+  const handleImportSectors = async (data) => {
+    //TODO Gestión de errores y update de SWR
+
+    try {
+      const projectsCreated = []
+      for (let index = 0; index < data.length; index++) {
+        const pro = await createDepartment(data[index])
+        projectsCreated.push(pro)
+      }
+
+      setShowImportModal(false)
+      showToast("Departamentos importados correctamente")
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
+
+  const handleExportSectors = () => {
+    setShowExportModal(false)
+    const _data = jsonToCSV(transformDepartmentsToExport(departmentsData))
+    download(
+      _data,
+      `departamentos_export_${new Date().toLocaleDateString()}`,
+      "text/csv"
+    )
+  }
 
   const handleOpenPopup = (departmentsToDelete, type) => {
     setDeleteType(type)
@@ -103,7 +137,7 @@ const departamentos = () => {
     }
   }
 
-  const onEdit = (id) => {
+  const handleUpdate = (id) => {
     const department = departmentsData.find((department) => department._id === id)
     setDepartmentToUpdate(department)
     setIsDepartmentModalOpen(true)
@@ -138,9 +172,17 @@ const departamentos = () => {
         onClose={handleOnCloseModal}
       />
 
+      <ExportFilesModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        onExport={() => handleExportSectors()}
+      />
+
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
+        onUpload={(data) => handleImportSectors(data)}
+        onDropDataTransform={(info) => departmentDataTransform(info)}
       />
 
       <PageHeader>
@@ -150,7 +192,7 @@ const departamentos = () => {
             onAdd={() => setIsDepartmentModalOpen(true)}
             onSearch={onSearch}
             onImport={() => setShowImportModal(true)}
-            onExport={handleExport}
+            onExport={() => setShowExportModal(true)}
             addLabel="Añadir departamentos"
             searchPlaceholder="Busqueda por ID, Alias"
             icon={<AddDepartmentIcon />}
@@ -176,7 +218,7 @@ const departamentos = () => {
           onDeleteMany={(departmentsId) =>
             handleOpenPopup(departmentsId, DeleteType.MANY)
           }
-          onEdit={onEdit}
+          onEdit={handleUpdate}
         />
       ) : null}
     </Page>

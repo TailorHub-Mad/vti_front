@@ -1,20 +1,33 @@
 import { FormLabel } from "@chakra-ui/form-control"
+import { Flex } from "@chakra-ui/layout"
 import React, { useEffect, useState } from "react"
 import { AddSelect } from "../../../../components/forms/AddSelect/AddSelect"
 import { FileInput } from "../../../../components/forms/FileInput/FileInput"
 import { InputSelect } from "../../../../components/forms/InputSelect/InputSelect"
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
 import useProjectApi from "../../../../hooks/api/useProjectApi"
+import useTagApi from "../../../../hooks/api/useTagApi"
 
-export const NewNoteForm = ({ value, onChange, noteToUpdate }) => {
+export const NewNoteForm = ({
+  value,
+  onChange,
+  noteToUpdate,
+  noteFromProject,
+  submitIsDisabled
+}) => {
   const { getProjects } = useProjectApi()
+  const { getNoteTags } = useTagApi()
 
   const [projectOptions, setProjectOptions] = useState([])
   const [projectData, setProjectData] = useState([])
   const [systemOptions, setSystemOptions] = useState([])
+  const [tagOptions, setTagOptions] = useState([])
 
   const formatSelectOption = (data) =>
     data.map((d) => ({ label: d.alias, value: d._id }))
+
+  const formatTags = (_tags) =>
+    _tags.map((tag) => ({ label: tag.name, value: tag._id }))
 
   const handleFormChange = (input, _value) => {
     onChange({
@@ -29,8 +42,8 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate }) => {
       config: {
         placeholder: "Selecciona",
         label: "Selecciona el proyecto*",
-        options: projectOptions
-        // disabled: Boolean(noteToUpdate)
+        options: projectOptions,
+        isDisabled: Boolean(noteFromProject)
       }
     },
     system: {
@@ -57,6 +70,16 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate }) => {
         label: "Descripción*"
       }
     },
+    tags: {
+      type: "add_select",
+      config: {
+        placeholder: "Tags de proyecto",
+        options: tagOptions,
+        label: "Tags de proyecto",
+        additemlabel: "Añadir ",
+        removeitemlabel: "Eliminar "
+      }
+    },
     link: {
       type: "text",
       config: {
@@ -67,25 +90,25 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate }) => {
     document: {
       type: "attachment",
       config: {
-        label: "Adjunta tus documentos",
-        isDisabled: true // TODO -> provisional
+        label: "Adjunta tus documentos"
       }
     }
-    // tags: {
-    //   type: "add_select",
-    //   config: {}
-    // }
   }
 
   useEffect(() => {
     const _getProjects = async () => {
       const data = await getProjects()
-      const _projects = data[0].projects
+      const _projects = data[0]?.projects || []
       setProjectData(_projects)
       setProjectOptions(formatSelectOption(_projects))
     }
+    const _getTags = async () => {
+      const tags = await getNoteTags()
+      setTagOptions(formatTags(tags))
+    }
 
-    _getProjects()
+    if (!noteFromProject) _getProjects()
+    _getTags()
   }, [])
 
   // Projects
@@ -99,14 +122,26 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate }) => {
     handleFormChange("project", project)
   }, [noteToUpdate, projectOptions])
 
+  // Tags
+  useEffect(() => {
+    if (!noteToUpdate || tagOptions.length === 0) return
+
+    const tags = tagOptions.filter((_tag) => _tag.label === noteToUpdate?.tags.name)
+
+    if (tags.length === 0) return
+    handleFormChange("tags", tags)
+  }, [noteToUpdate, tagOptions])
+
   useEffect(() => {
     const project = value.project
 
     if (!project || !project.value) return
 
-    const { testSystems } = projectData.find((p) => p._id === project.value)
+    const { testSystems } = noteFromProject
+      ? noteFromProject
+      : projectData.find((p) => p._id === project.value)
 
-    setSystemOptions(formatSelectOption(testSystems))
+    setSystemOptions(noteFromProject ? testSystems : formatSelectOption(testSystems))
   }, [value.project])
 
   const inputRefObj = {
@@ -122,8 +157,9 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate }) => {
         return React.cloneElement(inputRefObj[type], {
           value: value[name],
           onChange: (val) => handleFormChange(name, val),
-          marginBottom: name === "name" ? "0" : "24px",
-          isDisabled: index !== 0 && !value[Object.keys(value)[index - 1]],
+          marginBottom: "24px",
+          isDisabled:
+            index !== 0 && submitIsDisabled && !value[Object.keys(value)[index - 1]],
           key: `${name}-${index}`,
           ...config
         })
@@ -134,7 +170,7 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate }) => {
 
 const FileInputForm = ({ value, onChange, isDisabled }) => {
   return (
-    <>
+    <Flex flexDirection="column" mb="24px">
       <FormLabel
         margin="0"
         marginRight="4px"
@@ -146,6 +182,6 @@ const FileInputForm = ({ value, onChange, isDisabled }) => {
         Adjunta tus documentos (opcional)
       </FormLabel>
       <FileInput value={value} onChange={onChange} isDisabled={isDisabled} />
-    </>
+    </Flex>
   )
 }

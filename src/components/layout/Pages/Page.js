@@ -26,8 +26,8 @@ export const Page = ({ children }) => {
         background={"url(/images/backgrounds/general_bg.svg)"}
         bgRepeat="no-repeat"
         bgAttachment="fixed"
-        bgSize="stretch"
-        bgPosition="0 -100px"
+        bgSize="cover"
+        bgPosition="center"
         minH="100vh"
       >
         {children}

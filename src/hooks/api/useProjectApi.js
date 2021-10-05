@@ -11,9 +11,10 @@ const useProjectApi = () => {
   const deleteProject = (id) => projectService.deleteProject(id)
 
   // GROUP & FILTER
-  const getGroupedProjects = (_, data) => projectService.getGroupedProjects(data)
-  const getFilteredProjects = (_, data) => projectService.createProject(data)
-  const getSearchProjects = (_, data) => projectService.createProject(data)
+  const getGroupProjects = (_, data) => projectService.getGroupProjects(data)
+  const getActiveProjects = (_, data) => projectService.getActiveProjects(data)
+  const getFilterProjects = (_, data) => projectService.getFilterProjects(data)
+  const getSearchProjects = (_, data) => projectService.getSearchProjects(data)
 
   return {
     getProjects,
@@ -22,8 +23,9 @@ const useProjectApi = () => {
     updateProject,
     deleteProject,
 
-    getGroupedProjects,
-    getFilteredProjects,
+    getGroupProjects,
+    getActiveProjects,
+    getFilterProjects,
     getSearchProjects
   }
 }

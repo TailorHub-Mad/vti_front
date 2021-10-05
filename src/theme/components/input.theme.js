@@ -1,4 +1,4 @@
-export const Input = {
+const inputThemes = {
   variants: {
     base: {
       field: {
@@ -53,3 +53,7 @@ export const Input = {
     variant: "base"
   }
 }
+
+export const Input = { ...inputThemes }
+
+export const Textarea = { ...inputThemes }

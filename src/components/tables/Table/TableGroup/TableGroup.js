@@ -9,12 +9,16 @@ export const TableGroup = ({
   components,
   onRowSelect,
   selectedRows,
-  head
+  head,
+  optionsDisabled,
+  isLastOne
 }) => {
   const { isOpen, onToggle } = useDisclosure()
 
   const isSelected = (id) => !!selectedRows[id]
 
+  // TODO -> review
+  if (item.key === "undefined") return null
   return (
     <Box pb={isOpen ? "20px" : "10px"}>
       <Flex onClick={onToggle} cursor="pointer" align="center" padding="10px 0">
@@ -34,6 +38,8 @@ export const TableGroup = ({
                 onRowSelect={() => onRowSelect(row.id.value)}
                 selectedRows={selectedRows}
                 head={head}
+                isLastOne={isLastOne && idx === item.value.length - 1}
+                optionsDisabled={optionsDisabled}
               />
             )
           })

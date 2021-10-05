@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import useNoteApi from "../../../../hooks/api/useNoteApi"
-// import useNoteApi from "../../../../hooks/api/useNoteApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
@@ -14,12 +13,18 @@ const initialValues = {
   system: undefined,
   title: undefined,
   description: undefined,
+  tags: undefined,
   link: undefined,
-  docuement: undefined
-  // tags: [""], // provisioanl
+  document: undefined
 }
 
-export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
+export const NewNoteModal = ({
+  isOpen,
+  onClose,
+  noteToUpdate,
+  noteFromProject,
+  ...props
+}) => {
   const { showToast } = useContext(ToastContext)
   const { createNote } = useNoteApi()
   const { mutate } = useSWRConfig()
@@ -31,10 +36,15 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
 
   const checkInputsAreEmpty = () => {
     return (
-      !values.project || !values.system || !values.title || !values.description
-      // || !value.tags // TODO -> provisional
+      !values.project ||
+      !values.system ||
+      !values.title ||
+      !values.description ||
+      !values.tags
     )
   }
+
+  const submitIsDisabled = checkInputsAreEmpty()
 
   const formatCreateNote = (note) => {
     const formatData = {
@@ -42,18 +52,30 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
       testSystems: note.system.map((s) => s.value),
       title: note.title,
       description: note.description,
-      tags: ["60e71fb6b872c54560f16820"] // TODO -> provisional
+      tags: note.tags.map((t) => t.value)
     }
 
     if (note?.link) formatData["link"] = note.link
+    if (note?.document) formatData["file"] = note.document
 
-    return formatData
+    const formData = new FormData()
+
+    Object.entries(formatData).forEach(([key, value]) => {
+      Array.isArray(value)
+        ? value.forEach((v) => formData.set(key, v))
+        : formData.set(key, value)
+    })
+
+    return formData
   }
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateNote() : await handleCreateNote()
-    await mutate(SWR_CACHE_KEYS.projects)
+
+    noteFromProject
+      ? await mutate([SWR_CACHE_KEYS.project, noteFromProject.project.value])
+      : await mutate(SWR_CACHE_KEYS.notes)
     showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s apunte/s!")
     setIsSubmitting(false)
     onClose()
@@ -62,7 +84,6 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
   const handleCreateNote = async () => {
     try {
       const note = formatCreateNote(values)
-
       await createNote(note)
     } catch (error) {
       errorHandler(error)
@@ -73,6 +94,15 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
     return null
   }
 
+  const handleOnClose = () => {
+    if (noteFromProject)
+      setValues({
+        project: values.project
+      })
+    else setValues(initialValues)
+    onClose()
+  }
+
   useEffect(() => {
     if (!noteToUpdate) return
     const _note = {
@@ -81,15 +111,15 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
       title: noteToUpdate.title,
       description: noteToUpdate.description,
       link: noteToUpdate.link,
-      attachment: noteToUpdate.attachment
+      file: noteToUpdate.documents
     }
     setValues(_note)
   }, [noteToUpdate])
 
   useEffect(() => {
-    if (isOpen) return
-    setValues(initialValues)
-  }, [isOpen])
+    if (!noteFromProject) return
+    setValues(noteFromProject)
+  }, [noteFromProject])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
@@ -97,19 +127,21 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
           title={isUpdate ? "Editar apunte" : "Añadir nuevo apunte"}
-          onClose={onClose}
+          onClose={handleOnClose}
           pb="24px"
         />
         <NewNoteForm
           value={values}
           onChange={(val) => setValues(val)}
           noteToUpdate={noteToUpdate}
+          noteFromProject={noteFromProject}
+          submitIsDisabled={submitIsDisabled}
         />
         <Button
           w="194px"
           margin="0 auto"
           mt="24px"
-          disabled={checkInputsAreEmpty()}
+          disabled={submitIsDisabled}
           onClick={handleSubmit}
           isLoading={isSubmitting}
           pointerEvents={isSubmitting ? "none" : "all"}

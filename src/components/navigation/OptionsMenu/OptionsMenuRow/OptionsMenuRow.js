@@ -2,13 +2,29 @@ import { DeleteIcon } from "@chakra-ui/icons"
 import { Text } from "@chakra-ui/react"
 import React from "react"
 import { EditIcon } from "../../../icons/EditIcon"
+import { FinishIcon } from "../../../icons/FinishIcon"
 import { OptionsMenuItem } from "../OptionsMenuItem/OptionsMenuItem"
 import { TableOptionsMenu } from "../../../tables/TableOptionsMenu/TableOptionsMenu"
 import { ICONS_PROPS_16 } from "../../../../utils/constants/icons"
 
-export const OptionsMenuRow = ({ onEdit, onDelete, disabled, id }) => {
+export const OptionsMenuRow = ({
+  onEdit,
+  onDelete,
+  onClose,
+  disabled,
+  close,
+  id
+}) => {
   return (
     <TableOptionsMenu disabled={disabled}>
+      {close ? (
+        <OptionsMenuItem onClick={() => onClose(id)}>
+          <FinishIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
+          <Text variant="d_xs_regular" marginRight="2px">
+            Finalizar
+          </Text>
+        </OptionsMenuItem>
+      ) : null}
       <OptionsMenuItem onClick={() => onEdit(id)}>
         <EditIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
         <Text variant="d_xs_regular" marginRight="2px">

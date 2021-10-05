@@ -2,7 +2,7 @@ import { ServiceConstructor } from "."
 
 const DepartmentService = () => {
   const { instance, execute } = ServiceConstructor
-  const getDepartments = (limit = 50, offset = 0) =>
+  const getDepartments = (limit = 0, offset = 0) =>
     execute(instance.get(`/department?limit=${limit}&offset=${offset}`))
   const getDepartment = (id) => execute(instance.get(`/department/${id}`))
   const createDepartment = (data) =>

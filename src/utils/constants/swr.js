@@ -2,15 +2,31 @@ export const SWR_CACHE_KEYS = {
   // AUTH
   me: "/me",
 
+  // NOTES
+  notes: "notes/",
+  note: "note/",
+  groupNotes: "notes/group",
+  filterNotes: "notes/filter",
+  searchNotes: "notes/search",
+  favsNotes: "notes/favs",
+  subscribeNotes: "notes/subscribe",
+  unreadNotes: "notes/unread",
+  activeNotes: "notes/active",
+
   // PROJECTS
   projects: "projects/",
-  groupedProjects: "projects/group",
+  project: "project/",
+  groupProjects: "projects/group",
+  activeProjects: "projects/active",
   filterProjects: "projects/filter",
   searchProjects: "projects/search",
 
   // SYSTEMS
   systems: "systems/",
   system: "system/",
+  groupSystems: "systems/group",
+  filterSystems: "systems/filter",
+  searchSystems: "systems/search",
 
   // CLIENTS
   clients: "clietns/",
@@ -24,13 +40,10 @@ export const SWR_CACHE_KEYS = {
   departments: "departments/",
   department: "department/",
 
-  // NOTES
-  notes: "notes/",
-  note: "note/",
-
   // USERS
   users: "users/",
   user: "user/",
+  groupUsers: "users/group",
 
   // TAGS
   projectTags: "projectTags/",

@@ -1,5 +1,6 @@
 import { PATHS } from "../../../utils/constants/global"
 import { calcColWidth } from "../../../utils/constants/tables"
+import { variantGeneralTag } from "../../../utils/constants/tabs"
 
 export const formatUser = (data) => {
   // data && !isGrouped ? data?.map(transformUserData) : groupTable(data)
@@ -8,11 +9,11 @@ export const formatUser = (data) => {
 
 export const transformUserData = (user) => ({
   selector: "",
-  id: { label: user.ref, value: user._id },
+  id: { label: user.ref, value: user._id, link: `${PATHS.users}/${user._id}` },
   alias: user.alias,
-  fullName: { label: user.name, link: `${PATHS.users}/${user._id}` },
+  fullName: user.name,
   email: user.email,
-  department: user.department?.name,
+  department: user.department ? [user.department?.name] : undefined,
   focusPoint: user.focusPoint,
   projects: user.projects,
   options: ""
@@ -34,38 +35,47 @@ export const TABLE_USERS_HEAD = {
   },
   id: {
     label: "ID",
-    width: calcColWidth(80),
-    type: "mapText"
+    width: calcColWidth(60),
+    type: "link"
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(80),
+    width: calcColWidth(100),
     type: "text"
   },
   fullName: {
     label: "Nombre",
-    width: calcColWidth(120),
-    type: "link"
+    width: calcColWidth(160),
+    type: "text"
   },
   email: {
     label: "Email",
-    width: calcColWidth(150),
+    width: calcColWidth(158),
     type: "text"
   },
   department: {
     label: "Departamento",
     width: calcColWidth(80),
-    type: "tags"
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.SYSTEM
+    }
   },
   focusPoint: {
     label: "Punto focal proyectos",
-    width: calcColWidth(200),
-    type: "tags"
+    width: calcColWidth(220),
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.NOTE
+    }
   },
   projects: {
     label: "Proyectos",
-    width: calcColWidth(250),
-    type: "tags"
+    width: calcColWidth(220),
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.NOTE
+    }
   },
   options: {
     label: "",

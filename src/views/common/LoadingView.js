@@ -9,3 +9,5 @@ export const LoadingView = ({ ...props }) => {
     </Flex>
   )
 }
+
+export default React.memo(LoadingView)

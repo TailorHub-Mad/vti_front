@@ -7,7 +7,7 @@ export const generateRandomNote = () => ({
   id: `${faker.lorem.word(3).toUpperCase()}-00${faker.lorem.word(5).toUpperCase()}`,
   author: `${faker.name.firstName()} ${faker.name.lastName()}`,
   title: faker.lorem.words(6),
-  isFavourite: faker.datatype.boolean(),
+  isFavorite: faker.datatype.boolean(),
   isClosed: faker.datatype.boolean(),
   canSubscribe: faker.datatype.boolean(),
   subscribedUsers: new Array(faker.datatype.number(10))

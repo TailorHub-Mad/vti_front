@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
 import { MultipleFormContent } from "../../../../components/forms/MultipleFormContent/MultipleFormContent"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
+import useAuthApi from "../../../../hooks/api/useAuthApi"
 import useUserApi from "../../../../hooks/api/useUserApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
@@ -12,6 +13,7 @@ import { NewUserForm } from "../NewUserForm/NewUserForm"
 export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
   const { showToast } = useContext(ToastContext)
   const { createUser, updateUser } = useUserApi()
+  const { sendCreatePassword } = useAuthApi()
   const { mutate } = useSWRConfig()
 
   const [values, setValues] = useState([{}])
@@ -33,7 +35,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
 
   const checkInputsAreEmpty = () => {
     return values.some(
-      (value) => !value.alias || !value.fullName || !value.email || !value.department
+      (value) => !value.alias || !value.name || !value.email || !value.department
     )
   }
 
@@ -41,10 +43,20 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
     return users.map((user) => {
       return {
         alias: user.alias,
-        name: user.fullName,
+        name: user.name,
         email: user.email,
         department: user.department.value,
         password: Math.random().toString(8) // TODO -> provisional
+      }
+    })
+  }
+
+  const formatUpdateUsers = (users) => {
+    return users.map((user) => {
+      return {
+        alias: user.alias,
+        name: user.name,
+        department: user.department.value
       }
     })
   }
@@ -63,6 +75,11 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
       const usersToCreate = formatCreateUsers(values)
       const usersQueue = usersToCreate.map((user) => createUser(user))
       await Promise.all(usersQueue)
+
+      const sendEmailQueue = usersToCreate.map((u) =>
+        sendCreatePassword({ email: u.email })
+      )
+      await Promise.all(sendEmailQueue)
     } catch (error) {
       errorHandler(error)
     }
@@ -71,7 +88,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
   const handleUpdateUser = async () => {
     try {
       const { _id } = userToUpdate
-      const [data] = [...values]
+      const [data] = formatUpdateUsers(values)
       await updateUser(_id, data)
     } catch (error) {
       errorHandler(error)
@@ -80,8 +97,8 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
 
   useEffect(() => {
     if (!userToUpdate) return
-    const { alias, name } = userToUpdate
-    setValues([{ alias, name }])
+    const { alias, name, email, department } = userToUpdate
+    setValues([{ alias, name, email, department: department.name }])
   }, [userToUpdate])
 
   useEffect(() => {
@@ -102,6 +119,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
           values={values}
           onChange={handleChange}
           onDelete={handleDelete}
+          objectToUpdate={userToUpdate}
           addTitle="Añadir nuevo usuario"
         >
           <NewUserForm />

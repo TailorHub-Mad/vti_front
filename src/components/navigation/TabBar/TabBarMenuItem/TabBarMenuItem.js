@@ -11,6 +11,7 @@ export const MenuLink = ({
   setShowSubmenu,
   showSubmenu,
   disabled,
+  noEvents,
   ...props
 }) => {
   return (
@@ -20,15 +21,13 @@ export const MenuLink = ({
       marginBottom={showSubmenu ? "0" : "16px"}
       w="100%"
       role="group"
-      _hover={{
-        cursor: "pointer"
-      }}
+      cursor={noEvents ? "default" : "pointer"}
       pointerEvents={disabled ? "none" : "auto"}
       opacity={disabled ? "0.3" : "1"}
       {...props}
     >
-      <Link href={href || PATHS.notes} passHref>
-        <Flex>
+      <Link href={noEvents ? "" : href || PATHS.notes} passHref>
+        <Flex alignItems="center">
           <Icon
             color="white"
             marginRight="8px"
@@ -53,6 +52,7 @@ export const MenuLink = ({
           color="white"
           _groupHover={{ color: "yellow" }}
           onClick={setShowSubmenu.toggle}
+          cursor="pointer"
         />
       ) : null}
     </Flex>

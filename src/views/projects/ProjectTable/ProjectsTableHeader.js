@@ -1,4 +1,4 @@
-import { DeleteIcon } from "@chakra-ui/icons"
+import { CloseIcon, DeleteIcon } from "@chakra-ui/icons"
 import { chakra, Checkbox, Flex, Text } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { fetchType } from "../../../utils/constants/swr"
@@ -26,9 +26,14 @@ export const ProjectsTableHeader = ({
   selectedRows,
   onDelete,
   selectAllRows = () => {},
-  checked = false
+  checked = false,
+  fetchState,
+  onGroup,
+  groupOption
 }) => {
   const [isChecked, setIsChecked] = useState(checked)
+
+  const handleOnClick = () => onGroup(null)
 
   useEffect(() => {
     setIsChecked(checked)
@@ -36,52 +41,63 @@ export const ProjectsTableHeader = ({
 
   return (
     <Flex justify="space-between" align="center" pb="32px">
-      <Flex>
-        <Flex mr="15px">
-          <Checkbox mr="8px" onChange={selectAllRows} isChecked={isChecked} />
-          {Object.keys(selectedRows)?.length > 0 ? (
-            <Flex
-              alignItems="center"
-              justifyContent="center"
-              onClick={() => onDelete(selectedRows)}
-              cursor="pointer"
-            >
-              <DeleteIcon mr="8px" color="error" />
-              <Text color="error" marginTop="6px">
-                Eliminar
-              </Text>
-            </Flex>
-          ) : null}
+      {fetchState === fetchType.GROUP ? (
+        <Flex alignItems="center">
+          <CloseIcon mr="8px" h="12px" cursor="pointer" onClick={handleOnClick} />
+          <Text marginTop="6px">{`Filtrado por ${groupOption
+            .toString()
+            .toUpperCase()}`}</Text>
         </Flex>
-        {Object.entries(visibility_menu).map(([name, item], idx) => {
-          const isActive = name === activeItem
-          return (
-            <Flex
-              key={name}
-              height="24px"
-              align="center"
-              cursor="pointer"
-              onClick={() => onChange(item.value)}
-              ml={idx !== 0 ? "16px" : "0"}
-            >
-              {item.icon ? (
-                isActive ? (
-                  <item.active_icon mr="4px" color="blue.500" />
-                ) : (
-                  <item.icon mr="4px" color="grey" />
-                )
-              ) : null}
-              <Text
-                variant="d_s_medium"
-                mt="4px"
-                color={isActive ? "blue.500" : "grey"}
+      ) : (
+        <Flex>
+          <Flex mr="15px">
+            <Checkbox mr="8px" onChange={selectAllRows} isChecked={isChecked} />
+            {Object.keys(selectedRows)?.length > 0 ? (
+              <Flex
+                alignItems="center"
+                justifyContent="center"
+                onClick={() => onDelete(selectedRows)}
+                cursor="pointer"
               >
-                {item.label}
-              </Text>
-            </Flex>
-          )
-        })}
-      </Flex>
+                <DeleteIcon mr="8px" color="error" />
+                <Text color="error" marginTop="6px">
+                  Eliminar
+                </Text>
+              </Flex>
+            ) : null}
+          </Flex>
+
+          {Object.entries(visibility_menu).map(([name, item], idx) => {
+            const isActive = name === activeItem
+            return (
+              <Flex
+                key={name}
+                height="24px"
+                align="center"
+                cursor="pointer"
+                onClick={() => onChange(item.value)}
+                ml={idx !== 0 ? "16px" : "0"}
+              >
+                {item.icon ? (
+                  isActive ? (
+                    <item.active_icon mr="4px" color="blue.500" />
+                  ) : (
+                    <item.icon mr="4px" color="grey" />
+                  )
+                ) : null}
+                <Text
+                  variant="d_s_medium"
+                  mt="4px"
+                  color={isActive ? "blue.500" : "grey"}
+                >
+                  {item.label}
+                </Text>
+              </Flex>
+            )
+          })}
+        </Flex>
+      )}
+
       <Flex align="center">
         <Text variant="d_xs_regular" color="green" mr="15px">
           <chakra.span

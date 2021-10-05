@@ -11,11 +11,11 @@ export const TagCardHeader = ({
   onClick,
   onEdit,
   onDelete,
-  category,
-  parentTag,
+  parent,
   ...props
 }) => {
   const [showOptions, setShowOptions] = useState(false)
+
   return (
     <Flex height="32px" justify="space-between" {...props}>
       <Box maxWidth="80%" height="32px" onClick={onClick} cursor="pointer">
@@ -23,7 +23,7 @@ export const TagCardHeader = ({
           {title}
         </Text>
         <Text marginTop="2px" variant="d_xs_regular" casing="uppercase">
-          {parentTag ? `${parentTag} · ${category}` : category}
+          {parent ? `${parent}` : null}
         </Text>
       </Box>
       <Box position="relative">

@@ -12,8 +12,11 @@ export const TOAST_DEFAULT_TIME = 2000
 
 export const PATHS = {
   root: "/",
+  notFound: "/404",
   login: "/login",
-  recover: "/recuperar",
+  sendAccess: "/enviar-acceso",
+  createAccess: "/crear-acceso",
+  recoveryAccess: "/recuperar-acceso",
   notes: "/apuntes",
   newNote: "/apuntes/nuevo",
   projects: "/proyectos",
@@ -28,3 +31,10 @@ export const PATHS = {
   subscription: "/suscripciones",
   notifications: "/notificaciones"
 }
+
+export const WHITE_LIST = [
+  PATHS.login,
+  PATHS.sendAccess,
+  "/crear-acceso/[id]",
+  "/recuperar-acceso/[id]"
+]

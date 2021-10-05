@@ -18,35 +18,97 @@ import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/glob
 import { systemFetchHandler } from "../../swr/systems.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
+import { getGroupOptionLabel } from "../../utils/functions/objects"
+import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
+import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
+import download from "downloadjs"
+import { jsonToCSV } from "react-papaparse"
+import {
+  testSystemDataTransform,
+  transformTestSystemsToExport
+} from "../../utils/functions/import_export/testSystem_helpers"
+
+const SYSTEMS_GROUP_OPTIONS = [
+  {
+    label: "Cliente",
+    value: "client"
+  },
+  {
+    label: "Año",
+    value: "date.year"
+  },
+  {
+    label: "CodVTI",
+    value: "vtiCode"
+  }
+]
 
 const sistemas = () => {
+  // Hooks
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { deleteSystem } = useSystemApi()
+  const { deleteSystem, createSystem } = useSystemApi()
   const { showToast } = useContext(ToastContext)
 
+  // States
+  const [showImportModal, setShowImportModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
+  const [isSystemModalOpen, setIsSystemModalOpen] = useState(false)
+  const [systemToUpdate, setSystemToUpdate] = useState(null)
+  const [deleteType, setDeleteType] = useState(null)
+  const [systemsToDelete, setSystemsToDelete] = useState(null)
 
+  // Fetch
   const { data, error, isLoading, mutate } = systemFetchHandler(
     fetchState,
     fetchOptions
   )
 
-  const [showImportModal, setShowImportModal] = useState(false)
+  const handleSystemsData = (isEmptyData) => {
+    if (!data || isEmptyData) return null
+    if (fetchState == fetchType.GROUP) return data
+    return data[0].testSystems
 
-  // Create - Update state
-  const [isSystemModalOpen, setIsSystemModalOpen] = useState(false)
-  const [systemToUpdate, setSystemToUpdate] = useState(null)
-
-  // Delete state
-  const [deleteType, setDeleteType] = useState(null)
-  const [systemsToDelete, setSystemsToDelete] = useState(null)
+    // TODO FILTER
+  }
 
   const isEmptyData = checkDataIsEmpty(data)
-  const systemsData = data && !isEmptyData ? data[0].testSystems : null
+  const systemsData = handleSystemsData(isEmptyData)
 
-  // TODO
-  const handleExport = () => {}
+  const isSearch = fetchState == fetchType.SEARCH
+
+  // Handlers views
+
+  const isToolbarHidden = () => {
+    if (isLoading) return false
+    if (isEmptyData && !isSearch) return false
+
+    return true
+  }
+
+  const handleImportProjects = async (data) => {
+    //TODO Gestión de errores y update de SWR
+
+    try {
+      const systemsCreated = []
+      for (let index = 0; index < data.length; index++) {
+        const pro = await createSystem(data[index])
+        systemsCreated.push(pro)
+      }
+
+      setShowImportModal(false)
+      showToast("Sistemas importados correctamente")
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
+
+  const handleExportProjects = () => {
+    setShowExportModal(false)
+    const _data = jsonToCSV(transformTestSystemsToExport(systemsData))
+    download(_data, `sistemas_export_${new Date().toLocaleDateString()}`, "text/csv")
+  }
 
   const handleOpenPopup = (systemsToDelete, type) => {
     setDeleteType(type)
@@ -63,6 +125,7 @@ const sistemas = () => {
     setIsSystemModalOpen(false)
   }
 
+  // Handlers CRUD
   const handleDeleteMessage = () => {
     if (!systemsToDelete) return
 
@@ -75,7 +138,7 @@ const sistemas = () => {
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(systemsToDelete, systemsData)
-    updated.length > 0 ? await mutate(updated, false) : await mutate()
+    updated[0].testSystems.length > 0 ? await mutate(updated, false) : await mutate()
     setDeleteType(null)
     setSystemsToDelete(null)
   }
@@ -84,12 +147,13 @@ const sistemas = () => {
     try {
       await deleteSystem(id)
       showToast("Sistema borrado correctamente")
-      const updatedSystems = []
-      const filteredSystems = systems.filter((system) => system._id !== id)
-      updatedSystems.push({
-        testSystems: filteredSystems
-      })
-      return updatedSystems
+
+      const filterSystems = systems.filter((system) => system._id !== id)
+      return [
+        {
+          testSystems: filterSystems
+        }
+      ]
     } catch (error) {
       errorHandler(error)
     }
@@ -99,28 +163,57 @@ const sistemas = () => {
     try {
       const systemsQueue = systemsId.map((id) => deleteSystem(id))
       await Promise.all(systemsQueue)
-      showToast("Clientes borrados correctamente")
-      const updatedSystems = []
-      const filteredSystems = systems.filter(
+      showToast("Sistemas borrados correctamente")
+      const filterSystems = systems.filter(
         (system) => !systemsId.includes(system._id)
       )
-      updatedSystems.push({ testSystems: filteredSystems })
-      return filteredSystems
+      return [{ testSystems: filterSystems }]
     } catch (error) {
       errorHandler(error)
     }
   }
 
-  const onEdit = (id) => {
+  const handleUpdate = (id) => {
     const system = systemsData.find((system) => system._id === id)
     setSystemToUpdate(system)
     setIsSystemModalOpen(true)
   }
 
+  // Filters
   const onSearch = (search) => {
+    if (!search) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.SEARCH]: null
+      })
+      return
+    }
+
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
+    })
+  }
+
+  const handleOnGroup = (group) => {
+    if (!group) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.GROUP]: null
+      })
+      return
+    }
+
+    setFetchState(fetchType.GROUP)
+    setFetchOptions({
+      [fetchOption.GROUP]: group
+    })
+  }
+
+  const handleOnFilter = (filter) => {
+    setFetchState(fetchType.FILTER)
+    setFetchOptions({
+      [fetchOption.FILTER]: filter
     })
   }
 
@@ -145,27 +238,42 @@ const sistemas = () => {
         isOpen={isSystemModalOpen}
         onClose={handleOnCloseModal}
       />
+
+      <ExportFilesModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        onExport={() => handleExportProjects()}
+      />
+
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
+        onUpload={(data) => handleImportProjects(data)}
+        onDropDataTransform={(info) => testSystemDataTransform(info)}
       />
 
       <PageHeader>
         <BreadCrumbs />
-        {systemsData ? (
+        {isToolbarHidden() ? (
           <ToolBar
             onAdd={() => setIsSystemModalOpen(true)}
             onSearch={onSearch}
+            onGroup={handleOnGroup}
+            onFilter={handleOnFilter}
             onImport={() => setShowImportModal(true)}
-            onExport={handleExport}
+            onExport={() => setShowExportModal(true)}
             addLabel="Añadir sistema"
             searchPlaceholder="Busqueda por ID, Código"
+            groupOptions={SYSTEMS_GROUP_OPTIONS}
             icon={<AddTestSystemIcon />}
+            fetchState={fetchState}
           />
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData ? (
+      {isEmptyData && isSearch ? (
+        <ViewNotFoundState />
+      ) : isEmptyData ? (
         <ViewEmptyState
           message="Añadir sistemas a la plataforma"
           importButtonText="Importar"
@@ -176,10 +284,16 @@ const sistemas = () => {
       ) : null}
       {systemsData ? (
         <TestSystemsTable
+          fetchState={fetchState}
           systems={systemsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(systemsId) => handleOpenPopup(systemsId, DeleteType.MANY)}
-          onEdit={onEdit}
+          onEdit={handleUpdate}
+          onGroup={handleOnGroup}
+          groupOption={getGroupOptionLabel(
+            SYSTEMS_GROUP_OPTIONS,
+            fetchOptions[fetchOption.GROUP]
+          )}
         />
       ) : null}
     </Page>

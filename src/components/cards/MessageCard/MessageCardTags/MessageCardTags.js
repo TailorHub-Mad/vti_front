@@ -1,21 +1,9 @@
 import { Box } from "@chakra-ui/react"
 import React from "react"
+import { formatTags, variantGeneralTag } from "../../../../utils/constants/tabs"
 import { TagRow } from "../../../tags/TagRow/TagRow"
 
-export const MessageCardTags = ({ tags }) => {
-  const getRemainingTags = (tags) => {
-    if (tags.length <= 2) {
-      return 0
-    } else {
-      return tags.length - 2
-    }
-  }
-  const variantByTagName = {
-    test_system_tags: "pale_yellow",
-    project_tags: "violete",
-    notes_tags: "light_blue"
-  }
-
+export const MessageCardTags = ({ note }) => {
   return (
     <Box
       display="grid"
@@ -24,14 +12,24 @@ export const MessageCardTags = ({ tags }) => {
       gridTemplateColumns="100%"
       width="100%"
     >
-      {Object.entries(tags).map(([tagName, tags], idx) => (
+      {note.proyects?.length > 0 && (
         <TagRow
-          key={`${tagName}${idx}`}
-          tags={tags}
-          variant={variantByTagName[tagName]}
-          remainingTagsCount={getRemainingTags(tags)}
+          tags={formatTags(note.proyects, "alias")}
+          variant={variantGeneralTag.PROJECT}
         />
-      ))}
+      )}
+      {note.testSystems?.length > 0 && (
+        <TagRow
+          tags={formatTags(note.testSystems, "alias")}
+          variant={variantGeneralTag.SYSTEM}
+        />
+      )}
+      {note.tags?.length > 0 && (
+        <TagRow
+          tags={formatTags(note.tags, "name")}
+          variant={variantGeneralTag.NOTE}
+        />
+      )}
     </Box>
   )
 }

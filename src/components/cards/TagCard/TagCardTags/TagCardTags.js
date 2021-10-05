@@ -1,18 +1,10 @@
 import { Box } from "@chakra-ui/react"
 import React from "react"
 import { TagRow } from "../../../tags/TagRow/TagRow"
-import { GeneralTag } from "../../../tags/GeneralTag/GeneralTag"
+import { Tag } from "../../../tags/Tag/Tag"
+import { variantGeneralTag } from "../../../../utils/constants/tabs"
 
 export const TagCardTags = ({ projects, relatedTags }) => {
-  const getRemainingTags = (tags) => {
-    if (!tags) return 0
-    if (tags.length <= 2) {
-      return 0
-    } else {
-      return tags.length - 2
-    }
-  }
-
   return (
     <Box
       display="grid"
@@ -24,17 +16,11 @@ export const TagCardTags = ({ projects, relatedTags }) => {
       mb="16px"
     >
       <TagRow
-        tags={relatedTags}
-        tagComponent={<GeneralTag />}
-        remainingTagsCount={getRemainingTags(relatedTags)}
-        variant="pale_yellow"
+        tags={relatedTags.map((tags) => tags.name)}
+        tagcomponent={<Tag />}
+        variant={variantGeneralTag.NOTE}
       />
-      <TagRow
-        tags={projects}
-        tagComponent={<GeneralTag />}
-        remainingTagsCount={getRemainingTags(projects)}
-        variant="light_blue"
-      />
+      <TagRow tags={projects} tagcomponent={<Tag />} variant="light_blue" />
     </Box>
   )
 }

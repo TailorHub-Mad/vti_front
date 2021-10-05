@@ -1,6 +1,5 @@
 import { Flex, Text } from "@chakra-ui/react"
 import React from "react"
-import { getAcronym } from "../../../../utils/functions/global"
 
 export const MessageCardInfo = ({ id, author, updatedAt, ...props }) => {
   return (
@@ -15,7 +14,7 @@ export const MessageCardInfo = ({ id, author, updatedAt, ...props }) => {
         variant="d_xs_regular"
         marginLeft="10px"
       >
-        {getAcronym(author)}
+        {author}
       </Text>
       <Text color="grey" variant="d_xs_regular" marginLeft="10px">
         ult. actualización {updatedAt}

@@ -1,30 +1,37 @@
 import { PATHS } from "../../../utils/constants/global"
+import { fetchType } from "../../../utils/constants/swr"
 import { calcColWidth } from "../../../utils/constants/tables"
+import { variantGeneralTag } from "../../../utils/constants/tabs"
 
-export const formatSystem = (data) => {
-  // data && !isGrouped ? data?.map(transformSystemData) : groupTable(data)
-  return data && data?.map(transformSystemData)
+export const formatSystem = (systems, fetchState) => {
+  if (fetchState === fetchType.GROUP) return groupTable(systems)
+  return systems?.map(transformSystemData)
+}
+
+export const groupTable = (systems) => {
+  return Object.entries(systems).map(([key, value]) => {
+    return {
+      key,
+      value: value.map(transformSystemData)
+    }
+  })
 }
 
 export const transformSystemData = (system) => ({
   selector: "",
-  id: { label: system.ref, value: system._id },
-  alias: { label: system.alias, link: `${PATHS.testSystems}/${system._id}` },
-  client: system.clientAlias,
+  id: {
+    label: system.ref,
+    value: system._id,
+    link: `${PATHS.testSystems}/${system._id}`
+  },
+  alias: system.alias,
+  client: system.clientAlias || system.client,
   code: system.vtiCode,
   year: system.date?.year,
-  projects: system.projects.map((project) => project.alias),
-  notes: system.notes,
+  projects: system.projects.filter((p) => !Array.isArray(p)).map((p) => p.alias),
+  notes: system.notes.filter((n) => !Array.isArray(n)).map((n) => n.title),
   options: ""
 })
-
-export const groupTable = (data) => {
-  return data.map((it) => {
-    const _it = [...it]
-    _it[1] = it[1].map(transformSystemData)
-    return _it
-  })
-}
 
 export const TABLE_SYSTEMS_HEAD = {
   selector: {
@@ -34,22 +41,22 @@ export const TABLE_SYSTEMS_HEAD = {
   },
   id: {
     label: "ID",
-    width: calcColWidth(88),
-    type: "mapText"
+    width: calcColWidth(60),
+    type: "link"
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(88),
-    type: "link"
+    width: calcColWidth(180),
+    type: "text"
   },
   client: {
     label: "Cliente",
-    width: calcColWidth(80),
+    width: calcColWidth(120),
     type: "text"
   },
   code: {
     label: "Código",
-    width: calcColWidth(75),
+    width: calcColWidth(158),
     type: "text"
   },
   year: {
@@ -59,13 +66,19 @@ export const TABLE_SYSTEMS_HEAD = {
   },
   projects: {
     label: "Proyectos",
-    width: calcColWidth(260),
-    type: "tags"
+    width: calcColWidth(220),
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.SYSTEM
+    }
   },
   notes: {
     label: "Apuntes",
-    width: calcColWidth(350),
-    type: "tags"
+    width: calcColWidth(220),
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.NOTE
+    }
   },
   options: {
     label: "",
