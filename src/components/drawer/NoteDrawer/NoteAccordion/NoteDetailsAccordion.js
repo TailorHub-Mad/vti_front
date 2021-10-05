@@ -15,7 +15,7 @@ import { TagLineIcon } from "../../../icons/TagLineIcon"
 import { TestSystemLineIcon } from "../../../icons/TestSystemLineIcon"
 import { TagRow } from "../../../tags/TagRow/TagRow"
 import { NoteAccordionItem } from "./NoteAccordionItem/NoteAccordionItem"
-import {chakra} from "@chakra-ui/react"
+import { chakra } from "@chakra-ui/react"
 export const NoteDetailsAccordion = ({
   name,
   noteTags,
