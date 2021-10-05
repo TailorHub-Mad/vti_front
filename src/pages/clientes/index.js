@@ -25,6 +25,7 @@ import {
 import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
 import download from "downloadjs"
 import { jsonToCSV } from "react-papaparse"
+import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 
 const clientes = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -53,10 +54,21 @@ const clientes = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const clientsData = data && !isEmptyData ? data : null
 
+  const isSearch = fetchState == fetchType.SEARCH
+
+  // Handlers views
+  const isToolbarHidden = () => {
+    if (isLoading) return false
+    if (isEmptyData && !isSearch) return false
+
+    return true
+  }
+
   const handleImportClients = async (data) => {
     //TODO Gestión de errores y update de SWR
     try {
       await createClient(data)
+      await mutate()
       setShowImportModal(false)
       showToast("Clientes importados correctamente")
     } catch (error) {
@@ -130,6 +142,14 @@ const clientes = () => {
   }
 
   const onSearch = (search) => {
+    if (!search) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.SEARCH]: null
+      })
+      return
+    }
+
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
@@ -173,7 +193,7 @@ const clientes = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {clientsData ? (
+        {isToolbarHidden() ? (
           <ToolBar
             onAdd={() => setIsClientModalOpen(true)}
             onSearch={onSearch}
@@ -188,7 +208,9 @@ const clientes = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData ? (
+      {isEmptyData && isSearch ? (
+        <ViewNotFoundState />
+      ) : isEmptyData ? (
         <ViewEmptyState
           message="Añadir clientes a la plataforma"
           importButtonText="Importar"

@@ -17,6 +17,7 @@ export const SWR_CACHE_KEYS = {
   projects: "projects/",
   project: "project/",
   groupProjects: "projects/group",
+  activeProjects: "projects/active",
   filterProjects: "projects/filter",
   searchProjects: "projects/search",
 

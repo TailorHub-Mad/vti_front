@@ -1,9 +1,12 @@
 import { Box, Flex, Text } from "@chakra-ui/react"
+import { useRouter } from "next/router"
 import React from "react"
+import { PATHS } from "../../../utils/constants/global"
 import { TagCardHeader } from "./TagCardHeader/TagCardHeader"
 import { TagCardTags } from "./TagCardTags/TagCardTags"
 
 export const TagCard = ({
+  _id,
   name,
   updatedAt,
   projects,
@@ -13,6 +16,8 @@ export const TagCard = ({
   onEdit,
   onDelete
 }) => {
+  const router = useRouter()
+
   return (
     <Box
       bgColor="white"
@@ -28,6 +33,7 @@ export const TagCard = ({
         category={category}
         onEdit={onEdit}
         onDelete={onDelete}
+        onClick={() => router.push(`${PATHS.projectTags}/${_id}`)}
       />
 
       <TagCardTags

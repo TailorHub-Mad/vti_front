@@ -18,7 +18,13 @@ const initialValues = {
   document: undefined
 }
 
-export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
+export const NewNoteModal = ({
+  isOpen,
+  onClose,
+  noteToUpdate,
+  noteFromProject,
+  ...props
+}) => {
   const { showToast } = useContext(ToastContext)
   const { createNote } = useNoteApi()
   const { mutate } = useSWRConfig()
@@ -66,7 +72,10 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateNote() : await handleCreateNote()
-    await mutate(SWR_CACHE_KEYS.notes)
+
+    noteFromProject
+      ? await mutate([SWR_CACHE_KEYS.project, noteFromProject.project.value])
+      : await mutate(SWR_CACHE_KEYS.notes)
     showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s apunte/s!")
     setIsSubmitting(false)
     onClose()
@@ -85,6 +94,15 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
     return null
   }
 
+  const handleOnClose = () => {
+    if (noteFromProject)
+      setValues({
+        project: values.project
+      })
+    else setValues(initialValues)
+    onClose()
+  }
+
   useEffect(() => {
     if (!noteToUpdate) return
     const _note = {
@@ -99,9 +117,9 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
   }, [noteToUpdate])
 
   useEffect(() => {
-    if (isOpen) return
-    setValues(initialValues)
-  }, [isOpen])
+    if (!noteFromProject) return
+    setValues(noteFromProject)
+  }, [noteFromProject])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
@@ -109,13 +127,14 @@ export const NewNoteModal = ({ isOpen, onClose, noteToUpdate, ...props }) => {
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
           title={isUpdate ? "Editar apunte" : "Añadir nuevo apunte"}
-          onClose={onClose}
+          onClose={handleOnClose}
           pb="24px"
         />
         <NewNoteForm
           value={values}
           onChange={(val) => setValues(val)}
           noteToUpdate={noteToUpdate}
+          noteFromProject={noteFromProject}
           submitIsDisabled={submitIsDisabled}
         />
         <Button

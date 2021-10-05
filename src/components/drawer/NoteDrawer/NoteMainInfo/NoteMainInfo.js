@@ -56,6 +56,16 @@ export const NoteMainInfo = ({
     await mutate(SWR_CACHE_KEYS.notes)
   }
 
+  const isProjectHidden = () => {
+    if (isMessage) return false
+
+    const { proyects } = item
+
+    if (!proyects) return false
+
+    return true
+  }
+
   return (
     <>
       <Flex justify="space-between" h="16px">
@@ -95,7 +105,7 @@ export const NoteMainInfo = ({
         </Flex>
       </Flex>
 
-      {isMessage || !item.projects[0] || (
+      {isProjectHidden() && (
         <Box mt="24px">
           <Flex justify="space-between">
             <Flex align="center">

@@ -1,6 +1,7 @@
 import { fetchType } from "../../../utils/constants/swr"
 import { PATHS } from "../../../utils/constants/global"
 import { calcColWidth } from "../../../utils/constants/tables"
+import { variantGeneralTag } from "../../../utils/constants/tabs"
 
 export const formatProject = (projects, fetchState) => {
   if (fetchState === fetchType.GROUP) return groupTable(projects)
@@ -31,7 +32,7 @@ export const transformProjectData = (project) => ({
   users: project.users?.filter((u) => !Array.isArray(u)),
   notes: project.notes?.filter((n) => !Array.isArray(n)),
   options: "",
-  config: { isFinished: project.close }
+  config: { isFinished: Boolean(project.closed) }
 })
 
 export const TABLE_PROJECTS_HEAD = {
@@ -63,12 +64,18 @@ export const TABLE_PROJECTS_HEAD = {
   testSystems: {
     label: "Sistemas de ensayo",
     width: calcColWidth(210),
-    type: "tags"
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.SYSTEM
+    }
   },
   tags: {
     label: "Tags de proyecto",
     width: calcColWidth(210),
-    type: "tags"
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.NOTE
+    }
   },
   users: {
     label: "Usuarios",
@@ -83,6 +90,9 @@ export const TABLE_PROJECTS_HEAD = {
   options: {
     label: "",
     width: calcColWidth(20),
-    type: "options"
+    type: "options",
+    config: {
+      close: true
+    }
   }
 }

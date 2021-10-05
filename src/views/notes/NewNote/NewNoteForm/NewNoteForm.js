@@ -9,7 +9,13 @@ import { TextAreaInput } from "../../../../components/forms/TextAreaInput/TextAr
 import useProjectApi from "../../../../hooks/api/useProjectApi"
 import useTagApi from "../../../../hooks/api/useTagApi"
 
-export const NewNoteForm = ({ value, onChange, noteToUpdate, submitIsDisabled }) => {
+export const NewNoteForm = ({
+  value,
+  onChange,
+  noteToUpdate,
+  noteFromProject,
+  submitIsDisabled
+}) => {
   const { getProjects } = useProjectApi()
   const { getNoteTags } = useTagApi()
 
@@ -37,7 +43,8 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate, submitIsDisabled })
       config: {
         placeholder: "Selecciona",
         label: "Selecciona el proyecto*",
-        options: projectOptions
+        options: projectOptions,
+        isDisabled: Boolean(noteFromProject)
       }
     },
     system: {
@@ -101,7 +108,7 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate, submitIsDisabled })
       setTagOptions(formatTags(tags))
     }
 
-    _getProjects()
+    if (!noteFromProject) _getProjects()
     _getTags()
   }, [])
 
@@ -131,9 +138,11 @@ export const NewNoteForm = ({ value, onChange, noteToUpdate, submitIsDisabled })
 
     if (!project || !project.value) return
 
-    const { testSystems } = projectData.find((p) => p._id === project.value)
+    const { testSystems } = noteFromProject
+      ? noteFromProject
+      : projectData.find((p) => p._id === project.value)
 
-    setSystemOptions(formatSelectOption(testSystems))
+    setSystemOptions(noteFromProject ? testSystems : formatSelectOption(testSystems))
   }, [value.project])
 
   const inputRefObj = {
