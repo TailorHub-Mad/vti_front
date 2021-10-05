@@ -8,6 +8,8 @@ export const NewTagForm = ({ value, onChange, objectToUpdate, isProjectTag }) =>
 
   const [tagOptions, setTagOptions] = useState([])
 
+  const _values = { ...value }
+
   const handleFormChange = (input, _value) => {
     onChange({
       ...value,
@@ -16,7 +18,9 @@ export const NewTagForm = ({ value, onChange, objectToUpdate, isProjectTag }) =>
   }
 
   const formatTags = (tags) => {
-    return tags.map(({ name, _id }) => ({ label: name, value: _id }))
+    return tags
+      .filter((tag) => tag._id !== objectToUpdate?._id && !tag.parent)
+      .map(({ name, _id }) => ({ label: name, value: _id }))
   }
 
   const formInputs = {
@@ -32,7 +36,8 @@ export const NewTagForm = ({ value, onChange, objectToUpdate, isProjectTag }) =>
       config: {
         placeholder: "Padre",
         label: "Escriba el nombre del padre (opcional)",
-        options: tagOptions
+        options: tagOptions,
+        isDisabled: objectToUpdate?.relatedTags?.length > 0
       }
     }
   }
@@ -53,20 +58,21 @@ export const NewTagForm = ({ value, onChange, objectToUpdate, isProjectTag }) =>
   useEffect(() => {
     if (!objectToUpdate || tagOptions.length === 0) return
 
-    // TODO -> for update
-    // const tag = tagOptions.find((_tag) => _tag.label === objectToUpdate?.tagAlias)
+    const tag = tagOptions.find((_tag) => _tag.label === objectToUpdate?.parent.name)
 
-    // handleFormChange("relatedTag", tag)
+    handleFormChange("relatedTag", tag)
   }, [objectToUpdate, tagOptions])
 
   return (
     <>
       {Object.entries(formInputs).map(([name, { type, config }], index) => {
         return React.cloneElement(inputRefObj[type], {
-          value: value[name],
+          value: _values[name],
           onChange: (val) => handleFormChange(name, val),
           marginBottom: "24px",
-          isDisabled: index !== 0 && !value[Object.keys(value)[index - 1]],
+          isDisabled:
+            config.disabled ||
+            (index !== 0 && !value[Object.keys(value)[index - 1]]),
           key: `${name}-${index}`,
           ...config
         })

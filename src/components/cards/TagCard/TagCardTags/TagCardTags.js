@@ -4,7 +4,7 @@ import { TagRow } from "../../../tags/TagRow/TagRow"
 import { Tag } from "../../../tags/Tag/Tag"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
 
-export const TagCardTags = ({ projects, relatedTags }) => {
+export const TagCardTags = ({ items, relatedTags = [] }) => {
   return (
     <Box
       display="grid"
@@ -20,7 +20,7 @@ export const TagCardTags = ({ projects, relatedTags }) => {
         tagcomponent={<Tag />}
         variant={variantGeneralTag.NOTE}
       />
-      <TagRow tags={projects} tagcomponent={<Tag />} variant="light_blue" />
+      <TagRow tags={items} tagcomponent={<Tag />} variant="light_blue" />
     </Box>
   )
 }
