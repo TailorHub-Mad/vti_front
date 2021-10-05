@@ -27,6 +27,7 @@ import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { NewTagModal } from "../../views/tags/NewTag/NewTagModal/NewTagModal"
 import { TagsHeader } from "../../views/tags/TagsHeader/TagsHeader"
 import download from "downloadjs"
+import { fetchOption, fetchType } from "../../utils/constants/swr"
 
 const infoByType = {
   proyecto: {
@@ -47,35 +48,66 @@ const infoByType = {
   }
 }
 
+const ORDER = {
+  inheritance: "inheritance",
+  alphabetic: "alphabetic"
+}
+
 const tags = () => {
+  // Hooks
   const router = useRouter()
   const { type } = router.query
-  const isProjectTag = type === "proyecto"
-
   const { isLoggedIn } = useContext(ApiAuthContext)
   const { showToast } = useContext(ToastContext)
   const { deleteProjectTag, deleteNoteTag, createNoteTag, createProjectTag } =
     useTagApi()
-  const { data, error, isLoading, mutate } = tagFetchHandler(
-    infoByType[type].fetchKey
-  )
 
+  // States
   const [showImportModal, setShowImportModal] = useState(false)
   const [showExportModal, setShowExportModal] = useState(false)
-  const [activeTab, setActiveTab] = useState("inheritance")
-
-  // Create - Update state
   const [isTagModalOpen, setIsTagModalOpen] = useState(false)
   const [tagToUpdate, setTagToUpdate] = useState(null)
-
-  // Delete state
   const [deleteType, setDeleteType] = useState(null)
   const [tagToDelete, setTagsToDelete] = useState(null)
+  // TODO -> review order in back & ENUM
+  const [activeTab, setActiveTab] = useState(ORDER.inheritance)
+  const [fetchState, setFetchState] = useState(fetchType.ALL)
+  const [fetchOptions, setFetchOptions] = useState({})
+
+  // Fetch
+  // TODO -> review  ENUM
+  const isProjectTag = type === "proyecto"
+
+  const { data, error, isLoading, mutate } = tagFetchHandler(
+    fetchState,
+    fetchOptions,
+    isProjectTag
+  )
 
   const isEmptyData = checkDataIsEmpty(data)
   const tagData = data && !isEmptyData ? data : null
 
-  // TODO
+  const isSearch = fetchState == fetchType.SEARCH
+
+  // Handlers views
+  const isToolbarHidden = () => {
+    if (isLoading) return false
+    if (isEmptyData && !isSearch) return false
+
+    return true
+  }
+
+  const handleClosePopup = () => {
+    setDeleteType(null)
+    setTagsToDelete(null)
+  }
+
+  const handleOnCloseModal = () => {
+    setTagToUpdate(null)
+    setIsTagModalOpen(false)
+  }
+
+  // Handlers CRUD
   const handleImportTags = async (data) => {
     //TODO Gestión de errores y update de SWR
 
@@ -100,15 +132,6 @@ const tags = () => {
     const _data = jsonToCSV(transformTagsToExport(tagData))
     download(_data, `tags_export_${new Date().toLocaleDateString()}`, "text/csv")
   }
-  const handleClosePopup = () => {
-    setDeleteType(null)
-    setTagsToDelete(null)
-  }
-
-  const handleOnCloseModal = () => {
-    setTagToUpdate(null)
-    setIsTagModalOpen(false)
-  }
 
   const handleDeleteMessage = () => {
     if (!tagToDelete) return
@@ -124,8 +147,7 @@ const tags = () => {
       isProjectTag
         ? await deleteProjectTag(tagToDelete)
         : await deleteNoteTag(tagToDelete)
-      const updated = tagData.filter((projectTag) => projectTag._id !== tagToDelete)
-      updated.length > 0 ? await mutate(updated, false) : await mutate()
+      await mutate()
       showToast("Tag borrada correctamente")
       setDeleteType(null)
       setTagsToDelete(null)
@@ -139,8 +161,25 @@ const tags = () => {
     setIsTagModalOpen(true)
   }
 
-  // TODO
-  const onSearch = () => {}
+  // Filters
+  const onSearch = (search) => {
+    if (!search) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.SEARCH]: null
+      })
+      return
+    }
+
+    setFetchState(fetchType.SEARCH)
+    setFetchOptions({
+      [fetchOption.SEARCH]: search
+    })
+  }
+
+  const sortTags = (data) => {
+    return data.sort((a, b) => a.name.localeCompare(b.name))
+  }
 
   useEffect(() => {
     if (!infoByType[router?.query?.type]) router.push(PATHS.notFound)
@@ -187,7 +226,7 @@ const tags = () => {
       />
 
       <PageHeader title={infoByType[type].title}>
-        {tagData ? (
+        {isToolbarHidden() ? (
           <ToolBar
             onAdd={() => setIsTagModalOpen(true)}
             onSearch={onSearch}
@@ -198,6 +237,7 @@ const tags = () => {
             noFilter
             noGroup
             icon={<AddTagIcon />}
+            fetchState={fetchState}
           />
         ) : null}
       </PageHeader>
@@ -221,10 +261,10 @@ const tags = () => {
           <TagsHeader
             activeItem={activeTab}
             onChange={(value) => setActiveTab(value)}
-            tagsCount={data.length}
+            tagsCount={tagData.length}
           />
 
-          {activeTab === "inheritance" ? (
+          {activeTab === ORDER.inheritance ? (
             <>
               <Text variant="d_s_medium">Primer Grado</Text>
               <Grid
@@ -234,14 +274,15 @@ const tags = () => {
                 mt="8px"
                 mb="24px"
               >
-                {data
+                {tagData
                   .filter((tag) => tag?.relatedTags?.length > 0)
                   .map((tag) => (
                     <TagCard
                       onEdit={() => handleUpdate(tag)}
                       onDelete={() => setTagsToDelete(tag._id)}
                       key={tag.name}
-                      {...tag}
+                      tag={tag}
+                      isProjectTag={isProjectTag}
                     />
                   ))}
               </Grid>
@@ -254,21 +295,22 @@ const tags = () => {
                 mt="8px"
                 mb="24px"
               >
-                {data
+                {tagData
                   .filter((tag) => tag?.relatedTags?.length === 0)
                   .map((tag) => (
                     <TagCard
                       onEdit={() => handleUpdate(tag)}
                       onDelete={() => setTagsToDelete(tag._id)}
                       key={tag.name}
-                      {...tag}
+                      tag={tag}
+                      isProjectTag={isProjectTag}
                     />
                   ))}
               </Grid>
             </>
           ) : null}
 
-          {activeTab === "alphabetic" ? (
+          {activeTab === ORDER.alphabetic ? (
             <Grid
               templateColumns="repeat(auto-fill, 266px)"
               gap="16px"
@@ -276,16 +318,15 @@ const tags = () => {
               mt="8px"
               mb="24px"
             >
-              {[...data]
-                .sort((a, b) => a.name.localeCompare(b.name))
-                .map((tag) => (
-                  <TagCard
-                    onEdit={() => handleUpdate(tag)}
-                    onDelete={() => setTagsToDelete(tag._id)}
-                    key={tag.name}
-                    {...tag}
-                  />
-                ))}
+              {sortTags(tagData).map((tag) => (
+                <TagCard
+                  onEdit={() => handleUpdate(tag)}
+                  onDelete={() => setTagsToDelete(tag._id)}
+                  key={tag.name}
+                  tag={tag}
+                  isProjectTag={isProjectTag}
+                />
+              ))}
             </Grid>
           ) : null}
         </PageBody>
