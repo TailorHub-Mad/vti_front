@@ -117,13 +117,13 @@ export const NoteMainInfo = ({
             <GoToButton
               label="Ver proyecto"
               onClick={() =>
-                router.push(`${PATHS.projects}/${item.proyects[0]._id}`)
+                router.push(`${PATHS.projects}/${item.projects[0]._id}`)
               }
             />
           </Flex>
 
           <Tag variant={variantGeneralTag.PROJECT} mt="8px" ml="32px">
-            {item.proyects[0].alias}
+            {item.projects[0].alias}
           </Tag>
         </Box>
       )}
