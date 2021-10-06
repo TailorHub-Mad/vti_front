@@ -1,12 +1,10 @@
 import { SearchIcon } from "@chakra-ui/icons"
 import { Button, Input, InputGroup, InputLeftElement, Flex } from "@chakra-ui/react"
-import React, { useContext } from "react"
+import React from "react"
 import { CloudButton } from "../../buttons/CloudButton/CloudButton"
 import { Filter } from "../../filters/Filter"
 import { Group } from "../../grouping/Group"
 import { AddProjectIcon } from "../../icons/AddProjectIcon"
-import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
-import { RoleType } from "../../../utils/constants/global"
 import { fetchType } from "../../../utils/constants/swr"
 
 export const ToolBar = ({
@@ -23,11 +21,10 @@ export const ToolBar = ({
   noGroup,
   noImport,
   noSearch,
+  noAdd,
   fetchState,
   icon
 }) => {
-  const { role } = useContext(ApiAuthContext)
-
   const handleOnGroup = (activeItem) => onGroup(activeItem)
   const handleOnFilter = (activeItem) => onFilter(activeItem)
 
@@ -55,23 +52,19 @@ export const ToolBar = ({
           />
         </InputGroup>
       )}
+      {noImport || <CloudButton onImport={onImport} onExport={onExport} />}
+      {noAdd || (
+        <Button onClick={onAdd}>
+          {icon ? (
+            React.cloneElement(icon, {
+              marginRight: "8px"
+            })
+          ) : (
+            <AddProjectIcon marginRight="8px" />
+          )}
 
-      {role === RoleType.ADMIN && (
-        <>
-          {noImport || <CloudButton onImport={onImport} onExport={onExport} />}
-
-          <Button onClick={onAdd}>
-            {icon ? (
-              React.cloneElement(icon, {
-                marginRight: "8px"
-              })
-            ) : (
-              <AddProjectIcon marginRight="8px" />
-            )}
-
-            {addLabel ?? "Añadir"}
-          </Button>
-        </>
+          {addLabel ?? "Añadir"}
+        </Button>
       )}
     </Flex>
   )

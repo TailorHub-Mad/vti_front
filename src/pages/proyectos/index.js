@@ -9,7 +9,7 @@ import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { ToastContext } from "../../provider/ToastProvider"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
-import { DeleteType } from "../../utils/constants/global"
+import { DeleteType, RoleType } from "../../utils/constants/global"
 import { projectFetchHandler } from "../../swr/project.swr"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
@@ -51,9 +51,11 @@ const PROJECTS_GROUP_OPTIONS = [
 
 const proyectos = () => {
   // Hooks
-  const { isLoggedIn } = useContext(ApiAuthContext)
+  const { isLoggedIn, role } = useContext(ApiAuthContext)
   const { deleteProject, createProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
+
+  const isAdmin = role === RoleType.ADMIN
 
   // States
   const [showImportModal, setShowImportModal] = useState(false)
@@ -332,6 +334,8 @@ const proyectos = () => {
             groupOptions={PROJECTS_GROUP_OPTIONS}
             icon={<AddProjectIcon />}
             fetchState={fetchState}
+            noAdd={!isAdmin}
+            noImport={!isAdmin}
           />
         ) : null}
       </PageHeader>

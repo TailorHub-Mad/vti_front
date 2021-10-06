@@ -9,7 +9,7 @@ import { Popup } from "../../components/overlay/Popup/Popup"
 import { NewTestSystemModal } from "../../views/test_systems/NewTestSystem/NewTestSystemModal/NewTestSystemModal"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
-import { DeleteType } from "../../utils/constants/global"
+import { DeleteType, RoleType } from "../../utils/constants/global"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
@@ -49,9 +49,11 @@ const SYSTEMS_GROUP_OPTIONS = [
 
 const sistemas = () => {
   // Hooks
-  const { isLoggedIn } = useContext(ApiAuthContext)
+  const { isLoggedIn, role } = useContext(ApiAuthContext)
   const { deleteSystem, createSystem } = useSystemApi()
   const { showToast } = useContext(ToastContext)
+
+  const isAdmin = role === RoleType.ADMIN
 
   // States
   const [showImportModal, setShowImportModal] = useState(false)
@@ -299,6 +301,8 @@ const sistemas = () => {
             groupOptions={SYSTEMS_GROUP_OPTIONS}
             icon={<AddTestSystemIcon />}
             fetchState={fetchState}
+            noAdd={!isAdmin}
+            noImport={!isAdmin}
           />
         ) : null}
       </PageHeader>

@@ -31,7 +31,7 @@ import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 const USERS_GROUP_OPTIONS = [
   {
     label: "Departamento",
-    value: "department"
+    value: "department.name"
   }
 ]
 
