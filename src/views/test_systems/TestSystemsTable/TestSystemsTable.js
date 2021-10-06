@@ -15,8 +15,10 @@ export const TestSystemsTable = ({
   onGroup,
   groupOption
 }) => {
+  const isGrouped = fetchState === fetchType.GROUP
+
   const { selectedRows, setSelectedRows, handleSelectAllRows, handleRowSelect } =
-    useTableActions()
+    useTableActions(isGrouped)
 
   const selectedRowsKeys = Object.keys(selectedRows)
 
@@ -25,8 +27,10 @@ export const TestSystemsTable = ({
   }, [systems.length])
 
   const handleOnDelete = () => {
-    if (selectedRowsKeys.length > 1) return onDeleteMany(selectedRowsKeys)
-    return onDelete(selectedRowsKeys[0])
+    const systemsId = Object.keys(selectedRows)
+    if (Object.keys(selectedRows).length > 1) return onDeleteMany(systemsId)
+
+    return isGrouped ? onDelete(selectedRows) : onDelete(systemsId[0])
   }
 
   const systemsData = formatSystem(systems, fetchState)
@@ -34,7 +38,7 @@ export const TestSystemsTable = ({
     components: TABLE_COMPONENTS,
     head: {
       ...TABLE_SYSTEMS_HEAD,
-      options: { ...TABLE_SYSTEMS_HEAD.options, onDelete, onEdit }
+      options: { ...TABLE_SYSTEMS_HEAD.options, onDelete, onEdit, isGrouped }
     }
   }
 
@@ -59,7 +63,7 @@ export const TestSystemsTable = ({
       config={configTable}
       content={systemsData}
       selectedRows={selectedRows}
-      onRowSelect={(idx) => handleRowSelect(idx)}
+      onRowSelect={handleRowSelect}
       optionsDisabled={selectedRowsKeys.length > 1}
       isGrouped={fetchState === fetchType.GROUP}
     />

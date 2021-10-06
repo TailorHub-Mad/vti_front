@@ -11,8 +11,6 @@ const useTableActions = (isGrouped) => {
       return
     }
 
-    console.log("esto llega", id, key)
-
     isGrouped
       ? setSelectedRows({ ...selectedRows, [id]: { active: true, key } })
       : setSelectedRows({ ...selectedRows, [id]: true })

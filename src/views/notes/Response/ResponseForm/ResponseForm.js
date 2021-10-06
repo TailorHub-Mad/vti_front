@@ -28,7 +28,7 @@ export const ResponseForm = ({ value, onChange, submitIsDisabled, isUpdate }) =>
         label: "Link (opcional)"
       }
     },
-    file: {
+    documents: {
       type: "attachment",
       config: {
         label: "Adjunta tus documentos"

@@ -33,7 +33,7 @@ export const ResponseModal = ({
       message: note.message
     }
     if (note?.link) formatData["link"] = note.link
-    if (note?.file) formatData["file"] = note.file
+    if (note?.documents) formatData["file"] = note.documents
 
     const formData = new FormData()
 
@@ -42,6 +42,27 @@ export const ResponseModal = ({
         ? value.forEach((v) => formData.set(key, v))
         : formData.set(key, value)
     })
+
+    return formData
+  }
+
+  const formatUpdateMessage = (note) => {
+    const formatData = {
+      message: note.message
+    }
+
+    if (note?.link) formatData["link"] = note.link
+    if (note?.documents) formatData["documents"] = [...note.documents]
+
+    const formData = new FormData()
+
+    Object.entries(formatData).forEach(([key, value]) => {
+      Array.isArray(value)
+        ? value.forEach((v) => formData.set(key, v))
+        : formData.set(key, value)
+    })
+
+    console.log(formData)
 
     return formData
   }
@@ -66,7 +87,7 @@ export const ResponseModal = ({
 
   const handleUpdateMessage = async () => {
     try {
-      const message = formatCreateMessage(values)
+      const message = formatUpdateMessage(values)
       await updateMessage(noteId, messageToUpdate._id, message)
     } catch (error) {
       errorHandler(error)
@@ -79,7 +100,7 @@ export const ResponseModal = ({
     const message = {
       message: messageToUpdate.message,
       link: messageToUpdate.link,
-      file: messageToUpdate.documents
+      documents: messageToUpdate.documents
     }
 
     setValues(message)

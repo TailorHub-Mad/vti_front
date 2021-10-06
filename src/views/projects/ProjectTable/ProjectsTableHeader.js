@@ -45,7 +45,7 @@ export const ProjectsTableHeader = ({
         <Flex justify="flex-start" alignItems="center">
           <Flex alignItems="center">
             <CloseIcon mr="8px" h="12px" cursor="pointer" onClick={handleOnClick} />
-            <Text marginTop="6px">{`Filtrado por ${groupOption
+            <Text marginTop="6px">{`Agrupado por ${groupOption
               .toString()
               .toUpperCase()}`}</Text>
           </Flex>

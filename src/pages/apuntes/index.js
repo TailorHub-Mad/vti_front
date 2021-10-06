@@ -19,7 +19,11 @@ import { ToastContext } from "../../provider/ToastProvider"
 import { noteFetchHandler } from "../../swr/note.swr"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
 import { errorHandler } from "../../utils/errors"
-import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
+import {
+  checkDataIsEmpty,
+  getFieldGRoupObjectById,
+  getFieldObjectById
+} from "../../utils/functions/global"
 import {
   noteDataTransform,
   transformNotesToExport
@@ -33,6 +37,7 @@ import { NotesGroup } from "../../views/notes/NotesGroup/NotesGroup"
 import { NotesMenu } from "../../views/notes/NotesMenu/NotesMenu"
 import { ResponseModal } from "../../views/notes/Response/ResponseModal/ResponseModal"
 import download from "downloadjs"
+import { getGroupOptionLabel } from "../../utils/functions/objects"
 
 const NOTES_GROUP_OPTIONS = [
   {
@@ -89,33 +94,11 @@ const apuntes = () => {
     // TODO FILTER
   }
 
-  const handleImportNotes = async (data) => {
-    //TODO Gestión de errores y update de SWR
-
-    try {
-      const projectsCreated = []
-      for (let index = 0; index < data.length; index++) {
-        const pro = await createNote(data[index])
-        projectsCreated.push(pro)
-      }
-
-      setShowImportModal(false)
-      showToast("Proyectos importados correctamente")
-    } catch (error) {
-      errorHandler(error)
-    }
-  }
-
-  const handleExportNotes = () => {
-    setShowExportModal(false)
-    const _data = jsonToCSV(transformNotesToExport(notesData))
-    download(_data, `apuntes_export_${new Date().toLocaleDateString()}`, "text/csv")
-  }
-
   const isEmptyData = checkDataIsEmpty(data)
   const notesData = handleNotesData(isEmptyData)
 
   const isSearch = fetchState == fetchType.SEARCH
+  const isGrouped = fetchState == fetchType.GROUP
 
   const checkIsFavorite = (id) => user?.favorites?.notes?.includes(id)
   const checkIsSubscribe = (id) => user?.subscribed?.notes?.includes(id)
@@ -144,9 +127,48 @@ const apuntes = () => {
   }
 
   // Handlers CRUD
+  const handleDeleteMessageToNote = () => {
+    if (!noteToDelete) return
+
+    const label = isGrouped
+      ? getFieldGRoupObjectById(notesData, "ref", noteToDelete.id, noteToDelete.key)
+      : getFieldObjectById(notesData, "ref", noteToDelete)
+    return `¿Desea eliminar ${label}?`
+  }
+
+  const handleImportNotes = async (data) => {
+    //TODO Gestión de errores y update de SWR
+
+    try {
+      const projectsCreated = []
+      for (let index = 0; index < data.length; index++) {
+        const pro = await createNote(data[index])
+        projectsCreated.push(pro)
+      }
+
+      setShowImportModal(false)
+      showToast("Proyectos importados correctamente")
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
+
+  const handleExportNotes = () => {
+    setShowExportModal(false)
+    const _data = jsonToCSV(transformNotesToExport(notesData))
+    download(_data, `apuntes_export_${new Date().toLocaleDateString()}`, "text/csv")
+  }
+
   const handleDelete = async () => {
     try {
-      await deleteNote(noteToDelete)
+      if (isGrouped) {
+        await await deleteNote(noteToDelete.id)
+        showToast("Apunte borrado correctamente")
+        setNoteToDelete(null)
+        return await mutate()
+      }
+
+      await deleteNote(data)
       showToast("Apunte borrado correctamente")
 
       const updatedNotes = []
@@ -270,7 +292,7 @@ const apuntes = () => {
         onConfirm={handleDelete}
         onClose={() => setNoteToDelete(null)}
       >
-        {`¿Desea eliminar ${getFieldObjectById(notesData, "ref", noteToDelete)}?`}
+        {handleDeleteMessageToNote()}
       </Popup>
 
       <Popup
@@ -346,7 +368,7 @@ const apuntes = () => {
         )}
       </PageHeader>
       <PageMenu>
-        {notesData ? (
+        {notesData && !isGrouped ? (
           <NotesMenu
             fetchState={fetchState}
             notesCount={notesData?.length}
@@ -377,8 +399,14 @@ const apuntes = () => {
                 subscribedUsers={null} // TOPO -> review
                 checkIsSubscribe={checkIsSubscribe}
                 checkIsFavorite={checkIsFavorite}
-                onDelete={setNoteToDelete}
+                onDelete={(id, key) => setNoteToDelete({ id, key })}
+                onGroup={handleOnGroup}
                 handleFavorite={handleFavorite}
+                groupOption={getGroupOptionLabel(
+                  NOTES_GROUP_OPTIONS,
+                  fetchOptions[fetchOption.GROUP]
+                )}
+                isGrouped={isGrouped}
               />
             ) : (
               <NotesGrid

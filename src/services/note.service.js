@@ -35,7 +35,7 @@ const NoteService = () => {
   const getFavsNotes = () => execute(instance.get(`/user/favorite`))
   const getSubscribeNotes = () => execute(instance.get(`/user/subscribed`))
   const getUnreadNotes = () => execute(instance.get(`/user/noRead`))
-  const getActiveNotes = () => execute(instance.get(`/notes?limit=${0}&offset=${0}`)) // TODO -> pending
+  const getActiveNotes = () => execute(instance.get(`/user/active`))
 
   return {
     getNotes,

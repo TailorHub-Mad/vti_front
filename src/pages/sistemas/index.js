@@ -14,7 +14,11 @@ import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddTestSystemIcon } from "../../components/icons/AddTestSystemIcon"
-import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
+import {
+  checkDataIsEmpty,
+  getFieldGRoupObjectById,
+  getFieldObjectById
+} from "../../utils/functions/global"
 import { systemFetchHandler } from "../../swr/systems.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
@@ -77,9 +81,9 @@ const sistemas = () => {
   const systemsData = handleSystemsData(isEmptyData)
 
   const isSearch = fetchState == fetchType.SEARCH
+  const isGrouped = fetchState == fetchType.GROUP
 
   // Handlers views
-
   const isToolbarHidden = () => {
     if (isLoading) return false
     if (isEmptyData && !isSearch) return false
@@ -112,7 +116,12 @@ const sistemas = () => {
 
   const handleOpenPopup = (systemsToDelete, type) => {
     setDeleteType(type)
-    setSystemsToDelete(systemsToDelete)
+
+    if (type === DeleteType.ONE && isGrouped) {
+      const [id, { key }] = Object.entries(systemsToDelete)[0]
+      return setSystemsToDelete({ id, key })
+    }
+    return setSystemsToDelete(systemsToDelete)
   }
 
   const handleClosePopup = () => {
@@ -130,25 +139,41 @@ const sistemas = () => {
     if (!systemsToDelete) return
 
     if (deleteType === DeleteType.MANY)
-      return "¿Desea eliminar los sistemas seleccionados?"
-    const label = getFieldObjectById(systemsData, "alias", systemsToDelete)
+      return "¿Desea eliminar los proyectos seleccionados?"
+
+    const label = isGrouped
+      ? getFieldGRoupObjectById(
+          systemsData,
+          "alias",
+          systemsToDelete.id,
+          systemsToDelete.key
+        )
+      : getFieldObjectById(systemsData, "alias", systemsToDelete)
     return `¿Desea eliminar ${label}?`
   }
 
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(systemsToDelete, systemsData)
-    updated[0].testSystems.length > 0 ? await mutate(updated, false) : await mutate()
+
     setDeleteType(null)
     setSystemsToDelete(null)
+    if (isGrouped || updated[0].testSystems.length === 0) return await mutate()
+    await mutate(updated, false)
   }
 
-  const deleteOne = async (id, systems) => {
+  const deleteOne = async (data, systems) => {
     try {
-      await deleteSystem(id)
+      if (isGrouped) {
+        await deleteSystem(data.id)
+        showToast("Proyecto borrado correctamente")
+        return
+      }
+
+      await deleteSystem(data)
       showToast("Sistema borrado correctamente")
 
-      const filterSystems = systems.filter((system) => system._id !== id)
+      const filterSystems = systems.filter((system) => system._id !== data)
       return [
         {
           testSystems: filterSystems
@@ -173,9 +198,16 @@ const sistemas = () => {
     }
   }
 
-  const handleUpdate = (id) => {
-    const system = systemsData.find((system) => system._id === id)
-    setSystemToUpdate(system)
+  const handleUpdate = (data) => {
+    if (isGrouped) {
+      const [id, { key }] = Object.entries(data)[0]
+      const project = systemsData[key].find((project) => project._id === id)
+      setSystemToUpdate(project)
+    } else {
+      const project = systemsData.find((project) => project._id === data)
+      setSystemToUpdate(project)
+    }
+
     setIsSystemModalOpen(true)
   }
 
@@ -286,7 +318,10 @@ const sistemas = () => {
         <TestSystemsTable
           fetchState={fetchState}
           systems={systemsData}
-          onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
+          onDelete={(id) => {
+            console.log("esto llega", id)
+            handleOpenPopup(id, DeleteType.ONE)
+          }}
           onDeleteMany={(systemsId) => handleOpenPopup(systemsId, DeleteType.MANY)}
           onEdit={handleUpdate}
           onGroup={handleOnGroup}
