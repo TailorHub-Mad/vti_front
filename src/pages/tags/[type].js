@@ -28,6 +28,7 @@ import { NewTagModal } from "../../views/tags/NewTag/NewTagModal/NewTagModal"
 import { TagsHeader } from "../../views/tags/TagsHeader/TagsHeader"
 import download from "downloadjs"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
+import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 
 const infoByType = {
   proyecto: {
@@ -226,7 +227,9 @@ const tags = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData ? (
+      {isEmptyData && isSearch ? (
+        <ViewNotFoundState />
+      ) : isEmptyData ? (
         <ViewEmptyState
           message="Añadir tags a la plataforma"
           importButtonText="Importar"

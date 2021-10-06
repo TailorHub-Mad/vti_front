@@ -31,25 +31,30 @@ export const SWR_CACHE_KEYS = {
   // CLIENTS
   clients: "clients/",
   client: "client/",
+  searchClients: "clients/search",
 
   // SECTORS
   sectors: "sectors/",
   sector: "sector/",
+  searchSectors: "sectors/search",
 
   // DEPARTMENTS
   departments: "departments/",
   department: "department/",
+  searchDepartments: "departments/search",
 
   // USERS
   users: "users/",
   user: "user/",
   groupUsers: "users/group",
+  searchUsers: "users/search",
 
   // TAGS
   projectTags: "projectTags/",
   noteTags: "noteTags/",
   searchProjectTags: "projectTags/search",
   searchNoteTags: "noteTags/search",
+  searchTags: "tags/search",
 
   // HELPS
   projectHelps: "projectHelps/",

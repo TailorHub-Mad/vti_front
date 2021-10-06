@@ -26,6 +26,7 @@ import {
   transformUsersToExport,
   userDataTransform
 } from "../../utils/functions/import_export/users_helpers"
+import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 
 const USERS_GROUP_OPTIONS = [
   {
@@ -237,7 +238,9 @@ const usuarios = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData ? (
+      {isEmptyData && isSearch ? (
+        <ViewNotFoundState />
+      ) : isEmptyData ? (
         <ViewEmptyState
           message="Añadir usuarios a la plataforma"
           importButtonText="Importar"
@@ -246,6 +249,7 @@ const usuarios = () => {
           onAdd={() => setIsUserModalOpen(true)}
         />
       ) : null}
+
       {usersData ? (
         <UsersTable
           fetchState={fetchState}

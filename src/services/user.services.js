@@ -13,8 +13,23 @@ const UserService = () => {
 
   // GROUP & FILTER
   const getGroupUsers = (/*data*/) => execute(instance.get(``))
+  const getSearchUsers = (data) =>
+    execute(
+      instance.get(
+        `/user/filter?alias=${data}&ref=${data}&name=${data}&email=${data}`
+      )
+    )
 
-  return { getUsers, getUser, createUser, updateUser, deleteUser, getGroupUsers }
+  return {
+    getUsers,
+    getUser,
+    createUser,
+    updateUser,
+    deleteUser,
+
+    getGroupUsers,
+    getSearchUsers
+  }
 }
 
 export default UserService
