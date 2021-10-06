@@ -141,9 +141,16 @@ const proyectos = () => {
     setIsProjectModalOpen(false)
   }
 
-  const handleOnOpenFinishProjectModal = (id) => {
-    const project = projectsData.find((p) => (p._id = id))
-    setProjectToFinish(project)
+  const handleOnOpenFinishProjectModal = async (data) => {
+    if (isGrouped) {
+      const [id, { key }] = Object.entries(data)[0]
+      const project = projectsData[key].find((p) => (p._id = id))
+      setProjectToFinish(project)
+    } else {
+      const project = projectsData.find((p) => (p._id = data))
+      setProjectToFinish(project)
+    }
+
     setIsFinishProjectModalOpen(true)
   }
 
@@ -217,9 +224,16 @@ const proyectos = () => {
     }
   }
 
-  const handleUpdate = (id) => {
-    const project = projectsData.find((project) => project._id === id)
-    setProjectToUpdate(project)
+  const handleUpdate = (data) => {
+    if (isGrouped) {
+      const [id, { key }] = Object.entries(data)[0]
+      const project = projectsData[key].find((project) => project._id === id)
+      setProjectToUpdate(project)
+    } else {
+      const project = projectsData.find((project) => project._id === data)
+      setProjectToUpdate(project)
+    }
+
     setIsProjectModalOpen(true)
   }
 
@@ -287,6 +301,7 @@ const proyectos = () => {
         project={projectToFinish}
         isOpen={isFinishProjectModalOpen}
         onClose={handleOnCloseFinishProjectModal}
+        isGrouped={isGrouped}
       />
 
       <ExportFilesModal
@@ -337,10 +352,7 @@ const proyectos = () => {
           fetchState={fetchState}
           projects={projectsData}
           onClose={handleOnOpenFinishProjectModal}
-          onDelete={(id) => {
-            console.log(id)
-            handleOpenPopup(id, DeleteType.ONE)
-          }}
+          onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
           onEdit={handleUpdate}
           onTabChange={(state) => setFetchState(state)}

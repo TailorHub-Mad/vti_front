@@ -5,6 +5,7 @@ import { TableRow } from "../TableRow.js/TableRow"
 
 export const TableGroup = ({
   item,
+  keyGroup,
   templateColumns,
   components,
   onRowSelect,
@@ -29,6 +30,7 @@ export const TableGroup = ({
               <TableRow
                 key={`${row.id.value}-${idx}`}
                 item={row}
+                keyGroup={keyGroup}
                 templateColumns={templateColumns}
                 isSelected={isSelected(row.id.value)}
                 idx={idx}

@@ -50,6 +50,7 @@ export const Table = ({
               return (
                 <TableGroup
                   key={`it-${idx}`}
+                  keyGroup={item.key}
                   item={item}
                   templateColumns={templateColumns}
                   idx={idx}
