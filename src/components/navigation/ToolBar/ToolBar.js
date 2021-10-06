@@ -21,6 +21,8 @@ export const ToolBar = ({
   groupOptions,
   noFilter,
   noGroup,
+  noImport,
+  noSearch,
   fetchState,
   icon
 }) => {
@@ -39,25 +41,24 @@ export const ToolBar = ({
           active={fetchState === fetchType.GROUP}
         />
       )}
-      <InputGroup
-        width="196px"
-        marginRight="16px"
-        cursor="not-allowed" /* provisional */
-      >
-        <InputLeftElement
-          pointerEvents="none"
-          children={<SearchIcon color="gray" />}
-        />
-        <Input
-          placeholder={searchPlaceholder ?? "Busque por ID"}
-          paddingLeft="40px"
-          variant="white"
-          onChange={(e) => onSearch(e.target.value)}
-        />
-      </InputGroup>
+      {noSearch || (
+        <InputGroup width="196px" marginRight="16px">
+          <InputLeftElement
+            pointerEvents="none"
+            children={<SearchIcon color="gray" />}
+          />
+          <Input
+            placeholder={searchPlaceholder ?? "Busque por ID"}
+            paddingLeft="40px"
+            variant="white"
+            onChange={(e) => onSearch(e.target.value)}
+          />
+        </InputGroup>
+      )}
+
       {role === RoleType.ADMIN && (
         <>
-          <CloudButton onImport={onImport} onExport={onExport} />
+          {noImport || <CloudButton onImport={onImport} onExport={onExport} />}
 
           <Button onClick={onAdd}>
             {icon ? (

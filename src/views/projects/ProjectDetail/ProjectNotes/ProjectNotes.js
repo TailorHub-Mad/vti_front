@@ -23,7 +23,6 @@ import {
   getFieldObjectById
 } from "../../../../utils/functions/global"
 import { LoadingView } from "../../../common/LoadingView"
-import { ViewEmptyState } from "../../../common/ViewEmptyState"
 import { ViewNotFoundState } from "../../../common/ViewNotFoundState"
 import { NewNoteModal } from "../../../notes/NewNote/NewNoteModal/NewNoteModal"
 import { NotesGrid } from "../../../notes/NotesGrid/NotesGrid"
@@ -110,11 +109,6 @@ export const ProjectNotes = ({ notesData = [], project }) => {
 
   // Handlers views
   const handleExport = () => {}
-
-  const isToolbarHidden = () => {
-    if (isEmptyData && !isSearch) return false
-    return true
-  }
 
   const handleOnCloseModal = () => {
     setNoteToUpdate(null)
@@ -301,21 +295,23 @@ export const ProjectNotes = ({ notesData = [], project }) => {
       <Flex justify="space-between" align="center" mt="24px" mb="24px">
         <Text variant="d_l_regular">Apuntes</Text>
         <Flex width="fit-content">
-          {isToolbarHidden() && (
-            <ToolBar
-              onAdd={() => setIsNoteModalOpen(true)}
-              onSearch={onSearch}
-              onGroup={handleOnGroup}
-              onFilter={handleOnFilter}
-              onImport={() => setShowImportModal(true)}
-              onExport={handleExport}
-              addLabel="Añadir apunte"
-              searchPlaceholder="Busqueda por ID, Proyecto"
-              groupOptions={NOTES_GROUP_OPTIONS}
-              icon={<AddNoteIcon />}
-              fetchState={fetchState}
-            />
-          )}
+          <ToolBar
+            onAdd={() => setIsNoteModalOpen(true)}
+            onSearch={onSearch}
+            onGroup={handleOnGroup}
+            onFilter={handleOnFilter}
+            onImport={() => setShowImportModal(true)}
+            onExport={handleExport}
+            addLabel="Añadir apunte"
+            searchPlaceholder="Busqueda por ID, Proyecto"
+            groupOptions={NOTES_GROUP_OPTIONS}
+            icon={<AddNoteIcon />}
+            fetchState={fetchState}
+            noFilter={Boolean(notesData)}
+            noGroup={Boolean(notesData)}
+            noSearch={Boolean(notesData)}
+            noImport
+          />
         </Flex>
       </Flex>
       <PageBody height="calc(100vh - 260px)">
@@ -323,15 +319,8 @@ export const ProjectNotes = ({ notesData = [], project }) => {
         {isEmptyData && isSearch ? (
           <ViewNotFoundState />
         ) : isEmptyData ? (
-          <ViewEmptyState
-            message="Añadir apuntes a la plataforma"
-            importButtonText="Importar"
-            addButtonText="Añadir apunte"
-            onImport={() => setShowImportModal(true)}
-            onAdd={() => setIsNoteModalOpen(true)}
-          />
+          <ViewNotFoundState text="No hay apuntes asociados" />
         ) : null}
-
         {notesData ? (
           <>
             {fetchState === fetchType.GROUP ? (
