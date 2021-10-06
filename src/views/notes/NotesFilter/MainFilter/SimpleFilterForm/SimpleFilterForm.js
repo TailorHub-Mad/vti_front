@@ -1,16 +1,103 @@
 import { Checkbox, Switch } from "@chakra-ui/react"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { MOCK_SELECT_OPTIONS } from "../../../../../mock/mock"
-import { AddSelect } from "../../../../forms/AddSelect/AddSelect"
-import { InputSelect } from "../../../../forms/InputSelect/InputSelect"
+import { AddSelect } from "../../../../../components/forms/AddSelect/AddSelect"
+import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
+import useProjectApi from "../../../../../hooks/api/useProjectApi"
+import useSystemApi from "../../../../../hooks/api/useSystemApi"
+import useClientApi from "../../../../../hooks/api/useClientApi"
+import useUserApi from "../../../../../hooks/api/useUserApi"
+import useTagApi from "../../../../../hooks/api/useTagApi"
 
 export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
+  const { getProjects } = useProjectApi()
+  const { getSystems } = useSystemApi()
+  const { getClients } = useClientApi()
+  const { getUsers } = useUserApi()
+  const { getNoteTags, getProjectTags } = useTagApi()
+
+  // Filter Options
+  const [projectsOpt, setProjectsOpt] = useState(null)
+  const [testSystemsOpt, setTestSystemsOpt] = useState(null)
+  const [clientsOpt, setClientsOpt] = useState(null)
+  const [vtiCodesOpt, setVtiCodesOpt] = useState(null)
+  const [usersOpt, setUsersOpt] = useState(null)
+  const [projectTagsOpt, setProjectTagsOpt] = useState(null)
+  const [noteTagsOpt, setNoteTagsOpt] = useState(null)
+
+  useEffect(() => {
+    if (!projectsOpt) {
+      const fetchProjects = async () => {
+        const data = await getProjects()
+        setProjectsOpt(
+          data[0]?.projects.map((pr) => ({ label: pr.alias, value: pr._id }))
+        )
+      }
+      fetchProjects()
+    }
+  }, [projectsOpt])
+
+  useEffect(() => {
+    if (!testSystemsOpt) {
+      const fetchTestSystems = async () => {
+        const data = await getSystems()
+        setTestSystemsOpt(
+          data[0]?.testSystems.map((ts) => ({ label: ts.alias, value: ts._id }))
+        )
+        setVtiCodesOpt(
+          data[0]?.testSystems.map((ts) => ({ label: ts.vtiCode, value: ts._id }))
+        )
+      }
+      fetchTestSystems()
+    }
+  }, [testSystemsOpt])
+
+  useEffect(() => {
+    if (!clientsOpt) {
+      const fetchClients = async () => {
+        const data = await getClients()
+        setClientsOpt(data.map((cl) => ({ label: cl.alias, value: cl.alias })))
+      }
+      fetchClients()
+    }
+  }, [clientsOpt])
+
+  useEffect(() => {
+    if (!usersOpt) {
+      const fetchUsers = async () => {
+        const data = await getUsers()
+        setUsersOpt(data.map((user) => ({ label: user.alias, value: user._id })))
+      }
+      fetchUsers()
+    }
+  }, [usersOpt])
+
+  useEffect(() => {
+    if (!noteTagsOpt) {
+      const fetchNoteTags = async () => {
+        const data = await getNoteTags()
+        setNoteTagsOpt(data.map((ntag) => ({ label: ntag.name, value: ntag.id })))
+      }
+      fetchNoteTags()
+    }
+  }, [noteTagsOpt])
+
+  useEffect(() => {
+    if (!projectTagsOpt) {
+      const fetchNoteTags = async () => {
+        const data = await getProjectTags()
+        setProjectTagsOpt(data.map((ptag) => ({ label: ptag.name, value: ptag.id })))
+      }
+      fetchNoteTags()
+    }
+  }, [projectTagsOpt])
+
   const filterInputs = {
     project: {
       type: "select",
       config: {
         placeholder: "Alias proyecto",
-        options: MOCK_SELECT_OPTIONS,
+        options: projectsOpt,
         label: "Proyecto",
         helper: "Abrir ventana de ayuda",
         onHelperClick: () => openAuxModal("project")
@@ -20,7 +107,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       type: "select",
       config: {
         placeholder: "Sistema",
-        options: MOCK_SELECT_OPTIONS,
+        options: testSystemsOpt,
         label: "Sistema de ensayo"
       }
     },
@@ -28,7 +115,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       type: "select",
       config: {
         placeholder: "Cliente",
-        options: MOCK_SELECT_OPTIONS,
+        options: clientsOpt,
         label: "Cliente"
       }
     },
@@ -39,14 +126,15 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
         options: MOCK_SELECT_OPTIONS,
         label: "Fechas",
         additemlabel: "Añadir ",
-        removeitemlabel: "Eliminar "
+        removeitemlabel: "Eliminar ",
+        isDisabled: true
       }
     },
     users: {
       type: "add_select",
       config: {
         placeholder: "Usuario",
-        options: MOCK_SELECT_OPTIONS,
+        options: usersOpt,
         label: "Usuarios",
         additemlabel: "Añadir ",
         removeitemlabel: "Eliminar "
@@ -56,7 +144,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       type: "add_select",
       config: {
         placeholder: "Código",
-        options: MOCK_SELECT_OPTIONS,
+        options: vtiCodesOpt,
         label: "Códigos VTI",
         additemlabel: "Añadir ",
         removeitemlabel: "Añadir "
@@ -66,19 +154,20 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       type: "add_select",
       config: {
         placeholder: "Proyecto",
-        options: MOCK_SELECT_OPTIONS,
+        options: projectTagsOpt,
         label: "Tags de proyecto",
         additemlabel: "Añadir ",
         removeitemlabel: "Eliminar ",
         helper: "Abrir ventana de ayuda",
-        onHelperClick: () => openAuxModal("project_tags")
+        onHelperClick: () => openAuxModal("project_tags"),
+        isDisabled: true
       }
     },
     note_tags: {
       type: "add_select",
       config: {
         placeholder: "Tags de apunte",
-        options: MOCK_SELECT_OPTIONS,
+        options: noteTagsOpt,
         label: "Tags de apunte",
         additemlabel: "Añadir ",
         removeitemlabel: "Eliminar ",

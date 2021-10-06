@@ -19,7 +19,11 @@ import { ToastContext } from "../../provider/ToastProvider"
 import { noteFetchHandler } from "../../swr/note.swr"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
 import { errorHandler } from "../../utils/errors"
-import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
+import {
+  checkDataIsEmpty,
+  generateQueryStr,
+  getFieldObjectById
+} from "../../utils/functions/global"
 import {
   noteDataTransform,
   transformNotesToExport
@@ -33,6 +37,9 @@ import { NotesGroup } from "../../views/notes/NotesGroup/NotesGroup"
 import { NotesMenu } from "../../views/notes/NotesMenu/NotesMenu"
 import { ResponseModal } from "../../views/notes/Response/ResponseModal/ResponseModal"
 import download from "downloadjs"
+import { NotesFilterModal } from "../../views/notes/NotesFilter/NotesFilterModal"
+import { NOTES_FILTER_KEYS } from "../../utils/constants/filter"
+import { generateFilterQueryObj } from "../../utils/functions/filter"
 
 const NOTES_GROUP_OPTIONS = [
   {
@@ -60,10 +67,11 @@ const apuntes = () => {
   const { updateUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
 
+  // States
   const [showImportModal, setShowImportModal] = useState(false)
   const [showExportModal, setShowExportModal] = useState(false)
+  const [showFilterModal, setShowFilterModal] = useState(false)
 
-  // Hooks
   const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
   const [messageToUpdate, setMessageToUpdate] = useState(null)
   const [showNoteDetails, setShowNoteDetails] = useState(false)
@@ -241,11 +249,12 @@ const apuntes = () => {
     })
   }
 
-  const handleOnFilter = (filter) => {
-    setFetchState(fetchType.FILTER)
-    setFetchOptions({
-      [fetchOption.FILTER]: filter
-    })
+  const handleOnFilter = (values) => {
+    console.log(generateQueryStr(generateFilterQueryObj(NOTES_FILTER_KEYS, values)))
+    // setFetchState(fetchType.FILTER)
+    // setFetchOptions({
+    //   [fetchOption.FILTER]: filter
+    // })
   }
 
   useEffect(() => {
@@ -285,6 +294,12 @@ const apuntes = () => {
       >
         {`¿Deseas eliminar el mensaje seleccionado?`}
       </Popup>
+
+      <NotesFilterModal
+        isOpen={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onFilter={(values) => handleOnFilter(values)}
+      />
 
       <ResponseModal
         messageToUpdate={messageToUpdate}
@@ -335,7 +350,7 @@ const apuntes = () => {
             onAdd={() => setIsNoteModalOpen(true)}
             onSearch={onSearch}
             onGroup={handleOnGroup}
-            onFilter={handleOnFilter}
+            onFilter={() => setShowFilterModal(true)}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
             addLabel="Añadir apunte"

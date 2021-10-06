@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Input, Switch, Text } from "@chakra-ui/react"
 import React from "react"
-import { CustomModalHeader } from "../../../overlay/Modal/CustomModalHeader/CustomModalHeader"
+import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 
 export const SaveFilterModal = ({ onClose, ...props }) => {
   return (

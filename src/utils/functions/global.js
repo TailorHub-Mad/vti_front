@@ -25,3 +25,9 @@ export const checkDataIsEmpty = (data) => {
   if (!data) return false
   if (data.length === 0) return true
 }
+
+export const generateQueryStr = (queryObj) => {
+  return Object.entries(queryObj)
+    .map(([key, value]) => key + "=" + value)
+    .join("&")
+}

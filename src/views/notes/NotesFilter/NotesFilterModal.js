@@ -1,20 +1,13 @@
 import { ScaleFade, Modal, ModalOverlay } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, {  useState } from "react"
 import { AuxFilter } from "./AuxFilter/AuxFilter"
 import { MainFilter } from "./MainFilter/MainFilter"
 import { SupportFilter } from "./SupportFilter/SupportFilter"
 import { SaveFilterModal } from "./SaveFilterModal/SaveFilterModal"
-import { CustomModalContent } from "../../overlay/Modal/CustomModalContent/CustomModalContent"
+import { CustomModalContent } from "../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
 
-export const FilterModal = ({
-  isOpen,
-  onClose,
-  // textBody,
-  // color,
-  // title,
-  // childen,
-  ...props
-}) => {
+export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
+
   const [showMainContent] = useState(true)
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [showAuxContent, setShowAuxContent] = useState(false)
@@ -50,12 +43,14 @@ export const FilterModal = ({
           }
         >
           <MainFilter
+
             simpleFilterValues={filterValues}
             onClose={onClose}
             moveToLeft={["project_tags", "note_tags"].includes(showSecondaryContent)}
             onSecondaryOpen={(type) => setShowSecondaryContent(type)}
             onSimpleFilterChange={(val) => setFilterValues(val)}
             openSaveModal={() => setShowSaveFilter(true)}
+            onFilter={() => onFilter(filterValues)}
           />
         </ScaleFade>
         {showSaveFilter ? (
