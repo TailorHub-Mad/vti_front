@@ -28,7 +28,7 @@ Porcentaje de avance: 100%
 
 ***
 ### Proyectos:
-- [x] Crear:
+- [ ] Crear:
 - Editar el datepicker con diseño que debe hacer Simón.
 - [x] Ver lista
 - [x] Ver detalle 
@@ -75,7 +75,8 @@ Porcentaje de avance: 95%
 - [x] Ver lista
 - [x] Ver detalle
 - [x] Buscar 
-- [x] Agrupar 
+- [x] Agrupar
+- [ ] Filtrar
 - [x] Importar 
 - [x] Exportar
 - [ ] Editar Apunte
@@ -131,7 +132,7 @@ Porcentaje de avance: 100%
 - [x] Flujo de la contraseña
 - [x] Ver detalle
 - [x] Buscar
-- [ ] Agrupar
+- [x] Agrupar
 - [x] Importar 
 - [x] Exportar
 - [x] Editar
@@ -147,7 +148,7 @@ Porcentaje de avance 95%
 - [x] Ver herencia
 - [x] Ver detalle 
 - [x] Buscar
-- [x] Importar
+- [ ] Importar
 - Hacer check de que puedas introducir padre 
 - [x] Exportar
 - [x] Editar:
