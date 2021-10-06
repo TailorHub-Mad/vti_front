@@ -318,10 +318,7 @@ const sistemas = () => {
         <TestSystemsTable
           fetchState={fetchState}
           systems={systemsData}
-          onDelete={(id) => {
-            console.log("esto llega", id)
-            handleOpenPopup(id, DeleteType.ONE)
-          }}
+          onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(systemsId) => handleOpenPopup(systemsId, DeleteType.MANY)}
           onEdit={handleUpdate}
           onGroup={handleOnGroup}

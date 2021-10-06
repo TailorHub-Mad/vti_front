@@ -78,6 +78,7 @@ export const NoteDrawer = ({
             <NoteDetailsAccordion
               name={note.name}
               link={note.link}
+              description={note.description}
               noteTags={note.tags.length > 0 && note.tags}
               testSystems={note.testSystems}
               files={note.documents?.length > 0 ? note.documents : null}

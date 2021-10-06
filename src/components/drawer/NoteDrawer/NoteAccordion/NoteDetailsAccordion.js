@@ -20,6 +20,7 @@ export const NoteDetailsAccordion = ({
   name,
   noteTags,
   testSystems,
+  description,
   link,
   message,
   files,
@@ -38,6 +39,12 @@ export const NoteDetailsAccordion = ({
 
   return (
     <Accordion allowToggle allowMultiple {...props}>
+      {!isMessage && description ? (
+        <NoteAccordionItem title="Descripción" icon={<PageLineIcon mr="8px" />}>
+          {description}
+        </NoteAccordionItem>
+      ) : null}
+
       {!isMessage && testSystems ? (
         <NoteAccordionItem
           title="Sistema de ensayo del proyecto"

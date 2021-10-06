@@ -59,9 +59,9 @@ export const NoteMainInfo = ({
   const isProjectHidden = () => {
     if (isMessage) return false
 
-    const { proyects } = item
+    const { projects } = item
 
-    if (!proyects) return false
+    if (!projects) return false
 
     return true
   }
