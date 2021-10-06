@@ -14,7 +14,8 @@ const ProjectService = () => {
   // GROUP & FILTER
   const getGroupProjects = (data) =>
     execute(instance.get(`/projects/group?group=${data}&real=true`))
-  const getActiveProjects = () => execute(instance.get(`/projects`))
+  const getActiveProjects = () =>
+    execute(instance.get(`/projects/filter?projects.isActive=true`))
   const getFilterProjects = (data) =>
     execute(instance.get(`/projects/filter?${data}`))
   const getSearchProjects = (data) =>

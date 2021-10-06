@@ -3,12 +3,12 @@ import { useContext, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
-import { systemFetchHandler } from "../../swr/systems.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 import { PATHS } from "../../utils/constants/global"
 import { checkDataIsEmpty } from "../../utils/functions/global"
 import { ProjectsByObject } from "../../views/projects/ProjectsByObject/ProjectsByObject"
+import { projectFetchHandler } from "../../swr/project.swr"
 
 const system = () => {
   const router = useRouter()
@@ -18,10 +18,10 @@ const system = () => {
 
   const [fetchState, setFetchState] = useState(fetchType.FILTER)
   const [fetchOptions, setFetchOptions] = useState({
-    [fetchOption.FILTER]: `projects.tags._id=${systemId}`
+    [fetchOption.FILTER]: `projects.testSystems._id=${systemId}`
   })
 
-  const { data, error, isLoading, isValidating } = systemFetchHandler(
+  const { data, error, isLoading, isValidating } = projectFetchHandler(
     fetchState,
     fetchOptions
   )
@@ -31,7 +31,7 @@ const system = () => {
   const projectsData = data && !isEmptyData ? data[0].projects : null
 
   const system =
-    projectsData && projectsData[0].tags?.find((t) => t._id === systemId)
+    projectsData && projectsData[0].testSystems?.find((t) => t._id === systemId)
 
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
@@ -42,11 +42,12 @@ const system = () => {
       {projectsData && (
         <ProjectsByObject
           projects={projectsData}
-          customURL={`${PATHS.testSystems}/${system?.ref}`}
+          customURL={`${PATHS.testSystems}/${system?.ref || systemId}`}
           setFetchState={setFetchState}
           setFetchOptions={setFetchOptions}
           fetchState={fetchState}
           fetchOptions={fetchOptions}
+          isEmptyData={isEmptyData}
         />
       )}
     </Page>

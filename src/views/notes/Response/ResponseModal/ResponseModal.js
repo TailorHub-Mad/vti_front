@@ -62,8 +62,6 @@ export const ResponseModal = ({
         : formData.set(key, value)
     })
 
-    console.log(formData)
-
     return formData
   }
 

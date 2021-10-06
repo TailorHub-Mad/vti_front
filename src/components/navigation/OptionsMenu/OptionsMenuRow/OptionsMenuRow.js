@@ -17,7 +17,6 @@ export const OptionsMenuRow = ({
   close,
   id
 }) => {
-  console.log("isGrouped", isGrouped, keyGroup, id)
   return (
     <TableOptionsMenu disabled={disabled}>
       {close ? (

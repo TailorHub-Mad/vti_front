@@ -4,7 +4,8 @@ import { fetchOption } from "../utils/constants/swr"
 import { SWR_CACHE_KEYS } from "../utils/constants/swr"
 
 export const userFetchHandler = (state, options) => {
-  const { getUsers, getUser, getGroupUsers, getSearchUsers } = useUserApi()
+  const { getUsers, getUser, getGroupUsers, getSearchUsers, getFilterUsers } =
+    useUserApi()
 
   const fetchHandler = {
     all: () => useFetchSWR(SWR_CACHE_KEYS.users, getUsers),
@@ -18,6 +19,11 @@ export const userFetchHandler = (state, options) => {
       useFetchSWR(
         [SWR_CACHE_KEYS.searchUsers, options[fetchOption.SEARCH]],
         getSearchUsers
+      ),
+    filter: () =>
+      useFetchSWR(
+        [SWR_CACHE_KEYS.filterSystems, options[fetchOption.FILTER]],
+        getFilterUsers
       )
   }
 

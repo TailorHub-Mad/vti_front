@@ -123,7 +123,7 @@ export const NoteMainInfo = ({
           </Flex>
 
           <Tag variant={variantGeneralTag.PROJECT} mt="8px" ml="32px">
-            {item.projects[0].alias}
+            {item.projects[0]?.alias}
           </Tag>
         </Box>
       )}

@@ -21,7 +21,7 @@ import {
   transformProjectsToExport
 } from "../../../utils/functions/import_export/projects_helper"
 import { getGroupOptionLabel } from "../../../utils/functions/objects"
-import { ViewEmptyState } from "../../common/ViewEmptyState"
+import { ViewNotFoundState } from "../../common/ViewNotFoundState"
 import { FinishProjectModal } from "../NewProject/FinishProjectModal/FinishProjectModal"
 import { NewProjectModal } from "../NewProject/NewProjectModal/NewProjectModal"
 import { ProjectsTable } from "../ProjectTable/ProjectTable"
@@ -56,7 +56,6 @@ export const ProjectsByObject = ({
   const { mutate } = useSWRConfig()
 
   // States
-
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
   const [projectToUpdate, setProjectToUpdate] = useState(null)
   const [deleteType, setDeleteType] = useState(null)
@@ -279,15 +278,7 @@ export const ProjectsByObject = ({
           />
         ) : null}
       </PageHeader>
-      {isEmptyData ? (
-        <ViewEmptyState
-          message="Añadir proyectos a la plataforma"
-          importButtonText="Importar"
-          addButtonText="Añadir proyecto"
-          onImport={() => setShowImportModal(true)}
-          onAdd={() => setIsProjectModalOpen(true)}
-        />
-      ) : null}
+      {isEmptyData ? <ViewNotFoundState text="No hay proyectos asociados" /> : null}
       {projectsData ? (
         <ProjectsTable
           fetchState={fetchState}

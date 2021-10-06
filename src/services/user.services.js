@@ -13,6 +13,7 @@ const UserService = () => {
 
   // GROUP & FILTER
   const getGroupUsers = (/*data*/) => execute(instance.get(``))
+  const getFilterUsers = (data) => execute(instance.get(`/user/filter?${data}`))
   const getSearchUsers = (data) =>
     execute(
       instance.get(
@@ -28,7 +29,8 @@ const UserService = () => {
     deleteUser,
 
     getGroupUsers,
-    getSearchUsers
+    getSearchUsers,
+    getFilterUsers
   }
 }
 

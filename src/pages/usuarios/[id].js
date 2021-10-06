@@ -1,23 +1,36 @@
 import { useRouter } from "next/router"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
-import { clientFetchHandler } from "../../swr/client.swr"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 import { PATHS } from "../../utils/constants/global"
 import { ProjectsByObject } from "../../views/projects/ProjectsByObject/ProjectsByObject"
+import { projectFetchHandler } from "../../swr/project.swr"
+import { checkDataIsEmpty } from "../../utils/functions/global"
 
 const user = () => {
   const router = useRouter()
   const { isLoggedIn } = useContext(ApiAuthContext)
 
-  const { data, error, isLoading, isValidating } = clientFetchHandler(fetchType.ID, {
-    [fetchOption.ID]: router.query.id
+  const userId = router.query.id
+
+  const [fetchState, setFetchState] = useState(fetchType.FILTER)
+  const [fetchOptions, setFetchOptions] = useState({
+    [fetchOption.FILTER]: `projects.users._id=${userId}`
   })
 
+  const { data, error, isLoading, isValidating } = projectFetchHandler(
+    fetchState,
+    fetchOptions
+  )
+
   const notFound = !isValidating && !data
+  const isEmptyData = checkDataIsEmpty(data)
+  const projectsData = data && !isEmptyData ? data[0].projects : null
+
+  const user = projectsData && projectsData[0].users?.find((t) => t._id === userId)
 
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
@@ -27,8 +40,13 @@ const user = () => {
       {notFound && <>Error. No se ha encontrado el cliente.</>}
       {data && (
         <ProjectsByObject
-          projects={data.projects}
-          customURL={`${PATHS.clients}/${data.ref}`}
+          projects={projectsData}
+          customURL={`${PATHS.users}/${user?.ref || userId}`}
+          setFetchState={setFetchState}
+          setFetchOptions={setFetchOptions}
+          fetchState={fetchState}
+          fetchOptions={fetchOptions}
+          isEmptyData={isEmptyData}
         />
       )}
     </Page>
