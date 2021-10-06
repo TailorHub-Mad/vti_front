@@ -6,21 +6,23 @@ import { SupportFilter } from "./SupportFilter/SupportFilter"
 import { SaveFilterModal } from "./SaveFilterModal/SaveFilterModal"
 import { CustomModalContent } from "../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
 
-export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
+export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const [showMainContent] = useState(true)
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [showAuxContent, setShowAuxContent] = useState(false)
   const [showSaveFilter, setShowSaveFilter] = useState(false)
   const initialValues = {
-    client: "",
-    test_system: "",
-    year: "",
+    client: [""],
+    year: [""],
     vti_code: [""],
-    focus_point: [""],
-    sector: "",
-    tag_project: [""]
+    sector: [""],
+    project_tags: [""]
   }
   const [filterValues, setFilterValues] = useState(initialValues)
+  const handleReset = () => {
+    //TODO Los inputs no reflejan el reset
+    setFilterValues(initialValues)
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
@@ -41,6 +43,7 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
             onSimpleFilterChange={(val) => setFilterValues(val)}
             openSaveModal={() => setShowSaveFilter(true)}
             onFilter={() => onFilter(filterValues)}
+            onReset={handleReset}
           />
         </ScaleFade>
         {showSaveFilter ? (

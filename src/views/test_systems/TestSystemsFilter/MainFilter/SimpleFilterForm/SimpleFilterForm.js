@@ -1,41 +1,33 @@
 import React, { useEffect, useState } from "react"
 import { AddSelect } from "../../../../../components/forms/AddSelect/AddSelect"
-import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
 import useSystemApi from "../../../../../hooks/api/useSystemApi"
 import useClientApi from "../../../../../hooks/api/useClientApi"
-import useUserApi from "../../../../../hooks/api/useUserApi"
 import useTagApi from "../../../../../hooks/api/useTagApi"
 import useSectorApi from "../../../../../hooks/api/useSectorApi"
 
 export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
   const { getSystems } = useSystemApi()
   const { getClients } = useClientApi()
-  const { getUsers } = useUserApi()
-  const { getProjectTags } = useTagApi()
   const { getSectors } = useSectorApi()
+  const { getProjectTags } = useTagApi()
 
   // Filter Options
   const [clientsOpt, setClientsOpt] = useState(null)
-  const [testSystemsOpt, setTestSystemsOpt] = useState(null)
   const [vtiCodesOpt, setVtiCodesOpt] = useState(null)
-  const [usersOpt, setUsersOpt] = useState(null)
   const [projectTagsOpt, setProjectTagsOpt] = useState(null)
-  const [sectorsOpt, setSectorsOpt] = useState(null)
+  const [sectorsOpt, setSectorOpt] = useState(null)
 
   useEffect(() => {
-    if (!testSystemsOpt) {
+    if (!vtiCodesOpt) {
       const fetchTestSystems = async () => {
         const data = await getSystems()
-        setTestSystemsOpt(
-          data[0]?.testSystems.map((ts) => ({ label: ts.alias, value: ts._id }))
-        )
         setVtiCodesOpt(
           data[0]?.testSystems.map((ts) => ({ label: ts.vtiCode, value: ts._id }))
         )
       }
       fetchTestSystems()
     }
-  }, [testSystemsOpt])
+  }, [vtiCodesOpt])
 
   useEffect(() => {
     if (!clientsOpt) {
@@ -46,16 +38,15 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       fetchClients()
     }
   }, [clientsOpt])
-
   useEffect(() => {
-    if (!usersOpt) {
-      const fetchUsers = async () => {
-        const data = await getUsers()
-        setUsersOpt(data.map((user) => ({ label: user.alias, value: user._id })))
+    if (!sectorsOpt) {
+      const fetchSectors = async () => {
+        const data = await getSectors()
+        setSectorOpt(data.map((sc) => ({ label: sc.title, value: sc._id })))
       }
-      fetchUsers()
+      fetchSectors()
     }
-  }, [usersOpt])
+  }, [sectorsOpt])
 
   useEffect(() => {
     if (!projectTagsOpt) {
@@ -67,34 +58,27 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
     }
   }, [projectTagsOpt])
 
-  useEffect(() => {
-    if (!sectorsOpt) {
-      const fetchSectors = async () => {
-        const data = await getSectors()
-        setSectorsOpt(data.map((sc) => ({ label: sc.name, value: sc._id })))
-      }
-      fetchSectors()
-    }
-  }, [sectorsOpt])
-
   const filterInputs = {
     client: {
-      type: "select",
+      type: "add_select",
       config: {
         placeholder: "Cliente",
         options: clientsOpt,
         label: "Cliente"
       }
     },
-    test_system: {
-      type: "select",
+    year: {
+      type: "add_select",
       config: {
-        placeholder: "Sistema",
-        options: testSystemsOpt,
-        label: "Sistema de ensayo"
+        placeholder: "Año",
+        options: new Array(50).fill("").map((_, idx) => {
+          const year = new Date().getFullYear() - idx
+          return { label: year, value: year }
+        }),
+        label: "Año"
       }
     },
-    code_vti: {
+    vti_code: {
       type: "add_select",
       config: {
         placeholder: "Código",
@@ -104,25 +88,15 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
         removeitemlabel: "Añadir "
       }
     },
-    focus_point: {
+    sector: {
       type: "add_select",
       config: {
-        placeholder: "Punto focal",
-        options: usersOpt,
-        label: "Punto focal",
-        additemlabel: "Añadir ",
-        removeitemlabel: "Eliminar "
-      }
-    },
-    sector: {
-      type: "select",
-      config: {
-        placeholder: "Sistema",
-        options: testSystemsOpt,
+        placeholder: "Sector",
+        options: sectorsOpt,
         label: "Sector"
       }
     },
-    tag_project: {
+    project_tags: {
       type: "add_select",
       config: {
         placeholder: "Proyecto",
@@ -138,7 +112,6 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
   }
 
   const inputRefObj = {
-    select: <InputSelect />,
     add_select: <AddSelect />
   }
 

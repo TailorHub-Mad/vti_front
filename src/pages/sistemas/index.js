@@ -14,7 +14,11 @@ import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddTestSystemIcon } from "../../components/icons/AddTestSystemIcon"
-import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
+import {
+  checkDataIsEmpty,
+  generateQueryStr,
+  getFieldObjectById
+} from "../../utils/functions/global"
 import { systemFetchHandler } from "../../swr/systems.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
@@ -27,6 +31,9 @@ import {
   testSystemDataTransform,
   transformTestSystemsToExport
 } from "../../utils/functions/import_export/testSystem_helpers"
+import { generateFilterQueryObj } from "../../utils/functions/filter"
+import { TESTSYSTEMS_FILTER_KEYS } from "../../utils/constants/filter"
+import { TestsSystemsFilterModal } from "../../views/test_systems/TestSystemsFilter/TestSystemsFilterModal"
 
 const SYSTEMS_GROUP_OPTIONS = [
   {
@@ -52,6 +59,8 @@ const sistemas = () => {
   // States
   const [showImportModal, setShowImportModal] = useState(false)
   const [showExportModal, setShowExportModal] = useState(false)
+  const [showFilterModal, setShowFilterModal] = useState(false)
+
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
   const [isSystemModalOpen, setIsSystemModalOpen] = useState(false)
@@ -210,11 +219,14 @@ const sistemas = () => {
     })
   }
 
-  const handleOnFilter = (filter) => {
-    setFetchState(fetchType.FILTER)
-    setFetchOptions({
-      [fetchOption.FILTER]: filter
-    })
+  const handleOnFilter = (values) => {
+    console.log(
+      generateQueryStr(generateFilterQueryObj(TESTSYSTEMS_FILTER_KEYS, values))
+    )
+    // setFetchState(fetchType.FILTER)
+    // setFetchOptions({
+    //   [fetchOption.FILTER]: filter
+    // })
   }
 
   if (!isLoggedIn) return null
@@ -232,6 +244,12 @@ const sistemas = () => {
       >
         {handleDeleteMessage()}
       </Popup>
+
+      <TestsSystemsFilterModal
+        isOpen={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onFilter={(values) => handleOnFilter(values)}
+      />
 
       <NewTestSystemModal
         systemToUpdate={systemToUpdate}
@@ -259,7 +277,7 @@ const sistemas = () => {
             onAdd={() => setIsSystemModalOpen(true)}
             onSearch={onSearch}
             onGroup={handleOnGroup}
-            onFilter={handleOnFilter}
+            onFilter={() => setShowFilterModal(true)}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
             addLabel="Añadir sistema"

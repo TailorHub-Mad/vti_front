@@ -15,7 +15,11 @@ import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
-import { checkDataIsEmpty, generateQueryStr, getFieldObjectById } from "../../utils/functions/global"
+import {
+  checkDataIsEmpty,
+  generateQueryStr,
+  getFieldObjectById
+} from "../../utils/functions/global"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 import { getGroupOptionLabel } from "../../utils/functions/objects"
@@ -234,8 +238,9 @@ const proyectos = () => {
   }
 
   const handleOnFilter = (values) => {
-    console.log(values)
-    console.log(generateQueryStr(generateFilterQueryObj(PROJECTS_FILTER_KEYS, values)))
+    console.log(
+      generateQueryStr(generateFilterQueryObj(PROJECTS_FILTER_KEYS, values))
+    )
     // setFetchState(fetchType.FILTER)
     // setFetchOptions({
     //   [fetchOption.FILTER]: filter
@@ -263,7 +268,6 @@ const proyectos = () => {
         onClose={() => setShowFilterModal(false)}
         onFilter={(values) => handleOnFilter(values)}
       />
-
 
       <NewProjectModal
         projectToUpdate={projectToUpdate}
