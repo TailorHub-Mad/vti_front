@@ -35,7 +35,7 @@ import {
 const SYSTEMS_GROUP_OPTIONS = [
   {
     label: "Cliente",
-    value: "client"
+    value: "clientAlias"
   },
   {
     label: "Año",

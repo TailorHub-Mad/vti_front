@@ -15,7 +15,7 @@ export const transformUserData = (user) => ({
   email: user.email,
   department: user.department ? [user.department?.name] : undefined,
   focusPoint: user.focusPoint,
-  projects: user.projects,
+  projects: user.projectsComments,
   options: ""
 })
 

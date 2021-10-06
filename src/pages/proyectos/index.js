@@ -37,7 +37,7 @@ import { FinishProjectModal } from "../../views/projects/NewProject/FinishProjec
 const PROJECTS_GROUP_OPTIONS = [
   {
     label: "Cliente",
-    value: "client"
+    value: "clientAlias"
   },
   {
     label: "Año",
