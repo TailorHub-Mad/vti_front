@@ -1,0 +1,14 @@
+name: FaableCloud Deploy
+on:
+  push:
+    branches: [deploy]
+jobs:
+  deploy-to-faable:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: faablecloud/action-deploy@main
+        with:
+          faable_app_name: "vti-front"
+          faable_api_key: ${{ secrets.TAILOR_FAABLE_API_SECRET }}
+          faable_user: "tailorhub"
