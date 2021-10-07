@@ -23,7 +23,7 @@ export const TESTSYSTEMS_FILTER_KEYS = {
   client: "testSystems.clientAlias",
   year: "testSystems.year",
   vti_code: "testSystems.vtiCode",
-  sector: "testSystems.sector",
+  sector: "testSystems.projects.sector",
   project_tags: "testSystems.projects.tags.name"
 }
 
@@ -34,6 +34,6 @@ export const TAGS_FILTER_KEYS = {
 
 export const USERS_FILTER_KEYS = {
   project: "users.project._id",
-  department: "users.department._id",
-  focus_point: "users.focusPoint._id"
+  department: "user.department._id",
+  focus_point: "user.focusPoint._id"
 }

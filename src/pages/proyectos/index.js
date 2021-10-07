@@ -92,13 +92,12 @@ const proyectos = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const projectsData = handleProjectsData(isEmptyData)
 
-  const isSearch = fetchState == fetchType.SEARCH
   const isGrouped = fetchState == fetchType.GROUP
 
   // Handlers views
   const isToolbarHidden = () => {
     if (isLoading) return false
-    if (isEmptyData && !isSearch) return false
+    if (isEmptyData && fetchState === fetchType.ALL) return false
 
     return true
   }
@@ -165,6 +164,11 @@ const proyectos = () => {
   const handleOnCloseFinishProjectModal = () => {
     setProjectToFinish(null)
     setIsFinishProjectModalOpen(null)
+  }
+
+  const handleOnOpenFilter = () => {
+    if (fetchState === fetchType.FILTER) handleOnFilter(null)
+    else setShowFilterModal(true)
   }
 
   // Handlers CRUD
@@ -277,6 +281,14 @@ const proyectos = () => {
   }
 
   const handleOnFilter = (values) => {
+    if (!values) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.FILTER]: null
+      })
+      return
+    }
+
     const filter = generateQueryStr(
       generateFilterQueryObj(PROJECTS_FILTER_KEYS, values)
     )
@@ -344,7 +356,7 @@ const proyectos = () => {
             onAdd={() => setIsProjectModalOpen(true)}
             onSearch={onSearch}
             onGroup={handleOnGroup}
-            onFilter={() => setShowFilterModal(true)}
+            onFilter={handleOnOpenFilter}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
             addLabel="Añadir proyecto"
@@ -358,7 +370,7 @@ const proyectos = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData && isSearch ? (
+      {isEmptyData && fetchState !== fetchType.ALL ? (
         <ViewNotFoundState />
       ) : isEmptyData ? (
         <ViewEmptyState
@@ -379,6 +391,7 @@ const proyectos = () => {
           onEdit={handleUpdate}
           onTabChange={(state) => setFetchState(state)}
           onGroup={handleOnGroup}
+          onFilter={handleOnFilter}
           groupOption={getGroupOptionLabel(
             PROJECTS_GROUP_OPTIONS,
             fetchOptions[fetchOption.GROUP]

@@ -13,6 +13,7 @@ export const TestSystemsTable = ({
   onDeleteMany,
   fetchState,
   onGroup,
+  onFilter,
   groupOption
 }) => {
   const isGrouped = fetchState === fetchType.GROUP
@@ -56,6 +57,7 @@ export const TestSystemsTable = ({
           checked={allRowsAreSelected}
           fetchState={fetchState}
           onGroup={onGroup}
+          onFilter={onFilter}
           groupOption={groupOption}
         />
       }

@@ -15,6 +15,7 @@ export const ProjectsTable = ({
   onEdit,
   fetchState = fetchType.ALL,
   onGroup,
+  onFilter,
   groupOption
 }) => {
   const isGrouped = fetchState === fetchType.GROUP
@@ -71,6 +72,7 @@ export const ProjectsTable = ({
           checked={allRowsAreSelected}
           fetchState={fetchState}
           onGroup={onGroup}
+          onFilter={onFilter}
           groupOption={groupOption}
         />
       }

@@ -13,7 +13,7 @@ const useUserApi = () => {
   // GROUP & FILTER
   const getGroupUsers = (_, data) => userService.getGroupUsers(data)
   const getSearchUsers = (_, data) => userService.getSearchUsers(data)
-  const getFilterUsers = (_, data) => userService.getSearchUsers(data)
+  const getFilterUsers = (_, data) => userService.getFilterUsers(data)
 
   getSearchUsers
 

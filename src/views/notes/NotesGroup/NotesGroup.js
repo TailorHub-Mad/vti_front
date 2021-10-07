@@ -1,6 +1,7 @@
 import { CloseIcon } from "@chakra-ui/icons"
 import { Flex, Grid, Text } from "@chakra-ui/layout"
 import React from "react"
+import { fetchType } from "../../../utils/constants/swr"
 import { MAX_TABLE_WIDTH, MIN_TABLE_WIDTH } from "../../../utils/constants/tables"
 import { GroupNotesRow } from "./GroupNotesRow"
 import { groupTable } from "./utils"
@@ -12,22 +13,33 @@ export const NotesGroup = ({
   checkIsFavorite,
   onDelete,
   onGroup,
+  onFilter,
   handleFavorite,
   groupOption,
-  isGrouped
+  fetchState
 }) => {
   const formatNotes = groupTable(notes)
 
-  const handleOnClick = () => onGroup(null)
+  const handleOnClick = () => {
+    if (fetchState === fetchType.GROUP) return onGroup(null)
+    if (fetchState === fetchType.FILTER) return onFilter(null)
+  }
 
   return (
     <>
-      {isGrouped ? (
-        <Flex alignItems="center" mb="24px">
-          <CloseIcon mr="8px" h="12px" cursor="pointer" onClick={handleOnClick} />
+      {fetchState === fetchType.GROUP ? (
+        <Flex alignItems="center" mb="24px" cursor="pointer" onClick={handleOnClick}>
+          <CloseIcon mr="8px" h="12px" />
           <Text marginTop="6px">{`Agrupado por ${groupOption
             .toString()
             .toUpperCase()}`}</Text>
+        </Flex>
+      ) : null}
+
+      {fetchState === fetchType.FILTER ? (
+        <Flex alignItems="center" onClick={handleOnClick} cursor="pointer">
+          <CloseIcon mr="8px" h="12px" />
+          <Text marginTop="6px">{`Eliminar filtro`}</Text>
         </Flex>
       ) : null}
 

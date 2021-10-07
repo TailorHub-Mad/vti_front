@@ -30,7 +30,12 @@ export const ToolBar = ({
 
   return (
     <Flex>
-      {noFilter || <FilterButton onFilter={handleOnFilter} />}
+      {noFilter || (
+        <FilterButton
+          onFilter={handleOnFilter}
+          active={fetchState === fetchType.FILTER}
+        />
+      )}
       {noGroup || (
         <Group
           onGroup={handleOnGroup}

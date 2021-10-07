@@ -48,7 +48,7 @@ const NOTES_GROUP_OPTIONS = [
   }
 ]
 
-export const ProjectNotes = ({ notesData = [], project }) => {
+export const ProjectNotes = ({ notesData = [], project, onGroup, onFilter }) => {
   const { user } = useContext(ApiAuthContext)
   const { deleteNote, deleteMessage } = useNoteApi()
   const { updateUser } = useUserApi()
@@ -332,6 +332,8 @@ export const ProjectNotes = ({ notesData = [], project }) => {
                 checkIsFavorite={checkIsFavorite}
                 onDelete={setNoteToDelete}
                 handleFavorite={handleFavorite}
+                onGroup={onGroup}
+                onFilter={onFilter}
               />
             ) : (
               <NotesGrid

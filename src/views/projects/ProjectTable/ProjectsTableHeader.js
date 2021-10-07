@@ -29,11 +29,15 @@ export const ProjectsTableHeader = ({
   checked = false,
   fetchState,
   onGroup,
+  onFilter,
   groupOption
 }) => {
   const [isChecked, setIsChecked] = useState(checked)
 
-  const handleOnClick = () => onGroup(null)
+  const handleOnClick = () => {
+    if (fetchState === fetchType.GROUP) return onGroup(null)
+    if (fetchState === fetchType.FILTER) return onFilter(null)
+  }
 
   useEffect(() => {
     setIsChecked(checked)
@@ -111,6 +115,17 @@ export const ProjectsTableHeader = ({
               </Flex>
             )
           })}
+          {fetchState === fetchType.FILTER ? (
+            <Flex alignItems="center" ml="24px">
+              <CloseIcon
+                mr="8px"
+                h="12px"
+                cursor="pointer"
+                onClick={handleOnClick}
+              />
+              <Text marginTop="6px">{`Eliminar filtro`}</Text>
+            </Flex>
+          ) : null}
         </Flex>
       )}
 

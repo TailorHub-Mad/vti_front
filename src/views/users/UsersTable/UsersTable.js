@@ -11,6 +11,8 @@ export const UsersTable = ({
   onDelete,
   onEdit,
   fetchState,
+  onGroup,
+  groupOption,
   onDeleteMany
 }) => {
   const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
@@ -48,6 +50,8 @@ export const UsersTable = ({
           onDelete={handleOnDelete}
           selectAllRows={() => handleSelectAllRows(usersData)}
           checked={allRowsAreSelected}
+          onGroup={onGroup}
+          groupOption={groupOption}
         />
       }
       {...TABLE_STYLE}

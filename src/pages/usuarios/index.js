@@ -194,6 +194,16 @@ const usuarios = () => {
     })
   }
   const handleOnFilter = (values) => {
+    if (!values) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.FILTER]: null
+      })
+      return
+    }
+
+    console.log(values)
+
     const filter = generateQueryStr(
       generateFilterQueryObj(USERS_FILTER_KEYS, values)
     )
@@ -202,6 +212,8 @@ const usuarios = () => {
     setFetchOptions({
       [fetchOption.FILTER]: filter
     })
+
+    setShowFilterModal(false)
   }
 
   if (!isLoggedIn) return null
@@ -262,7 +274,7 @@ const usuarios = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData && isSearch ? (
+      {isEmptyData && fetchState !== fetchType.ALL ? (
         <ViewNotFoundState />
       ) : isEmptyData ? (
         <ViewEmptyState

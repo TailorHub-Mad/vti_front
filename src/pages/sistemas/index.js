@@ -88,13 +88,12 @@ const sistemas = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const systemsData = handleSystemsData(isEmptyData)
 
-  const isSearch = fetchState == fetchType.SEARCH
   const isGrouped = fetchState == fetchType.GROUP
 
   // Handlers views
   const isToolbarHidden = () => {
     if (isLoading) return false
-    if (isEmptyData && !isSearch) return false
+    if (isEmptyData && fetchState === fetchType.ALL) return false
 
     return true
   }
@@ -140,6 +139,11 @@ const sistemas = () => {
   const handleOnCloseModal = () => {
     setSystemToUpdate(null)
     setIsSystemModalOpen(false)
+  }
+
+  const handleOnOpenFilter = () => {
+    if (fetchState === fetchType.FILTER) handleOnFilter(null)
+    else setShowFilterModal(true)
   }
 
   // Handlers CRUD
@@ -251,6 +255,14 @@ const sistemas = () => {
   }
 
   const handleOnFilter = (values) => {
+    if (!values) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.FILTER]: null
+      })
+      return
+    }
+
     const filter = generateQueryStr(
       generateFilterQueryObj(TESTSYSTEMS_FILTER_KEYS, values)
     )
@@ -259,6 +271,8 @@ const sistemas = () => {
     setFetchOptions({
       [fetchOption.FILTER]: filter
     })
+
+    setShowFilterModal(false)
   }
 
   if (!isLoggedIn) return null
@@ -309,7 +323,7 @@ const sistemas = () => {
             onAdd={() => setIsSystemModalOpen(true)}
             onSearch={onSearch}
             onGroup={handleOnGroup}
-            onFilter={() => setShowFilterModal(true)}
+            onFilter={handleOnOpenFilter}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
             addLabel="Añadir sistema"
@@ -323,7 +337,7 @@ const sistemas = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData && isSearch ? (
+      {isEmptyData && fetchState !== fetchType.ALL ? (
         <ViewNotFoundState />
       ) : isEmptyData ? (
         <ViewEmptyState
