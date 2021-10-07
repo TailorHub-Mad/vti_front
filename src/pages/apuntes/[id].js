@@ -3,7 +3,7 @@ import { useContext } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
-import { noteFetchHandler } from "../../swr/note.swr"
+import { projectFetchHandler } from "../../swr/project.swr"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
 import { errorHandler } from "../../utils/errors"
 import { LoadingView } from "../../views/common/LoadingView"
@@ -12,9 +12,12 @@ const apunte = () => {
   const router = useRouter()
   const { isLoggedIn } = useContext(ApiAuthContext)
 
-  const { data, error, isLoading, isValidating } = noteFetchHandler(fetchType.ID, {
-    [fetchOption.ID]: router.query.id
-  })
+  const { data, error, isLoading, isValidating } = projectFetchHandler(
+    fetchType.ID,
+    {
+      [fetchOption.ID]: router.query.id
+    }
+  )
 
   const notFound = !isValidating && !data
 

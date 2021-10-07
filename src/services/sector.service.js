@@ -3,6 +3,8 @@ import { ServiceConstructor } from "."
 const SectorService = () => {
   const { instance, execute } = ServiceConstructor
 
+  // CRUD
+
   const getSectors = (limit = 0, offset = 0) =>
     execute(instance.get(`/sector?limit=${limit}&offset=${offset}`))
   const getSector = (id) => execute(instance.get(`/sector/${id}`))
@@ -11,7 +13,20 @@ const SectorService = () => {
     execute(instance.put(`/sector/update/${id}`, data))
   const deleteSector = (id) => execute(instance.delete(`/sector/delete/${id}`))
 
-  return { getSectors, getSector, createSector, updateSector, deleteSector }
+  // GROUP & FILTER
+
+  const getSearchSectors = (data) =>
+    execute(instance.get(`/sector/filter?title=${data}&ref=${data}`))
+
+  return {
+    getSectors,
+    getSector,
+    createSector,
+    updateSector,
+    deleteSector,
+
+    getSearchSectors
+  }
 }
 
 export default SectorService

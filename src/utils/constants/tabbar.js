@@ -6,8 +6,7 @@ const TABBAR_LINKS = {
   new_note: {
     label: "Nuevo apunte",
     icon: ICONS_REFERENCE.new_note,
-    href: PATHS.newNote,
-    disabled: true // TODO -> provisional
+    href: PATHS.newNote
   },
   notes: {
     label: "Apuntes",
@@ -20,8 +19,7 @@ const TABBAR_LINKS = {
   projects: {
     label: "Proyectos",
     icon: ICONS_REFERENCE.project_line,
-    href: PATHS.projects,
-    disabled: true // TODO -> provisional
+    href: PATHS.projects
   },
   projects_admin: {
     label: "Proyectos",
@@ -96,8 +94,7 @@ const TABBAR_LINKS = {
   help: {
     label: "Apoyo",
     icon: ICONS_REFERENCE.help_line,
-    href: PATHS.help,
-    disabled: true // TODO -> provisional
+    href: PATHS.help
   },
 
   // SUBSCRIPTION

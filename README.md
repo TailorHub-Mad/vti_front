@@ -3,10 +3,8 @@
 - *Ojo crítico*: Revisar en el back cómo vienen los datos agrupados.
 - *Ojo critico*: Reservar un día para la gestión global de errores del back
 - Revisión versión movil.
-- Generar panel user capando opciones del panel admin
-- Revisar los checkoxs en las vistas agrupadas (no parece necesario). Meter en rojo la opción elminar seleccionados.
-- Falta gestionar el Editar en la vista agrupada.
-- Falta que llegue bien el alias en el popup de confirmación de eliminar en la agrupación.
+- Falta gestionar el Editar en la vista agrupada (Apuntes)
+- Revisar el refresh de la data cuando hacemos update en vista agrupada.
 
 Estimaciones:
 - Jueves: Que sólo falten notificaciones
@@ -16,31 +14,28 @@ Estimaciones:
 ### Clientes:
 - [x] Crear uno
 - [x] Crear varios
-- [ ] Ver lista: 
-- Falta que aparezca la referencia
+- [x] Ver lista: 
 - [x] Select en la tabla
-- [ ] Ver detalle 
-- [x] Buscar: 
-- [x] Importar: 
+- [x] Ver detalle
+- [x] Buscar
+- [x] Importar
 - [x] Exportar
 - [x] Editar
 - [x] Borrar uno
 - [x] Borrar many
 
-Porcentaje de avance: 95%
+Porcentaje de avance: 100%
 
 ***
 ### Proyectos:
-- [x] Crear:
+- [ ] Crear:
 - Editar el datepicker con diseño que debe hacer Simón.
 - [x] Ver lista
 - [x] Ver detalle 
 - [x] Buscar
 - [x] Agrupar
-- Falta cuadrar que en el back la info venga bien
 - [ ] Filtrar 
 - [x] Filtrado de activos
-- Falta ruta del back
 - [x] Importar 
 - [x] Exportar
 - [x] Finalizar proyecto
@@ -58,7 +53,6 @@ Porcentaje de avance: 90%
 - [x] Crear varios
 - [x] Ver lista
 - [x] Ver detalle 
-- Falta datos correctos del back
 - [x] Buscar 
 - [x] Agrupar 
 - [ ] Filtrar 
@@ -77,18 +71,18 @@ Porcentaje de avance: 95%
 ***
 ### Apuntes:
 - [x] Crear Apuntes
-- Meter el textarea en la descripción
 - [x] Crear mensaje
 - [x] Ver lista
-- Falta meter las rutas desde que estén listas para filtrar por favoritos suscritos etc.
 - [x] Ver detalle
 - [x] Buscar 
-- [x] Agrupar 
+- [x] Agrupar
+- [ ] Filtrar
 - [x] Importar 
 - [x] Exportar
 - [ ] Editar Apunte
 - [x] Editar mensaje de apunte:
 - Los debe poder editar el autor durante un tiempo y el admin siempre
+- Comprobar con Gabi el editar un mensaje cuando hay un adjunto
 - [x] Eliminar mensaje
 - [x] Borrar uno
 - [x] Cerrar / Abrir
@@ -100,54 +94,45 @@ General:
 - Revisar estilos del textarea y parseo de los saltos de linea en los mensajes.
 
 Porcentaje de avance: 95%
-Tiempo aprox restante: 1 hora
 
 ***
 ### Sectores:
 - [x] Crear uno
 - [x] Crear varios
-- [x]  Ver lista: 
-- Falta que cargue la referncia para ir al detalle
-- [x] Ver detalle 
-- Falta que datos vengan populados.
-- [ ] Buscar 
-- Falta ruta del back
+- [x]  Ver lista
+- [x] Ver detalle
+- [x] Buscar 
 - [x] Importar 
 - [x] Exportar
 - [x] Editar
 - [x] Borrar uno
 - [x] Borrar many
 
-Porcentaje de avance: 95%
+Porcentaje de avance: 100%
 ***
 
 ### Departamentos:
 - [x] Crear Uno
 - [x] Crear varios
 - [x] Ver lista:
-- Falta la carga de los ref
-- [x] Ver detalle 
-- Falta que datos vengan populados.
-- [ ] Buscar
-- Falta ruta del back
+- [x] Ver detalle
+- [x] Buscar
 - [x] Importar 
 - [x] Exportar
 - [x] Editar
 - [x] Borrar uno
 - [x] Borrar many
 
-Porcentaje de avance: 95%
+Porcentaje de avance: 100%
 ***
+
 ### Usuarios:
 - [x] Crear 
 - [x] Ver lista
 - [x] Flujo de la contraseña
-- [x] Ver detalle 
-- Falta que datos vengan populados.
-- [ ] Buscar
-- Falta ruta del back
-- [ ] Agrupar :
-- Falta la agrupación por departamento (back)
+- [x] Ver detalle
+- [x] Buscar
+- [x] Agrupar
 - [x] Importar 
 - [x] Exportar
 - [x] Editar
@@ -159,25 +144,17 @@ Porcentaje de avance 95%
 ***
 ### Tags:
 - [x] Crear :
-- Falta filter de los tags que no pueden ser padre de otros. (Un tag que tenga padre no puede ser padre)
 - [x] Ver alfabetico
 - [x] Ver herencia
 - [x] Ver detalle 
-- Falta que datos vengan populados.
-- [ ] Buscar
-- Falta ruta del back
-- [x] Importar
+- [x] Buscar
+- [ ] Importar
 - Hacer check de que puedas introducir padre 
 - [x] Exportar
 - [x] Editar:
-- Revisar editar el padre
 - [x] Borrar uno
-- Ojo con el refresco al borrar porque la tag no desaparece del tag padre si lo tiene
 
 Porcentaje de avance: 90% 
-Tiempo restante:  2 horas
-
-***
 
 ***
 ### Filtros simples:

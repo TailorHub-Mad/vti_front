@@ -30,9 +30,8 @@ import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 const clientes = () => {
   // Hooks
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { deleteClient } = useClientApi()
+  const { deleteClient, createClient } = useClientApi()
   const { showToast } = useContext(ToastContext)
-  const { createClient } = useClientApi()
 
   // States
   const [fetchState, setFetchState] = useState(fetchType.ALL)

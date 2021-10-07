@@ -2,23 +2,38 @@ import { Button } from "@chakra-ui/button"
 import { Checkbox } from "@chakra-ui/checkbox"
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons"
 import { Box, Flex, Text } from "@chakra-ui/layout"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { ChevronDownIcon } from "../../icons/ChevronDownIcon"
 import { ChevronUpIcon } from "../../icons/ChevronUpIcon"
 import { Tag } from "../../tags/Tag/Tag"
 import { CriterionTitleCardHeader } from "./CriterionTitleCardHeader/CriterionTitleCardHeader"
 
 export const CriterionTitleCard = ({
+  help,
+  onAdd,
+  onEdit,
+  onDelete,
   selectAllTags,
   onSelect,
-  tags = [],
   selectedTags = [],
-  onDelete,
   ...props
 }) => {
+  const [showAll, setShowAll] = useState(false)
+  const [tags, setTags] = useState([])
+
   const allSelected = tags.length === selectedTags.length
   const isChecked = false
-  const [showAll, setShowAll] = useState(false)
+
+  const showMoroLess = () => {
+    if (tags.length > 0) return false
+    if (!showAll && tags.length < help.relatedTags.length) return false
+  }
+
+  useEffect(() => {
+    if (showAll) setTags(help.relatedTags)
+    else setTags(help.relatedTags.splice(0, 3))
+  }, [showAll])
+
   return (
     <Box
       bgColor="white"
@@ -30,52 +45,66 @@ export const CriterionTitleCard = ({
       p="16px"
       {...props}
     >
-      <CriterionTitleCardHeader />
+      <CriterionTitleCardHeader
+        title={help.name}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
+
       <Text variant="d_xs_regular" mb="8px">
-        Fecha de creación 15/02/2021
+        {`Fecha de creación ${new Date(help.createdAt).toLocaleDateString()}`}
       </Text>
-      <Checkbox mr="8px" onChange={selectAllTags} isChecked={allSelected} />
-      {new Array(3).fill("").map((idx) => (
+
+      {tags.length > 0 ? (
+        <Checkbox mb="16px" onChange={selectAllTags} isChecked={allSelected}>
+          <Text color="gray" variant="d_s_regular">
+            Seleccionar
+          </Text>
+        </Checkbox>
+      ) : null}
+
+      {tags.map((tag, idx) => (
         <Flex key={idx} align="center" width="100%" justify="space-between" mb="8px">
           <Flex align="center">
             <Checkbox mr="8px" onChange={onSelect} isChecked={isChecked} />
-            <Tag variant="pale_yellow">hola k dise</Tag>
+            <Tag variant="pale_yellow">{tag.name}</Tag>
           </Flex>
-          <DeleteIcon color="grey" onClick={onDelete} />
+          <DeleteIcon
+            color="grey"
+            cursor="pointer"
+            onClick={onDelete}
+            _hover={{
+              stroke: "red",
+              fill: "white"
+            }}
+          />
         </Flex>
       ))}
-      {showAll &&
-        new Array(3).fill("").map((idx) => (
-          <Flex
-            key={idx}
-            align="center"
-            width="100%"
-            justify="space-between"
-            mb="8px"
-          >
-            <Flex align="center">
-              <Checkbox mr="8px" onChange={onSelect} isChecked={isChecked} />
-              <Tag variant="pale_yellow">hola k dise</Tag>
-            </Flex>
-            <DeleteIcon color="grey" onClick={onDelete} cursor="pointer" />
-          </Flex>
-        ))}
-      <Text variant="d_xs_regular" as="a" cursor="pointer">
-        {showAll ? "Ver menos" : "Ver más"}
-        {showAll ? (
-          <ChevronUpIcon onClick={() => setShowAll(false)} />
-        ) : (
-          <ChevronDownIcon onClick={() => setShowAll(true)} />
-        )}
-      </Text>
+
+      {showMoroLess() ? (
+        <Text variant="d_xs_regular" as="a" cursor="pointer">
+          {showAll ? "Ver menos" : "Ver más"}
+          {showAll ? (
+            <ChevronUpIcon onClick={() => setShowAll(false)} />
+          ) : (
+            <ChevronDownIcon onClick={() => setShowAll(true)} />
+          )}
+        </Text>
+      ) : null}
+
       <Button
         mt="18px"
         height="24px"
         borderRadius="24px"
         width="100%"
         variant="secondary"
+        display="flex"
+        flexDirection="row"
+        justifyContent="center"
+        alignItems="center"
+        onClick={onAdd}
       >
-        <AddIcon w="16px" h="16px" mr="4px" />{" "}
+        <AddIcon w="12px" h="12px" mr="4px" />{" "}
         <Text variant="d_s_regular">Añadir tag</Text>
       </Button>
     </Box>

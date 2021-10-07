@@ -9,13 +9,18 @@ import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { ToastContext } from "../../provider/ToastProvider"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
-import { DeleteType } from "../../utils/constants/global"
+import { DeleteType, RoleType } from "../../utils/constants/global"
 import { projectFetchHandler } from "../../swr/project.swr"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
-import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
+import {
+  checkDataIsEmpty,
+  generateQueryStr,
+  getFieldGRoupObjectById,
+  getFieldObjectById
+} from "../../utils/functions/global"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 import { getGroupOptionLabel } from "../../utils/functions/objects"
@@ -29,11 +34,14 @@ import {
 } from "../../utils/functions/import_export/projects_helper"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 import { FinishProjectModal } from "../../views/projects/NewProject/FinishProjectModal/FinishProjectModal"
+import { generateFilterQueryObj } from "../../utils/functions/filter"
+import { ProjectsFilterModal } from "../../views/projects/ProjectFilter/ProjectsFilterModal"
+import { PROJECTS_FILTER_KEYS } from "../../utils/constants/filter"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
     label: "Cliente",
-    value: "client"
+    value: "clientAlias"
   },
   {
     label: "Año",
@@ -47,13 +55,17 @@ const PROJECTS_GROUP_OPTIONS = [
 
 const proyectos = () => {
   // Hooks
-  const { isLoggedIn } = useContext(ApiAuthContext)
+  const { isLoggedIn, role } = useContext(ApiAuthContext)
   const { deleteProject, createProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
+
+  const isAdmin = role === RoleType.ADMIN
 
   // States
   const [showImportModal, setShowImportModal] = useState(false)
   const [showExportModal, setShowExportModal] = useState(false)
+  const [showFilterModal, setShowFilterModal] = useState(false)
+
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
   const [projectToUpdate, setProjectToUpdate] = useState(null)
   const [deleteType, setDeleteType] = useState(null)
@@ -80,12 +92,12 @@ const proyectos = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const projectsData = handleProjectsData(isEmptyData)
 
-  const isSearch = fetchState == fetchType.SEARCH
+  const isGrouped = fetchState == fetchType.GROUP
 
   // Handlers views
   const isToolbarHidden = () => {
     if (isLoading) return false
-    if (isEmptyData && !isSearch) return false
+    if (isEmptyData && fetchState === fetchType.ALL) return false
 
     return true
   }
@@ -118,7 +130,12 @@ const proyectos = () => {
   // Handlers views
   const handleOpenPopup = (projectsToDelete, type) => {
     setDeleteType(type)
-    setProjectsToDelete(projectsToDelete)
+
+    if (type === DeleteType.ONE && isGrouped) {
+      const [id, { key }] = Object.entries(projectsToDelete)[0]
+      return setProjectsToDelete({ id, key })
+    }
+    return setProjectsToDelete(projectsToDelete)
   }
 
   const handleClosePopup = () => {
@@ -131,9 +148,16 @@ const proyectos = () => {
     setIsProjectModalOpen(false)
   }
 
-  const handleOnOpenFinishProjectModal = (id) => {
-    const project = projectsData.find((p) => (p._id = id))
-    setProjectToFinish(project)
+  const handleOnOpenFinishProjectModal = async (data) => {
+    if (isGrouped) {
+      const [id, { key }] = Object.entries(data)[0]
+      const project = projectsData[key].find((p) => (p._id = id))
+      setProjectToFinish(project)
+    } else {
+      const project = projectsData.find((p) => (p._id = data))
+      setProjectToFinish(project)
+    }
+
     setIsFinishProjectModalOpen(true)
   }
 
@@ -142,30 +166,51 @@ const proyectos = () => {
     setIsFinishProjectModalOpen(null)
   }
 
+  const handleOnOpenFilter = () => {
+    if (fetchState === fetchType.FILTER) handleOnFilter(null)
+    else setShowFilterModal(true)
+  }
+
   // Handlers CRUD
   const handleDeleteMessage = () => {
     if (!projectsToDelete) return
 
     if (deleteType === DeleteType.MANY)
       return "¿Desea eliminar los proyectos seleccionados?"
-    const label = getFieldObjectById(projectsData, "alias", projectsToDelete)
+
+    const label = isGrouped
+      ? getFieldGRoupObjectById(
+          projectsData,
+          "alias",
+          projectsToDelete.id,
+          projectsToDelete.key
+        )
+      : getFieldObjectById(projectsData, "alias", projectsToDelete)
     return `¿Desea eliminar ${label}?`
   }
 
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(projectsToDelete, projectsData)
-    updated.length > 0 ? await mutate(updated, false) : await mutate()
+
     setDeleteType(null)
     setProjectsToDelete(null)
+    if (isGrouped || updated?.length === 0) return await mutate()
+    await mutate(updated, false)
   }
 
-  const deleteOne = async (id, projects) => {
+  const deleteOne = async (data, projects) => {
     try {
-      await deleteProject(id)
+      if (isGrouped) {
+        await deleteProject(data.id)
+        showToast("Proyecto borrado correctamente")
+        return
+      }
+
+      await deleteProject(data)
       showToast("Proyecto borrado correctamente")
       const updatedProjects = []
-      const filterProjects = projects.filter((system) => system._id !== id)
+      const filterProjects = projects.filter((system) => system._id !== data)
       updatedProjects.push({
         projects: filterProjects
       })
@@ -191,9 +236,16 @@ const proyectos = () => {
     }
   }
 
-  const handleUpdate = (id) => {
-    const project = projectsData.find((project) => project._id === id)
-    setProjectToUpdate(project)
+  const handleUpdate = (data) => {
+    if (isGrouped) {
+      const [id, { key }] = Object.entries(data)[0]
+      const project = projectsData[key].find((project) => project._id === id)
+      setProjectToUpdate(project)
+    } else {
+      const project = projectsData.find((project) => project._id === data)
+      setProjectToUpdate(project)
+    }
+
     setIsProjectModalOpen(true)
   }
 
@@ -228,11 +280,25 @@ const proyectos = () => {
     })
   }
 
-  const handleOnFilter = (filter) => {
+  const handleOnFilter = (values) => {
+    if (!values) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.FILTER]: null
+      })
+      return
+    }
+
+    const filter = generateQueryStr(
+      generateFilterQueryObj(PROJECTS_FILTER_KEYS, values)
+    )
+
     setFetchState(fetchType.FILTER)
     setFetchOptions({
       [fetchOption.FILTER]: filter
     })
+
+    setShowFilterModal(false)
   }
 
   if (!isLoggedIn) return null
@@ -251,6 +317,12 @@ const proyectos = () => {
         {handleDeleteMessage()}
       </Popup>
 
+      <ProjectsFilterModal
+        isOpen={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onFilter={(values) => handleOnFilter(values)}
+      />
+
       <NewProjectModal
         projectToUpdate={projectToUpdate}
         isOpen={isProjectModalOpen}
@@ -261,6 +333,7 @@ const proyectos = () => {
         project={projectToFinish}
         isOpen={isFinishProjectModalOpen}
         onClose={handleOnCloseFinishProjectModal}
+        isGrouped={isGrouped}
       />
 
       <ExportFilesModal
@@ -283,7 +356,7 @@ const proyectos = () => {
             onAdd={() => setIsProjectModalOpen(true)}
             onSearch={onSearch}
             onGroup={handleOnGroup}
-            onFilter={handleOnFilter}
+            onFilter={handleOnOpenFilter}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
             addLabel="Añadir proyecto"
@@ -291,11 +364,13 @@ const proyectos = () => {
             groupOptions={PROJECTS_GROUP_OPTIONS}
             icon={<AddProjectIcon />}
             fetchState={fetchState}
+            noAdd={!isAdmin}
+            noImport={!isAdmin}
           />
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData && isSearch ? (
+      {isEmptyData && fetchState !== fetchType.ALL ? (
         <ViewNotFoundState />
       ) : isEmptyData ? (
         <ViewEmptyState
@@ -316,6 +391,7 @@ const proyectos = () => {
           onEdit={handleUpdate}
           onTabChange={(state) => setFetchState(state)}
           onGroup={handleOnGroup}
+          onFilter={handleOnFilter}
           groupOption={getGroupOptionLabel(
             PROJECTS_GROUP_OPTIONS,
             fetchOptions[fetchOption.GROUP]

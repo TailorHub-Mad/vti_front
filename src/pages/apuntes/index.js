@@ -19,7 +19,12 @@ import { ToastContext } from "../../provider/ToastProvider"
 import { noteFetchHandler } from "../../swr/note.swr"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
 import { errorHandler } from "../../utils/errors"
-import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
+import {
+  checkDataIsEmpty,
+  generateQueryStr,
+  getFieldGRoupObjectById,
+  getFieldObjectById
+} from "../../utils/functions/global"
 import {
   noteDataTransform,
   transformNotesToExport
@@ -33,6 +38,10 @@ import { NotesGroup } from "../../views/notes/NotesGroup/NotesGroup"
 import { NotesMenu } from "../../views/notes/NotesMenu/NotesMenu"
 import { ResponseModal } from "../../views/notes/Response/ResponseModal/ResponseModal"
 import download from "downloadjs"
+import { NotesFilterModal } from "../../views/notes/NotesFilter/NotesFilterModal"
+import { NOTES_FILTER_KEYS } from "../../utils/constants/filter"
+import { generateFilterQueryObj } from "../../utils/functions/filter"
+import { getGroupOptionLabel } from "../../utils/functions/objects"
 
 const NOTES_GROUP_OPTIONS = [
   {
@@ -60,10 +69,11 @@ const apuntes = () => {
   const { updateUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
 
+  // States
   const [showImportModal, setShowImportModal] = useState(false)
   const [showExportModal, setShowExportModal] = useState(false)
+  const [showFilterModal, setShowFilterModal] = useState(false)
 
-  // Hooks
   const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
   const [messageToUpdate, setMessageToUpdate] = useState(null)
   const [showNoteDetails, setShowNoteDetails] = useState(false)
@@ -89,39 +99,16 @@ const apuntes = () => {
     // TODO FILTER
   }
 
-  const handleImportNotes = async (data) => {
-    //TODO Gestión de errores y update de SWR
-
-    try {
-      const projectsCreated = []
-      for (let index = 0; index < data.length; index++) {
-        const pro = await createNote(data[index])
-        projectsCreated.push(pro)
-      }
-
-      setShowImportModal(false)
-      showToast("Proyectos importados correctamente")
-    } catch (error) {
-      errorHandler(error)
-    }
-  }
-
-  const handleExportNotes = () => {
-    setShowExportModal(false)
-    const _data = jsonToCSV(transformNotesToExport(notesData))
-    download(_data, `apuntes_export_${new Date().toLocaleDateString()}`, "text/csv")
-  }
-
   const isEmptyData = checkDataIsEmpty(data)
   const notesData = handleNotesData(isEmptyData)
 
   const isSearch = fetchState == fetchType.SEARCH
+  const isGrouped = fetchState == fetchType.GROUP
 
   const checkIsFavorite = (id) => user?.favorites?.notes?.includes(id)
   const checkIsSubscribe = (id) => user?.subscribed?.notes?.includes(id)
 
   // Handlers views
-
   const isToolbarHidden = () => {
     if (isLoading) return false
     if (isEmptyData && !isSearch) return false
@@ -145,8 +132,47 @@ const apuntes = () => {
   }
 
   // Handlers CRUD
+  const handleDeleteMessageToNote = () => {
+    if (!noteToDelete) return
+
+    const label = isGrouped
+      ? getFieldGRoupObjectById(notesData, "name", noteToDelete.id, noteToDelete.key)
+      : getFieldObjectById(notesData, "name", noteToDelete)
+    return `¿Desea eliminar ${label}?`
+  }
+
+  const handleImportNotes = async (data) => {
+    //TODO Gestión de errores y update de SWR
+
+    try {
+      const projectsCreated = []
+      for (let index = 0; index < data.length; index++) {
+        const pro = await createNote(data[index])
+        projectsCreated.push(pro)
+      }
+
+      setShowImportModal(false)
+      showToast("Proyectos importados correctamente")
+    } catch (error) {
+      errorHandler(error)
+    }
+  }
+
+  const handleExportNotes = () => {
+    setShowExportModal(false)
+    const _data = jsonToCSV(transformNotesToExport(notesData))
+    download(_data, `apuntes_export_${new Date().toLocaleDateString()}`, "text/csv")
+  }
+
   const handleDelete = async () => {
     try {
+      if (isGrouped) {
+        await await deleteNote(noteToDelete.id)
+        showToast("Apunte borrado correctamente")
+        setNoteToDelete(null)
+        return await mutate()
+      }
+
       await deleteNote(noteToDelete)
       showToast("Apunte borrado correctamente")
 
@@ -176,9 +202,7 @@ const apuntes = () => {
   }
 
   const handleUpdate = (id) => {
-    // TODO -> create full notes
     const note = notesData.find((note) => note._id === id)
-
     setNoteToUpdate(note)
     setIsNoteModalOpen(true)
   }
@@ -241,11 +265,17 @@ const apuntes = () => {
     })
   }
 
-  const handleOnFilter = (filter) => {
+  const handleOnFilter = (values) => {
+    const filter = generateQueryStr(
+      generateFilterQueryObj(NOTES_FILTER_KEYS, values)
+    )
+
     setFetchState(fetchType.FILTER)
     setFetchOptions({
       [fetchOption.FILTER]: filter
     })
+
+    setShowFilterModal(false)
   }
 
   useEffect(() => {
@@ -271,7 +301,7 @@ const apuntes = () => {
         onConfirm={handleDelete}
         onClose={() => setNoteToDelete(null)}
       >
-        {`¿Desea eliminar ${getFieldObjectById(notesData, "ref", noteToDelete)}?`}
+        {handleDeleteMessageToNote()}
       </Popup>
 
       <Popup
@@ -286,6 +316,12 @@ const apuntes = () => {
         {`¿Deseas eliminar el mensaje seleccionado?`}
       </Popup>
 
+      <NotesFilterModal
+        isOpen={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onFilter={(values) => handleOnFilter(values)}
+      />
+
       <ResponseModal
         messageToUpdate={messageToUpdate}
         isOpen={isResponseModalOpen}
@@ -294,7 +330,7 @@ const apuntes = () => {
       />
 
       <NewNoteModal
-        clientToUpdate={noteToUpdate}
+        noteToUpdate={noteToUpdate}
         isOpen={isNoteModalOpen}
         onClose={handleOnCloseModal}
       />
@@ -335,7 +371,7 @@ const apuntes = () => {
             onAdd={() => setIsNoteModalOpen(true)}
             onSearch={onSearch}
             onGroup={handleOnGroup}
-            onFilter={handleOnFilter}
+            onFilter={() => setShowFilterModal(true)}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
             addLabel="Añadir apunte"
@@ -347,7 +383,7 @@ const apuntes = () => {
         )}
       </PageHeader>
       <PageMenu>
-        {notesData ? (
+        {notesData && !isGrouped ? (
           <NotesMenu
             fetchState={fetchState}
             notesCount={notesData?.length}
@@ -378,8 +414,14 @@ const apuntes = () => {
                 subscribedUsers={null} // TOPO -> review
                 checkIsSubscribe={checkIsSubscribe}
                 checkIsFavorite={checkIsFavorite}
-                onDelete={setNoteToDelete}
+                onDelete={(id, key) => setNoteToDelete({ id, key })}
+                onGroup={handleOnGroup}
                 handleFavorite={handleFavorite}
+                groupOption={getGroupOptionLabel(
+                  NOTES_GROUP_OPTIONS,
+                  fetchOptions[fetchOption.GROUP]
+                )}
+                isGrouped={isGrouped}
               />
             ) : (
               <NotesGrid

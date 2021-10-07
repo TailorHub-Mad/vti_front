@@ -13,7 +13,9 @@ export const Button = {
       opacity: 0.8
     },
     _disabled: {
-      opacity: 0.1,
+      opacity: 1,
+      bgColor: "blue.300",
+      borderColor: "blue.300",
       pointerEvents: "none"
     }
   },

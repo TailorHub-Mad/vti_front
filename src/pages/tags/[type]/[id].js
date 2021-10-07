@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Page } from "../../../components/layout/Pages/Page"
 import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 import { fetchOption, fetchType } from "../../../utils/constants/swr"
@@ -14,10 +14,11 @@ const tag = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
 
   const tagId = router.query.id
+  const filterQuery = `projects.tags._id=${tagId}`
 
   const [fetchState, setFetchState] = useState(fetchType.FILTER)
   const [fetchOptions, setFetchOptions] = useState({
-    [fetchOption.FILTER]: `projects.tags._id=${tagId}`
+    [fetchOption.FILTER]: filterQuery
   })
 
   const { data, error, isLoading, isValidating } = projectFetchHandler(
@@ -31,13 +32,17 @@ const tag = () => {
 
   const tag = projectsData && projectsData[0].tags?.find((t) => t._id === tagId)
 
+  useEffect(() => {
+    if (fetchOptions) return null
+    setFetchOptions(filterQuery)
+  }, [fetchOptions])
+
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (
     <Page>
       {isLoading ? <LoadingView mt="-200px" /> : null}
       {notFound ? <>Error. No se ha encontrado el tag.</> : null}
-      {isEmptyData ? <>No hay projectos asociados.</> : null}
       {projectsData ? (
         <ProjectsByObject
           projects={projectsData}
@@ -46,6 +51,7 @@ const tag = () => {
           setFetchOptions={setFetchOptions}
           fetchState={fetchState}
           fetchOptions={fetchOptions}
+          isEmptyData={isEmptyData}
         />
       ) : null}
     </Page>

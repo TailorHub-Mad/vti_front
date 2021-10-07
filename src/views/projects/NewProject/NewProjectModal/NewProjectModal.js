@@ -7,7 +7,6 @@ import {
 } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
-import { AuxFilter } from "../../../../components/filters/FilterModal/AuxFilter/AuxFilter"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import useProjectApi from "../../../../hooks/api/useProjectApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
@@ -169,9 +168,9 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
           </Button>
         </ModalContent>
       </ScaleFade>
-      {showSecondaryContent ? (
+      {/* {showSecondaryContent ? (
         <AuxFilter onClose={() => setShowSecondaryContent(false)} />
-      ) : null}
+      ) : null} */}
     </Modal>
   )
 }

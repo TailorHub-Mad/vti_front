@@ -12,6 +12,8 @@ export const systemFetchHandler = (state, options) => {
     getSearchSystems
   } = useSystemApi()
 
+  console.log(state, options)
+
   const fetchHandler = {
     all: () => useFetchSWR(SWR_CACHE_KEYS.systems, getSystems),
     id: () =>

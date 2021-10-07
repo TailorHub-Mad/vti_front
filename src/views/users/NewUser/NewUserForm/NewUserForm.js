@@ -70,7 +70,7 @@ export const NewUserForm = ({ value, onChange, objectToUpdate }) => {
     if (!objectToUpdate || departmentOptions.length === 0) return
 
     const department = departmentOptions.find(
-      (_department) => _department.label === objectToUpdate?.department.name
+      (_department) => _department.label === objectToUpdate?.department?.name
     )
 
     handleFormChange("department", department)

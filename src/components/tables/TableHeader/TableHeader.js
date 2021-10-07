@@ -12,11 +12,15 @@ export const TableHeader = ({
   selectAllRows = () => {},
   fetchState,
   onGroup,
+  onFilter,
   groupOption
 }) => {
   const [isChecked, setIsChecked] = useState(checked)
 
-  const handleOnClick = () => onGroup(null)
+  const handleOnClick = () => {
+    if (fetchState === fetchType.GROUP) return onGroup(null)
+    if (fetchState === fetchType.FILTER) return onFilter(null)
+  }
 
   useEffect(() => {
     setIsChecked(checked)
@@ -25,26 +29,55 @@ export const TableHeader = ({
   return (
     <Flex justify="space-between" align="center" pb="32px">
       {fetchState === fetchType.GROUP ? (
-        <Flex alignItems="center">
-          <CloseIcon mr="8px" h="12px" cursor="pointer" onClick={handleOnClick} />
-          <Text marginTop="6px">{`Filtrado por ${groupOption
-            .toString()
-            .toUpperCase()}`}</Text>
-        </Flex>
-      ) : (
-        <Flex>
-          <Checkbox mr="8px" onChange={selectAllRows} isChecked={isChecked} />
+        <Flex justify="flex-start" alignItems="center">
+          <Flex alignItems="center">
+            <CloseIcon mr="8px" h="12px" cursor="pointer" onClick={handleOnClick} />
+            <Text marginTop="6px">{`Agrupado por ${groupOption
+              .toString()
+              .toUpperCase()}`}</Text>
+          </Flex>
           {Object.keys(selectedRows)?.length > 0 ? (
             <Flex
               alignItems="center"
               justifyContent="center"
               onClick={() => onDelete(selectedRows)}
               cursor="pointer"
+              ml="24px"
             >
               <DeleteIcon mr="8px" color="error" />
               <Text color="error" marginTop="6px">
                 Eliminar
               </Text>
+            </Flex>
+          ) : null}
+        </Flex>
+      ) : (
+        <Flex>
+          <Flex>
+            <Checkbox mr="8px" onChange={selectAllRows} isChecked={isChecked} />
+            {Object.keys(selectedRows)?.length > 0 ? (
+              <Flex
+                alignItems="center"
+                justifyContent="center"
+                onClick={() => onDelete(selectedRows)}
+                cursor="pointer"
+              >
+                <DeleteIcon mr="8px" color="error" />
+                <Text color="error" marginTop="6px">
+                  Eliminar
+                </Text>
+              </Flex>
+            ) : null}
+          </Flex>
+          {fetchState === fetchType.FILTER ? (
+            <Flex
+              alignItems="center"
+              ml="24px"
+              onClick={handleOnClick}
+              cursor="pointer"
+            >
+              <CloseIcon mr="8px" h="12px" />
+              <Text marginTop="6px">{`Eliminar filtro`}</Text>
             </Flex>
           ) : null}
         </Flex>

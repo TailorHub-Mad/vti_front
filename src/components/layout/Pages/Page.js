@@ -3,7 +3,6 @@ import React, { useContext, useState } from "react"
 import { ToastContext } from "../../../provider/ToastProvider"
 import { TabBar } from "../../navigation/TabBar/TabBar"
 import { Popup } from "../../overlay/Popup/Popup"
-import Meta from "../Meta/Meta"
 
 export const Page = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true)
@@ -11,7 +10,6 @@ export const Page = ({ children }) => {
 
   return (
     <>
-      <Meta />
       <TabBar isOpen={isOpen} setIsOpen={(val) => setIsOpen(val)} />
       <Popup isOpen={isToastOpen} variant="info">
         {message}

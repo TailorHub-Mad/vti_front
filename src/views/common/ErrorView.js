@@ -18,7 +18,7 @@ export const ErrorView = ({ ...props }) => {
           Ha ocurrido un error
         </Text>
         <Link href={PATHS.root} passHref>
-          <Button>Vovler al inicio</Button>
+          <Button>Volver al inicio</Button>
         </Link>
       </Flex>
     </Page>

@@ -6,6 +6,7 @@ import useNoteApi from "../../../../hooks/api/useNoteApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
+import { createFormData } from "../../../../utils/functions/formdata"
 import { NewNoteForm } from "../NewNoteForm/NewNoteForm"
 
 const initialValues = {
@@ -15,7 +16,7 @@ const initialValues = {
   description: undefined,
   tags: undefined,
   link: undefined,
-  document: undefined
+  documents: undefined
 }
 
 export const NewNoteModal = ({
@@ -26,10 +27,10 @@ export const NewNoteModal = ({
   ...props
 }) => {
   const { showToast } = useContext(ToastContext)
-  const { createNote } = useNoteApi()
+  const { createNote, updateNote } = useNoteApi()
   const { mutate } = useSWRConfig()
 
-  const [values, setValues] = useState([{}])
+  const [values, setValues] = useState(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isUpdate = Boolean(noteToUpdate)
@@ -56,14 +57,52 @@ export const NewNoteModal = ({
     }
 
     if (note?.link) formatData["link"] = note.link
-    if (note?.document) formatData["file"] = note.document
+    if (note?.documents) formatData["file"] = note.documents
 
     const formData = new FormData()
 
     Object.entries(formatData).forEach(([key, value]) => {
       Array.isArray(value)
-        ? value.forEach((v) => formData.set(key, v))
-        : formData.set(key, value)
+        ? value.forEach((v) => formData.append(key, v))
+        : formData.append(key, value)
+    })
+
+    return formData
+  }
+
+  const formatUpdateNote = (note) => {
+    const _formatData = {}
+    const formatData = {
+      title: note.title,
+      description: note.description,
+      tags: note.tags.map((t) => t.value)
+    }
+
+    if (note?.link) formatData["link"] = note.link
+
+    if (note?.documents) {
+      const { files, documents } = note.documents.reduce(
+        (acc, doc) => {
+          if (doc.path) acc.files.push(doc)
+          else acc.documents.push(doc)
+          return acc
+        },
+        {
+          files: [],
+          documents: []
+        }
+      )
+
+      _formatData["documents"] = documents
+      _formatData["file"] = files
+    }
+
+    const formData = createFormData(_formatData)
+
+    Object.entries(formatData).forEach(([key, value]) => {
+      Array.isArray(value)
+        ? value.forEach((v) => formData.append(key, v))
+        : formData.append(key, value)
     })
 
     return formData
@@ -85,13 +124,19 @@ export const NewNoteModal = ({
     try {
       const note = formatCreateNote(values)
       await createNote(note)
+      setValues(initialValues)
     } catch (error) {
       errorHandler(error)
     }
   }
 
   const handleUpdateNote = async () => {
-    return null
+    try {
+      const note = formatUpdateNote(values)
+      await updateNote(noteToUpdate._id, note)
+    } catch (error) {
+      errorHandler(error)
+    }
   }
 
   const handleOnClose = () => {
@@ -105,14 +150,17 @@ export const NewNoteModal = ({
 
   useEffect(() => {
     if (!noteToUpdate) return
+
     const _note = {
-      project: noteToUpdate.project,
-      system: noteToUpdate.system,
+      project: noteToUpdate.projects[0].alias,
+      system: noteToUpdate.testSystems.map((ts) => ts.alias),
       title: noteToUpdate.title,
       description: noteToUpdate.description,
       link: noteToUpdate.link,
-      file: noteToUpdate.documents
+      documents: noteToUpdate.documents,
+      tags: noteToUpdate.tags.map((t) => t.name)
     }
+
     setValues(_note)
   }, [noteToUpdate])
 
@@ -136,6 +184,7 @@ export const NewNoteModal = ({
           noteToUpdate={noteToUpdate}
           noteFromProject={noteFromProject}
           submitIsDisabled={submitIsDisabled}
+          isUpdate={Boolean(noteToUpdate)}
         />
         <Button
           w="194px"

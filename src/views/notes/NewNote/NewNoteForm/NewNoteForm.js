@@ -14,7 +14,8 @@ export const NewNoteForm = ({
   onChange,
   noteToUpdate,
   noteFromProject,
-  submitIsDisabled
+  submitIsDisabled,
+  isUpdate
 }) => {
   const { getProjects } = useProjectApi()
   const { getNoteTags } = useTagApi()
@@ -23,6 +24,19 @@ export const NewNoteForm = ({
   const [projectData, setProjectData] = useState([])
   const [systemOptions, setSystemOptions] = useState([])
   const [tagOptions, setTagOptions] = useState([])
+
+  const formatValues = !noteToUpdate
+    ? { ...value }
+    : {
+        ...value,
+        tags:
+          noteToUpdate.tags.length > 0
+            ? noteToUpdate.tags.map((tag) => ({
+                label: tag.name,
+                value: tag._id
+              }))
+            : undefined
+      }
 
   const formatSelectOption = (data) =>
     data.map((d) => ({ label: d.alias, value: d._id }))
@@ -44,7 +58,7 @@ export const NewNoteForm = ({
         placeholder: "Selecciona",
         label: "Selecciona el proyecto*",
         options: projectOptions,
-        isDisabled: Boolean(noteFromProject)
+        isDisabled: Boolean(noteFromProject) || Boolean(noteToUpdate)
       }
     },
     system: {
@@ -54,7 +68,8 @@ export const NewNoteForm = ({
         label: "Selecciona el sistema utilizado en el proyecto*",
         options: systemOptions,
         additemlabel: "Añadir ",
-        removeitemlabel: "Eliminar "
+        removeitemlabel: "Eliminar ",
+        isDisabled: Boolean(noteToUpdate)
       }
     },
     title: {
@@ -88,7 +103,7 @@ export const NewNoteForm = ({
         label: "Link (opcional)"
       }
     },
-    document: {
+    documents: {
       type: "attachment",
       config: {
         label: "Adjunta tus documentos"
@@ -117,7 +132,7 @@ export const NewNoteForm = ({
     if (!noteToUpdate || projectOptions.length === 0) return
 
     const project = projectOptions.find(
-      (_project) => _project.label === noteToUpdate?.project
+      (_project) => _project.label === noteToUpdate?.projects[0].alias
     )
 
     handleFormChange("project", project)
@@ -127,9 +142,11 @@ export const NewNoteForm = ({
   useEffect(() => {
     if (!noteToUpdate || tagOptions.length === 0) return
 
-    const tags = tagOptions.filter((_tag) => _tag.label === noteToUpdate?.tags.name)
+    const _tagsFormat = noteToUpdate.tags.map((t) => t.name)
+    const tags = tagOptions.filter((_tag) => _tagsFormat.includes(_tag.label))
 
     if (tags.length === 0) return
+
     handleFormChange("tags", tags)
   }, [noteToUpdate, tagOptions])
 
@@ -138,11 +155,13 @@ export const NewNoteForm = ({
 
     if (!project || !project.value) return
 
-    const { testSystems } = noteFromProject
-      ? noteFromProject
-      : projectData.find((p) => p._id === project.value)
+    const data = noteFromProject ?? projectData.find((p) => p._id === project.value)
 
-    setSystemOptions(noteFromProject ? testSystems : formatSelectOption(testSystems))
+    if (!data?.testSystems) return
+
+    setSystemOptions(
+      noteFromProject ? data?.testSystems : formatSelectOption(data?.testSystems)
+    )
   }, [value.project])
 
   const inputRefObj = {
@@ -150,14 +169,14 @@ export const NewNoteForm = ({
     textarea: <TextAreaInput />,
     select: <InputSelect />,
     add_select: <AddSelect />,
-    attachment: <FileInputForm />
+    attachment: <FileInputForm isUpdate={isUpdate} />
   }
 
   return (
     <>
       {Object.entries(formInputs).map(([name, { type, config }], index) => {
         return React.cloneElement(inputRefObj[type], {
-          value: value[name],
+          value: formatValues[name],
           onChange: (val) => handleFormChange(name, val),
           marginBottom: "24px",
           isDisabled:
@@ -170,7 +189,7 @@ export const NewNoteForm = ({
   )
 }
 
-const FileInputForm = ({ value, onChange, isDisabled }) => {
+const FileInputForm = ({ value, onChange, isDisabled, isUpdate }) => {
   return (
     <Flex flexDirection="column" mb="24px">
       <FormLabel
@@ -183,7 +202,12 @@ const FileInputForm = ({ value, onChange, isDisabled }) => {
       >
         Adjunta tus documentos (opcional)
       </FormLabel>
-      <FileInput value={value} onChange={onChange} isDisabled={isDisabled} />
+      <FileInput
+        value={value}
+        onChange={onChange}
+        isDisabled={isDisabled}
+        isUpdate={isUpdate}
+      />
     </Flex>
   )
 }

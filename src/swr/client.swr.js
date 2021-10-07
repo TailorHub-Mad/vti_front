@@ -4,12 +4,17 @@ import { fetchOption } from "../utils/constants/swr"
 import { SWR_CACHE_KEYS } from "../utils/constants/swr"
 
 export const clientFetchHandler = (state, options) => {
-  const { getClients, getClient } = useClientApi()
+  const { getClients, getClient, getSearchClients } = useClientApi()
 
   const fetchHandler = {
     all: () => useFetchSWR(SWR_CACHE_KEYS.clients, getClients),
     id: () =>
-      useFetchSWR([SWR_CACHE_KEYS.client, options[fetchOption.ID]], getClient)
+      useFetchSWR([SWR_CACHE_KEYS.client, options[fetchOption.ID]], getClient),
+    search: () =>
+      useFetchSWR(
+        [SWR_CACHE_KEYS.searchClients, options[fetchOption.SEARCH]],
+        getSearchClients
+      )
   }
 
   return fetchHandler[state]()

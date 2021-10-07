@@ -7,7 +7,7 @@ import { OptionsMenu } from "../../../navigation/OptionsMenu/OptionsMenu"
 import { OptionsMenuItem } from "../../../navigation/OptionsMenu/OptionsMenuItem/OptionsMenuItem"
 
 export const CriterionTitleCardHeader = ({
-  title = "Título",
+  title,
   onClick,
   onEdit,
   onDelete,

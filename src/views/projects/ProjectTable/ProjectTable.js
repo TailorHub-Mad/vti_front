@@ -15,10 +15,13 @@ export const ProjectsTable = ({
   onEdit,
   fetchState = fetchType.ALL,
   onGroup,
+  onFilter,
   groupOption
 }) => {
+  const isGrouped = fetchState === fetchType.GROUP
+
   const { selectedRows, setSelectedRows, handleSelectAllRows, handleRowSelect } =
-    useTableActions()
+    useTableActions(isGrouped)
 
   const selectedRowsKeys = Object.keys(selectedRows)
 
@@ -36,7 +39,8 @@ export const ProjectsTable = ({
   const handleOnDelete = () => {
     const projectsId = Object.keys(selectedRows)
     if (Object.keys(selectedRows).length > 1) return onDeleteMany(projectsId)
-    return onDelete(projectsId[0])
+
+    return isGrouped ? onDelete(selectedRows) : onDelete(projectsId[0])
   }
 
   const projectsData = formatProject(projects, fetchState)
@@ -44,7 +48,13 @@ export const ProjectsTable = ({
     components: TABLE_COMPONENTS,
     head: {
       ...TABLE_PROJECTS_HEAD,
-      options: { ...TABLE_PROJECTS_HEAD.options, onDelete, onEdit, onClose }
+      options: {
+        ...TABLE_PROJECTS_HEAD.options,
+        onDelete,
+        onEdit,
+        onClose,
+        isGrouped
+      }
     }
   }
   const allRowsAreSelected = selectedRowsKeys.length === projectsData?.length
@@ -62,6 +72,7 @@ export const ProjectsTable = ({
           checked={allRowsAreSelected}
           fetchState={fetchState}
           onGroup={onGroup}
+          onFilter={onFilter}
           groupOption={groupOption}
         />
       }
@@ -69,9 +80,9 @@ export const ProjectsTable = ({
       config={configTable}
       content={projectsData}
       selectedRows={selectedRows}
-      onRowSelect={(id) => handleRowSelect(id)}
+      onRowSelect={handleRowSelect}
       optionsDisabled={selectedRowsKeys.length > 1}
-      isGrouped={fetchState === fetchType.GROUP}
+      isGrouped={isGrouped}
     />
   )
 }
