@@ -34,11 +34,12 @@ import { USERS_FILTER_KEYS } from "../../utils/constants/filter"
 
 import { generateFilterQueryObj } from "../../utils/functions/filter"
 import { UsersFilterModal } from "../../views/users/UsersFilter/UsersFilterModal"
+import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 
 const USERS_GROUP_OPTIONS = [
   {
     label: "Departamento",
-    value: "department"
+    value: "department.name"
   }
 ]
 
@@ -69,8 +70,32 @@ const usuarios = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const usersData = data && !isEmptyData ? data : null
 
-  // Handlers views
+  const isSearch = fetchState == fetchType.SEARCH
 
+  // Handlers views
+  const isToolbarHidden = () => {
+    if (isLoading) return false
+    if (isEmptyData && !isSearch) return false
+
+    return true
+  }
+
+  const handleOpenPopup = (usersToDelete, type) => {
+    setDeleteType(type)
+    setUsersToDelete(usersToDelete)
+  }
+
+  const handleClosePopup = () => {
+    setDeleteType(null)
+    setUsersToDelete(null)
+  }
+
+  const handleOnCloseModal = () => {
+    setUserToUpdate(null)
+    setIsUserModalOpen(false)
+  }
+
+  // Handlers CRUD
   const handleImportProjects = async (data) => {
     //TODO Gestión de errores y update de SWR
 
@@ -94,22 +119,6 @@ const usuarios = () => {
     download(_data, `users_export_${new Date().toLocaleDateString()}`, "text/csv")
   }
 
-  const handleOpenPopup = (usersToDelete, type) => {
-    setDeleteType(type)
-    setUsersToDelete(usersToDelete)
-  }
-
-  const handleClosePopup = () => {
-    setDeleteType(null)
-    setUsersToDelete(null)
-  }
-
-  const handleOnCloseModal = () => {
-    setUserToUpdate(null)
-    setIsUserModalOpen(false)
-  }
-
-  // Handlers CRUD
   const handleDeleteMessage = () => {
     if (!usersToDelete) return
 
@@ -156,6 +165,14 @@ const usuarios = () => {
 
   // Filters
   const onSearch = (search) => {
+    if (!search) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.SEARCH]: null
+      })
+      return
+    }
+
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
@@ -225,7 +242,7 @@ const usuarios = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {usersData ? (
+        {isToolbarHidden() ? (
           <ToolBar
             onAdd={() => setIsUserModalOpen(true)}
             onSearch={onSearch}
@@ -242,7 +259,9 @@ const usuarios = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData ? (
+      {isEmptyData && isSearch ? (
+        <ViewNotFoundState />
+      ) : isEmptyData ? (
         <ViewEmptyState
           message="Añadir usuarios a la plataforma"
           importButtonText="Importar"
@@ -251,6 +270,7 @@ const usuarios = () => {
           onAdd={() => setIsUserModalOpen(true)}
         />
       ) : null}
+
       {usersData ? (
         <UsersTable
           fetchState={fetchState}

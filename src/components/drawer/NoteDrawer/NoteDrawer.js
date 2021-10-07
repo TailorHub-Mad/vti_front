@@ -1,9 +1,10 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { CloseIcon } from "../../icons/CloseIcon"
 import { NoteMainInfo } from "./NoteMainInfo/NoteMainInfo"
 import { NoteDetailsAccordion } from "./NoteAccordion/NoteDetailsAccordion"
 import { CollapseIconHor } from "../../icons/CollapseIconHor"
+import useNoteApi from "../../../hooks/api/useNoteApi"
 
 export const NoteDrawer = ({
   note,
@@ -17,11 +18,16 @@ export const NoteDrawer = ({
   ...props
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
+  const { getNote } = useNoteApi()
 
   const formatMessage = (msg) => ({
     ...msg,
     isClosed: msg.approved
   })
+
+  useEffect(() => {
+    if (note) getNote(null, note._id)
+  }, [note])
 
   if (!note) return null
   return (
@@ -78,6 +84,7 @@ export const NoteDrawer = ({
             <NoteDetailsAccordion
               name={note.name}
               link={note.link}
+              description={note.description}
               noteTags={note.tags.length > 0 && note.tags}
               testSystems={note.testSystems}
               files={note.documents?.length > 0 ? note.documents : null}

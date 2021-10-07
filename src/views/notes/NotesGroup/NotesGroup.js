@@ -1,4 +1,5 @@
-import { Flex, Grid } from "@chakra-ui/layout"
+import { CloseIcon } from "@chakra-ui/icons"
+import { Flex, Grid, Text } from "@chakra-ui/layout"
 import React from "react"
 import { MAX_TABLE_WIDTH, MIN_TABLE_WIDTH } from "../../../utils/constants/tables"
 import { GroupNotesRow } from "./GroupNotesRow"
@@ -10,28 +11,44 @@ export const NotesGroup = ({
   checkIsSubscribe,
   checkIsFavorite,
   onDelete,
-  handleFavorite
+  onGroup,
+  handleFavorite,
+  groupOption,
+  isGrouped
 }) => {
   const formatNotes = groupTable(notes)
 
+  const handleOnClick = () => onGroup(null)
+
   return (
-    <Flex overflow="hidden" width="100%" position="relative">
-      <Grid minWidth={MIN_TABLE_WIDTH} maxWidth={MAX_TABLE_WIDTH} width="100%">
-        {formatNotes.map((item, idx) => {
-          return (
-            <GroupNotesRow
-              key={`${item.key}-${idx}`}
-              item={item}
-              onSeeDetails={onSeeDetails}
-              subscribedUsers={null} // TOPO -> review
-              checkIsSubscribe={checkIsSubscribe}
-              checkIsFavorite={checkIsFavorite}
-              onDelete={onDelete}
-              handleFavorite={handleFavorite}
-            />
-          )
-        })}
-      </Grid>
-    </Flex>
+    <>
+      {isGrouped ? (
+        <Flex alignItems="center" mb="24px">
+          <CloseIcon mr="8px" h="12px" cursor="pointer" onClick={handleOnClick} />
+          <Text marginTop="6px">{`Agrupado por ${groupOption
+            .toString()
+            .toUpperCase()}`}</Text>
+        </Flex>
+      ) : null}
+
+      <Flex overflow="hidden" width="100%" position="relative">
+        <Grid minWidth={MIN_TABLE_WIDTH} maxWidth={MAX_TABLE_WIDTH} width="100%">
+          {formatNotes.map((item, idx) => {
+            return (
+              <GroupNotesRow
+                key={`${item.key}-${idx}`}
+                item={item}
+                onSeeDetails={onSeeDetails}
+                subscribedUsers={null} // TOPO -> review
+                checkIsSubscribe={checkIsSubscribe}
+                checkIsFavorite={checkIsFavorite}
+                onDelete={(value) => onDelete(value, item.key)}
+                handleFavorite={handleFavorite}
+              />
+            )
+          })}
+        </Grid>
+      </Flex>
+    </>
   )
 }

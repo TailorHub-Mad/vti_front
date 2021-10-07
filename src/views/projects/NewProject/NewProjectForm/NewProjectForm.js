@@ -203,11 +203,13 @@ export const NewProjectForm = ({
     if (!projectToUpdate || systemOptions.length === 0) return
 
     const _systemsFormat = projectToUpdate?.testSystems.map((s) => s.alias)
-    const system = systemOptions.filter((_system) =>
+    const systems = systemOptions.filter((_system) =>
       _systemsFormat.includes(_system.label)
     )
 
-    handleFormChange("testSystems", system)
+    if (systems.length === 0) return
+
+    handleFormChange("testSystems", systems)
   }, [projectToUpdate, systemOptions])
 
   // Tags

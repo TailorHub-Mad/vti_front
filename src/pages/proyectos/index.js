@@ -9,7 +9,7 @@ import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { ToastContext } from "../../provider/ToastProvider"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
-import { DeleteType } from "../../utils/constants/global"
+import { DeleteType, RoleType } from "../../utils/constants/global"
 import { projectFetchHandler } from "../../swr/project.swr"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
@@ -18,6 +18,7 @@ import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
 import {
   checkDataIsEmpty,
   generateQueryStr,
+  getFieldGRoupObjectById,
   getFieldObjectById
 } from "../../utils/functions/global"
 import { LoadingView } from "../../views/common/LoadingView"
@@ -40,7 +41,7 @@ import { PROJECTS_FILTER_KEYS } from "../../utils/constants/filter"
 const PROJECTS_GROUP_OPTIONS = [
   {
     label: "Cliente",
-    value: "client"
+    value: "clientAlias"
   },
   {
     label: "Año",
@@ -54,9 +55,11 @@ const PROJECTS_GROUP_OPTIONS = [
 
 const proyectos = () => {
   // Hooks
-  const { isLoggedIn } = useContext(ApiAuthContext)
+  const { isLoggedIn, role } = useContext(ApiAuthContext)
   const { deleteProject, createProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
+
+  const isAdmin = role === RoleType.ADMIN
 
   // States
   const [showImportModal, setShowImportModal] = useState(false)
@@ -90,6 +93,7 @@ const proyectos = () => {
   const projectsData = handleProjectsData(isEmptyData)
 
   const isSearch = fetchState == fetchType.SEARCH
+  const isGrouped = fetchState == fetchType.GROUP
 
   // Handlers views
   const isToolbarHidden = () => {
@@ -127,7 +131,12 @@ const proyectos = () => {
   // Handlers views
   const handleOpenPopup = (projectsToDelete, type) => {
     setDeleteType(type)
-    setProjectsToDelete(projectsToDelete)
+
+    if (type === DeleteType.ONE && isGrouped) {
+      const [id, { key }] = Object.entries(projectsToDelete)[0]
+      return setProjectsToDelete({ id, key })
+    }
+    return setProjectsToDelete(projectsToDelete)
   }
 
   const handleClosePopup = () => {
@@ -140,9 +149,16 @@ const proyectos = () => {
     setIsProjectModalOpen(false)
   }
 
-  const handleOnOpenFinishProjectModal = (id) => {
-    const project = projectsData.find((p) => (p._id = id))
-    setProjectToFinish(project)
+  const handleOnOpenFinishProjectModal = async (data) => {
+    if (isGrouped) {
+      const [id, { key }] = Object.entries(data)[0]
+      const project = projectsData[key].find((p) => (p._id = id))
+      setProjectToFinish(project)
+    } else {
+      const project = projectsData.find((p) => (p._id = data))
+      setProjectToFinish(project)
+    }
+
     setIsFinishProjectModalOpen(true)
   }
 
@@ -157,24 +173,40 @@ const proyectos = () => {
 
     if (deleteType === DeleteType.MANY)
       return "¿Desea eliminar los proyectos seleccionados?"
-    const label = getFieldObjectById(projectsData, "alias", projectsToDelete)
+
+    const label = isGrouped
+      ? getFieldGRoupObjectById(
+          projectsData,
+          "alias",
+          projectsToDelete.id,
+          projectsToDelete.key
+        )
+      : getFieldObjectById(projectsData, "alias", projectsToDelete)
     return `¿Desea eliminar ${label}?`
   }
 
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(projectsToDelete, projectsData)
-    updated.length > 0 ? await mutate(updated, false) : await mutate()
+
     setDeleteType(null)
     setProjectsToDelete(null)
+    if (isGrouped || updated?.length === 0) return await mutate()
+    await mutate(updated, false)
   }
 
-  const deleteOne = async (id, projects) => {
+  const deleteOne = async (data, projects) => {
     try {
-      await deleteProject(id)
+      if (isGrouped) {
+        await deleteProject(data.id)
+        showToast("Proyecto borrado correctamente")
+        return
+      }
+
+      await deleteProject(data)
       showToast("Proyecto borrado correctamente")
       const updatedProjects = []
-      const filterProjects = projects.filter((system) => system._id !== id)
+      const filterProjects = projects.filter((system) => system._id !== data)
       updatedProjects.push({
         projects: filterProjects
       })
@@ -200,9 +232,16 @@ const proyectos = () => {
     }
   }
 
-  const handleUpdate = (id) => {
-    const project = projectsData.find((project) => project._id === id)
-    setProjectToUpdate(project)
+  const handleUpdate = (data) => {
+    if (isGrouped) {
+      const [id, { key }] = Object.entries(data)[0]
+      const project = projectsData[key].find((project) => project._id === id)
+      setProjectToUpdate(project)
+    } else {
+      const project = projectsData.find((project) => project._id === data)
+      setProjectToUpdate(project)
+    }
+
     setIsProjectModalOpen(true)
   }
 
@@ -279,6 +318,7 @@ const proyectos = () => {
         project={projectToFinish}
         isOpen={isFinishProjectModalOpen}
         onClose={handleOnCloseFinishProjectModal}
+        isGrouped={isGrouped}
       />
 
       <ExportFilesModal
@@ -309,6 +349,8 @@ const proyectos = () => {
             groupOptions={PROJECTS_GROUP_OPTIONS}
             icon={<AddProjectIcon />}
             fetchState={fetchState}
+            noAdd={!isAdmin}
+            noImport={!isAdmin}
           />
         ) : null}
       </PageHeader>

@@ -29,25 +29,38 @@ export const SWR_CACHE_KEYS = {
   searchSystems: "systems/search",
 
   // CLIENTS
-  clients: "clietns/",
+  clients: "clients/",
   client: "client/",
+  searchClients: "clients/search",
 
   // SECTORS
   sectors: "sectors/",
   sector: "sector/",
+  searchSectors: "sectors/search",
 
   // DEPARTMENTS
   departments: "departments/",
   department: "department/",
+  searchDepartments: "departments/search",
 
   // USERS
   users: "users/",
   user: "user/",
   groupUsers: "users/group",
+  searchUsers: "users/search",
 
   // TAGS
   projectTags: "projectTags/",
-  noteTags: "noteTags/"
+  noteTags: "noteTags/",
+  searchProjectTags: "projectTags/search",
+  searchNoteTags: "noteTags/search",
+  searchTags: "tags/search",
+
+  // HELPS
+  projectHelps: "projectHelps/",
+  noteHelps: "noteHelps/",
+  searchProjectHelps: "projectHelps/search",
+  searchNoteHelps: "noteHelps/search"
 }
 
 export const fetchType = {

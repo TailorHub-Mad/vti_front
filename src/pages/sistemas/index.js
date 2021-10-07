@@ -9,7 +9,7 @@ import { Popup } from "../../components/overlay/Popup/Popup"
 import { NewTestSystemModal } from "../../views/test_systems/NewTestSystem/NewTestSystemModal/NewTestSystemModal"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
-import { DeleteType } from "../../utils/constants/global"
+import { DeleteType, RoleType } from "../../utils/constants/global"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
@@ -17,6 +17,7 @@ import { AddTestSystemIcon } from "../../components/icons/AddTestSystemIcon"
 import {
   checkDataIsEmpty,
   generateQueryStr,
+  getFieldGRoupObjectById,
   getFieldObjectById
 } from "../../utils/functions/global"
 import { systemFetchHandler } from "../../swr/systems.swr"
@@ -38,7 +39,7 @@ import { TestsSystemsFilterModal } from "../../views/test_systems/TestSystemsFil
 const SYSTEMS_GROUP_OPTIONS = [
   {
     label: "Cliente",
-    value: "client"
+    value: "clientAlias"
   },
   {
     label: "Año",
@@ -52,9 +53,11 @@ const SYSTEMS_GROUP_OPTIONS = [
 
 const sistemas = () => {
   // Hooks
-  const { isLoggedIn } = useContext(ApiAuthContext)
+  const { isLoggedIn, role } = useContext(ApiAuthContext)
   const { deleteSystem, createSystem } = useSystemApi()
   const { showToast } = useContext(ToastContext)
+
+  const isAdmin = role === RoleType.ADMIN
 
   // States
   const [showImportModal, setShowImportModal] = useState(false)
@@ -86,9 +89,9 @@ const sistemas = () => {
   const systemsData = handleSystemsData(isEmptyData)
 
   const isSearch = fetchState == fetchType.SEARCH
+  const isGrouped = fetchState == fetchType.GROUP
 
   // Handlers views
-
   const isToolbarHidden = () => {
     if (isLoading) return false
     if (isEmptyData && !isSearch) return false
@@ -121,7 +124,12 @@ const sistemas = () => {
 
   const handleOpenPopup = (systemsToDelete, type) => {
     setDeleteType(type)
-    setSystemsToDelete(systemsToDelete)
+
+    if (type === DeleteType.ONE && isGrouped) {
+      const [id, { key }] = Object.entries(systemsToDelete)[0]
+      return setSystemsToDelete({ id, key })
+    }
+    return setSystemsToDelete(systemsToDelete)
   }
 
   const handleClosePopup = () => {
@@ -139,25 +147,41 @@ const sistemas = () => {
     if (!systemsToDelete) return
 
     if (deleteType === DeleteType.MANY)
-      return "¿Desea eliminar los sistemas seleccionados?"
-    const label = getFieldObjectById(systemsData, "alias", systemsToDelete)
+      return "¿Desea eliminar los proyectos seleccionados?"
+
+    const label = isGrouped
+      ? getFieldGRoupObjectById(
+          systemsData,
+          "alias",
+          systemsToDelete.id,
+          systemsToDelete.key
+        )
+      : getFieldObjectById(systemsData, "alias", systemsToDelete)
     return `¿Desea eliminar ${label}?`
   }
 
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(systemsToDelete, systemsData)
-    updated[0].testSystems.length > 0 ? await mutate(updated, false) : await mutate()
+
     setDeleteType(null)
     setSystemsToDelete(null)
+    if (isGrouped || updated[0].testSystems.length === 0) return await mutate()
+    await mutate(updated, false)
   }
 
-  const deleteOne = async (id, systems) => {
+  const deleteOne = async (data, systems) => {
     try {
-      await deleteSystem(id)
+      if (isGrouped) {
+        await deleteSystem(data.id)
+        showToast("Proyecto borrado correctamente")
+        return
+      }
+
+      await deleteSystem(data)
       showToast("Sistema borrado correctamente")
 
-      const filterSystems = systems.filter((system) => system._id !== id)
+      const filterSystems = systems.filter((system) => system._id !== data)
       return [
         {
           testSystems: filterSystems
@@ -182,9 +206,16 @@ const sistemas = () => {
     }
   }
 
-  const handleUpdate = (id) => {
-    const system = systemsData.find((system) => system._id === id)
-    setSystemToUpdate(system)
+  const handleUpdate = (data) => {
+    if (isGrouped) {
+      const [id, { key }] = Object.entries(data)[0]
+      const project = systemsData[key].find((project) => project._id === id)
+      setSystemToUpdate(project)
+    } else {
+      const project = systemsData.find((project) => project._id === data)
+      setSystemToUpdate(project)
+    }
+
     setIsSystemModalOpen(true)
   }
 
@@ -285,6 +316,8 @@ const sistemas = () => {
             groupOptions={SYSTEMS_GROUP_OPTIONS}
             icon={<AddTestSystemIcon />}
             fetchState={fetchState}
+            noAdd={!isAdmin}
+            noImport={!isAdmin}
           />
         ) : null}
       </PageHeader>

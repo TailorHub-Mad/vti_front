@@ -9,6 +9,11 @@ import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
 import { NewTagForm } from "../NewTagForm/NewTagForm"
 
+const initialValues = {
+  name: undefined,
+  relatedTag: undefined
+}
+
 export const NewTagModal = ({
   isOpen,
   onClose,
@@ -24,7 +29,7 @@ export const NewTagModal = ({
     useTagApi()
   const { mutate } = useSWRConfig()
 
-  const [values, setValues] = useState([{}])
+  const [values, setValues] = useState([initialValues])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isUpdate = Boolean(tagToUpdate)
@@ -32,10 +37,6 @@ export const NewTagModal = ({
   const handleChange = (val, idx) => {
     const _values = [...values]
     _values[idx] = val
-    if (val.relatedTag) {
-      _values[idx].relatedTag = val.relatedTag.value
-    }
-
     setValues(_values)
   }
 
@@ -49,10 +50,20 @@ export const NewTagModal = ({
     return values.some((value) => !value.name)
   }
 
+  const formatTags = (tags) => {
+    return tags.map((tag) => {
+      const formatTag = {
+        name: tag.name
+      }
+      if (tag?.relatedTag) formatTag["relatedTag"] = tag.relatedTag.value
+      return formatTag
+    })
+  }
+
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateTag() : await handleCreateTag()
-    await mutate(SWR_CACHE_KEYS.projectTags)
+    await mutate(isProjectTag ? SWR_CACHE_KEYS.projectTags : SWR_CACHE_KEYS.noteTags)
     showToast(isUpdate ? editSuccessMsg : addSuccessMsg)
     setIsSubmitting(false)
     onClose()
@@ -60,10 +71,10 @@ export const NewTagModal = ({
 
   const handleCreateTag = async () => {
     try {
-      const projectTagsToCreate = [...values].map((pTag) =>
-        isProjectTag ? createProjectTag(pTag) : createNoteTag(pTag)
-      )
-      await Promise.all(projectTagsToCreate)
+      const tagsToCreate = formatTags(values)
+      const func = isProjectTag ? createProjectTag : createNoteTag
+      const tagsQueue = tagsToCreate.map((tag) => func(tag))
+      await Promise.all(tagsQueue)
     } catch (error) {
       errorHandler(error)
     }
@@ -72,24 +83,24 @@ export const NewTagModal = ({
   const handleUpdateTag = async () => {
     try {
       const { _id } = tagToUpdate
-      isProjectTag
-        ? await updateProjectTag(_id, values[0])
-        : await updateNoteTag(_id, values[0])
+      const [data] = formatTags(values)
+      const func = isProjectTag ? updateProjectTag : updateNoteTag
+      await func(_id, data)
     } catch (error) {
       errorHandler(error)
     }
   }
 
-  useEffect(() => {
-    if (!tagToUpdate) return
-    const { relatedTag, name } = tagToUpdate
-    setValues([{ relatedTag, name }])
-  }, [tagToUpdate])
+  const handleOnClose = () => {
+    setValues([initialValues])
+    onClose()
+  }
 
   useEffect(() => {
-    if (isOpen) return
-    setValues([{}])
-  }, [isOpen])
+    if (!tagToUpdate) return
+    const { parent, name } = tagToUpdate
+    setValues([{ relatedTag: parent.name, name }])
+  }, [tagToUpdate])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -97,7 +108,7 @@ export const NewTagModal = ({
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
           title={isUpdate ? editTitle : addTitle}
-          onClose={onClose}
+          onClose={handleOnClose}
           pb="24px"
         />
         <MultipleFormContent

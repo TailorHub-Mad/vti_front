@@ -15,11 +15,12 @@ import { TagLineIcon } from "../../../icons/TagLineIcon"
 import { TestSystemLineIcon } from "../../../icons/TestSystemLineIcon"
 import { TagRow } from "../../../tags/TagRow/TagRow"
 import { NoteAccordionItem } from "./NoteAccordionItem/NoteAccordionItem"
-
+import { chakra } from "@chakra-ui/react"
 export const NoteDetailsAccordion = ({
   name,
   noteTags,
   testSystems,
+  description,
   link,
   message,
   files,
@@ -38,6 +39,12 @@ export const NoteDetailsAccordion = ({
 
   return (
     <Accordion allowToggle allowMultiple {...props}>
+      {!isMessage && description ? (
+        <NoteAccordionItem title="Descripción" icon={<PageLineIcon mr="8px" />}>
+          {description}
+        </NoteAccordionItem>
+      ) : null}
+
       {!isMessage && testSystems ? (
         <NoteAccordionItem
           title="Sistema de ensayo del proyecto"
@@ -73,7 +80,11 @@ export const NoteDetailsAccordion = ({
             isMessage ? <ConversationIcon mr="8px" /> : <PageLineIcon mr="8px" />
           }
         >
-          {message}
+          {message.split("\n").map((ms) => (
+            <chakra.p key={ms} display="block">
+              {ms}
+            </chakra.p>
+          ))}
         </NoteAccordionItem>
       ) : null}
 
@@ -95,7 +106,6 @@ export const NoteDetailsAccordion = ({
         <NoteAccordionItem title="Adjuntos" icon={<CloudLineIcon mr="8px" />}>
           {files.map((file, idx) => {
             const name = file.url?.split("-")[1]
-
             return (
               <Button
                 key={`${file.name}-${idx}`}

@@ -4,7 +4,7 @@ import { fetchOption } from "../utils/constants/swr"
 import { SWR_CACHE_KEYS } from "../utils/constants/swr"
 
 export const departmentFetchHandler = (state, options) => {
-  const { getDepartments, getDepartment } = useDepartmentApi()
+  const { getDepartments, getDepartment, getSearchDepartments } = useDepartmentApi()
 
   const fetchHandler = {
     all: () => useFetchSWR(SWR_CACHE_KEYS.departments, getDepartments),
@@ -12,6 +12,11 @@ export const departmentFetchHandler = (state, options) => {
       useFetchSWR(
         [SWR_CACHE_KEYS.department, options[fetchOption.ID]],
         getDepartment
+      ),
+    search: () =>
+      useFetchSWR(
+        [SWR_CACHE_KEYS.searchDepartments, options[fetchOption.SEARCH]],
+        getSearchDepartments
       )
   }
 

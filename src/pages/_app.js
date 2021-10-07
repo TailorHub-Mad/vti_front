@@ -4,6 +4,7 @@ import ToastProvider from "../provider/ToastProvider"
 import ErrorProvider from "../provider/ErrorProvider"
 import { SWRConfig } from "swr"
 import theme from "../theme/"
+import Meta from "../components/layout/Meta/Meta"
 
 function MyApp({ Component, pageProps }) {
   const swrConfig = { provider: () => new Map() }
@@ -14,6 +15,7 @@ function MyApp({ Component, pageProps }) {
         <ApiAuthProvider>
           <ErrorProvider>
             <ToastProvider>
+              <Meta />
               <Component {...pageProps} />
             </ToastProvider>
           </ErrorProvider>

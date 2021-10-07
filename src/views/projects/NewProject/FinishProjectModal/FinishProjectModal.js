@@ -15,7 +15,13 @@ const initialValues = {
   focusPoint: undefined
 }
 
-export const FinishProjectModal = ({ isOpen, onClose, project, ...props }) => {
+export const FinishProjectModal = ({
+  isOpen,
+  onClose,
+  project,
+  isGrouped,
+  ...props
+}) => {
   const { showToast } = useContext(ToastContext)
   const { mutate } = useSWRConfig()
   const { updateProject } = useProjectApi()
@@ -33,7 +39,10 @@ export const FinishProjectModal = ({ isOpen, onClose, project, ...props }) => {
       closed: destructuringDate(values.date)
     })
 
-    await mutate(SWR_CACHE_KEYS.projects)
+    isGrouped
+      ? await mutate(SWR_CACHE_KEYS.groupProjects)
+      : await mutate(SWR_CACHE_KEYS.projects)
+
     showToast("Ha finalizado el proyecto")
     setIsSubmitting(false)
     setValues(initialValues)

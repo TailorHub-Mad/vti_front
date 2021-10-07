@@ -42,9 +42,10 @@ export const ManagePassword = ({ title, subtitle }) => {
       w="100vw"
       h="100vh"
       background={"url(/images/backgrounds/general_bg.svg)"}
-      backgroundPosition="0 -160px"
-      backgroundRepeat="no-repeat"
-      backgroundSize="cover"
+      bgRepeat="no-repeat"
+      bgAttachment="fixed"
+      bgSize="cover"
+      bgPosition="center"
     >
       <Card
         width="492px"

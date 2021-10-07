@@ -25,6 +25,7 @@ import {
   transformSectorsToExport
 } from "../../utils/functions/import_export/sectors_helper"
 import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
+import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 
 const sectores = () => {
   // Hooks
@@ -51,7 +52,16 @@ const sectores = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const sectorsData = data && !isEmptyData ? data : null
 
+  const isSearch = fetchState == fetchType.SEARCH
+
   // Handlers views
+  // Handlers views
+  const isToolbarHidden = () => {
+    if (isLoading) return false
+    if (isEmptyData && !isSearch) return false
+
+    return true
+  }
 
   const handleImportSectors = async (data) => {
     //TODO Gestión de errores y update de SWR
@@ -138,6 +148,14 @@ const sectores = () => {
 
   // Filters
   const onSearch = (search) => {
+    if (!search) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.SEARCH]: null
+      })
+      return
+    }
+
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
@@ -181,7 +199,7 @@ const sectores = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {sectorsData ? (
+        {isToolbarHidden ? (
           <ToolBar
             onAdd={() => setIsSectorModalOpen(true)}
             onSearch={onSearch}
@@ -196,6 +214,17 @@ const sectores = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
+      {isEmptyData && isSearch ? (
+        <ViewNotFoundState />
+      ) : isEmptyData ? (
+        <ViewEmptyState
+          message="Añadir sectores a la plataforma"
+          importButtonText="Importar"
+          addButtonText="Añadir sector"
+          onImport={() => setShowImportModal(true)}
+          onAdd={() => setIsSectorModalOpen(true)}
+        />
+      ) : null}
       {isEmptyData ? (
         <ViewEmptyState
           message="Añadir sectores a la plataforma"

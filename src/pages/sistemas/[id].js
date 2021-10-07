@@ -1,25 +1,37 @@
 import { useRouter } from "next/router"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
-import { systemFetchHandler } from "../../swr/systems.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 import { PATHS } from "../../utils/constants/global"
 import { checkDataIsEmpty } from "../../utils/functions/global"
 import { ProjectsByObject } from "../../views/projects/ProjectsByObject/ProjectsByObject"
+import { projectFetchHandler } from "../../swr/project.swr"
 
 const system = () => {
   const router = useRouter()
   const { isLoggedIn } = useContext(ApiAuthContext)
 
-  const { data, error, isLoading, isValidating } = systemFetchHandler(fetchType.ID, {
-    [fetchOption.ID]: router.query.id
+  const systemId = router.query.id
+
+  const [fetchState, setFetchState] = useState(fetchType.FILTER)
+  const [fetchOptions, setFetchOptions] = useState({
+    [fetchOption.FILTER]: `projects.testSystems._id=${systemId}`
   })
 
+  const { data, error, isLoading, isValidating } = projectFetchHandler(
+    fetchState,
+    fetchOptions
+  )
+
   const notFound = !isValidating && !data
-  const systemData = data && !checkDataIsEmpty(data) ? data[0].testSystems[0] : null
+  const isEmptyData = checkDataIsEmpty(data)
+  const projectsData = data && !isEmptyData ? data[0].projects : null
+
+  const system =
+    projectsData && projectsData[0].testSystems?.find((t) => t._id === systemId)
 
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
@@ -27,10 +39,15 @@ const system = () => {
     <Page>
       {isLoading || !data ? <LoadingView mt="-200px" /> : null}
       {notFound && <>Error. No se ha encontrado el sistema.</>}
-      {systemData && (
+      {projectsData && (
         <ProjectsByObject
-          projects={systemData.projects}
-          customURL={`${PATHS.testSystems}/${systemData.ref}`}
+          projects={projectsData}
+          customURL={`${PATHS.testSystems}/${system?.ref || systemId}`}
+          setFetchState={setFetchState}
+          setFetchOptions={setFetchOptions}
+          fetchState={fetchState}
+          fetchOptions={fetchOptions}
+          isEmptyData={isEmptyData}
         />
       )}
     </Page>

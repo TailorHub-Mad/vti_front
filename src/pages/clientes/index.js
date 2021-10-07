@@ -28,28 +28,26 @@ import { jsonToCSV } from "react-papaparse"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 
 const clientes = () => {
+  // Hooks
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { deleteClient } = useClientApi()
+  const { deleteClient, createClient } = useClientApi()
   const { showToast } = useContext(ToastContext)
-  const { createClient } = useClientApi()
+
+  // States
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
+  const [showImportModal, setShowImportModal] = useState(false)
+  const [showExportModal, setShowExportModal] = useState(false)
+  const [isClientModalOpen, setIsClientModalOpen] = useState(false)
+  const [clientToUpdate, setClientToUpdate] = useState(null)
+  const [deleteType, setDeleteType] = useState(null)
+  const [clientsToDelete, setClientsToDelete] = useState(null)
 
+  // fetch
   const { data, error, isLoading, mutate } = clientFetchHandler(
     fetchState,
     fetchOptions
   )
-
-  const [showImportModal, setShowImportModal] = useState(false)
-  const [showExportModal, setShowExportModal] = useState(false)
-
-  // Create - Update state
-  const [isClientModalOpen, setIsClientModalOpen] = useState(false)
-  const [clientToUpdate, setClientToUpdate] = useState(null)
-
-  // Delete state
-  const [deleteType, setDeleteType] = useState(null)
-  const [clientsToDelete, setClientsToDelete] = useState(null)
 
   const isEmptyData = checkDataIsEmpty(data)
   const clientsData = data && !isEmptyData ? data : null
@@ -64,6 +62,22 @@ const clientes = () => {
     return true
   }
 
+  const handleOpenPopup = (clientsToDelete, type) => {
+    setDeleteType(type)
+    setClientsToDelete(clientsToDelete)
+  }
+
+  const handleClosePopup = () => {
+    setDeleteType(null)
+    setClientsToDelete(null)
+  }
+
+  const handleOnCloseModal = () => {
+    setClientToUpdate(null)
+    setIsClientModalOpen(false)
+  }
+
+  // Handlers CRUD
   const handleImportClients = async (data) => {
     //TODO Gestión de errores y update de SWR
     try {
@@ -80,21 +94,6 @@ const clientes = () => {
     setShowExportModal(false)
     const _data = jsonToCSV(transformClientsToExport(clientsData))
     download(_data, `clients_export_${new Date().toLocaleDateString()}`, "text/csv")
-  }
-
-  const handleOpenPopup = (clientsToDelete, type) => {
-    setDeleteType(type)
-    setClientsToDelete(clientsToDelete)
-  }
-
-  const handleClosePopup = () => {
-    setDeleteType(null)
-    setClientsToDelete(null)
-  }
-
-  const handleOnCloseModal = () => {
-    setClientToUpdate(null)
-    setIsClientModalOpen(false)
   }
 
   const handleDeleteMessage = () => {

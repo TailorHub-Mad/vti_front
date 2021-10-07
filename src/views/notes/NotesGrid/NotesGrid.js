@@ -22,7 +22,7 @@ export const NotesGrid = ({
           key={`${note.title}-${idx}`}
           note={note}
           onSeeDetails={() => onSeeDetails(note)}
-          subscribedUsers={null} // TOPO -> review
+          subscribedUsers={null} // TODO -> review
           isSubscribe={checkIsSubscribe(note._id)}
           isFavorite={checkIsFavorite(note._id)}
           onDelete={() => onDelete(note._id)}

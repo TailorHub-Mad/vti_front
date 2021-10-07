@@ -1,10 +1,20 @@
 import { PATHS } from "../../../utils/constants/global"
+import { fetchType } from "../../../utils/constants/swr"
 import { calcColWidth } from "../../../utils/constants/tables"
 import { variantGeneralTag } from "../../../utils/constants/tabs"
 
-export const formatUser = (data) => {
-  // data && !isGrouped ? data?.map(transformUserData) : groupTable(data)
-  return data && data?.map(transformUserData)
+export const formatUser = (data, fetchState) => {
+  if (fetchState === fetchType.GROUP) return groupTable(data)
+  return data?.map(transformUserData)
+}
+
+export const groupTable = (systems) => {
+  return Object.entries(systems).map(([key, value]) => {
+    return {
+      key,
+      value: value.map(transformUserData)
+    }
+  })
 }
 
 export const transformUserData = (user) => ({
@@ -15,17 +25,9 @@ export const transformUserData = (user) => ({
   email: user.email,
   department: user.department ? [user.department?.name] : undefined,
   focusPoint: user.focusPoint,
-  projects: user.projects,
+  projects: user.projectsComments,
   options: ""
 })
-
-export const groupTable = (data) => {
-  return data.map((it) => {
-    const _it = [...it]
-    _it[1] = it[1].map(transformUserData)
-    return _it
-  })
-}
 
 export const TABLE_USERS_HEAD = {
   selector: {

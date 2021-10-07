@@ -98,7 +98,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
   useEffect(() => {
     if (!userToUpdate) return
     const { alias, name, email, department } = userToUpdate
-    setValues([{ alias, name, email, department: department.name }])
+    setValues([{ alias, name, email, department: department?.name }])
   }, [userToUpdate])
 
   useEffect(() => {
