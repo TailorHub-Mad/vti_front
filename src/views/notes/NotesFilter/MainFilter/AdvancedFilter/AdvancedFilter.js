@@ -1,6 +1,6 @@
 import { Button, Flex, Grid, Input, Text } from "@chakra-ui/react"
 import React from "react"
-import { InputSelect } from "../../../../forms/InputSelect/InputSelect"
+import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
 
 export const AdvancedFilter = () => {
   const symbols = ["(", ")", "&", "||", "Not"]

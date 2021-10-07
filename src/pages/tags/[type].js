@@ -27,6 +27,10 @@ import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { NewTagModal } from "../../views/tags/NewTag/NewTagModal/NewTagModal"
 import { TagsHeader } from "../../views/tags/TagsHeader/TagsHeader"
 import download from "downloadjs"
+import { generateFilterQueryObj } from "../../utils/functions/filter"
+import { generateQueryStr } from "../../utils/functions/global"
+import { TagsFilterModal } from "../../views/tags/TagsFilter/TagsFilterModal"
+import { TAGS_FILTER_KEYS } from "../../utils/constants/filter"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 
@@ -63,14 +67,17 @@ const tags = () => {
   const { deleteProjectTag, deleteNoteTag, createNoteTag, createProjectTag } =
     useTagApi()
 
-  // States
+  const [showFilterModal, setShowFilterModal] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
   const [showExportModal, setShowExportModal] = useState(false)
+
+  const [activeTab, setActiveTab] = useState("inheritance")
+
+  // Create - Update state
   const [isTagModalOpen, setIsTagModalOpen] = useState(false)
   const [tagToUpdate, setTagToUpdate] = useState(null)
   const [tagToDelete, setTagToDelete] = useState(null)
   // TODO -> review order in back & ENUM
-  const [activeTab, setActiveTab] = useState(ORDER.inheritance)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
 
@@ -166,6 +173,14 @@ const tags = () => {
     return data.sort((a, b) => a.name.localeCompare(b.name))
   }
 
+  const handleOnFilter = (values) => {
+    console.log(generateQueryStr(generateFilterQueryObj(TAGS_FILTER_KEYS, values)))
+    // setFetchState(fetchType.FILTER)
+    // setFetchOptions({
+    //   [fetchOption.FILTER]: filter
+    // })
+  }
+
   useEffect(() => {
     if (!infoByType[router?.query?.type]) router.push(PATHS.notFound)
   }, [])
@@ -185,6 +200,12 @@ const tags = () => {
       >
         {`¿Desea eliminar ${getFieldObjectById(tagData, "name", tagToDelete)}?`}
       </Popup>
+
+      <TagsFilterModal
+        isOpen={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onFilter={(values) => handleOnFilter(values)}
+      />
 
       <NewTagModal
         tagToUpdate={tagToUpdate}
@@ -215,11 +236,11 @@ const tags = () => {
           <ToolBar
             onAdd={() => setIsTagModalOpen(true)}
             onSearch={onSearch}
+            onFilter={() => setShowFilterModal(true)}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
             addLabel={infoByType[type].addTitle}
             searchPlaceholder="Busqueda por ID, Alias"
-            noFilter
             noGroup
             icon={<AddTagIcon />}
             fetchState={fetchState}

@@ -10,9 +10,9 @@ import {
   Text
 } from "@chakra-ui/react"
 import React from "react"
-import { AdvancedFilterIcon } from "../../../icons/AdvancedFilterIcon"
-import { SimpleFilterIcon } from "../../../icons/SimpleFilterIcon"
-import { CustomModalHeader } from "../../../overlay/Modal/CustomModalHeader/CustomModalHeader"
+import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
+import { AdvancedFilterIcon } from "../../../../components/icons/AdvancedFilterIcon"
+import { SimpleFilterIcon } from "../../../../components/icons/SimpleFilterIcon"
 import { AdvancedFilter } from "./AdvancedFilter/AdvancedFilter"
 import { SimpleFilterForm } from "./SimpleFilterForm/SimpleFilterForm"
 
@@ -20,6 +20,7 @@ export const MainFilter = ({
   onClose,
   onSecondaryOpen,
   onSimpleFilterChange,
+  onFilter,
   simpleFilterValues,
   moveToLeft,
   openSaveModal,
@@ -74,7 +75,7 @@ export const MainFilter = ({
         <Button variant="secondary" onClick={openSaveModal}>
           Recordar
         </Button>
-        <Button>Filtrar</Button>
+        <Button onClick={onFilter}>Filtrar</Button>
       </Flex>
     </Box>
   )

@@ -2,7 +2,7 @@ import { SearchIcon } from "@chakra-ui/icons"
 import { Button, Input, InputGroup, InputLeftElement, Flex } from "@chakra-ui/react"
 import React from "react"
 import { CloudButton } from "../../buttons/CloudButton/CloudButton"
-import { Filter } from "../../filters/Filter"
+import { FilterButton } from "../../filters/FilterButton"
 import { Group } from "../../grouping/Group"
 import { AddProjectIcon } from "../../icons/AddProjectIcon"
 import { fetchType } from "../../../utils/constants/swr"
@@ -30,7 +30,7 @@ export const ToolBar = ({
 
   return (
     <Flex>
-      {noFilter || <Filter onFilter={handleOnFilter} />}
+      {noFilter || <FilterButton onFilter={handleOnFilter} />}
       {noGroup || (
         <Group
           onGroup={handleOnGroup}

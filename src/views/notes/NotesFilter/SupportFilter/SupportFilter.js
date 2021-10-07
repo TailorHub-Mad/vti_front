@@ -1,9 +1,9 @@
 import { Box, Button, Input } from "@chakra-ui/react"
 import React from "react"
 import { MOCK_SELECT_OPTIONS } from "../../../../mock/mock"
-import { FormController } from "../../../forms/FormItemWrapper/FormController"
-import { InputSelect } from "../../../forms/InputSelect/InputSelect"
-import { CustomModalHeader } from "../../../overlay/Modal/CustomModalHeader/CustomModalHeader"
+import { FormController } from "../../../../components/forms/FormItemWrapper/FormController"
+import { InputSelect } from "../../../../components/forms/InputSelect/InputSelect"
+import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 
 export const SupportFilter = ({ onClose, onSecondaryOpen, isAuxOpen, ...props }) => {
   return (

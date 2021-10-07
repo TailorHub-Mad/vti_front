@@ -10,13 +10,13 @@ import {
   Text
 } from "@chakra-ui/react"
 import React from "react"
-import { ChevronDownIcon } from "../../../icons/ChevronDownIcon"
-import { ChevronUpIcon } from "../../../icons/ChevronUpIcon"
-import { ProjectsIcon } from "../../../icons/ProjectsIcon"
-import { CustomModalHeader } from "../../../overlay/Modal/CustomModalHeader/CustomModalHeader"
+import { ChevronDownIcon } from "../../../../components/icons/ChevronDownIcon"
+import { ChevronUpIcon } from "../../../../components/icons/ChevronUpIcon"
+import { ProjectsIcon } from "../../../../components/icons/ProjectsIcon"
+import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import faker from "faker"
 import { sortAlphabetic } from "../../../../utils/functions/sorting"
-import { Tag } from "../../../tags/Tag/Tag"
+import { Tag } from "../../../../components/tags/Tag/Tag"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
 export const AuxFilter = ({ onClose, ...props }) => {
   const project_tags = new Array(80)

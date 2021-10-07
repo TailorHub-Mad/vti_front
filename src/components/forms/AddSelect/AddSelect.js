@@ -32,7 +32,7 @@ export const AddSelect = ({
 
   useEffect(() => {
     const valuesSelected = inputValues.map((inputValue) => inputValue?.value)
-    const availableOptions = options.filter(
+    const availableOptions = options?.filter(
       (option) => !valuesSelected.includes(option.value)
     )
 
@@ -70,7 +70,7 @@ export const AddSelect = ({
   const renderAddItem = (itemPosition) => {
     if (inputValues.length > 1 && itemPosition !== inputValues.length - 1)
       return null
-    if (inputValues.length === options.length) return null
+    if (inputValues.length === options?.length) return null
 
     const handleOnClick = () => setInputValues([...inputValues, undefined])
 

@@ -17,6 +17,7 @@ import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
 import {
   checkDataIsEmpty,
+  generateQueryStr,
   getFieldGRoupObjectById,
   getFieldObjectById
 } from "../../utils/functions/global"
@@ -33,6 +34,9 @@ import {
 } from "../../utils/functions/import_export/projects_helper"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 import { FinishProjectModal } from "../../views/projects/NewProject/FinishProjectModal/FinishProjectModal"
+import { generateFilterQueryObj } from "../../utils/functions/filter"
+import { ProjectsFilterModal } from "../../views/projects/ProjectFilter/ProjectsFilterModal"
+import { PROJECTS_FILTER_KEYS } from "../../utils/constants/filter"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -60,6 +64,8 @@ const proyectos = () => {
   // States
   const [showImportModal, setShowImportModal] = useState(false)
   const [showExportModal, setShowExportModal] = useState(false)
+  const [showFilterModal, setShowFilterModal] = useState(false)
+
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
   const [projectToUpdate, setProjectToUpdate] = useState(null)
   const [deleteType, setDeleteType] = useState(null)
@@ -270,11 +276,14 @@ const proyectos = () => {
     })
   }
 
-  const handleOnFilter = (filter) => {
-    setFetchState(fetchType.FILTER)
-    setFetchOptions({
-      [fetchOption.FILTER]: filter
-    })
+  const handleOnFilter = (values) => {
+    console.log(
+      generateQueryStr(generateFilterQueryObj(PROJECTS_FILTER_KEYS, values))
+    )
+    // setFetchState(fetchType.FILTER)
+    // setFetchOptions({
+    //   [fetchOption.FILTER]: filter
+    // })
   }
 
   if (!isLoggedIn) return null
@@ -292,6 +301,12 @@ const proyectos = () => {
       >
         {handleDeleteMessage()}
       </Popup>
+
+      <ProjectsFilterModal
+        isOpen={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onFilter={(values) => handleOnFilter(values)}
+      />
 
       <NewProjectModal
         projectToUpdate={projectToUpdate}
@@ -326,7 +341,7 @@ const proyectos = () => {
             onAdd={() => setIsProjectModalOpen(true)}
             onSearch={onSearch}
             onGroup={handleOnGroup}
-            onFilter={handleOnFilter}
+            onFilter={() => setShowFilterModal(true)}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
             addLabel="Añadir proyecto"
