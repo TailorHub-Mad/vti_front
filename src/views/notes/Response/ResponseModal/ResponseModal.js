@@ -32,6 +32,7 @@ export const ResponseModal = ({
     const formatData = {
       message: note.message
     }
+
     if (note?.link) formatData["link"] = note.link
     if (note?.documents) formatData["file"] = note.documents
 
@@ -39,8 +40,8 @@ export const ResponseModal = ({
 
     Object.entries(formatData).forEach(([key, value]) => {
       Array.isArray(value)
-        ? value.forEach((v) => formData.set(key, v))
-        : formData.set(key, value)
+        ? value.forEach((v) => formData.append(key, v))
+        : formData.append(key, value)
     })
 
     return formData
@@ -52,14 +53,14 @@ export const ResponseModal = ({
     }
 
     if (note?.link) formatData["link"] = note.link
-    if (note?.documents) formatData["documents"] = [...note.documents]
+    if (note?.documents) formatData["documents"] = note.documents
 
     const formData = new FormData()
 
     Object.entries(formatData).forEach(([key, value]) => {
       Array.isArray(value)
-        ? value.forEach((v) => formData.set(key, v))
-        : formData.set(key, value)
+        ? value.forEach((v) => formData.append(key, v))
+        : formData.append(key, value)
     })
 
     return formData

@@ -23,12 +23,12 @@ const notesMenuOptions = {
     label: "No leídos",
     activeIcon: ICONS_REFERENCE.hide,
     icon: ICONS_REFERENCE.hide_line
-  },
-  active: {
-    label: "Activos",
-    activeIcon: ICONS_REFERENCE.active,
-    icon: ICONS_REFERENCE.active
   }
+  // active: {
+  //   label: "Activos",
+  //   activeIcon: ICONS_REFERENCE.active,
+  //   icon: ICONS_REFERENCE.active
+  // }
 }
 
 export const NotesMenu = ({

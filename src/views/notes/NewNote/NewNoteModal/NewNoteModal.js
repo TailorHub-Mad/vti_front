@@ -62,8 +62,8 @@ export const NewNoteModal = ({
 
     Object.entries(formatData).forEach(([key, value]) => {
       Array.isArray(value)
-        ? value.forEach((v) => formData.set(key, v))
-        : formData.set(key, value)
+        ? value.forEach((v) => formData.append(key, v))
+        : formData.append(key, value)
     })
 
     return formData
