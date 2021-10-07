@@ -42,13 +42,19 @@ export const ToolBar = ({
         <InputGroup width="196px" marginRight="16px">
           <InputLeftElement
             pointerEvents="none"
-            children={<SearchIcon color="gray" />}
+            children={<SearchIcon color="grey" />}
           />
           <Input
             placeholder={searchPlaceholder ?? "Busque por ID"}
             paddingLeft="40px"
             variant="white"
             onChange={(e) => onSearch(e.target.value)}
+            color="yellow"
+            sx={{
+              _placeholder: {
+                color: "grey"
+              }
+            }}
           />
         </InputGroup>
       )}
