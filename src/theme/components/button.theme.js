@@ -51,7 +51,9 @@ export const Button = {
       },
       _disabled: {
         opacity: 0.3,
-        pointerEvents: "none"
+        pointerEvents: "none",
+        bgColor: "transparent",
+        borderColor: "transparent"
       }
     },
     tool_button: {
@@ -71,7 +73,9 @@ export const Button = {
       },
       _disabled: {
         opacity: 0.3,
-        pointerEvents: "none"
+        pointerEvents: "none",
+        bgColor: "transparent",
+        borderColor: "transparent"
       }
     },
     filter_button: {
@@ -88,7 +92,10 @@ export const Button = {
       },
       _disabled: {
         opacity: 0.3,
-        pointerEvents: "none"
+        pointerEvents: "none",
+        bgColor: "transparent",
+        bg: "start",
+        borderColor: "start"
       }
     },
     note_content: {
@@ -106,7 +113,9 @@ export const Button = {
       },
       _disabled: {
         opacity: 0.3,
-        pointerEvents: "none"
+        pointerEvents: "none",
+        bgColor: "white",
+        borderColor: "blue.500"
       }
     },
     text_only: {
