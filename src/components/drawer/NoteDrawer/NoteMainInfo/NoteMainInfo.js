@@ -83,58 +83,58 @@ export const NoteMainInfo = ({
           {new Date(item.updatedAt)?.toLocaleDateString()}
         </Text>
         <Flex>
-          <>
-            {/* {!isMessage || isMyMessage ? (
+          {!isMessage || isMyMessage ? (
             <>
               {!isMessage ? (
-                
-              ) : null} */}
+                <ActionLink
+                  onClick={onEdit}
+                  color="grey"
+                  icon={<EditIcon />}
+                  label="Editar"
+                />
+              ) : null}
 
-            <ActionLink
-              onClick={onEdit}
-              color="grey"
-              icon={<EditIcon />}
-              label="Editar"
-            />
+              {isMessage && editAllowed ? (
+                <ActionLink
+                  onClick={onEdit}
+                  color="grey"
+                  icon={<EditIcon />}
+                  label="Editar"
+                />
+              ) : null}
 
-            {isMessage && editAllowed ? (
               <ActionLink
-                onClick={onEdit}
-                color="grey"
-                icon={<EditIcon />}
-                label="Editar"
+                onClick={() => handleUpdateNote(actionType.CLOSE)}
+                color={item.isClosed ? "blue.500" : "#C9C9C9"}
+                icon={
+                  item.isClosed ? <LockCloseIcon /> : <LockOpenIcon fill="#C9C9C9" />
+                }
+                label={item.isClosed ? "Cerrado" : "Cerrar"}
               />
-            ) : null}
 
-            <ActionLink
-              onClick={() => handleUpdateNote(actionType.CLOSE)}
-              color={item.isClosed ? "blue.500" : "#C9C9C9"}
-              icon={
-                item.isClosed ? <LockCloseIcon /> : <LockOpenIcon fill="#C9C9C9" />
-              }
-              label={item.isClosed ? "Cerrado" : "Cerrar"}
-            />
+              {role === RoleType.USER && isMessage ? null : (
+                <>
+                  <ActionLink
+                    onClick={() => handleUpdateNote(actionType.FORMALIZED)}
+                    color={item.formalized ? "#0085FF" : "#C9C9C9"}
+                    icon={
+                      <FormalizedIcon
+                        fill={item.formalized ? "#0085FF" : "#C9C9C9"}
+                      />
+                    }
+                    label={item.formalized ? "Formalizado" : "Formalizar"}
+                  />
 
-            {role === RoleType.USER && isMessage ? null : (
-              <>
-                <ActionLink
-                  onClick={() => handleUpdateNote(actionType.FORMALIZED)}
-                  color={item.formalized ? "#0085FF" : "#C9C9C9"}
-                  icon={
-                    <FormalizedIcon fill={item.formalized ? "#0085FF" : "#C9C9C9"} />
-                  }
-                  label={item.formalized ? "Formalizado" : "Formalizar"}
-                />
-
-                <ActionLink
-                  onClick={onDelete}
-                  color="error"
-                  icon={<DeleteIcon />}
-                  label="Eliminar"
-                />
-              </>
-            )}
-          </>
+                  <ActionLink
+                    onClick={onDelete}
+                    color="error"
+                    icon={<DeleteIcon />}
+                    label="Eliminar"
+                  />
+                </>
+              )}
+            </>
+          ) : null}
         </Flex>
       </Flex>
 
