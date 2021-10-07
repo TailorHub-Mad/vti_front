@@ -225,15 +225,7 @@ const sectores = () => {
           onAdd={() => setIsSectorModalOpen(true)}
         />
       ) : null}
-      {isEmptyData ? (
-        <ViewEmptyState
-          message="Añadir sectores a la plataforma"
-          importButtonText="Importar"
-          addButtonText="Añadir sector"
-          onImport={() => setShowImportModal(true)}
-          onAdd={() => setIsSectorModalOpen(true)}
-        />
-      ) : null}
+
       {sectorsData ? (
         <SectorsTable
           sectors={sectorsData}
