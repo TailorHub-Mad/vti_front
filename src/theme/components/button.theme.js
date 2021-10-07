@@ -126,7 +126,13 @@ export const Button = {
       color: "blue.500",
       width: "fit-content",
       margin: "0 auto",
-      display: "block"
+      display: "block",
+      _disabled: {
+        opacity: 0.3,
+        pointerEvents: "none",
+        bgColor: "transparent",
+        borderColor: "transparent"
+      }
     }
   },
   defaultProps: {
