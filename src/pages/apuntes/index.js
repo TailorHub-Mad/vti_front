@@ -168,7 +168,7 @@ const apuntes = () => {
         return await mutate()
       }
 
-      await deleteNote(data)
+      await deleteNote(noteToDelete)
       showToast("Apunte borrado correctamente")
 
       const updatedNotes = []

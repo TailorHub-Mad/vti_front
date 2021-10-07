@@ -154,11 +154,13 @@ export const NewNoteForm = ({
 
     if (!project || !project.value) return
 
-    const { testSystems } = noteFromProject
-      ? noteFromProject
-      : projectData.find((p) => p._id === project.value)
+    const data = noteFromProject ?? projectData.find((p) => p._id === project.value)
 
-    setSystemOptions(noteFromProject ? testSystems : formatSelectOption(testSystems))
+    if (!data?.testSystems) return
+
+    setSystemOptions(
+      noteFromProject ? data?.testSystems : formatSelectOption(data?.testSystems)
+    )
   }, [value.project])
 
   const inputRefObj = {
