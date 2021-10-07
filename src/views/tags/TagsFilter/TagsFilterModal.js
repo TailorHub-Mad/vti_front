@@ -10,11 +10,13 @@ export const TagsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const [showSaveFilter, setShowSaveFilter] = useState(false)
   const router = useRouter()
   const isProjectTag = router.query.type === "projects"
-  const initialValues = isProjectTag ? {
-    project_tags: [""]
-  } : {
-    note_tags: [""]
-  }
+  const initialValues = isProjectTag
+    ? {
+        project_tags: [""]
+      }
+    : {
+        note_tags: [""]
+      }
   const [filterValues, setFilterValues] = useState(initialValues)
   const handleReset = () => {
     //TODO Los inputs no reflejan el reset
