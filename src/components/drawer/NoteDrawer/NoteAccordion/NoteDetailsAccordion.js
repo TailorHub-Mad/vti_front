@@ -106,7 +106,6 @@ export const NoteDetailsAccordion = ({
         <NoteAccordionItem title="Adjuntos" icon={<CloudLineIcon mr="8px" />}>
           {files.map((file, idx) => {
             const name = file.url?.split("-")[1]
-
             return (
               <Button
                 key={`${file.name}-${idx}`}

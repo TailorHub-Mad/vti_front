@@ -25,7 +25,7 @@ export const NoteAccordionItem = ({ title, icon, children, ...props }) => {
               <Flex align="center">
                 {React.cloneElement(icon, { mr: "8px" })}
                 <Text variant="d_s_medium" mt="4px">
-                  {title}{" "}
+                  {title}
                 </Text>
               </Flex>
               {isExpanded ? (

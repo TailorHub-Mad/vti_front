@@ -14,7 +14,8 @@ export const NewNoteForm = ({
   onChange,
   noteToUpdate,
   noteFromProject,
-  submitIsDisabled
+  submitIsDisabled,
+  isUpdate
 }) => {
   const { getProjects } = useProjectApi()
   const { getNoteTags } = useTagApi()
@@ -102,7 +103,7 @@ export const NewNoteForm = ({
         label: "Link (opcional)"
       }
     },
-    document: {
+    file: {
       type: "attachment",
       config: {
         label: "Adjunta tus documentos"
@@ -168,7 +169,7 @@ export const NewNoteForm = ({
     textarea: <TextAreaInput />,
     select: <InputSelect />,
     add_select: <AddSelect />,
-    attachment: <FileInputForm />
+    attachment: <FileInputForm isUpdate={isUpdate} />
   }
 
   return (
@@ -188,7 +189,7 @@ export const NewNoteForm = ({
   )
 }
 
-const FileInputForm = ({ value, onChange, isDisabled }) => {
+const FileInputForm = ({ value, onChange, isDisabled, isUpdate }) => {
   return (
     <Flex flexDirection="column" mb="24px">
       <FormLabel
@@ -201,7 +202,12 @@ const FileInputForm = ({ value, onChange, isDisabled }) => {
       >
         Adjunta tus documentos (opcional)
       </FormLabel>
-      <FileInput value={value} onChange={onChange} isDisabled={isDisabled} />
+      <FileInput
+        value={value}
+        onChange={onChange}
+        isDisabled={isDisabled}
+        isUpdate={isUpdate}
+      />
     </Flex>
   )
 }

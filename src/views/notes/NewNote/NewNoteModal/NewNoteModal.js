@@ -168,6 +168,7 @@ export const NewNoteModal = ({
           noteToUpdate={noteToUpdate}
           noteFromProject={noteFromProject}
           submitIsDisabled={submitIsDisabled}
+          isUpdate={Boolean(noteToUpdate)}
         />
         <Button
           w="194px"
