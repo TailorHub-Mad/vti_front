@@ -39,7 +39,8 @@ export const NewProjectForm = ({
         tags:
           projectToUpdate.tags.length > 0
             ? projectToUpdate.tags.map((tag) => ({
-                label: tag.name
+                label: tag.name,
+                value: tag._id
               }))
             : undefined
       }
@@ -216,9 +217,8 @@ export const NewProjectForm = ({
   useEffect(() => {
     if (!projectToUpdate || tagOptions.length === 0) return
 
-    const tags = tagOptions.filter(
-      (_tag) => _tag.label === projectToUpdate?.tags.name
-    )
+    const _tagsFormat = projectToUpdate?.tags.map((t) => t.name)
+    const tags = tagOptions.filter((_tag) => _tagsFormat.includes(_tag.label))
 
     if (tags.length === 0) return
     handleFormChange("tags", tags)
