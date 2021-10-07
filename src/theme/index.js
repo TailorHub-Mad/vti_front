@@ -11,6 +11,7 @@ import { IconButton } from "./components/icon_button.theme"
 import { breakpoints } from "./fundations/breakpoints.theme"
 import { textStyles } from "./fundations/textStyles.theme"
 import { colors } from "./fundations/colors.theme"
+import { FormLabel } from "./components/formLabel.theme"
 import { icons } from "./fundations/icons.theme"
 
 const theme = extendTheme({
@@ -32,7 +33,8 @@ const theme = extendTheme({
     IconButton,
     Icon,
     Checkbox,
-    Switch
+    Switch,
+    FormLabel
   },
   icons
 })
