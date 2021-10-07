@@ -197,9 +197,7 @@ const apuntes = () => {
   }
 
   const handleUpdate = (id) => {
-    // TODO -> create full notes
     const note = notesData.find((note) => note._id === id)
-
     setNoteToUpdate(note)
     setIsNoteModalOpen(true)
   }
@@ -315,7 +313,7 @@ const apuntes = () => {
       />
 
       <NewNoteModal
-        clientToUpdate={noteToUpdate}
+        noteToUpdate={noteToUpdate}
         isOpen={isNoteModalOpen}
         onClose={handleOnCloseModal}
       />

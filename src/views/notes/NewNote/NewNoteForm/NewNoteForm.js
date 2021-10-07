@@ -24,6 +24,19 @@ export const NewNoteForm = ({
   const [systemOptions, setSystemOptions] = useState([])
   const [tagOptions, setTagOptions] = useState([])
 
+  const formatValues = !noteToUpdate
+    ? { ...value }
+    : {
+        ...value,
+        tags:
+          noteToUpdate.tags.length > 0
+            ? noteToUpdate.tags.map((tag) => ({
+                label: tag.name,
+                value: tag._id
+              }))
+            : undefined
+      }
+
   const formatSelectOption = (data) =>
     data.map((d) => ({ label: d.alias, value: d._id }))
 
@@ -44,7 +57,7 @@ export const NewNoteForm = ({
         placeholder: "Selecciona",
         label: "Selecciona el proyecto*",
         options: projectOptions,
-        isDisabled: Boolean(noteFromProject)
+        isDisabled: Boolean(noteFromProject) || Boolean(noteToUpdate)
       }
     },
     system: {
@@ -54,7 +67,8 @@ export const NewNoteForm = ({
         label: "Selecciona el sistema utilizado en el proyecto*",
         options: systemOptions,
         additemlabel: "Añadir ",
-        removeitemlabel: "Eliminar "
+        removeitemlabel: "Eliminar ",
+        isDisabled: Boolean(noteToUpdate)
       }
     },
     title: {
@@ -117,7 +131,7 @@ export const NewNoteForm = ({
     if (!noteToUpdate || projectOptions.length === 0) return
 
     const project = projectOptions.find(
-      (_project) => _project.label === noteToUpdate?.project
+      (_project) => _project.label === noteToUpdate?.projects[0].alias
     )
 
     handleFormChange("project", project)
@@ -127,9 +141,11 @@ export const NewNoteForm = ({
   useEffect(() => {
     if (!noteToUpdate || tagOptions.length === 0) return
 
-    const tags = tagOptions.filter((_tag) => _tag.label === noteToUpdate?.tags.name)
+    const _tagsFormat = noteToUpdate.tags.map((t) => t.name)
+    const tags = tagOptions.filter((_tag) => _tagsFormat.includes(_tag.label))
 
     if (tags.length === 0) return
+
     handleFormChange("tags", tags)
   }, [noteToUpdate, tagOptions])
 
@@ -157,7 +173,7 @@ export const NewNoteForm = ({
     <>
       {Object.entries(formInputs).map(([name, { type, config }], index) => {
         return React.cloneElement(inputRefObj[type], {
-          value: value[name],
+          value: formatValues[name],
           onChange: (val) => handleFormChange(name, val),
           marginBottom: "24px",
           isDisabled:

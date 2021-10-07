@@ -72,7 +72,7 @@ export const AddSelect = ({
       return null
     if (inputValues.length === options.length) return null
 
-    const handleOnClick = () => setInputValues([undefined, ...inputValues])
+    const handleOnClick = () => setInputValues([...inputValues, undefined])
 
     return (
       <>

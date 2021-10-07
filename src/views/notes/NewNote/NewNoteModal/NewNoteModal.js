@@ -26,10 +26,10 @@ export const NewNoteModal = ({
   ...props
 }) => {
   const { showToast } = useContext(ToastContext)
-  const { createNote } = useNoteApi()
+  const { createNote, updateNote } = useNoteApi()
   const { mutate } = useSWRConfig()
 
-  const [values, setValues] = useState([{}])
+  const [values, setValues] = useState(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isUpdate = Boolean(noteToUpdate)
@@ -69,6 +69,29 @@ export const NewNoteModal = ({
     return formData
   }
 
+  const formatUpdateNote = (note) => {
+    const formatData = {
+      // projects: note.project.value,
+      // testSystems: note.system.map((s) => s.value),
+      title: note.title,
+      description: note.description,
+      tags: note.tags.map((t) => t.value)
+    }
+
+    if (note?.link) formatData["link"] = note.link
+    if (note?.document) formatData["file"] = note.document
+
+    const formData = new FormData()
+
+    Object.entries(formatData).forEach(([key, value]) => {
+      Array.isArray(value)
+        ? value.forEach((v) => formData.append(key, v))
+        : formData.append(key, value)
+    })
+
+    return formData
+  }
+
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateNote() : await handleCreateNote()
@@ -85,13 +108,19 @@ export const NewNoteModal = ({
     try {
       const note = formatCreateNote(values)
       await createNote(note)
+      setValues(initialValues)
     } catch (error) {
       errorHandler(error)
     }
   }
 
   const handleUpdateNote = async () => {
-    return null
+    try {
+      const note = formatUpdateNote(values)
+      await updateNote(noteToUpdate._id, note)
+    } catch (error) {
+      errorHandler(error)
+    }
   }
 
   const handleOnClose = () => {
@@ -105,14 +134,17 @@ export const NewNoteModal = ({
 
   useEffect(() => {
     if (!noteToUpdate) return
+
     const _note = {
-      project: noteToUpdate.project,
-      system: noteToUpdate.system,
+      project: noteToUpdate.projects[0].alias,
+      system: noteToUpdate.testSystems.map((ts) => ts.alias),
       title: noteToUpdate.title,
       description: noteToUpdate.description,
       link: noteToUpdate.link,
-      file: noteToUpdate.documents
+      file: noteToUpdate.documents,
+      tags: noteToUpdate.tags.map((t) => t.name)
     }
+
     setValues(_note)
   }, [noteToUpdate])
 
