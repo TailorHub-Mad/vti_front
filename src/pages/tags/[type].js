@@ -27,6 +27,10 @@ import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { NewTagModal } from "../../views/tags/NewTag/NewTagModal/NewTagModal"
 import { TagsHeader } from "../../views/tags/TagsHeader/TagsHeader"
 import download from "downloadjs"
+import { generateFilterQueryObj } from "../../utils/functions/filter"
+import { generateQueryStr } from "../../utils/functions/global"
+import { TagsFilterModal } from "../../views/tags/TagsFilter/TagsFilterModal"
+import { TAGS_FILTER_KEYS } from "../../utils/constants/filter"
 
 const infoByType = {
   proyecto: {
@@ -60,8 +64,10 @@ const tags = () => {
     infoByType[type].fetchKey
   )
 
+  const [showFilterModal, setShowFilterModal] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
   const [showExportModal, setShowExportModal] = useState(false)
+
   const [activeTab, setActiveTab] = useState("inheritance")
 
   // Create - Update state
@@ -142,6 +148,14 @@ const tags = () => {
   // TODO
   const onSearch = () => {}
 
+  const handleOnFilter = (values) => {
+    console.log(generateQueryStr(generateFilterQueryObj(TAGS_FILTER_KEYS, values)))
+    // setFetchState(fetchType.FILTER)
+    // setFetchOptions({
+    //   [fetchOption.FILTER]: filter
+    // })
+  }
+
   useEffect(() => {
     if (!infoByType[router?.query?.type]) router.push(PATHS.notFound)
   }, [])
@@ -161,6 +175,12 @@ const tags = () => {
       >
         {handleDeleteMessage()}
       </Popup>
+
+      <TagsFilterModal
+        isOpen={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onFilter={(values) => handleOnFilter(values)}
+      />
 
       <NewTagModal
         tagToUpdate={tagToUpdate}
@@ -191,11 +211,11 @@ const tags = () => {
           <ToolBar
             onAdd={() => setIsTagModalOpen(true)}
             onSearch={onSearch}
+            onFilter={() => setShowFilterModal(true)}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
             addLabel={infoByType[type].addTitle}
             searchPlaceholder="Busqueda por ID, Alias"
-            noFilter
             noGroup
             icon={<AddTagIcon />}
           />

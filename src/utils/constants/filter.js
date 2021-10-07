@@ -26,3 +26,14 @@ export const TESTSYSTEMS_FILTER_KEYS = {
   sector: "testSystems.sector",
   project_tags: "testSystems.projects.tags.name"
 }
+
+export const TAGS_FILTER_KEYS = {
+  project_tags: "tags.name",
+  note_tags: "tags.name",
+}
+
+export const USERS_FILTER_KEYS = {
+  project: "users.project._id",
+  department: "users.department._id",
+  focus_point: "users.focusPoint._id",
+}

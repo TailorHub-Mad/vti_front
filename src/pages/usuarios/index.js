@@ -14,7 +14,11 @@ import { NewUserModal } from "../../views/users/NewUser/NewUserModal/NewUserModa
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { UsersLineIcon } from "../../components/icons/UsersLineIcon"
-import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
+import {
+  checkDataIsEmpty,
+  generateQueryStr,
+  getFieldObjectById
+} from "../../utils/functions/global"
 import { userFetchHandler } from "../../swr/user.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
@@ -26,6 +30,10 @@ import {
   transformUsersToExport,
   userDataTransform
 } from "../../utils/functions/import_export/users_helpers"
+import { USERS_FILTER_KEYS } from "../../utils/constants/filter"
+
+import { generateFilterQueryObj } from "../../utils/functions/filter"
+import { UsersFilterModal } from "../../views/users/UsersFilter/UsersFilterModal"
 
 const USERS_GROUP_OPTIONS = [
   {
@@ -43,6 +51,8 @@ const usuarios = () => {
   // States
   const [showImportModal, setShowImportModal] = useState(false)
   const [showExportModal, setShowExportModal] = useState(false)
+  const [showFilterModal, setShowFilterModal] = useState(false)
+
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
   const [isUserModalOpen, setIsUserModalOpen] = useState(false)
@@ -166,6 +176,13 @@ const usuarios = () => {
       [fetchOption.GROUP]: group
     })
   }
+  const handleOnFilter = (values) => {
+    console.log(generateQueryStr(generateFilterQueryObj(USERS_FILTER_KEYS, values)))
+    // setFetchState(fetchType.FILTER)
+    // setFetchOptions({
+    //   [fetchOption.FILTER]: filter
+    // })
+  }
 
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
@@ -182,7 +199,11 @@ const usuarios = () => {
       >
         {handleDeleteMessage()}
       </Popup>
-
+      <UsersFilterModal
+        isOpen={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onFilter={(values) => handleOnFilter(values)}
+      />
       <NewUserModal
         userToUpdate={userToUpdate}
         isOpen={isUserModalOpen}
@@ -211,9 +232,9 @@ const usuarios = () => {
             onGroup={handleOnGroup}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
+            onFilter={() => setShowFilterModal(true)}
             addLabel="Añadir usuario"
             searchPlaceholder="Busqueda por ID, Alias"
-            noFilter
             icon={<UsersLineIcon />}
             fetchState={fetchState}
             groupOptions={USERS_GROUP_OPTIONS}
