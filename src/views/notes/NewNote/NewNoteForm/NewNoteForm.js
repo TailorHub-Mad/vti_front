@@ -103,7 +103,7 @@ export const NewNoteForm = ({
         label: "Link (opcional)"
       }
     },
-    file: {
+    documents: {
       type: "attachment",
       config: {
         label: "Adjunta tus documentos"

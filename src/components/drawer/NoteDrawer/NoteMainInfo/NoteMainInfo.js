@@ -83,58 +83,58 @@ export const NoteMainInfo = ({
           {new Date(item.updatedAt)?.toLocaleDateString()}
         </Text>
         <Flex>
-          {!isMessage || isMyMessage ? (
+          <>
+            {/* {!isMessage || isMyMessage ? (
             <>
               {!isMessage ? (
-                <ActionLink
-                  onClick={onEdit}
-                  color="grey"
-                  icon={<EditIcon />}
-                  label="Editar"
-                />
-              ) : null}
+                
+              ) : null} */}
 
-              {isMessage && editAllowed ? (
-                <ActionLink
-                  onClick={onEdit}
-                  color="grey"
-                  icon={<EditIcon />}
-                  label="Editar"
-                />
-              ) : null}
+            <ActionLink
+              onClick={onEdit}
+              color="grey"
+              icon={<EditIcon />}
+              label="Editar"
+            />
 
+            {isMessage && editAllowed ? (
               <ActionLink
-                onClick={() => handleUpdateNote(actionType.CLOSE)}
-                color={item.isClosed ? "blue.500" : "#C9C9C9"}
-                icon={
-                  item.isClosed ? <LockCloseIcon /> : <LockOpenIcon fill="#C9C9C9" />
-                }
-                label={item.isClosed ? "Cerrado" : "Cerrar"}
+                onClick={onEdit}
+                color="grey"
+                icon={<EditIcon />}
+                label="Editar"
               />
+            ) : null}
 
-              {role === RoleType.USER && isMessage ? null : (
-                <>
-                  <ActionLink
-                    onClick={() => handleUpdateNote(actionType.FORMALIZED)}
-                    color={item.formalized ? "#0085FF" : "#C9C9C9"}
-                    icon={
-                      <FormalizedIcon
-                        fill={item.formalized ? "#0085FF" : "#C9C9C9"}
-                      />
-                    }
-                    label={item.formalized ? "Formalizado" : "Formalizar"}
-                  />
+            <ActionLink
+              onClick={() => handleUpdateNote(actionType.CLOSE)}
+              color={item.isClosed ? "blue.500" : "#C9C9C9"}
+              icon={
+                item.isClosed ? <LockCloseIcon /> : <LockOpenIcon fill="#C9C9C9" />
+              }
+              label={item.isClosed ? "Cerrado" : "Cerrar"}
+            />
 
-                  <ActionLink
-                    onClick={onDelete}
-                    color="error"
-                    icon={<DeleteIcon />}
-                    label="Eliminar"
-                  />
-                </>
-              )}
-            </>
-          ) : null}
+            {role === RoleType.USER && isMessage ? null : (
+              <>
+                <ActionLink
+                  onClick={() => handleUpdateNote(actionType.FORMALIZED)}
+                  color={item.formalized ? "#0085FF" : "#C9C9C9"}
+                  icon={
+                    <FormalizedIcon fill={item.formalized ? "#0085FF" : "#C9C9C9"} />
+                  }
+                  label={item.formalized ? "Formalizado" : "Formalizar"}
+                />
+
+                <ActionLink
+                  onClick={onDelete}
+                  color="error"
+                  icon={<DeleteIcon />}
+                  label="Eliminar"
+                />
+              </>
+            )}
+          </>
         </Flex>
       </Flex>
 

@@ -6,6 +6,7 @@ import useNoteApi from "../../../../hooks/api/useNoteApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
+import { createFormData } from "../../../../utils/functions/formdata"
 import { NewNoteForm } from "../NewNoteForm/NewNoteForm"
 
 const initialValues = {
@@ -15,7 +16,7 @@ const initialValues = {
   description: undefined,
   tags: undefined,
   link: undefined,
-  document: undefined
+  documents: undefined
 }
 
 export const NewNoteModal = ({
@@ -56,7 +57,7 @@ export const NewNoteModal = ({
     }
 
     if (note?.link) formatData["link"] = note.link
-    if (note?.document) formatData["file"] = note.document
+    if (note?.documents) formatData["file"] = note.documents
 
     const formData = new FormData()
 
@@ -70,18 +71,33 @@ export const NewNoteModal = ({
   }
 
   const formatUpdateNote = (note) => {
+    const _formatData = {}
     const formatData = {
-      // projects: note.project.value,
-      // testSystems: note.system.map((s) => s.value),
       title: note.title,
       description: note.description,
       tags: note.tags.map((t) => t.value)
     }
 
     if (note?.link) formatData["link"] = note.link
-    if (note?.document) formatData["file"] = note.document
 
-    const formData = new FormData()
+    if (note?.documents) {
+      const { files, documents } = note.documents.reduce(
+        (acc, doc) => {
+          if (doc.path) acc.files.push(doc)
+          else acc.documents.push(doc)
+          return acc
+        },
+        {
+          files: [],
+          documents: []
+        }
+      )
+
+      _formatData["documents"] = documents
+      _formatData["file"] = files
+    }
+
+    const formData = createFormData(_formatData)
 
     Object.entries(formatData).forEach(([key, value]) => {
       Array.isArray(value)
@@ -141,7 +157,7 @@ export const NewNoteModal = ({
       title: noteToUpdate.title,
       description: noteToUpdate.description,
       link: noteToUpdate.link,
-      file: noteToUpdate.documents,
+      documents: noteToUpdate.documents,
       tags: noteToUpdate.tags.map((t) => t.name)
     }
 

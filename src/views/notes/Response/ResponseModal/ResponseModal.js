@@ -7,6 +7,7 @@ import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
 import { ResponseForm } from "../ResponseForm/ResponseForm"
+import { createFormData } from "../../../../utils/functions/formdata"
 
 export const ResponseModal = ({
   isOpen,
@@ -48,14 +49,31 @@ export const ResponseModal = ({
   }
 
   const formatUpdateMessage = (note) => {
+    const _formatData = {}
     const formatData = {
       message: note.message
     }
 
     if (note?.link) formatData["link"] = note.link
-    if (note?.documents) formatData["documents"] = note.documents
 
-    const formData = new FormData()
+    if (note?.documents) {
+      const { files, documents } = note.documents.reduce(
+        (acc, doc) => {
+          if (doc.path) acc.files.push(doc)
+          else acc.documents.push(doc)
+          return acc
+        },
+        {
+          files: [],
+          documents: []
+        }
+      )
+
+      _formatData["documents"] = documents
+      _formatData["file"] = files
+    }
+
+    const formData = createFormData(_formatData)
 
     Object.entries(formatData).forEach(([key, value]) => {
       Array.isArray(value)
