@@ -20,6 +20,7 @@ export const NoteDetailsAccordion = ({
   name,
   noteTags,
   testSystems,
+  description,
   link,
   message,
   files,
@@ -36,8 +37,16 @@ export const NoteDetailsAccordion = ({
     downloadFile(response, name)
   }
 
+  console.log(files)
+
   return (
     <Accordion allowToggle allowMultiple {...props}>
+      {!isMessage && description ? (
+        <NoteAccordionItem title="Descripción" icon={<PageLineIcon mr="8px" />}>
+          {description}
+        </NoteAccordionItem>
+      ) : null}
+
       {!isMessage && testSystems ? (
         <NoteAccordionItem
           title="Sistema de ensayo del proyecto"
@@ -99,7 +108,6 @@ export const NoteDetailsAccordion = ({
         <NoteAccordionItem title="Adjuntos" icon={<CloudLineIcon mr="8px" />}>
           {files.map((file, idx) => {
             const name = file.url?.split("-")[1]
-
             return (
               <Button
                 key={`${file.name}-${idx}`}

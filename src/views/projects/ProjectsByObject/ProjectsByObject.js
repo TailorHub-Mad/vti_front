@@ -21,7 +21,7 @@ import {
   transformProjectsToExport
 } from "../../../utils/functions/import_export/projects_helper"
 import { getGroupOptionLabel } from "../../../utils/functions/objects"
-import { ViewEmptyState } from "../../common/ViewEmptyState"
+import { ViewNotFoundState } from "../../common/ViewNotFoundState"
 import { FinishProjectModal } from "../NewProject/FinishProjectModal/FinishProjectModal"
 import { NewProjectModal } from "../NewProject/NewProjectModal/NewProjectModal"
 import { ProjectsTable } from "../ProjectTable/ProjectTable"
@@ -47,7 +47,8 @@ export const ProjectsByObject = ({
   fetchState,
   setFetchState,
   fetchOptions,
-  setFetchOptions
+  setFetchOptions,
+  isEmptyData
 }) => {
   // Hooks
   const { deleteProject, createProject } = useProjectApi()
@@ -55,7 +56,6 @@ export const ProjectsByObject = ({
   const { mutate } = useSWRConfig()
 
   // States
-
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
   const [projectToUpdate, setProjectToUpdate] = useState(null)
   const [deleteType, setDeleteType] = useState(null)
@@ -65,7 +65,15 @@ export const ProjectsByObject = ({
   const [projectToFinish, setProjectToFinish] = useState(null)
   const [isFinishProjectModalOpen, setIsFinishProjectModalOpen] = useState(null)
 
+  const isSearch = fetchState == fetchType.SEARCH
+
   // Handlers views
+  const isToolbarHidden = () => {
+    if (isEmptyData && !isSearch) return false
+
+    return true
+  }
+
   const handleImportProjects = async (data) => {
     //TODO Gestión de errores y update de SWR
 
@@ -156,7 +164,7 @@ export const ProjectsByObject = ({
     try {
       const projectsQueue = projectsId.map((id) => deleteProject(id))
       await Promise.all(projectsQueue)
-      showToast("Clientes borrados correctamente")
+      showToast("Proyectos borrados correctamente")
       const updatedProjects = []
       const filterProjects = projects.filter(
         (project) => !projectsId.includes(project._id)
@@ -174,20 +182,43 @@ export const ProjectsByObject = ({
     setIsProjectModalOpen(true)
   }
 
-  const onSearch = (search) =>
+  // Filters
+  const onSearch = (search) => {
+    if (!search) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.SEARCH]: null
+      })
+      return
+    }
+
+    setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
     })
+  }
 
-  const handleOnGroup = () => {
+  const handleOnGroup = (group) => {
+    if (!group) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.GROUP]: null
+      })
+      return
+    }
+
     setFetchState(fetchType.GROUP)
+    setFetchOptions({
+      [fetchOption.GROUP]: group
+    })
   }
 
-  const handleOnFilter = () => {
+  const handleOnFilter = (filter) => {
     setFetchState(fetchType.FILTER)
+    setFetchOptions({
+      [fetchOption.FILTER]: filter
+    })
   }
-
-  const isEmptyData = projectsData.length === 0
 
   return (
     <>
@@ -230,7 +261,7 @@ export const ProjectsByObject = ({
 
       <PageHeader>
         <BreadCrumbs customURL={customURL} lastElement="Proyectos" />
-        {projectsData ? (
+        {isToolbarHidden() ? (
           <ToolBar
             onAdd={() => setIsProjectModalOpen(true)}
             onSearch={onSearch}
@@ -243,18 +274,12 @@ export const ProjectsByObject = ({
             groupOptions={PROJECTS_GROUP_OPTIONS}
             icon={<AddProjectIcon />}
             fetchState={fetchState}
+            noImport
           />
         ) : null}
       </PageHeader>
-      {isEmptyData ? (
-        <ViewEmptyState
-          message="Añadir proyectos a la plataforma"
-          importButtonText="Importar"
-          addButtonText="Añadir proyecto"
-          onImport={() => setShowImportModal(true)}
-          onAdd={() => setIsProjectModalOpen(true)}
-        />
-      ) : (
+      {isEmptyData ? <ViewNotFoundState text="No hay proyectos asociados" /> : null}
+      {projectsData ? (
         <ProjectsTable
           fetchState={fetchState}
           projects={projectsData}
@@ -269,7 +294,7 @@ export const ProjectsByObject = ({
             fetchOptions[fetchOption.GROUP]
           )}
         />
-      )}
+      ) : null}
     </>
   )
 }

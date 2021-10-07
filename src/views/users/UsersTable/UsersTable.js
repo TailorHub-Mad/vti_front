@@ -2,10 +2,19 @@ import { useMemo } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import useTableActions from "../../../hooks/useTableActions"
+import { fetchType } from "../../../utils/constants/swr"
 import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
 import { formatUser, TABLE_USERS_HEAD } from "./utils"
 
-export const UsersTable = ({ users = [], onDelete, onEdit, onDeleteMany }) => {
+export const UsersTable = ({
+  users = [],
+  onDelete,
+  onEdit,
+  fetchState,
+  onGroup,
+  groupOption,
+  onDeleteMany
+}) => {
   const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
     useTableActions()
 
@@ -20,7 +29,7 @@ export const UsersTable = ({ users = [], onDelete, onEdit, onDeleteMany }) => {
     return onDelete(selectedRowsKeys[0])
   }
 
-  const usersData = formatUser(users)
+  const usersData = formatUser(users, fetchState)
   const configTable = {
     components: TABLE_COMPONENTS,
     head: {
@@ -41,6 +50,8 @@ export const UsersTable = ({ users = [], onDelete, onEdit, onDeleteMany }) => {
           onDelete={handleOnDelete}
           selectAllRows={() => handleSelectAllRows(usersData)}
           checked={allRowsAreSelected}
+          onGroup={onGroup}
+          groupOption={groupOption}
         />
       }
       {...TABLE_STYLE}
@@ -49,6 +60,7 @@ export const UsersTable = ({ users = [], onDelete, onEdit, onDeleteMany }) => {
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
       optionsDisabled={selectedRowsKeys.length > 1}
+      isGrouped={fetchState === fetchType.GROUP}
     />
   )
 }

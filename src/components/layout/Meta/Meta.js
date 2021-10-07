@@ -14,12 +14,12 @@ const Meta = ({ title, description }) => (
         @font-face {
           font-family: "Noway-Medium";
           src: url("/fonts/noway/Noway-Medium.ttf") format("truetype");
-          font-display: swap;
+          font-display: block;
         }
         @font-face {
           font-family: "Noway-Regular";
           src: url("/fonts/noway/Noway-Regular.ttf") format("truetype");
-          font-display: swap;
+          font-display: block;
         }
       `}
     </style>

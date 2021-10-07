@@ -25,6 +25,7 @@ import {
   departmentDataTransform,
   transformDepartmentsToExport
 } from "../../utils/functions/import_export/departments_helpers.js"
+import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 
 const departamentos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -53,8 +54,32 @@ const departamentos = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const departmentsData = data && !isEmptyData ? data : null
 
-  // TODO
+  const isSearch = fetchState == fetchType.SEARCH
 
+  // Handlers views
+  const isToolbarHidden = () => {
+    if (isLoading) return false
+    if (isEmptyData && !isSearch) return false
+
+    return true
+  }
+
+  const handleOpenPopup = (departmentsToDelete, type) => {
+    setDeleteType(type)
+    setDepartmentsToDelete(departmentsToDelete)
+  }
+
+  const handleClosePopup = () => {
+    setDeleteType(null)
+    setDepartmentsToDelete(null)
+  }
+
+  const handleOnCloseModal = () => {
+    setDepartmentToUpdate(null)
+    setIsDepartmentModalOpen(false)
+  }
+
+  // Handle CRUD
   const handleImportSectors = async (data) => {
     //TODO Gestión de errores y update de SWR
 
@@ -80,21 +105,6 @@ const departamentos = () => {
       `departamentos_export_${new Date().toLocaleDateString()}`,
       "text/csv"
     )
-  }
-
-  const handleOpenPopup = (departmentsToDelete, type) => {
-    setDeleteType(type)
-    setDepartmentsToDelete(departmentsToDelete)
-  }
-
-  const handleClosePopup = () => {
-    setDeleteType(null)
-    setDepartmentsToDelete(null)
-  }
-
-  const handleOnCloseModal = () => {
-    setDepartmentToUpdate(null)
-    setIsDepartmentModalOpen(false)
   }
 
   const handleDeleteMessage = () => {
@@ -143,7 +153,16 @@ const departamentos = () => {
     setIsDepartmentModalOpen(true)
   }
 
+  // Filters
   const onSearch = (search) => {
+    if (!search) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.SEARCH]: null
+      })
+      return
+    }
+
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
@@ -187,7 +206,7 @@ const departamentos = () => {
 
       <PageHeader>
         <BreadCrumbs />
-        {departmentsData ? (
+        {isToolbarHidden() ? (
           <ToolBar
             onAdd={() => setIsDepartmentModalOpen(true)}
             onSearch={onSearch}
@@ -202,7 +221,9 @@ const departamentos = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData ? (
+      {isEmptyData && isSearch ? (
+        <ViewNotFoundState />
+      ) : isEmptyData ? (
         <ViewEmptyState
           message="Añadir departamentos a la plataforma"
           importButtonText="Importar"

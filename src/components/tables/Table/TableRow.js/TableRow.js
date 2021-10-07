@@ -4,6 +4,7 @@ import { variantGeneralTag } from "../../../../utils/constants/tabs"
 
 export const TableRow = ({
   item,
+  keyGroup,
   templateColumns,
   isSelected,
   components,
@@ -91,6 +92,7 @@ export const TableRow = ({
           return React.cloneElement(components[head[name]?.type], {
             ...head[name],
             id: item.id.value,
+            keyGroup: keyGroup,
             key: `${name}-${idx}`,
             disabled: optionsDisabled,
             ...head[name].config

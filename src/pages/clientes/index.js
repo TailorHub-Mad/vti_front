@@ -30,9 +30,8 @@ import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 const clientes = () => {
   // Hooks
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { deleteClient } = useClientApi()
+  const { deleteClient, createClient } = useClientApi()
   const { showToast } = useContext(ToastContext)
-  const { createClient } = useClientApi()
 
   // States
   const [fetchState, setFetchState] = useState(fetchType.ALL)
@@ -81,8 +80,13 @@ const clientes = () => {
   // Handlers CRUD
   const handleImportClients = async (data) => {
     //TODO Gestión de errores y update de SWR
+
     try {
-      await createClient(data)
+      const clientsCreated = []
+      for (let index = 0; index < data.length; index++) {
+        const cl = await createClient(data[index])
+        clientsCreated.push(cl)
+      }
       await mutate()
       setShowImportModal(false)
       showToast("Clientes importados correctamente")

@@ -4,12 +4,17 @@ import { fetchOption } from "../utils/constants/swr"
 import { SWR_CACHE_KEYS } from "../utils/constants/swr"
 
 export const sectorFetchHandler = (state, options) => {
-  const { getSectors, getSector } = useSectorApi()
+  const { getSectors, getSector, getSearchSectors } = useSectorApi()
 
   const fetchHandler = {
     all: () => useFetchSWR(SWR_CACHE_KEYS.sectors, getSectors),
     id: () =>
-      useFetchSWR([SWR_CACHE_KEYS.sector, options[fetchOption.ID]], getSector)
+      useFetchSWR([SWR_CACHE_KEYS.sector, options[fetchOption.ID]], getSector),
+    search: () =>
+      useFetchSWR(
+        [SWR_CACHE_KEYS.searchSectors, options[fetchOption.SEARCH]],
+        getSearchSectors
+      )
   }
 
   return fetchHandler[state]()

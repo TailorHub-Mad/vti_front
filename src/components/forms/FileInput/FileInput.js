@@ -1,3 +1,4 @@
+import { DeleteIcon } from "@chakra-ui/icons"
 import { Box, Flex, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { useDropzone } from "react-dropzone"
@@ -40,6 +41,12 @@ export const FileInput = ({
     }
   }
 
+  const handleDelete = (position) => {
+    const newFilteredFiles = [...value]
+    newFilteredFiles.splice(position, 1)
+    onChange(newFilteredFiles)
+  }
+
   const formatFileName = (file) =>
     isUpdate ? file?.path || file.url.split("-")[1] : file.path
 
@@ -72,9 +79,21 @@ export const FileInput = ({
         <Flex>
           {value.map((v, idx) => {
             return (
-              <Text key={`${v.size}-${idx}`} mt="8px">
-                {idx !== 0 ? `- ${formatFileName(v)}` : `${formatFileName(v)} `}
-              </Text>
+              <Flex
+                key={`${v.size}-${idx}`}
+                ml={idx !== 0 ? "16px" : 0}
+                mt="8px"
+                justify="flex-start"
+                alignItems="center"
+              >
+                <DeleteIcon
+                  color="error"
+                  mr="4px"
+                  cursor="pointer"
+                  onClick={() => handleDelete(idx)}
+                />
+                <Text mt="5px">{formatFileName(v)}</Text>
+              </Flex>
             )
           })}
         </Flex>

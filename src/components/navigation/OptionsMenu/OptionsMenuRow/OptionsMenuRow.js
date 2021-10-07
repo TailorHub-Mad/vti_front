@@ -11,6 +11,8 @@ export const OptionsMenuRow = ({
   onEdit,
   onDelete,
   onClose,
+  keyGroup,
+  isGrouped,
   disabled,
   close,
   id
@@ -18,20 +20,27 @@ export const OptionsMenuRow = ({
   return (
     <TableOptionsMenu disabled={disabled}>
       {close ? (
-        <OptionsMenuItem onClick={() => onClose(id)}>
+        <OptionsMenuItem
+          onClick={() => onClose(isGrouped ? { [id]: { key: keyGroup } } : id)}
+        >
           <FinishIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
           <Text variant="d_xs_regular" marginRight="2px">
             Finalizar
           </Text>
         </OptionsMenuItem>
       ) : null}
-      <OptionsMenuItem onClick={() => onEdit(id)}>
+      <OptionsMenuItem
+        onClick={() => onEdit(isGrouped ? { [id]: { key: keyGroup } } : id)}
+      >
         <EditIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
         <Text variant="d_xs_regular" marginRight="2px">
           Editar
         </Text>
       </OptionsMenuItem>
-      <OptionsMenuItem onClick={() => onDelete(id)} isLast>
+      <OptionsMenuItem
+        onClick={() => onDelete(isGrouped ? { [id]: { key: keyGroup } } : id)}
+        isLast
+      >
         <DeleteIcon {...ICONS_PROPS_16} marginRight="4px" color="error" />
         <Text variant="d_xs_regular" color="error" marginRight="2px">
           Eliminar

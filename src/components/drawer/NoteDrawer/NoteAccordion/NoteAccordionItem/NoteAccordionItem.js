@@ -25,7 +25,7 @@ export const NoteAccordionItem = ({ title, icon, children, ...props }) => {
               <Flex align="center">
                 {React.cloneElement(icon, { mr: "8px" })}
                 <Text variant="d_s_medium" mt="4px">
-                  {title}{" "}
+                  {title}
                 </Text>
               </Flex>
               {isExpanded ? (
@@ -35,7 +35,13 @@ export const NoteAccordionItem = ({ title, icon, children, ...props }) => {
               )}
             </Flex>
           </AccordionButton>
-          <AccordionPanel pl={"32px"}>{children}</AccordionPanel>
+          <AccordionPanel pl={"32px"}>
+            {Array.isArray(children)
+              ? children?.map((child, index) => {
+                  return React.cloneElement(child, { key: index })
+                })
+              : children}
+          </AccordionPanel>
         </>
       )}
     </AccordionItem>

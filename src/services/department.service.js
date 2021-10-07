@@ -2,6 +2,8 @@ import { ServiceConstructor } from "."
 
 const DepartmentService = () => {
   const { instance, execute } = ServiceConstructor
+
+  // CRUD
   const getDepartments = (limit = 0, offset = 0) =>
     execute(instance.get(`/department?limit=${limit}&offset=${offset}`))
   const getDepartment = (id) => execute(instance.get(`/department/${id}`))
@@ -12,12 +14,18 @@ const DepartmentService = () => {
   const deleteDepartment = (id) =>
     execute(instance.delete(`/department/delete/${id}`))
 
+  // GROUP & FILTER
+  const getSearchDepartments = (data) =>
+    execute(instance.get(`/department/filter?name=${data}&ref=${data}`))
+
   return {
     getDepartments,
     getDepartment,
     createDepartment,
     updateDepartment,
-    deleteDepartment
+    deleteDepartment,
+
+    getSearchDepartments
   }
 }
 

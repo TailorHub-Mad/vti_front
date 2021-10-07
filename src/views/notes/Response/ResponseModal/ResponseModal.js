@@ -7,6 +7,7 @@ import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
 import { ResponseForm } from "../ResponseForm/ResponseForm"
+import { createFormData } from "../../../../utils/functions/formdata"
 
 export const ResponseModal = ({
   isOpen,
@@ -32,15 +33,52 @@ export const ResponseModal = ({
     const formatData = {
       message: note.message
     }
+
     if (note?.link) formatData["link"] = note.link
-    if (note?.file) formatData["file"] = note.file
+    if (note?.documents) formatData["file"] = note.documents
 
     const formData = new FormData()
 
     Object.entries(formatData).forEach(([key, value]) => {
       Array.isArray(value)
-        ? value.forEach((v) => formData.set(key, v))
-        : formData.set(key, value)
+        ? value.forEach((v) => formData.append(key, v))
+        : formData.append(key, value)
+    })
+
+    return formData
+  }
+
+  const formatUpdateMessage = (note) => {
+    const _formatData = {}
+    const formatData = {
+      message: note.message
+    }
+
+    if (note?.link) formatData["link"] = note.link
+
+    if (note?.documents) {
+      const { files, documents } = note.documents.reduce(
+        (acc, doc) => {
+          if (doc.path) acc.files.push(doc)
+          else acc.documents.push(doc)
+          return acc
+        },
+        {
+          files: [],
+          documents: []
+        }
+      )
+
+      _formatData["documents"] = documents
+      _formatData["file"] = files
+    }
+
+    const formData = createFormData(_formatData)
+
+    Object.entries(formatData).forEach(([key, value]) => {
+      Array.isArray(value)
+        ? value.forEach((v) => formData.append(key, v))
+        : formData.append(key, value)
     })
 
     return formData
@@ -66,7 +104,7 @@ export const ResponseModal = ({
 
   const handleUpdateMessage = async () => {
     try {
-      const message = formatCreateMessage(values)
+      const message = formatUpdateMessage(values)
       await updateMessage(noteId, messageToUpdate._id, message)
     } catch (error) {
       errorHandler(error)
@@ -79,7 +117,7 @@ export const ResponseModal = ({
     const message = {
       message: messageToUpdate.message,
       link: messageToUpdate.link,
-      file: messageToUpdate.documents
+      documents: messageToUpdate.documents
     }
 
     setValues(message)

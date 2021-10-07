@@ -15,7 +15,7 @@ import useTagApi from "../../hooks/api/useTagApi"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { ToastContext } from "../../provider/ToastProvider"
 import { tagFetchHandler } from "../../swr/tag.swr"
-import { DeleteType, PATHS } from "../../utils/constants/global"
+import { PATHS } from "../../utils/constants/global"
 import { errorHandler } from "../../utils/errors"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
 import {
@@ -27,7 +27,12 @@ import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { NewTagModal } from "../../views/tags/NewTag/NewTagModal/NewTagModal"
 import { TagsHeader } from "../../views/tags/TagsHeader/TagsHeader"
 import download from "downloadjs"
+import { generateFilterQueryObj } from "../../utils/functions/filter"
+import { generateQueryStr } from "../../utils/functions/global"
+import { TagsFilterModal } from "../../views/tags/TagsFilter/TagsFilterModal"
+import { TAGS_FILTER_KEYS } from "../../utils/constants/filter"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
+import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 
 const infoByType = {
   proyecto: {
@@ -62,15 +67,17 @@ const tags = () => {
   const { deleteProjectTag, deleteNoteTag, createNoteTag, createProjectTag } =
     useTagApi()
 
-  // States
+  const [showFilterModal, setShowFilterModal] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
   const [showExportModal, setShowExportModal] = useState(false)
+
+  const [activeTab, setActiveTab] = useState("inheritance")
+
+  // Create - Update state
   const [isTagModalOpen, setIsTagModalOpen] = useState(false)
   const [tagToUpdate, setTagToUpdate] = useState(null)
-  const [deleteType, setDeleteType] = useState(null)
-  const [tagToDelete, setTagsToDelete] = useState(null)
+  const [tagToDelete, setTagToDelete] = useState(null)
   // TODO -> review order in back & ENUM
-  const [activeTab, setActiveTab] = useState(ORDER.inheritance)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
 
@@ -95,11 +102,6 @@ const tags = () => {
     if (isEmptyData && !isSearch) return false
 
     return true
-  }
-
-  const handleClosePopup = () => {
-    setDeleteType(null)
-    setTagsToDelete(null)
   }
 
   const handleOnCloseModal = () => {
@@ -133,15 +135,6 @@ const tags = () => {
     download(_data, `tags_export_${new Date().toLocaleDateString()}`, "text/csv")
   }
 
-  const handleDeleteMessage = () => {
-    if (!tagToDelete) return
-
-    if (deleteType === DeleteType.MANY)
-      return "¿Desea eliminar los tags seleccionados?"
-    const label = getFieldObjectById(tagData, "name", tagToDelete)
-    return `¿Desea eliminar ${label}?`
-  }
-
   const handleDelete = async () => {
     try {
       isProjectTag
@@ -149,8 +142,7 @@ const tags = () => {
         : await deleteNoteTag(tagToDelete)
       await mutate()
       showToast("Tag borrada correctamente")
-      setDeleteType(null)
-      setTagsToDelete(null)
+      setTagToDelete(null)
     } catch (error) {
       errorHandler(error)
     }
@@ -181,6 +173,15 @@ const tags = () => {
     return data.sort((a, b) => a.name.localeCompare(b.name))
   }
 
+  const handleOnFilter = (values) => {
+    const filter = generateQueryStr(generateFilterQueryObj(TAGS_FILTER_KEYS, values))
+
+    setFetchState(fetchType.FILTER)
+    setFetchOptions({
+      [fetchOption.FILTER]: filter
+    })
+  }
+
   useEffect(() => {
     if (!infoByType[router?.query?.type]) router.push(PATHS.notFound)
   }, [])
@@ -196,10 +197,16 @@ const tags = () => {
         color="error"
         isOpen={tagToDelete}
         onConfirm={handleDelete}
-        onClose={handleClosePopup}
+        onClose={() => setTagToDelete(null)}
       >
-        {handleDeleteMessage()}
+        {`¿Desea eliminar ${getFieldObjectById(tagData, "name", tagToDelete)}?`}
       </Popup>
+
+      <TagsFilterModal
+        isOpen={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onFilter={(values) => handleOnFilter(values)}
+      />
 
       <NewTagModal
         tagToUpdate={tagToUpdate}
@@ -230,11 +237,11 @@ const tags = () => {
           <ToolBar
             onAdd={() => setIsTagModalOpen(true)}
             onSearch={onSearch}
+            onFilter={() => setShowFilterModal(true)}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
             addLabel={infoByType[type].addTitle}
             searchPlaceholder="Busqueda por ID, Alias"
-            noFilter
             noGroup
             icon={<AddTagIcon />}
             fetchState={fetchState}
@@ -242,7 +249,9 @@ const tags = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData ? (
+      {isEmptyData && isSearch ? (
+        <ViewNotFoundState />
+      ) : isEmptyData ? (
         <ViewEmptyState
           message="Añadir tags a la plataforma"
           importButtonText="Importar"
@@ -279,7 +288,7 @@ const tags = () => {
                   .map((tag) => (
                     <TagCard
                       onEdit={() => handleUpdate(tag)}
-                      onDelete={() => setTagsToDelete(tag._id)}
+                      onDelete={() => setTagToDelete(tag._id)}
                       key={tag.name}
                       tag={tag}
                       isProjectTag={isProjectTag}
@@ -300,7 +309,7 @@ const tags = () => {
                   .map((tag) => (
                     <TagCard
                       onEdit={() => handleUpdate(tag)}
-                      onDelete={() => setTagsToDelete(tag._id)}
+                      onDelete={() => setTagToDelete(tag._id)}
                       key={tag.name}
                       tag={tag}
                       isProjectTag={isProjectTag}
@@ -321,7 +330,7 @@ const tags = () => {
               {sortTags(tagData).map((tag) => (
                 <TagCard
                   onEdit={() => handleUpdate(tag)}
-                  onDelete={() => setTagsToDelete(tag._id)}
+                  onDelete={() => setTagToDelete(tag._id)}
                   key={tag.name}
                   tag={tag}
                   isProjectTag={isProjectTag}

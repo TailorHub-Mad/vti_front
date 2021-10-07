@@ -5,6 +5,7 @@ import { TableRow } from "../TableRow.js/TableRow"
 
 export const TableGroup = ({
   item,
+  keyGroup,
   templateColumns,
   components,
   onRowSelect,
@@ -17,8 +18,6 @@ export const TableGroup = ({
 
   const isSelected = (id) => !!selectedRows[id]
 
-  // TODO -> review
-  if (item.key === "undefined") return null
   return (
     <Box pb={isOpen ? "20px" : "10px"}>
       <Flex onClick={onToggle} cursor="pointer" align="center" padding="10px 0">
@@ -31,6 +30,7 @@ export const TableGroup = ({
               <TableRow
                 key={`${row.id.value}-${idx}`}
                 item={row}
+                keyGroup={keyGroup}
                 templateColumns={templateColumns}
                 isSelected={isSelected(row.id.value)}
                 idx={idx}

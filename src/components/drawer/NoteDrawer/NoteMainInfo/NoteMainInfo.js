@@ -1,10 +1,11 @@
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons"
 import { Box, Flex, Text } from "@chakra-ui/react"
 import { useRouter } from "next/router"
-import React from "react"
+import React, { useContext } from "react"
 import { useSWRConfig } from "swr"
 import useNoteApi from "../../../../hooks/api/useNoteApi"
-import { PATHS } from "../../../../utils/constants/global"
+import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
+import { PATHS, RoleType } from "../../../../utils/constants/global"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
 import { ActionLink } from "../../../buttons/ActionLink/ActionLink"
@@ -30,6 +31,15 @@ export const NoteMainInfo = ({
   const router = useRouter()
   const { updateNote, updateMessage } = useNoteApi()
   const { mutate } = useSWRConfig()
+  const { role, user } = useContext(ApiAuthContext)
+
+  const { _id } = user
+  const ownerMessage = item?.owner && item?.owner[0]?._id
+
+  const isMyMessage = ownerMessage === _id
+
+  const updateLimitDate = isMyMessage ? item?.updateLimitDate : null
+  const editAllowed = updateLimitDate ? new Date() < new Date(updateLimitDate) : null
 
   const handleUpdateNote = async (action) => {
     switch (action) {
@@ -59,9 +69,9 @@ export const NoteMainInfo = ({
   const isProjectHidden = () => {
     if (isMessage) return false
 
-    const { proyects } = item
+    const { projects } = item
 
-    if (!proyects) return false
+    if (!projects) return false
 
     return true
   }
@@ -73,35 +83,58 @@ export const NoteMainInfo = ({
           {new Date(item.updatedAt)?.toLocaleDateString()}
         </Text>
         <Flex>
-          <ActionLink
-            onClick={onEdit}
-            color="grey"
-            icon={<EditIcon />}
-            label="Editar"
-          />
+          {!isMessage || isMyMessage ? (
+            <>
+              {!isMessage ? (
+                <ActionLink
+                  onClick={onEdit}
+                  color="grey"
+                  icon={<EditIcon />}
+                  label="Editar"
+                />
+              ) : null}
 
-          <ActionLink
-            onClick={() => handleUpdateNote(actionType.CLOSE)}
-            color={item.isClosed ? "blue.500" : "#C9C9C9"}
-            icon={
-              item.isClosed ? <LockCloseIcon /> : <LockOpenIcon fill="#C9C9C9" />
-            }
-            label={item.isClosed ? "Cerrado" : "Cerrar"}
-          />
+              {isMessage && editAllowed ? (
+                <ActionLink
+                  onClick={onEdit}
+                  color="grey"
+                  icon={<EditIcon />}
+                  label="Editar"
+                />
+              ) : null}
 
-          <ActionLink
-            onClick={() => handleUpdateNote(actionType.FORMALIZED)}
-            color={item.formalized ? "#0085FF" : "#C9C9C9"}
-            icon={<FormalizedIcon fill={item.formalized ? "#0085FF" : "#C9C9C9"} />}
-            label={item.formalized ? "Formalizado" : "Formalizar"}
-          />
+              <ActionLink
+                onClick={() => handleUpdateNote(actionType.CLOSE)}
+                color={item.isClosed ? "blue.500" : "#C9C9C9"}
+                icon={
+                  item.isClosed ? <LockCloseIcon /> : <LockOpenIcon fill="#C9C9C9" />
+                }
+                label={item.isClosed ? "Cerrado" : "Cerrar"}
+              />
 
-          <ActionLink
-            onClick={onDelete}
-            color="error"
-            icon={<DeleteIcon />}
-            label="Eliminar"
-          />
+              {role === RoleType.USER && isMessage ? null : (
+                <>
+                  <ActionLink
+                    onClick={() => handleUpdateNote(actionType.FORMALIZED)}
+                    color={item.formalized ? "#0085FF" : "#C9C9C9"}
+                    icon={
+                      <FormalizedIcon
+                        fill={item.formalized ? "#0085FF" : "#C9C9C9"}
+                      />
+                    }
+                    label={item.formalized ? "Formalizado" : "Formalizar"}
+                  />
+
+                  <ActionLink
+                    onClick={onDelete}
+                    color="error"
+                    icon={<DeleteIcon />}
+                    label="Eliminar"
+                  />
+                </>
+              )}
+            </>
+          ) : null}
         </Flex>
       </Flex>
 
@@ -123,7 +156,7 @@ export const NoteMainInfo = ({
           </Flex>
 
           <Tag variant={variantGeneralTag.PROJECT} mt="8px" ml="32px">
-            {item.projects[0].alias}
+            {item.projects[0]?.alias}
           </Tag>
         </Box>
       )}

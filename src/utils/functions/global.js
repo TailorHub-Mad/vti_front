@@ -21,7 +21,19 @@ export const getFieldObjectById = (collection, field, id) => {
   return item ? item[field] : null
 }
 
+export const getFieldGRoupObjectById = (collection, field, id, key) => {
+  const item = collection[key]?.find((item) => item._id === id)
+  return item ? item[field] : null
+}
+
 export const checkDataIsEmpty = (data) => {
   if (!data) return false
   if (data.length === 0) return true
+}
+
+export const generateQueryStr = (queryObj) => {
+  return Object.entries(queryObj)
+    .filter(([, value]) => value)
+    .map(([key, value]) => key + "=" + value)
+    .join("&")
 }
