@@ -174,11 +174,12 @@ const tags = () => {
   }
 
   const handleOnFilter = (values) => {
-    console.log(generateQueryStr(generateFilterQueryObj(TAGS_FILTER_KEYS, values)))
-    // setFetchState(fetchType.FILTER)
-    // setFetchOptions({
-    //   [fetchOption.FILTER]: filter
-    // })
+    const filter = generateQueryStr(generateFilterQueryObj(TAGS_FILTER_KEYS, values))
+
+    setFetchState(fetchType.FILTER)
+    setFetchOptions({
+      [fetchOption.FILTER]: filter
+    })
   }
 
   useEffect(() => {

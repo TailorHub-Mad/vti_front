@@ -251,13 +251,14 @@ const sistemas = () => {
   }
 
   const handleOnFilter = (values) => {
-    console.log(
-      generateQueryStr(generateFilterQueryObj(TESTSYSTEMS_FILTER_KEYS, values))
+    const filter = generateQueryStr(
+      generateFilterQueryObj(TESTSYSTEMS_FILTER_KEYS, values)
     )
-    // setFetchState(fetchType.FILTER)
-    // setFetchOptions({
-    //   [fetchOption.FILTER]: filter
-    // })
+
+    setFetchState(fetchType.FILTER)
+    setFetchOptions({
+      [fetchOption.FILTER]: filter
+    })
   }
 
   if (!isLoggedIn) return null

@@ -266,11 +266,16 @@ const apuntes = () => {
   }
 
   const handleOnFilter = (values) => {
-    console.log(generateQueryStr(generateFilterQueryObj(NOTES_FILTER_KEYS, values)))
-    // setFetchState(fetchType.FILTER)
-    // setFetchOptions({
-    //   [fetchOption.FILTER]: filter
-    // })
+    const filter = generateQueryStr(
+      generateFilterQueryObj(NOTES_FILTER_KEYS, values)
+    )
+
+    setFetchState(fetchType.FILTER)
+    setFetchOptions({
+      [fetchOption.FILTER]: filter
+    })
+
+    setShowFilterModal(false)
   }
 
   useEffect(() => {

@@ -194,11 +194,14 @@ const usuarios = () => {
     })
   }
   const handleOnFilter = (values) => {
-    console.log(generateQueryStr(generateFilterQueryObj(USERS_FILTER_KEYS, values)))
-    // setFetchState(fetchType.FILTER)
-    // setFetchOptions({
-    //   [fetchOption.FILTER]: filter
-    // })
+    const filter = generateQueryStr(
+      generateFilterQueryObj(USERS_FILTER_KEYS, values)
+    )
+
+    setFetchState(fetchType.FILTER)
+    setFetchOptions({
+      [fetchOption.FILTER]: filter
+    })
   }
 
   if (!isLoggedIn) return null

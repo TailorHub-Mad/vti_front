@@ -277,13 +277,16 @@ const proyectos = () => {
   }
 
   const handleOnFilter = (values) => {
-    console.log(
-      generateQueryStr(generateFilterQueryObj(PROJECTS_FILTER_KEYS, values))
+    const filter = generateQueryStr(
+      generateFilterQueryObj(PROJECTS_FILTER_KEYS, values)
     )
-    // setFetchState(fetchType.FILTER)
-    // setFetchOptions({
-    //   [fetchOption.FILTER]: filter
-    // })
+
+    setFetchState(fetchType.FILTER)
+    setFetchOptions({
+      [fetchOption.FILTER]: filter
+    })
+
+    setShowFilterModal(false)
   }
 
   if (!isLoggedIn) return null
