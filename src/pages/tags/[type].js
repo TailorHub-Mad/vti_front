@@ -93,12 +93,10 @@ const tags = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const tagData = data && !isEmptyData ? data : null
 
-  const isSearch = fetchState == fetchType.SEARCH
-
   // Handlers views
   const isToolbarHidden = () => {
     if (isLoading) return false
-    if (isEmptyData && !isSearch) return false
+    if (isEmptyData && fetchState === fetchType.ALL) return false
 
     return true
   }
@@ -192,6 +190,8 @@ const tags = () => {
     setFetchOptions({
       [fetchOption.FILTER]: filter
     })
+
+    setShowFilterModal(false)
   }
 
   useEffect(() => {
@@ -261,7 +261,7 @@ const tags = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData && isSearch ? (
+      {isEmptyData && fetchState !== fetchType.ALL ? (
         <ViewNotFoundState />
       ) : isEmptyData ? (
         <ViewEmptyState

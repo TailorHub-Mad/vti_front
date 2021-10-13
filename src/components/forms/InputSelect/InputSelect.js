@@ -64,7 +64,7 @@ export const InputSelect = ({
 
   useEffect(() => {
     if (!isReset) return
-    setInputValue()
+    setInputValue("")
   }, [isReset])
 
   return (
