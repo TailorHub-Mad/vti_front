@@ -84,7 +84,7 @@ const clientes = () => {
     try {
       const clientsCreated = []
       for (let index = 0; index < data.length; index++) {
-        const cl = await createClient(data[index])
+        const cl = await createClient([data[index]])
         clientsCreated.push(cl)
       }
       await mutate()
