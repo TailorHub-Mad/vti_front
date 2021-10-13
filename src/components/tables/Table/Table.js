@@ -44,9 +44,13 @@ export const Table = ({
         position="relative"
         sx={CUSTOM_SCROLLBAR}
         overflow="scroll"
-      
       >
-        <Grid minWidth={MIN_TABLE_WIDTH} maxWidth={MAX_TABLE_WIDTH} width="100%" height="fit-content">
+        <Grid
+          minWidth={MIN_TABLE_WIDTH}
+          maxWidth={MAX_TABLE_WIDTH}
+          width="100%"
+          height="fit-content"
+        >
           <TableHead templateColumns={templateColumns} head={head} />
           {content.map((item, idx) => {
             if (isGrouped)
