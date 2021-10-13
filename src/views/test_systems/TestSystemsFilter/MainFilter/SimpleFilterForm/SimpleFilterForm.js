@@ -6,7 +6,7 @@ import useTagApi from "../../../../../hooks/api/useTagApi"
 import useSectorApi from "../../../../../hooks/api/useSectorApi"
 import { MultiTagSelect } from "../../../../../components/forms/MultiTagSelect/MultiTagSelect"
 
-export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
+export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => {
   const { getSystems } = useSystemApi()
   const { getClients } = useClientApi()
   const { getSectors } = useSectorApi()
@@ -113,8 +113,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
   }
 
   const inputRefObj = {
-    add_select: <AddSelect />,
-    multitag_select: <MultiTagSelect />
+    add_select: <AddSelect isReset={isReset} />,
+    multitag_select: <MultiTagSelect isReset={isReset} />
   }
 
   const handleFilterChange = (input, _value) => {

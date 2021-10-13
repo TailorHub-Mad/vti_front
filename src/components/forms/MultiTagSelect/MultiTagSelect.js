@@ -12,6 +12,7 @@ export const MultiTagSelect = ({
   label,
   placeholder,
   isDisabled,
+  isReset,
   ...props
 }) => {
   const [inputValues, setInputValues] = useState(value)
@@ -46,6 +47,11 @@ export const MultiTagSelect = ({
     setAvailableOptions(availableOptions)
   }, [inputValues])
 
+  useEffect(() => {
+    if (!isReset) return
+    setInputValues([{ label: "", value: "" }])
+  }, [isReset])
+
   return (
     <FormController label={label} {...props} isDisabled={isDisabled}>
       <Box>
@@ -53,7 +59,7 @@ export const MultiTagSelect = ({
           onChange={(selected) => handleChange(selected)}
           placeholder={placeholder}
           options={availableOptions}
-          isDisabled={availableOptions.length === 0 || isDisabled}
+          isDisabled={availableOptions?.length === 0 || isDisabled}
           isMultiTag
         />
         <Flex mt="12px" width="100%" wrap="wrap" height="fit-content">

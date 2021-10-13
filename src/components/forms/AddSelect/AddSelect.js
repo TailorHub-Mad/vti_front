@@ -13,6 +13,7 @@ export const AddSelect = ({
   additemlabel,
   deleteItemLabel,
   isDisabled: inputDisabled,
+  isReset,
   ...props
 }) => {
   const [inputValues, setInputValues] = useState(value)
@@ -39,9 +40,10 @@ export const AddSelect = ({
     setAvailableOptions(availableOptions)
   }, [inputValues])
 
-  // useEffect(() => {
-  //   setInputValues(value)
-  // }, [value])
+  useEffect(() => {
+    if (!isReset) return
+    setInputValues([{ label: "", value: "" }])
+  }, [isReset])
 
   const renderDeleteItem = (itemPosition) => {
     if (inputDisabled) return null

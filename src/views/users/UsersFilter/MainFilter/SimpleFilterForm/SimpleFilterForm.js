@@ -4,7 +4,7 @@ import useUserApi from "../../../../../hooks/api/useUserApi"
 import useProjectApi from "../../../../../hooks/api/useProjectApi"
 import useDepartmentApi from "../../../../../hooks/api/useDepartmentApi"
 
-export const SimpleFilterForm = ({ value, onChange }) => {
+export const SimpleFilterForm = ({ value, onChange, isReset }) => {
   const { getUsers } = useUserApi()
   const { getProjects } = useProjectApi()
   const { getDepartments } = useDepartmentApi()
@@ -74,7 +74,7 @@ export const SimpleFilterForm = ({ value, onChange }) => {
   }
 
   const inputRefObj = {
-    add_select: <AddSelect />
+    add_select: <AddSelect isReset={isReset} />
   }
 
   const handleFilterChange = (input, _value) => {

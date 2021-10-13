@@ -4,7 +4,7 @@ import { useRouter } from "next/router"
 import useTagApi from "../../../../../hooks/api/useTagApi"
 import { MultiTagSelect } from "../../../../../components/forms/MultiTagSelect/MultiTagSelect"
 
-export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
+export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => {
   const router = useRouter()
   const isProjectTag = router.query.type === "proyecto"
   const { getProjectTags, getNoteTags } = useTagApi()
@@ -66,8 +66,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       }
 
   const inputRefObj = {
-    add_select: <AddSelect />,
-    multitag_select: <MultiTagSelect />
+    add_select: <AddSelect isReset={isReset} />,
+    multitag_select: <MultiTagSelect isReset={isReset} />
   }
 
   const handleFilterChange = (input, _value) => {

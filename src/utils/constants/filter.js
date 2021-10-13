@@ -28,8 +28,8 @@ export const TESTSYSTEMS_FILTER_KEYS = {
 }
 
 export const TAGS_FILTER_KEYS = {
-  project_tags: "tags.name",
-  note_tags: "tags.name"
+  project_tags: "name",
+  note_tags: "name"
 }
 
 export const USERS_FILTER_KEYS = {

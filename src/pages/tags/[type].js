@@ -28,7 +28,6 @@ import { NewTagModal } from "../../views/tags/NewTag/NewTagModal/NewTagModal"
 import { TagsHeader } from "../../views/tags/TagsHeader/TagsHeader"
 import download from "downloadjs"
 import { generateFilterQuery } from "../../utils/functions/filter"
-import { generateQueryStr } from "../../utils/functions/global"
 import { TagsFilterModal } from "../../views/tags/TagsFilter/TagsFilterModal"
 import { TAGS_FILTER_KEYS } from "../../utils/constants/filter"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
@@ -179,7 +178,15 @@ const tags = () => {
   }
 
   const handleOnFilter = (values) => {
-    const filter = generateQueryStr(generateFilterQuery(TAGS_FILTER_KEYS, values))
+    if (!values) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.FILTER]: null
+      })
+      return
+    }
+
+    const filter = generateFilterQuery(TAGS_FILTER_KEYS, values)
 
     setFetchState(fetchType.FILTER)
     setFetchOptions({

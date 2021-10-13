@@ -9,7 +9,7 @@ import {
   Tabs,
   Text
 } from "@chakra-ui/react"
-import React from "react"
+import React, { useState } from "react"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import { AdvancedFilterIcon } from "../../../../components/icons/AdvancedFilterIcon"
 import { SimpleFilterIcon } from "../../../../components/icons/SimpleFilterIcon"
@@ -27,6 +27,13 @@ export const MainFilter = ({
   onReset,
   ...props
 }) => {
+  const [isReset, setIsReset] = useState(false)
+
+  const handleOnReset = () => {
+    setIsReset(true)
+    onReset()
+  }
+
   return (
     <Box
       width="460px"
@@ -61,6 +68,7 @@ export const MainFilter = ({
               value={simpleFilterValues}
               onChange={onSimpleFilterChange}
               openAuxModal={onSecondaryOpen}
+              isReset={isReset}
             />
           </TabPanel>
           <TabPanel p={0}>
@@ -80,7 +88,12 @@ export const MainFilter = ({
       </Flex>
 
       <Flex justifyContent="center">
-        <Text onClick={onReset} variant="d_xs_regular" mt="32px" cursor="pointer">
+        <Text
+          onClick={handleOnReset}
+          variant="d_xs_regular"
+          mt="32px"
+          cursor="pointer"
+        >
           Resetear filtros
         </Text>
       </Flex>

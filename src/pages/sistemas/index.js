@@ -16,7 +16,6 @@ import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddTestSystemIcon } from "../../components/icons/AddTestSystemIcon"
 import {
   checkDataIsEmpty,
-  generateQueryStr,
   getFieldGRoupObjectById,
   getFieldObjectById
 } from "../../utils/functions/global"
@@ -263,9 +262,7 @@ const sistemas = () => {
       return
     }
 
-    const filter = generateQueryStr(
-      generateFilterQuery(TESTSYSTEMS_FILTER_KEYS, values)
-    )
+    const filter = generateFilterQuery(TESTSYSTEMS_FILTER_KEYS, values)
 
     setFetchState(fetchType.FILTER)
     setFetchOptions({

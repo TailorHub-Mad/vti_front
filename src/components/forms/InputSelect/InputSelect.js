@@ -14,6 +14,7 @@ export const InputSelect = ({
   onHelperClick,
   isDisabled = false,
   isMultiTag,
+  isReset,
   ...props
 }) => {
   const [inputValue, setInputValue] = useState(value)
@@ -60,6 +61,11 @@ export const InputSelect = ({
   useEffect(() => {
     setAvailableOptions(options)
   }, [options])
+
+  useEffect(() => {
+    if (!isReset) return
+    setInputValue()
+  }, [isReset])
 
   return (
     <FormController
