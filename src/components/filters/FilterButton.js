@@ -12,7 +12,6 @@ export const FilterButton = ({ onFilter, active }) => {
         onClick={onFilter}
         background={active ? "#052E57" : "#FFF"}
         color={active ? "#FFF" : "#052E57"}
-        isDisabled // TODO -> provisional
       >
         {active ? (
           <CloseIcon h="14px" mr={["8px", "8px"]} />
