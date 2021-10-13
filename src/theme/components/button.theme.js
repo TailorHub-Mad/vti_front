@@ -43,6 +43,10 @@ export const Button = {
       minW: "194px",
       bg: "white",
       color: "blue.500",
+      css: {
+        "box-shadow": "0px 0px 8px rgba(5, 46, 87, 0.1)"
+      },
+
       _hover: {
         bg: "#E1E5E8"
       },
@@ -126,7 +130,13 @@ export const Button = {
       color: "blue.500",
       width: "fit-content",
       margin: "0 auto",
-      display: "block"
+      display: "block",
+      _disabled: {
+        opacity: 0.3,
+        pointerEvents: "none",
+        bgColor: "transparent",
+        borderColor: "transparent"
+      }
     }
   },
   defaultProps: {
