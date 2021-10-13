@@ -24,12 +24,14 @@ export const MainFilter = ({
   simpleFilterValues,
   moveToLeft,
   openSaveModal,
+  onReset,
   ...props
 }) => {
   return (
     <Box
       width="460px"
-      height="fit-content"
+      maxHeight="calc(100vh - 120px)"
+      overflowY="scroll"
       position="absolute"
       top="50px"
       left={moveToLeft ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}
@@ -75,7 +77,15 @@ export const MainFilter = ({
         <Button variant="secondary" onClick={openSaveModal}>
           Recordar
         </Button>
-        <Button onClick={onFilter}>Filtrar</Button>
+        <Button onClick={onFilter} ml="8px">
+          Filtrar
+        </Button>
+      </Flex>
+
+      <Flex justify="center">
+        <Text onClick={onReset} variant="d_xs_regular" mt="32px" cursor="pointer">
+          Resetear filtros
+        </Text>
       </Flex>
     </Box>
   )

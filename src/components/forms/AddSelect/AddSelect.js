@@ -12,7 +12,7 @@ export const AddSelect = ({
   placeholder,
   additemlabel,
   deleteItemLabel,
-  isDisabled,
+  isDisabled: inputDisabled,
   ...props
 }) => {
   const [inputValues, setInputValues] = useState(value)
@@ -39,16 +39,21 @@ export const AddSelect = ({
     setAvailableOptions(availableOptions)
   }, [inputValues])
 
+  useEffect(() => {
+    setInputValues(value)
+  }, [value])
+
   const renderDeleteItem = (itemPosition) => {
-    if (inputValues.length === 1 && itemPosition === 0) return null
-    if (inputValues.length > 1 && itemPosition === inputValues.length - 1)
-      return null
+    if (inputDisabled) return null
+    if (inputValues.length === 1 && inputValues[0]?.value === "") return null
 
     const handleOnClick = () => {
       const newValues = [...inputValues].filter((_, index) => itemPosition !== index)
+      const checkValues =
+        newValues.length === 0 ? [{ label: "", value: "" }] : newValues
 
-      setInputValues(newValues)
-      onChange(newValues)
+      setInputValues(checkValues)
+      onChange(checkValues)
     }
 
     return (
@@ -68,11 +73,14 @@ export const AddSelect = ({
   }
 
   const renderAddItem = (itemPosition) => {
+    if (inputDisabled) return null
     if (inputValues.length > 1 && itemPosition !== inputValues.length - 1)
       return null
     if (inputValues.length === options?.length) return null
 
     const handleOnClick = () => setInputValues([...inputValues, undefined])
+
+    const isDisabled = inputValues.length === 1 && inputValues[0]?.value === ""
 
     return (
       <>
@@ -80,15 +88,20 @@ export const AddSelect = ({
           display="flex"
           alignItems="center"
           marginTop="8px"
-          cursor="pointer"
+          cursor={isDisabled ? "default" : "pointer"}
           onClick={handleOnClick}
+          pointerEvents={isDisabled ? "none" : "all"}
         >
-          <AddIcon marginRight="4px" width="16px" color="blue.500" />
+          <AddIcon
+            marginRight="4px"
+            width="16px"
+            color={isDisabled ? "grey" : "blue.500"}
+          />
           <Text
             marginTop="4px"
             display="block"
             variant="m_xs_regular"
-            color="blue.500"
+            color={isDisabled ? "grey" : "blue.500"}
           >
             {additemlabel || "Añadir"}
           </Text>
@@ -98,7 +111,7 @@ export const AddSelect = ({
   }
 
   return (
-    <FormController label={label} {...props} isDisabled={isDisabled}>
+    <FormController label={label} {...props} isDisabled={inputDisabled}>
       <Box>
         {inputValues.map((value, idx) => {
           return (
@@ -108,11 +121,14 @@ export const AddSelect = ({
                 onChange={(selected) => handleChange(selected, idx)}
                 placeholder={placeholder}
                 options={availableOptions}
-                isDisabled={isDisabled}
+                isDisabled={inputDisabled}
               />
               <>
-                {renderDeleteItem(idx)}
-                {renderAddItem(idx)}
+                {options && (
+                  <>
+                    {renderDeleteItem(idx)} {renderAddItem(idx)}
+                  </>
+                )}
               </>
             </Box>
           )

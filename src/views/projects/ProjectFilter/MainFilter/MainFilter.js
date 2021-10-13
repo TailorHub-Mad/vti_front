@@ -24,6 +24,7 @@ export const MainFilter = ({
   simpleFilterValues,
   moveToLeft,
   openSaveModal,
+  onReset,
   ...props
 }) => {
   return (
@@ -76,6 +77,12 @@ export const MainFilter = ({
           Recordar
         </Button>
         <Button onClick={onFilter}>Filtrar</Button>
+      </Flex>
+
+      <Flex justifyContent="center">
+        <Text onClick={onReset} variant="d_xs_regular" mt="32px" cursor="pointer">
+          Resetear filtros
+        </Text>
       </Flex>
     </Box>
   )

@@ -2,27 +2,27 @@ import { CloseIcon, DeleteIcon } from "@chakra-ui/icons"
 import { chakra, Checkbox, Flex, Text } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { fetchType } from "../../../utils/constants/swr"
-import { ICONS_REFERENCE } from "../../../utils/constants/icons"
+// import { ICONS_REFERENCE } from "../../../utils/constants/icons"
 
-const visibility_menu = {
-  all: {
-    label: "Todos",
-    value: fetchType.ALL,
-    active_icon: ICONS_REFERENCE.notes,
-    icon: ICONS_REFERENCE.notes
-  },
-  active: {
-    label: "Activos",
-    value: fetchType.ACTIVE,
-    active_icon: ICONS_REFERENCE.active,
-    icon: ICONS_REFERENCE.active
-  }
-}
+// const visibility_menu = {
+//   all: {
+//     label: "Todos",
+//     value: fetchType.ALL,
+//     active_icon: ICONS_REFERENCE.notes,
+//     icon: ICONS_REFERENCE.notes
+//   },
+//   active: {
+//     label: "Activos",
+//     value: fetchType.ACTIVE,
+//     active_icon: ICONS_REFERENCE.active,
+//     icon: ICONS_REFERENCE.active
+//   }
+// }
 
 export const ProjectsTableHeader = ({
   projectsCount = 0,
-  onChange,
-  activeItem = fetchType.ALL,
+  // onChange,
+  // activeItem = fetchType.ALL,
   selectedRows,
   onDelete,
   selectAllRows = () => {},
@@ -87,7 +87,7 @@ export const ProjectsTableHeader = ({
             ) : null}
           </Flex>
 
-          {Object.entries(visibility_menu).map(([name, item], idx) => {
+          {/* {Object.entries(visibility_menu).map(([name, item], idx) => {
             const isActive = name === activeItem
             return (
               <Flex
@@ -114,7 +114,8 @@ export const ProjectsTableHeader = ({
                 </Text>
               </Flex>
             )
-          })}
+          })} */}
+
           {fetchState === fetchType.FILTER ? (
             <Flex alignItems="center" ml="24px">
               <CloseIcon

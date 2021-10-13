@@ -17,7 +17,6 @@ import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
 import {
   checkDataIsEmpty,
-  generateQueryStr,
   getFieldGRoupObjectById,
   getFieldObjectById
 } from "../../utils/functions/global"
@@ -34,9 +33,10 @@ import {
 } from "../../utils/functions/import_export/projects_helper"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 import { FinishProjectModal } from "../../views/projects/NewProject/FinishProjectModal/FinishProjectModal"
-import { generateFilterQueryObj } from "../../utils/functions/filter"
+import { generateFilterQuery } from "../../utils/functions/filter"
 import { ProjectsFilterModal } from "../../views/projects/ProjectFilter/ProjectsFilterModal"
 import { PROJECTS_FILTER_KEYS } from "../../utils/constants/filter"
+import { ProjectsMenu } from "../../views/projects/ProjectsMenu/ProjectsMenu"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -97,6 +97,14 @@ const proyectos = () => {
   // Handlers views
   const isToolbarHidden = () => {
     if (isLoading) return false
+    if (isEmptyData && fetchState === fetchType.ALL) return false
+
+    return true
+  }
+
+  const isMenuHidden = () => {
+    if (isLoading) return false
+    if (fetchState === fetchType.GROUP) return false
     if (isEmptyData && fetchState === fetchType.ALL) return false
 
     return true
@@ -289,9 +297,7 @@ const proyectos = () => {
       return
     }
 
-    const filter = generateQueryStr(
-      generateFilterQueryObj(PROJECTS_FILTER_KEYS, values)
-    )
+    const filter = generateFilterQuery(PROJECTS_FILTER_KEYS, values)
 
     setFetchState(fetchType.FILTER)
     setFetchOptions({
@@ -316,39 +322,33 @@ const proyectos = () => {
       >
         {handleDeleteMessage()}
       </Popup>
-
       <ProjectsFilterModal
         isOpen={showFilterModal}
         onClose={() => setShowFilterModal(false)}
         onFilter={(values) => handleOnFilter(values)}
       />
-
       <NewProjectModal
         projectToUpdate={projectToUpdate}
         isOpen={isProjectModalOpen}
         onClose={handleOnCloseModal}
       />
-
       <FinishProjectModal
         project={projectToFinish}
         isOpen={isFinishProjectModalOpen}
         onClose={handleOnCloseFinishProjectModal}
         isGrouped={isGrouped}
       />
-
       <ExportFilesModal
         isOpen={showExportModal}
         onClose={() => setShowExportModal(false)}
         onExport={() => handleExportProjects()}
       />
-
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
         onUpload={(data) => handleImportProjects(data)}
         onDropDataTransform={(info) => projectDataTransform(info)}
       />
-
       <PageHeader>
         <BreadCrumbs />
         {isToolbarHidden() ? (
@@ -369,6 +369,14 @@ const proyectos = () => {
           />
         ) : null}
       </PageHeader>
+
+      {isMenuHidden() ? (
+        <ProjectsMenu
+          fetchState={fetchState}
+          onChange={(state) => setFetchState(state)}
+        />
+      ) : null}
+
       {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData && fetchState !== fetchType.ALL ? (
         <ViewNotFoundState />
@@ -381,6 +389,7 @@ const proyectos = () => {
           onAdd={() => setIsProjectModalOpen(true)}
         />
       ) : null}
+
       {projectsData ? (
         <ProjectsTable
           fetchState={fetchState}

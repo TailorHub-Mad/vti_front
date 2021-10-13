@@ -20,7 +20,12 @@ export const TagCardTags = ({ items, relatedTags = [] }) => {
         tagcomponent={<Tag />}
         variant={variantGeneralTag.NOTE}
       />
-      <TagRow tags={items} tagcomponent={<Tag />} variant="light_blue" />
+      <TagRow
+        tags={items}
+        max={2}
+        tagcomponent={<Tag />}
+        variant={variantGeneralTag.SYSTEM}
+      />
     </Box>
   )
 }

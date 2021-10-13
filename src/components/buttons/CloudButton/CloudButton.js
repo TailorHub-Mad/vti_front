@@ -5,11 +5,16 @@ import { UploadCloudIcon } from "../../icons/UploadCloudIcon"
 import { OptionsMenu } from "../../navigation/OptionsMenu/OptionsMenu"
 import { OptionsMenuItem } from "../../navigation/OptionsMenu/OptionsMenuItem/OptionsMenuItem"
 
-export const CloudButton = ({ onImport, onExport }) => {
+export const CloudButton = ({ onImport, onExport, isDisabled }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <Box position="relative">
-      <Button variant="icon_only_secondary" marginRight="16px" onClick={onOpen}>
+      <Button
+        variant="icon_only_secondary"
+        marginRight="16px"
+        onClick={onOpen}
+        isDisabled={isDisabled}
+      >
         <UploadCloudIcon />
       </Button>
       <OptionsMenu
@@ -22,7 +27,9 @@ export const CloudButton = ({ onImport, onExport }) => {
       >
         <OptionsMenuItem onClick={onImport} width="100%" p="9.5px">
           <UploadCloudIcon mr="8px" width="16px" heigth="16px" />
-          <Text variant="d_xs_regular" mt="3px">Importar</Text>
+          <Text variant="d_xs_regular" mt="3px">
+            Importar
+          </Text>
         </OptionsMenuItem>
         <OptionsMenuItem onClick={onExport} width="100%" isLast>
           <ExportIcon mr="8px" width="16px" heigth="16px" />

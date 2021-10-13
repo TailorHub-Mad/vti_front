@@ -24,7 +24,7 @@ export const SimpleFilterForm = ({ value, onChange }) => {
       }
       fetchProjects()
     }
-  }, [projectsOpt])
+  }, [])
 
   useEffect(() => {
     if (!departmentOpt) {
@@ -34,7 +34,7 @@ export const SimpleFilterForm = ({ value, onChange }) => {
       }
       fetchDepartments()
     }
-  }, [departmentOpt])
+  }, [])
 
   useEffect(() => {
     if (!usersOpt) {
@@ -44,7 +44,7 @@ export const SimpleFilterForm = ({ value, onChange }) => {
       }
       fetchUsers()
     }
-  }, [usersOpt])
+  }, [])
 
   const filterInputs = {
     project: {
@@ -52,7 +52,7 @@ export const SimpleFilterForm = ({ value, onChange }) => {
       config: {
         placeholder: "Proyecto",
         options: projectsOpt,
-        label: "Departamento"
+        label: "Proyecto"
       }
     },
     department: {
