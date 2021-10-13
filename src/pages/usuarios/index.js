@@ -202,8 +202,6 @@ const usuarios = () => {
       return
     }
 
-    console.log(values)
-
     const filter = generateQueryStr(
       generateFilterQueryObj(USERS_FILTER_KEYS, values)
     )

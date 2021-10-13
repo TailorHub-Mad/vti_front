@@ -299,8 +299,6 @@ const apuntes = () => {
     setNoteToDetail(newNoteToDetail)
   }, [notesData])
 
-  console.log(isEmptyData, notesData)
-
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (
