@@ -116,6 +116,14 @@ const apuntes = () => {
     return true
   }
 
+  const isMenuHidden = () => {
+    if (isLoading) return false
+    if (fetchState === fetchType.GROUP) return false
+    if (isEmptyData && fetchState === fetchType.ALL) return false
+
+    return true
+  }
+
   const handleOnCloseModal = () => {
     setNoteToUpdate(null)
     setIsNoteModalOpen(false)
@@ -181,7 +189,10 @@ const apuntes = () => {
       updatedNotes.push({
         notes: filterNotes
       })
-      updatedNotes.length > 0 ? await mutate(updatedNotes, false) : await mutate()
+
+      updatedNotes[0].notes.length > 0
+        ? await mutate(updatedNotes, false)
+        : await mutate()
 
       if (showNoteDetails) setShowNoteDetails(false)
       setNoteToDelete(null)
@@ -288,6 +299,8 @@ const apuntes = () => {
     setNoteToDetail(newNoteToDetail)
   }, [notesData])
 
+  console.log(isEmptyData, notesData)
+
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (
@@ -383,7 +396,7 @@ const apuntes = () => {
         )}
       </PageHeader>
       <PageMenu>
-        {notesData && !isGrouped ? (
+        {isMenuHidden() ? (
           <NotesMenu
             fetchState={fetchState}
             notesCount={notesData?.length}
@@ -393,7 +406,7 @@ const apuntes = () => {
       </PageMenu>
       <PageBody height="calc(100vh - 140px)">
         {isLoading ? <LoadingView mt="-200px" /> : null}
-        {isEmptyData && isSearch ? (
+        {isEmptyData && fetchState !== fetchType.ALL ? (
           <ViewNotFoundState />
         ) : isEmptyData ? (
           <ViewEmptyState
@@ -422,6 +435,7 @@ const apuntes = () => {
                   fetchOptions[fetchOption.GROUP]
                 )}
                 isGrouped={isGrouped}
+                fetchState={fetchState}
               />
             ) : (
               <NotesGrid

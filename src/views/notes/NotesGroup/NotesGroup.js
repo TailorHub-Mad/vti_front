@@ -25,6 +25,8 @@ export const NotesGroup = ({
     if (fetchState === fetchType.FILTER) return onFilter(null)
   }
 
+  console.log(fetchState, "codicieon", fetchState === fetchType.GROUP)
+
   return (
     <>
       {fetchState === fetchType.GROUP ? (

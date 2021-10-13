@@ -44,7 +44,7 @@ export const Button = {
       bg: "white",
       color: "blue.500",
       css: {
-        "box-shadow": "0px 0px 8px rgba(5, 46, 87, 0.1)"
+        boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)"
       },
 
       _hover: {
