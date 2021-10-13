@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { AddSelect } from "../../../../../components/forms/AddSelect/AddSelect"
 import { useRouter } from "next/router"
 import useTagApi from "../../../../../hooks/api/useTagApi"
+import { MultiTagSelect } from "../../../../../components/forms/MultiTagSelect/MultiTagSelect"
 
 export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
   const router = useRouter()
@@ -37,7 +38,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
   const filterInputs = isProjectTag
     ? {
         project_tags: {
-          type: "add_select",
+          type: "multitag_select",
           config: {
             placeholder: "Seleccione",
             options: projectTagsOpt,
@@ -51,7 +52,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       }
     : {
         note_tags: {
-          type: "add_select",
+          type: "multitag_select",
           config: {
             placeholder: "Seleccione",
             options: noteTagsOpt,
@@ -65,7 +66,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       }
 
   const inputRefObj = {
-    add_select: <AddSelect />
+    add_select: <AddSelect />,
+    multitag_select: <MultiTagSelect />
   }
 
   const handleFilterChange = (input, _value) => {

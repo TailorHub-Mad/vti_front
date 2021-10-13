@@ -6,6 +6,7 @@ import useClientApi from "../../../../../hooks/api/useClientApi"
 import useUserApi from "../../../../../hooks/api/useUserApi"
 import useTagApi from "../../../../../hooks/api/useTagApi"
 import useSectorApi from "../../../../../hooks/api/useSectorApi"
+import { MultiTagSelect } from "../../../../../components/forms/MultiTagSelect/MultiTagSelect"
 
 export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
   const { getSystems } = useSystemApi()
@@ -123,7 +124,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       }
     },
     tag_project: {
-      type: "add_select",
+      type: "multitag_select",
       config: {
         placeholder: "Tags de proyecto",
         options: projectTagsOpt,
@@ -139,7 +140,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
 
   const inputRefObj = {
     select: <InputSelect />,
-    add_select: <AddSelect />
+    add_select: <AddSelect />,
+    multitag_select: <MultiTagSelect />
   }
 
   const handleFilterChange = (input, _value) => {
