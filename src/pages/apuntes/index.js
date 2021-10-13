@@ -21,7 +21,6 @@ import { fetchOption, fetchType } from "../../utils/constants/swr"
 import { errorHandler } from "../../utils/errors"
 import {
   checkDataIsEmpty,
-  generateQueryStr,
   getFieldGRoupObjectById,
   getFieldObjectById
 } from "../../utils/functions/global"
@@ -102,7 +101,6 @@ const apuntes = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const notesData = handleNotesData(isEmptyData)
 
-  const isSearch = fetchState == fetchType.SEARCH
   const isGrouped = fetchState == fetchType.GROUP
 
   const checkIsFavorite = (id) => user?.favorites?.notes?.includes(id)
@@ -111,7 +109,7 @@ const apuntes = () => {
   // Handlers views
   const isToolbarHidden = () => {
     if (isLoading) return false
-    if (isEmptyData && !isSearch) return false
+    if (isEmptyData && fetchState === fetchType.ALL) return false
 
     return true
   }
@@ -119,6 +117,7 @@ const apuntes = () => {
   const isMenuHidden = () => {
     if (isLoading) return false
     if (fetchState === fetchType.GROUP) return false
+    if (isEmptyData && fetchState === fetchType.FILTER) return false
     if (isEmptyData && fetchState === fetchType.ALL) return false
 
     return true
@@ -282,7 +281,15 @@ const apuntes = () => {
   }
 
   const handleOnFilter = (values) => {
-    const filter = generateQueryStr(generateFilterQuery(NOTES_FILTER_KEYS, values))
+    if (!values) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.FILTER]: null
+      })
+      return
+    }
+
+    const filter = generateFilterQuery(NOTES_FILTER_KEYS, values)
 
     setFetchState(fetchType.FILTER)
     setFetchOptions({

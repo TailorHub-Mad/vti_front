@@ -3,7 +3,7 @@ import { Button } from "@chakra-ui/react"
 import React from "react"
 import { FilterIcon } from "../icons/FilterIcon"
 
-export const FilterButton = ({ onFilter, active }) => {
+export const FilterButton = ({ onFilter, active, isDisabled }) => {
   return (
     <>
       <Button
@@ -12,6 +12,7 @@ export const FilterButton = ({ onFilter, active }) => {
         onClick={onFilter}
         background={active ? "#052E57" : "#FFF"}
         color={active ? "#FFF" : "#052E57"}
+        isDisabled={isDisabled}
       >
         {active ? (
           <CloseIcon h="14px" mr={["8px", "8px"]} />

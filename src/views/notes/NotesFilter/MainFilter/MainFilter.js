@@ -77,7 +77,9 @@ export const MainFilter = ({
         <Button variant="secondary" onClick={openSaveModal}>
           Recordar
         </Button>
-        <Button onClick={onFilter}>Filtrar</Button>
+        <Button onClick={onFilter} ml="8px">
+          Filtrar
+        </Button>
       </Flex>
 
       <Flex justify="center">

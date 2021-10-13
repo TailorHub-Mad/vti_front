@@ -8,7 +8,6 @@ export const Tag = ({
   children,
   ...props
 }) => {
-  console.log("lo que llega", label, children)
   return (
     <ChakraTag variant={variant} borderRadius="full" {...props}>
       <TagLabel isTruncated>{label || children}</TagLabel>

@@ -1,9 +1,9 @@
 export const NOTES_FILTER_KEYS = {
-  client: "notes.clientAlias",
+  client: "notes.clientId",
   note_tags: "notes.tags",
   users: "notes.owner",
   test_system: "notes.testSystems._id",
-  vti_code: "notes.vtiCode._id",
+  vti_code: "notes.testSystems.vtiCode._id",
   project: "notes.projects._id",
   formalized: "notes.formalized",
   closed: "notes.isClosed",

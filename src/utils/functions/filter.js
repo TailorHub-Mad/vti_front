@@ -1,4 +1,6 @@
 export const generateFilterQuery = (keyRef, values) => {
+  console.log("KEY REF", keyRef)
+  console.log("values", values)
   const queryList = Object.entries(values).reduce((acc, [name, value]) => {
     if (!value) return acc
     if (!keyRef[name]) return acc
@@ -13,8 +15,12 @@ export const generateFilterQuery = (keyRef, values) => {
       return acc
     }
 
-    if (value?.value !== "") {
-      acc.push(`${[keyRef[name]]}=${value.value}`)
+    if (typeof value === "object") {
+      if (value?.value !== "") {
+        acc.push(`${[keyRef[name]]}=${value.value}`)
+        return acc
+      }
+
       return acc
     }
 
