@@ -13,6 +13,7 @@ export const InputSelect = ({
   helper,
   onHelperClick,
   isDisabled = false,
+  isMultiTag,
   ...props
 }) => {
   const [inputValue, setInputValue] = useState(value)
@@ -23,6 +24,15 @@ export const InputSelect = ({
 
   const handleChange = (e) => {
     const targetValue = e.target.value
+
+    setInputValue(targetValue)
+    // if (targetValue.length !== inputValue?.length) {
+
+    //   onChange({
+    //     value: "",
+    //     label: ""
+    //   })
+    // }
 
     if (targetValue === "") return setAvailableOptions(options)
     return filterOptions(targetValue)
@@ -75,8 +85,7 @@ export const InputSelect = ({
           placeholder={placeholder}
           onChange={handleChange}
           onClick={() => setShowSelectMenu(true)}
-          value={inputValue}
-          isDisabled={isDisabled}
+          value={isMultiTag ? "" : inputValue}
           autoComplete="off"
         />
         <ChevronDownIcon

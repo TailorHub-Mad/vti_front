@@ -49,26 +49,29 @@ export const MultiTagSelect = ({
           onChange={(selected) => handleChange(selected)}
           placeholder={placeholder}
           options={availableOptions}
-          isDisabled={isDisabled}
+          isDisabled={availableOptions.length === 0 || isDisabled}
+          isMultiTag
         />
         <Flex mt="12px" width="100%" wrap="wrap" height="fit-content">
           {inputValues.map((value, idx) => {
             return (
               value.value && (
-                <Tag
-                  key={`${value.value}-${idx}`}
-                  variant="pale_yellow"
-                  mb="8px"
-                  mr="8px"
-                  height="32px"
-                >
-                  {value.label}{" "}
-                  <CloseIcon
-                    width="16px"
-                    cursor="pointer"
-                    onClick={() => handleDeleteItem(idx)}
-                  />{" "}
-                </Tag>
+                <Flex alignItems="center">
+                  <Tag
+                    key={`${value.value}-${idx}`}
+                    variant="pale_yellow"
+                    mb="8px"
+                    mr="8px"
+                    height="32px"
+                  >
+                    {value.label}
+                    <CloseIcon
+                      width="16px"
+                      cursor="pointer"
+                      onClick={() => handleDeleteItem(idx)}
+                    />
+                  </Tag>
+                </Flex>
               )
             )
           })}
