@@ -118,7 +118,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       type: "select",
       config: {
         placeholder: "Sistema",
-        options: testSystemsOpt,
+        options: sectorsOpt,
         label: "Sector"
       }
     },
