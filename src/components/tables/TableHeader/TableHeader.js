@@ -60,7 +60,6 @@ export const TableHeader = ({
                 alignItems="center"
                 justifyContent="center"
                 onClick={() => onDelete(selectedRows)}
-                cursor="pointer"
               >
                 <DeleteIcon mr="8px" color="error" />
                 <Text color="error" marginTop="6px">
@@ -71,13 +70,15 @@ export const TableHeader = ({
           </Flex>
           {fetchState === fetchType.FILTER ? (
             <Flex
+              cursor="pointer"
               alignItems="center"
               ml="24px"
               onClick={handleOnClick}
-              cursor="pointer"
             >
               <CloseIcon mr="8px" h="12px" />
-              <Text marginTop="6px">{`Eliminar filtro`}</Text>
+              <Text marginTop="6px" cursor="pointer">
+                Eliminar filtro
+              </Text>
             </Flex>
           ) : null}
         </Flex>

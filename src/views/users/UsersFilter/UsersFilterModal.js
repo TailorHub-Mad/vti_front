@@ -24,16 +24,21 @@ export const UsersFilterModal = ({ isOpen, onClose, onFilter }) => {
     onFilter(filterValues)
   }
 
+  const handleOnClose = () => {
+    setFilterValues(initialValues)
+    onClose()
+  }
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleOnClose}>
       <ModalOverlay />
       <CustomModalContent>
         <ScaleFade in={showMainContent}>
           <MainFilter
             simpleFilterValues={filterValues}
-            onClose={onClose}
+            onClose={handleOnClose}
             onSimpleFilterChange={(val) => setFilterValues(val)}
-            onFilter={() => handleOnFilter()}
+            onFilter={handleOnFilter}
             onReset={handleOnReset}
           />
         </ScaleFade>

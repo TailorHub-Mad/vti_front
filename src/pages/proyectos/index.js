@@ -17,7 +17,6 @@ import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddProjectIcon } from "../../components/icons/AddProjectIcon"
 import {
   checkDataIsEmpty,
-  generateQueryStr,
   getFieldGRoupObjectById,
   getFieldObjectById
 } from "../../utils/functions/global"
@@ -298,9 +297,7 @@ const proyectos = () => {
       return
     }
 
-    const filter = generateQueryStr(
-      generateFilterQuery(PROJECTS_FILTER_KEYS, values)
-    )
+    const filter = generateFilterQuery(PROJECTS_FILTER_KEYS, values)
 
     setFetchState(fetchType.FILTER)
     setFetchOptions({
