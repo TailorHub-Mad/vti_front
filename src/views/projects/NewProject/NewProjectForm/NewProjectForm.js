@@ -229,7 +229,7 @@ export const NewProjectForm = ({
     text: <SimpleInput />,
     select: <InputSelect />,
     add_select: <AddSelect />,
-    multitag_select: <MultiTagSelect/>
+    multitag_select: <MultiTagSelect />
   }
 
   return (
