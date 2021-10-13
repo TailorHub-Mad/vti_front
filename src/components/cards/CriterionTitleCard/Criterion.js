@@ -21,17 +21,17 @@ export const CriterionTitleCard = ({
   const [showAll, setShowAll] = useState(false)
   const [tags, setTags] = useState([])
 
-  const allSelected = tags.length === selectedTags.length
+  const allSelected = tags?.length === selectedTags?.length
   const isChecked = false
 
   const showMoroLess = () => {
-    if (tags.length > 0) return false
-    if (!showAll && tags.length < help.relatedTags.length) return false
+    if (tags?.length > 0) return false
+    if (!showAll && tags?.length < help.relatedTags?.length) return false
   }
 
   useEffect(() => {
     if (showAll) setTags(help.relatedTags)
-    else setTags(help.relatedTags.splice(0, 3))
+    else setTags(help.relatedTags?.splice(0, 3))
   }, [showAll])
 
   return (
@@ -46,7 +46,7 @@ export const CriterionTitleCard = ({
       {...props}
     >
       <CriterionTitleCardHeader
-        title={help.name}
+        title={help.title}
         onEdit={onEdit}
         onDelete={onDelete}
       />
@@ -55,7 +55,7 @@ export const CriterionTitleCard = ({
         {`Fecha de creación ${new Date(help.createdAt).toLocaleDateString()}`}
       </Text>
 
-      {tags.length > 0 ? (
+      {tags?.length > 0 ? (
         <Checkbox mb="16px" onChange={selectAllTags} isChecked={allSelected}>
           <Text color="gray" variant="d_s_regular">
             Seleccionar
@@ -63,7 +63,7 @@ export const CriterionTitleCard = ({
         </Checkbox>
       ) : null}
 
-      {tags.map((tag, idx) => (
+      {tags?.map((tag, idx) => (
         <Flex key={idx} align="center" width="100%" justify="space-between" mb="8px">
           <Flex align="center">
             <Checkbox mr="8px" onChange={onSelect} isChecked={isChecked} />

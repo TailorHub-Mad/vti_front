@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, Text } from "@chakra-ui/react"
+import { Box, Flex, Text } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { Page } from "../components/layout/Pages/Page"
 import { PageBody } from "../components/layout/Pages/PageBody/PageBody"
@@ -29,7 +29,7 @@ import { BreadCrumbs } from "../components/navigation/BreadCrumbs/BreadCrumbs"
 import { LoadingView } from "../views/common/LoadingView"
 import { ViewNotFoundState } from "../views/common/ViewNotFoundState"
 import { ViewEmptyState } from "../views/common/ViewEmptyState"
-
+import { CriterionContainer } from "../views/helps/CriterionContainer/CriterionContainer"
 const HELP_MENU_TABS = {
   projects_board: "projects_board",
   projects_alphabetic: "projects_alphabetic",
@@ -59,7 +59,7 @@ const apoyo = () => {
   const [helpToUpdate, setHelpToUpdate] = useState(null)
   const [helpToDelete, setHelpToDelete] = useState(null)
   const [tagsNotWork, setTagsNotWork] = useState([])
-  const [isProjectHelp, setIsProjectHelp] = useState(true)
+  const [isProjectHelp, setIsProjectHelp] = useState(false)
 
   // Fetch
   const { data, error, isLoading, mutate } = helpFetchHandler(
@@ -68,6 +68,7 @@ const apoyo = () => {
     isProjectHelp
   )
 
+  console.log(data)
   const isEmptyData = checkDataIsEmpty(data)
   const helpsData = data && !isEmptyData ? data : null
 
@@ -111,7 +112,7 @@ const apoyo = () => {
       }
 
       setShowImportModal(false)
-      showToast("Criterios importadas correctamente")
+      showToast("Criterios importados correctamente")
     } catch (error) {
       errorHandler(error)
     }
@@ -258,37 +259,23 @@ const apoyo = () => {
               </Box>
             ) : null}
 
-            <Grid
-              templateColumns="repeat(auto-fill, 266px)"
-              gap="16px"
-              width="100%"
-              mt="8px"
-              mb="24px"
-            >
-              {activeTab.includes(ORDER.board)
-                ? helpsData.map((help) => (
-                    <CriterionTitleCard
-                      help={help}
-                      onAdd={() => setIsHelpModalOpen(true)}
-                      onEdit={() => handleUpdate(help._id)}
-                      onDelete={() => setHelpToDelete(help._id)}
-                      key={help.name}
-                    />
-                  ))
-                : null}
+            {activeTab.includes(ORDER.board)
+              ? helpsData.map((help) => (
+                  <CriterionContainer key={help._id} criterion={help} />
+                ))
+              : null}
 
-              {activeTab.includes(ORDER.alphabetic)
-                ? sortTags(helpsData).map((help) => (
-                    <CriterionTitleCard
-                      help={help}
-                      onAdd={() => setIsHelpModalOpen(true)}
-                      onEdit={() => handleUpdate(help._id)}
-                      onDelete={() => setHelpToDelete(help._id)}
-                      key={help.name}
-                    />
-                  ))
-                : null}
-            </Grid>
+            {activeTab.includes(ORDER.alphabetic)
+              ? sortTags(helpsData).map((help) => (
+                  <CriterionTitleCard
+                    help={help}
+                    onAdd={() => setIsHelpModalOpen(true)}
+                    onEdit={() => handleUpdate(help._id)}
+                    onDelete={() => setHelpToDelete(help._id)}
+                    key={help.title}
+                  />
+                ))
+              : null}
           </>
         ) : null}
       </PageBody>
