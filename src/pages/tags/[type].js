@@ -27,7 +27,7 @@ import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { NewTagModal } from "../../views/tags/NewTag/NewTagModal/NewTagModal"
 import { TagsHeader } from "../../views/tags/TagsHeader/TagsHeader"
 import download from "downloadjs"
-import { generateFilterQueryObj } from "../../utils/functions/filter"
+import { generateFilterQuery } from "../../utils/functions/filter"
 import { generateQueryStr } from "../../utils/functions/global"
 import { TagsFilterModal } from "../../views/tags/TagsFilter/TagsFilterModal"
 import { TAGS_FILTER_KEYS } from "../../utils/constants/filter"
@@ -109,6 +109,11 @@ const tags = () => {
     setIsTagModalOpen(false)
   }
 
+  const handleOnOpenFilter = () => {
+    if (fetchState === fetchType.FILTER) handleOnFilter(null)
+    else setShowFilterModal(true)
+  }
+
   // Handlers CRUD
   const handleImportTags = async (data) => {
     //TODO Gestión de errores y update de SWR
@@ -174,7 +179,7 @@ const tags = () => {
   }
 
   const handleOnFilter = (values) => {
-    const filter = generateQueryStr(generateFilterQueryObj(TAGS_FILTER_KEYS, values))
+    const filter = generateQueryStr(generateFilterQuery(TAGS_FILTER_KEYS, values))
 
     setFetchState(fetchType.FILTER)
     setFetchOptions({
@@ -237,7 +242,7 @@ const tags = () => {
           <ToolBar
             onAdd={() => setIsTagModalOpen(true)}
             onSearch={onSearch}
-            onFilter={() => setShowFilterModal(true)}
+            onFilter={handleOnOpenFilter}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
             addLabel={infoByType[type].addTitle}

@@ -33,7 +33,7 @@ export const TAGS_FILTER_KEYS = {
 }
 
 export const USERS_FILTER_KEYS = {
-  project: "users.project._id",
-  department: "user.department._id",
-  focus_point: "user.focusPoint._id"
+  project: "projectsComments._id",
+  department: "department._id",
+  focus_point: "focusPoint._id"
 }

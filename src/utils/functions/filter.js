@@ -1,14 +1,31 @@
-export const generateFilterQueryObj = (keyRef, values) => {
-  const queryObj = Object.entries(values).reduce((ac, [name, value]) => {
-    if (value && keyRef[name]) {
-      if (Array.isArray(value) && keyRef[name]) {
-        ac[keyRef[name]] = value[0]?.value ? value[0].value : value[0]
-      } else {
-        ac[keyRef[name]] = value?.value ? value.value : value
-      }
-    }
-    return ac
-  }, {})
+export const generateFilterQuery = (keyRef, values) => {
+  const queryList = Object.entries(values).reduce((acc, [name, value]) => {
+    if (!value) return acc
+    if (!keyRef[name]) return acc
 
-  return queryObj
+    if (Array.isArray(value)) {
+      value.forEach((v) => {
+        if (v.value !== "") {
+          acc.push(`${[keyRef[name]]}=${v.value}`)
+        }
+      })
+
+      return acc
+    }
+
+    if (value?.value !== "") {
+      acc.push(`${[keyRef[name]]}=${value.value}`)
+      return acc
+    }
+
+    acc.push(`${[keyRef[name]]}=${value}`)
+    return acc
+  }, [])
+
+  // TODO -> review OR / AND
+  queryList.push("union=true")
+
+  const filter = queryList.join("&")
+
+  return filter
 }

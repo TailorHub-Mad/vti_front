@@ -39,16 +39,20 @@ export const AddSelect = ({
     setAvailableOptions(availableOptions)
   }, [inputValues])
 
+  useEffect(() => {
+    setInputValues(value)
+  }, [value])
+
   const renderDeleteItem = (itemPosition) => {
-    if (inputValues.length === 1 && itemPosition === 0) return null
-    if (inputValues.length > 1 && itemPosition === inputValues.length - 1)
-      return null
+    if (inputValues.length === 1 && inputValues[0]?.value === "") return null
 
     const handleOnClick = () => {
       const newValues = [...inputValues].filter((_, index) => itemPosition !== index)
+      const checkValues =
+        newValues.length === 0 ? [{ label: "", value: "" }] : newValues
 
-      setInputValues(newValues)
-      onChange(newValues)
+      setInputValues(checkValues)
+      onChange(checkValues)
     }
 
     return (
@@ -74,21 +78,28 @@ export const AddSelect = ({
 
     const handleOnClick = () => setInputValues([...inputValues, undefined])
 
+    const isDisabled = inputValues.length === 1 && inputValues[0]?.value === ""
+
     return (
       <>
         <Box
           display="flex"
           alignItems="center"
           marginTop="8px"
-          cursor="pointer"
+          cursor={isDisabled ? "default" : "pointer"}
           onClick={handleOnClick}
+          pointerEvents={isDisabled ? "none" : "all"}
         >
-          <AddIcon marginRight="4px" width="16px" color="blue.500" />
+          <AddIcon
+            marginRight="4px"
+            width="16px"
+            color={isDisabled ? "grey" : "blue.500"}
+          />
           <Text
             marginTop="4px"
             display="block"
             variant="m_xs_regular"
-            color="blue.500"
+            color={isDisabled ? "grey" : "blue.500"}
           >
             {additemlabel || "Añadir"}
           </Text>
@@ -111,8 +122,11 @@ export const AddSelect = ({
                 isDisabled={isDisabled}
               />
               <>
-                {renderDeleteItem(idx)}
-                {renderAddItem(idx)}
+                {options && (
+                  <>
+                    {renderDeleteItem(idx)} {renderAddItem(idx)}
+                  </>
+                )}
               </>
             </Box>
           )

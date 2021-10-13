@@ -16,7 +16,7 @@ export const FilterButton = ({ onFilter, active }) => {
         {active ? (
           <CloseIcon h="14px" mr={["8px", "8px"]} />
         ) : (
-          <FilterIcon mr={["8px", "8px"]} display />
+          <FilterIcon mr={["8px", "8px"]} />
         )}
         Filtrar
       </Button>

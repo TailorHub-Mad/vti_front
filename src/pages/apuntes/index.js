@@ -40,7 +40,7 @@ import { ResponseModal } from "../../views/notes/Response/ResponseModal/Response
 import download from "downloadjs"
 import { NotesFilterModal } from "../../views/notes/NotesFilter/NotesFilterModal"
 import { NOTES_FILTER_KEYS } from "../../utils/constants/filter"
-import { generateFilterQueryObj } from "../../utils/functions/filter"
+import { generateFilterQuery } from "../../utils/functions/filter"
 import { getGroupOptionLabel } from "../../utils/functions/objects"
 
 const NOTES_GROUP_OPTIONS = [
@@ -137,6 +137,11 @@ const apuntes = () => {
   const handleOpenEditResponse = (message) => {
     setMessageToUpdate(message)
     setIsResponseModalOpen(true)
+  }
+
+  const handleOnOpenFilter = () => {
+    if (fetchState === fetchType.FILTER) handleOnFilter(null)
+    else setShowFilterModal(true)
   }
 
   // Handlers CRUD
@@ -277,9 +282,7 @@ const apuntes = () => {
   }
 
   const handleOnFilter = (values) => {
-    const filter = generateQueryStr(
-      generateFilterQueryObj(NOTES_FILTER_KEYS, values)
-    )
+    const filter = generateQueryStr(generateFilterQuery(NOTES_FILTER_KEYS, values))
 
     setFetchState(fetchType.FILTER)
     setFetchOptions({
@@ -382,7 +385,7 @@ const apuntes = () => {
             onAdd={() => setIsNoteModalOpen(true)}
             onSearch={onSearch}
             onGroup={handleOnGroup}
-            onFilter={() => setShowFilterModal(true)}
+            onFilter={handleOnOpenFilter}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
             addLabel="Añadir apunte"

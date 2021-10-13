@@ -9,14 +9,18 @@ import { formatUser, TABLE_USERS_HEAD } from "./utils"
 export const UsersTable = ({
   users = [],
   onDelete,
+  onClose,
+  onDeleteMany,
   onEdit,
   fetchState,
   onGroup,
-  groupOption,
-  onDeleteMany
+  onFilter,
+  groupOption
 }) => {
+  const isGrouped = fetchState === fetchType.GROUP
+
   const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
-    useTableActions()
+    useTableActions(isGrouped)
 
   const selectedRowsKeys = Object.keys(selectedRows)
 
@@ -34,7 +38,7 @@ export const UsersTable = ({
     components: TABLE_COMPONENTS,
     head: {
       ...TABLE_USERS_HEAD,
-      options: { ...TABLE_USERS_HEAD.options, onDelete, onEdit }
+      options: { ...TABLE_USERS_HEAD.options, onDelete, onEdit, onClose, isGrouped }
     }
   }
 
@@ -51,7 +55,9 @@ export const UsersTable = ({
           selectAllRows={() => handleSelectAllRows(usersData)}
           checked={allRowsAreSelected}
           onGroup={onGroup}
+          onFilter={onFilter}
           groupOption={groupOption}
+          fetchState={fetchState}
         />
       }
       {...TABLE_STYLE}

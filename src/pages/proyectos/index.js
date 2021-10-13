@@ -34,7 +34,7 @@ import {
 } from "../../utils/functions/import_export/projects_helper"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 import { FinishProjectModal } from "../../views/projects/NewProject/FinishProjectModal/FinishProjectModal"
-import { generateFilterQueryObj } from "../../utils/functions/filter"
+import { generateFilterQuery } from "../../utils/functions/filter"
 import { ProjectsFilterModal } from "../../views/projects/ProjectFilter/ProjectsFilterModal"
 import { PROJECTS_FILTER_KEYS } from "../../utils/constants/filter"
 import { ProjectsMenu } from "../../views/projects/ProjectsMenu/ProjectsMenu"
@@ -299,7 +299,7 @@ const proyectos = () => {
     }
 
     const filter = generateQueryStr(
-      generateFilterQueryObj(PROJECTS_FILTER_KEYS, values)
+      generateFilterQuery(PROJECTS_FILTER_KEYS, values)
     )
 
     setFetchState(fetchType.FILTER)
