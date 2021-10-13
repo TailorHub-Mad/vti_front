@@ -22,7 +22,9 @@ export const CloudButton = ({ onImport, onExport }) => {
       >
         <OptionsMenuItem onClick={onImport} width="100%" p="9.5px">
           <UploadCloudIcon mr="8px" width="16px" heigth="16px" />
-          <Text variant="d_xs_regular" mt="3px">Importar</Text>
+          <Text variant="d_xs_regular" mt="3px">
+            Importar
+          </Text>
         </OptionsMenuItem>
         <OptionsMenuItem onClick={onExport} width="100%" isLast>
           <ExportIcon mr="8px" width="16px" heigth="16px" />
