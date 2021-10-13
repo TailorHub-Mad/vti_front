@@ -39,9 +39,9 @@ export const AddSelect = ({
     setAvailableOptions(availableOptions)
   }, [inputValues])
 
-  useEffect(() => {
-    setInputValues(value)
-  }, [value])
+  // useEffect(() => {
+  //   setInputValues(value)
+  // }, [value])
 
   const renderDeleteItem = (itemPosition) => {
     if (inputDisabled) return null

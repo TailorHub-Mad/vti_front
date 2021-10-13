@@ -19,7 +19,11 @@ export const MultiTagSelect = ({
 
   const handleChange = (option) => {
     const newInputValues = [...inputValues]
-    newInputValues.push(option)
+
+    if (newInputValues.length === 1 && newInputValues[0].value === "")
+      newInputValues[0] = option
+    else newInputValues.push(option)
+
     setInputValues(newInputValues)
     onChange(newInputValues)
   }
@@ -56,14 +60,8 @@ export const MultiTagSelect = ({
           {inputValues.map((value, idx) => {
             return (
               value.value && (
-                <Flex alignItems="center">
-                  <Tag
-                    key={`${value.value}-${idx}`}
-                    variant="pale_yellow"
-                    mb="8px"
-                    mr="8px"
-                    height="32px"
-                  >
+                <Flex alignItems="center" key={`${value.value}-${idx}`}>
+                  <Tag variant="pale_yellow" mb="8px" mr="8px" height="32px">
                     {value.label}
                     <CloseIcon
                       width="16px"

@@ -26,13 +26,6 @@ export const InputSelect = ({
     const targetValue = e.target.value
 
     setInputValue(targetValue)
-    // if (targetValue.length !== inputValue?.length) {
-
-    //   onChange({
-    //     value: "",
-    //     label: ""
-    //   })
-    // }
 
     if (targetValue === "") return setAvailableOptions(options)
     return filterOptions(targetValue)
@@ -42,7 +35,8 @@ export const InputSelect = ({
     const selected = availableOptions?.find((option) => option.value === _value)
 
     onChange(selected)
-    setInputValue(selected?.label)
+    setInputValue(isMultiTag ? "" : selected?.label)
+
     setShowSelectMenu(false)
   }
 
@@ -85,7 +79,7 @@ export const InputSelect = ({
           placeholder={placeholder}
           onChange={handleChange}
           onClick={() => setShowSelectMenu(true)}
-          value={isMultiTag ? "" : inputValue}
+          value={inputValue}
           autoComplete="off"
         />
         <ChevronDownIcon
