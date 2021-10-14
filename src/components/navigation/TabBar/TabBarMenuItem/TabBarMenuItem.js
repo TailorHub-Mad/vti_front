@@ -1,7 +1,98 @@
-import { Flex, Icon, Text, useBoolean } from "@chakra-ui/react"
+import { Flex, Icon, Text } from "@chakra-ui/react"
 import Link from "next/link"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 import { PATHS } from "../../../../utils/constants/global"
 import { ArrowDownIcon } from "../../../icons/ArrowDownIcon"
+
+export const MenuItem = ({ label, icon, href, submenu, disabled, ...props }) => {
+  const [showSubmenu, setShowSubmenu] = useState(false)
+  const [active, setActive] = useState({
+    state: false,
+    submenu: false,
+    position: null
+  })
+
+  const router = useRouter()
+  const { asPath } = router
+
+  const compare = (href) => !asPath.localeCompare(href)
+
+  useEffect(() => {
+    if (href && submenu) {
+      const noSubmenuHref = submenu.find((sm, idx) => {
+        if (compare(sm.href)) {
+          setActive({
+            state: true,
+            submenu: true,
+            position: idx
+          })
+
+          setShowSubmenu(true)
+          return true
+        }
+        return false
+      })
+
+      if (!noSubmenuHref) {
+        if (compare(href)) {
+          setActive({
+            state: true,
+            submenu: false,
+            position: null
+          })
+        }
+      }
+    } else if (submenu) {
+      submenu.forEach((sm, idx) => {
+        if (compare(sm.href)) {
+          setActive({
+            state: true,
+            submenu: true,
+            position: idx
+          })
+          setShowSubmenu(true)
+        }
+      })
+    } else {
+      compare(href)
+        ? setActive({
+            state: true
+          })
+        : null
+    }
+  }, [])
+
+  return (
+    <>
+      <MenuLink
+        label={label}
+        icon={icon}
+        href={href}
+        submenu={submenu}
+        setShowSubmenu={setShowSubmenu}
+        showSubmenu={showSubmenu}
+        disabled={disabled}
+        active={active?.state && !active?.submenu}
+        {...props}
+      />
+      {submenu && showSubmenu
+        ? submenu.map((link, idx) => (
+            <MenuLink
+              key={link.label}
+              label={link.label}
+              icon={link.icon()}
+              href={link.href}
+              disabled={disabled}
+              pl="16px"
+              active={active?.state && active?.submenu && active?.position === idx}
+              mb={idx === submenu.length - 1 ? "16px" : "0"}
+            />
+          ))
+        : null}
+    </>
+  )
+}
 
 export const MenuLink = ({
   label,
@@ -12,6 +103,7 @@ export const MenuLink = ({
   showSubmenu,
   disabled,
   noEvents,
+  active = false,
   ...props
 }) => {
   return (
@@ -29,7 +121,7 @@ export const MenuLink = ({
       <Link href={noEvents ? "" : href || PATHS.notes} passHref>
         <Flex alignItems="center">
           <Icon
-            color="white"
+            color={active ? "#F3D30C" : "white"}
             marginRight="8px"
             _groupHover={{ color: "yellow" }}
             pointerEvents={true}
@@ -37,7 +129,7 @@ export const MenuLink = ({
             {icon}
           </Icon>
           <Text
-            color="white"
+            color={active ? "#F3D30C" : "white"}
             variant="d_s_medium"
             _groupHover={{ color: "yellow" }}
             marginTop="3px"
@@ -49,51 +141,12 @@ export const MenuLink = ({
 
       {submenu ? (
         <ArrowDownIcon
-          color="white"
+          color={active ? "#F3D30C" : "white"}
           _groupHover={{ color: "yellow" }}
-          onClick={setShowSubmenu.toggle}
+          onClick={() => setShowSubmenu(!showSubmenu)}
           cursor="pointer"
         />
       ) : null}
     </Flex>
-  )
-}
-
-export const MenuItem = ({
-  label,
-  icon,
-  href,
-  submenu,
-  disabled,
-
-  ...props
-}) => {
-  const [showSubmenu, setShowSubmenu] = useBoolean(false)
-  return (
-    <>
-      <MenuLink
-        label={label}
-        icon={icon}
-        href={href}
-        submenu={submenu}
-        setShowSubmenu={setShowSubmenu}
-        showSubmenu={showSubmenu}
-        disabled={disabled}
-        {...props}
-      />
-      {submenu && showSubmenu
-        ? submenu.map((link, idx) => (
-            <MenuLink
-              key={link.label}
-              label={link.label}
-              icon={link.icon()}
-              href={link.href}
-              disabled={disabled}
-              pl="16px"
-              mb={idx === submenu.length - 1 ? "16px" : "0"}
-            />
-          ))
-        : null}
-    </>
   )
 }

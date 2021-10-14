@@ -7,6 +7,7 @@ import { Switch } from "./components/switch.theme"
 import { Checkbox } from "./components/checkbox.theme"
 import { Icon } from "./components/icon.theme"
 import { Tag } from "./components/tag.theme"
+import { Modal } from "./components/modal.theme"
 import { IconButton } from "./components/icon_button.theme"
 import { breakpoints } from "./fundations/breakpoints.theme"
 import { textStyles } from "./fundations/textStyles.theme"
@@ -34,7 +35,8 @@ const theme = extendTheme({
     Icon,
     Checkbox,
     Switch,
-    FormLabel
+    FormLabel,
+    Modal
   },
   icons
 })

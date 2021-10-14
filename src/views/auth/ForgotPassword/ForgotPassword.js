@@ -53,7 +53,7 @@ export const ForgotPassword = () => {
           marginBottom="16px"
           color="#052E57"
         >
-          Dinos por favor tu email para restaurarla.
+          No te preocupes, dinos por favor tu mail para restaurarla.
         </Text>
         <Formik
           initialValues={{ email: "" }}

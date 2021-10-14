@@ -10,6 +10,7 @@ const inputThemes = {
         borderColor: "light_grey",
         fontSize: ["16px", "17px"],
         lineHeight: ["21px", "18.70px"],
+        boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)",
         _disabled: {
           _hover: {
             borderColor: "light_grey"

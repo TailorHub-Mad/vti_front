@@ -9,6 +9,7 @@ export const Button = {
     borderRadius: "2px",
     bgColor: "blue.500",
     color: "white",
+    textDecoration: "none",
     _hover: {
       opacity: 0.8
     },
@@ -43,6 +44,7 @@ export const Button = {
       minW: "194px",
       bg: "white",
       color: "blue.500",
+      boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)",
       css: {
         boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)"
       },
@@ -67,6 +69,7 @@ export const Button = {
       padding: "16px",
       width: ["46px", "46px", "46px", "auto"],
       fontSize: ["0", "0", "0", "17px"],
+      boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)",
       _hover: {
         bg: "blue.500",
         borderColor: "blue.500",
@@ -90,6 +93,7 @@ export const Button = {
       height: "27px",
       bg: "start",
       color: "white",
+      boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)",
       borderColor: "start",
       _hover: {
         opacity: 0.6
@@ -110,6 +114,7 @@ export const Button = {
       bg: "white",
       color: "blue.500",
       borderColor: "blue.500",
+      boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)",
       padding: "8px 24px",
       border: "1px solid",
       _hover: {
