@@ -58,7 +58,9 @@ export const NewTagForm = ({ value, onChange, objectToUpdate, isProjectTag }) =>
   useEffect(() => {
     if (!objectToUpdate || tagOptions.length === 0) return
 
-    const tag = tagOptions.find((_tag) => _tag.label === objectToUpdate?.parent.name)
+    const tag = tagOptions.find(
+      (_tag) => _tag.label === objectToUpdate?.parent?.name
+    )
 
     handleFormChange("relatedTag", tag)
   }, [objectToUpdate, tagOptions])

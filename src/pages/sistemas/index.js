@@ -101,10 +101,8 @@ const sistemas = () => {
     //TODO Gestión de errores y update de SWR
 
     try {
-      const systemsCreated = []
       for (let index = 0; index < data.length; index++) {
-        const pro = await createSystem(data[index])
-        systemsCreated.push(pro)
+        await createSystem(data[index])
       }
 
       setShowImportModal(false)

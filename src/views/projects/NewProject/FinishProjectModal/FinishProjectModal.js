@@ -39,6 +39,8 @@ export const FinishProjectModal = ({
       closed: destructuringDate(values.date)
     })
 
+    setValues(initialValues)
+
     isGrouped
       ? await mutate(SWR_CACHE_KEYS.groupProjects)
       : await mutate(SWR_CACHE_KEYS.projects)
@@ -55,7 +57,7 @@ export const FinishProjectModal = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} {...props}>
+    <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader

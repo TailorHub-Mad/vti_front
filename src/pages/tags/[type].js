@@ -116,12 +116,9 @@ const tags = () => {
     //TODO Gestión de errores y update de SWR
 
     try {
-      const tagsCreated = []
+      const func = isProjectTag ? createProjectTag : createNoteTag
       for (let index = 0; index < data.length; index++) {
-        const pro = isProjectTag
-          ? await createProjectTag(data[index])
-          : await createNoteTag(data[index])
-        tagsCreated.push(pro)
+        await func(data[index])
       }
 
       setShowImportModal(false)

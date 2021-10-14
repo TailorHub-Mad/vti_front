@@ -83,6 +83,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateProject() : await handleCreateProject()
+    setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.projects)
     showToast(
       isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s proyecto/s!"
@@ -110,6 +111,11 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
     }
   }
 
+  const handleOnClose = () => {
+    setValues(initialValues)
+    onClose()
+  }
+
   useEffect(() => {
     if (!projectToUpdate) return
     const _project = {
@@ -130,7 +136,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
   }, [isOpen])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} {...props}>
+    <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
       <ScaleFade in={showSecondaryContent || !showSecondaryContent}>
         <ModalContent
@@ -146,7 +152,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
         >
           <CustomModalHeader
             title={isUpdate ? "Editar proyecto" : "Añadir nuevo proyecto"}
-            onClose={onClose}
+            onClose={handleOnClose}
             pb="24px"
           />
           <NewProjectForm

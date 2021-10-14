@@ -23,7 +23,6 @@ export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props })
   const [filterValues, setFilterValues] = useState(initialValues)
 
   const handleOnReset = () => {
-    console.log("pasa por aqio")
     setFilterValues(initialValues)
     onFilter(null)
   }
@@ -41,7 +40,7 @@ export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props })
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
-      <CustomModalContent>
+      <CustomModalContent zIndex="10001">
         <ScaleFade
           in={
             !showSaveFilter &&

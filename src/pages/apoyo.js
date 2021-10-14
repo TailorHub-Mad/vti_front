@@ -103,12 +103,9 @@ const apoyo = () => {
     //TODO Gestión de errores y update de SWR
 
     try {
-      const tagsCreated = []
+      const func = isProjectHelp ? createProjectHelp : createNoteHelp
       for (let index = 0; index < data.length; index++) {
-        const pro = isProjectHelp
-          ? await createProjectHelp(data[index])
-          : await createNoteHelp(data[index])
-        tagsCreated.push(pro)
+        await await func(data[index])
       }
 
       setShowImportModal(false)

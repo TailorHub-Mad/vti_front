@@ -82,10 +82,8 @@ export const UsersByObject = ({
     //TODO Gestión de errores y update de SWR
 
     try {
-      const usersCreated = []
       for (let index = 0; index < data.length; index++) {
-        const pro = await createUser(data[index])
-        usersCreated.push(pro)
+        await createUser(data[index])
       }
 
       setShowImportModal(false)

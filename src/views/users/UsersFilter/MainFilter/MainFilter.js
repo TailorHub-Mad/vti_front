@@ -30,7 +30,7 @@ export const MainFilter = ({
       left={moveToLeft ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}
       transition="left 0.18s ease-in-out"
       bgColor="white"
-      zIndex="1400"
+      zIndex="10001"
       padding="32px"
       {...props}
     >

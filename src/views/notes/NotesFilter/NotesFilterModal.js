@@ -50,7 +50,7 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
-      <CustomModalContent>
+      <CustomModalContent zIndex="10001">
         <ScaleFade
           in={
             !showSaveFilter &&

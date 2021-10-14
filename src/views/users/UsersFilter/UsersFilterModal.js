@@ -32,7 +32,7 @@ export const UsersFilterModal = ({ isOpen, onClose, onFilter }) => {
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose}>
       <ModalOverlay />
-      <CustomModalContent>
+      <CustomModalContent zIndex="10001">
         <ScaleFade in={showMainContent}>
           <MainFilter
             simpleFilterValues={filterValues}

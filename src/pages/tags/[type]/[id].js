@@ -8,6 +8,7 @@ import { errorHandler } from "../../../utils/errors"
 import { ProjectsByObject } from "../../../views/projects/ProjectsByObject/ProjectsByObject"
 import { projectFetchHandler } from "../../../swr/project.swr"
 import { checkDataIsEmpty } from "../../../utils/functions/global"
+import { PATHS } from "../../../utils/constants/global"
 
 const tag = () => {
   const router = useRouter()
@@ -43,17 +44,18 @@ const tag = () => {
     <Page>
       {isLoading ? <LoadingView mt="-200px" /> : null}
       {notFound ? <>Error. No se ha encontrado el tag.</> : null}
-      {projectsData ? (
-        <ProjectsByObject
-          projects={projectsData}
-          customURL={`Tags/${tag?.name}`}
-          setFetchState={setFetchState}
-          setFetchOptions={setFetchOptions}
-          fetchState={fetchState}
-          fetchOptions={fetchOptions}
-          isEmptyData={isEmptyData}
-        />
-      ) : null}
+
+      <ProjectsByObject
+        projects={projectsData}
+        customURL={`Tags/${tag?.name}`}
+        setFetchState={setFetchState}
+        setFetchOptions={setFetchOptions}
+        fetchState={fetchState}
+        fetchOptions={fetchOptions}
+        isEmptyData={isEmptyData}
+        hrefBack={PATHS.projectTags}
+        backText={"Volver a tags"}
+      />
     </Page>
   )
 }

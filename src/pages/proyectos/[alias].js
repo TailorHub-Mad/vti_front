@@ -103,6 +103,7 @@ const project = () => {
               testSystems={projectData?.testSystems}
               tags={projectData?.tags}
               users={projectData?.users}
+              closeInfo={projectData?.closed}
             />
             <ProjectNotes
               notesData={projectData?.notes.filter((n) => n?._id)}

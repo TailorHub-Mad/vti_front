@@ -9,9 +9,8 @@ export const CustomModalContent = ({ children, ...props }) => {
       position="fixed"
       top="0"
       left="0"
-      bgColor="transparent"
+      bgColor="#052E5780"
       zIndex="1400"
-      overflow="scroll"
       {...props}
     >
       {children}

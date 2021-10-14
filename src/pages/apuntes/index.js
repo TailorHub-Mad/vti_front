@@ -93,7 +93,7 @@ const apuntes = () => {
   const handleNotesData = (isEmptyData) => {
     if (!data || isEmptyData) return null
     if (fetchState == fetchType.GROUP) return data
-    return data[0].notes
+    return data[0]?.notes
 
     // TODO FILTER
   }
@@ -157,10 +157,8 @@ const apuntes = () => {
     //TODO Gestión de errores y update de SWR
 
     try {
-      const projectsCreated = []
       for (let index = 0; index < data.length; index++) {
-        const pro = await createNote(data[index])
-        projectsCreated.push(pro)
+        await createNote(data[index])
       }
 
       setShowImportModal(false)
