@@ -97,7 +97,7 @@ export const NewHelpModal = ({
   useEffect(() => {
     if (!tagToUpdate) return
     const { parent, name } = tagToUpdate
-    setValues([{ relatedTag: parent.name, name }])
+    setValues([{ relatedTag: parent?.name, name }])
   }, [tagToUpdate])
 
   return (

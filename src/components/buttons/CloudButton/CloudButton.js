@@ -7,6 +7,17 @@ import { OptionsMenuItem } from "../../navigation/OptionsMenu/OptionsMenuItem/Op
 
 export const CloudButton = ({ onImport, onExport, isDisabled }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const handleOnImport = () => {
+    onClose()
+    onImport()
+  }
+
+  const handleOnExport = () => {
+    onClose()
+    onExport()
+  }
+
   return (
     <Box position="relative">
       <Button
@@ -25,13 +36,13 @@ export const CloudButton = ({ onImport, onExport, isDisabled }) => {
         w="94px"
         height="64px"
       >
-        <OptionsMenuItem onClick={onImport} width="100%" p="9.5px">
+        <OptionsMenuItem onClick={handleOnImport} width="100%" p="9.5px">
           <UploadCloudIcon mr="8px" width="16px" heigth="16px" />
           <Text variant="d_xs_regular" mt="3px">
             Importar
           </Text>
         </OptionsMenuItem>
-        <OptionsMenuItem onClick={onExport} width="100%" isLast>
+        <OptionsMenuItem onClick={handleOnExport} width="100%" isLast>
           <ExportIcon mr="8px" width="16px" heigth="16px" />
           <Text variant="d_xs_regular">Exportar</Text>
         </OptionsMenuItem>

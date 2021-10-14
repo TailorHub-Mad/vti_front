@@ -8,8 +8,15 @@ import { PATHS } from "../../../../utils/constants/global"
 import Link from "next/link"
 import { Tag } from "../../../../components/tags/Tag/Tag"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
+import { CalendarIcon } from "@chakra-ui/icons"
 
-export const ProjectDetails = ({ focusPoint, testSystems, tags, users }) => {
+export const ProjectDetails = ({
+  focusPoint,
+  testSystems,
+  closeInfo,
+  tags,
+  users
+}) => {
   const [showProjectDetails, setShowProjectDetails] = useState(true)
 
   return (
@@ -24,6 +31,23 @@ export const ProjectDetails = ({ focusPoint, testSystems, tags, users }) => {
         <CollapseIconVert />
       </Flex>
       <Collapse in={showProjectDetails} animateOpacity>
+        {closeInfo && (
+          <Box mt="16px" mb="32px">
+            <Flex align="center" mb="8px">
+              <CalendarIcon mr="8px" />
+              <Text variant="d_m_regular">Fecha de cierre</Text>
+            </Flex>
+            {focusPoint && (
+              <Tag variant={variantGeneralTag.PROJECT} ml="32px">
+                {`${closeInfo.day.padStart(2, 0)}/${closeInfo.month.padStart(
+                  2,
+                  0
+                )}/${closeInfo.year}`}
+              </Tag>
+            )}
+          </Box>
+        )}
+
         <Box mt="16px" mb="32px">
           <Flex align="center" mb="8px">
             <PeopleLineIcon mr="8px" />
@@ -61,11 +85,7 @@ export const ProjectDetails = ({ focusPoint, testSystems, tags, users }) => {
           <Flex ml="32px">
             {tags?.length > 0 &&
               tags.map((tag, idx) => (
-                <Tag
-                  variant={variantGeneralTag.SYSTEM}
-                  key={`${tag}-${idx}`}
-                  mr="8px"
-                >
+                <Tag variant={variantGeneralTag.NOTE} key={`${tag}-${idx}`} mr="8px">
                   {tag.name}
                 </Tag>
               ))}

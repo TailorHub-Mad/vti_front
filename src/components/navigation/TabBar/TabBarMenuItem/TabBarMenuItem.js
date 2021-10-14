@@ -2,7 +2,6 @@ import { Flex, Icon, Text } from "@chakra-ui/react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { PATHS } from "../../../../utils/constants/global"
 import { ArrowDownIcon } from "../../../icons/ArrowDownIcon"
 
 export const MenuItem = ({ label, icon, href, submenu, disabled, ...props }) => {
@@ -106,6 +105,32 @@ export const MenuLink = ({
   active = false,
   ...props
 }) => {
+  const handleLink = () => {
+    return (
+      <Flex
+        alignItems="center"
+        pointerEvents={true}
+        onClick={noEvents ? () => setShowSubmenu(!showSubmenu) : null}
+      >
+        <Icon
+          color={active ? "#F3D30C" : "white"}
+          marginRight="8px"
+          _groupHover={{ color: "yellow" }}
+        >
+          {icon}
+        </Icon>
+        <Text
+          color={active ? "#F3D30C" : "white"}
+          variant="d_s_medium"
+          _groupHover={{ color: "yellow" }}
+          marginTop="3px"
+        >
+          {label}
+        </Text>
+      </Flex>
+    )
+  }
+
   return (
     <Flex
       align="center"
@@ -113,39 +138,26 @@ export const MenuLink = ({
       marginBottom={showSubmenu ? "0" : "16px"}
       w="100%"
       role="group"
-      cursor={noEvents ? "default" : "pointer"}
+      cursor={"pointer"}
       pointerEvents={disabled ? "none" : "auto"}
       opacity={disabled ? "0.3" : "1"}
       {...props}
     >
-      <Link href={noEvents ? "" : href || PATHS.notes} passHref>
-        <Flex alignItems="center">
-          <Icon
-            color={active ? "#F3D30C" : "white"}
-            marginRight="8px"
-            _groupHover={{ color: "yellow" }}
-            pointerEvents={true}
-          >
-            {icon}
-          </Icon>
-          <Text
-            color={active ? "#F3D30C" : "white"}
-            variant="d_s_medium"
-            _groupHover={{ color: "yellow" }}
-            marginTop="3px"
-          >
-            {label}
-          </Text>
-        </Flex>
-      </Link>
+      {noEvents ? (
+        handleLink()
+      ) : (
+        <Link href={href} passHref>
+          {handleLink()}
+        </Link>
+      )}
 
       {submenu ? (
         <ArrowDownIcon
           color={active ? "#F3D30C" : "white"}
           _groupHover={{ color: "yellow" }}
           transform={showSubmenu ? "rotate(0.5turn)" : "rotate(0turn)"}
-          onClick={() => setShowSubmenu(!showSubmenu)}
           cursor="pointer"
+          onClick={() => setShowSubmenu(!showSubmenu)}
         />
       ) : null}
     </Flex>

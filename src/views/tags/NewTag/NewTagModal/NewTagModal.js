@@ -44,7 +44,7 @@ export const NewTagModal = ({
   }
 
   const checkInputsAreEmpty = () => {
-    return values.some((value) => !value.name)
+    return values?.some((value) => !value.name)
   }
 
   const formatTags = (tags) => {
@@ -97,7 +97,7 @@ export const NewTagModal = ({
   useEffect(() => {
     if (!tagToUpdate) return
     const { parent, name } = tagToUpdate
-    setValues([{ relatedTag: parent.name, name }])
+    setValues([{ relatedTag: parent?.name, name }])
   }, [tagToUpdate])
 
   return (

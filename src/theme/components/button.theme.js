@@ -2,17 +2,17 @@ export const Button = {
   baseStyle: {
     fontFamily: "Noway-Regular",
     fontWeight: "400",
-    border: "2px solid",
-    borderColor: "blue.500",
     h: "48px",
     height: "48px",
     borderRadius: "2px",
     bgColor: "blue.500",
     color: "white",
     textDecoration: "none",
+    outline: "none",
     _hover: {
       opacity: 0.8
     },
+    _focus: { boxShadow: "none" },
     _disabled: {
       opacity: 1,
       bgColor: "blue.300",
