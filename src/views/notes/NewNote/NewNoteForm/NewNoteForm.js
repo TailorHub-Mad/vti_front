@@ -59,7 +59,7 @@ export const NewNoteForm = ({
         placeholder: "Selecciona",
         label: "Selecciona el proyecto*",
         options: projectOptions,
-        isDisabled: Boolean(noteFromProject) || Boolean(noteToUpdate)
+        disabled: Boolean(noteToUpdate) || Boolean(noteFromProject)
       }
     },
     system: {
@@ -69,8 +69,7 @@ export const NewNoteForm = ({
         label: "Selecciona el sistema utilizado en el proyecto*",
         options: systemOptions,
         additemlabel: "Añadir ",
-        removeitemlabel: "Eliminar ",
-        isDisabled: Boolean(noteToUpdate)
+        removeitemlabel: "Eliminar "
       }
     },
     title: {

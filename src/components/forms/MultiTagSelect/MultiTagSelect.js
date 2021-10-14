@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import { FormController } from "../FormItemWrapper/FormController"
 import { InputSelect } from "../InputSelect/InputSelect"
 import { CloseIcon } from "../../icons/CloseIcon"
-import { Tag } from "../../tags/tag/tag"
+import { Tag } from "../../tags/Tag/Tag"
 
 export const MultiTagSelect = ({
   value = [{ label: "", value: "" }],

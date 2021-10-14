@@ -23,7 +23,6 @@ export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props })
   const [filterValues, setFilterValues] = useState(initialValues)
 
   const handleOnReset = () => {
-    console.log("pasa por aqio")
     setFilterValues(initialValues)
     onFilter(null)
   }
