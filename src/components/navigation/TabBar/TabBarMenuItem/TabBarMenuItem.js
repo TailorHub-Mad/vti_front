@@ -143,6 +143,7 @@ export const MenuLink = ({
         <ArrowDownIcon
           color={active ? "#F3D30C" : "white"}
           _groupHover={{ color: "yellow" }}
+          transform={showSubmenu ? "rotate(0.5turn)" : "rotate(0turn)"}
           onClick={() => setShowSubmenu(!showSubmenu)}
           cursor="pointer"
         />

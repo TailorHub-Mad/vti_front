@@ -26,6 +26,8 @@ export const NewNoteForm = ({
   const [systemOptions, setSystemOptions] = useState([])
   const [tagOptions, setTagOptions] = useState([])
 
+  const [isReset, setIsReset] = useState(false)
+
   const formatValues = !noteToUpdate
     ? { ...value }
     : {
@@ -46,6 +48,9 @@ export const NewNoteForm = ({
     _tags.map((tag) => ({ label: tag.name, value: tag._id }))
 
   const handleFormChange = (input, _value) => {
+    if (input === "project") setIsReset(true)
+    else if (isReset) setIsReset(false)
+
     onChange({
       ...value,
       [input]: _value
@@ -69,7 +74,8 @@ export const NewNoteForm = ({
         label: "Selecciona el sistema utilizado en el proyecto*",
         options: systemOptions,
         additemlabel: "Añadir ",
-        removeitemlabel: "Eliminar "
+        removeitemlabel: "Eliminar ",
+        isReset: isReset
       }
     },
     title: {
@@ -91,7 +97,7 @@ export const NewNoteForm = ({
       config: {
         placeholder: "Tags de apunte",
         options: tagOptions,
-        label: "Tags de proyecto",
+        label: "Tags de apunte",
         additemlabel: "Añadir ",
         removeitemlabel: "Eliminar "
       }
@@ -115,8 +121,9 @@ export const NewNoteForm = ({
     const _getProjects = async () => {
       const data = await getProjects()
       const _projects = data[0]?.projects || []
-      setProjectData(_projects)
-      setProjectOptions(formatSelectOption(_projects))
+      const fiteredProjects = _projects.filter((p) => p.testSystems.length > 0)
+      setProjectData(fiteredProjects)
+      setProjectOptions(formatSelectOption(fiteredProjects))
     }
     const _getTags = async () => {
       const tags = await getNoteTags()
