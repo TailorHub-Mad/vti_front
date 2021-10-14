@@ -4,7 +4,7 @@ import React from "react"
 import { NotesIcon } from "../icons/NotesIcon"
 import { GroupModal } from "./GroupModal/GroupModal"
 
-export const Group = ({ onGroup, options, active }) => {
+export const Group = ({ onGroup, options, active, isDisabled }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
 
   const handleOnGroup = (activeItem) => {
@@ -25,6 +25,7 @@ export const Group = ({ onGroup, options, active }) => {
         onClick={handleOnClick}
         background={active ? "#052E57" : "#FFF"}
         color={active ? "#FFF" : "#052E57"}
+        isDisabled={isDisabled}
       >
         {active ? (
           <CloseIcon h="14px" mr={["8px", "8px"]} />

@@ -16,6 +16,8 @@ const useTagApi = () => {
   // GROUP & FILTER
   const getSearchProjectTags = (_, data) => tagService.getSearchProjectTags(data)
   const getSearchNotesTags = (_, data) => tagService.getSearchNotesTags(data)
+  const getFilterNotesTags = (_, data) => tagService.getFilterNotesTags(data)
+  const getFilterProjectTags = (_, data) => tagService.getFilterProjectTags(data)
 
   return {
     getNoteTags,
@@ -28,7 +30,9 @@ const useTagApi = () => {
     deleteNoteTag,
 
     getSearchProjectTags,
-    getSearchNotesTags
+    getSearchNotesTags,
+    getFilterNotesTags,
+    getFilterProjectTags
   }
 }
 

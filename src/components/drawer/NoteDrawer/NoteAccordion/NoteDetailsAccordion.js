@@ -37,8 +37,6 @@ export const NoteDetailsAccordion = ({
     downloadFile(response, name)
   }
 
-  console.log(files)
-
   return (
     <Accordion allowToggle allowMultiple {...props}>
       {!isMessage && description ? (

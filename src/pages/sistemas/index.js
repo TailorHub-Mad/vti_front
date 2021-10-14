@@ -16,7 +16,6 @@ import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { AddTestSystemIcon } from "../../components/icons/AddTestSystemIcon"
 import {
   checkDataIsEmpty,
-  generateQueryStr,
   getFieldGRoupObjectById,
   getFieldObjectById
 } from "../../utils/functions/global"
@@ -32,7 +31,7 @@ import {
   testSystemDataTransform,
   transformTestSystemsToExport
 } from "../../utils/functions/import_export/testSystem_helpers"
-import { generateFilterQueryObj } from "../../utils/functions/filter"
+import { generateFilterQuery } from "../../utils/functions/filter"
 import { TESTSYSTEMS_FILTER_KEYS } from "../../utils/constants/filter"
 import { TestsSystemsFilterModal } from "../../views/test_systems/TestSystemsFilter/TestSystemsFilterModal"
 
@@ -263,9 +262,7 @@ const sistemas = () => {
       return
     }
 
-    const filter = generateQueryStr(
-      generateFilterQueryObj(TESTSYSTEMS_FILTER_KEYS, values)
-    )
+    const filter = generateFilterQuery(TESTSYSTEMS_FILTER_KEYS, values)
 
     setFetchState(fetchType.FILTER)
     setFetchOptions({

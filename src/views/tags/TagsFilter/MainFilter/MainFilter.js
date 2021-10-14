@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react"
-import React from "react"
+import React, { useState } from "react"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 
 import { SimpleFilterForm } from "./SimpleFilterForm/SimpleFilterForm"
@@ -14,6 +14,13 @@ export const MainFilter = ({
   onReset,
   ...props
 }) => {
+  const [isReset, setIsReset] = useState(false)
+
+  const handleOnReset = () => {
+    setIsReset(true)
+    onReset()
+  }
+
   return (
     <Box
       width="460px"
@@ -32,11 +39,17 @@ export const MainFilter = ({
         value={simpleFilterValues}
         onChange={onSimpleFilterChange}
         openAuxModal={onSecondaryOpen}
+        isReset={isReset}
       />
 
       <Flex direction="column" align="center">
         <Button onClick={onFilter}>Filtrar</Button>
-        <Text onClick={onReset} variant="d_xs_regular" mt="32px" cursor="pointer">
+        <Text
+          oonClick={handleOnReset}
+          variant="d_xs_regular"
+          mt="32px"
+          cursor="pointer"
+        >
           Resetear filtros
         </Text>
       </Flex>

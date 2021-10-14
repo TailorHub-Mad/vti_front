@@ -32,8 +32,10 @@ export const checkDataIsEmpty = (data) => {
 }
 
 export const generateQueryStr = (queryObj) => {
-  return Object.entries(queryObj)
+  const filter = Object.entries(queryObj)
     .filter(([, value]) => value)
     .map(([key, value]) => key + "=" + value)
     .join("&")
+
+  return filter
 }

@@ -21,7 +21,6 @@ import { fetchOption, fetchType } from "../../utils/constants/swr"
 import { errorHandler } from "../../utils/errors"
 import {
   checkDataIsEmpty,
-  generateQueryStr,
   getFieldGRoupObjectById,
   getFieldObjectById
 } from "../../utils/functions/global"
@@ -40,7 +39,7 @@ import { ResponseModal } from "../../views/notes/Response/ResponseModal/Response
 import download from "downloadjs"
 import { NotesFilterModal } from "../../views/notes/NotesFilter/NotesFilterModal"
 import { NOTES_FILTER_KEYS } from "../../utils/constants/filter"
-import { generateFilterQueryObj } from "../../utils/functions/filter"
+import { generateFilterQuery } from "../../utils/functions/filter"
 import { getGroupOptionLabel } from "../../utils/functions/objects"
 
 const NOTES_GROUP_OPTIONS = [
@@ -102,7 +101,6 @@ const apuntes = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const notesData = handleNotesData(isEmptyData)
 
-  const isSearch = fetchState == fetchType.SEARCH
   const isGrouped = fetchState == fetchType.GROUP
 
   const checkIsFavorite = (id) => user?.favorites?.notes?.includes(id)
@@ -111,7 +109,16 @@ const apuntes = () => {
   // Handlers views
   const isToolbarHidden = () => {
     if (isLoading) return false
-    if (isEmptyData && !isSearch) return false
+    if (isEmptyData && fetchState === fetchType.ALL) return false
+
+    return true
+  }
+
+  const isMenuHidden = () => {
+    if (isLoading) return false
+    if (fetchState === fetchType.GROUP) return false
+    if (isEmptyData && fetchState === fetchType.FILTER) return false
+    if (isEmptyData && fetchState === fetchType.ALL) return false
 
     return true
   }
@@ -129,6 +136,11 @@ const apuntes = () => {
   const handleOpenEditResponse = (message) => {
     setMessageToUpdate(message)
     setIsResponseModalOpen(true)
+  }
+
+  const handleOnOpenFilter = () => {
+    if (fetchState === fetchType.FILTER) handleOnFilter(null)
+    else setShowFilterModal(true)
   }
 
   // Handlers CRUD
@@ -181,7 +193,10 @@ const apuntes = () => {
       updatedNotes.push({
         notes: filterNotes
       })
-      updatedNotes.length > 0 ? await mutate(updatedNotes, false) : await mutate()
+
+      updatedNotes[0].notes.length > 0
+        ? await mutate(updatedNotes, false)
+        : await mutate()
 
       if (showNoteDetails) setShowNoteDetails(false)
       setNoteToDelete(null)
@@ -266,9 +281,15 @@ const apuntes = () => {
   }
 
   const handleOnFilter = (values) => {
-    const filter = generateQueryStr(
-      generateFilterQueryObj(NOTES_FILTER_KEYS, values)
-    )
+    if (!values) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.FILTER]: null
+      })
+      return
+    }
+
+    const filter = generateFilterQuery(NOTES_FILTER_KEYS, values)
 
     setFetchState(fetchType.FILTER)
     setFetchOptions({
@@ -371,7 +392,7 @@ const apuntes = () => {
             onAdd={() => setIsNoteModalOpen(true)}
             onSearch={onSearch}
             onGroup={handleOnGroup}
-            onFilter={() => setShowFilterModal(true)}
+            onFilter={handleOnOpenFilter}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
             addLabel="Añadir apunte"
@@ -383,7 +404,7 @@ const apuntes = () => {
         )}
       </PageHeader>
       <PageMenu>
-        {notesData && !isGrouped ? (
+        {isMenuHidden() ? (
           <NotesMenu
             fetchState={fetchState}
             notesCount={notesData?.length}
@@ -393,7 +414,7 @@ const apuntes = () => {
       </PageMenu>
       <PageBody height="calc(100vh - 140px)">
         {isLoading ? <LoadingView mt="-200px" /> : null}
-        {isEmptyData && isSearch ? (
+        {isEmptyData && fetchState !== fetchType.ALL ? (
           <ViewNotFoundState />
         ) : isEmptyData ? (
           <ViewEmptyState
@@ -422,6 +443,7 @@ const apuntes = () => {
                   fetchOptions[fetchOption.GROUP]
                 )}
                 isGrouped={isGrouped}
+                fetchState={fetchState}
               />
             ) : (
               <NotesGrid

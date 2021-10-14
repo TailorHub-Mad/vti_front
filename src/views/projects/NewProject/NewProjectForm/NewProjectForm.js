@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { AddSelect } from "../../../../components/forms/AddSelect/AddSelect"
+import { MultiTagSelect } from "../../../../components/forms/MultiTagSelect/MultiTagSelect"
 import { InputSelect } from "../../../../components/forms/InputSelect/InputSelect"
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
 import useClientApi from "../../../../hooks/api/useClientApi"
@@ -126,7 +127,7 @@ export const NewProjectForm = ({
       }
     },
     tags: {
-      type: "add_select",
+      type: "multitag_select",
       config: {
         placeholder: "Tags de proyecto",
         options: tagOptions,
@@ -227,7 +228,8 @@ export const NewProjectForm = ({
   const inputRefObj = {
     text: <SimpleInput />,
     select: <InputSelect />,
-    add_select: <AddSelect />
+    add_select: <AddSelect />,
+    multitag_select: <MultiTagSelect />
   }
 
   return (

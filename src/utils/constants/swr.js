@@ -54,7 +54,8 @@ export const SWR_CACHE_KEYS = {
   noteTags: "noteTags/",
   searchProjectTags: "projectTags/search",
   searchNoteTags: "noteTags/search",
-  searchTags: "tags/search",
+  filterProjectTags: "projectTags/filter",
+  filterNoteTags: "noteTags/filter",
 
   // HELPS
   projectHelps: "projectHelps/",

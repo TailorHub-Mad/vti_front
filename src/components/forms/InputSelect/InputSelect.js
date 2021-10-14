@@ -13,6 +13,8 @@ export const InputSelect = ({
   helper,
   onHelperClick,
   isDisabled = false,
+  isMultiTag,
+  isReset,
   ...props
 }) => {
   const [inputValue, setInputValue] = useState(value)
@@ -24,6 +26,8 @@ export const InputSelect = ({
   const handleChange = (e) => {
     const targetValue = e.target.value
 
+    setInputValue(targetValue)
+
     if (targetValue === "") return setAvailableOptions(options)
     return filterOptions(targetValue)
   }
@@ -32,7 +36,8 @@ export const InputSelect = ({
     const selected = availableOptions?.find((option) => option.value === _value)
 
     onChange(selected)
-    setInputValue(selected?.label)
+    setInputValue(isMultiTag ? "" : selected?.label)
+
     setShowSelectMenu(false)
   }
 
@@ -57,6 +62,11 @@ export const InputSelect = ({
     setAvailableOptions(options)
   }, [options])
 
+  useEffect(() => {
+    if (!isReset) return
+    setInputValue("")
+  }, [isReset])
+
   return (
     <FormController
       label={label}
@@ -76,7 +86,6 @@ export const InputSelect = ({
           onChange={handleChange}
           onClick={() => setShowSelectMenu(true)}
           value={inputValue}
-          isDisabled={isDisabled}
           autoComplete="off"
         />
         <ChevronDownIcon

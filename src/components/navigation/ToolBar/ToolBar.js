@@ -34,6 +34,7 @@ export const ToolBar = ({
         <FilterButton
           onFilter={handleOnFilter}
           active={fetchState === fetchType.FILTER}
+          isDisabled={fetchState === fetchType.GROUP}
         />
       )}
       {noGroup || (
@@ -41,6 +42,7 @@ export const ToolBar = ({
           onGroup={handleOnGroup}
           options={groupOptions}
           active={fetchState === fetchType.GROUP}
+          isDisabled={fetchState === fetchType.FILTER}
         />
       )}
       {noSearch || (
@@ -63,7 +65,15 @@ export const ToolBar = ({
           />
         </InputGroup>
       )}
-      {noImport || <CloudButton onImport={onImport} onExport={onExport} />}
+      {noImport || (
+        <CloudButton
+          onImport={onImport}
+          onExport={onExport}
+          isDisabled={
+            fetchState === fetchType.FILTER || fetchState === fetchType.GROUP
+          }
+        />
+      )}
       {noAdd || (
         <Button onClick={onAdd}>
           {icon ? (

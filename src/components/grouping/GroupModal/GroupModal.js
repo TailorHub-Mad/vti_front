@@ -59,6 +59,7 @@ export const GroupModal = ({ isOpen, onClose, onGroup, options = [], ...props })
               display="block"
               margin="0 auto"
               mt="32px"
+              isDisabled={!activeItem}
             >
               Agrupar
             </Button>

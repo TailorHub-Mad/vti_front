@@ -10,7 +10,7 @@ export const TagCard = ({ tag, onEdit, onDelete, isProjectTag }) => {
 
   const handleItemTags = () => {
     if (isProjectTag) return tag?.projects?.map((p) => p.alias)
-    return tag?.notes?.map((p) => p.name)
+    return tag?.notes?.map((p) => p.title)
   }
 
   return (
@@ -25,7 +25,6 @@ export const TagCard = ({ tag, onEdit, onDelete, isProjectTag }) => {
       <TagCardHeader
         title={tag?.name}
         parent={tag?.parent?.name}
-        category={tag?.category}
         onEdit={onEdit}
         onDelete={onDelete}
         onClick={() => router.push(`${PATHS.projectTags}/${tag?._id}`)}

@@ -9,7 +9,7 @@ import {
   Tabs,
   Text
 } from "@chakra-ui/react"
-import React from "react"
+import React, { useState } from "react"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import { AdvancedFilterIcon } from "../../../../components/icons/AdvancedFilterIcon"
 import { SimpleFilterIcon } from "../../../../components/icons/SimpleFilterIcon"
@@ -24,12 +24,21 @@ export const MainFilter = ({
   simpleFilterValues,
   moveToLeft,
   openSaveModal,
+  onReset,
   ...props
 }) => {
+  const [isReset, setIsReset] = useState(false)
+
+  const handleOnReset = () => {
+    setIsReset(true)
+    onReset()
+  }
+
   return (
     <Box
       width="460px"
-      height="fit-content"
+      maxHeight="calc(100vh - 120px)"
+      overflowY="scroll"
       position="absolute"
       top="50px"
       left={moveToLeft ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}
@@ -60,6 +69,7 @@ export const MainFilter = ({
               value={simpleFilterValues}
               onChange={onSimpleFilterChange}
               openAuxModal={onSecondaryOpen}
+              isReset={isReset}
             />
           </TabPanel>
           <TabPanel p={0}>
@@ -75,7 +85,20 @@ export const MainFilter = ({
         <Button variant="secondary" onClick={openSaveModal}>
           Recordar
         </Button>
-        <Button onClick={onFilter}>Filtrar</Button>
+        <Button onClick={onFilter} ml="8px">
+          Filtrar
+        </Button>
+      </Flex>
+
+      <Flex justify="center">
+        <Text
+          onClick={handleOnReset}
+          variant="d_xs_regular"
+          mt="32px"
+          cursor="pointer"
+        >
+          Resetear filtros
+        </Text>
       </Flex>
     </Box>
   )

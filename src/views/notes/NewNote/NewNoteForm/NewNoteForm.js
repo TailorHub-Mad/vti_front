@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react"
 import { AddSelect } from "../../../../components/forms/AddSelect/AddSelect"
 import { FileInput } from "../../../../components/forms/FileInput/FileInput"
 import { InputSelect } from "../../../../components/forms/InputSelect/InputSelect"
+import { MultiTagSelect } from "../../../../components/forms/MultiTagSelect/MultiTagSelect"
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
 import { TextAreaInput } from "../../../../components/forms/TextAreaInput/TextAreaInput"
 import useProjectApi from "../../../../hooks/api/useProjectApi"
@@ -87,9 +88,9 @@ export const NewNoteForm = ({
       }
     },
     tags: {
-      type: "add_select",
+      type: "multitag_select",
       config: {
-        placeholder: "Tags de proyecto",
+        placeholder: "Tags de apunte",
         options: tagOptions,
         label: "Tags de proyecto",
         additemlabel: "Añadir ",
@@ -169,7 +170,8 @@ export const NewNoteForm = ({
     textarea: <TextAreaInput />,
     select: <InputSelect />,
     add_select: <AddSelect />,
-    attachment: <FileInputForm isUpdate={isUpdate} />
+    attachment: <FileInputForm isUpdate={isUpdate} />,
+    multitag_select: <MultiTagSelect />
   }
 
   return (
