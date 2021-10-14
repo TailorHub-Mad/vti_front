@@ -2,13 +2,17 @@ export const Modal = {
   baseStyle: {
     overlay: {
       bgColor: "rgba(5, 46, 87, 0.8)",
-      pointerEvents: "none"
+      position: "fixed",
+      zIndex: "10000"
     },
     dialog: {
-      pointerEvents: "auto"
+      pointerEvents: "auto",
+      position: "fixed"
     },
     dialogContainer: {
-      pointerEvents: "none"
+      pointerEvents: "none",
+      position: "fixed",
+      zIndex: "10001"
     }
   }
 }

@@ -9,12 +9,14 @@ import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
 import { NewClientForm } from "../NewClientForm/NewClientForm"
 
+const initialValues = [{}]
+
 export const NewClientModal = ({ isOpen, onClose, clientToUpdate }) => {
   const { showToast } = useContext(ToastContext)
   const { createClient, updateClient } = useClientApi()
   const { mutate } = useSWRConfig()
 
-  const [values, setValues] = useState([{}])
+  const [values, setValues] = useState(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isUpdate = Boolean(clientToUpdate)
@@ -38,6 +40,7 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate }) => {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateClient() : await handleCreateClient()
+    setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.clients)
     showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s cliente/s!")
     setIsSubmitting(false)
@@ -63,6 +66,11 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate }) => {
     }
   }
 
+  const handleOnClose = () => {
+    setValues(initialValues)
+    onClose()
+  }
+
   useEffect(() => {
     if (!clientToUpdate) return
     const { alias, name } = clientToUpdate
@@ -75,12 +83,12 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate }) => {
   }, [isOpen])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleOnClose}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
           title={isUpdate ? "Editar cliente" : "Añadir nuevo cliente"}
-          onClose={onClose}
+          onClose={handleOnClose}
           pb="24px"
         />
         <MultipleFormContent

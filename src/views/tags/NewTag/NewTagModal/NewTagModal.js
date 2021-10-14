@@ -9,10 +9,7 @@ import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
 import { NewTagForm } from "../NewTagForm/NewTagForm"
 
-const initialValues = {
-  name: undefined,
-  relatedTag: undefined
-}
+const initialValues = [{}]
 
 export const NewTagModal = ({
   isOpen,
@@ -29,7 +26,7 @@ export const NewTagModal = ({
     useTagApi()
   const { mutate } = useSWRConfig()
 
-  const [values, setValues] = useState([initialValues])
+  const [values, setValues] = useState()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isUpdate = Boolean(tagToUpdate)
@@ -63,6 +60,7 @@ export const NewTagModal = ({
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateTag() : await handleCreateTag()
+    setValues(initialValues)
     await mutate(isProjectTag ? SWR_CACHE_KEYS.projectTags : SWR_CACHE_KEYS.noteTags)
     showToast(isUpdate ? editSuccessMsg : addSuccessMsg)
     setIsSubmitting(false)
@@ -103,7 +101,7 @@ export const NewTagModal = ({
   }, [tagToUpdate])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleOnClose}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader

@@ -14,7 +14,13 @@ export const ViewEmptyState = ({
 }) => {
   return (
     <Center>
-      <Flex flexDir="column" mt="150px" {...props}>
+      <Flex
+        flexDir="column"
+        alignItems="center"
+        justify="center"
+        height="calc(100vh - 400px)"
+        {...props}
+      >
         <Text variant="d_s_medium" mb="24px">
           {children || message || "Añadir a la plataforma"}
         </Text>

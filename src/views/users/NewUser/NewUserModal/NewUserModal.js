@@ -10,13 +10,15 @@ import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
 import { NewUserForm } from "../NewUserForm/NewUserForm"
 
+const initialValues = [{}]
+
 export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
   const { showToast } = useContext(ToastContext)
   const { createUser, updateUser } = useUserApi()
   const { sendCreatePassword } = useAuthApi()
   const { mutate } = useSWRConfig()
 
-  const [values, setValues] = useState([{}])
+  const [values, setValues] = useState(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isUpdate = Boolean(userToUpdate)
@@ -64,6 +66,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateUser() : await handleCreateUser()
+    setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.users)
     showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s usuario/s!")
     setIsSubmitting(false)
@@ -95,6 +98,11 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
     }
   }
 
+  const handleOnClose = () => {
+    setValues(initialValues)
+    onClose()
+  }
+
   useEffect(() => {
     if (!userToUpdate) return
     const { alias, name, email, department } = userToUpdate
@@ -107,12 +115,12 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
   }, [isOpen])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleOnClose}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
           title={isUpdate ? "Editar usuario" : "Añadir nuevo usuario"}
-          onClose={onClose}
+          onClose={handleOnClose}
           pb="24px"
         />
         <MultipleFormContent

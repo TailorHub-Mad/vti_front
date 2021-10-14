@@ -111,7 +111,7 @@ export const NewNoteModal = ({
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateNote() : await handleCreateNote()
-
+    setValues(initialValues)
     noteFromProject
       ? await mutate([SWR_CACHE_KEYS.project, noteFromProject.project.value])
       : await mutate(SWR_CACHE_KEYS.notes)
@@ -124,7 +124,6 @@ export const NewNoteModal = ({
     try {
       const note = formatCreateNote(values)
       await createNote(note)
-      setValues(initialValues)
     } catch (error) {
       errorHandler(error)
     }
@@ -170,7 +169,7 @@ export const NewNoteModal = ({
   }, [noteFromProject])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} {...props}>
+    <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader

@@ -9,6 +9,8 @@ import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
 import { NewDepartmentForm } from "../NewDepartmentForm/NewDepartmentForm"
 
+const initialValues = [{}]
+
 export const NewDepartmentModal = ({
   isOpen,
   onClose,
@@ -19,7 +21,7 @@ export const NewDepartmentModal = ({
   const { createDepartment, updateDepartment } = useDepartmentApi()
   const { mutate } = useSWRConfig()
 
-  const [values, setValues] = useState([{}])
+  const [values, setValues] = useState(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isUpdate = Boolean(departmentToUpdate)
@@ -43,6 +45,7 @@ export const NewDepartmentModal = ({
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateDepartment() : await handleCreateDepartment()
+    setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.departments)
     showToast(
       isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s departamentos/s!"
@@ -70,6 +73,11 @@ export const NewDepartmentModal = ({
     }
   }
 
+  const handleOnClose = () => {
+    setValues(initialValues)
+    onClose()
+  }
+
   useEffect(() => {
     if (!departmentToUpdate) return
     const { name } = departmentToUpdate || {}
@@ -82,12 +90,12 @@ export const NewDepartmentModal = ({
   }, [isOpen])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} {...props}>
+    <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
           title={isUpdate ? "Editar departamento" : "Añadir nuevo departamento"}
-          onClose={onClose}
+          onClose={handleOnClose}
           pb="24px"
         />
         <MultipleFormContent

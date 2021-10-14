@@ -9,6 +9,8 @@ import { errorHandler } from "../../../../utils/errors"
 import { ResponseForm } from "../ResponseForm/ResponseForm"
 import { createFormData } from "../../../../utils/functions/formdata"
 
+const initialValues = {}
+
 export const ResponseModal = ({
   isOpen,
   noteId,
@@ -20,7 +22,7 @@ export const ResponseModal = ({
   const { createMessage, updateMessage } = useNoteApi()
   const { mutate } = useSWRConfig()
 
-  const [values, setValues] = useState({})
+  const [values, setValues] = useState(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isUpdate = Boolean(messageToUpdate)
@@ -87,6 +89,7 @@ export const ResponseModal = ({
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateMessage() : await handleCreateMessage()
+    setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.notes)
     showToast(isUpdate ? "Editado correctamente" : "¡Mensaje enviado!")
     setIsSubmitting(false)
@@ -111,6 +114,11 @@ export const ResponseModal = ({
     }
   }
 
+  const handleOnClose = () => {
+    setValues(initialValues)
+    onClose()
+  }
+
   useEffect(() => {
     if (!messageToUpdate) return
 
@@ -124,12 +132,12 @@ export const ResponseModal = ({
   }, [messageToUpdate])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} {...props}>
+    <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
           title={isUpdate ? "Editar mensaje" : "Escribir respuesta"}
-          onClose={onClose}
+          onClose={handleOnClose}
           pb="24px"
         />
         <ResponseForm

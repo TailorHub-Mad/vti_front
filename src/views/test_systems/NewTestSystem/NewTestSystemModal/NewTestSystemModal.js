@@ -9,12 +9,14 @@ import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
 import { NewTestSystemForm } from "../NewTestSystemForm/NewTestSystemForm"
 
+const initialValues = [{}]
+
 export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
   const { showToast } = useContext(ToastContext)
   const { createSystem, updateSystem } = useSystemApi()
   const { mutate } = useSWRConfig()
 
-  const [values, setValues] = useState([{}])
+  const [values, setValues] = useState(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isUpdate = Boolean(systemToUpdate)
@@ -66,6 +68,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateSystem() : await handleCreateSystem()
+    setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.systems)
     showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
     setIsSubmitting(false)
@@ -92,6 +95,11 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
     }
   }
 
+  const handleOnClose = () => {
+    setValues(initialValues)
+    onClose()
+  }
+
   useEffect(() => {
     if (!systemToUpdate) return
     const {
@@ -109,12 +117,12 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
   }, [isOpen])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleOnClose}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
           title={isUpdate ? "Editar sistema" : "Añadir nuevo sistema"}
-          onClose={onClose}
+          onClose={handleOnClose}
           pb="24px"
         />
         <MultipleFormContent
