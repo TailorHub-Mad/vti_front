@@ -39,17 +39,17 @@ const sector = () => {
     <Page>
       {isLoading || !data ? <LoadingView mt="-200px" /> : null}
       {notFound && <>Error. No se ha encontrado el sector.</>}
-      {data && (
-        <ProjectsByObject
-          projects={projectsData}
-          customURL={`${PATHS.sectors}/${sector?.ref || sectorId}`}
-          setFetchState={setFetchState}
-          setFetchOptions={setFetchOptions}
-          fetchState={fetchState}
-          fetchOptions={fetchOptions}
-          isEmptyData={isEmptyData}
-        />
-      )}
+      <ProjectsByObject
+        projects={projectsData}
+        customURL={`${PATHS.sectors}/${sector?.ref || sectorId}`}
+        setFetchState={setFetchState}
+        setFetchOptions={setFetchOptions}
+        fetchState={fetchState}
+        fetchOptions={fetchOptions}
+        isEmptyData={isEmptyData}
+        hrefBack={PATHS.sectors}
+        backText={"Volver a sectores"}
+      />
     </Page>
   )
 }

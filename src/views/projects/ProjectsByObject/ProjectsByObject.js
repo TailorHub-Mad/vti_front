@@ -1,4 +1,5 @@
 import download from "downloadjs"
+import { useRouter } from "next/router"
 import { useContext, useState } from "react"
 import { jsonToCSV } from "react-papaparse"
 import { useSWRConfig } from "swr"
@@ -48,12 +49,16 @@ export const ProjectsByObject = ({
   setFetchState,
   fetchOptions,
   setFetchOptions,
-  isEmptyData
+  isEmptyData,
+  hrefBack,
+  backText
 }) => {
   // Hooks
   const { deleteProject, createProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
   const { mutate } = useSWRConfig()
+
+  const router = useRouter()
 
   // States
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
@@ -258,7 +263,9 @@ export const ProjectsByObject = ({
       />
 
       <PageHeader>
-        <BreadCrumbs customURL={customURL} lastElement="Proyectos" />
+        {projectsData ? (
+          <BreadCrumbs customURL={customURL} lastElement={"Proyectos"} />
+        ) : null}
         {isToolbarHidden() ? (
           <ToolBar
             onAdd={() => setIsProjectModalOpen(true)}
@@ -271,15 +278,21 @@ export const ProjectsByObject = ({
             searchPlaceholder="Busqueda por ID, Alias"
             groupOptions={PROJECTS_GROUP_OPTIONS}
             icon={<AddProjectIcon />}
-            fetchState={fetchState}
+            // fetchState={fetchState} -> Provisional to filters
             noImport
           />
         ) : null}
       </PageHeader>
-      {isEmptyData ? <ViewNotFoundState text="No hay proyectos asociados" /> : null}
+      {isEmptyData ? (
+        <ViewNotFoundState
+          text="No hay proyectos asociados"
+          backText={backText}
+          onClick={() => router.push(hrefBack)}
+        />
+      ) : null}
       {projectsData ? (
         <ProjectsTable
-          fetchState={fetchState}
+          // fetchState={fetchState} -> Provisional to filters
           projects={projectsData}
           onClose={handleOnOpenFinishProjectModal}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}

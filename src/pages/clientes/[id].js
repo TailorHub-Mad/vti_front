@@ -38,17 +38,17 @@ const client = () => {
     <Page>
       {isLoading || !data ? <LoadingView mt="-200px" /> : null}
       {notFound && <>Error. No se ha encontrado el cliente.</>}
-      {data && (
-        <ProjectsByObject
-          projects={projectsData}
-          customURL={`${PATHS.clients}/${client || clientId}`}
-          setFetchState={setFetchState}
-          setFetchOptions={setFetchOptions}
-          fetchState={fetchState}
-          fetchOptions={fetchOptions}
-          isEmptyData={isEmptyData}
-        />
-      )}
+      <ProjectsByObject
+        projects={projectsData}
+        customURL={`${PATHS.clients}/${client || clientId}`}
+        setFetchState={setFetchState}
+        setFetchOptions={setFetchOptions}
+        fetchState={fetchState}
+        fetchOptions={fetchOptions}
+        isEmptyData={isEmptyData}
+        hrefBack={PATHS.clients}
+        backText={"Volver a clientes"}
+      />
     </Page>
   )
 }

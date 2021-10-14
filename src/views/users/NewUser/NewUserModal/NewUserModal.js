@@ -76,8 +76,9 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
   const handleCreateUser = async () => {
     try {
       const usersToCreate = formatCreateUsers(values)
-      const usersQueue = usersToCreate.map((user) => createUser(user))
-      await Promise.all(usersQueue)
+      for (let index = 0; index < usersToCreate.length; index++) {
+        await createUser(usersToCreate[index])
+      }
 
       const sendEmailQueue = usersToCreate.map((u) =>
         sendCreatePassword({ email: u.email })

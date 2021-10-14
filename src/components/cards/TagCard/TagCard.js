@@ -27,7 +27,10 @@ export const TagCard = ({ tag, onEdit, onDelete, isProjectTag }) => {
         parent={tag?.parent?.name}
         onEdit={onEdit}
         onDelete={onDelete}
-        onClick={() => router.push(`${PATHS.projectTags}/${tag?._id}`)}
+        isProjectTag={isProjectTag}
+        onClick={
+          isProjectTag ? () => router.push(`${PATHS.projectTags}/${tag?._id}`) : null
+        }
       />
 
       <TagCardTags items={handleItemTags()} relatedTags={tag?.relatedTags} />

@@ -57,7 +57,10 @@ export const NewDepartmentModal = ({
   const handleCreateDepartment = async () => {
     try {
       const departmentsToCreate = [...values]
-      await createDepartment(departmentsToCreate)
+
+      for (let index = 0; index < departmentsToCreate.length; index++) {
+        await createDepartment([departmentsToCreate[index]])
+      }
     } catch (error) {
       errorHandler(error)
     }
