@@ -50,7 +50,10 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate }) => {
   const handleCreateClient = async () => {
     try {
       const clientsToCreate = [...values]
-      await createClient(clientsToCreate)
+
+      for (let index = 0; index < clientsToCreate.length; index++) {
+        await createClient([clientsToCreate[index]])
+      }
     } catch (error) {
       errorHandler(error)
     }

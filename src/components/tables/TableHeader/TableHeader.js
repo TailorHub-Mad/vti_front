@@ -29,10 +29,10 @@ export const TableHeader = ({
   return (
     <Flex justify="space-between" align="center" pb="32px">
       {fetchState === fetchType.GROUP ? (
-        <Flex justify="flex-start" alignItems="center">
-          <Flex alignItems="center">
+        <Flex justify="flex-start" alignItems="center" cursor="pointer">
+          <Flex alignItems="center" cursor="pointer">
             <CloseIcon mr="8px" h="12px" cursor="pointer" onClick={handleOnClick} />
-            <Text marginTop="6px">{`Agrupado por ${groupOption
+            <Text marginTop="6px" cursor="pointer">{`Agrupado por ${groupOption
               .toString()
               .toUpperCase()}`}</Text>
           </Flex>
@@ -44,8 +44,8 @@ export const TableHeader = ({
               cursor="pointer"
               ml="24px"
             >
-              <DeleteIcon mr="8px" color="error" />
-              <Text color="error" marginTop="6px">
+              <DeleteIcon mr="8px" color="error" cursor="pointer" />
+              <Text color="error" marginTop="6px" cursor="pointer">
                 Eliminar
               </Text>
             </Flex>
@@ -60,9 +60,10 @@ export const TableHeader = ({
                 alignItems="center"
                 justifyContent="center"
                 onClick={() => onDelete(selectedRows)}
+                cursor="pointer"
               >
-                <DeleteIcon mr="8px" color="error" />
-                <Text color="error" marginTop="6px">
+                <DeleteIcon mr="8px" color="error" cursor="pointer" />
+                <Text color="error" marginTop="6px" cursor="pointer">
                   Eliminar
                 </Text>
               </Flex>

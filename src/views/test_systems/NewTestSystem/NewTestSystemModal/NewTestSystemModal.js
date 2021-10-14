@@ -78,8 +78,9 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
   const handleCreateSystem = async () => {
     try {
       const systemsToCreate = formatCreateSystems(values)
-      const systemsQueue = systemsToCreate.map((system) => createSystem(system))
-      await Promise.all(systemsQueue)
+      for (let index = 0; index < systemsToCreate.length; index++) {
+        await createSystem(systemsToCreate[index])
+      }
     } catch (error) {
       errorHandler(error)
     }

@@ -78,10 +78,8 @@ export const ProjectsByObject = ({
     //TODO Gestión de errores y update de SWR
 
     try {
-      const projectsCreated = []
       for (let index = 0; index < data.length; index++) {
-        const pro = await createProject(data[index])
-        projectsCreated.push(pro)
+        await createProject(data[index])
       }
 
       await mutate()
