@@ -28,12 +28,14 @@ export const getFieldGRoupObjectById = (collection, field, id, key) => {
 
 export const checkDataIsEmpty = (data) => {
   if (!data) return false
-  if (data.length === 0) return true
+  if (data?.length === 0) return true
 }
 
 export const generateQueryStr = (queryObj) => {
-  return Object.entries(queryObj)
+  const filter = Object.entries(queryObj)
     .filter(([, value]) => value)
     .map(([key, value]) => key + "=" + value)
     .join("&")
+
+  return filter
 }

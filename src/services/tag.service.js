@@ -19,6 +19,10 @@ const TagService = () => {
     execute(instance.get(`/tag/projects/filter?name=${data}&ref=${data}`))
   const getSearchNotesTags = (data) =>
     execute(instance.get(`/tag/notes/filter?name=${data}&ref=${data}`))
+  const getFilterNotesTags = (data) =>
+    execute(instance.get(`/tag/notes/filter?${data}`))
+  const getFilterProjectTags = (data) =>
+    execute(instance.get(`/tag/projects/filter?${data}`))
 
   return {
     getNoteTags,
@@ -31,7 +35,9 @@ const TagService = () => {
     deleteNoteTag,
 
     getSearchProjectTags,
-    getSearchNotesTags
+    getSearchNotesTags,
+    getFilterNotesTags,
+    getFilterProjectTags
   }
 }
 

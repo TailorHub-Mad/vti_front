@@ -11,21 +11,38 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [showAuxContent, setShowAuxContent] = useState(false)
   const [showSaveFilter, setShowSaveFilter] = useState(false)
+
   const initialValues = {
-    client: "",
-    test_system: "",
-    year: "",
-    vti_code: [""],
-    focus_point: [""],
-    sector: "",
-    tag_project: [""]
+    client: undefined,
+    test_system: [{ label: "", value: "" }],
+    year: undefined,
+    vti_code: [{ label: "", value: "" }],
+    focus_point: [{ label: "", value: "" }],
+    sector: [{ label: "", value: "" }],
+    tag_project: [{ label: "", value: "" }]
   }
+
   const [filterValues, setFilterValues] = useState(initialValues)
 
+  const handleOnReset = () => {
+    setFilterValues(initialValues)
+    onFilter(null)
+  }
+
+  const handleOnFilter = () => {
+    setFilterValues(initialValues)
+    onFilter(filterValues)
+  }
+
+  const handleOnClose = () => {
+    setFilterValues(initialValues)
+    onClose()
+  }
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} {...props}>
+    <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
-      <CustomModalContent>
+      <CustomModalContent zIndex="10001">
         <ScaleFade
           in={
             !showSaveFilter &&
@@ -35,12 +52,13 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
         >
           <MainFilter
             simpleFilterValues={filterValues}
-            onClose={onClose}
+            onClose={handleOnClose}
             moveToLeft={["project_tags", "note_tags"].includes(showSecondaryContent)}
             onSecondaryOpen={(type) => setShowSecondaryContent(type)}
             onSimpleFilterChange={(val) => setFilterValues(val)}
             openSaveModal={() => setShowSaveFilter(true)}
-            onFilter={() => onFilter(filterValues)}
+            onFilter={handleOnFilter}
+            onReset={handleOnReset}
           />
         </ScaleFade>
         {showSaveFilter ? (

@@ -34,6 +34,7 @@ export const Table = ({
       bgColor="white"
       sx={CUSTOM_SCROLLBAR}
       {...props}
+      overflow="scroll"
     >
       {header ? <Box>{header}</Box> : null}
 
@@ -42,8 +43,14 @@ export const Table = ({
         maxHeight={tableHeight || `calc(100vh - ${header ? "310px" : "230px"})`}
         position="relative"
         sx={CUSTOM_SCROLLBAR}
+        overflow="scroll"
       >
-        <Grid minWidth={MIN_TABLE_WIDTH} maxWidth={MAX_TABLE_WIDTH} width="100%">
+        <Grid
+          minWidth={MIN_TABLE_WIDTH}
+          maxWidth={MAX_TABLE_WIDTH}
+          width="100%"
+          height="fit-content"
+        >
           <TableHead templateColumns={templateColumns} head={head} />
           {content.map((item, idx) => {
             if (isGrouped)

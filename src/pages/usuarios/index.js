@@ -7,18 +7,14 @@ import { Popup } from "../../components/overlay/Popup/Popup"
 import useUserApi from "../../hooks/api/useUserApi"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { ToastContext } from "../../provider/ToastProvider"
-import { DeleteType } from "../../utils/constants/global"
+import { DeleteType, RoleType } from "../../utils/constants/global"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
 import { UsersTable } from "../../views/users/UsersTable/UsersTable"
 import { NewUserModal } from "../../views/users/NewUser/NewUserModal/NewUserModal"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { UsersLineIcon } from "../../components/icons/UsersLineIcon"
-import {
-  checkDataIsEmpty,
-  generateQueryStr,
-  getFieldObjectById
-} from "../../utils/functions/global"
+import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
 import { userFetchHandler } from "../../swr/user.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
@@ -31,8 +27,7 @@ import {
   userDataTransform
 } from "../../utils/functions/import_export/users_helpers"
 import { USERS_FILTER_KEYS } from "../../utils/constants/filter"
-
-import { generateFilterQueryObj } from "../../utils/functions/filter"
+import { generateFilterQuery } from "../../utils/functions/filter"
 import { UsersFilterModal } from "../../views/users/UsersFilter/UsersFilterModal"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 
@@ -45,9 +40,11 @@ const USERS_GROUP_OPTIONS = [
 
 const usuarios = () => {
   // Hooks
-  const { isLoggedIn } = useContext(ApiAuthContext)
+  const { isLoggedIn, role } = useContext(ApiAuthContext)
   const { deleteUser, createUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
+
+  const isAdmin = role === RoleType.ADMIN
 
   // States
   const [showImportModal, setShowImportModal] = useState(false)
@@ -70,12 +67,10 @@ const usuarios = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const usersData = data && !isEmptyData ? data : null
 
-  const isSearch = fetchState == fetchType.SEARCH
-
   // Handlers views
   const isToolbarHidden = () => {
     if (isLoading) return false
-    if (isEmptyData && !isSearch) return false
+    if (isEmptyData && fetchState === fetchType.ALL) return false
 
     return true
   }
@@ -95,15 +90,18 @@ const usuarios = () => {
     setIsUserModalOpen(false)
   }
 
+  const handleOnOpenFilter = () => {
+    if (fetchState === fetchType.FILTER) handleOnFilter(null)
+    else setShowFilterModal(true)
+  }
+
   // Handlers CRUD
   const handleImportProjects = async (data) => {
     //TODO Gestión de errores y update de SWR
 
     try {
-      const usersCreated = []
       for (let index = 0; index < data.length; index++) {
-        const pro = await createUser(data[index])
-        usersCreated.push(pro)
+        await createUser(data[index])
       }
 
       setShowImportModal(false)
@@ -202,11 +200,7 @@ const usuarios = () => {
       return
     }
 
-    console.log(values)
-
-    const filter = generateQueryStr(
-      generateFilterQueryObj(USERS_FILTER_KEYS, values)
-    )
+    const filter = generateFilterQuery(USERS_FILTER_KEYS, values)
 
     setFetchState(fetchType.FILTER)
     setFetchOptions({
@@ -231,6 +225,7 @@ const usuarios = () => {
       >
         {handleDeleteMessage()}
       </Popup>
+
       <UsersFilterModal
         isOpen={showFilterModal}
         onClose={() => setShowFilterModal(false)}
@@ -264,16 +259,20 @@ const usuarios = () => {
             onGroup={handleOnGroup}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
-            onFilter={() => setShowFilterModal(true)}
+            onFilter={handleOnOpenFilter}
             addLabel="Añadir usuario"
             searchPlaceholder="Busqueda por ID, Alias"
             icon={<UsersLineIcon />}
             fetchState={fetchState}
             groupOptions={USERS_GROUP_OPTIONS}
+            noAdd={!isAdmin}
+            noImport={!isAdmin}
           />
         ) : null}
       </PageHeader>
+
       {isLoading ? <LoadingView mt="-200px" /> : null}
+
       {isEmptyData && fetchState !== fetchType.ALL ? (
         <ViewNotFoundState />
       ) : isEmptyData ? (
@@ -293,6 +292,7 @@ const usuarios = () => {
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(usersId) => handleOpenPopup(usersId, DeleteType.MANY)}
           onEdit={handleUpdate}
+          onFilter={handleOnFilter}
           onGroup={handleOnGroup}
           groupOption={getGroupOptionLabel(
             USERS_GROUP_OPTIONS,

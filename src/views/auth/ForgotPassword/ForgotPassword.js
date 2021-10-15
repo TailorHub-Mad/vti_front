@@ -12,10 +12,13 @@ export const ForgotPassword = () => {
 
   const [hasError] = useState(false)
   const [, setEmail] = useState() // TODO -> re-send request
+  const [showMessage, setShowMessage] = useState(false)
 
   const handleSubmit = async (data) => {
     setEmail(data.email)
     await sendRecoveryPassword(data)
+
+    setShowMessage(true)
   }
 
   return (
@@ -53,13 +56,17 @@ export const ForgotPassword = () => {
           marginBottom="16px"
           color="#052E57"
         >
-          Dinos por favor tu email para restaurarla.
+          No te preocupes, dinos por favor tu mail para restaurarla.
         </Text>
         <Formik
           initialValues={{ email: "" }}
-          onSubmit={(values, { setSubmitting }) => {
+          onSubmit={(values, { setSubmitting, resetForm }) => {
             handleSubmit(values)
             setSubmitting(false)
+            setTimeout(() => {
+              setShowMessage(false)
+              resetForm()
+            }, 3000)
           }}
         >
           {(props) => (
@@ -89,6 +96,20 @@ export const ForgotPassword = () => {
                   Enviar email
                 </Button>
               </Flex>
+
+              {showMessage ? (
+                <Flex justifyContent="center" mt="24px">
+                  <Text
+                    variant="d_s_regular"
+                    align="center"
+                    w="100%"
+                    marginBottom="16px"
+                    color="#052E57"
+                  >
+                    Hemos enviado un email a tu correo. Revísalo por favor.
+                  </Text>
+                </Flex>
+              ) : null}
             </form>
           )}
         </Formik>

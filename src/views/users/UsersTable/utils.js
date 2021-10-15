@@ -24,8 +24,12 @@ export const transformUserData = (user) => ({
   fullName: user.name,
   email: user.email,
   department: user.department ? [user.department?.name] : undefined,
-  focusPoint: user.focusPoint,
-  projects: user.projectsComments,
+  focusPoint: user.focusPoint[0]?._id
+    ? user.focusPoint.map((p) => p.alias)
+    : user.focusPoint,
+  projects: user.projectsComments[0]?._id
+    ? user.projectsComments.map((p) => p.alias)
+    : user.projectsComments,
   options: ""
 })
 

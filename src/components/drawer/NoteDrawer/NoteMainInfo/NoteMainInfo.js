@@ -88,7 +88,7 @@ export const NoteMainInfo = ({
               {!isMessage ? (
                 <ActionLink
                   onClick={onEdit}
-                  color="grey"
+                  color="blue.500"
                   icon={<EditIcon />}
                   label="Editar"
                 />
@@ -97,7 +97,7 @@ export const NoteMainInfo = ({
               {isMessage && editAllowed ? (
                 <ActionLink
                   onClick={onEdit}
-                  color="grey"
+                  color="blue.500"
                   icon={<EditIcon />}
                   label="Editar"
                 />
@@ -105,10 +105,8 @@ export const NoteMainInfo = ({
 
               <ActionLink
                 onClick={() => handleUpdateNote(actionType.CLOSE)}
-                color={item.isClosed ? "blue.500" : "#C9C9C9"}
-                icon={
-                  item.isClosed ? <LockCloseIcon /> : <LockOpenIcon fill="#C9C9C9" />
-                }
+                color="blue.500"
+                icon={item.isClosed ? <LockCloseIcon /> : <LockOpenIcon />}
                 label={item.isClosed ? "Cerrado" : "Cerrar"}
               />
 
@@ -116,12 +114,8 @@ export const NoteMainInfo = ({
                 <>
                   <ActionLink
                     onClick={() => handleUpdateNote(actionType.FORMALIZED)}
-                    color={item.formalized ? "#0085FF" : "#C9C9C9"}
-                    icon={
-                      <FormalizedIcon
-                        fill={item.formalized ? "#0085FF" : "#C9C9C9"}
-                      />
-                    }
+                    color="blue.500"
+                    icon={<FormalizedIcon fill="blue.500" />}
                     label={item.formalized ? "Formalizado" : "Formalizar"}
                   />
 

@@ -12,13 +12,19 @@ export const TagCardHeader = ({
   onEdit,
   onDelete,
   parent,
+  isProjectTag,
   ...props
 }) => {
   const [showOptions, setShowOptions] = useState(false)
 
   return (
     <Flex height="32px" justify="space-between" {...props}>
-      <Box maxWidth="80%" height="32px" onClick={onClick} cursor="pointer">
+      <Box
+        maxWidth="80%"
+        height="32px"
+        onClick={onClick}
+        cursor={isProjectTag ? "pointer" : "default"}
+      >
         <Text marginTop="2px" variant="d_m_medium">
           {title}
         </Text>

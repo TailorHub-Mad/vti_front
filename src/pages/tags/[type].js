@@ -27,8 +27,7 @@ import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { NewTagModal } from "../../views/tags/NewTag/NewTagModal/NewTagModal"
 import { TagsHeader } from "../../views/tags/TagsHeader/TagsHeader"
 import download from "downloadjs"
-import { generateFilterQueryObj } from "../../utils/functions/filter"
-import { generateQueryStr } from "../../utils/functions/global"
+import { generateFilterQuery } from "../../utils/functions/filter"
 import { TagsFilterModal } from "../../views/tags/TagsFilter/TagsFilterModal"
 import { TAGS_FILTER_KEYS } from "../../utils/constants/filter"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
@@ -94,12 +93,10 @@ const tags = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const tagData = data && !isEmptyData ? data : null
 
-  const isSearch = fetchState == fetchType.SEARCH
-
   // Handlers views
   const isToolbarHidden = () => {
     if (isLoading) return false
-    if (isEmptyData && !isSearch) return false
+    if (isEmptyData && fetchState === fetchType.ALL) return false
 
     return true
   }
@@ -109,17 +106,19 @@ const tags = () => {
     setIsTagModalOpen(false)
   }
 
+  const handleOnOpenFilter = () => {
+    if (fetchState === fetchType.FILTER) handleOnFilter(null)
+    else setShowFilterModal(true)
+  }
+
   // Handlers CRUD
   const handleImportTags = async (data) => {
     //TODO Gestión de errores y update de SWR
 
     try {
-      const tagsCreated = []
+      const func = isProjectTag ? createProjectTag : createNoteTag
       for (let index = 0; index < data.length; index++) {
-        const pro = isProjectTag
-          ? await createProjectTag(data[index])
-          : await createNoteTag(data[index])
-        tagsCreated.push(pro)
+        await func(data[index])
       }
 
       setShowImportModal(false)
@@ -174,12 +173,22 @@ const tags = () => {
   }
 
   const handleOnFilter = (values) => {
-    const filter = generateQueryStr(generateFilterQueryObj(TAGS_FILTER_KEYS, values))
+    if (!values) {
+      setFetchState(fetchType.ALL)
+      setFetchOptions({
+        [fetchOption.FILTER]: null
+      })
+      return
+    }
+
+    const filter = generateFilterQuery(TAGS_FILTER_KEYS, values)
 
     setFetchState(fetchType.FILTER)
     setFetchOptions({
       [fetchOption.FILTER]: filter
     })
+
+    setShowFilterModal(false)
   }
 
   useEffect(() => {
@@ -237,7 +246,7 @@ const tags = () => {
           <ToolBar
             onAdd={() => setIsTagModalOpen(true)}
             onSearch={onSearch}
-            onFilter={() => setShowFilterModal(true)}
+            onFilter={handleOnOpenFilter}
             onImport={() => setShowImportModal(true)}
             onExport={() => setShowExportModal(true)}
             addLabel={infoByType[type].addTitle}
@@ -249,7 +258,7 @@ const tags = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData && isSearch ? (
+      {isEmptyData && fetchState !== fetchType.ALL ? (
         <ViewNotFoundState />
       ) : isEmptyData ? (
         <ViewEmptyState

@@ -82,10 +82,8 @@ const clientes = () => {
     //TODO Gestión de errores y update de SWR
 
     try {
-      const clientsCreated = []
       for (let index = 0; index < data.length; index++) {
-        const cl = await createClient(data[index])
-        clientsCreated.push(cl)
+        await createClient([data[index]])
       }
       await mutate()
       setShowImportModal(false)

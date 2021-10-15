@@ -6,8 +6,9 @@ import useClientApi from "../../../../../hooks/api/useClientApi"
 import useUserApi from "../../../../../hooks/api/useUserApi"
 import useTagApi from "../../../../../hooks/api/useTagApi"
 import useSectorApi from "../../../../../hooks/api/useSectorApi"
+import { MultiTagSelect } from "../../../../../components/forms/MultiTagSelect/MultiTagSelect"
 
-export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
+export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => {
   const { getSystems } = useSystemApi()
   const { getClients } = useClientApi()
   const { getUsers } = useUserApi()
@@ -35,7 +36,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       }
       fetchTestSystems()
     }
-  }, [testSystemsOpt])
+  }, [])
 
   useEffect(() => {
     if (!clientsOpt) {
@@ -45,7 +46,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       }
       fetchClients()
     }
-  }, [clientsOpt])
+  }, [])
 
   useEffect(() => {
     if (!usersOpt) {
@@ -55,7 +56,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       }
       fetchUsers()
     }
-  }, [usersOpt])
+  }, [])
 
   useEffect(() => {
     if (!projectTagsOpt) {
@@ -65,21 +66,21 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       }
       fetchNoteTags()
     }
-  }, [projectTagsOpt])
+  }, [])
 
   useEffect(() => {
     if (!sectorsOpt) {
       const fetchSectors = async () => {
         const data = await getSectors()
-        setSectorsOpt(data.map((sc) => ({ label: sc.name, value: sc._id })))
+        setSectorsOpt(data.map((sc) => ({ label: sc.title, value: sc._id })))
       }
       fetchSectors()
     }
-  }, [sectorsOpt])
+  }, [])
 
   const filterInputs = {
     client: {
-      type: "select",
+      type: "add_select",
       config: {
         placeholder: "Cliente",
         options: clientsOpt,
@@ -87,7 +88,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       }
     },
     test_system: {
-      type: "select",
+      type: "add_select",
       config: {
         placeholder: "Sistema",
         options: testSystemsOpt,
@@ -115,17 +116,17 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
       }
     },
     sector: {
-      type: "select",
+      type: "add_select",
       config: {
-        placeholder: "Sistema",
+        placeholder: "Sector",
         options: sectorsOpt,
         label: "Sector"
       }
     },
     tag_project: {
-      type: "add_select",
+      type: "multitag_select",
       config: {
-        placeholder: "Proyecto",
+        placeholder: "Tags de proyecto",
         options: projectTagsOpt,
         label: "Tags de proyecto",
         additemlabel: "Añadir ",
@@ -138,8 +139,9 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange }) => {
   }
 
   const inputRefObj = {
-    select: <InputSelect />,
-    add_select: <AddSelect />
+    select: <InputSelect isReset={isReset} />,
+    add_select: <AddSelect isReset={isReset} />,
+    multitag_select: <MultiTagSelect isReset={isReset} />
   }
 
   const handleFilterChange = (input, _value) => {
