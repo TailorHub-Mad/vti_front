@@ -1,13 +1,21 @@
 import React from "react"
 import { Flex, Box, Grid, Text } from "@chakra-ui/react"
-import { CriterionTitleCard } from "../../../components/cards/CriterionTitleCard/Criterion"
+import { CriterionCard } from "../../../components/cards/CriterionCard/Criterion"
+import { ChevronDuoUpIcon } from "../../../components/icons/ChevronDuoUpIcon"
+import { ChevronDuoDownIcon } from "../../../components/icons/ChevronDuoDownIcon"
+import { NewCriterionGroupCard } from "../NewCriterionGroupCard/NewCriterionGroupCard"
 
-export const CriterionContainer = ({ criterion, ...props }) => {
+export const CriterionContainer = ({ criterion, createCriterion, ...props }) => {
   console.log("DENTRO", criterion)
+
   return (
     <Box>
       <Flex width="100%" alignItems="center" {...props}>
-        <Text variant="d_m_medium">{criterion.title}</Text>
+        <Text variant="d_m_medium" mr="2px">
+          {criterion.title}
+        </Text>
+        <ChevronDuoUpIcon mb="4px" />
+        <ChevronDuoDownIcon mb="4px" />
       </Flex>
 
       <Grid
@@ -17,8 +25,9 @@ export const CriterionContainer = ({ criterion, ...props }) => {
         mt="8px"
         mb="24px"
       >
+        <NewCriterionGroupCard createCriterion={createCriterion} />
         {criterion.group.map((group) => (
-          <CriterionTitleCard
+          <CriterionCard
             help={group}
             // onAdd={() => setIsHelpModalOpen(true)}
             // onEdit={() => handleUpdate(group._id)}

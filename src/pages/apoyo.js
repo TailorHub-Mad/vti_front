@@ -11,7 +11,7 @@ import { checkDataIsEmpty, getFieldObjectById } from "../utils/functions/global"
 import { AddCriterionIcon } from "../components/icons/AddCriterionIcon"
 import { HelpHeader } from "../views/helps/HelpHeader/HelpHeader"
 import { Tag } from "../components/tags/Tag/Tag"
-import { CriterionTitleCard } from "../components/cards/CriterionTitleCard/Criterion"
+import { CriterionTitleCard } from "../components/cards/CriterionCard/Criterion"
 import { fetchOption, fetchType } from "../utils/constants/swr"
 import { errorHandler } from "../utils/errors"
 import download from "downloadjs"
@@ -99,6 +99,13 @@ const apoyo = () => {
     return data.sort((a, b) => a.name.localeCompare(b.name))
   }
 
+  const handleCreateCriterion = async (data) => {
+    console.log("ENTRA", data)
+    const _criterion = await createNoteHelp(data)
+    console.log(_criterion)
+    mutate()
+  }
+
   const handleImportHelps = async (data) => {
     //TODO Gestión de errores y update de SWR
 
@@ -182,7 +189,6 @@ const apoyo = () => {
         onClose={handleOnCloseModal}
         addTitle="Añadir nuevo criterio"
       />
-
       <ExportFilesModal
         isOpen={showExportModal}
         onClose={() => setShowExportModal(false)}
@@ -213,7 +219,6 @@ const apoyo = () => {
           />
         )}
       </PageHeader>
-
       <PageBody
         p="32px"
         bgColor="white"
@@ -258,7 +263,11 @@ const apoyo = () => {
 
             {activeTab.includes(ORDER.board)
               ? helpsData.map((help) => (
-                  <CriterionContainer key={help._id} criterion={help} />
+                  <CriterionContainer
+                    key={help._id}
+                    criterion={help}
+                    createCriterion={handleCreateCriterion}
+                  />
                 ))
               : null}
 
