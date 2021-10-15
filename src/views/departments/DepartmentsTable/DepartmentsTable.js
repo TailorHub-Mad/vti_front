@@ -35,7 +35,8 @@ export const DepartmentsTable = ({
     }
   }
 
-  const allRowsAreSelected = selectedRowsKeys.length === departmentsData?.length
+  const allRowsAreSelected =
+    departmentsData.length > 0 && selectedRowsKeys.length === departmentsData?.length
 
   return (
     <Table

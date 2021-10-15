@@ -44,7 +44,8 @@ export const TestSystemsTable = ({
     }
   }
 
-  const allRowsAreSelected = selectedRowsKeys.length === systemsData?.length
+  const allRowsAreSelected =
+    systemsData.length > 0 && selectedRowsKeys.length === systemsData?.length
 
   return (
     <Table

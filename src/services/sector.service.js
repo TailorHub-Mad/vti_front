@@ -5,8 +5,8 @@ const SectorService = () => {
 
   // CRUD
 
-  const getSectors = (limit = 0, offset = 0) =>
-    execute(instance.get(`/sector?limit=${limit}&offset=${offset}`))
+  const getSectors = (data = "", limit = 0, offset = 0) =>
+    execute(instance.get(`/sector?limit=${limit}&offset=${offset}${data}`))
   const getSector = (id) => execute(instance.get(`/sector/${id}`))
   const createSector = (data) => execute(instance.post(`/sector/create`, data))
   const updateSector = (id, data) =>

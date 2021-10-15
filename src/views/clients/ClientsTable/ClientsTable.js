@@ -35,7 +35,8 @@ export const ClientsTable = ({
     }
   }
 
-  const allRowsAreSelected = selectedRowsKeys.length === clientsData?.length
+  const allRowsAreSelected =
+    clientsData.length > 0 && selectedRowsKeys.length === clientsData?.length
 
   return (
     <Table

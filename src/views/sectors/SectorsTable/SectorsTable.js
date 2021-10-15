@@ -35,7 +35,8 @@ export const SectorsTable = ({
     }
   }
 
-  const allRowsAreSelected = selectedRowsKeys.length === sectorsData?.length
+  const allRowsAreSelected =
+    sectorsData.length > 0 && selectedRowsKeys.length === sectorsData?.length
 
   return (
     <Table

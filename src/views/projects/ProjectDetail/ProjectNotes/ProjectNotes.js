@@ -77,26 +77,6 @@ export const ProjectNotes = ({ notesData = [], project, onGroup, onFilter }) => 
   const [noteToDetail, setNoteToDetail] = useState(null)
   const [noteToDelete, setNoteToDelete] = useState(null)
 
-  // TODO -> provisional
-  // // Fetch
-  // const { data, error, isLoading, mutate } = noteFetchHandler(
-  //   fetchState,
-  //   fetchOptions
-  // )
-
-  // const handleNotesData = (isEmptyData) => {
-  //   if (!data || isEmptyData) return null
-  //   if (fetchState == fetchType.GROUP) return data
-  //   return data[0].notes
-
-  //   // TODO FILTER
-  // }
-
-  // const isEmptyData = checkDataIsEmpty(data)
-  // const notesData = handleNotesData(isEmptyData)
-
-  // const isSearch = fetchState == fetchType.SEARCH
-
   // ************ PROVISIONAL
   const isLoading = false // TODO -> provisional
 

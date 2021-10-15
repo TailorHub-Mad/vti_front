@@ -216,7 +216,7 @@ const usuarios = () => {
     if (!name || !order) return
 
     setFetchOptions({
-      [fetchOption.ORDER]: `&projects_${name}=${order}`
+      [fetchOption.ORDER]: `&users_${name}=${order}`
     })
   }
 

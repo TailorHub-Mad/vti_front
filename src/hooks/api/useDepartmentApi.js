@@ -4,7 +4,7 @@ const useDepartmentApi = () => {
   const departmentService = DepartmentService()
 
   // CRUD
-  const getDepartments = () => departmentService.getDepartments()
+  const getDepartments = (_, data) => departmentService.getDepartments(data)
   const getDepartment = (_, id) => departmentService.getDepartment(id)
   const createDepartment = (data) => departmentService.createDepartment(data)
   const updateDepartment = (id, data) => departmentService.updateDepartment(id, data)

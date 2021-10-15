@@ -77,7 +77,7 @@ const sistemas = () => {
   )
 
   const handleSystemsData = (isEmptyData) => {
-    if (!data || isEmptyData) return null
+    if (!data || isEmptyData) return []
     if (fetchState == fetchType.GROUP) return data
     return data[0].testSystems
 
@@ -276,7 +276,7 @@ const sistemas = () => {
     if (!name || !order) return
 
     setFetchOptions({
-      [fetchOption.ORDER]: `&projects_${name}=${order}`
+      [fetchOption.ORDER]: `&testSystems_${name}=${order}`
     })
   }
 
