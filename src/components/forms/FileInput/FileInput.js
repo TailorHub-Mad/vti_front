@@ -76,12 +76,12 @@ export const FileInput = ({
       </Flex>
 
       {value ? (
-        <Flex>
+        <Flex wrap="wrap" justifyContent="flex-start">
           {value.map((v, idx) => {
             return (
               <Flex
                 key={`${v.size}-${idx}`}
-                ml={idx !== 0 ? "16px" : 0}
+                mr={idx < value.length ? "16px" : 0}
                 mt="8px"
                 justify="flex-start"
                 alignItems="center"

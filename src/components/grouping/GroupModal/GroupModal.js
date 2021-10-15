@@ -23,17 +23,16 @@ export const GroupModal = ({ isOpen, onClose, onGroup, options = [], ...props })
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
       <ModalOverlay />
-      <CustomModalContent>
+      <CustomModalContent zIndex="10001">
         <ScaleFade in={isOpen}>
           <Box
             width="460px"
             height="fit-content"
-            position="absolute"
+            position="fixed"
             top="50px"
             left={"calc(50vw - 230px)"}
             transition="left 0.18s ease-in-out"
             bgColor="white"
-            zIndex="1400"
             padding="32px"
             {...props}
           >
@@ -59,6 +58,7 @@ export const GroupModal = ({ isOpen, onClose, onGroup, options = [], ...props })
               display="block"
               margin="0 auto"
               mt="32px"
+              isDisabled={!activeItem}
             >
               Agrupar
             </Button>

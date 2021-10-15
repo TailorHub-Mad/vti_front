@@ -9,24 +9,38 @@ export const TagsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [showSaveFilter, setShowSaveFilter] = useState(false)
   const router = useRouter()
+
   const isProjectTag = router.query.type === "projects"
+
   const initialValues = isProjectTag
     ? {
-        project_tags: [""]
+        project_tags: [{ label: "", value: "" }]
       }
     : {
-        note_tags: [""]
+        note_tags: [{ label: "", value: "" }]
       }
+
   const [filterValues, setFilterValues] = useState(initialValues)
-  const handleReset = () => {
-    //TODO Los inputs no reflejan el reset
+
+  const handleOnReset = () => {
     setFilterValues(initialValues)
+    onFilter(null)
+  }
+
+  const handleOnFilter = () => {
+    setFilterValues(initialValues)
+    onFilter(filterValues)
+  }
+
+  const handleOnClose = () => {
+    setFilterValues(initialValues)
+    onClose()
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} {...props}>
+    <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
-      <CustomModalContent>
+      <CustomModalContent zIndex="10001">
         <ScaleFade
           in={
             !showSaveFilter &&
@@ -36,13 +50,13 @@ export const TagsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
         >
           <MainFilter
             simpleFilterValues={filterValues}
-            onClose={onClose}
+            onClose={handleOnClose}
             moveToLeft={["project_tags", "note_tags"].includes(showSecondaryContent)}
             onSecondaryOpen={(type) => setShowSecondaryContent(type)}
             onSimpleFilterChange={(val) => setFilterValues(val)}
             openSaveModal={() => setShowSaveFilter(true)}
-            onFilter={() => onFilter(filterValues)}
-            onReset={handleReset}
+            onFilter={handleOnFilter}
+            onReset={handleOnReset}
           />
         </ScaleFade>
 

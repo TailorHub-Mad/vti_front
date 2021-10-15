@@ -67,10 +67,8 @@ const sectores = () => {
     //TODO Gestión de errores y update de SWR
 
     try {
-      const projectsCreated = []
       for (let index = 0; index < data.length; index++) {
-        const pro = await createSector([data[index]])
-        projectsCreated.push(pro)
+        await createSector([data[index]])
       }
 
       setShowImportModal(false)

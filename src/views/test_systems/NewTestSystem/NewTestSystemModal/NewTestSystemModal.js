@@ -9,12 +9,14 @@ import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
 import { NewTestSystemForm } from "../NewTestSystemForm/NewTestSystemForm"
 
+const initialValues = [{}]
+
 export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
   const { showToast } = useContext(ToastContext)
   const { createSystem, updateSystem } = useSystemApi()
   const { mutate } = useSWRConfig()
 
-  const [values, setValues] = useState([{}])
+  const [values, setValues] = useState(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isUpdate = Boolean(systemToUpdate)
@@ -66,6 +68,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     isUpdate ? await handleUpdateSystem() : await handleCreateSystem()
+    setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.systems)
     showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
     setIsSubmitting(false)
@@ -75,8 +78,9 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
   const handleCreateSystem = async () => {
     try {
       const systemsToCreate = formatCreateSystems(values)
-      const systemsQueue = systemsToCreate.map((system) => createSystem(system))
-      await Promise.all(systemsQueue)
+      for (let index = 0; index < systemsToCreate.length; index++) {
+        await createSystem(systemsToCreate[index])
+      }
     } catch (error) {
       errorHandler(error)
     }
@@ -90,6 +94,11 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
     } catch (error) {
       errorHandler(error)
     }
+  }
+
+  const handleOnClose = () => {
+    setValues(initialValues)
+    onClose()
   }
 
   useEffect(() => {
@@ -109,12 +118,12 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
   }, [isOpen])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleOnClose}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
           title={isUpdate ? "Editar sistema" : "Añadir nuevo sistema"}
-          onClose={onClose}
+          onClose={handleOnClose}
           pb="24px"
         />
         <MultipleFormContent

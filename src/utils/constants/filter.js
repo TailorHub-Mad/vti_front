@@ -1,9 +1,9 @@
 export const NOTES_FILTER_KEYS = {
-  client: "notes.clientAlias",
+  client: "notes.clientId",
   note_tags: "notes.tags",
   users: "notes.owner",
   test_system: "notes.testSystems._id",
-  vti_code: "notes.vtiCode._id",
+  vti_code: "notes.testSystems.vtiCode._id",
   project: "notes.projects._id",
   formalized: "notes.formalized",
   closed: "notes.isClosed",
@@ -28,12 +28,12 @@ export const TESTSYSTEMS_FILTER_KEYS = {
 }
 
 export const TAGS_FILTER_KEYS = {
-  project_tags: "tags.name",
-  note_tags: "tags.name"
+  project_tags: "_id",
+  note_tags: "_id"
 }
 
 export const USERS_FILTER_KEYS = {
-  project: "users.project._id",
-  department: "user.department._id",
-  focus_point: "user.focusPoint._id"
+  project: "projectsComments._id",
+  department: "department._id",
+  focus_point: "focusPoint._id"
 }

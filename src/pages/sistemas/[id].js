@@ -39,17 +39,17 @@ const system = () => {
     <Page>
       {isLoading || !data ? <LoadingView mt="-200px" /> : null}
       {notFound && <>Error. No se ha encontrado el sistema.</>}
-      {projectsData && (
-        <ProjectsByObject
-          projects={projectsData}
-          customURL={`${PATHS.testSystems}/${system?.ref || systemId}`}
-          setFetchState={setFetchState}
-          setFetchOptions={setFetchOptions}
-          fetchState={fetchState}
-          fetchOptions={fetchOptions}
-          isEmptyData={isEmptyData}
-        />
-      )}
+      <ProjectsByObject
+        projects={projectsData}
+        customURL={`${PATHS.testSystems}/${system?.ref || systemId}`}
+        setFetchState={setFetchState}
+        setFetchOptions={setFetchOptions}
+        fetchState={fetchState}
+        fetchOptions={fetchOptions}
+        isEmptyData={isEmptyData}
+        hrefBack={PATHS.testSystems}
+        backText={"Volver a sistemas"}
+      />
     </Page>
   )
 }

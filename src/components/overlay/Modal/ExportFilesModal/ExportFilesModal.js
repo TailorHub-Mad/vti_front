@@ -26,11 +26,12 @@ export const ExportFilesModal = ({ title, isOpen, onClose, onExport, ...props })
   useEffect(() => {
     if (progress >= 100) {
       onExport()
+      setProgress(0)
     }
   }, [progress])
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} {...props}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered {...props}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
@@ -38,7 +39,6 @@ export const ExportFilesModal = ({ title, isOpen, onClose, onExport, ...props })
           onClose={onClose}
           pb="24px"
         />
-
         <Progress value={progress} />
         <Button
           w="194px"
