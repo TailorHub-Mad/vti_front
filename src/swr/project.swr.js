@@ -30,11 +30,16 @@ export const projectFetchHandler = (state, options) => {
         [SWR_CACHE_KEYS.groupProjects, options[fetchOption.GROUP]],
         getGroupProjects
       ),
-    filter: () =>
-      useFetchSWR(
-        [SWR_CACHE_KEYS.filterProjects, options[fetchOption.FILTER]],
-        getFilterProjects
-      ),
+    filter: () => {
+      const order = options[fetchOption.ORDER]
+      let query = options[fetchOption.FILTER]
+
+      if (order) query = `${query}&${order}`
+
+      console.log(query)
+
+      return useFetchSWR([SWR_CACHE_KEYS.filterProjects, query], getFilterProjects)
+    },
     search: () =>
       useFetchSWR(
         [SWR_CACHE_KEYS.searchProjects, options[fetchOption.SEARCH]],

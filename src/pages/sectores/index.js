@@ -232,9 +232,7 @@ const sectores = () => {
           onImport={() => setShowImportModal(true)}
           onAdd={() => setIsSectorModalOpen(true)}
         />
-      ) : null}
-
-      {sectorsData ? (
+      ) : (
         <SectorsTable
           sectors={sectorsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
@@ -242,7 +240,7 @@ const sectores = () => {
           onEdit={handleUpdate}
           handleSortElement={handleSortElement}
         />
-      ) : null}
+      )}
     </Page>
   )
 }

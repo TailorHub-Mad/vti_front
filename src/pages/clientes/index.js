@@ -230,8 +230,7 @@ const clientes = () => {
           onImport={() => setShowImportModal(true)}
           onAdd={() => setIsClientModalOpen(true)}
         />
-      ) : null}
-      {clientsData ? (
+      ) : (
         <ClientsTable
           clients={clientsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
@@ -239,7 +238,7 @@ const clientes = () => {
           onEdit={handleUpdate}
           handleSortElement={handleSortElement}
         />
-      ) : null}
+      )}
     </Page>
   )
 }

@@ -293,9 +293,7 @@ const usuarios = () => {
           onImport={() => setShowImportModal(true)}
           onAdd={() => setIsUserModalOpen(true)}
         />
-      ) : null}
-
-      {usersData ? (
+      ) : (
         <UsersTable
           fetchState={fetchState}
           users={usersData}
@@ -310,7 +308,7 @@ const usuarios = () => {
           )}
           handleSortElement={handleSortElement}
         />
-      ) : null}
+      )}
     </Page>
   )
 }

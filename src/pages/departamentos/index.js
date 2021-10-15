@@ -239,8 +239,7 @@ const departamentos = () => {
           onImport={() => setShowImportModal(true)}
           onAdd={() => setIsDepartmentModalOpen(true)}
         />
-      ) : null}
-      {departmentsData ? (
+      ) : (
         <DepartmentsTable
           departments={departmentsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
@@ -250,7 +249,7 @@ const departamentos = () => {
           onEdit={handleUpdate}
           handleSortElement={handleSortElement}
         />
-      ) : null}
+      )}
     </Page>
   )
 }

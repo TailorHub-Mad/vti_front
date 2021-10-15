@@ -307,10 +307,10 @@ const proyectos = () => {
 
   const handleSortElement = (data) => {
     const { name, order } = data
-
     if (!name || !order) return
 
     setFetchOptions({
+      ...fetchOptions,
       [fetchOption.ORDER]: `&projects_${name}=${order}`
     })
   }
@@ -387,7 +387,7 @@ const proyectos = () => {
 
       {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData && fetchState !== fetchType.ALL ? (
-        <ViewNotFoundState />
+        <ViewNotFoundState noBack />
       ) : isEmptyData ? (
         <ViewEmptyState
           message="Añadir proyectos a la plataforma"
@@ -396,9 +396,7 @@ const proyectos = () => {
           onImport={() => setShowImportModal(true)}
           onAdd={() => setIsProjectModalOpen(true)}
         />
-      ) : null}
-
-      {projectsData ? (
+      ) : (
         <ProjectsTable
           fetchState={fetchState}
           projects={projectsData}
@@ -414,7 +412,7 @@ const proyectos = () => {
           )}
           handleSortElement={handleSortElement}
         />
-      ) : null}
+      )}
     </Page>
   )
 }

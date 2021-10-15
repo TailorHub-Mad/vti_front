@@ -13,8 +13,7 @@ const useProjectApi = () => {
   // GROUP & FILTER
   const getGroupProjects = (_, data) => projectService.getGroupProjects(data)
   const getActiveProjects = (_, data) => projectService.getActiveProjects(data)
-  const getFilterProjects = (_, data, order) =>
-    projectService.getFilterProjects(data, order)
+  const getFilterProjects = (_, data) => projectService.getFilterProjects(data)
   const getSearchProjects = (_, data) => projectService.getSearchProjects(data)
 
   return {

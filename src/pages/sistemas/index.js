@@ -352,8 +352,7 @@ const sistemas = () => {
           onImport={() => setShowImportModal(true)}
           onAdd={() => setIsSystemModalOpen(true)}
         />
-      ) : null}
-      {systemsData ? (
+      ) : (
         <TestSystemsTable
           fetchState={fetchState}
           systems={systemsData}
@@ -367,7 +366,7 @@ const sistemas = () => {
           )}
           handleSortElement={handleSortElement}
         />
-      ) : null}
+      )}
     </Page>
   )
 }
