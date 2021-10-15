@@ -75,6 +75,7 @@ export const fetchType = {
 
 export const fetchOption = {
   ID: "id",
+  ORDER: "order",
   GROUP: "group",
   FILTER: "filter",
   SEARCH: "search"

@@ -5,7 +5,13 @@ import useTableActions from "../../../hooks/useTableActions"
 import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
 import { formatSector, TABLE_SECTORS_HEAD } from "./utils"
 
-export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
+export const SectorsTable = ({
+  sectors,
+  onDelete,
+  onEdit,
+  onDeleteMany,
+  handleSortElement
+}) => {
   const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
     useTableActions()
 
@@ -49,6 +55,7 @@ export const SectorsTable = ({ sectors, onDelete, onEdit, onDeleteMany }) => {
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
       optionsDisabled={selectedRowsKeys.length > 1}
+      handleSortElement={handleSortElement}
     />
   )
 }

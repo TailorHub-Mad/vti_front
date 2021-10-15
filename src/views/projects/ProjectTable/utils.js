@@ -44,22 +44,26 @@ export const TABLE_PROJECTS_HEAD = {
   id: {
     label: "ID",
     width: calcColWidth(60),
-    type: "link"
+    type: "link",
+    config: { sort: true, name: "ref" }
   },
   alias: {
     label: "Alias",
     width: calcColWidth(220),
-    type: "text"
+    type: "text",
+    config: { sort: true, name: "alias" }
   },
   sector: {
     label: "Sector",
     width: calcColWidth(90),
-    type: "text"
+    type: "text",
+    config: { sort: true, name: "sector" }
   },
   focusPoint: {
     label: "Punto Focal",
     width: calcColWidth(90),
-    type: "text"
+    type: "text",
+    config: { sort: true, name: "focusPoint" }
   },
   testSystems: {
     label: "Sistemas de ensayo",

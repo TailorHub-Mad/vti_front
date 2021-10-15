@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useMemo } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import useTableActions from "../../../hooks/useTableActions"
 import { fetchType } from "../../../utils/constants/swr"
@@ -8,7 +8,6 @@ import { formatProject, TABLE_PROJECTS_HEAD } from "./utils"
 
 export const ProjectsTable = ({
   projects,
-  onTabChange,
   onDelete,
   onClose,
   onDeleteMany,
@@ -16,7 +15,8 @@ export const ProjectsTable = ({
   fetchState = fetchType.ALL,
   onGroup,
   onFilter,
-  groupOption
+  groupOption,
+  handleSortElement
 }) => {
   const isGrouped = fetchState === fetchType.GROUP
 
@@ -25,16 +25,9 @@ export const ProjectsTable = ({
 
   const selectedRowsKeys = Object.keys(selectedRows)
 
-  const [activeItem, setActiveItem] = useState(fetchState)
-
   useMemo(() => {
     setSelectedRows([])
   }, [projects?.length])
-
-  const handleOnTabChange = (state) => {
-    setActiveItem(state)
-    onTabChange(state)
-  }
 
   const handleOnDelete = () => {
     const projectsId = Object.keys(selectedRows)
@@ -57,14 +50,13 @@ export const ProjectsTable = ({
       }
     }
   }
-  const allRowsAreSelected = selectedRowsKeys.length === projectsData?.length
+  const allRowsAreSelected =
+    projectsData?.length > 0 && selectedRowsKeys.length === projectsData?.length
 
   return (
     <Table
       header={
         <ProjectsTableHeader
-          activeItem={activeItem}
-          onChange={handleOnTabChange}
           projectsCount={projectsData?.length}
           selectedRows={selectedRows}
           onDelete={handleOnDelete}
@@ -83,6 +75,7 @@ export const ProjectsTable = ({
       onRowSelect={handleRowSelect}
       optionsDisabled={selectedRowsKeys.length > 1}
       isGrouped={isGrouped}
+      handleSortElement={handleSortElement}
     />
   )
 }

@@ -160,6 +160,16 @@ const sectores = () => {
     })
   }
 
+  const handleSortElement = (data) => {
+    const { name, order } = data
+
+    if (!name || !order) return
+
+    setFetchOptions({
+      [fetchOption.ORDER]: `&projects_${name}=${order}`
+    })
+  }
+
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (
@@ -230,6 +240,7 @@ const sectores = () => {
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
           onEdit={handleUpdate}
+          handleSortElement={handleSortElement}
         />
       ) : null}
     </Page>

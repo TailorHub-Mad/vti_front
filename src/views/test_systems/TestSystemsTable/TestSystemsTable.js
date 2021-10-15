@@ -14,7 +14,8 @@ export const TestSystemsTable = ({
   fetchState,
   onGroup,
   onFilter,
-  groupOption
+  groupOption,
+  handleSortElement
 }) => {
   const isGrouped = fetchState === fetchType.GROUP
 
@@ -68,6 +69,7 @@ export const TestSystemsTable = ({
       onRowSelect={handleRowSelect}
       optionsDisabled={selectedRowsKeys.length > 1}
       isGrouped={fetchState === fetchType.GROUP}
+      handleSortElement={handleSortElement}
     />
   )
 }

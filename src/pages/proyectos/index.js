@@ -82,7 +82,7 @@ const proyectos = () => {
   )
 
   const handleProjectsData = (isEmptyData) => {
-    if (!data || isEmptyData) return null
+    if (!data || isEmptyData) return []
     if (fetchState == fetchType.GROUP) return data
     return data[0].projects
 
@@ -305,6 +305,16 @@ const proyectos = () => {
     setShowFilterModal(false)
   }
 
+  const handleSortElement = (data) => {
+    const { name, order } = data
+
+    if (!name || !order) return
+
+    setFetchOptions({
+      [fetchOption.ORDER]: `&projects_${name}=${order}`
+    })
+  }
+
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (
@@ -396,13 +406,13 @@ const proyectos = () => {
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
           onEdit={handleUpdate}
-          onTabChange={(state) => setFetchState(state)}
           onGroup={handleOnGroup}
           onFilter={handleOnFilter}
           groupOption={getGroupOptionLabel(
             PROJECTS_GROUP_OPTIONS,
             fetchOptions[fetchOption.GROUP]
           )}
+          handleSortElement={handleSortElement}
         />
       ) : null}
     </Page>

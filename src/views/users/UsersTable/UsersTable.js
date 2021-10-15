@@ -15,7 +15,8 @@ export const UsersTable = ({
   fetchState,
   onGroup,
   onFilter,
-  groupOption
+  groupOption,
+  handleSortElement
 }) => {
   const isGrouped = fetchState === fetchType.GROUP
 
@@ -67,6 +68,7 @@ export const UsersTable = ({
       onRowSelect={(idx) => handleRowSelect(idx)}
       optionsDisabled={selectedRowsKeys.length > 1}
       isGrouped={fetchState === fetchType.GROUP}
+      handleSortElement={handleSortElement}
     />
   )
 }

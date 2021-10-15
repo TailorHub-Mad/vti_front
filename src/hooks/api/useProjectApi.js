@@ -4,7 +4,7 @@ const useProjectApi = () => {
   const projectService = ProjectService()
 
   // CRUD
-  const getProjects = () => projectService.getProjects()
+  const getProjects = (_, data) => projectService.getProjects(data)
   const getProject = (_, id) => projectService.getProject(id)
   const createProject = (data) => projectService.createProject(data)
   const updateProject = (id, data) => projectService.updateProject(id, data)
@@ -13,7 +13,8 @@ const useProjectApi = () => {
   // GROUP & FILTER
   const getGroupProjects = (_, data) => projectService.getGroupProjects(data)
   const getActiveProjects = (_, data) => projectService.getActiveProjects(data)
-  const getFilterProjects = (_, data) => projectService.getFilterProjects(data)
+  const getFilterProjects = (_, data, order) =>
+    projectService.getFilterProjects(data, order)
   const getSearchProjects = (_, data) => projectService.getSearchProjects(data)
 
   return {

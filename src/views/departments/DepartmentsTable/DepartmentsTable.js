@@ -9,7 +9,8 @@ export const DepartmentsTable = ({
   departments,
   onDelete,
   onEdit,
-  onDeleteMany
+  onDeleteMany,
+  handleSortElement
 }) => {
   const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
     useTableActions()
@@ -54,6 +55,7 @@ export const DepartmentsTable = ({
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
       optionsDisabled={selectedRowsKeys.length > 1}
+      handleSortElement={handleSortElement}
     />
   )
 }
