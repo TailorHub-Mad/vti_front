@@ -36,8 +36,6 @@ export const projectFetchHandler = (state, options) => {
 
       if (order) query = `${query}&${order}`
 
-      console.log(query)
-
       return useFetchSWR([SWR_CACHE_KEYS.filterProjects, query], getFilterProjects)
     },
     search: () =>
