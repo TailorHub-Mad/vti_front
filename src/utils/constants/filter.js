@@ -37,3 +37,7 @@ export const USERS_FILTER_KEYS = {
   department: "department._id",
   focus_point: "focusPoint._id"
 }
+
+export const NOTIFICATIONS_FILTER_KEYS = {
+  name: "projectsComments._id"
+}

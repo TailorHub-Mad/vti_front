@@ -10,6 +10,7 @@ export const ViewEmptyState = ({
   addButtonText,
   onImport,
   onAdd,
+  noImport,
   ...props
 }) => {
   return (
@@ -24,18 +25,21 @@ export const ViewEmptyState = ({
         <Text variant="d_s_medium" mb="24px">
           {children || message || "Añadir a la plataforma"}
         </Text>
-        <Button
-          display="flex"
-          justifyContent="flex-start"
-          leftIcon={<UploadCloudIcon />}
-          variant="secondary"
-          mb="16px"
-          onClick={onImport}
-          w="auto"
-          p="20px"
-        >
-          {importButtonText || "Importar"}
-        </Button>
+        {noImport || (
+          <Button
+            display="flex"
+            justifyContent="flex-start"
+            leftIcon={<UploadCloudIcon />}
+            variant="secondary"
+            mb="16px"
+            onClick={onImport}
+            w="auto"
+            p="20px"
+          >
+            {importButtonText || "Importar"}
+          </Button>
+        )}
+
         <Button
           display="flex"
           justifyContent="flex-start"
