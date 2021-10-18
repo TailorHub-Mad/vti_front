@@ -32,6 +32,13 @@ export const NewNoteForm = ({
     ? { ...value }
     : {
         ...value,
+        testSystems:
+          noteToUpdate.testSystems.length > 0
+            ? noteToUpdate.testSystems.map((system) => ({
+                label: system.alias,
+                value: system._id
+              }))
+            : undefined,
         tags:
           noteToUpdate.tags.length > 0
             ? noteToUpdate.tags.map((tag) => ({
@@ -48,7 +55,7 @@ export const NewNoteForm = ({
     _tags.map((tag) => ({ label: tag.name, value: tag._id }))
 
   const handleFormChange = (input, _value) => {
-    if (input === "project") setIsReset(true)
+    if (input === "project" && !noteToUpdate) setIsReset(true)
     else if (isReset) setIsReset(false)
 
     onChange({
@@ -145,6 +152,17 @@ export const NewNoteForm = ({
     handleFormChange("project", project)
   }, [noteToUpdate, projectOptions])
 
+  // System
+  useEffect(() => {
+    if (!noteToUpdate || systemOptions.length === 0) return
+    const _systemsFormat = noteToUpdate?.testSystems.map((s) => s.alias)
+    const systems = systemOptions.filter((_system) =>
+      _systemsFormat.includes(_system.label)
+    )
+    if (systems.length === 0) return
+    handleFormChange("testSystems", systems)
+  }, [noteToUpdate, systemOptions])
+
   // Tags
   useEffect(() => {
     if (!noteToUpdate || tagOptions.length === 0) return
@@ -157,7 +175,7 @@ export const NewNoteForm = ({
     handleFormChange("tags", tags)
   }, [noteToUpdate, tagOptions])
 
-  useEffect(() => {
+  const handleSystemOptions = () => {
     const project = value.project
 
     if (!project || !project.value) return
@@ -169,7 +187,17 @@ export const NewNoteForm = ({
     setSystemOptions(
       noteFromProject ? data?.testSystems : formatSelectOption(data?.testSystems)
     )
+  }
+
+  useEffect(() => {
+    handleSystemOptions()
   }, [value.project])
+
+  useEffect(() => {
+    if (!noteToUpdate && value?.project?.value) return
+
+    handleSystemOptions()
+  }, [noteToUpdate, value.project])
 
   const inputRefObj = {
     text: <SimpleInput />,
@@ -179,6 +207,8 @@ export const NewNoteForm = ({
     attachment: <FileInputForm isUpdate={isUpdate} />,
     multitag_select: <MultiTagSelect />
   }
+
+  console.log("formatValues", formatValues)
 
   return (
     <>

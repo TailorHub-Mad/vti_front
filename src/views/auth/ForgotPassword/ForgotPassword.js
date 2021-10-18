@@ -6,21 +6,22 @@ import { Formik } from "formik"
 import { checkFormIsEmpty } from "../../../utils/functions/forms"
 import { LogoFull } from "../../../components/images/LogoFull"
 import useAuthApi from "../../../hooks/api/useAuthApi"
+import { useRouter } from "next/dist/client/router"
+import { PATHS } from "../../../utils/constants/global"
 
 export const ForgotPassword = () => {
+  const router = useRouter()
   const { sendRecoveryPassword } = useAuthApi()
 
   const [hasError] = useState(false)
-  const [, setEmail] = useState() // TODO -> re-send request
   const [showMessage, setShowMessage] = useState(false)
+  const [email, setEmail] = useState(null)
 
   const handleSubmit = async (data) => {
     setEmail(data.email)
     await sendRecoveryPassword(data)
-
     setShowMessage(true)
   }
-
   return (
     <Center
       w="100vw"
@@ -31,89 +32,108 @@ export const ForgotPassword = () => {
       bgSize="cover"
       bgPosition="center"
     >
-      <Card
-        width="492px"
-        height="410px"
-        p="32px 48px 56px 48px"
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-      >
-        <LogoFull width="163px" color="blue.500" mb="32px" />
-        <Text
-          variant="d_l_regular"
-          align="left"
-          w="100%"
-          marginBottom="16px"
-          color="#052E57"
+      {showMessage ? (
+        <Card
+          width="492px"
+          p="32px 48px 56px 48px"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
         >
-          ¿Has olvidado tu contraseña?
-        </Text>
-        <Text
-          variant="d_m_regular"
-          align="left"
-          w="100%"
-          marginBottom="16px"
-          color="#052E57"
-        >
-          No te preocupes, dinos por favor tu mail para restaurarla.
-        </Text>
-        <Formik
-          initialValues={{ email: "" }}
-          onSubmit={(values, { setSubmitting, resetForm }) => {
-            handleSubmit(values)
-            setSubmitting(false)
-            setTimeout(() => {
-              setShowMessage(false)
-              resetForm()
-            }, 3000)
-          }}
-        >
-          {(props) => (
-            <form onSubmit={props.handleSubmit} style={{ width: "100%" }}>
-              <FormController
-                label="Email"
-                mb="24px"
-                error={hasError && "Tu email no pertenece a la compañia"}
+          <LogoFull width="163px" color="blue.500" mb="32px" />
+          <Text
+            variant="d_m_regular"
+            align="left"
+            w="100%"
+            color="#052E57"
+            display="inline"
+          >
+            {`Le hemos enviado un correo electrónico a`}{" "}
+            <span>
+              {" "}
+              <Text
+                display="inline"
+                variant="d_m_medium"
+                align="left"
+                color="#052E57"
               >
-                <Input
-                  name="email"
-                  placeholder="Escribe tu email"
-                  onChange={props.handleChange}
-                  value={props.values.email}
-                  isInvalid={hasError}
-                  color={hasError ? "#F95C5C" : "#052E57"}
-                  errorBorderColor="#F95C5C"
-                />
-              </FormController>
-
-              <Flex justifyContent="center">
-                <Button
-                  type="submit"
-                  isLoading={props.isSubmitting}
-                  disabled={checkFormIsEmpty(props.values)}
+                {email}
+              </Text>
+            </span>{" "}
+            {`con las
+            instrucciones para restaurar su contraseña.`}
+          </Text>
+          <Button mt="48px" type="submit" onClick={() => router.push(PATHS.login)}>
+            Volver al inicio
+          </Button>
+        </Card>
+      ) : (
+        <Card
+          width="492px"
+          height="410px"
+          p="32px 48px 56px 48px"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+        >
+          <LogoFull width="163px" color="blue.500" mb="32px" />
+          <Text
+            variant="d_l_regular"
+            align="left"
+            w="100%"
+            marginBottom="16px"
+            color="#052E57"
+          >
+            ¿Has olvidado tu contraseña?
+          </Text>
+          <Text
+            variant="d_m_regular"
+            align="left"
+            w="100%"
+            marginBottom="16px"
+            color="#052E57"
+          >
+            No te preocupes, dinos por favor tu mail para restaurarla.
+          </Text>
+          <Formik
+            initialValues={{ email: "" }}
+            onSubmit={(values, { setSubmitting }) => {
+              handleSubmit(values)
+              setSubmitting(false)
+            }}
+          >
+            {(props) => (
+              <form onSubmit={props.handleSubmit} style={{ width: "100%" }}>
+                <FormController
+                  label="Email"
+                  mb="24px"
+                  error={hasError && "Tu email no pertenece a la compañia"}
                 >
-                  Enviar email
-                </Button>
-              </Flex>
+                  <Input
+                    name="email"
+                    placeholder="Escribe tu email"
+                    onChange={props.handleChange}
+                    value={props.values.email}
+                    isInvalid={hasError}
+                    color={hasError ? "#F95C5C" : "#052E57"}
+                    errorBorderColor="#F95C5C"
+                  />
+                </FormController>
 
-              {showMessage ? (
-                <Flex justifyContent="center" mt="24px">
-                  <Text
-                    variant="d_s_regular"
-                    align="center"
-                    w="100%"
-                    marginBottom="16px"
-                    color="#052E57"
+                <Flex justifyContent="center">
+                  <Button
+                    type="submit"
+                    isLoading={props.isSubmitting}
+                    disabled={checkFormIsEmpty(props.values)}
                   >
-                    Hemos enviado un email a tu correo. Revísalo por favor.
-                  </Text>
+                    Enviar email
+                  </Button>
                 </Flex>
-              ) : null}
-            </form>
-          )}
-        </Formik>
-      </Card>
+              </form>
+            )}
+          </Formik>
+        </Card>
+      )}
     </Center>
   )
 }

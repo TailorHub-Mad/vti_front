@@ -27,7 +27,7 @@ export const UsersTable = ({
 
   useMemo(() => {
     setSelectedRows([])
-  }, [users.length])
+  }, [users?.length])
 
   const handleOnDelete = () => {
     if (selectedRowsKeys.length > 1) return onDeleteMany(selectedRowsKeys)

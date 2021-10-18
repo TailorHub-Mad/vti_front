@@ -57,7 +57,7 @@ export const Table = ({
             head={head}
             handleSortElement={handleSortElement}
           />
-          {content.map((item, idx) => {
+          {content?.map((item, idx) => {
             if (isGrouped)
               return (
                 <TableGroup

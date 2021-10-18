@@ -32,29 +32,7 @@ export const NewProjectForm = ({
   const [systemOptions, setSystemOptions] = useState([])
   const [tagOptions, setTagOptions] = useState([])
 
-  console.log("value", value)
-
-  const formatValues = !projectToUpdate
-    ? { ...value }
-    : {
-        ...value,
-        focusPoint: {
-          label: projectToUpdate.focusPoint[0].alias
-        },
-        testSystems:
-          projectToUpdate.testSystems.length > 0
-            ? projectToUpdate.testSystems.map((system) => ({
-                label: system.alias
-              }))
-            : undefined,
-        tags:
-          projectToUpdate.tags.length > 0
-            ? projectToUpdate.tags.map((tag) => ({
-                label: tag.name,
-                value: tag._id
-              }))
-            : undefined
-      }
+  const _values = { ...value }
 
   const formatClients = (_clients) =>
     _clients.map((client) => ({ label: client.alias, value: client._id }))
@@ -271,12 +249,12 @@ export const NewProjectForm = ({
   return (
     <>
       {Object.entries(formInputs).map(([name, { type, config }], index) => {
-        let auxValue = formatValues[name]
+        let auxValue = _values[name]
 
         if (
           name === "date" &&
           value[Object.keys(value)[index - 1]] &&
-          !formatValues[name]
+          !_values[name]
         ) {
           auxValue = formatDateToInput(destructuringDate(new Date()))
           handleFormChange(name, auxValue)

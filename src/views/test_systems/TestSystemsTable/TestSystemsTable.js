@@ -26,7 +26,7 @@ export const TestSystemsTable = ({
 
   useMemo(() => {
     setSelectedRows([])
-  }, [systems.length])
+  }, [systems?.length])
 
   const handleOnDelete = () => {
     const systemsId = Object.keys(selectedRows)

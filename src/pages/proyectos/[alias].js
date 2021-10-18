@@ -73,6 +73,7 @@ const project = () => {
             projectToUpdate={projectData}
             isOpen={openUpdateModal}
             onClose={() => setOpenUpdateModal(false)}
+            projectDetail={true}
           />
 
           <FinishProjectModal
