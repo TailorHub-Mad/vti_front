@@ -6,16 +6,24 @@ const HelpService = () => {
   // CRUD
   const getNoteHelps = () => execute(instance.get("/criterion/notes"))
   const getProjectHelps = () => execute(instance.get("/criterion/project"))
-  const createProjectHelp = (data) =>
+  const getNoteTags = () => execute(instance.get("/criterion/notes/tags"))
+  const getProjectTags = () => execute(instance.get("/criterion/project/tags"))
+  const createProjectCriterion = (data) =>
     execute(instance.post(`/criterion/project`, data))
-  const createNoteHelp = (data) => execute(instance.post(`/criterion/notes`, data))
-  const updateProjectHelp = (id, data) =>
+  const createNoteCriterion = (data) =>
+    execute(instance.post(`/criterion/notes`, data))
+  const updateProjectCriterion = (id, data) =>
+    execute(instance.put(`/criterion/project/update/${id}`, data))
+  const updateNoteCriterion = (id, data) =>
+    execute(instance.put(`/criterion/notes/update/${id}`, data))
+  const createProjectGroup = (id, data) =>
     execute(instance.put(`/criterion/project/${id}`, data))
-  const updateNoteHelp = (id, data) =>
+  const createNoteGroup = (id, data) =>
     execute(instance.put(`/criterion/notes/${id}`, data))
-  const deleteProjectHelp = (id) =>
+  const deleteProjectCriterion = (id) =>
     execute(instance.delete(`/criterion/project/${id}`))
-  const deleteNoteHelp = (id) => execute(instance.delete(`/criterion/notes/${id}`))
+  const deleteNoteCriterion = (id) =>
+    execute(instance.delete(`/criterion/notes/${id}`))
 
   // GROUP & FILTER
   const getSearchProjectHelps = (data) =>
@@ -26,15 +34,18 @@ const HelpService = () => {
   return {
     getNoteHelps,
     getProjectHelps,
-    createProjectHelp,
-    createNoteHelp,
-    updateProjectHelp,
-    updateNoteHelp,
-    deleteProjectHelp,
-    deleteNoteHelp,
-
+    createProjectCriterion,
+    createNoteCriterion,
+    updateProjectCriterion,
+    updateNoteCriterion,
+    deleteProjectCriterion,
+    deleteNoteCriterion,
+    createProjectGroup,
+    createNoteGroup,
     getSearchProjectHelps,
-    getSearchNotesHelps
+    getSearchNotesHelps,
+    getNoteTags,
+    getProjectTags
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Box, Flex, Text } from "@chakra-ui/layout"
 import { OptionsIcon } from "../../../components/icons/OptionsIcon"
 import { ICONS_PROPS_16 } from "../../../utils/constants/icons"
@@ -6,30 +6,29 @@ import { Button } from "@chakra-ui/button"
 import { AddIcon } from "@chakra-ui/icons"
 import { chakra } from "@chakra-ui/system"
 
-export const NewCriterionGroupCard = ({ createCriterion, ...props }) => {
-  const [value, setValue] = useState("")
+export const NewCriterionGroupCard = ({ createCriterionGroup, ...props }) => {
+  const [value, _setValue] = useState("")
+  const _valueRef = React.useRef(value)
+
+  const setValue = (data) => {
+    _valueRef.current = data
+    _setValue(data)
+  }
+
   const handleChange = (e) => {
     setValue(e.target.value)
   }
-  console.log(value)
 
   const onEnter = () => {
-    console.log("entra")
-    createCriterion({ title: value })
+    createCriterionGroup(_valueRef.current)
+    setValue("")
   }
 
-  useEffect(() => {
-    document.addEventListener("keydown", (e) => {
-      if (e.code === "Enter") {
-        onEnter()
-      }
-    })
-    return document.removeEventListener("keydown", (e) => {
-      if (e.code === "Enter") {
-        onEnter()
-      }
-    })
-  }, [value])
+  const handleEnter = (e) => {
+    if (e.code === "Enter") {
+      onEnter()
+    }
+  }
 
   return (
     <Flex
@@ -40,6 +39,7 @@ export const NewCriterionGroupCard = ({ createCriterion, ...props }) => {
       borderRadius="2px"
       w="266px"
       h="293px"
+      {...props}
     >
       <Flex height="32px" justify="space-between">
         <Box maxWidth="80%" height="32px" cursor="pointer">
@@ -53,9 +53,10 @@ export const NewCriterionGroupCard = ({ createCriterion, ...props }) => {
             fontFamily="Noway-Medium"
             fontSize="17px"
             lineHeight="19px"
+            onKeyDown={handleEnter}
           />
         </Box>
-        <OptionsIcon {...ICONS_PROPS_16} color="grey" />
+        <OptionsIcon {...ICONS_PROPS_16} color="grey" cursor="default" />
       </Flex>
       <Button
         mt="18px"

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
-import { InputSelect } from "../../../../components/forms/InputSelect/InputSelect"
+import { MultiTagSelect } from "../../../../components/forms/MultiTagSelect/MultiTagSelect"
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
 import useTagApi from "../../../../hooks/api/useTagApi"
 
-export const NewHelpForm = ({ value, onChange, objectToUpdate, isProjectTag }) => {
+export const NewCriterionForm = ({ value, onChange, isProject, editOnlyTags }) => {
   const { getProjectTags, getNoteTags } = useTagApi()
 
   const [tagOptions, setTagOptions] = useState([])
@@ -18,52 +18,54 @@ export const NewHelpForm = ({ value, onChange, objectToUpdate, isProjectTag }) =
   }
 
   const formatTags = (tags) => {
-    return tags
-      .filter((tag) => tag._id !== objectToUpdate?._id && !tag.parent)
-      .map(({ name, _id }) => ({ label: name, value: _id }))
+    return tags.map(({ name, _id }) => ({ label: name, value: _id }))
   }
 
   const formInputs = {
-    name: {
+    title: {
       type: "text",
       config: {
-        placeholder: "Tag",
-        label: "Tag"
+        placeholder: "Nombre*",
+        label: "Nombre del criterio*",
+        disabled: editOnlyTags
       }
     },
-    relatedTag: {
+    group_title: {
+      type: "text",
+      config: {
+        placeholder: "Escriba",
+        label: "Título*",
+        disabled: editOnlyTags
+      }
+    },
+    relatedTags: {
       type: "select",
       config: {
-        placeholder: "Padre",
-        label: "Escriba el nombre del padre (opcional)",
-        options: tagOptions,
-        isDisabled: objectToUpdate?.relatedTags?.length > 0
+        placeholder: "Seleccione",
+        label: "Tag*",
+        options: tagOptions
       }
     }
   }
 
   const inputRefObj = {
     text: <SimpleInput />,
-    select: <InputSelect />
+    select: <MultiTagSelect />
   }
 
   useEffect(() => {
     const _getTags = async () => {
-      const tags = isProjectTag ? await getProjectTags() : await getNoteTags()
-      setTagOptions(formatTags(tags))
+      const tags = isProject ? await getProjectTags() : await getNoteTags()
+      const availableTags =
+        _values?.relatedTags?.length > 0
+          ? tags.filter(
+              (t) => !_values.relatedTags.map((v) => v.value).includes(t._id)
+            )
+          : tags
+      setTagOptions(formatTags(availableTags))
     }
     _getTags()
-  }, [])
-
-  useEffect(() => {
-    if (!objectToUpdate || tagOptions.length === 0) return
-
-    const tag = tagOptions.find(
-      (_tag) => _tag.label === objectToUpdate?.parent?.name
-    )
-
-    handleFormChange("relatedTag", tag)
-  }, [objectToUpdate, tagOptions])
+  }, [isProject])
 
   return (
     <>

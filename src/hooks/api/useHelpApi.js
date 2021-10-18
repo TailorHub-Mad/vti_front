@@ -6,12 +6,18 @@ const useHelpApi = () => {
   // CRUD
   const getNoteHelps = () => helpService.getNoteHelps()
   const getProjectHelps = () => helpService.getProjectHelps()
-  const createProjectHelp = (data) => helpService.createProjectHelp(data)
-  const createNoteHelp = (data) => helpService.createNoteHelp(data)
-  const updateProjectHelp = (_id, data) => helpService.updateProjectHelp(_id, data)
-  const updateNoteHelp = (_id, data) => helpService.updateNoteHelp(_id, data)
-  const deleteProjectHelp = (id) => helpService.deleteProjectHelp(id)
-  const deleteNoteHelp = (id) => helpService.deleteNoteHelp(id)
+  const getNoteTags = () => helpService.getNoteTags()
+  const getProjectTags = () => helpService.getProjectTags()
+  const createProjectCriterion = (data) => helpService.createProjectCriterion(data)
+  const createNoteCriterion = (data) => helpService.createNoteCriterion(data)
+  const updateProjectCriterion = (_id, data) =>
+    helpService.updateProjectCriterion(_id, data)
+  const updateNoteCriterion = (_id, data) =>
+    helpService.updateNoteCriterion(_id, data)
+  const createNoteGroup = (_id, data) => helpService.createNoteGroup(_id, data)
+  const createProjectGroup = (_id, data) => helpService.createProjectGroup(_id, data)
+  const deleteProjectCriterion = (id) => helpService.deleteProjectCriterion(id)
+  const deleteNoteCriterion = (id) => helpService.deleteNoteCriterion(id)
 
   // GROUP & FILTER
   const getSearchProjectHelps = (_, data) => helpService.getSearchProjectHelps(data)
@@ -19,15 +25,18 @@ const useHelpApi = () => {
   return {
     getNoteHelps,
     getProjectHelps,
-    createProjectHelp,
-    createNoteHelp,
-    updateProjectHelp,
-    updateNoteHelp,
-    deleteProjectHelp,
-    deleteNoteHelp,
-
+    createProjectCriterion,
+    createNoteCriterion,
+    updateProjectCriterion,
+    updateNoteCriterion,
+    deleteProjectCriterion,
+    deleteNoteCriterion,
+    createNoteGroup,
+    createProjectGroup,
     getSearchProjectHelps,
-    getSearchNotesHelps
+    getSearchNotesHelps,
+    getNoteTags,
+    getProjectTags
   }
 }
 

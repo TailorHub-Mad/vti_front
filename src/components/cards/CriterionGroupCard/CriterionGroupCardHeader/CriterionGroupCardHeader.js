@@ -6,7 +6,7 @@ import { OptionsIcon } from "../../../icons/OptionsIcon"
 import { OptionsMenu } from "../../../navigation/OptionsMenu/OptionsMenu"
 import { OptionsMenuItem } from "../../../navigation/OptionsMenu/OptionsMenuItem/OptionsMenuItem"
 
-export const CriterionTitleCardHeader = ({
+export const CriterionGroupCardHeader = ({
   title,
   onClick,
   onEdit,
@@ -28,13 +28,24 @@ export const CriterionTitleCardHeader = ({
           onClick={() => setShowOptions(true)}
         />
         <OptionsMenu isOpen={showOptions} onClose={() => setShowOptions(false)}>
-          <OptionsMenuItem onClick={onEdit}>
+          <OptionsMenuItem
+            onClick={() => {
+              onEdit()
+              setShowOptions(false)
+            }}
+          >
             <EditIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
             <Text variant="d_xs_regular" marginRight="2px">
               Editar
             </Text>
           </OptionsMenuItem>
-          <OptionsMenuItem onClick={onDelete} isLast>
+          <OptionsMenuItem
+            onClick={() => {
+              onDelete()
+              setShowOptions(false)
+            }}
+            isLast
+          >
             <DeleteIcon {...ICONS_PROPS_16} marginRight="4px" color="error" />
             <Text variant="d_xs_regular" color="error" marginRight="2px">
               Eliminar
