@@ -9,7 +9,8 @@ export const DepartmentsTable = ({
   departments,
   onDelete,
   onEdit,
-  onDeleteMany
+  onDeleteMany,
+  handleSortElement
 }) => {
   const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
     useTableActions()
@@ -34,7 +35,8 @@ export const DepartmentsTable = ({
     }
   }
 
-  const allRowsAreSelected = selectedRowsKeys.length === departmentsData?.length
+  const allRowsAreSelected =
+    departmentsData.length > 0 && selectedRowsKeys.length === departmentsData?.length
 
   return (
     <Table
@@ -54,6 +56,7 @@ export const DepartmentsTable = ({
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
       optionsDisabled={selectedRowsKeys.length > 1}
+      handleSortElement={handleSortElement}
     />
   )
 }

@@ -4,8 +4,8 @@ const UserService = () => {
   const { instance, execute } = ServiceConstructor
 
   // CRUD
-  const getUsers = (limit = 0, offset = 0) =>
-    execute(instance.get(`/user?limit=${limit}&offset=${offset}`))
+  const getUsers = (data = "", limit = 0, offset = 0) =>
+    execute(instance.get(`/user?limit=${limit}&offset=${offset}${data}`))
   const getUser = (id) => execute(instance.get(`/user/${id}`))
   const createUser = (data) => execute(instance.post(`/user/signup`, data))
   const updateUser = (id, data) => execute(instance.put(`/user/${id}`, data))

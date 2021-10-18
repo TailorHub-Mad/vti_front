@@ -210,6 +210,16 @@ const usuarios = () => {
     setShowFilterModal(false)
   }
 
+  const handleSortElement = (data) => {
+    const { name, order } = data
+
+    if (!name || !order) return
+
+    setFetchOptions({
+      [fetchOption.ORDER]: `&users_${name}=${order}`
+    })
+  }
+
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (
@@ -283,9 +293,7 @@ const usuarios = () => {
           onImport={() => setShowImportModal(true)}
           onAdd={() => setIsUserModalOpen(true)}
         />
-      ) : null}
-
-      {usersData ? (
+      ) : (
         <UsersTable
           fetchState={fetchState}
           users={usersData}
@@ -298,8 +306,9 @@ const usuarios = () => {
             USERS_GROUP_OPTIONS,
             fetchOptions[fetchOption.GROUP]
           )}
+          handleSortElement={handleSortElement}
         />
-      ) : null}
+      )}
     </Page>
   )
 }

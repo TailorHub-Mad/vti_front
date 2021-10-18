@@ -13,7 +13,14 @@ export const systemFetchHandler = (state, options) => {
   } = useSystemApi()
 
   const fetchHandler = {
-    all: () => useFetchSWR(SWR_CACHE_KEYS.systems, getSystems),
+    all: () => {
+      if (options)
+        return useFetchSWR(
+          [SWR_CACHE_KEYS.systems, options[fetchOption.ORDER]],
+          getSystems
+        )
+      else return useFetchSWR(SWR_CACHE_KEYS.systems, getSystems)
+    },
     id: () =>
       useFetchSWR([SWR_CACHE_KEYS.client, options[fetchOption.ID]], getSystem),
     group: () =>

@@ -7,7 +7,14 @@ export const sectorFetchHandler = (state, options) => {
   const { getSectors, getSector, getSearchSectors } = useSectorApi()
 
   const fetchHandler = {
-    all: () => useFetchSWR(SWR_CACHE_KEYS.sectors, getSectors),
+    all: () => {
+      if (options)
+        return useFetchSWR(
+          [SWR_CACHE_KEYS.sectors, options[fetchOption.ORDER]],
+          getSectors
+        )
+      else return useFetchSWR(SWR_CACHE_KEYS.sectors, getSectors)
+    },
     id: () =>
       useFetchSWR([SWR_CACHE_KEYS.sector, options[fetchOption.ID]], getSector),
     search: () =>

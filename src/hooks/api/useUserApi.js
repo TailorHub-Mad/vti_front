@@ -4,7 +4,7 @@ const useUserApi = () => {
   const userService = UserService()
 
   // CRUD
-  const getUsers = () => userService.getUsers()
+  const getUsers = (_, data) => userService.getUsers(data)
   const getUser = (_, id) => userService.getUser(id)
   const createUser = (user) => userService.createUser(user)
   const updateUser = (id, user) => userService.updateUser(id, user)

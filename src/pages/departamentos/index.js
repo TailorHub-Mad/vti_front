@@ -167,6 +167,16 @@ const departamentos = () => {
     })
   }
 
+  const handleSortElement = (data) => {
+    const { name, order } = data
+
+    if (!name || !order) return
+
+    setFetchOptions({
+      [fetchOption.ORDER]: `&projects_${name}=${order}`
+    })
+  }
+
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (
@@ -229,8 +239,7 @@ const departamentos = () => {
           onImport={() => setShowImportModal(true)}
           onAdd={() => setIsDepartmentModalOpen(true)}
         />
-      ) : null}
-      {departmentsData ? (
+      ) : (
         <DepartmentsTable
           departments={departmentsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
@@ -238,8 +247,9 @@ const departamentos = () => {
             handleOpenPopup(departmentsId, DeleteType.MANY)
           }
           onEdit={handleUpdate}
+          handleSortElement={handleSortElement}
         />
-      ) : null}
+      )}
     </Page>
   )
 }

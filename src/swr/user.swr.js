@@ -8,7 +8,14 @@ export const userFetchHandler = (state, options) => {
     useUserApi()
 
   const fetchHandler = {
-    all: () => useFetchSWR(SWR_CACHE_KEYS.users, getUsers),
+    all: () => {
+      if (options)
+        return useFetchSWR(
+          [SWR_CACHE_KEYS.users, options[fetchOption.ORDER]],
+          getUsers
+        )
+      else return useFetchSWR(SWR_CACHE_KEYS.users, getUsers)
+    },
     id: () => useFetchSWR([SWR_CACHE_KEYS.user, options[fetchOption.ID]], getUser),
     group: () =>
       useFetchSWR(

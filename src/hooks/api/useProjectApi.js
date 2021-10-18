@@ -4,7 +4,7 @@ const useProjectApi = () => {
   const projectService = ProjectService()
 
   // CRUD
-  const getProjects = () => projectService.getProjects()
+  const getProjects = (_, data) => projectService.getProjects(data)
   const getProject = (_, id) => projectService.getProject(id)
   const createProject = (data) => projectService.createProject(data)
   const updateProject = (id, data) => projectService.updateProject(id, data)

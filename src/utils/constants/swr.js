@@ -61,7 +61,18 @@ export const SWR_CACHE_KEYS = {
   projectHelps: "projectHelps/",
   noteHelps: "noteHelps/",
   searchProjectHelps: "projectHelps/search",
-  searchNoteHelps: "noteHelps/search"
+  searchNoteHelps: "noteHelps/search",
+
+  // NOTIFICATIONS
+  notifications: "notifications",
+  notification: "notification",
+  filterNotifications: "notifications/filter",
+  searchNotifications: "notifications/search",
+  notesNotifications: "notifications/notes",
+  containersNotifications: "notifications/container",
+  manteinanceNotifications: "notifications/manteinance",
+  behaviourNotifications: "notifications/behaviour",
+  fixedNotifications: "notifications/fixed"
 }
 
 export const fetchType = {
@@ -75,6 +86,7 @@ export const fetchType = {
 
 export const fetchOption = {
   ID: "id",
+  ORDER: "order",
   GROUP: "group",
   FILTER: "filter",
   SEARCH: "search"

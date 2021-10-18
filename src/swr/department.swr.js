@@ -7,7 +7,14 @@ export const departmentFetchHandler = (state, options) => {
   const { getDepartments, getDepartment, getSearchDepartments } = useDepartmentApi()
 
   const fetchHandler = {
-    all: () => useFetchSWR(SWR_CACHE_KEYS.departments, getDepartments),
+    all: () => {
+      if (options)
+        return useFetchSWR(
+          [SWR_CACHE_KEYS.departments, options[fetchOption.ORDER]],
+          getDepartments
+        )
+      else return useFetchSWR(SWR_CACHE_KEYS.departments, getDepartments)
+    },
     id: () =>
       useFetchSWR(
         [SWR_CACHE_KEYS.department, options[fetchOption.ID]],

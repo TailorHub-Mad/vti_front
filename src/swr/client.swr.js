@@ -7,7 +7,14 @@ export const clientFetchHandler = (state, options) => {
   const { getClients, getClient, getSearchClients } = useClientApi()
 
   const fetchHandler = {
-    all: () => useFetchSWR(SWR_CACHE_KEYS.clients, getClients),
+    all: () => {
+      if (options)
+        return useFetchSWR(
+          [SWR_CACHE_KEYS.clients, options[fetchOption.ORDER]],
+          getClients
+        )
+      else return useFetchSWR(SWR_CACHE_KEYS.clients, getClients)
+    },
     id: () =>
       useFetchSWR([SWR_CACHE_KEYS.client, options[fetchOption.ID]], getClient),
     search: () =>

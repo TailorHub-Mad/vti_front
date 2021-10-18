@@ -4,7 +4,7 @@ const useSystemApi = () => {
   const systemService = SystemService()
 
   // CRUD
-  const getSystems = () => systemService.getSystems()
+  const getSystems = (_, data) => systemService.getSystems(data)
   const getSystem = (_, id) => systemService.getSystem(id)
   const createSystem = (system) => systemService.createSystem(system)
   const updateSystem = (id, system) => systemService.updateSystem(id, system)
