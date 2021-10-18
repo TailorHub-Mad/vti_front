@@ -118,6 +118,7 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
 
   useEffect(() => {
     if (!projectToUpdate) return
+
     const _project = {
       alias: projectToUpdate?.alias,
       sector: projectToUpdate.sector[0]?.title,
@@ -127,13 +128,17 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
       tags: projectToUpdate?.tags.map((tg) => tg.name),
       date: formatDateToInput(projectToUpdate?.date)
     }
+
     setValues(_project)
   }, [projectToUpdate])
 
-  useEffect(() => {
-    if (isOpen) return
-    setValues(initialValues)
-  }, [isOpen])
+  console.log("values....", values)
+
+  // useEffect(() => {
+  //   if (isOpen) return
+  //   console.log("se está ejecutando")
+  //   setValues(initialValues)
+  // }, [isOpen])
 
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>

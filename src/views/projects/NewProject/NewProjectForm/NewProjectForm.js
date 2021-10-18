@@ -8,6 +8,10 @@ import useSectorApi from "../../../../hooks/api/useSectorApi"
 import useUserApi from "../../../../hooks/api/useUserApi"
 import useSystemApi from "../../../../hooks/api/useSystemApi"
 import useTagApi from "../../../../hooks/api/useTagApi"
+import {
+  destructuringDate,
+  formatDateToInput
+} from "../../../../utils/functions/date"
 
 export const NewProjectForm = ({
   // openAuxModal,
@@ -22,10 +26,13 @@ export const NewProjectForm = ({
   const { getProjectTags } = useTagApi()
 
   const [clientOptions, setClientOptions] = useState([])
+  const [clientData, setClientData] = useState([])
   const [sectorOptions, setSectorOptions] = useState([])
   const [userOptions, setUserOptions] = useState([])
   const [systemOptions, setSystemOptions] = useState([])
   const [tagOptions, setTagOptions] = useState([])
+
+  console.log("value", value)
 
   const formatValues = !projectToUpdate
     ? { ...value }
@@ -34,9 +41,12 @@ export const NewProjectForm = ({
         focusPoint: {
           label: projectToUpdate.focusPoint[0].alias
         },
-        testSystems: projectToUpdate.testSystems.map((system) => ({
-          label: system.alias
-        })),
+        testSystems:
+          projectToUpdate.testSystems.length > 0
+            ? projectToUpdate.testSystems.map((system) => ({
+                label: system.alias
+              }))
+            : undefined,
         tags:
           projectToUpdate.tags.length > 0
             ? projectToUpdate.tags.map((tag) => ({
@@ -57,7 +67,7 @@ export const NewProjectForm = ({
 
   const formatSystems = (_systems) => {
     if (_systems.length === 0) return []
-    return _systems[0].testSystems.map((system) => ({
+    return _systems.map((system) => ({
       label: system.alias,
       value: system._id
     }))
@@ -141,7 +151,9 @@ export const NewProjectForm = ({
   useEffect(() => {
     const _getClients = async () => {
       const clients = await getClients()
-      setClientOptions(formatClients(clients))
+      const fiteredClients = clients.filter((p) => p.testSystems.length > 0)
+      setClientData(fiteredClients)
+      setClientOptions(formatClients(fiteredClients))
     }
     const _getSectors = async () => {
       const sectors = await getSectors()
@@ -152,8 +164,10 @@ export const NewProjectForm = ({
       setUserOptions(formatUsers(users))
     }
     const _getSystems = async () => {
+      if (projectToUpdate) return
       const systems = await getSystems()
-      setSystemOptions(formatSystems(systems))
+
+      setSystemOptions(formatSystems(systems[0]?.testSystems))
     }
     const _getTags = async () => {
       const tags = await getProjectTags()
@@ -225,6 +239,28 @@ export const NewProjectForm = ({
     handleFormChange("tags", tags)
   }, [projectToUpdate, tagOptions])
 
+  const handleSystemOptions = () => {
+    const client = value.client
+
+    if (!client || !client.value) return
+
+    const data = clientData.find((c) => c._id === client.value)
+
+    if (!data?.testSystems) return
+
+    setSystemOptions(formatSystems(data?.testSystems))
+  }
+
+  useEffect(() => {
+    handleSystemOptions()
+  }, [value.client])
+
+  useEffect(() => {
+    if (!projectToUpdate && value?.client?.value) return
+
+    handleSystemOptions()
+  }, [projectToUpdate, value.client])
+
   const inputRefObj = {
     text: <SimpleInput />,
     select: <InputSelect />,
@@ -235,8 +271,19 @@ export const NewProjectForm = ({
   return (
     <>
       {Object.entries(formInputs).map(([name, { type, config }], index) => {
+        let auxValue = formatValues[name]
+
+        if (
+          name === "date" &&
+          value[Object.keys(value)[index - 1]] &&
+          !formatValues[name]
+        ) {
+          auxValue = formatDateToInput(destructuringDate(new Date()))
+          handleFormChange(name, auxValue)
+        }
+
         return React.cloneElement(inputRefObj[type], {
-          value: formatValues[name],
+          value: auxValue,
           onChange: (val) => handleFormChange(name, val),
           marginBottom: "24px",
           isDisabled:

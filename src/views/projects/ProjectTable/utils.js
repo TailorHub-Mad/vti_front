@@ -30,7 +30,7 @@ export const transformProjectData = (project) => ({
   testSystems: project.testSystems?.map((ts) => ts.alias) || "---",
   tags: project.tags?.map((t) => t.name),
   users: project.users?.filter((u) => !Array.isArray(u)),
-  notes: project.notes?.filter((n) => !Array.isArray(n)),
+  notes: project.notes?.filter((n) => n?._id),
   options: "",
   config: { isFinished: Boolean(project.closed) }
 })

@@ -26,7 +26,7 @@ export const Page = ({ children }) => {
         bgAttachment="fixed"
         bgSize="cover"
         bgPosition="center"
-        minH="100vh"
+        h="100vh"
       >
         {children}
       </Box>

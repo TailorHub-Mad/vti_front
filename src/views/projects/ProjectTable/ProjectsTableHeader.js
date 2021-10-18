@@ -43,7 +43,7 @@ export const ProjectsTableHeader = ({
               cursor="pointer"
               ml="24px"
             >
-              <DeleteIcon mr="8px" color="error" />
+              <DeleteIcon mr="6px" color="error" />
               <Text color="error" marginTop="6px">
                 Eliminar
               </Text>
@@ -53,7 +53,12 @@ export const ProjectsTableHeader = ({
       ) : (
         <Flex>
           <Flex mr="15px">
-            <Checkbox mr="8px" onChange={selectAllRows} isChecked={isChecked} />
+            <Checkbox
+              pl="6px"
+              mr="15px"
+              onChange={selectAllRows}
+              isChecked={isChecked}
+            />
             {Object.keys(selectedRows)?.length > 0 ? (
               <Flex
                 alignItems="center"
@@ -61,7 +66,7 @@ export const ProjectsTableHeader = ({
                 onClick={() => onDelete(selectedRows)}
                 cursor="pointer"
               >
-                <DeleteIcon mr="8px" color="error" />
+                <DeleteIcon mr="6px" color="error" />
                 <Text color="error" marginTop="6px">
                   Eliminar
                 </Text>
