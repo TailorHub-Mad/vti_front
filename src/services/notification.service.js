@@ -13,24 +13,22 @@ const NotificationService = () => {
         headers: { "content-type": "multipart/form-data" }
       })
     )
-  const updateNotification = (/*id*/ data) => execute(instance.put(``, data))
   const deleteNotification = (/*id*/) => execute(instance.delete(``))
 
   // GROUP & FILTER
-  const getFilterNotifications = (/*data*/) => execute(instance.get(``))
-  const getSearchNotifications = (/*data*/) => execute(instance.get(``))
+  const getFilterNotifications = (data) => console.log("onFilter", data)
+  const getSearchNotifications = (data) => console.log("onSearch", data)
 
-  const getNotesNotifications = () => execute(instance.get(``))
-  const getContainerNotifications = () => execute(instance.get(``))
-  const getManteinanceNotifications = () => execute(instance.get(``))
-  const getBehaviourNotifications = () => execute(instance.get(``))
-  const getFixedNotifications = () => execute(instance.get(``))
+  const getNotesNotifications = () => console.log("on filter notes")
+  const getContainerNotifications = () => console.log("on filter container")
+  const getManteinanceNotifications = () => console.log("on filter manteinance")
+  const getBehaviourNotifications = () => console.log("on filter behaviour")
+  const getFixedNotifications = () => console.log("on filter fixed")
 
   return {
     getNotifications,
     getNotification,
     createNotification,
-    updateNotification,
     deleteNotification,
 
     getFilterNotifications,

@@ -11,3 +11,13 @@ export const LinkItem = ({ url = "", children, ...props }) => {
     </Link>
   )
 }
+
+export const LinkItemSpan = ({ url = "", children, ...props }) => {
+  return (
+    <Link href={url} passHref {...props}>
+      <Text display="inline" cursor="pointer" {...props}>
+        {children}
+      </Text>
+    </Link>
+  )
+}

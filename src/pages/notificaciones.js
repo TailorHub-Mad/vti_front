@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react"
-import { NotificationDrawer } from "../components/drawer/NotificationDrawer/NotificationDrawer"
 import { NotificationActiveLineIcon } from "../components/icons/NotificationActiveLineIcon"
 import { Page } from "../components/layout/Pages/Page"
 import { PageBody } from "../components/layout/Pages/PageBody/PageBody"
@@ -16,13 +15,51 @@ import { NOTIFICATIONS_FILTER_KEYS } from "../utils/constants/filter"
 import { fetchOption, fetchType } from "../utils/constants/swr"
 import { errorHandler } from "../utils/errors"
 import { generateFilterQuery } from "../utils/functions/filter"
-import { checkDataIsEmpty, getFieldGRoupObjectById } from "../utils/functions/global"
+import { checkDataIsEmpty } from "../utils/functions/global"
 import { LoadingView } from "../views/common/LoadingView"
 import { ViewEmptyState } from "../views/common/ViewEmptyState"
 import { ViewNotFoundState } from "../views/common/ViewNotFoundState"
 import { NewNotificationModal } from "../views/notifications/NewNotification/NewNotificationModal/NewNotificationModal"
 import { NotificationsFilterModal } from "../views/notifications/NotificationsFilter/NotificationsFilterModal"
+import { NotificationsGroup } from "../views/notifications/NotificationsGroup/NotificationsGroup"
 import { NotificationsMenu } from "../views/notifications/NotificationsMenu/NotificationsMenu"
+
+const mock = {
+  yesterday: [
+    {
+      _id: "987132984798137fdg2984981273",
+      description: "El proyecto *AliasPR tiene un nuevo apunte.",
+      urls: [
+        {
+          label: "AliasPR",
+          model: "project",
+          id: "9871329847981372984981273"
+        }
+      ],
+      deleteTime: false,
+      unRead: true,
+      type: "Proyecto",
+      pin: true,
+      owner: "Administrador"
+    },
+    {
+      _id: "9871329847981372dfgdfg984981273",
+      description: "El proyecto *AliasPR tiene un nuevo apunte.",
+      urls: [
+        {
+          label: "AliasPR",
+          model: "project",
+          id: "9871329847981372984981273"
+        }
+      ],
+      deleteTime: true,
+      unRead: false,
+      type: "Proyecto",
+      pin: false,
+      owner: "María losada"
+    }
+  ]
+}
 
 const notificaciones = () => {
   // Hooks
@@ -33,7 +70,6 @@ const notificaciones = () => {
   // States
   const [showFilterModal, setShowFilterModal] = useState(false)
 
-  const [showNotificationDetails, setShowNotificationDetails] = useState(false)
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false)
@@ -47,22 +83,14 @@ const notificaciones = () => {
     fetchOptions
   )
 
-  // const handleNotificationsData = (isEmptyData) => {
-  //   if (!data || isEmptyData) return null
-  //   if (fetchState == fetchType.GROUP) return data
-  //   return data[0]?.notifications
+  const handleNotificationsData = (isEmptyData) => {
+    if (!data || isEmptyData) return null
+    return mock
+    // return data[0]?.notifications
+  }
 
-  //   // TODO FILTER
-  // }
-
-  // const isEmptyData = checkDataIsEmpty(data)
-  // const notificationsData = handleNotificationsData(isEmptyData)
-
-  // PROVISIONAL
-  console.log(data)
-  checkDataIsEmpty()
-  const isEmptyData = true
-  const notificationsData = []
+  const isEmptyData = checkDataIsEmpty(data)
+  const notificationsData = handleNotificationsData(isEmptyData)
 
   // Handlers views
   const isToolbarHidden = () => {
@@ -85,59 +113,36 @@ const notificaciones = () => {
     setIsNotificationModalOpen(false)
   }
 
-  // const handleOpenDetail = (notification) => {
-  //   setNotificationToDetail(notification)
-  //   setShowNotificationDetails(true)
-  // }
-
   const handleOnOpenFilter = () => {
     if (fetchState === fetchType.FILTER) handleOnFilter(null)
     else setShowFilterModal(true)
   }
 
-  // Handlers CRUD
-  const handleDeleteMessageToNotification = () => {
-    if (!notificationToDelete) return
-
-    const label = getFieldGRoupObjectById(
-      notificationsData,
-      "name",
-      notificationToDelete.id,
-      notificationToDelete.key
-    )
-    return `¿Desea eliminar ${label}?`
+  const handleNotificationsCount = () => {
+    if (!notificationsData) return
+    return Object.values(notificationsData).reduce((acc, values) => {
+      return acc + values.length
+    }, 0)
   }
 
+  // Handlers CRUD
   const handleDelete = async () => {
     try {
       await deleteNotification(notificationToDelete)
-      showToast("Apunte borrado correctamente")
-
-      const updatedNotifications = []
-      const filterNotifications = notificationsData.filter(
-        (notification) => notification._id !== notificationToDelete
-      )
-      updatedNotifications.push({
-        notifications: filterNotifications
-      })
-
-      updatedNotifications[0].notifications.length > 0
-        ? await mutate(updatedNotifications, false)
-        : await mutate()
-
-      if (showNotificationDetails) setShowNotificationDetails(false)
+      showToast("Notificación borrado correctamente")
+      await mutate()
       setNotificationToDelete(null)
     } catch (error) {
       errorHandler(error)
     }
   }
 
-  const handleUpdate = (id) => {
-    const notification = notificationsData.find(
-      (notification) => notification._id === id
-    )
-    setNotificationToUpdate(notification)
-    setIsNotificationModalOpen(true)
+  const handleOnPin = () => {
+    try {
+      console.log("OnPin")
+    } catch (error) {
+      errorHandler(error)
+    }
   }
 
   // Filters
@@ -200,7 +205,7 @@ const notificaciones = () => {
         onConfirm={handleDelete}
         onClose={() => setNotificationToDelete(null)}
       >
-        {handleDeleteMessageToNotification()}
+        ¿Desea eliminar la notficación seleccionada?
       </Popup>
 
       <NotificationsFilterModal
@@ -213,14 +218,6 @@ const notificaciones = () => {
         notificationToUpdate={notificationToUpdate}
         isOpen={isNotificationModalOpen}
         onClose={handleOnCloseModal}
-      />
-
-      <NotificationDrawer
-        notification={notificationToDetail}
-        isOpen={showNotificationDetails}
-        onClose={() => setShowNotificationDetails(false)}
-        onDelete={() => setNotificationToDelete(notificationToDetail._id)}
-        onEdit={() => handleUpdate(notificationToDetail._id)}
       />
 
       <PageHeader>
@@ -243,7 +240,7 @@ const notificaciones = () => {
         {isMenuHidden() ? (
           <NotificationsMenu
             fetchState={fetchState}
-            notificationsCount={notificationsData?.length}
+            notificationsCount={handleNotificationsCount()}
             onChange={(state) => setFetchState(state)}
           />
         ) : null}
@@ -261,38 +258,13 @@ const notificaciones = () => {
           />
         ) : null}
 
-        {/* {notificationsData ? (
-          <>
-            {fetchState === fetchType.GROUP ? (
-              <NotificationsGroup
-                notifications={notificationsData}
-                onSeeDetails={handleOpenDetail}
-                subscribedUsers={null} // TOPO -> review
-                checkIsSubscribe={checkIsSubscribe}
-                checkIsFavorite={checkIsFavorite}
-                onDelete={(id, key) => setNotificationToDelete({ id, key })}
-                onGroup={handleOnGroup}
-                handleFavorite={handleFavorite}
-                groupOption={getGroupOptionLabel(
-                  NOTIFICATIONS_GROUP_OPTIONS,
-                  fetchOptions[fetchOption.GROUP]
-                )}
-                isGrouped={isGrouped}
-                fetchState={fetchState}
-              />
-            ) : (
-              <NotificationsGrid
-                notifications={notificationsData}
-                onSeeDetails={handleOpenDetail}
-                subscribedUsers={null} // TOPO -> review
-                checkIsSubscribe={checkIsSubscribe}
-                checkIsFavorite={checkIsFavorite}
-                onDelete={setNotificationToDelete}
-                handleFavorite={handleFavorite}
-              />
-            )}
-          </>
-        ) : null} */}
+        {notificationsData ? (
+          <NotificationsGroup
+            notifications={notificationsData}
+            onDelete={(id) => setNotificationToDelete(id)}
+            onPin={handleOnPin}
+          />
+        ) : null}
       </PageBody>
     </Page>
   )

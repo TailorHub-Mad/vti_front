@@ -38,7 +38,7 @@ const notesMenuOptions = {
 
 export const NotificationsMenu = ({
   fetchState = fetchType.ALL,
-  notesCount = 0,
+  notificationsCount = 0,
   onChange
 }) => {
   return (
@@ -68,7 +68,7 @@ export const NotificationsMenu = ({
         })}
       </Flex>
       <Text color="#C9C9C9" variant="d_s_medium">
-        {`${notesCount} Apuntes`}
+        {`${notificationsCount} Notificaciones`}
       </Text>
     </>
   )

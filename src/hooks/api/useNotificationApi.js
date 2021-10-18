@@ -7,7 +7,6 @@ const useNotificationApi = () => {
   const getNotifications = () => noteService.getNotifications()
   const getNotification = (_, id) => noteService.getNotification(id)
   const createNotification = (data) => noteService.createNotification(data)
-  const updateNotification = (id, data) => noteService.updateNotification(id, data)
   const deleteNotification = (id) => noteService.deleteNotification(id)
 
   // GROUP & FILTER
@@ -26,7 +25,6 @@ const useNotificationApi = () => {
     getNotifications,
     getNotification,
     createNotification,
-    updateNotification,
     deleteNotification,
 
     getFilterNotifications,
