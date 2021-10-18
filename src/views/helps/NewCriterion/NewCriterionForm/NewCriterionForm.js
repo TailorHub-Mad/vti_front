@@ -3,7 +3,13 @@ import { MultiTagSelect } from "../../../../components/forms/MultiTagSelect/Mult
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
 import useTagApi from "../../../../hooks/api/useTagApi"
 
-export const NewCriterionForm = ({ value, onChange, isProject, editOnlyTags }) => {
+export const NewCriterionForm = ({
+  value,
+  onChange,
+  isProject,
+  editOnlyTags,
+  openSupportModal
+}) => {
   const { getProjectTags, getNoteTags } = useTagApi()
 
   const [tagOptions, setTagOptions] = useState([])
@@ -43,7 +49,9 @@ export const NewCriterionForm = ({ value, onChange, isProject, editOnlyTags }) =
       config: {
         placeholder: "Seleccione",
         label: "Tag*",
-        options: tagOptions
+        options: tagOptions,
+        helper: "Abrir ventana de ayuda",
+        onHelperClick: () => openSupportModal()
       }
     }
   }

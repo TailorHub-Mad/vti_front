@@ -1,10 +1,12 @@
-import { Modal, ModalOverlay, ModalContent, Button } from "@chakra-ui/react"
+import { Modal, ModalOverlay, Button, Box, SlideFade } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
+import { CustomModalContent } from "../../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import useHelpApi from "../../../../hooks/api/useHelpApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { NewCriterionForm } from "../NewCriterionForm/NewCriterionForm"
 import { CriterionTypeSelector } from "./CriterionTypeSelector/CriterionTypeSelector"
+import { SupportModal } from "./SupportModal/SupportModal"
 
 export const NewCriterionModal = ({
   isOpen,
@@ -20,6 +22,7 @@ export const NewCriterionModal = ({
 }) => {
   const { showToast } = useContext(ToastContext)
   const [isProject, setIsProject] = useState(isProjectView)
+  const [showSupportModal, setShowSupportModal] = useState(false)
 
   const {
     createProjectCriterion,
@@ -108,33 +111,55 @@ export const NewCriterionModal = ({
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose}>
       <ModalOverlay />
-      <ModalContent p="48px 32px" borderRadius="2px">
-        <CustomModalHeader
-          title={isUpdate ? editTitle : addTitle}
-          onClose={handleOnClose}
-          pb="24px"
-        />
-        {groupToEdit ? null : (
-          <CriterionTypeSelector setIsProject={setIsProject} isProject={isProject} />
-        )}
-        <NewCriterionForm
-          isProject={isProject}
-          value={values}
-          onChange={handleChange}
-          editOnlyTags={editOnlyTags}
-        />
-        <Button
-          w="194px"
-          margin="0 auto"
-          mt="24px"
-          disabled={checkInputsAreEmpty()}
-          onClick={handleSubmit}
-          isLoading={isSubmitting}
-          pointerEvents={isSubmitting ? "none" : "all"}
+      <CustomModalContent zIndex="10001" p="48px 32px" borderRadius="2px">
+        {/* <ScaleFade in={showSupportModal}> */}
+
+        <Box
+          width="460px"
+          height="fit-content"
+          position="absolute"
+          top="50px"
+          left={showSupportModal ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}
+          transition="left 0.18s ease-in-out"
+          bgColor="white"
+          zIndex="1400"
+          padding="32px"
         >
-          Guardar
-        </Button>
-      </ModalContent>
+          <CustomModalHeader
+            title={isUpdate ? editTitle : addTitle}
+            onClose={handleOnClose}
+            pb="24px"
+          />
+          {groupToEdit ? null : (
+            <CriterionTypeSelector
+              setIsProject={setIsProject}
+              isProject={isProject}
+            />
+          )}
+          <NewCriterionForm
+            isProject={isProject}
+            value={values}
+            onChange={handleChange}
+            editOnlyTags={editOnlyTags}
+            openSupportModal={() => setShowSupportModal(true)}
+          />
+          <Button
+            w="194px"
+            margin="0 auto"
+            mt="24px"
+            disabled={checkInputsAreEmpty()}
+            onClick={handleSubmit}
+            isLoading={isSubmitting}
+            pointerEvents={isSubmitting ? "none" : "all"}
+          >
+            Guardar
+          </Button>
+        </Box>
+        {/* </ScaleFade> */}
+        <SlideFade in={showSupportModal} x="30px">
+          <SupportModal onClose={() => setShowSupportModal(false)} />
+        </SlideFade>
+      </CustomModalContent>
     </Modal>
   )
 }

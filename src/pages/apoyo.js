@@ -48,6 +48,8 @@ const apoyo = () => {
   const {
     deleteProjectCriterion,
     deleteNoteCriterion,
+    updateNoteCriterion,
+    updateProjectCriterion,
     getNoteHelps,
     getProjectHelps,
     getProjectTags,
@@ -65,33 +67,46 @@ const apoyo = () => {
   const [isCriterionModalOpen, setIsCriterionModalOpen] = useState(false)
   const [unusedTags, setUnusedTags] = useState([])
   const [usedTags, setUsedTags] = useState([])
-  const [crtierionToDelete, setCriterionToDelete] = useState(null)
+  const [criterionToDelete, setCriterionToDelete] = useState(null)
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(null)
 
-  const moveCriterion = (id, _data, up) => {
-    const indexToMove = _data.findIndex((item) => item._id === id)
+  const updateCriterionOrder = async (isProject, _criterion) => {
+    const _criterionToUpdate = {
+      ..._criterion,
+      group: _criterion.group.map((gr) => ({
+        ...gr,
+        relatedTags: gr.relatedTags.map((rt) => rt._id)
+      }))
+    }
+    if (isProject) {
+      await updateProjectCriterion(_criterion._id, _criterionToUpdate)
+    } else {
+      await updateNoteCriterion(_criterion._id, _criterionToUpdate)
+    }
+  }
+  const handleMoveCriterion = async (_id, _data, up) => {
+    const indexToMove = _data.findIndex((item) => item._id === _id)
     const arr = [..._data]
     if (indexToMove === -1) return arr
     if (up && indexToMove !== 0) {
       arr[indexToMove - 1] = { ...arr[indexToMove - 1], order: indexToMove + 1 }
       arr[indexToMove] = { ...arr[indexToMove], order: indexToMove - 1 }
+      await updateCriterionOrder(isProjectCriteria, arr[indexToMove - 1])
+      await updateCriterionOrder(isProjectCriteria, arr[indexToMove])
     }
     if (!up && indexToMove !== _data.length - 1) {
       arr[indexToMove + 1] = { ...arr[indexToMove + 1], order: indexToMove - 1 }
       arr[indexToMove] = { ...arr[indexToMove], order: indexToMove + 1 }
+      await updateCriterionOrder(isProjectCriteria, arr[indexToMove + 1])
+      await updateCriterionOrder(isProjectCriteria, arr[indexToMove])
     }
 
-    return arr
-  }
-
-  const handleMoveCriterion = (_id, _data, up) => {
-    setData(moveCriterion(_id, _data, up))
+    setData(arr)
   }
 
   const isEmptyData = checkDataIsEmpty(data)
   const criteriaData = data && !isEmptyData ? data : null
-
   // Handlers views
   const isToolbarHidden = () => {
     if (isLoading) return false
@@ -106,10 +121,6 @@ const apoyo = () => {
 
   const handleOnCloseModal = () => {
     setIsCriterionModalOpen(false)
-  }
-
-  const sortTags = (data) => {
-    return data.sort((a, b) => a.name.localeCompare(b.name))
   }
 
   // const handleImportHelps = async (data) => {
@@ -136,18 +147,12 @@ const apoyo = () => {
 
   const handleDelete = async () => {
     isProjectCriteria
-      ? await deleteProjectCriterion(crtierionToDelete)
-      : await deleteNoteCriterion(crtierionToDelete)
+      ? await deleteProjectCriterion(criterionToDelete)
+      : await deleteNoteCriterion(criterionToDelete)
     showToast("Criterio eliminado correctamente")
-    setData(data.filter((cr) => cr._id !== crtierionToDelete))
+    setData(data.filter((cr) => cr._id !== criterionToDelete))
     setCriterionToDelete(null)
   }
-
-  // const handleUpdate = (id) => {
-  //   const help = criteriaData.find((help) => help._id === id)
-  //   setHelpToUpdate(help)
-  //   setIsCriterionModalOpen(true)
-  // }
 
   const fetchCriteria = async () => {
     setIsLoading(true)
@@ -195,14 +200,14 @@ const apoyo = () => {
         confirmText="Eliminar"
         cancelText="Cancelar"
         color="error"
-        isOpen={crtierionToDelete}
+        isOpen={criterionToDelete}
         onConfirm={handleDelete}
         onClose={() => setCriterionToDelete(null)}
       >
         {`¿Desea eliminar ${getFieldObjectById(
           criteriaData,
           "title",
-          crtierionToDelete
+          criterionToDelete
         )}?`}
       </Popup>
 
@@ -268,7 +273,7 @@ const apoyo = () => {
             <HelpHeader
               activeItem={activeTab}
               onChange={handleActiveTab}
-              tagsCount={criteriaData.length}
+              tagsCount={unusedTags?.length + usedTags?.length}
             />
 
             {unusedTags.length > 0 ? (
