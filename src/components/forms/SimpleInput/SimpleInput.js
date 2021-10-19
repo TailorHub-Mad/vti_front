@@ -13,6 +13,8 @@ export const SimpleInput = ({
   type = "text",
   ...props
 }) => {
+  // const [activeDate, setActiveDate] = useState(false)
+
   return (
     <FormController
       label={label}
@@ -25,7 +27,9 @@ export const SimpleInput = ({
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
         value={value}
+        // value={activeDate && defaultValue ? defaultValue : value}
         type={type}
+        // onClick={() => setActiveDate(true)}
       />
     </FormController>
   )

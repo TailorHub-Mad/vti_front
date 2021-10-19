@@ -35,8 +35,8 @@ export const MessageCardHeader = ({
   })
 
   return (
-    <Flex height="32px" justify="space-between" {...props}>
-      <Flex maxWidth="80%" height="32px" onClick={onClick} cursor="pointer">
+    <Flex height="32px" justify="space-between" alignItems="center" {...props}>
+      <Flex onClick={onClick} cursor="pointer">
         {isFavorite ? (
           <HeartIcon color="error" {...ICONS_PROPS_16} marginRight="4px" />
         ) : null}
@@ -46,7 +46,9 @@ export const MessageCardHeader = ({
       </Flex>
       <Box position="relative" ref={ref}>
         <OptionsIcon
-          {...ICONS_PROPS_16}
+          cursor="pointer"
+          width="16px"
+          heigth="16px"
           color="grey"
           onClick={() => setShowOptions(true)}
         />

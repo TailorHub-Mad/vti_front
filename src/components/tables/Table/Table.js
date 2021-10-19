@@ -11,12 +11,13 @@ import { TableRow } from "./TableRow.js/TableRow"
 export const Table = ({
   onRowSelect,
   header,
-  selectedRows,
+  selectedRows = {},
   config,
   content,
   tableHeight,
   isGrouped,
   optionsDisabled,
+  handleSortElement,
   ...props
 }) => {
   const { head, components } = config
@@ -26,7 +27,7 @@ export const Table = ({
   )
   const isSelected = (id) => !!selectedRows[id]
 
-  return content ? (
+  return (
     <Card
       width="100%"
       maxWidth={MAX_TABLE_WIDTH}
@@ -51,8 +52,12 @@ export const Table = ({
           width="100%"
           height="fit-content"
         >
-          <TableHead templateColumns={templateColumns} head={head} />
-          {content.map((item, idx) => {
+          <TableHead
+            templateColumns={templateColumns}
+            head={head}
+            handleSortElement={handleSortElement}
+          />
+          {content?.map((item, idx) => {
             if (isGrouped)
               return (
                 <TableGroup
@@ -88,5 +93,5 @@ export const Table = ({
         </Grid>
       </Flex>
     </Card>
-  ) : null
+  )
 }

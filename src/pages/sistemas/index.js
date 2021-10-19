@@ -77,7 +77,7 @@ const sistemas = () => {
   )
 
   const handleSystemsData = (isEmptyData) => {
-    if (!data || isEmptyData) return null
+    if (!data || isEmptyData) return []
     if (fetchState == fetchType.GROUP) return data
     return data[0].testSystems
 
@@ -270,6 +270,16 @@ const sistemas = () => {
     setShowFilterModal(false)
   }
 
+  const handleSortElement = (data) => {
+    const { name, order } = data
+
+    if (!name || !order) return
+
+    setFetchOptions({
+      [fetchOption.ORDER]: `&testSystems_${name}=${order}`
+    })
+  }
+
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (
@@ -342,8 +352,7 @@ const sistemas = () => {
           onImport={() => setShowImportModal(true)}
           onAdd={() => setIsSystemModalOpen(true)}
         />
-      ) : null}
-      {systemsData ? (
+      ) : (
         <TestSystemsTable
           fetchState={fetchState}
           systems={systemsData}
@@ -355,8 +364,9 @@ const sistemas = () => {
             SYSTEMS_GROUP_OPTIONS,
             fetchOptions[fetchOption.GROUP]
           )}
+          handleSortElement={handleSortElement}
         />
-      ) : null}
+      )}
     </Page>
   )
 }

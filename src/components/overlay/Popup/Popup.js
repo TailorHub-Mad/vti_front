@@ -26,15 +26,16 @@ export const Popup = ({
     <Modal isOpen={isOpen} onClose={onClose} {...props} zIndex="9999">
       <ModalOverlay />
       <ModalContent
-        w={["343px", null, null, "502px"]}
+        minW="502px"
+        width="502px"
         alignSelf="center"
         alignItems="center"
         borderRadius="2px"
         boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
-        padding="40px 0"
+        p="40px 83px"
         zIndex="9999"
       >
-        <ModalBody padding="0 24px">
+        <ModalBody>
           <Text textAlign="center" color={color}>
             {children || message}
           </Text>
@@ -52,32 +53,40 @@ export const Popup = ({
         )}
         {variant === "twoButtons" && (
           <ModalFooter
-            padding="16px 24px 0 24px"
             display="grid"
             gridTemplateColumns={["1fr", null, null, "1fr 1fr"]}
             gridColumnGap="16px"
           >
             <Button
+              minW="160px"
+              height="56px"
               color={color}
               borderColor={color}
               variant="secondary"
               onClick={onConfirm}
             >
-              {confirmText}
+              <Text color="error" variant="d_m_medium">
+                {confirmText}
+              </Text>
             </Button>
             <Button
-              marginTop={["16px", null, null, "0"]}
+              minW="160px"
+              height="56px"
               bgColor={color}
               borderColor={color}
               onClick={onClose}
             >
-              {cancelText}
+              <Text color="white" variant="d_m_medium">
+                {cancelText}
+              </Text>
             </Button>
           </ModalFooter>
         )}
         {variant === "hover" && (
-          <ModalFooter padding="16px 24px 0 24px">
+          <ModalFooter>
             <Button
+              minW="160px"
+              height="56px"
               color={color}
               borderColor={color}
               variant="secondary"

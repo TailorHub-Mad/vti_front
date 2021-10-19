@@ -30,7 +30,7 @@ export const transformProjectData = (project) => ({
   testSystems: project.testSystems?.map((ts) => ts.alias) || "---",
   tags: project.tags?.map((t) => t.name),
   users: project.users?.filter((u) => !Array.isArray(u)),
-  notes: project.notes?.filter((n) => !Array.isArray(n)),
+  notes: project.notes?.filter((n) => n?._id),
   options: "",
   config: { isFinished: Boolean(project.closed) }
 })
@@ -38,28 +38,32 @@ export const transformProjectData = (project) => ({
 export const TABLE_PROJECTS_HEAD = {
   selector: {
     label: "",
-    width: calcColWidth(32),
+    width: calcColWidth(0),
     type: "selector"
   },
   id: {
     label: "ID",
     width: calcColWidth(60),
-    type: "link"
+    type: "link",
+    config: { sort: true, name: "ref" }
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(220),
-    type: "text"
+    width: calcColWidth(140),
+    type: "text",
+    config: { sort: true, name: "alias" }
   },
   sector: {
     label: "Sector",
-    width: calcColWidth(90),
-    type: "text"
+    width: calcColWidth(100),
+    type: "text",
+    config: { sort: true, name: "sector" }
   },
   focusPoint: {
     label: "Punto Focal",
     width: calcColWidth(90),
-    type: "text"
+    type: "text",
+    config: { sort: true, name: "focusPoint" }
   },
   testSystems: {
     label: "Sistemas de ensayo",
@@ -79,12 +83,12 @@ export const TABLE_PROJECTS_HEAD = {
   },
   users: {
     label: "Usuarios",
-    width: calcColWidth(60),
+    width: calcColWidth(50),
     type: "count"
   },
   notes: {
     label: "Apuntes",
-    width: calcColWidth(55),
+    width: calcColWidth(20),
     type: "count"
   },
   options: {

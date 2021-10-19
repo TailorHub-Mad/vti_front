@@ -158,6 +158,7 @@ export const MenuLink = ({
           transform={showSubmenu ? "rotate(0.5turn)" : "rotate(0turn)"}
           cursor="pointer"
           onClick={() => setShowSubmenu(!showSubmenu)}
+          pt="2.5px"
         />
       ) : null}
     </Flex>

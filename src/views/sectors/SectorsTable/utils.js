@@ -33,12 +33,14 @@ export const TABLE_SECTORS_HEAD = {
   id: {
     label: "ID",
     width: calcColWidth(80),
-    type: "link"
+    type: "link",
+    config: { sort: true, name: "ref" }
   },
   name: {
     label: "Nombre",
     width: calcColWidth(120),
-    type: "text"
+    type: "text",
+    config: { sort: true, name: "name" }
   },
   projects: {
     label: "Proyectos",

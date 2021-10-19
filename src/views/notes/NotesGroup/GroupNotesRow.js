@@ -19,7 +19,7 @@ export const GroupNotesRow = ({
       <Box pb={isOpen ? "20px" : "10px"}>
         <Flex onClick={onToggle} cursor="pointer" align="center" padding="10px 0">
           <Text variant="d_s_medium">{item.key}</Text>
-          <ChevronDownIcon />
+          <ChevronDownIcon transform={isOpen ? "rotate(180deg)" : "none"} />
         </Flex>
         {isOpen ? (
           <NotesGrid

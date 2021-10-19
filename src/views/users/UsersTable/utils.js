@@ -42,22 +42,26 @@ export const TABLE_USERS_HEAD = {
   id: {
     label: "ID",
     width: calcColWidth(60),
-    type: "link"
+    type: "link",
+    config: { sort: true, name: "ref" }
   },
   alias: {
     label: "Alias",
     width: calcColWidth(100),
-    type: "text"
+    type: "text",
+    config: { sort: true, name: "alias" }
   },
   fullName: {
     label: "Nombre",
     width: calcColWidth(160),
-    type: "text"
+    type: "text",
+    config: { sort: true, name: "name" }
   },
   email: {
     label: "Email",
     width: calcColWidth(158),
-    type: "text"
+    type: "text",
+    config: { sort: true, name: "email" }
   },
   department: {
     label: "Departamento",

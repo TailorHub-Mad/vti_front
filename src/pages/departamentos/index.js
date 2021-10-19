@@ -26,6 +26,7 @@ import {
   transformDepartmentsToExport
 } from "../../utils/functions/import_export/departments_helpers.js"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
+import { Text } from "@chakra-ui/layout"
 
 const departamentos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -109,9 +110,30 @@ const departamentos = () => {
     if (!departmentsToDelete) return
 
     if (deleteType === DeleteType.MANY)
-      return "¿Desea eliminar los departamentos seleccionados?"
+      return (
+        <Text variant="d_s_regular" textAlign="center" color="error">
+          {"¿Desea eliminar los"}{" "}
+          <Text
+            display="inline"
+            variant="d_s_medium"
+            textAlign="center"
+            color="error"
+          >
+            departamentos seleccionados
+          </Text>
+          {"?"}
+        </Text>
+      )
     const label = getFieldObjectById(departmentsData, "name", departmentsToDelete)
-    return `¿Desea eliminar ${label}?`
+    return (
+      <Text variant="d_s_regular" textAlign="center" color="error">
+        {"¿Desea eliminar"}{" "}
+        <Text display="inline" variant="d_s_medium" textAlign="center" color="error">
+          {label}
+        </Text>
+        {"?"}
+      </Text>
+    )
   }
 
   const handleDeleteFunction = async () => {
@@ -164,6 +186,16 @@ const departamentos = () => {
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
       [fetchOption.SEARCH]: search
+    })
+  }
+
+  const handleSortElement = (data) => {
+    const { name, order } = data
+
+    if (!name || !order) return
+
+    setFetchOptions({
+      [fetchOption.ORDER]: `&projects_${name}=${order}`
     })
   }
 
@@ -229,8 +261,7 @@ const departamentos = () => {
           onImport={() => setShowImportModal(true)}
           onAdd={() => setIsDepartmentModalOpen(true)}
         />
-      ) : null}
-      {departmentsData ? (
+      ) : (
         <DepartmentsTable
           departments={departmentsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
@@ -238,8 +269,9 @@ const departamentos = () => {
             handleOpenPopup(departmentsId, DeleteType.MANY)
           }
           onEdit={handleUpdate}
+          handleSortElement={handleSortElement}
         />
-      ) : null}
+      )}
     </Page>
   )
 }

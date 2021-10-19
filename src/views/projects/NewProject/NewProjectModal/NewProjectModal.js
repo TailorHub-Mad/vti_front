@@ -28,7 +28,13 @@ const initialValues = {
   tags: undefined
 }
 
-export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) => {
+export const NewProjectModal = ({
+  isOpen,
+  onClose,
+  projectToUpdate,
+  projectDetail = false,
+  ...props
+}) => {
   const { showToast } = useContext(ToastContext)
   const { createProject, updateProject } = useProjectApi()
   const { mutate } = useSWRConfig()
@@ -84,7 +90,9 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
     setIsSubmitting(true)
     isUpdate ? await handleUpdateProject() : await handleCreateProject()
     setValues(initialValues)
-    await mutate(SWR_CACHE_KEYS.projects)
+    projectDetail
+      ? await mutate([SWR_CACHE_KEYS.project, projectToUpdate._id])
+      : await mutate(SWR_CACHE_KEYS.projects)
     showToast(
       isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s proyecto/s!"
     )
@@ -118,22 +126,25 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
 
   useEffect(() => {
     if (!projectToUpdate) return
+
     const _project = {
       alias: projectToUpdate?.alias,
       sector: projectToUpdate.sector[0]?.title,
       client: projectToUpdate?.clientAlias,
       focusPoint: projectToUpdate?.focusPoint.map((fp) => fp.alias)[0],
-      testSystems: projectToUpdate?.testSystems.map((ts) => ts.alias),
-      tags: projectToUpdate?.tags.map((tg) => tg.name),
+      testSystems: projectToUpdate?.testSystems.map((ts) => ({
+        label: ts.alias,
+        value: ts._id
+      })),
+      tags: projectToUpdate?.tags.map((tg) => ({
+        label: tg.name,
+        value: tg._id
+      })),
       date: formatDateToInput(projectToUpdate?.date)
     }
+
     setValues(_project)
   }, [projectToUpdate])
-
-  useEffect(() => {
-    if (isOpen) return
-    setValues(initialValues)
-  }, [isOpen])
 
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
@@ -158,16 +169,19 @@ export const NewProjectModal = ({ isOpen, onClose, projectToUpdate, ...props }) 
           <NewProjectForm
             value={values}
             openAuxModal={() => setShowSecondaryContent(true)}
-            onChange={(val) => setValues(val)}
+            onChange={(val) => {
+              setValues(val)
+            }}
             projectToUpdate={projectToUpdate}
           />
           <Button
             margin="0 auto"
             mt="32px"
-            display="block"
             disabled={checkInputsAreEmpty()}
             onClick={handleSubmit}
             isLoading={isSubmitting}
+            display="flex"
+            justifyContent="center"
             pointerEvents={isSubmitting ? "none" : "all"}
           >
             Guardar proyecto

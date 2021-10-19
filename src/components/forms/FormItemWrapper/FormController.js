@@ -8,6 +8,7 @@ export const FormController = ({
   helper,
   children,
   onHelperClick,
+  isDisabled,
   ...props
 }) => {
   //TODO helper y ventana de apoyo
@@ -38,8 +39,9 @@ export const FormController = ({
                   width="24px"
                   height="24px"
                   marginBottom="4px"
-                  cursor="pointer"
-                  onClick={() => onHelperClick && onHelperClick()}
+                  cursor={isDisabled ? "default" : "pointer"}
+                  opacity={isDisabled ? 0.4 : 1}
+                  onClick={() => !isDisabled && onHelperClick && onHelperClick()}
                 />
               </span>
             </Tooltip>

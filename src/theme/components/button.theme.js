@@ -61,7 +61,7 @@ export const Button = {
         opacity: 0.3,
         pointerEvents: "none",
         bgColor: "transparent",
-        borderColor: "transparent"
+        borderColor: "blue.500"
       }
     },
     tool_button: {
