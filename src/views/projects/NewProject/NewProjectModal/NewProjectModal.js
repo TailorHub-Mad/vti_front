@@ -177,10 +177,11 @@ export const NewProjectModal = ({
           <Button
             margin="0 auto"
             mt="32px"
-            display="block"
             disabled={checkInputsAreEmpty()}
             onClick={handleSubmit}
             isLoading={isSubmitting}
+            display="flex"
+            justifyContent="center"
             pointerEvents={isSubmitting ? "none" : "all"}
           >
             Guardar proyecto

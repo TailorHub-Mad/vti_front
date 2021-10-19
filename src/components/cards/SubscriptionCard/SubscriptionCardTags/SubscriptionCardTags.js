@@ -14,7 +14,6 @@ export const SubscriptionCardTags = ({ tags }) => {
     >
       {tags?.length > 0 && (
         <TagRow
-          max="5"
           tags={formatTags(tags, "name")}
           variant={variantGeneralTag.NOTE}
           flexWrap="wrap"
