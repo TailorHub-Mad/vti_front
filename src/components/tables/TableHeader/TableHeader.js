@@ -7,7 +7,7 @@ export const TableHeader = ({
   count = 0,
   countLabel = "",
   checked = false,
-  selectedRows,
+  selectedRows = {},
   onDelete,
   selectAllRows = () => {},
   fetchState,

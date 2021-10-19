@@ -28,6 +28,11 @@ export const SWR_CACHE_KEYS = {
   filterSystems: "systems/filter",
   searchSystems: "systems/search",
 
+  // CODES
+  codes: "codes/",
+  code: "code/",
+  searchCodes: "codes/search",
+
   // CLIENTS
   clients: "clients/",
   client: "client/",
@@ -72,7 +77,12 @@ export const SWR_CACHE_KEYS = {
   containersNotifications: "notifications/container",
   manteinanceNotifications: "notifications/manteinance",
   behaviourNotifications: "notifications/behaviour",
-  fixedNotifications: "notifications/fixed"
+  fixedNotifications: "notifications/fixed",
+
+  // SUBSCRIPTION
+  subscriptions: "subscriptions/",
+  subscription: "subscription/",
+  searchSubscriptions: "subscriptions/search"
 }
 
 export const fetchType = {

@@ -208,8 +208,6 @@ export const NewNoteForm = ({
     multitag_select: <MultiTagSelect />
   }
 
-  console.log("formatValues", formatValues)
-
   return (
     <>
       {Object.entries(formInputs).map(([name, { type, config }], index) => {
