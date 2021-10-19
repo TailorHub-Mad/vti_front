@@ -40,13 +40,13 @@ export const CriterionContainer = ({
   const [groupToEdit, setGroupToEdit] = useState(null)
   const [editOnlyTags, setEditOnlyTags] = useState(null)
   const handleCreateGroup = async (newGroupName) => {
-    const updatedCriterion = {
-      ...criterion,
-      group: [
-        ...criterion.group,
-        { name: newGroupName, relatedTags: [], createdAt: new Date() }
-      ]
-    }
+    // const updatedCriterion = {
+    //   ...criterion,
+    //   group: [
+    //     ...criterion.group,
+    //     { name: newGroupName, relatedTags: [], createdAt: new Date() }
+    //   ]
+    // }
     isProjectCriteria
       ? await createProjectGroup(criterion._id, {
           name: newGroupName
@@ -54,8 +54,7 @@ export const CriterionContainer = ({
       : await createNoteGroup(criterion._id, {
           name: newGroupName
         })
-    const _data = criteria.filter((crit) => crit._id !== criterion._id)
-    updateCriteria([..._data, updatedCriterion])
+    fetchData()
   }
 
   const handleDeleteGroup = async (groupName) => {
@@ -74,8 +73,7 @@ export const CriterionContainer = ({
       : await updateNoteCriterion(criterion._id, updatedCriterion)
 
     //update state con los relatedTags populados
-    const _data = criteria.filter((crit) => crit._id !== criterion._id)
-    updateCriteria([..._data, { ...criterion, group: _group }])
+    fetchData()
   }
 
   const handleDeleteTags = async () => {
@@ -103,10 +101,7 @@ export const CriterionContainer = ({
     }
     await updateNoteCriterion(criterion._id, updatedCriterion)
 
-    //update state con los relatedTags populados
-    //TODO No se actualiza el state pero si borra :/
-    const _data = criteria.filter((crit) => crit._id !== criterion._id)
-    updateCriteria([..._data, { ...criterion, group: updatedGroups }])
+    fetchData()
     setInfoToDeleteTags(null)
     showToast("Tags eliminadas correctamente")
   }
@@ -122,7 +117,6 @@ export const CriterionContainer = ({
   const handleOnCloseModal = () => {
     setIsCriterionModalOpen(false)
   }
-  // console.log("usadas", usedTags)
   return (
     <>
       {!isSupport ? (
@@ -142,22 +136,23 @@ export const CriterionContainer = ({
                 : getTagName()
             }?`}
           </Popup>
-
-          <NewCriterionModal
-            criterionToEdit={criterion}
-            groupToEdit={groupToEdit}
-            isOpen={isCriterionModalOpen}
-            onClose={handleOnCloseModal}
-            editTitle="Editar criterio"
-            addSuccessMsg="Criterio editado satisfactoriamente"
-            onSuccessEdit={updateCriteria}
-            isProjectView={isProjectCriteria}
-            editOnlyTags={editOnlyTags}
-            unusedTags={unusedTags}
-            usedTags={usedTags}
-            criteria={criteria}
-            fetchData={fetchData}
-          />
+          {groupToEdit ? (
+            <NewCriterionModal
+              criterionToEdit={criterion}
+              groupToEdit={groupToEdit}
+              isOpen={isCriterionModalOpen}
+              onClose={handleOnCloseModal}
+              editTitle="Editar criterio"
+              addSuccessMsg="Criterio editado satisfactoriamente"
+              onSuccessEdit={updateCriteria}
+              isProjectCriteria={isProjectCriteria}
+              editOnlyTags={editOnlyTags}
+              unusedTags={unusedTags}
+              usedTags={usedTags}
+              criteria={criteria}
+              fetchData={fetchData}
+            />
+          ) : null}
         </>
       ) : null}
 

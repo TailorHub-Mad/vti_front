@@ -39,7 +39,8 @@ export const NewCriterionModal = ({
   const [criteria, setCriteria] = useState([])
   const [usedTags, setUsedTags] = useState([])
   const [unusedTags, setUnusedTags] = useState([])
-  const [isProject, setIsProject] = useState(true)
+  const [isProject, setIsProject] = useState(isProjectCriteria)
+
   const _isProject = isCreation ? isProject : isProjectCriteria
   const isUpdate = Boolean(groupToEdit)
   const handleChange = (val) => {
@@ -164,9 +165,9 @@ export const NewCriterionModal = ({
         <Box
           width="460px"
           height="fit-content"
-          position="absolute"
-          top="50px"
-          left={showSupportModal ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}
+          position="sticky"
+          top="2px"
+          left={showSupportModal ? "calc(50vw - 550px)" : "calc(50vw - 230px)"}
           transition="left 0.18s ease-in-out"
           bgColor="white"
           zIndex="1400"

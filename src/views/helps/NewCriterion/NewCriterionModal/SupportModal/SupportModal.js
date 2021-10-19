@@ -103,27 +103,21 @@ export const SupportModal = ({
                     variant="violete"
                     mr="8px"
                     mb="8px"
-                    labelProps={{
-                      display: "flex",
-                      alignItems: "center"
-                    }}
-                    display="flex"
-                    alignItems="center"
                   >
                     <Checkbox
                       size="sm"
                       borderColor="blue.500"
                       mr="4px"
-                      mb="2px"
                       onChange={() => onTagsSelect([tag.name])}
                       isChecked={selectedTags?.includes(tag.name)}
                     />
-                    <chakra.p
+                    <Text
+                      variant="d_xs_regular"
                       display="inline"
                       onClick={() => onTagsSelect([tag.name])}
                     >
                       {tag.name}
-                    </chakra.p>
+                    </Text>
                   </Tag>
                 ))}
               </Flex>
