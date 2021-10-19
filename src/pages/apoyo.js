@@ -11,23 +11,13 @@ import { checkDataIsEmpty, getFieldObjectById } from "../utils/functions/global"
 import { AddCriterionIcon } from "../components/icons/AddCriterionIcon"
 import { HelpHeader } from "../views/helps/HelpHeader/HelpHeader"
 import { Tag } from "../components/tags/Tag/Tag"
-import download from "downloadjs"
-import { jsonToCSV } from "react-papaparse"
-import {
-  helpDataTransform,
-  transformHelpsToExport
-} from "../utils/functions/import_export/help_helpers"
+import { helpDataTransform } from "../utils/functions/import_export/help_helpers"
 import useHelpApi from "../hooks/api/useHelpApi"
 import { ToastContext } from "../provider/ToastProvider"
-import {
-  NewCriterionModal,
-  NewHelpModal
-} from "../views/helps/NewCriterion/NewCriterionModal/NewCriterionModal"
+import { NewCriterionModal } from "../views/helps/NewCriterion/NewCriterionModal/NewCriterionModal"
 import { ExportFilesModal } from "../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
 import { BreadCrumbs } from "../components/navigation/BreadCrumbs/BreadCrumbs"
 import { LoadingView } from "../views/common/LoadingView"
-import { ViewNotFoundState } from "../views/common/ViewNotFoundState"
-import { ViewEmptyState } from "../views/common/ViewEmptyState"
 import { CriterionContainer } from "../views/helps/CriterionContainer/CriterionContainer"
 import { TagsAlphabeticContainer } from "../views/tags/TagsAlphabeticContainer/TagsAlphabeticContainer"
 import useTagApi from "../hooks/api/useTagApi"
