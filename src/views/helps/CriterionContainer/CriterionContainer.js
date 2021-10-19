@@ -24,6 +24,7 @@ export const CriterionContainer = ({
   onTagSelect,
   isSupport,
   selectedTags,
+  fetchData,
   ...props
 }) => {
   const {
@@ -155,6 +156,7 @@ export const CriterionContainer = ({
             unusedTags={unusedTags}
             usedTags={usedTags}
             criteria={criteria}
+            fetchData={fetchData}
           />
         </>
       ) : null}

@@ -17,7 +17,10 @@ export const NewCriterionModal = ({
   criterionToEdit,
   editTitle,
   editSuccessMsg,
-  editOnlyTags
+  editOnlyTags,
+  isProjectCriteria,
+  fetchData,
+  isCreation
 }) => {
   const { showToast } = useContext(ToastContext)
   const [showSupportModal, setShowSupportModal] = useState(false)
@@ -38,6 +41,7 @@ export const NewCriterionModal = ({
   const [usedTags, setUsedTags] = useState([])
   const [unusedTags, setUnusedTags] = useState([])
   const [isProject, setIsProject] = useState(true)
+  const _isProject = isCreation ? isProject : isProjectCriteria
   const isUpdate = Boolean(groupToEdit)
   const handleChange = (val) => {
     setValues(val)
@@ -51,7 +55,8 @@ export const NewCriterionModal = ({
     setIsSubmitting(true)
     isUpdate ? await handleUpdateCriterion() : await handleCreateCriterion()
     setValues({})
-    showToast(isUpdate ? editSuccessMsg : addSuccessMsg)
+    showToast(isUpdate ? "Criterio editado correctamente" : addSuccessMsg)
+    fetchData()
     setIsSubmitting(false)
     onClose()
   }
@@ -69,8 +74,6 @@ export const NewCriterionModal = ({
     isProject
       ? await createProjectCriterion(_criterion)
       : await createNoteCriterion(_criterion)
-
-    showToast("Grupo creado correctamente")
   }
 
   const handleUpdateCriterion = async () => {
@@ -87,15 +90,12 @@ export const NewCriterionModal = ({
         }
       ]
     }
-    isProject
+    isProjectCriteria
       ? await updateProjectCriterion(criterionToEdit._id, _criterion)
       : await updateNoteCriterion(criterionToEdit._id, _criterion)
-
-    showToast("Criterio editado correctamente")
   }
 
   const handleSelectType = (type) => {
-    console.log("TYPE", type)
     setIsProject(type)
     setValues({})
   }
@@ -136,24 +136,30 @@ export const NewCriterionModal = ({
   }, [groupToEdit])
 
   const fetchCriteria = async () => {
-    const _data = isProject ? await getProjectHelps() : await getNoteHelps()
+    const _data = _isProject ? await getProjectHelps() : await getNoteHelps()
     setCriteria(_data)
   }
 
   const fetchTags = async () => {
-    const _tags = isProject ? await getProjectTags() : await getNoteTags()
+    const _tags = _isProject ? await getProjectTags() : await getNoteTags()
     setUnusedTags(_tags.filter((tag) => !tag.isUsed))
     setUsedTags(_tags.filter((tag) => tag.isUsed))
   }
   useEffect(() => {
     fetchTags()
     fetchCriteria()
-  }, [isProject])
+  }, [_isProject])
 
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose}>
       <ModalOverlay />
-      <CustomModalContent zIndex="10001" p="48px 32px" borderRadius="2px">
+      <CustomModalContent
+        zIndex="10001"
+        p="48px 32px"
+        borderRadius="2px"
+        overflowY="scroll"
+        padding-bottom="120px"
+      >
         {/* <ScaleFade in={showSupportModal}> */}
 
         <Box
@@ -175,11 +181,11 @@ export const NewCriterionModal = ({
           {groupToEdit ? null : (
             <CriterionTypeSelector
               setIsProject={handleSelectType}
-              isProject={isProject}
+              isProject={_isProject}
             />
           )}
           <NewCriterionForm
-            isProject={isProject}
+            isProject={_isProject}
             value={values}
             onChange={handleChange}
             editOnlyTags={editOnlyTags}
@@ -200,6 +206,7 @@ export const NewCriterionModal = ({
         {/* </ScaleFade> */}
         {showSupportModal ? (
           <SupportModal
+            mb="120px"
             unusedTags={unusedTags}
             usedTags={usedTags}
             criteria={criteria}

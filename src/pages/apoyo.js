@@ -217,6 +217,8 @@ const apoyo = () => {
         addSuccessMsg="Criterio añadido satisfactoriamente"
         onSuccessCreate={() => fetchCriteria()}
         criteria={data}
+        isCreation
+        fetchData={() => fetchCriteria()}
       />
 
       <ExportFilesModal
@@ -298,6 +300,7 @@ const apoyo = () => {
                   .sort((a, b) => (b.order > a.order ? -1 : 1))
                   .map((criterion) => (
                     <CriterionContainer
+                      fetchData={() => fetchCriteria()}
                       criteria={data}
                       updateCriteria={(_data) => setData(_data)}
                       key={criterion._id}
