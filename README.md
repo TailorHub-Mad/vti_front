@@ -158,4 +158,11 @@ Porcentaje de avance: 0%
 
 ### Suscripciones:
 
-Porcentaje de avance: 0%
+Porcentaje de avance: 0% 
+
+***
+
+***
+### Gestión de roles:
+
+Porcentaje de avance: 0% 
