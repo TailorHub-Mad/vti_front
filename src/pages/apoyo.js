@@ -231,6 +231,8 @@ const apoyo = () => {
             // fetchState={fetchState}
             noGroup
             noFilter
+            noSearch
+            noImport
           />
         )}
       </PageHeader>
