@@ -6,12 +6,12 @@ import { Popup } from "../../overlay/Popup/Popup"
 
 export const Page = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true)
-  const { isToastOpen, message } = useContext(ToastContext)
+  const { isToastOpen, message, toastType } = useContext(ToastContext)
 
   return (
     <>
       <TabBar isOpen={isOpen} setIsOpen={(val) => setIsOpen(val)} />
-      <Popup isOpen={isToastOpen} variant="info">
+      <Popup isOpen={isToastOpen} variant="info" type={toastType}>
         {message}
       </Popup>
       <Box

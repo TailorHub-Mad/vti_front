@@ -74,7 +74,7 @@ export const TableRow = ({
             isChecked: isSelected,
             onChange: onRowSelect,
             key: `${name}-${idx}`,
-            mb: "4px"
+            mb: "12px"
           })
         }
 

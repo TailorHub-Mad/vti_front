@@ -32,16 +32,23 @@ export const BreadCrumbs = ({ customURL, lastElement }) => {
     <Flex alignItems="center" justifyContent="center">
       {items.map((navItem, idx) => {
         const key = `${navItem}-${idx}`
+        const href = generateUrl(idx)
+        const lock = href.localeCompare(router.asPath)
         return (
           <div key={key}>
             {idx > 0 && idx < items.length && <ArrowRight pb="5px" />}
             {idx === items.length - 1 ? (
-              <Text variant="d_l_medium" color="blue.500" as="a">
+              <Text variant="d_l_medium" color="blue.500" as="a" cursor="default">
                 {navItem}
               </Text>
             ) : (
-              <Link passHref href={generateUrl(idx)}>
-                <Text variant="d_l_medium" color="blue.400" as="a">
+              <Link passHref href={href}>
+                <Text
+                  variant="d_l_medium"
+                  color="blue.400"
+                  as="a"
+                  cursor={lock ? "pointer" : "default"}
+                >
                   {navItem}
                 </Text>
               </Link>

@@ -122,7 +122,6 @@ export const CriterionContainer = ({
   const handleOnCloseModal = () => {
     setIsCriterionModalOpen(false)
   }
-  // console.log("usadas", usedTags)
   return (
     <>
       {!isSupport ? (

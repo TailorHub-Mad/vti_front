@@ -195,7 +195,7 @@ const departamentos = () => {
     if (!name || !order) return
 
     setFetchOptions({
-      [fetchOption.ORDER]: `&projects_${name}=${order}`
+      [fetchOption.ORDER]: `&department_${name}=${order}`
     })
   }
 

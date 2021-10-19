@@ -17,6 +17,7 @@ export const transformSectorData = (sector) => ({
 })
 
 export const groupTable = (data) => {
+  if (!data) return
   return data.map((it) => {
     const _it = [...it]
     _it[1] = it[1].map(transformSectorData)
@@ -40,7 +41,7 @@ export const TABLE_SECTORS_HEAD = {
     label: "Nombre",
     width: calcColWidth(120),
     type: "text",
-    config: { sort: true, name: "name" }
+    config: { sort: true, name: "title" }
   },
   projects: {
     label: "Proyectos",
