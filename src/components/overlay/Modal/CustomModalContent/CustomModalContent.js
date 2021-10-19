@@ -11,6 +11,7 @@ export const CustomModalContent = ({ children, ...props }) => {
       left="0"
       bgColor="#052E5780"
       zIndex="1400"
+      overflowY="scroll"
       {...props}
     >
       {children}

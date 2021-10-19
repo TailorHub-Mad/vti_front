@@ -118,7 +118,10 @@ export const SupportModal = ({
                       onChange={() => onTagsSelect([tag.name])}
                       isChecked={selectedTags?.includes(tag.name)}
                     />
-                    <chakra.p onClick={() => onTagsSelect([tag.name])}>
+                    <chakra.p
+                      display="inline"
+                      onClick={() => onTagsSelect([tag.name])}
+                    >
                       {tag.name}
                     </chakra.p>
                   </Tag>
@@ -205,7 +208,7 @@ export const SupportModal = ({
                               width="100%"
                             >
                               {group.map((tag) => (
-                                <Flex key="" cursor="pointer">
+                                <Flex key={tag} cursor="pointer">
                                   <Checkbox
                                     mr="4px"
                                     onChange={() => onTagsSelect([tag])}
