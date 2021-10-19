@@ -1,4 +1,4 @@
-import { Modal, ModalOverlay, Button, Box, SlideFade } from "@chakra-ui/react"
+import { Modal, ModalOverlay, Button, Box } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { CustomModalContent } from "../../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
@@ -17,25 +17,27 @@ export const NewCriterionModal = ({
   criterionToEdit,
   editTitle,
   editSuccessMsg,
-  editOnlyTags,
-  unusedTags,
-  usedTags,
-  criteria,
-  isProjectView
+  editOnlyTags
 }) => {
   const { showToast } = useContext(ToastContext)
-  const [isProject, setIsProject] = useState(isProjectView)
   const [showSupportModal, setShowSupportModal] = useState(false)
   const {
+    getNoteHelps,
+    getProjectHelps,
     createProjectCriterion,
     updateProjectCriterion,
     createNoteCriterion,
-    updateNoteCriterion
+    updateNoteCriterion,
+    getProjectTags,
+    getNoteTags
   } = useHelpApi()
 
   const [values, setValues] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-
+  const [criteria, setCriteria] = useState([])
+  const [usedTags, setUsedTags] = useState([])
+  const [unusedTags, setUnusedTags] = useState([])
+  const [isProject, setIsProject] = useState(true)
   const isUpdate = Boolean(groupToEdit)
   const handleChange = (val) => {
     setValues(val)
@@ -93,6 +95,7 @@ export const NewCriterionModal = ({
   }
 
   const handleSelectType = (type) => {
+    console.log("TYPE", type)
     setIsProject(type)
     setValues({})
   }
@@ -101,23 +104,22 @@ export const NewCriterionModal = ({
     onClose()
   }
 
-  const handleTagSelect = (_tag) => {
-    if (values?.relatedTags?.map((t) => t.label).includes(_tag)) {
-      setValues({
-        ...values,
-        relatedTags: values.relatedTags.filter((rt) => rt.label !== _tag)
-      })
-      return
-    }
-    const allTags = [...usedTags, ...unusedTags]
-    const [tagInfo] = allTags.filter((t) => _tag === t.name)
-    const selectedTag = { label: tagInfo.name, value: tagInfo._id }
+  const handleTagSelect = (_tags) => {
+    let nextRelatedTags = values?.relatedTags ? [...values.relatedTags] : []
 
+    _tags.forEach((_tag) => {
+      if (nextRelatedTags.map((t) => t.label).includes(_tag)) {
+        nextRelatedTags = nextRelatedTags.filter((rt) => rt.label !== _tag)
+        return
+      }
+      const allTags = [...usedTags, ...unusedTags]
+      const [tagInfo] = allTags.filter((t) => _tag === t.name)
+      const selectedTag = { label: tagInfo.name, value: tagInfo._id }
+      nextRelatedTags.push(selectedTag)
+    })
     setValues({
       ...values,
-      relatedTags: values?.relatedTags
-        ? [...values.relatedTags, selectedTag]
-        : [selectedTag]
+      relatedTags: nextRelatedTags
     })
   }
 
@@ -132,6 +134,22 @@ export const NewCriterionModal = ({
         }))
       })
   }, [groupToEdit])
+
+  const fetchCriteria = async () => {
+    const _data = isProject ? await getProjectHelps() : await getNoteHelps()
+    setCriteria(_data)
+  }
+
+  const fetchTags = async () => {
+    const _tags = isProject ? await getProjectTags() : await getNoteTags()
+    setUnusedTags(_tags.filter((tag) => !tag.isUsed))
+    setUsedTags(_tags.filter((tag) => tag.isUsed))
+  }
+  useEffect(() => {
+    fetchTags()
+    fetchCriteria()
+  }, [isProject])
+
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose}>
       <ModalOverlay />

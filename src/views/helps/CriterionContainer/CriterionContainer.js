@@ -9,6 +9,7 @@ import useHelpApi from "../../../hooks/api/useHelpApi"
 import { Popup } from "../../../components/overlay/Popup/Popup"
 import { ToastContext } from "../../../provider/ToastProvider"
 import { NewCriterionModal } from "../NewCriterion/NewCriterionModal/NewCriterionModal"
+import { CriterionGroupSupportCard } from "../../../components/cards/CriterionGroupSupportCard/CriterionGroupSupportCard"
 
 export const CriterionContainer = ({
   criterion,
@@ -20,6 +21,9 @@ export const CriterionContainer = ({
   isProjectCriteria,
   unusedTags,
   usedTags,
+  onTagSelect,
+  isSupport,
+  selectedTags,
   ...props
 }) => {
   const {
@@ -120,86 +124,106 @@ export const CriterionContainer = ({
   // console.log("usadas", usedTags)
   return (
     <>
-      <Popup
-        variant="twoButtons"
-        confirmText="Eliminar"
-        cancelText="Cancelar"
-        color="error"
-        isOpen={infoToDeleteTags}
-        onConfirm={handleDeleteTags}
-        onClose={() => setInfoToDeleteTags(false)}
-      >
-        {`¿Desea eliminar ${
-          infoToDeleteTags?.tagsToDelete?.length > 1
-            ? "los tags seleccionados"
-            : getTagName()
-        }?`}
-      </Popup>
+      {!isSupport ? (
+        <>
+          <Popup
+            variant="twoButtons"
+            confirmText="Eliminar"
+            cancelText="Cancelar"
+            color="error"
+            isOpen={infoToDeleteTags}
+            onConfirm={handleDeleteTags}
+            onClose={() => setInfoToDeleteTags(false)}
+          >
+            {`¿Desea eliminar ${
+              infoToDeleteTags?.tagsToDelete?.length > 1
+                ? "los tags seleccionados"
+                : getTagName()
+            }?`}
+          </Popup>
 
-      <NewCriterionModal
-        criterionToEdit={criterion}
-        groupToEdit={groupToEdit}
-        isOpen={isCriterionModalOpen}
-        onClose={handleOnCloseModal}
-        editTitle="Editar criterio"
-        addSuccessMsg="Criterio editado satisfactoriamente"
-        onSuccessEdit={updateCriteria}
-        isProjectView={isProjectCriteria}
-        editOnlyTags={editOnlyTags}
-        unusedTags={unusedTags}
-        usedTags={usedTags}
-        criteria={criteria}
-      />
+          <NewCriterionModal
+            criterionToEdit={criterion}
+            groupToEdit={groupToEdit}
+            isOpen={isCriterionModalOpen}
+            onClose={handleOnCloseModal}
+            editTitle="Editar criterio"
+            addSuccessMsg="Criterio editado satisfactoriamente"
+            onSuccessEdit={updateCriteria}
+            isProjectView={isProjectCriteria}
+            editOnlyTags={editOnlyTags}
+            unusedTags={unusedTags}
+            usedTags={usedTags}
+            criteria={criteria}
+          />
+        </>
+      ) : null}
 
       <Box>
-        <Flex width="100%" alignItems="center" {...props}>
-          <DeleteIcon
-            onClick={onDelete}
-            width="16px"
-            color="grey"
-            mb="2px"
-            mr="8px"
-            cursor="pointer"
-          />
-          <Text variant="d_m_medium" mr="2px">
-            {criterion.title}
-          </Text>
-          <ChevronDuoUpIcon mb="4px" onClick={onMoveUp} cursor="pointer" />
-          <ChevronDuoDownIcon mb="4px" onClick={onMoveDown} cursor="pointer" />
-        </Flex>
+        {!isSupport ? (
+          <Flex width="100%" alignItems="center" {...props}>
+            <DeleteIcon
+              onClick={onDelete}
+              width="16px"
+              color="grey"
+              mb="2px"
+              mr="8px"
+              cursor="pointer"
+            />
+            <Text variant="d_m_medium" mr="2px">
+              {criterion.title}
+            </Text>
+            <ChevronDuoUpIcon mb="4px" onClick={onMoveUp} cursor="pointer" />
+            <ChevronDuoDownIcon mb="4px" onClick={onMoveDown} cursor="pointer" />
+          </Flex>
+        ) : null}
 
         <Grid
-          templateColumns="repeat(auto-fill, 266px)"
+          templateColumns={isSupport ? "auto auto" : "repeat(auto-fill, 266px)"}
           gap="16px"
           width="100%"
           mt="8px"
           mb="24px"
         >
-          <NewCriterionGroupCard createCriterionGroup={handleCreateGroup} />
+          {!isSupport ? (
+            <NewCriterionGroupCard createCriterionGroup={handleCreateGroup} />
+          ) : null}
 
-          {criterion.group.map((group) => (
-            <CriterionGroupCard
-              group={group}
-              onEdit={() => {
-                setGroupToEdit(group)
-                setIsCriterionModalOpen(true)
-              }}
-              onAddTags={() => {
-                setEditOnlyTags(true)
-                setGroupToEdit(group)
-                setIsCriterionModalOpen(true)
-              }}
-              onDeleteGroup={() => handleDeleteGroup(group.name)}
-              onDeleteTags={(tagsToDelete) =>
-                setInfoToDeleteTags({
-                  groupName: group.name,
-                  tagsToDelete: tagsToDelete
-                })
-              }
-              key={group.title}
-              id={group.title}
-            />
-          ))}
+          {!isSupport
+            ? criterion.group.map((group) => (
+                <CriterionGroupCard
+                  group={group}
+                  onEdit={() => {
+                    setGroupToEdit(group)
+                    setIsCriterionModalOpen(true)
+                  }}
+                  onAddTags={() => {
+                    setEditOnlyTags(true)
+                    setGroupToEdit(group)
+                    setIsCriterionModalOpen(true)
+                  }}
+                  onDeleteGroup={() => handleDeleteGroup(group.name)}
+                  onDeleteTags={(tagsToDelete) =>
+                    setInfoToDeleteTags({
+                      groupName: group.name,
+                      tagsToDelete: tagsToDelete
+                    })
+                  }
+                  key={group.title}
+                  id={group.title}
+                />
+              ))
+            : criterion.group
+                .filter((gr) => gr?.relatedTags?.length >= 1)
+                .map((group) => (
+                  <CriterionGroupSupportCard
+                    key={group.title}
+                    id={group.title}
+                    group={group}
+                    onTagsSelect={(_tgs) => onTagSelect(_tgs)}
+                    selectedTags={selectedTags}
+                  />
+                ))}
         </Grid>
       </Box>
     </>

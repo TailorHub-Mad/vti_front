@@ -172,24 +172,8 @@ const apoyo = () => {
   }, [isProjectCriteria])
 
   useEffect(() => {
-    fetchTags()
+    fetchTags(isProjectCriteria)
   }, [isProjectCriteria, data])
-  // useEffect(() => {
-  //   const updateCriterion = async () => {
-  //     const _criterionToUpdate = { ...criterionToUpdate }
-  //     delete _criterionToUpdate._id
-  //     await updateNoteHelp(criterionToUpdate._id, _criterionToUpdate)
-  //     setData(
-  //       data.map((criterion) => {
-  //         if (criterion._id === criterionToUpdate._id) {
-  //           return { ..._criterionToUpdate, _id: criterionToUpdate._id }
-  //         }
-  //       })
-  //     )
-  //     setCriterionToUpdate(null)
-  //   }
-  //   criterionToUpdate && updateCriterion()
-  // }, [criterionToUpdate])
 
   if (!isLoggedIn) return null
   // if (error) return errorHandler(error)
@@ -218,9 +202,6 @@ const apoyo = () => {
         addSuccessMsg="Criterio añadido satisfactoriamente"
         onSuccessCreate={() => fetchCriteria()}
         criteria={data}
-        unusedTags={unusedTags}
-        usedTags={usedTags}
-        isProjectCriteria={isProjectCriteria}
       />
 
       <ExportFilesModal

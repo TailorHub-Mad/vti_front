@@ -22,7 +22,6 @@ export const NewCriterionForm = ({
       [input]: _value
     })
   }
-  console.log(_values)
   const formatTags = (tags) => {
     return tags.map(({ name, _id }) => ({ label: name, value: _id }))
   }

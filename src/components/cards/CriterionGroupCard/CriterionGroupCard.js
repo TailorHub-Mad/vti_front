@@ -132,6 +132,7 @@ export const CriterionGroupCard = ({
               />
               <Tag variant="pale_yellow">{tag.name}</Tag>
             </Flex>
+
             <DeleteIcon
               color="light_grey"
               width="16px"
@@ -155,6 +156,7 @@ export const CriterionGroupCard = ({
           </Text>
         ) : null}
       </Flex>
+
       <Button
         mt="18px"
         height="24px"

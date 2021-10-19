@@ -7,11 +7,14 @@ export const Tag = ({
   label,
   variant = variantGeneralTag.NOTE,
   children,
+  labelProps,
   ...props
 }) => {
   return (
     <ChakraTag variant={variant} borderRadius="full" {...props}>
-      <TagLabel isTruncated>{label || children}</TagLabel>
+      <TagLabel isTruncated {...labelProps}>
+        {label || children}
+      </TagLabel>
     </ChakraTag>
   )
 }
