@@ -28,6 +28,11 @@ export const SWR_CACHE_KEYS = {
   filterSystems: "systems/filter",
   searchSystems: "systems/search",
 
+  // CODES
+  codes: "codes/",
+  code: "code/",
+  searchCodes: "codes/search",
+
   // CLIENTS
   clients: "clients/",
   client: "client/",

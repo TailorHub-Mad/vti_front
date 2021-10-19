@@ -41,7 +41,15 @@ const TABBAR_LINKS = {
     label: "Sistemas ensayo",
     icon: ICONS_REFERENCE.machine_line,
     href: PATHS.testSystems,
-    disabled: false
+    disabled: false,
+    submenu: [
+      {
+        label: "VTI Code",
+        icon: ICONS_REFERENCE.sector,
+        href: PATHS.codes,
+        disabled: false
+      }
+    ]
   },
 
   // TAGS

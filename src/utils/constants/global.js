@@ -22,6 +22,7 @@ export const PATHS = {
   projects: "/proyectos",
   sectors: "/sectores",
   testSystems: "/sistemas",
+  codes: "/codigos",
   projectTags: "/tags/proyecto",
   noteTags: "/tags/apunte",
   clients: "/clientes",
