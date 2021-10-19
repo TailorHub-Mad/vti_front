@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash"
 import useProjectApi from "../hooks/api/useProjectApi"
 import useFetchSWR from "../hooks/useFetchSWR"
 import { fetchOption } from "../utils/constants/swr"
@@ -15,7 +16,8 @@ export const projectFetchHandler = (state, options) => {
 
   const fetchHandler = {
     all: () => {
-      if (options)
+      console.log(isEmpty(options))
+      if (!isEmpty(options))
         return useFetchSWR(
           [SWR_CACHE_KEYS.projects, options[fetchOption.ORDER]],
           getProjects

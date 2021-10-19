@@ -18,7 +18,7 @@ export const GroupNotificationsRow = ({ item, onDelete, onPin }) => {
         >
           {item.value.map((notification, idx) => (
             <NotificationCard
-              key={idx}
+              key={`${notification._id}-${idx}`}
               notification={notification}
               onPin={onPin}
               onDelete={onDelete}

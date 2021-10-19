@@ -10,7 +10,8 @@ export const OptionsMenu = ({ isOpen, onClose, children, ...props }) => {
   return isOpen ? (
     <Box
       position="absolute"
-      right="16px"
+      right="12px"
+      top="16px"
       bgColor="white"
       ref={ref}
       borderRadius="2px"

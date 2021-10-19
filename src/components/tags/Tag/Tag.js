@@ -11,10 +11,14 @@ export const Tag = ({
   ...props
 }) => {
   return (
-    <ChakraTag variant={variant} borderRadius="full" {...props}>
-      <TagLabel isTruncated {...labelProps}>
-        {label || children}
-      </TagLabel>
+    <ChakraTag
+      display="flex"
+      justifyContent="center"
+      variant={variant}
+      borderRadius="full"
+      {...props}
+    >
+      <TagLabel textAlign="center">{label || children}</TagLabel>
     </ChakraTag>
   )
 }

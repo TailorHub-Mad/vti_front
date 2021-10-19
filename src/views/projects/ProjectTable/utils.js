@@ -38,7 +38,7 @@ export const transformProjectData = (project) => ({
 export const TABLE_PROJECTS_HEAD = {
   selector: {
     label: "",
-    width: calcColWidth(32),
+    width: calcColWidth(0),
     type: "selector"
   },
   id: {
@@ -49,13 +49,13 @@ export const TABLE_PROJECTS_HEAD = {
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(220),
+    width: calcColWidth(140),
     type: "text",
     config: { sort: true, name: "alias" }
   },
   sector: {
     label: "Sector",
-    width: calcColWidth(90),
+    width: calcColWidth(100),
     type: "text",
     config: { sort: true, name: "sector" }
   },
@@ -83,12 +83,12 @@ export const TABLE_PROJECTS_HEAD = {
   },
   users: {
     label: "Usuarios",
-    width: calcColWidth(60),
+    width: calcColWidth(50),
     type: "count"
   },
   notes: {
     label: "Apuntes",
-    width: calcColWidth(55),
+    width: calcColWidth(20),
     type: "count"
   },
   options: {

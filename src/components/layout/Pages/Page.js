@@ -16,7 +16,7 @@ export const Page = ({ children }) => {
       </Popup>
       <Box
         transition={"padding-left 0.15s ease-in-out"}
-        pl={["20px", null, null, isOpen ? "224px" : "48px"]}
+        pl={["30px", null, null, isOpen ? "239px" : "63px"]}
         pt={["88px", null, null, "32px"]}
         pr={["20px", null, null, "24px"]}
         pb="0"

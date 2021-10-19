@@ -27,13 +27,13 @@ import { NotificationsMenu } from "../views/notifications/NotificationsMenu/Noti
 const mock = {
   yesterday: [
     {
-      _id: "987132984798137fdg2984981273",
+      _id: "987132984798137fdg298498127ss3",
       description: "El proyecto *AliasPR tiene un nuevo apunte.",
       urls: [
         {
           label: "AliasPR",
           model: "project",
-          id: "9871329847981372984981273"
+          id: "9871329847981372984981ss273"
         }
       ],
       deleteTime: false,
