@@ -5,7 +5,13 @@ import useTableActions from "../../../hooks/useTableActions"
 import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
 import { formatClient, TABLE_CLIENT_HEAD } from "./utils"
 
-export const ClientsTable = ({ clients = [], onDelete, onEdit, onDeleteMany }) => {
+export const ClientsTable = ({
+  clients = [],
+  onDelete,
+  onEdit,
+  onDeleteMany,
+  handleSortElement
+}) => {
   const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
     useTableActions()
 
@@ -13,7 +19,7 @@ export const ClientsTable = ({ clients = [], onDelete, onEdit, onDeleteMany }) =
 
   useMemo(() => {
     setSelectedRows([])
-  }, [clients.length])
+  }, [clients?.length])
 
   const handleOnDelete = () => {
     if (selectedRowsKeys.length > 1) return onDeleteMany(selectedRowsKeys)
@@ -29,7 +35,8 @@ export const ClientsTable = ({ clients = [], onDelete, onEdit, onDeleteMany }) =
     }
   }
 
-  const allRowsAreSelected = selectedRowsKeys.length === clientsData?.length
+  const allRowsAreSelected =
+    clientsData.length > 0 && selectedRowsKeys.length === clientsData?.length
 
   return (
     <Table
@@ -48,6 +55,7 @@ export const ClientsTable = ({ clients = [], onDelete, onEdit, onDeleteMany }) =
       content={clientsData}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
+      handleSortElement={handleSortElement}
     />
   )
 }

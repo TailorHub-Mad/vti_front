@@ -21,7 +21,7 @@ const projectsMenuOptions = {
 export const ProjectsMenu = ({ fetchState = fetchType.ALL, onChange }) => {
   return (
     <>
-      <Flex mb="24px" ml="28px">
+      <Flex mb="16px" ml="34px">
         {Object.entries(projectsMenuOptions).map(([name, item], idx) => {
           const isActive = name === fetchState
 
@@ -36,9 +36,9 @@ export const ProjectsMenu = ({ fetchState = fetchType.ALL, onChange }) => {
             >
               {item.icon ? (
                 isActive ? (
-                  <item.active_icon mr="4px" color="blue.500" />
+                  <item.active_icon color="blue.500" />
                 ) : (
-                  <item.icon mr="4px" color="grey" />
+                  <item.icon color="grey" />
                 )
               ) : null}
               <Text

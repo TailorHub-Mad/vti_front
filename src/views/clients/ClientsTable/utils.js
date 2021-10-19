@@ -35,17 +35,32 @@ export const TABLE_CLIENT_HEAD = {
   id: {
     label: "ID",
     width: calcColWidth(60),
-    type: "link"
+    type: "link",
+    config: {
+      close: true,
+      sort: true,
+      name: "ref"
+    }
   },
   alias: {
     label: "Alias",
     width: calcColWidth(100),
-    type: "text"
+    type: "text",
+    config: {
+      close: true,
+      sort: true,
+      name: "alias"
+    }
   },
   name: {
     label: "Nombre",
     width: calcColWidth(408),
-    type: "text"
+    type: "text",
+    config: {
+      close: true,
+      sort: true,
+      name: "name"
+    }
   },
   testSystems: {
     label: "Sistemas de ensayo",

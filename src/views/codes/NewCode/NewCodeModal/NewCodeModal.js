@@ -3,33 +3,23 @@ import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
 import { MultipleFormContent } from "../../../../components/forms/MultipleFormContent/MultipleFormContent"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
-import useTagApi from "../../../../hooks/api/useTagApi"
+import useCodeApi from "../../../../hooks/api/useCodeApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
-import { NewHelpForm } from "../NewHelpForm/NewHelpForm"
+import { NewCodeForm } from "../NewCodeForm/NewCodeForm"
 
 const initialValues = [{}]
 
-export const NewHelpModal = ({
-  isOpen,
-  onClose,
-  tagToUpdate,
-  isProjectTag,
-  addTitle,
-  addSuccessMsg,
-  editTitle,
-  editSuccessMsg
-}) => {
+export const NewCodeModal = ({ isOpen, onClose, codeToUpdate, ...props }) => {
   const { showToast } = useContext(ToastContext)
-  const { createProjectTag, updateProjectTag, createNoteTag, updateNoteTag } =
-    useTagApi()
+  const { createCode, updateCode } = useCodeApi()
   const { mutate } = useSWRConfig()
 
   const [values, setValues] = useState(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const isUpdate = Boolean(tagToUpdate)
+  const isUpdate = Boolean(codeToUpdate)
 
   const handleChange = (val, idx) => {
     const _values = [...values]
@@ -44,68 +34,60 @@ export const NewHelpModal = ({
   }
 
   const checkInputsAreEmpty = () => {
-    return values.some((value) => !value.name)
-  }
-
-  const formatTags = (tags) => {
-    return tags.map((tag) => {
-      const formatTag = {
-        name: tag.name
-      }
-      if (tag?.relatedTag) formatTag["relatedTag"] = tag.relatedTag.value
-      return formatTag
-    })
+    return values.some((value) => !value.title)
   }
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
-    isUpdate ? await handleUpdateTag() : await handleCreateTag()
+    isUpdate ? await handleUpdateCode() : await handleCreateCode()
     setValues(initialValues)
-    await mutate(isProjectTag ? SWR_CACHE_KEYS.projectTags : SWR_CACHE_KEYS.noteTags)
-    showToast(isUpdate ? editSuccessMsg : addSuccessMsg)
+    await mutate(SWR_CACHE_KEYS.codes)
+    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s códigos/s!")
     setIsSubmitting(false)
     onClose()
   }
 
-  const handleCreateTag = async () => {
+  const handleCreateCode = async () => {
     try {
-      const tagsToCreate = formatTags(values)
-      const func = isProjectTag ? createProjectTag : createNoteTag
-      const tagsQueue = tagsToCreate.map((tag) => func(tag))
-      await Promise.all(tagsQueue)
+      const codesToCreate = [...values]
+      await createCode(codesToCreate)
     } catch (error) {
       errorHandler(error)
     }
   }
 
-  const handleUpdateTag = async () => {
+  const handleUpdateCode = async () => {
     try {
-      const { _id } = tagToUpdate
-      const [data] = formatTags(values)
-      const func = isProjectTag ? updateProjectTag : updateNoteTag
-      await func(_id, data)
+      const { _id } = codeToUpdate
+      const [data] = [...values]
+      await updateCode(_id, data)
     } catch (error) {
       errorHandler(error)
     }
   }
 
   const handleOnClose = () => {
-    setValues([initialValues])
+    setValues(initialValues)
     onClose()
   }
 
   useEffect(() => {
-    if (!tagToUpdate) return
-    const { parent, name } = tagToUpdate
-    setValues([{ relatedTag: parent?.name, name }])
-  }, [tagToUpdate])
+    if (!codeToUpdate) return
+    const { title } = codeToUpdate
+    setValues([{ title }])
+  }, [codeToUpdate])
+
+  useEffect(() => {
+    if (isOpen) return
+    setValues([{}])
+  }, [isOpen])
 
   return (
-    <Modal isOpen={isOpen} onClose={handleOnClose}>
+    <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
-          title={isUpdate ? editTitle : addTitle}
+          title={isUpdate ? "Editar código" : "Añadir nuevo código"}
           onClose={handleOnClose}
           pb="24px"
         />
@@ -113,10 +95,9 @@ export const NewHelpModal = ({
           values={values}
           onChange={handleChange}
           onDelete={handleDelete}
-          objectToUpdate={tagToUpdate}
-          addTitle="Añadir nuevo tag"
+          addTitle="Añadir nuevo código"
         >
-          <NewHelpForm isProjectTag={isProjectTag} />
+          <NewCodeForm />
         </MultipleFormContent>
         <Button
           w="194px"
@@ -130,15 +111,15 @@ export const NewHelpModal = ({
           Guardar
         </Button>
 
-        {!isUpdate ? (
+        {isUpdate || (
           <Button
             variant="text_only"
             onClick={() => setValues([...values, {}])}
             disabled={checkInputsAreEmpty()}
           >
-            {addTitle}
+            Añadir nuevo código
           </Button>
-        ) : null}
+        )}
       </ModalContent>
     </Modal>
   )

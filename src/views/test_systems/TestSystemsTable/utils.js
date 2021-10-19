@@ -42,27 +42,32 @@ export const TABLE_SYSTEMS_HEAD = {
   id: {
     label: "ID",
     width: calcColWidth(60),
-    type: "link"
+    type: "link",
+    config: { sort: true, name: "ref" }
   },
   alias: {
     label: "Alias",
     width: calcColWidth(180),
-    type: "text"
+    type: "text",
+    config: { sort: true, name: "alias" }
   },
   client: {
     label: "Cliente",
     width: calcColWidth(120),
-    type: "text"
+    type: "text",
+    config: { sort: true, name: "clientAlias" }
   },
   code: {
     label: "Código",
     width: calcColWidth(158),
-    type: "text"
+    type: "text",
+    config: { sort: true, name: "vtiCode" }
   },
   year: {
     label: "Año",
     width: calcColWidth(45),
-    type: "text"
+    type: "text",
+    config: { sort: true, name: "date" }
   },
   projects: {
     label: "Proyectos",

@@ -3,7 +3,7 @@ import ClientService from "../../services/client.service"
 const useClientApi = () => {
   const clientService = ClientService()
 
-  const getClients = () => clientService.getClients()
+  const getClients = (_, data) => clientService.getClients(data)
   const getClient = (_, id) => clientService.getClient(id)
   const createClient = (data) => clientService.createClient(data)
   const updateClient = (id, data) => clientService.updateClient(id, data)

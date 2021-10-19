@@ -28,7 +28,7 @@ export const TableRow = ({
       padding="16px 0"
       bgColor={isSelected ? "blue.100" : "white"}
       _hover={{ bgColor: "blue.100" }}
-      gridColumnGap="8px"
+      gridColumnGap="32px"
       {...props}
     >
       {Object.entries(item).map(([name, element], idx) => {
@@ -73,7 +73,8 @@ export const TableRow = ({
           return React.cloneElement(components[head[name]?.type], {
             isChecked: isSelected,
             onChange: onRowSelect,
-            key: `${name}-${idx}`
+            key: `${name}-${idx}`,
+            mb: "4px"
           })
         }
 

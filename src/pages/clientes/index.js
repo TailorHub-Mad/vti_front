@@ -50,7 +50,7 @@ const clientes = () => {
   )
 
   const isEmptyData = checkDataIsEmpty(data)
-  const clientsData = data && !isEmptyData ? data : null
+  const clientsData = data && !isEmptyData ? data : []
 
   const isSearch = fetchState == fetchType.SEARCH
 
@@ -158,6 +158,16 @@ const clientes = () => {
     })
   }
 
+  const handleSortElement = (data) => {
+    const { name, order } = data
+
+    if (!name || !order) return
+
+    setFetchOptions({
+      [fetchOption.ORDER]: `&_${name}=${order}`
+    })
+  }
+
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (
@@ -220,15 +230,15 @@ const clientes = () => {
           onImport={() => setShowImportModal(true)}
           onAdd={() => setIsClientModalOpen(true)}
         />
-      ) : null}
-      {clientsData ? (
+      ) : (
         <ClientsTable
           clients={clientsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(clientsId) => handleOpenPopup(clientsId, DeleteType.MANY)}
           onEdit={handleUpdate}
+          handleSortElement={handleSortElement}
         />
-      ) : null}
+      )}
     </Page>
   )
 }

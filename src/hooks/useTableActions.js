@@ -23,7 +23,7 @@ const useTableActions = (isGrouped) => {
     }
 
     const nextValues = items.reduce((obj, cv) => {
-      const itemId = cv.id.value
+      const itemId = cv?.id?.value || cv?._id
       const _next = { ...obj, [itemId]: true }
       return _next
     }, {})

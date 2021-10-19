@@ -33,12 +33,14 @@ export const TABLE_DEPARTMENT_HEAD = {
   id: {
     label: "ID",
     width: calcColWidth(80),
-    type: "link"
+    type: "link",
+    config: { sort: true, name: "ref" }
   },
   name: {
     label: "Departamento",
     width: calcColWidth(120),
-    type: "text"
+    type: "text",
+    config: { sort: true, name: "department" }
   },
   users: {
     label: "Usuarios",

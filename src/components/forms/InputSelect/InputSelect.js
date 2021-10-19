@@ -87,6 +87,7 @@ export const InputSelect = ({
           onClick={() => setShowSelectMenu(true)}
           value={inputValue}
           autoComplete="off"
+          pr="48px"
         />
         <ChevronDownIcon
           position="absolute"

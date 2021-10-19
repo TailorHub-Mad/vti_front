@@ -14,7 +14,8 @@ export const TestSystemsTable = ({
   fetchState,
   onGroup,
   onFilter,
-  groupOption
+  groupOption,
+  handleSortElement
 }) => {
   const isGrouped = fetchState === fetchType.GROUP
 
@@ -25,7 +26,7 @@ export const TestSystemsTable = ({
 
   useMemo(() => {
     setSelectedRows([])
-  }, [systems.length])
+  }, [systems?.length])
 
   const handleOnDelete = () => {
     const systemsId = Object.keys(selectedRows)
@@ -43,7 +44,8 @@ export const TestSystemsTable = ({
     }
   }
 
-  const allRowsAreSelected = selectedRowsKeys.length === systemsData?.length
+  const allRowsAreSelected =
+    systemsData.length > 0 && selectedRowsKeys.length === systemsData?.length
 
   return (
     <Table
@@ -68,6 +70,7 @@ export const TestSystemsTable = ({
       onRowSelect={handleRowSelect}
       optionsDisabled={selectedRowsKeys.length > 1}
       isGrouped={fetchState === fetchType.GROUP}
+      handleSortElement={handleSortElement}
     />
   )
 }

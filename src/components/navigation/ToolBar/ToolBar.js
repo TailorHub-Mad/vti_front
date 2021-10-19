@@ -52,7 +52,7 @@ export const ToolBar = ({
             children={<SearchIcon color="grey" />}
           />
           <Input
-            placeholder={searchPlaceholder ?? "Busque por ID"}
+            placeholder={searchPlaceholder ?? "Busqueda por ID"}
             paddingLeft="40px"
             variant="white"
             onChange={(e) => onSearch(e.target.value)}

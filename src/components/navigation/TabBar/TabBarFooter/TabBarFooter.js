@@ -23,7 +23,7 @@ export const TabBarFooter = ({ areActiveNotifications }) => {
       <MenuItem
         label="Notificaciones"
         href={PATHS.notifications}
-        disabled={true} // TODO -> provisional
+        disabled={false}
         icon={
           areActiveNotifications ? (
             <NotificationActiveLineIcon />

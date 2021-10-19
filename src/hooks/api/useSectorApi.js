@@ -4,7 +4,7 @@ const useSectorApi = () => {
   const sectorService = SectorService()
 
   // CRUD
-  const getSectors = () => sectorService.getSectors()
+  const getSectors = (_, data) => sectorService.getSectors(data)
   const getSector = (_, id) => sectorService.getSector(id)
   const createSector = (data) => sectorService.createSector(data)
   const updateSector = (id, data) => sectorService.updateSector(id, data)

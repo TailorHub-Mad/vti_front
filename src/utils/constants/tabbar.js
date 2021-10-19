@@ -41,7 +41,15 @@ const TABBAR_LINKS = {
     label: "Sistemas ensayo",
     icon: ICONS_REFERENCE.machine_line,
     href: PATHS.testSystems,
-    disabled: false
+    disabled: false,
+    submenu: [
+      {
+        label: "Códigos VTI",
+        icon: ICONS_REFERENCE.sector,
+        href: PATHS.codes,
+        disabled: false
+      }
+    ]
   },
 
   // TAGS
@@ -49,19 +57,19 @@ const TABBAR_LINKS = {
     label: "Tags",
     icon: ICONS_REFERENCE.tag_line,
     noEvents: true,
-    disabled: false, // TODO -> provisional
+    disabled: false,
     submenu: [
       {
         label: "Proyecto",
         icon: ICONS_REFERENCE.tag_line,
         href: PATHS.projectTags,
-        disabled: false // TODO -> provisional
+        disabled: false
       },
       {
         label: "Apunte",
         icon: ICONS_REFERENCE.tag_line,
         href: PATHS.noteTags,
-        disabled: false // TODO -> provisional
+        disabled: false
       }
     ]
   },
@@ -85,7 +93,7 @@ const TABBAR_LINKS = {
         label: "Departamentos",
         icon: ICONS_REFERENCE.departments,
         href: PATHS.departments,
-        disabled: true
+        disabled: false
       }
     ]
   },
@@ -99,10 +107,10 @@ const TABBAR_LINKS = {
 
   // SUBSCRIPTION
   subscription: {
-    label: "Subscripción",
+    label: "Suscripcion",
     icon: ICONS_REFERENCE.subscribe_line,
-    href: PATHS.subscription,
-    disabled: true // TODO -> provisional
+    href: PATHS.subscriptions,
+    disabled: false
   }
 }
 

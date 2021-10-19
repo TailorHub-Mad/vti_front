@@ -22,13 +22,14 @@ export const PATHS = {
   projects: "/proyectos",
   sectors: "/sectores",
   testSystems: "/sistemas",
+  codes: "/codigos",
   projectTags: "/tags/proyecto",
   noteTags: "/tags/apunte",
   clients: "/clientes",
   departments: "/departamentos",
   users: "/usuarios",
   help: "/apoyo",
-  subscription: "/suscripciones",
+  subscriptions: "/suscripciones",
   notifications: "/notificaciones"
 }
 

@@ -13,7 +13,7 @@ export const TABLE_COMPONENTS = {
   count: <Text />,
   link: <LinkItem />,
   selector: <Checkbox marginLeft="8px" colorScheme="blue" />,
-  tags: <TagRow variant={variantGeneralTag.NOTE} max={1} />,
+  tags: <TagRow variant={variantGeneralTag.NOTE} />,
   options: <OptionsMenuRow />
 }
 export const TABLE_STYLE = {
