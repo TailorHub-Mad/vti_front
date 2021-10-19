@@ -8,8 +8,9 @@ export const formatUser = (data, fetchState) => {
   return data?.map(transformUserData)
 }
 
-export const groupTable = (systems) => {
-  return Object.entries(systems).map(([key, value]) => {
+export const groupTable = (users) => {
+  if (!users) return
+  return Object.entries(users)?.map(([key, value]) => {
     return {
       key,
       value: value.map(transformUserData)

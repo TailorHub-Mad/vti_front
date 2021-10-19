@@ -25,21 +25,21 @@ export const NewUserForm = ({ value, onChange, objectToUpdate }) => {
       type: "text",
       config: {
         placeholder: "Alias",
-        label: "Alias"
+        label: "Alias*"
       }
     },
     name: {
       type: "text",
       config: {
         placeholder: "Escribe tu nombre",
-        label: "Nombre"
+        label: "Nombre*"
       }
     },
     email: {
       type: "text",
       config: {
         placeholder: "Escrube tu email",
-        label: "Email",
+        label: "Email*",
         disabled: Boolean(objectToUpdate)
       }
     },
@@ -47,7 +47,7 @@ export const NewUserForm = ({ value, onChange, objectToUpdate }) => {
       type: "select",
       config: {
         placeholder: "Selecciona",
-        label: "Departamento",
+        label: "Departamento*",
         options: departmentOptions
       }
     }

@@ -19,6 +19,7 @@ export const Popup = ({
   cancelText,
   onConfirm,
   variant = "twoButtons",
+  type = "girl",
   children,
   ...props
 }) => {
@@ -45,7 +46,11 @@ export const Popup = ({
             pos="absolute"
             right={["20px", null, null, "40px"]}
             top={["-70px", null, null, "-100px"]}
-            src="/images/illustrations/girl_sit.svg"
+            src={
+              type === "girl"
+                ? "/images/illustrations/girl_sit.svg"
+                : "/images/illustrations/boy_sit.svg"
+            }
             w={["68px", null, null, "auto"]}
             h="auto"
             objectFit="contain"

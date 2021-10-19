@@ -9,7 +9,8 @@ export const formatSystem = (systems, fetchState) => {
 }
 
 export const groupTable = (systems) => {
-  return Object.entries(systems).map(([key, value]) => {
+  if (!systems) return
+  return Object.entries(systems)?.map(([key, value]) => {
     return {
       key,
       value: value.map(transformSystemData)

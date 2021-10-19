@@ -9,6 +9,7 @@ export const formatProject = (projects, fetchState) => {
 }
 
 export const groupTable = (projects) => {
+  if (!projects) return
   return Object.entries(projects).map(([key, value]) => {
     return {
       key,
