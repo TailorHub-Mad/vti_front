@@ -7,6 +7,7 @@ export const Tag = ({
   label,
   variant = variantGeneralTag.NOTE,
   children,
+  labelProps,
   ...props
 }) => {
   return (
