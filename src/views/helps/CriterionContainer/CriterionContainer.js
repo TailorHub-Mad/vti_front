@@ -18,6 +18,8 @@ export const CriterionContainer = ({
   criteria,
   updateCriteria,
   isProjectCriteria,
+  unusedTags,
+  usedTags,
   ...props
 }) => {
   const {
@@ -32,7 +34,6 @@ export const CriterionContainer = ({
   const [isCriterionModalOpen, setIsCriterionModalOpen] = useState(false)
   const [groupToEdit, setGroupToEdit] = useState(null)
   const [editOnlyTags, setEditOnlyTags] = useState(null)
-
   const handleCreateGroup = async (newGroupName) => {
     const updatedCriterion = {
       ...criterion,
@@ -116,7 +117,7 @@ export const CriterionContainer = ({
   const handleOnCloseModal = () => {
     setIsCriterionModalOpen(false)
   }
-
+  // console.log("usadas", usedTags)
   return (
     <>
       <Popup
@@ -145,6 +146,9 @@ export const CriterionContainer = ({
         onSuccessEdit={updateCriteria}
         isProjectView={isProjectCriteria}
         editOnlyTags={editOnlyTags}
+        unusedTags={unusedTags}
+        usedTags={usedTags}
+        criteria={criteria}
       />
 
       <Box>

@@ -18,12 +18,14 @@ export const NewCriterionModal = ({
   editTitle,
   editSuccessMsg,
   editOnlyTags,
+  unusedTags,
+  usedTags,
+  criteria,
   isProjectView
 }) => {
   const { showToast } = useContext(ToastContext)
   const [isProject, setIsProject] = useState(isProjectView)
   const [showSupportModal, setShowSupportModal] = useState(false)
-
   const {
     createProjectCriterion,
     updateProjectCriterion,
@@ -35,7 +37,6 @@ export const NewCriterionModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const isUpdate = Boolean(groupToEdit)
-
   const handleChange = (val) => {
     setValues(val)
   }
@@ -91,9 +92,33 @@ export const NewCriterionModal = ({
     showToast("Criterio editado correctamente")
   }
 
+  const handleSelectType = (type) => {
+    setIsProject(type)
+    setValues({})
+  }
   const handleOnClose = () => {
     setValues({})
     onClose()
+  }
+
+  const handleTagSelect = (_tag) => {
+    if (values?.relatedTags?.map((t) => t.label).includes(_tag)) {
+      setValues({
+        ...values,
+        relatedTags: values.relatedTags.filter((rt) => rt.label !== _tag)
+      })
+      return
+    }
+    const allTags = [...usedTags, ...unusedTags]
+    const [tagInfo] = allTags.filter((t) => _tag === t.name)
+    const selectedTag = { label: tagInfo.name, value: tagInfo._id }
+
+    setValues({
+      ...values,
+      relatedTags: values?.relatedTags
+        ? [...values.relatedTags, selectedTag]
+        : [selectedTag]
+    })
   }
 
   useEffect(() => {
@@ -107,7 +132,6 @@ export const NewCriterionModal = ({
         }))
       })
   }, [groupToEdit])
-
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose}>
       <ModalOverlay />
@@ -132,7 +156,7 @@ export const NewCriterionModal = ({
           />
           {groupToEdit ? null : (
             <CriterionTypeSelector
-              setIsProject={setIsProject}
+              setIsProject={handleSelectType}
               isProject={isProject}
             />
           )}
@@ -156,9 +180,16 @@ export const NewCriterionModal = ({
           </Button>
         </Box>
         {/* </ScaleFade> */}
-        <SlideFade in={showSupportModal} x="30px">
-          <SupportModal onClose={() => setShowSupportModal(false)} />
-        </SlideFade>
+        {showSupportModal ? (
+          <SupportModal
+            unusedTags={unusedTags}
+            usedTags={usedTags}
+            criteria={criteria}
+            onClose={() => setShowSupportModal(false)}
+            onTagsSelect={(tags) => handleTagSelect(tags)}
+            selectedTags={values?.relatedTags?.map((rt) => rt.label)}
+          />
+        ) : null}
       </CustomModalContent>
     </Modal>
   )

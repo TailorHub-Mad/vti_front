@@ -17,7 +17,7 @@ export const MultiTagSelect = ({
 }) => {
   const [inputValues, setInputValues] = useState(value)
   const [availableOptions, setAvailableOptions] = useState([])
-
+  console.log(inputValues)
   const handleChange = (option) => {
     const newInputValues = [...inputValues]
 
@@ -46,6 +46,10 @@ export const MultiTagSelect = ({
 
     setAvailableOptions(availableOptions)
   }, [inputValues])
+
+  useEffect(() => {
+    setInputValues(value)
+  }, [value])
 
   useEffect(() => {
     if (!isReset) return

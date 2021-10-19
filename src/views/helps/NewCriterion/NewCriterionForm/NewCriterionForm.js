@@ -14,7 +14,7 @@ export const NewCriterionForm = ({
 
   const [tagOptions, setTagOptions] = useState([])
 
-  const _values = { ...value }
+  const [_values, setValues] = useState(value)
 
   const handleFormChange = (input, _value) => {
     onChange({
@@ -22,10 +22,14 @@ export const NewCriterionForm = ({
       [input]: _value
     })
   }
-
+  console.log(_values)
   const formatTags = (tags) => {
     return tags.map(({ name, _id }) => ({ label: name, value: _id }))
   }
+
+  useEffect(() => {
+    setValues(value)
+  }, [value])
 
   const formInputs = {
     title: {

@@ -170,10 +170,10 @@ const apoyo = () => {
   useEffect(() => {
     fetchCriteria()
   }, [isProjectCriteria])
+
   useEffect(() => {
     fetchTags()
   }, [isProjectCriteria, data])
-
   // useEffect(() => {
   //   const updateCriterion = async () => {
   //     const _criterionToUpdate = { ...criterionToUpdate }
@@ -217,6 +217,10 @@ const apoyo = () => {
         addTitle="Añadir nuevo criterio"
         addSuccessMsg="Criterio añadido satisfactoriamente"
         onSuccessCreate={() => fetchCriteria()}
+        criteria={data}
+        unusedTags={unusedTags}
+        usedTags={usedTags}
+        isProjectCriteria={isProjectCriteria}
       />
 
       <ExportFilesModal
@@ -300,6 +304,8 @@ const apoyo = () => {
                       updateCriteria={(_data) => setData(_data)}
                       key={criterion._id}
                       criterion={criterion}
+                      unusedTags={unusedTags}
+                      usedTags={usedTags}
                       isProjectCriteria={isProjectCriteria}
                       onDelete={() => setCriterionToDelete(criterion._id)}
                       onMoveUp={() => handleMoveCriterion(criterion._id, data, true)}
