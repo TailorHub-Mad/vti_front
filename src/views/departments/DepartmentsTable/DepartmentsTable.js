@@ -19,7 +19,7 @@ export const DepartmentsTable = ({
 
   useMemo(() => {
     setSelectedRows([])
-  }, [departments.length])
+  }, [departments?.length])
 
   const handleOnDelete = () => {
     if (selectedRowsKeys.length > 1) return onDeleteMany(selectedRowsKeys)
@@ -36,7 +36,8 @@ export const DepartmentsTable = ({
   }
 
   const allRowsAreSelected =
-    departmentsData.length > 0 && selectedRowsKeys.length === departmentsData?.length
+    departmentsData?.length > 0 &&
+    selectedRowsKeys.length === departmentsData?.length
 
   return (
     <Table

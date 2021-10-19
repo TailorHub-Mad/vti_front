@@ -14,7 +14,7 @@ export const TableHead = ({ templateColumns, head, handleSortElement }) => {
       top="0"
       left="0"
       bgColor="white"
-      zIndex="1"
+      zIndex="10000"
       gridColumnGap="8px"
       alignItems="center"
       minWidth={MIN_TABLE_WIDTH}

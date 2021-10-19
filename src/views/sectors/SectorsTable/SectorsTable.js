@@ -19,7 +19,7 @@ export const SectorsTable = ({
 
   useMemo(() => {
     setSelectedRows([])
-  }, [sectors.length])
+  }, [sectors?.length])
 
   const handleOnDelete = () => {
     if (selectedRowsKeys.length > 1) return onDeleteMany(selectedRowsKeys)

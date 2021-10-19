@@ -1,4 +1,4 @@
-import { Accordion, Button } from "@chakra-ui/react"
+import { Accordion, Button, Text } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import React from "react"
 import useNoteApi from "../../../../hooks/api/useNoteApi"
@@ -54,11 +54,20 @@ export const NoteDetailsAccordion = ({
             <Button
               key={`${ts}-${idx}`}
               variant="note_content"
+              maxW="200px"
               mr="8px"
               mb="8px"
               onClick={() => router.push(`${PATHS.testSystems}/${ts._id}`)}
             >
-              {ts.alias}
+              <Text
+                maxW="180px"
+                variant="d_xs_regular"
+                textOverflow="ellipsis"
+                whiteSpace="nowrap"
+                overflow="hidden"
+              >
+                {ts.alias}
+              </Text>
             </Button>
           ))}
         </NoteAccordionItem>
@@ -97,7 +106,15 @@ export const NoteDetailsAccordion = ({
             onClick={() => window.open(link)}
           >
             <LinkLineIcon width="16px" />
-            {link}
+            <Text
+              maxW="180px"
+              variant="d_xs_regular"
+              textOverflow="ellipsis"
+              whiteSpace="nowrap"
+              overflow="hidden"
+            >
+              {link}
+            </Text>
           </Button>
         </NoteAccordionItem>
       ) : null}
@@ -114,8 +131,16 @@ export const NoteDetailsAccordion = ({
                 mb="8px"
                 onClick={() => handleOnClick(file._id, name)}
               >
-                {file.type === "image" ? <ImageTypeIcon /> : <PdfTypeIcon />}
-                {name}
+                <Text
+                  maxW="180px"
+                  variant="d_xs_regular"
+                  textOverflow="ellipsis"
+                  whiteSpace="nowrap"
+                  overflow="hidden"
+                >
+                  {file.type === "image" ? <ImageTypeIcon /> : <PdfTypeIcon />}
+                  {name}
+                </Text>
               </Button>
             )
           })}
