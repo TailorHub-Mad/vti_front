@@ -109,7 +109,7 @@ const TABBAR_LINKS = {
   subscription: {
     label: "Suscripcion",
     icon: ICONS_REFERENCE.subscribe_line,
-    href: PATHS.subscription,
+    href: PATHS.subscriptions,
     disabled: false
   }
 }

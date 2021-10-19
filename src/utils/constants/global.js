@@ -29,7 +29,7 @@ export const PATHS = {
   departments: "/departamentos",
   users: "/usuarios",
   help: "/apoyo",
-  subscription: "/suscripciones",
+  subscriptions: "/suscripciones",
   notifications: "/notificaciones"
 }
 

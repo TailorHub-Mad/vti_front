@@ -6,7 +6,7 @@ export const TagRow = ({ tags = [], max = 3, variant, ...props }) => {
   const remainingTagsCount = tags.length < max ? 0 : tags.length - max
 
   return (
-    <Box display="flex" alignItems="center" {...props} height="28px">
+    <Box display="flex" alignItems="center" height="28px" {...props}>
       {[...tags].slice(0, max).map((tag, idx) => (
         <Tag key={`${tag}-${idx}`} variant={variant} mr="8px">
           {tag}
