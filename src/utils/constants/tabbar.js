@@ -44,7 +44,7 @@ const TABBAR_LINKS = {
     disabled: false,
     submenu: [
       {
-        label: "VTI Code",
+        label: "Códigos VTI",
         icon: ICONS_REFERENCE.sector,
         href: PATHS.codes,
         disabled: false

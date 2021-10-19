@@ -5,26 +5,27 @@ const CodeService = () => {
 
   // CRUD
 
-  const getcodes = (data = "", limit = 0, offset = 0) =>
-    execute(instance.get(`/code?limit=${limit}&offset=${offset}${data}`))
-  const getcode = (id) => execute(instance.get(`/code/${id}`))
-  const createcode = (data) => execute(instance.post(`/code/create`, data))
-  const updatecode = (id, data) => execute(instance.put(`/code/update/${id}`, data))
-  const deletecode = (id) => execute(instance.delete(`/code/delete/${id}`))
+  const getCodes = (data = "", limit = 0, offset = 0) =>
+    execute(instance.get(`/sector?limit=${limit}&offset=${offset}${data}`))
+  const getCode = (id) => execute(instance.get(`/sector/${id}`))
+  const createCode = (data) => execute(instance.post(`/sector/create`, data))
+  const updateCode = (id, data) =>
+    execute(instance.put(`/sector/update/${id}`, data))
+  const deleteCode = (id) => execute(instance.delete(`/sector/delete/${id}`))
 
   // GROUP & FILTER
 
-  const getSearchcodes = (data) =>
-    execute(instance.get(`/code/filter?title=${data}&ref=${data}`))
+  const getSearchCodes = (data) =>
+    execute(instance.get(`/sector/filter?title=${data}&ref=${data}`))
 
   return {
-    getcodes,
-    getcode,
-    createcode,
-    updatecode,
-    deletecode,
+    getCodes,
+    getCode,
+    createCode,
+    updateCode,
+    deleteCode,
 
-    getSearchcodes
+    getSearchCodes
   }
 }
 

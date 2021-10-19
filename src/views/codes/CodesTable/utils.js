@@ -4,25 +4,17 @@ import { variantGeneralTag } from "../../../utils/constants/tabs"
 
 export const formatCode = (data) => data && data?.map(transformCodeData)
 
-export const transformCodeData = (sector) => ({
+export const transformCodeData = (code) => ({
   selector: "",
   id: {
-    label: sector.ref,
-    value: sector._id,
-    link: `${PATHS.sectors}/${sector._id}`
+    label: code.ref,
+    value: code._id,
+    link: `${PATHS.codes}/${code._id}`
   },
-  name: sector.title,
-  projects: sector.projects,
+  name: code.title,
+  projects: code.projects,
   options: ""
 })
-
-export const groupTable = (data) => {
-  return data.map((it) => {
-    const _it = [...it]
-    _it[1] = it[1].map(transformCodeData)
-    return _it
-  })
-}
 
 export const TABLE_CODES_HEAD = {
   selector: {

@@ -3,7 +3,7 @@ import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import useTableActions from "../../../hooks/useTableActions"
 import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
-import { formatSector, TABLE_CODES_HEAD } from "./utils"
+import { formatCode, TABLE_CODES_HEAD } from "./utils"
 
 export const CodesTable = ({
   codes,
@@ -26,7 +26,7 @@ export const CodesTable = ({
     return onDelete(selectedRowsKeys[0])
   }
 
-  const codesData = formatSector(codes)
+  const codesData = formatCode(codes)
   const configTable = {
     components: TABLE_COMPONENTS,
     head: {
@@ -36,7 +36,7 @@ export const CodesTable = ({
   }
 
   const allRowsAreSelected =
-    codesData.length > 0 && selectedRowsKeys.length === codesData?.length
+    codesData?.length > 0 && selectedRowsKeys.length === codesData?.length
 
   return (
     <Table

@@ -11,7 +11,7 @@ import { TableRow } from "./TableRow.js/TableRow"
 export const Table = ({
   onRowSelect,
   header,
-  selectedRows,
+  selectedRows = {},
   config,
   content,
   tableHeight,

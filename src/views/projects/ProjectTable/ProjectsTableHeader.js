@@ -5,7 +5,7 @@ import { fetchType } from "../../../utils/constants/swr"
 
 export const ProjectsTableHeader = ({
   projectsCount = 0,
-  selectedRows,
+  selectedRows = {},
   onDelete,
   selectAllRows = () => {},
   checked = false,

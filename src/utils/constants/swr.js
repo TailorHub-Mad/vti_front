@@ -77,7 +77,12 @@ export const SWR_CACHE_KEYS = {
   containersNotifications: "notifications/container",
   manteinanceNotifications: "notifications/manteinance",
   behaviourNotifications: "notifications/behaviour",
-  fixedNotifications: "notifications/fixed"
+  fixedNotifications: "notifications/fixed",
+
+  // SUBSCRIPTION
+  subscriptions: "subscriptions/",
+  subscription: "subscription/",
+  searchSubscriptions: "subscriptions/search"
 }
 
 export const fetchType = {

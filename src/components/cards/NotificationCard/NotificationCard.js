@@ -1,4 +1,4 @@
-import { Flex, Text } from "@chakra-ui/react"
+import { Flex, Text, Box } from "@chakra-ui/react"
 import React from "react"
 import { BLINK_ANIMATION } from "../../../theme/animations/animations"
 import { DeleteIcon } from "../../icons/DeleteIcon"
@@ -45,6 +45,7 @@ export const NotificationCard = ({ notification, onPin, onDelete, ...props }) =>
     <>
       {deleteTime ? (
         <Card
+          key={`${notification._id}`}
           width={["100%", null, null, "428px"]}
           height="56px"
           bgColor="white"
@@ -102,22 +103,31 @@ export const NotificationCard = ({ notification, onPin, onDelete, ...props }) =>
               />
             </Flex>
           </Flex>
-          <Text variant="d_s_regular" marginBottom="8px">
+          <Box>
             {formatDescription().map((e, idx) => {
-              if (!e?.label) return <span>{e} </span>
-              return (
-                <>
-                  <LinkItemSpan
+              if (!e?.label)
+                return (
+                  <Text
+                    display="inline"
+                    variant="d_s_regular"
+                    marginBottom="8px"
                     key={`${e.id}-${idx}`}
-                    href={handleLinkRef(e)}
-                    style={{ textDecoration: "underline" }}
                   >
-                    {`${e.label}`}
-                  </LinkItemSpan>{" "}
-                </>
+                    {" "}
+                    {e}{" "}
+                  </Text>
+                )
+              return (
+                <LinkItemSpan
+                  key={`${e.id}-${idx}`}
+                  href={handleLinkRef(e)}
+                  style={{ textDecoration: "underline" }}
+                >
+                  {`${e.label}`}
+                </LinkItemSpan>
               )
             })}
-          </Text>
+          </Box>
           <Text variant="d_xs_regular" color="start">
             {notification?.type}
           </Text>
