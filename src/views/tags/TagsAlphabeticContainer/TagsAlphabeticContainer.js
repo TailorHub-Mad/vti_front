@@ -26,8 +26,6 @@ export const TagsAlphabeticContainer = ({ tags, onDelete }) => {
     setSelectedTags([...selectedTags, tagName])
   }
 
-  const handleDeleteTags = () => {}
-
   return (
     <Box>
       <Popup
@@ -36,7 +34,10 @@ export const TagsAlphabeticContainer = ({ tags, onDelete }) => {
         cancelText="Cancelar"
         color="error"
         isOpen={tagsToDelete}
-        onConfirm={handleDeleteTags}
+        onConfirm={() => {
+          onDelete(tagsToDelete)
+          setTagsToDelete(null)
+        }}
         onClose={() => setTagsToDelete(null)}
       >
         {`¿Desea eliminar ${

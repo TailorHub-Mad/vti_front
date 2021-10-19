@@ -30,6 +30,7 @@ import { ViewNotFoundState } from "../views/common/ViewNotFoundState"
 import { ViewEmptyState } from "../views/common/ViewEmptyState"
 import { CriterionContainer } from "../views/helps/CriterionContainer/CriterionContainer"
 import { TagsAlphabeticContainer } from "../views/tags/TagsAlphabeticContainer/TagsAlphabeticContainer"
+import useTagApi from "../hooks/api/useTagApi"
 const HELP_MENU_TABS = {
   projects_board: "projects_board",
   projects_alphabetic: "projects_alphabetic",
@@ -55,6 +56,8 @@ const apoyo = () => {
     getProjectTags,
     getNoteTags
   } = useHelpApi()
+
+  const { deleteProjectTag, deleteNoteTag } = useTagApi()
   const { showToast } = useContext(ToastContext)
 
   // States
@@ -145,15 +148,6 @@ const apoyo = () => {
   //   download(_data, `helps_export_${new Date().toLocaleDateString()}`, "text/csv")
   // }
 
-  const handleDelete = async () => {
-    isProjectCriteria
-      ? await deleteProjectCriterion(criterionToDelete)
-      : await deleteNoteCriterion(criterionToDelete)
-    showToast("Criterio eliminado correctamente")
-    setData(data.filter((cr) => cr._id !== criterionToDelete))
-    setCriterionToDelete(null)
-  }
-
   const fetchCriteria = async () => {
     setIsLoading(true)
     const _data = isProjectCriteria ? await getProjectHelps() : await getNoteHelps()
@@ -165,6 +159,27 @@ const apoyo = () => {
     const _tags = isProjectCriteria ? await getProjectTags() : await getNoteTags()
     setUnusedTags(_tags.filter((tag) => !tag.isUsed))
     setUsedTags(_tags.filter((tag) => tag.isUsed))
+  }
+
+  const handleDelete = async () => {
+    isProjectCriteria
+      ? await deleteProjectCriterion(criterionToDelete)
+      : await deleteNoteCriterion(criterionToDelete)
+    showToast("Criterio eliminado correctamente")
+    setData(data.filter((cr) => cr._id !== criterionToDelete))
+    setCriterionToDelete(null)
+  }
+
+  const handleTagsDelete = async (tags) => {
+    const _tagsToDelete = tags.map((t) => {
+      const [_t] = usedTags.filter((ut) => ut.name === t)
+      return _t._id
+    })
+    const _deletePromises = isProjectCriteria
+      ? _tagsToDelete.map((tag) => deleteProjectTag(tag))
+      : _tagsToDelete.map((tag) => deleteNoteTag(tag))
+    await Promise.all(_deletePromises)
+    fetchTags()
   }
 
   useEffect(() => {
@@ -300,7 +315,7 @@ const apoyo = () => {
               : null}
 
             {activeTab.includes(ORDER.alphabetic) ? (
-              <TagsAlphabeticContainer tags={usedTags} />
+              <TagsAlphabeticContainer tags={usedTags} onDelete={handleTagsDelete} />
             ) : null}
           </>
         ) : null}
