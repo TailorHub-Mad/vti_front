@@ -2,13 +2,14 @@ import useClientApi from "../hooks/api/useClientApi"
 import useFetchSWR from "../hooks/useFetchSWR"
 import { fetchOption } from "../utils/constants/swr"
 import { SWR_CACHE_KEYS } from "../utils/constants/swr"
+import { isEmpty } from "lodash"
 
 export const clientFetchHandler = (state, options) => {
   const { getClients, getClient, getSearchClients } = useClientApi()
 
   const fetchHandler = {
     all: () => {
-      if (options)
+      if (!isEmpty(options))
         return useFetchSWR(
           [SWR_CACHE_KEYS.clients, options[fetchOption.ORDER]],
           getClients

@@ -22,7 +22,6 @@ export const TagCardTags = ({ items, relatedTags = [] }) => {
       />
       <TagRow
         tags={items}
-        max={2}
         tagcomponent={<Tag />}
         variant={variantGeneralTag.SYSTEM}
       />

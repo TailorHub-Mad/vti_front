@@ -2,6 +2,7 @@ import useSystemApi from "../hooks/api/useSystemApi"
 import useFetchSWR from "../hooks/useFetchSWR"
 import { fetchOption } from "../utils/constants/swr"
 import { SWR_CACHE_KEYS } from "../utils/constants/swr"
+import { isEmpty } from "lodash"
 
 export const systemFetchHandler = (state, options) => {
   const {
@@ -14,7 +15,7 @@ export const systemFetchHandler = (state, options) => {
 
   const fetchHandler = {
     all: () => {
-      if (options)
+      if (!isEmpty(options))
         return useFetchSWR(
           [SWR_CACHE_KEYS.systems, options[fetchOption.ORDER]],
           getSystems

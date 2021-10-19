@@ -16,7 +16,6 @@ export const NewCriterionModal = ({
   addSuccessMsg,
   criterionToEdit,
   editTitle,
-  editSuccessMsg,
   editOnlyTags,
   isProjectCriteria,
   fetchData,
