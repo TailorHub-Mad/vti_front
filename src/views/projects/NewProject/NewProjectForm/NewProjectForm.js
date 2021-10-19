@@ -14,7 +14,7 @@ import {
 } from "../../../../utils/functions/date"
 
 export const NewProjectForm = ({
-  // openAuxModal,
+  openAuxModal,
   value,
   onChange,
   projectToUpdate
@@ -121,7 +121,9 @@ export const NewProjectForm = ({
         options: tagOptions,
         label: "Tags de proyecto",
         additemlabel: "Añadir ",
-        removeitemlabel: "Eliminar "
+        removeitemlabel: "Eliminar ",
+        helper: "Abrir ventana de ayuda",
+        onHelperClick: () => openAuxModal()
       }
     }
   }

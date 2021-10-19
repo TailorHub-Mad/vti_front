@@ -43,10 +43,10 @@ export const SupportModal = ({
       top="50px"
       right="calc(50vw - 620px)"
       bgColor="transparent"
-      zIndex="1400"
+      zIndex="3000"
       mb="200px"
-      {...props}
       pb="200px"
+      {...props}
     >
       <Box bgColor="white" padding="32px">
         <CustomModalHeader title="Ventana de apoyo" onClose={onClose} />

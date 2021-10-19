@@ -58,6 +58,7 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
     onClose()
   }
 
+  //TODO Esta función se repite en todos los apoyos, se podría refactorizar para meterla en utils
   const handleTagSelect = (_tags, isProject) => {
     const refTags = isProject ? filterValues.project_tags : filterValues.note_tags
     const refUsed = isProject ? usedProjectTags : usedNoteTags
@@ -153,7 +154,13 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
         ) : null}
 
         {!showSaveFilter && showAuxContent && showSecondaryContent === "project" ? (
-          <SupportModal onClose={() => setShowAuxContent(false)} />
+          <SupportModal
+            onClose={() => setShowAuxContent(false)}
+            usedTags={usedProjectTags}
+            criteria={projectCriteria}
+            onTagsSelect={(tags) => handleTagSelect(tags, true)}
+            selectedTags={filterValues.project_tags.map((t) => t.label)}
+          />
         ) : null}
       </CustomModalContent>
     </Modal>
