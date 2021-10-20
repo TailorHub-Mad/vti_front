@@ -56,6 +56,7 @@ const suscripcion = () => {
   const formatSubscriptionProjects = (data) => {
     return data.map((d) => {
       return {
+        _id: d._id,
         title: d.alias,
         updatedAt: d.updatedAt,
         tags: d.notes.map((n) => ({ name: n.title }))
@@ -66,6 +67,7 @@ const suscripcion = () => {
   const formatSubscriptionSystem = (data) => {
     return data.map((d) => {
       return {
+        _id: d._id,
         title: d.alias,
         updatedAt: d.updatedAt,
         tags: d.notes.map((n) => ({ name: n.title }))
@@ -120,6 +122,7 @@ const suscripcion = () => {
 
   // Handlers CRUD
   const handleOpenPopup = (subscriptionsToDelete, type) => {
+    console.log("estamos aqui", subscriptionsToDelete, type)
     setDeleteType(type)
     setSubscriptionsToDelete(subscriptionsToDelete)
   }

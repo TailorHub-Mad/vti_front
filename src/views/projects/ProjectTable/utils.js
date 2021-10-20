@@ -106,6 +106,11 @@ export const TABLE_PROJECTS_HEAD = {
 }
 
 export const TABLE_PROJECTS_HEAD_USER = {
+  selector: {
+    label: "",
+    width: calcColWidth(20),
+    type: "selector"
+  },
   id: {
     label: "ID",
     width: calcColWidth(40),
@@ -114,13 +119,13 @@ export const TABLE_PROJECTS_HEAD_USER = {
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(120),
+    width: calcColWidth(80),
     type: "text",
     config: { sort: true, name: "alias" }
   },
   sector: {
     label: "Sector",
-    width: calcColWidth(40),
+    width: calcColWidth(30),
     type: "text",
     config: { sort: true, name: "sector" }
   },
@@ -161,8 +166,8 @@ export const TABLE_PROJECTS_HEAD_USER = {
     width: calcColWidth(10),
     type: "options",
     config: {
-      close: true,
-      subscribed: true
+      subscribed: true,
+      favorited: true
     }
   }
 }

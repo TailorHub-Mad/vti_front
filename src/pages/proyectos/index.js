@@ -38,6 +38,7 @@ import { ProjectsFilterModal } from "../../views/projects/ProjectFilter/Projects
 import { PROJECTS_FILTER_KEYS } from "../../utils/constants/filter"
 import { ProjectsMenu } from "../../views/projects/ProjectsMenu/ProjectsMenu"
 import useUserApi from "../../hooks/api/useUserApi"
+import { remove } from "lodash"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -257,7 +258,7 @@ const proyectos = () => {
     setIsProjectModalOpen(true)
   }
 
-  const formatUpdateUsers = (user, subscribed) => {
+  const formatUpdateUsersSubscribe = (user, subscribed) => {
     return {
       alias: user.alias,
       name: user.name,
@@ -266,21 +267,63 @@ const proyectos = () => {
     }
   }
 
-  const handleSubscribe = async (data) => {
+  const formatUpdateUsersFavorites = (user, favorites) => {
+    return {
+      alias: user.alias,
+      name: user.name,
+      favorites,
+      department: user.department
+    }
+  }
+
+  const handleSubscribe = async (data, state) => {
     const { subscribed, _id } = user
 
     const listToUpdate = subscribed["projects"]
 
     if (isGrouped) {
       const [id] = Object.entries(data)[0]
-      listToUpdate.push(id)
-      subscribed["projects"] = listToUpdate
+      if (state) {
+        remove(listToUpdate, (e) => e === id)
+      } else {
+        listToUpdate.push(id)
+      }
     } else {
-      listToUpdate.push(data)
-      subscribed["projects"] = listToUpdate
+      if (state) {
+        remove(listToUpdate, (e) => e === data)
+      } else {
+        listToUpdate.push(data)
+      }
     }
 
-    const formatUser = formatUpdateUsers(user, subscribed)
+    subscribed["projects"] = listToUpdate
+
+    const formatUser = formatUpdateUsersSubscribe(user, subscribed)
+    await updateUser(_id, formatUser)
+    await mutate()
+  }
+
+  const handleFavorite = async (data, state) => {
+    const { favorites, _id } = user
+
+    const listToUpdate = favorites["projects"]
+
+    if (isGrouped) {
+      const [id] = Object.entries(data)[0]
+      if (state) {
+        remove(listToUpdate, (e) => e === id)
+      } else {
+        listToUpdate.push(id)
+      }
+    } else {
+      if (state) {
+        remove(listToUpdate, (e) => e === data)
+      } else {
+        listToUpdate.push(data)
+      }
+    }
+    favorites["projects"] = listToUpdate
+    const formatUser = formatUpdateUsersFavorites(user, favorites)
     await updateUser(_id, formatUser)
     await mutate()
   }
@@ -442,6 +485,7 @@ const proyectos = () => {
           )}
           handleSortElement={handleSortElement}
           onSubscribe={handleSubscribe}
+          onFavorite={handleFavorite}
         />
       )}
     </Page>

@@ -14,6 +14,7 @@ export const OptionsMenu = ({ isOpen, onClose, children, ...props }) => {
       top="16px"
       bgColor="white"
       ref={ref}
+      onClick={() => onClose()}
       borderRadius="2px"
       boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
       width="112px"

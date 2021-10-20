@@ -97,3 +97,65 @@ export const TABLE_SYSTEMS_HEAD = {
     }
   }
 }
+
+export const TABLE_SYSTEMS_HEAD_USER = {
+  selector: {
+    label: "",
+    width: calcColWidth(20),
+    type: "selector"
+  },
+  id: {
+    label: "ID",
+    width: calcColWidth(30),
+    type: "link",
+    config: { sort: true, name: "ref" }
+  },
+  alias: {
+    label: "Alias",
+    width: calcColWidth(120),
+    type: "text",
+    config: { sort: true, name: "alias" }
+  },
+  client: {
+    label: "Cliente",
+    width: calcColWidth(60),
+    type: "text",
+    config: { sort: true, name: "clientAlias" }
+  },
+  code: {
+    label: "Código",
+    width: calcColWidth(84),
+    type: "text",
+    config: { sort: true, name: "vtiCode" }
+  },
+  year: {
+    label: "Año",
+    width: calcColWidth(20),
+    type: "text",
+    config: { sort: true, name: "date" }
+  },
+  projects: {
+    label: "Proyectos",
+    width: calcColWidth(100),
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.SYSTEM
+    }
+  },
+  notes: {
+    label: "Apuntes",
+    width: calcColWidth(100),
+    type: "tags",
+    config: {
+      variant: variantGeneralTag.NOTE
+    }
+  },
+  options: {
+    label: "",
+    width: calcColWidth(10),
+    type: "options",
+    config: {
+      subscribed: true
+    }
+  }
+}

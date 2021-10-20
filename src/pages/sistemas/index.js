@@ -35,6 +35,7 @@ import { generateFilterQuery } from "../../utils/functions/filter"
 import { TESTSYSTEMS_FILTER_KEYS } from "../../utils/constants/filter"
 import { TestsSystemsFilterModal } from "../../views/test_systems/TestSystemsFilter/TestSystemsFilterModal"
 import useUserApi from "../../hooks/api/useUserApi"
+import { remove } from "lodash"
 
 const SYSTEMS_GROUP_OPTIONS = [
   {
@@ -222,7 +223,7 @@ const sistemas = () => {
     setIsSystemModalOpen(true)
   }
 
-  const formatUpdateUsers = (user, subscribed) => {
+  const formatUpdateUsersSubscribe = (user, subscribed) => {
     return {
       alias: user.alias,
       name: user.name,
@@ -231,21 +232,29 @@ const sistemas = () => {
     }
   }
 
-  const handleSubscribe = async (data) => {
+  const handleSubscribe = async (data, state) => {
     const { subscribed, _id } = user
 
     const listToUpdate = subscribed["testSystems"]
 
     if (isGrouped) {
       const [id] = Object.entries(data)[0]
-      listToUpdate.push(id)
-      subscribed["testSystems"] = listToUpdate
+      if (state) {
+        remove(listToUpdate, (e) => e === id)
+      } else {
+        listToUpdate.push(id)
+      }
     } else {
-      listToUpdate.push(data)
-      subscribed["testSystems"] = listToUpdate
+      if (state) {
+        remove(listToUpdate, (e) => e === data)
+      } else {
+        listToUpdate.push(data)
+      }
     }
 
-    const formatUser = formatUpdateUsers(user, subscribed)
+    subscribed["testSystems"] = listToUpdate
+
+    const formatUser = formatUpdateUsersSubscribe(user, subscribed)
     await updateUser(_id, formatUser)
     await mutate()
   }

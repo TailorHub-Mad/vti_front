@@ -23,7 +23,8 @@ export const ProjectsTable = ({
   onFilter,
   groupOption,
   handleSortElement,
-  onSubscribe
+  onSubscribe,
+  onFavorite
 }) => {
   const { role } = useContext(ApiAuthContext)
 
@@ -59,7 +60,8 @@ export const ProjectsTable = ({
         onEdit,
         onClose,
         isGrouped,
-        onSubscribe
+        onSubscribe,
+        onFavorite
       }
     }
   }
