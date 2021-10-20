@@ -132,8 +132,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
         additemlabel: "Añadir ",
         removeitemlabel: "Eliminar ",
         helper: "Abrir ventana de ayuda",
-        onHelperClick: () => openAuxModal("project_tags"),
-        isDisabled: true
+        onHelperClick: () => openAuxModal()
       }
     }
   }

@@ -19,6 +19,7 @@ export const transformClientData = (client) => ({
 })
 
 export const groupTable = (data) => {
+  if (!data) return
   return data.map((it) => {
     const _it = [...it]
     _it[1] = it[1].map(transformClientData)

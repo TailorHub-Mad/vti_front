@@ -75,7 +75,7 @@ export const ToolBar = ({
         />
       )}
       {noAdd || (
-        <Button onClick={onAdd}>
+        <Button onClick={onAdd} justifyContent="center" alignItems="center">
           {icon ? (
             React.cloneElement(icon, {
               marginRight: "8px"

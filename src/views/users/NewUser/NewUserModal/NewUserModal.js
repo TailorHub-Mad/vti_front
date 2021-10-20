@@ -68,7 +68,10 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
     isUpdate ? await handleUpdateUser() : await handleCreateUser()
     setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.users)
-    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s usuario/s!")
+    showToast(
+      isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s usuario/s!",
+      "boy"
+    )
     setIsSubmitting(false)
     onClose()
   }

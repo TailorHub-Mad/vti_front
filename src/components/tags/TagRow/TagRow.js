@@ -1,9 +1,9 @@
 import { Box } from "@chakra-ui/react"
 import React, { useEffect, useRef, useState } from "react"
-import { Tag } from "../Tag/Tag"
+import { Tooltip, Tag } from "../Tag/Tag"
 
 export const TagRow = ({ tags = [], variant, ...props }) => {
-  const TAG_WIDTH_NUM = 62
+  const TAG_WIDTH_NUM = 82
 
   const ref = useRef()
 
@@ -36,12 +36,21 @@ export const TagRow = ({ tags = [], variant, ...props }) => {
       {...props}
     >
       {[...tags].slice(0, max).map((tag, idx) => (
-        <Tag key={`${tag}-${idx}`} variant={variant} width={"62px"}>
+        <Tooltip
+          key={`${tag}-${idx}`}
+          variant={variant}
+          width={"62px"}
+          minWidth={"62px"}
+        >
           {tag}
-        </Tag>
+        </Tooltip>
       ))}
       {remainingTagsCount > 0 ? (
-        <Tag width={"26px"} variant={variant}>{`+${remainingTagsCount}`}</Tag>
+        <Tag
+          width={"32px"}
+          minWidth={"32px"}
+          variant={variant}
+        >{`+${remainingTagsCount}`}</Tag>
       ) : null}
     </Box>
   )
