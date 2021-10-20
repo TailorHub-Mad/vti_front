@@ -25,10 +25,12 @@ export const groupTable = (data) => {
   })
 }
 
+//Para el cálculo  del ancho: Todas las columnas deben sumar MIN_TABLE_WIDTH - [(nº columnas - 1) * 32]
+
 export const TABLE_SECTORS_HEAD = {
   selector: {
     label: "",
-    width: calcColWidth(32),
+    width: calcColWidth(10),
     type: "selector"
   },
   id: {
@@ -45,7 +47,7 @@ export const TABLE_SECTORS_HEAD = {
   },
   projects: {
     label: "Proyectos",
-    width: calcColWidth(815),
+    width: calcColWidth(452),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
@@ -53,7 +55,7 @@ export const TABLE_SECTORS_HEAD = {
   },
   options: {
     label: "",
-    width: calcColWidth(20),
+    width: calcColWidth(10),
     type: "options"
   }
 }
