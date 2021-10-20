@@ -6,15 +6,15 @@ export const formatSubscription = (data) =>
   data && data?.map(transformSubscriptionData)
 
 export const transformSubscriptionData = (subscription) => ({
-  selector: "",
   id: {
     label: subscription.ref,
     value: subscription._id,
     link: `${PATHS.subscriptions}/${subscription._id}`
   },
-  name: subscription.title,
-  projects: subscription.projects,
-  options: ""
+  name: subscription.name,
+  projects: subscription.subscribed.projects.map((s) => s.alias),
+  systems: subscription.subscribed.testSystems.map((s) => s.alias),
+  notes: subscription.subscribed.notes.map((s) => s.title)
 })
 
 export const TABLE_SUBSCRIPTIONS_HEAD = {
@@ -32,39 +32,23 @@ export const TABLE_SUBSCRIPTIONS_HEAD = {
   },
   projects: {
     label: "Proyectos",
-    width: calcColWidth(120),
+    width: calcColWidth(265),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
     }
   },
   systems: {
-    label: "Proyectos",
-    width: calcColWidth(120),
+    label: "Sistemas",
+    width: calcColWidth(265),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
     }
   },
   notes: {
-    label: "Proyectos",
-    width: calcColWidth(120),
-    type: "tags",
-    config: {
-      variant: variantGeneralTag.NOTE
-    }
-  },
-  tagProjects: {
-    label: "Proyectos",
-    width: calcColWidth(120),
-    type: "tags",
-    config: {
-      variant: variantGeneralTag.NOTE
-    }
-  },
-  tagNotes: {
-    label: "Tags de apunte",
-    width: calcColWidth(120),
+    label: "Apuntes",
+    width: calcColWidth(265),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE

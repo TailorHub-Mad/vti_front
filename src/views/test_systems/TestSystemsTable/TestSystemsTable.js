@@ -13,6 +13,7 @@ export const TestSystemsTable = ({
   onDeleteMany,
   fetchState,
   onGroup,
+  onSubscribe,
   onFilter,
   groupOption,
   handleSortElement
@@ -40,7 +41,13 @@ export const TestSystemsTable = ({
     components: TABLE_COMPONENTS,
     head: {
       ...TABLE_SYSTEMS_HEAD,
-      options: { ...TABLE_SYSTEMS_HEAD.options, onDelete, onEdit, isGrouped }
+      options: {
+        ...TABLE_SYSTEMS_HEAD.options,
+        onDelete,
+        onEdit,
+        onSubscribe,
+        isGrouped
+      }
     }
   }
 

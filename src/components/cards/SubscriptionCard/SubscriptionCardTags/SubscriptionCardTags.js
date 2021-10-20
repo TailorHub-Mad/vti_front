@@ -3,7 +3,7 @@ import React from "react"
 import { formatTags, variantGeneralTag } from "../../../../utils/constants/tabs"
 import { TagRow } from "../../../tags/TagRow/TagRow"
 
-export const SubscriptionCardTags = ({ tags }) => {
+export const SubscriptionCardTags = ({ tags, ...props }) => {
   return (
     <Box
       display="grid"
@@ -11,6 +11,7 @@ export const SubscriptionCardTags = ({ tags }) => {
       gridTemplateRows="28px"
       gridTemplateColumns="100%"
       width="100%"
+      {...props}
     >
       {tags?.length > 0 && (
         <TagRow

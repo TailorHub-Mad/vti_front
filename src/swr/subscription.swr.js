@@ -12,7 +12,7 @@ export const subscriptionFetchHandler = (state, options) => {
     all: () => {
       if (!isEmpty(options))
         return useFetchSWR(
-          [SWR_CACHE_KEYS.subscriptions, options[fetchOption.ORDER]],
+          [SWR_CACHE_KEYS.subscriptions, options[fetchOption.FILTER]],
           getSubscriptions
         )
       else return useFetchSWR(SWR_CACHE_KEYS.subscriptions, getSubscriptions)

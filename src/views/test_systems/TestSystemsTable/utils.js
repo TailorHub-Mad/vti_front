@@ -89,6 +89,9 @@ export const TABLE_SYSTEMS_HEAD = {
   options: {
     label: "",
     width: calcColWidth(20),
-    type: "options"
+    type: "options",
+    config: {
+      subscribed: true
+    }
   }
 }

@@ -187,10 +187,20 @@ export const NewProjectModal = ({
   }, [])
 
   return (
-    <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleOnClose}
+      scrollBehavior={"inside"}
+      height="100vh"
+      margin="32px"
+      {...props}
+    >
       <ModalOverlay />
       <CustomModalContent zIndex="10001">
-        <ScaleFade in={showSecondaryContent || !showSecondaryContent}>
+        <ScaleFade
+          padding="100px"
+          in={showSecondaryContent || !showSecondaryContent}
+        >
           <Box
             width="460px"
             height="fit-content"
