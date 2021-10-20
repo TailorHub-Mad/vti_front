@@ -3,7 +3,14 @@ import { InputSelect } from "../../../../components/forms/InputSelect/InputSelec
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
 import useTagApi from "../../../../hooks/api/useTagApi"
 
-export const NewTagForm = ({ value, onChange, objectToUpdate, isProjectTag }) => {
+export const NewTagForm = ({
+  value,
+  onChange,
+  objectToUpdate,
+  isProjectTag,
+  onSupportClick,
+  openAuxModal
+}) => {
   const { getProjectTags, getNoteTags } = useTagApi()
 
   const [tagOptions, setTagOptions] = useState([])
@@ -37,7 +44,9 @@ export const NewTagForm = ({ value, onChange, objectToUpdate, isProjectTag }) =>
         placeholder: "Padre",
         label: "Escriba el nombre del padre (opcional)",
         options: tagOptions,
-        isDisabled: objectToUpdate?.relatedTags?.length > 0
+        isDisabled: objectToUpdate?.relatedTags?.length > 0,
+        helper: "Abrir ventana de ayuda",
+        onHelperClick: () => openAuxModal()
       }
     }
   }
@@ -76,6 +85,7 @@ export const NewTagForm = ({ value, onChange, objectToUpdate, isProjectTag }) =>
             config.disabled ||
             (index !== 0 && !value[Object.keys(value)[index - 1]]),
           key: `${name}-${index}`,
+          onClick: config.onHelperClick ? onSupportClick : null,
           ...config
         })
       })}

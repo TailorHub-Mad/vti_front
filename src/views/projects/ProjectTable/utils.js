@@ -39,7 +39,7 @@ export const transformProjectData = (project) => ({
 export const TABLE_PROJECTS_HEAD = {
   selector: {
     label: "",
-    width: calcColWidth(0),
+    width: calcColWidth(20),
     type: "selector"
   },
   id: {
@@ -50,13 +50,13 @@ export const TABLE_PROJECTS_HEAD = {
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(140),
+    width: calcColWidth(120),
     type: "text",
     config: { sort: true, name: "alias" }
   },
   sector: {
     label: "Sector",
-    width: calcColWidth(100),
+    width: calcColWidth(80),
     type: "text",
     config: { sort: true, name: "sector" }
   },
@@ -68,7 +68,7 @@ export const TABLE_PROJECTS_HEAD = {
   },
   testSystems: {
     label: "Sistemas de ensayo",
-    width: calcColWidth(210),
+    width: calcColWidth(80),
     type: "tags",
     config: {
       variant: variantGeneralTag.SYSTEM
@@ -76,7 +76,7 @@ export const TABLE_PROJECTS_HEAD = {
   },
   tags: {
     label: "Tags de proyecto",
-    width: calcColWidth(210),
+    width: calcColWidth(287),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
@@ -84,7 +84,7 @@ export const TABLE_PROJECTS_HEAD = {
   },
   users: {
     label: "Usuarios",
-    width: calcColWidth(50),
+    width: calcColWidth(35),
     type: "count"
   },
   notes: {

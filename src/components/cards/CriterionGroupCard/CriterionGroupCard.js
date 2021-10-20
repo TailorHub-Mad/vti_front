@@ -170,7 +170,7 @@ export const CriterionGroupCard = ({
         onClick={onAdd}
       >
         <AddIcon w="12px" h="12px" mr="4px" />{" "}
-        <Text variant="d_s_regular" onClick={onAddTags}>
+        <Text variant="d_s_regular" mt="4px" onClick={onAddTags}>
           Añadir tag
         </Text>
       </Button>
