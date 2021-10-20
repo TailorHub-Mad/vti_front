@@ -28,13 +28,13 @@ export const TABLE_SUBSCRIPTIONS_HEAD = {
   },
   name: {
     label: "Usuario",
-    width: calcColWidth(201),
+    width: calcColWidth(151),
     type: "text",
     config: { sort: true, name: "user" }
   },
   projects: {
     label: "Proyectos",
-    width: calcColWidth(201),
+    width: calcColWidth(151),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
@@ -42,7 +42,7 @@ export const TABLE_SUBSCRIPTIONS_HEAD = {
   },
   systems: {
     label: "Sistemas",
-    width: calcColWidth(201),
+    width: calcColWidth(151),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
@@ -50,7 +50,7 @@ export const TABLE_SUBSCRIPTIONS_HEAD = {
   },
   notes: {
     label: "Apuntes",
-    width: calcColWidth(201),
+    width: calcColWidth(151),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE

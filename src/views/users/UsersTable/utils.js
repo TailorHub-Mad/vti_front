@@ -44,7 +44,7 @@ export const TABLE_USERS_HEAD = {
   },
   id: {
     label: "ID",
-    width: calcColWidth(30),
+    width: calcColWidth(40),
     type: "link",
     config: { sort: true, name: "ref" }
   },
@@ -62,7 +62,7 @@ export const TABLE_USERS_HEAD = {
   },
   email: {
     label: "Email",
-    width: calcColWidth(120),
+    width: calcColWidth(110),
     type: "text",
     config: { sort: true, name: "email" }
   },

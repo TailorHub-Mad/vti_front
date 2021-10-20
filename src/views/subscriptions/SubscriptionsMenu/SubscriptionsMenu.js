@@ -37,7 +37,7 @@ export const SubscriptionsMenu = ({
 
   const handleLabel = () => {
     switch (currentState) {
-      case "project":
+      case "projects":
         return "Proyectos"
       case "notes":
         return "Apuntes"

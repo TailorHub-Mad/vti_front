@@ -135,7 +135,7 @@ const suscripcion = () => {
     if (deleteType === DeleteType.MANY)
       return (
         <Text variant="d_s_regular" textAlign="center" color="error">
-          {"¿Desea eliminar las"}{" "}
+          {"¿Desea dar de baja las"}{" "}
           <Text
             display="inline"
             variant="d_s_medium"
@@ -154,7 +154,7 @@ const suscripcion = () => {
     )
     return (
       <Text variant="d_s_regular" textAlign="center" color="error">
-        {"¿Desea eliminar"}{" "}
+        {"¿Desea dar de baja"}{" "}
         <Text display="inline" variant="d_s_medium" textAlign="center" color="error">
           {label}
         </Text>
@@ -246,7 +246,7 @@ const suscripcion = () => {
     <Page>
       <Popup
         variant="twoButtons"
-        confirmText="Eliminar"
+        confirmText="Aceptar"
         cancelText="Cancelar"
         color="error"
         isOpen={subscriptionsToDelete}
