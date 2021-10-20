@@ -46,23 +46,27 @@ export const OptionsMenuRow = ({
           </Text>
         </OptionsMenuItem>
       ) : null}
-      <OptionsMenuItem
-        onClick={() => onEdit(isGrouped ? { [id]: { key: keyGroup } } : id)}
-      >
-        <EditIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
-        <Text variant="d_xs_regular" marginRight="2px">
-          Editar
-        </Text>
-      </OptionsMenuItem>
-      <OptionsMenuItem
-        onClick={() => onDelete(isGrouped ? { [id]: { key: keyGroup } } : id)}
-        isLast
-      >
-        <DeleteIcon {...ICONS_PROPS_16} marginRight="4px" color="error" />
-        <Text variant="d_xs_regular" color="error" marginRight="2px">
-          Eliminar
-        </Text>
-      </OptionsMenuItem>
+      {subscribed && role === RoleType.ADMIN ? (
+        <>
+          <OptionsMenuItem
+            onClick={() => onEdit(isGrouped ? { [id]: { key: keyGroup } } : id)}
+          >
+            <EditIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
+            <Text variant="d_xs_regular" marginRight="2px">
+              Editar
+            </Text>
+          </OptionsMenuItem>
+          <OptionsMenuItem
+            onClick={() => onDelete(isGrouped ? { [id]: { key: keyGroup } } : id)}
+            isLast
+          >
+            <DeleteIcon {...ICONS_PROPS_16} marginRight="4px" color="error" />
+            <Text variant="d_xs_regular" color="error" marginRight="2px">
+              Eliminar
+            </Text>
+          </OptionsMenuItem>
+        </>
+      ) : null}
     </TableOptionsMenu>
   )
 }

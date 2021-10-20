@@ -395,7 +395,10 @@ const apuntes = () => {
       <NoteDrawer
         note={noteToDetail}
         isOpen={showNoteDetails}
-        onClose={() => setShowNoteDetails(false)}
+        onClose={() => {
+          setShowNoteDetails(false)
+          setNoteToDetail(null)
+        }}
         onDelete={() => setNoteToDelete(noteToDetail._id)}
         onEdit={() => handleUpdate(noteToDetail._id)}
         onResponse={() => setIsResponseModalOpen(true)}
@@ -438,7 +441,7 @@ const apuntes = () => {
       <PageBody height="calc(100vh - 140px)">
         {isLoading ? <LoadingView mt="-200px" /> : null}
         {isEmptyData && fetchState !== fetchType.ALL ? (
-          <ViewNotFoundState />
+          <ViewNotFoundState noBack />
         ) : isEmptyData ? (
           <ViewEmptyState
             message="Añadir apuntes a la plataforma"
