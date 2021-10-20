@@ -20,7 +20,7 @@ export const SubscriptionsGrid = ({
       width="100%"
       marginBottom="32px"
     >
-      {subscriptions.map((subscription, idx) => {
+      {subscriptions?.map((subscription, idx) => {
         return (
           <SubscriptionCard
             key={`${subscription.title}-${idx}`}

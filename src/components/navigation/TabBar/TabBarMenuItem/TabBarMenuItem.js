@@ -109,6 +109,7 @@ export const MenuLink = ({
     return (
       <Flex
         alignItems="center"
+        cursor={"pointer"}
         pointerEvents={true}
         onClick={noEvents ? () => setShowSubmenu(!showSubmenu) : null}
       >
@@ -136,31 +137,30 @@ export const MenuLink = ({
       align="center"
       padding="8px 0"
       marginBottom={showSubmenu ? "0" : "16px"}
-      w="100%"
-      role="group"
-      cursor={"pointer"}
       pointerEvents={disabled ? "none" : "auto"}
       opacity={disabled ? "0.3" : "1"}
       {...props}
     >
-      {noEvents ? (
-        handleLink()
-      ) : (
-        <Link href={href} passHref>
-          {handleLink()}
-        </Link>
-      )}
+      <Flex role="group">
+        {noEvents ? (
+          handleLink()
+        ) : (
+          <Link href={href} passHref>
+            {handleLink()}
+          </Link>
+        )}
 
-      {submenu ? (
-        <ArrowDownIcon
-          color={active ? "#F3D30C" : "white"}
-          _groupHover={{ color: "yellow" }}
-          transform={showSubmenu ? "rotate(0.5turn)" : "rotate(0turn)"}
-          cursor="pointer"
-          onClick={() => setShowSubmenu(!showSubmenu)}
-          pt="2.5px"
-        />
-      ) : null}
+        {submenu ? (
+          <ArrowDownIcon
+            cursor={"pointer"}
+            color={active ? "#F3D30C" : "white"}
+            _groupHover={{ color: "yellow" }}
+            transform={showSubmenu ? "rotate(0.5turn)" : "rotate(0turn)"}
+            onClick={() => setShowSubmenu(!showSubmenu)}
+            pt="2.5px"
+          />
+        ) : null}
+      </Flex>
     </Flex>
   )
 }

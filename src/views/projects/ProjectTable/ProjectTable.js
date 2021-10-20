@@ -16,7 +16,8 @@ export const ProjectsTable = ({
   onGroup,
   onFilter,
   groupOption,
-  handleSortElement
+  handleSortElement,
+  onSubscribe
 }) => {
   const isGrouped = fetchState === fetchType.GROUP
 
@@ -46,7 +47,8 @@ export const ProjectsTable = ({
         onDelete,
         onEdit,
         onClose,
-        isGrouped
+        isGrouped,
+        onSubscribe
       }
     }
   }

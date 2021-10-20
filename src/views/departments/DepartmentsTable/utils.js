@@ -25,27 +25,29 @@ export const groupTable = (data) => {
   })
 }
 
+//Para el cálculo  del ancho: Todas las columnas deben sumar MIN_TABLE_WIDTH - [(nº columnas - 1) * 32]
+
 export const TABLE_DEPARTMENT_HEAD = {
   selector: {
     label: "",
-    width: calcColWidth(32),
+    width: calcColWidth(10),
     type: "selector"
   },
   id: {
     label: "ID",
-    width: calcColWidth(80),
+    width: calcColWidth(50),
     type: "link",
     config: { sort: true, name: "ref" }
   },
   name: {
     label: "Departamento",
-    width: calcColWidth(120),
+    width: calcColWidth(60),
     type: "text",
     config: { sort: true, name: "name" }
   },
   users: {
     label: "Usuarios",
-    width: calcColWidth(815),
+    width: calcColWidth(542),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
@@ -53,7 +55,7 @@ export const TABLE_DEPARTMENT_HEAD = {
   },
   options: {
     label: "",
-    width: calcColWidth(20),
+    width: calcColWidth(10),
     type: "options"
   }
 }

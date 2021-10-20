@@ -27,10 +27,12 @@ export const groupTable = (data) => {
   })
 }
 
+//Para el cálculo  del ancho: Todas las columnas deben sumar MIN_TABLE_WIDTH - [(nº columnas - 1) * 32]
+
 export const TABLE_CLIENT_HEAD = {
   selector: {
     label: "",
-    width: calcColWidth(32),
+    width: calcColWidth(10),
     type: "selector"
   },
   id: {
@@ -45,7 +47,7 @@ export const TABLE_CLIENT_HEAD = {
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(100),
+    width: calcColWidth(80),
     type: "text",
     config: {
       close: true,
@@ -55,7 +57,7 @@ export const TABLE_CLIENT_HEAD = {
   },
   name: {
     label: "Nombre",
-    width: calcColWidth(408),
+    width: calcColWidth(208),
     type: "text",
     config: {
       close: true,
@@ -65,7 +67,7 @@ export const TABLE_CLIENT_HEAD = {
   },
   testSystems: {
     label: "Sistemas de ensayo",
-    width: calcColWidth(220),
+    width: calcColWidth(120),
     type: "tags",
     config: {
       variant: variantGeneralTag.SYSTEM
@@ -73,7 +75,7 @@ export const TABLE_CLIENT_HEAD = {
   },
   projects: {
     label: "Proyectos",
-    width: calcColWidth(220),
+    width: calcColWidth(120),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
@@ -81,7 +83,7 @@ export const TABLE_CLIENT_HEAD = {
   },
   options: {
     label: "",
-    width: calcColWidth(20),
+    width: calcColWidth(10),
     type: "options"
   }
 }

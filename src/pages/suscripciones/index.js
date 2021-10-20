@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
 import { SubscriptionsTable } from "../../views/subscriptions/SubscriptionTable/SubscriptionsTable"
@@ -11,10 +11,13 @@ import { subscriptionFetchHandler } from "../../swr/subscription.swr"
 import { LoadingView } from "../../views/common/LoadingView"
 import { errorHandler } from "../../utils/errors"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
+import { PATHS, RoleType } from "../../utils/constants/global"
+import { useRouter } from "next/router"
 
 const suscripciones = () => {
   // Hooks
-  const { isLoggedIn } = useContext(ApiAuthContext)
+  const { isLoggedIn, role, user } = useContext(ApiAuthContext)
+  const router = useRouter()
 
   // States
   const [fetchState, setFetchState] = useState(fetchType.ALL)
@@ -65,31 +68,43 @@ const suscripciones = () => {
     })
   }
 
+  useEffect(() => {
+    if (!user) return
+
+    if (role === RoleType.USER) router.push(`${PATHS.subscriptions}/${user._id}`)
+  }, [user])
+
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (
     <Page>
-      <PageHeader>
-        <BreadCrumbs />
-        {isToolbarHidden ? (
-          <ToolBar
-            onSearch={onSearch}
-            searchPlaceholder="Busqueda por ID, Alias"
-            noFilter
-            noGroup
-            noAdd
-            noImport
-          />
-        ) : null}
-      </PageHeader>
-      {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData ? (
-        <ViewNotFoundState />
+      {role === RoleType.ADMIN ? (
+        <>
+          <PageHeader>
+            <BreadCrumbs />
+            {isToolbarHidden ? (
+              <ToolBar
+                onSearch={onSearch}
+                searchPlaceholder="Busqueda por ID, Alias"
+                noFilter
+                noGroup
+                noAdd
+                noImport
+              />
+            ) : null}
+          </PageHeader>
+          {isLoading ? <LoadingView mt="-200px" /> : null}
+          {isEmptyData ? (
+            <ViewNotFoundState />
+          ) : (
+            <SubscriptionsTable
+              subscriptions={subscriptionsData}
+              handleSortElement={handleSortElement}
+            />
+          )}
+        </>
       ) : (
-        <SubscriptionsTable
-          subscriptions={subscriptionsData}
-          handleSortElement={handleSortElement}
-        />
+        <LoadingView mt="-200px" />
       )}
     </Page>
   )
