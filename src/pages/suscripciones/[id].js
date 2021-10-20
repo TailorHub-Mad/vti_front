@@ -1,5 +1,7 @@
 import { Text } from "@chakra-ui/layout"
-import React, { useContext, useState } from "react"
+import { remove } from "lodash"
+import { useRouter } from "next/router"
+import React, { useContext, useMemo, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageBody } from "../../components/layout/Pages/PageBody/PageBody"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
@@ -7,7 +9,7 @@ import { PageMenu } from "../../components/layout/Pages/PageMenu/PageMenu"
 import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
 import { Popup } from "../../components/overlay/Popup/Popup"
-import useSubscriptionApi from "../../hooks/api/useSubscriptionApi"
+import useUserApi from "../../hooks/api/useUserApi"
 import useTableActions from "../../hooks/useTableActions"
 import { ApiAuthContext } from "../../provider/ApiAuthProvider"
 import { ToastContext } from "../../provider/ToastProvider"
@@ -21,91 +23,24 @@ import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 import { SubscriptionsGrid } from "../../views/subscriptions/SubscriptionsGrid/SubscriptionsGrid"
 import { SubscriptionsMenu } from "../../views/subscriptions/SubscriptionsMenu/SubscriptionsMenu"
 
-const mock = {
-  _id: "lajsdlfkjlaskdjfljlasñdj",
-  name: "Maria Losada",
-  subscriptions: [
-    {
-      _id: "lkjadlfkjalsdkf90wq8r09834",
-      title: "Suscripción prueba",
-      client: "CL-0001",
-      updatedAt: new Date(),
-      tags: [
-        {
-          name: "Tag apunte 1"
-        },
-        {
-          name: "Tag apunte 2"
-        },
-        {
-          name: "Tag apunte 3"
-        },
-        {
-          name: "Tag apunte 4"
-        },
-        {
-          name: "Tag apunte 4"
-        },
-        {
-          name: "Tag apunte 4"
-        },
-        {
-          name: "Tag apunte 4"
-        },
-        {
-          name: "Tag apunte 4"
-        }
-      ]
-    },
-    {
-      _id: "lkjadlfkjalsdkf90wq8afsdfdsr09834",
-      title: "Suscripción prueba",
-      client: "CL-0001",
-      updatedAt: new Date(),
-      tags: [
-        {
-          name: "Tag apunte 1"
-        },
-        {
-          name: "Tag apunte 2"
-        },
-        {
-          name: "Tag apunte 3"
-        },
-        {
-          name: "Tag apunte 4"
-        },
-        {
-          name: "Tag apunte 4"
-        },
-        {
-          name: "Tag apunte 4"
-        },
-        {
-          name: "Tag apunte 4"
-        },
-        {
-          name: "Tag apunte 4"
-        }
-      ]
-    }
-  ]
-}
-
 const suscripcion = () => {
   // Hooks
+  const router = useRouter()
   const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
     useTableActions()
-  const { isLoggedIn } = useContext(ApiAuthContext)
-  const { deleteSubscription } = useSubscriptionApi()
+  const { isLoggedIn, user } = useContext(ApiAuthContext)
   const { showToast } = useContext(ToastContext)
+  const { updateUser } = useUserApi()
 
   // States
-
   const [fetchState, setFetchState] = useState(fetchType.ALL)
-  const [fetchOptions, setFetchOptions] = useState({})
+  const [fetchOptions, setFetchOptions] = useState({
+    [fetchOption.FILTER]: "project"
+  })
   const [deleteType, setDeleteType] = useState(null)
   const [subscriptionsToDelete, setSubscriptionsToDelete] = useState(null)
+  const [currentState, setCurrentState] = useState("projects")
+  const [subscriptionsData, setSubscriptionsData] = useState([])
 
   // Fetch
   const { data, error, isLoading, mutate } = subscriptionFetchHandler(
@@ -113,14 +48,51 @@ const suscripcion = () => {
     fetchOptions
   )
 
-  const handleSubscriptionsData = (isEmptyData) => {
-    if (!data || isEmptyData) return null
-    if (fetchState == fetchType.GROUP) return data
-    return mock.subscriptions
+  const subscriptionId = router.query.id
+  const isEmptyData = checkDataIsEmpty(data)
+  const subscription =
+    data && !isEmptyData ? data.find((d) => d._id === subscriptionId) : null
+
+  const formatSubscriptionProjects = (data) => {
+    return data.map((d) => {
+      return {
+        title: d.alias,
+        updatedAt: d.updatedAt,
+        tags: d.notes.map((n) => ({ name: n.title }))
+      }
+    })
   }
 
-  const isEmptyData = checkDataIsEmpty(data)
-  const subscriptionsData = handleSubscriptionsData(isEmptyData)
+  const formatSubscriptionSystem = (data) => {
+    return data.map((d) => {
+      return {
+        title: d.alias,
+        updatedAt: d.updatedAt,
+        tags: d.notes.map((n) => ({ name: n.title }))
+      }
+    })
+  }
+
+  useMemo(() => {
+    if (!subscription) return
+
+    const { subscribed } = subscription
+
+    switch (currentState) {
+      case "projects":
+        return setSubscriptionsData(
+          formatSubscriptionProjects(subscribed[currentState])
+        )
+
+      case "notes":
+        return setSubscriptionsData(subscribed[currentState])
+
+      case "testSystems":
+        return setSubscriptionsData(
+          formatSubscriptionSystem(subscribed[currentState])
+        )
+    }
+  }, [subscription, currentState])
 
   // Handlers views
   const isToolbarHidden = () => {
@@ -137,6 +109,13 @@ const suscripcion = () => {
     if (isEmptyData && fetchState === fetchType.ALL) return false
 
     return true
+  }
+
+  const handleState = (state) => {
+    setFetchOptions({
+      [fetchOption.FILTER]: state === "projects" ? "project" : state
+    })
+    setCurrentState(state)
   }
 
   // Handlers CRUD
@@ -156,7 +135,7 @@ const suscripcion = () => {
     if (deleteType === DeleteType.MANY)
       return (
         <Text variant="d_s_regular" textAlign="center" color="error">
-          {"¿Desea eliminar las"}{" "}
+          {"¿Desea dar de baja las"}{" "}
           <Text
             display="inline"
             variant="d_s_medium"
@@ -175,7 +154,7 @@ const suscripcion = () => {
     )
     return (
       <Text variant="d_s_regular" textAlign="center" color="error">
-        {"¿Desea eliminar"}{" "}
+        {"¿Desea dar de baja"}{" "}
         <Text display="inline" variant="d_s_medium" textAlign="center" color="error">
           {label}
         </Text>
@@ -193,30 +172,53 @@ const suscripcion = () => {
 
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
-    const updated = await f(subscriptionsToDelete, subscriptionsData)
-    updated.length > 0 ? await mutate(updated, false) : await mutate()
+    await f(subscriptionsToDelete, subscriptionsData)
+    await mutate()
     setDeleteType(null)
     setSubscriptionsToDelete(null)
   }
 
-  const deleteOne = async (id, subscriptions) => {
+  const formatUpdateUsers = (user, subscribed) => {
+    return {
+      alias: user.alias,
+      name: user.name,
+      subscribed,
+      department: user.department
+    }
+  }
+
+  const handleSubscribed = async (idUser, newList) => {
+    const formatUser = formatUpdateUsers(user, newList)
+
+    await updateUser(idUser, formatUser)
+    await mutate()
+  }
+
+  const deleteOne = async (id) => {
     try {
-      await deleteSubscription(id)
+      const { subscribed, _id } = user
+      const listToUpdate = subscribed[currentState]
+
+      remove(listToUpdate, (e) => e === id)
+      subscribed[currentState] = listToUpdate
+
+      await handleSubscribed(_id, subscribed)
       showToast("Suscripción borrada correctamente")
-      return subscriptions.filter((subscription) => subscription._id !== id)
     } catch (error) {
       errorHandler(error)
     }
   }
 
-  const deleteMany = async (subscriptionsId, subscriptions) => {
+  const deleteMany = async (subscriptionsId) => {
     try {
-      const subscriptionsQueue = subscriptionsId.map((id) => deleteSubscription(id))
-      await Promise.all(subscriptionsQueue)
+      const { subscribed, _id } = user
+      const listToUpdate = subscribed[currentState]
+
+      remove(listToUpdate, (e) => subscriptionsId.includes(e))
+      subscribed[currentState] = listToUpdate
+
+      await handleSubscribed(_id, subscribed)
       showToast("Suscripciones borradas correctamente")
-      return subscriptions.filter(
-        (subscription) => !subscriptionsId.includes(subscription._id)
-      )
     } catch (error) {
       errorHandler(error)
     }
@@ -244,7 +246,7 @@ const suscripcion = () => {
     <Page>
       <Popup
         variant="twoButtons"
-        confirmText="Eliminar"
+        confirmText="Aceptar"
         cancelText="Cancelar"
         color="error"
         isOpen={subscriptionsToDelete}
@@ -255,7 +257,7 @@ const suscripcion = () => {
       </Popup>
 
       <PageHeader>
-        <BreadCrumbs customURL={`${PATHS.subscriptions}/${mock?.name}`} />
+        <BreadCrumbs customURL={`${PATHS.subscriptions}/${subscription?.name}`} />
         {isToolbarHidden() && (
           <ToolBar
             onSearch={onSearch}
@@ -271,13 +273,14 @@ const suscripcion = () => {
       <PageMenu>
         {isMenuHidden() ? (
           <SubscriptionsMenu
-            currentState={"projects"} // provisional
+            currentState={currentState}
             subscriptionsCount={subscriptionsData?.length}
-            onChange={(state) => console.log(state)}
+            onChange={handleState}
             handleSelectAllRows={() => handleSelectAllRows(subscriptionsData)}
             isChecked={
               Object.keys(selectedRows)?.length === subscriptionsData?.length
             }
+            noCheck={subscriptionsData.length === 0}
             selectedRows={selectedRows}
             onDelete={handleOnDelete}
           />
@@ -285,8 +288,9 @@ const suscripcion = () => {
       </PageMenu>
       <PageBody height="calc(100vh - 140px)">
         {isLoading ? <LoadingView mt="-200px" /> : null}
-        {isEmptyData && fetchState !== fetchType.ALL ? <ViewNotFoundState /> : null}
-        {subscriptionsData ? (
+        {subscriptionsData.length === 0 ? (
+          <ViewNotFoundState text="No se ha suscrito a nada" noBack />
+        ) : (
           <SubscriptionsGrid
             subscriptions={subscriptionsData}
             onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
@@ -294,7 +298,7 @@ const suscripcion = () => {
             setSelectedRows={setSelectedRows}
             handleRowSelect={handleRowSelect}
           />
-        ) : null}
+        )}
       </PageBody>
     </Page>
   )

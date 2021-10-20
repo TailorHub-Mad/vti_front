@@ -51,11 +51,17 @@ export const NotesMenu = ({
               height="24px"
               align="center"
               cursor="pointer"
+              role="group"
               onClick={() => onChange(name)}
               ml={idx !== 0 ? "16px" : "0"}
             >
-              <Icon mr="4px" color={color} />
-              <Text variant="d_s_medium" mt="4px" color={color}>
+              <Icon mr="4px" color={color} _groupHover={{ color: "blue.500" }} />
+              <Text
+                variant="d_s_medium"
+                mt="4px"
+                color={color}
+                _groupHover={{ color: "blue.500" }}
+              >
                 {label}
               </Text>
             </Flex>

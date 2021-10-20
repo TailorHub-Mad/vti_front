@@ -1,4 +1,4 @@
-import { Modal, ModalOverlay, ModalContent, Button, Box } from "@chakra-ui/react"
+import { Modal, ModalOverlay, Button, Box } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
 import { MultipleFormContent } from "../../../../components/forms/MultipleFormContent/MultipleFormContent"

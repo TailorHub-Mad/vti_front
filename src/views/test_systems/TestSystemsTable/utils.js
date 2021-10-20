@@ -34,45 +34,47 @@ export const transformSystemData = (system) => ({
   options: ""
 })
 
+//Para el cálculo  del ancho: Todas las columnas deben sumar MIN_TABLE_WIDTH - [(nº columnas - 1) * 32]
+
 export const TABLE_SYSTEMS_HEAD = {
   selector: {
     label: "",
-    width: calcColWidth(32),
+    width: calcColWidth(10),
     type: "selector"
   },
   id: {
     label: "ID",
-    width: calcColWidth(60),
+    width: calcColWidth(30),
     type: "link",
     config: { sort: true, name: "ref" }
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(180),
+    width: calcColWidth(130),
     type: "text",
     config: { sort: true, name: "alias" }
   },
   client: {
     label: "Cliente",
-    width: calcColWidth(120),
+    width: calcColWidth(60),
     type: "text",
     config: { sort: true, name: "clientAlias" }
   },
   code: {
     label: "Código",
-    width: calcColWidth(158),
+    width: calcColWidth(84),
     type: "text",
     config: { sort: true, name: "vtiCode" }
   },
   year: {
     label: "Año",
-    width: calcColWidth(45),
+    width: calcColWidth(20),
     type: "text",
     config: { sort: true, name: "date" }
   },
   projects: {
     label: "Proyectos",
-    width: calcColWidth(220),
+    width: calcColWidth(100),
     type: "tags",
     config: {
       variant: variantGeneralTag.SYSTEM
@@ -80,7 +82,7 @@ export const TABLE_SYSTEMS_HEAD = {
   },
   notes: {
     label: "Apuntes",
-    width: calcColWidth(220),
+    width: calcColWidth(100),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
@@ -88,7 +90,10 @@ export const TABLE_SYSTEMS_HEAD = {
   },
   options: {
     label: "",
-    width: calcColWidth(20),
-    type: "options"
+    width: calcColWidth(10),
+    type: "options",
+    config: {
+      subscribed: true
+    }
   }
 }

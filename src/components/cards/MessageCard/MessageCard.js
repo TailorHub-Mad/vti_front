@@ -11,7 +11,8 @@ export const MessageCard = ({
   isSubscribe,
   isFavorite,
   onDelete,
-  handleFavorite
+  handleFavorite,
+  handleSubscribe
 }) => {
   return (
     <Card>
@@ -19,8 +20,10 @@ export const MessageCard = ({
         isFavorite={isFavorite}
         title={note?.title}
         onClick={onSeeDetails}
+        isSubscribe={isSubscribe}
         onDelele={onDelete}
         onFavorite={handleFavorite}
+        onSubscribe={handleSubscribe}
       />
       <MessageCardInfo
         id={note?.ref}

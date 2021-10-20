@@ -31,6 +31,7 @@ export const TagsHeader = ({
               height="24px"
               align="center"
               cursor="pointer"
+              role="group"
               onClick={() => onChange && onChange(name)}
               ml={idx !== 0 ? "16px" : "0"}
             >
@@ -38,13 +39,18 @@ export const TagsHeader = ({
                 isActive ? (
                   <item.active_icon mr="4px" color="blue.500" />
                 ) : (
-                  <item.icon mr="4px" color="grey" />
+                  <item.icon
+                    mr="4px"
+                    color="grey"
+                    _groupHover={{ color: "blue.500" }}
+                  />
                 )
               ) : null}
               <Text
                 variant="d_s_medium"
                 mt="4px"
                 color={isActive ? "blue.500" : "grey"}
+                _groupHover={{ color: "blue.500" }}
               >
                 {item.label}
               </Text>
