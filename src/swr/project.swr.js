@@ -16,7 +16,6 @@ export const projectFetchHandler = (state, options) => {
 
   const fetchHandler = {
     all: () => {
-      console.log(isEmpty(options))
       if (!isEmpty(options))
         return useFetchSWR(
           [SWR_CACHE_KEYS.projects, options[fetchOption.ORDER]],

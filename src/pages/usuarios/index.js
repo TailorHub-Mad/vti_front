@@ -13,7 +13,7 @@ import { UsersTable } from "../../views/users/UsersTable/UsersTable"
 import { NewUserModal } from "../../views/users/NewUser/NewUserModal/NewUserModal"
 import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { ViewEmptyState } from "../../views/common/ViewEmptyState"
-import { UsersLineIcon } from "../../components/icons/UsersLineIcon"
+import { AddUserIcon } from "../../components/icons/AddUserIcon"
 import { checkDataIsEmpty, getFieldObjectById } from "../../utils/functions/global"
 import { userFetchHandler } from "../../swr/user.swr"
 import { LoadingView } from "../../views/common/LoadingView"
@@ -216,7 +216,7 @@ const usuarios = () => {
     if (!name || !order) return
 
     setFetchOptions({
-      [fetchOption.ORDER]: `&users_${name}=${order}`
+      [fetchOption.ORDER]: `&user_${name}=${order}`
     })
   }
 
@@ -272,7 +272,7 @@ const usuarios = () => {
             onFilter={handleOnOpenFilter}
             addLabel="Añadir usuario"
             searchPlaceholder="Busqueda por ID, Alias"
-            icon={<UsersLineIcon />}
+            icon={<AddUserIcon />}
             fetchState={fetchState}
             groupOptions={USERS_GROUP_OPTIONS}
             noAdd={!isAdmin}

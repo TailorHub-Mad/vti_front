@@ -17,6 +17,7 @@ export const transformDepartmentData = (department) => ({
 })
 
 export const groupTable = (data) => {
+  if (!data) return
   return data.map((it) => {
     const _it = [...it]
     _it[1] = it[1].map(transformDepartmentData)
@@ -40,7 +41,7 @@ export const TABLE_DEPARTMENT_HEAD = {
     label: "Departamento",
     width: calcColWidth(120),
     type: "text",
-    config: { sort: true, name: "department" }
+    config: { sort: true, name: "name" }
   },
   users: {
     label: "Usuarios",

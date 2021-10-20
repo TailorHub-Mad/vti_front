@@ -8,6 +8,7 @@ export const MultipleFormContent = ({
   addTitle,
   deleteTitle,
   objectToUpdate,
+  onHelperClick,
   children
 }) => {
   return (
@@ -23,7 +24,8 @@ export const MultipleFormContent = ({
             {React.cloneElement(children, {
               value: value,
               onChange: (val) => onChange(val, idx),
-              objectToUpdate: objectToUpdate
+              objectToUpdate: objectToUpdate,
+              onSupportClick: onHelperClick
             })}
           </>
           {idx !== 0 ? (

@@ -43,10 +43,10 @@ export const SupportModal = ({
       top="50px"
       right="calc(50vw - 620px)"
       bgColor="transparent"
-      zIndex="1400"
+      zIndex="3000"
       mb="200px"
-      {...props}
       pb="200px"
+      {...props}
     >
       <Box bgColor="white" padding="32px">
         <CustomModalHeader title="Ventana de apoyo" onClose={onClose} />
@@ -103,24 +103,21 @@ export const SupportModal = ({
                     variant="violete"
                     mr="8px"
                     mb="8px"
-                    labelProps={{
-                      display: "flex",
-                      alignItems: "center"
-                    }}
-                    display="flex"
-                    alignItems="center"
                   >
                     <Checkbox
                       size="sm"
                       borderColor="blue.500"
                       mr="4px"
-                      mb="2px"
                       onChange={() => onTagsSelect([tag.name])}
                       isChecked={selectedTags?.includes(tag.name)}
                     />
-                    <chakra.p onClick={() => onTagsSelect([tag.name])}>
+                    <Text
+                      variant="d_xs_regular"
+                      display="inline"
+                      onClick={() => onTagsSelect([tag.name])}
+                    >
                       {tag.name}
-                    </chakra.p>
+                    </Text>
                   </Tag>
                 ))}
               </Flex>
@@ -205,7 +202,7 @@ export const SupportModal = ({
                               width="100%"
                             >
                               {group.map((tag) => (
-                                <Flex key="" cursor="pointer">
+                                <Flex key={tag} cursor="pointer">
                                   <Checkbox
                                     mr="4px"
                                     onChange={() => onTagsSelect([tag])}

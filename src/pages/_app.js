@@ -5,6 +5,8 @@ import ErrorProvider from "../provider/ErrorProvider"
 import { SWRConfig } from "swr"
 import theme from "../theme/"
 import Meta from "../components/layout/Meta/Meta"
+import "focus-visible/dist/focus-visible"
+import "../theme/nofocus.css"
 
 function MyApp({ Component, pageProps }) {
   const swrConfig = { provider: () => new Map() }

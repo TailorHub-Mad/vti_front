@@ -1,10 +1,13 @@
 import { ScaleFade, Modal, ModalOverlay } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { AuxFilter } from "./AuxFilter/AuxFilter"
 import { MainFilter } from "./MainFilter/MainFilter"
 import { SupportFilter } from "./SupportFilter/SupportFilter"
 import { SaveFilterModal } from "./SaveFilterModal/SaveFilterModal"
 import { CustomModalContent } from "../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
+import { SupportModal } from "../../helps/NewCriterion/NewCriterionModal/SupportModal/SupportModal"
+import useHelpApi from "../../../hooks/api/useHelpApi"
+import useTagApi from "../../../hooks/api/useTagApi"
 
 export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const [showMainContent] = useState(true)
@@ -31,6 +34,14 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   }
 
   const [filterValues, setFilterValues] = useState(initialValues)
+  const [usedProjectTags, setUsedProjectTags] = useState([])
+  const [usedNoteTags, setUsedNoteTags] = useState([])
+  const [projectCriteria, setProjectCriteria] = useState([])
+  const [noteCriteria, setNoteCriteria] = useState([])
+
+  const { getProjectHelps, getNoteHelps } = useHelpApi()
+
+  const { getProjectTags, getNoteTags } = useTagApi()
 
   const handleOnReset = () => {
     setFilterValues(initialValues)
@@ -46,6 +57,50 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
     setFilterValues(initialValues)
     onClose()
   }
+
+  //TODO Esta función se repite en todos los apoyos, se podría refactorizar para meterla en utils
+  const handleTagSelect = (_tags, isProject) => {
+    const refTags = isProject ? filterValues.project_tags : filterValues.note_tags
+    const refUsed = isProject ? usedProjectTags : usedNoteTags
+    let nextTags = refTags ? [...refTags] : []
+
+    _tags.forEach((_tag) => {
+      if (nextTags.map((t) => t.label).includes(_tag)) {
+        nextTags = nextTags.filter((rt) => rt.label !== _tag)
+        return
+      }
+      const [tagInfo] = refUsed.filter((t) => _tag === t.name)
+      const selectedTag = { label: tagInfo.name, value: tagInfo._id }
+      nextTags.push(selectedTag)
+    })
+    isProject
+      ? setFilterValues({
+          ...filterValues,
+          project_tags: nextTags
+        })
+      : setFilterValues({
+          ...filterValues,
+          note_tags: nextTags
+        })
+  }
+
+  useEffect(() => {
+    const fetchCriteria = async (isProject) => {
+      const _data = isProject ? await getProjectHelps() : await getNoteHelps()
+      isProject ? setProjectCriteria(_data) : setNoteCriteria(_data)
+    }
+
+    const fetchTags = async (isProject) => {
+      const _tags = isProject ? await getProjectTags() : await getNoteTags()
+      const _used = _tags.filter((tag) => !tag.isUsed)
+      isProject ? setUsedProjectTags(_used) : setUsedNoteTags(_used)
+    }
+
+    fetchCriteria(true)
+    fetchCriteria()
+    fetchTags(true)
+    fetchTags()
+  }, [])
 
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
@@ -80,14 +135,32 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
           />
         ) : null}
         {!showSaveFilter && showSecondaryContent === "project_tags" ? (
-          <AuxFilter onClose={() => setShowSecondaryContent(false)} />
+          <SupportModal
+            onClose={() => setShowSecondaryContent(false)}
+            usedTags={usedProjectTags}
+            criteria={projectCriteria}
+            onTagsSelect={(tags) => handleTagSelect(tags, true)}
+            selectedTags={filterValues.project_tags.map((t) => t.label)}
+          />
         ) : null}
         {!showSaveFilter && showSecondaryContent === "note_tags" ? (
-          <AuxFilter onClose={() => setShowSecondaryContent(false)} />
+          <SupportModal
+            onClose={() => setShowSecondaryContent(false)}
+            usedTags={usedNoteTags}
+            criteria={noteCriteria}
+            onTagsSelect={(tags) => handleTagSelect(tags)}
+            selectedTags={filterValues.note_tags.map((t) => t.label)}
+          />
         ) : null}
 
         {!showSaveFilter && showAuxContent && showSecondaryContent === "project" ? (
-          <AuxFilter onClose={() => setShowAuxContent(false)} />
+          <SupportModal
+            onClose={() => setShowAuxContent(false)}
+            usedTags={usedProjectTags}
+            criteria={projectCriteria}
+            onTagsSelect={(tags) => handleTagSelect(tags, true)}
+            selectedTags={filterValues.project_tags.map((t) => t.label)}
+          />
         ) : null}
       </CustomModalContent>
     </Modal>

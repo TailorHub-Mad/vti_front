@@ -55,6 +55,7 @@ const apoyo = () => {
   const isProjectCriteria =
     activeTab === HELP_MENU_TABS.projects_board ||
     activeTab === HELP_MENU_TABS.projects_alphabetic
+
   const [showImportModal, setShowImportModal] = useState(false)
   const [showExportModal, setShowExportModal] = useState(false)
   const [isCriterionModalOpen, setIsCriterionModalOpen] = useState(false)
@@ -140,6 +141,7 @@ const apoyo = () => {
 
   const fetchCriteria = async () => {
     setIsLoading(true)
+    setData(null)
     const _data = isProjectCriteria ? await getProjectHelps() : await getNoteHelps()
     setData(_data)
     setIsLoading(false)
@@ -207,6 +209,7 @@ const apoyo = () => {
         addSuccessMsg="Criterio añadido satisfactoriamente"
         onSuccessCreate={() => fetchCriteria()}
         criteria={data}
+        isProjectCriteria={isProjectCriteria}
         isCreation
         fetchData={() => fetchCriteria()}
       />

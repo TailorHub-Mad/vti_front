@@ -7,7 +7,7 @@ import { getPercentage } from "../functions/global"
 import { variantGeneralTag } from "./tabs"
 
 export const MAX_TABLE_WIDTH = 2400
-export const MIN_TABLE_WIDTH = 1110
+export const MIN_TABLE_WIDTH = 1100
 export const TABLE_COMPONENTS = {
   text: <Text />,
   count: <Text />,

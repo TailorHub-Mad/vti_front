@@ -37,7 +37,15 @@ export const TableHead = ({ templateColumns, head, handleSortElement }) => {
             onClick={handleOnClick}
             cursor={element?.config?.sort ? "pointer" : "default"}
           >
-            <Text>{element?.label}</Text>
+            <Text
+              textOverflow="ellipsis"
+              whiteSpace="nowrap"
+              overflow="hidden"
+              variant="d_xs_medium"
+              color="grey"
+            >
+              {element?.label.toString().toUpperCase()}
+            </Text>
           </Flex>
         )
       })}

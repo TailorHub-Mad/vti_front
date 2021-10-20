@@ -25,6 +25,7 @@ export const CloudButton = ({ onImport, onExport, isDisabled }) => {
         marginRight="16px"
         onClick={onOpen}
         isDisabled={isDisabled}
+        borderWidth="1px"
       >
         <UploadCloudIcon />
       </Button>
