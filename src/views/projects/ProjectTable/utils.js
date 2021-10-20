@@ -36,39 +36,41 @@ export const transformProjectData = (project) => ({
   config: { isFinished: Boolean(project.closed) }
 })
 
+//Para el cálculo  del ancho: Todas las columnas deben sumar MIN_TABLE_WIDTH - [(nº columnas - 1) * 32]
+
 export const TABLE_PROJECTS_HEAD = {
   selector: {
     label: "",
-    width: calcColWidth(20),
+    width: calcColWidth(10),
     type: "selector"
   },
   id: {
     label: "ID",
-    width: calcColWidth(60),
+    width: calcColWidth(40),
     type: "link",
     config: { sort: true, name: "ref" }
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(120),
+    width: calcColWidth(80),
     type: "text",
     config: { sort: true, name: "alias" }
   },
   sector: {
     label: "Sector",
-    width: calcColWidth(80),
+    width: calcColWidth(40),
     type: "text",
     config: { sort: true, name: "sector" }
   },
   focusPoint: {
     label: "Punto Focal",
-    width: calcColWidth(90),
+    width: calcColWidth(50),
     type: "text",
     config: { sort: true, name: "focusPoint" }
   },
   testSystems: {
     label: "Sistemas de ensayo",
-    width: calcColWidth(80),
+    width: calcColWidth(115),
     type: "tags",
     config: {
       variant: variantGeneralTag.SYSTEM
@@ -76,7 +78,7 @@ export const TABLE_PROJECTS_HEAD = {
   },
   tags: {
     label: "Tags de proyecto",
-    width: calcColWidth(287),
+    width: calcColWidth(115),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
@@ -84,17 +86,17 @@ export const TABLE_PROJECTS_HEAD = {
   },
   users: {
     label: "Usuarios",
-    width: calcColWidth(35),
+    width: calcColWidth(26),
     type: "count"
   },
   notes: {
     label: "Apuntes",
-    width: calcColWidth(20),
+    width: calcColWidth(26),
     type: "count"
   },
   options: {
     label: "",
-    width: calcColWidth(20),
+    width: calcColWidth(10),
     type: "options",
     config: {
       close: true
