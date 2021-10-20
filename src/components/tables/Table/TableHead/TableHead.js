@@ -14,7 +14,7 @@ export const TableHead = ({ templateColumns, head, handleSortElement }) => {
       left="0"
       bgColor="white"
       zIndex="10000"
-      gridColumnGap="32px"
+      gridColumnGap={`${((32 / MIN_TABLE_WIDTH) * 100).toFixed(2)}%`}
       alignItems="center"
       minWidth={MIN_TABLE_WIDTH}
       maxWidth={MAX_TABLE_WIDTH}

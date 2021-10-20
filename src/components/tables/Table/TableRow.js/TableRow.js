@@ -1,5 +1,6 @@
 import { Grid } from "@chakra-ui/react"
 import React from "react"
+import { MIN_TABLE_WIDTH } from "../../../../utils/constants/tables"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
 
 export const TableRow = ({
@@ -28,7 +29,7 @@ export const TableRow = ({
       padding="16px 0"
       bgColor={isSelected ? "blue.100" : "white"}
       _hover={{ bgColor: "blue.100" }}
-      gridColumnGap="32px"
+      gridColumnGap={`${((32 / MIN_TABLE_WIDTH) * 100).toFixed(2)}%`}
       {...props}
     >
       {Object.entries(item).map(([name, element], idx) => {
@@ -36,9 +37,9 @@ export const TableRow = ({
         if (head[name]?.type === "text") {
           return React.cloneElement(components[head[name]?.type], {
             children: element?.toString(),
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
+            // textOverflow: "ellipsis",
+            // whiteSpace: "nowrap",
+            // overflow: "hidden",
             key: `${name}-${idx}`,
             ...colorConfig
           })
@@ -60,9 +61,9 @@ export const TableRow = ({
             url: element?.link,
             key: `${name}-${idx}`,
 
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
+            // textOverflow: "ellipsis",
+            // whiteSpace: "nowrap",
+            // overflow: "hidden",
             paddingRight: "10px",
             ...colorConfig
           })
