@@ -4,7 +4,6 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
-  chakra,
   Checkbox,
   Flex,
   Grid,
