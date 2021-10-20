@@ -17,22 +17,24 @@ export const transformSubscriptionData = (subscription) => ({
   options: ""
 })
 
+//Para el cálculo  del ancho: Todas las columnas deben sumar MIN_TABLE_WIDTH - [(nº columnas - 1) * 32]
+
 export const TABLE_SUBSCRIPTIONS_HEAD = {
   id: {
     label: "Alias",
-    width: calcColWidth(80),
+    width: calcColWidth(68),
     type: "link",
     config: { sort: true, name: "alias" }
   },
   name: {
     label: "Usuario",
-    width: calcColWidth(120),
+    width: calcColWidth(90),
     type: "text",
     config: { sort: true, name: "user" }
   },
   projects: {
     label: "Proyectos",
-    width: calcColWidth(120),
+    width: calcColWidth(90),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
@@ -40,7 +42,7 @@ export const TABLE_SUBSCRIPTIONS_HEAD = {
   },
   systems: {
     label: "Proyectos",
-    width: calcColWidth(120),
+    width: calcColWidth(90),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
@@ -48,7 +50,7 @@ export const TABLE_SUBSCRIPTIONS_HEAD = {
   },
   notes: {
     label: "Proyectos",
-    width: calcColWidth(120),
+    width: calcColWidth(90),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
@@ -56,7 +58,7 @@ export const TABLE_SUBSCRIPTIONS_HEAD = {
   },
   tagProjects: {
     label: "Proyectos",
-    width: calcColWidth(120),
+    width: calcColWidth(90),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
@@ -64,7 +66,7 @@ export const TABLE_SUBSCRIPTIONS_HEAD = {
   },
   tagNotes: {
     label: "Tags de apunte",
-    width: calcColWidth(120),
+    width: calcColWidth(90),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
