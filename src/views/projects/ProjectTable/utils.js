@@ -99,7 +99,8 @@ export const TABLE_PROJECTS_HEAD = {
     width: calcColWidth(10),
     type: "options",
     config: {
-      close: true
+      close: true,
+      subscribed: true
     }
   }
 }

@@ -6,7 +6,7 @@ const SubscriptionService = () => {
   // CRUD
 
   const getSubscriptions = (data = "", limit = 0, offset = 0) =>
-    execute(instance.get(`/sector?limit=${limit}&offset=${offset}${data}`))
+    execute(instance.get(`/subscribed/${data}?limit=${limit}&offset=${offset}`))
   const getSubscription = (id) => execute(instance.get(`/sector/${id}`))
   const createSubscription = (system) =>
     execute(instance.post("/testSystem", system))

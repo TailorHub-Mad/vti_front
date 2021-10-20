@@ -1,20 +1,27 @@
 import { DeleteIcon } from "@chakra-ui/icons"
 import { Box, Flex, Text, useOutsideClick } from "@chakra-ui/react"
-import React, { useRef, useState } from "react"
+import React, { useContext, useRef, useState } from "react"
+import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
+import { RoleType } from "../../../../utils/constants/global"
 import { ICONS_PROPS_16 } from "../../../../utils/constants/icons"
 import { HeartIcon } from "../../../icons/HeartIcon"
 import { OptionsIcon } from "../../../icons/OptionsIcon"
+import { SubscribeIcon } from "../../../icons/SubscribeIcon"
 import { OptionsMenu } from "../../../navigation/OptionsMenu/OptionsMenu"
 import { OptionsMenuItem } from "../../../navigation/OptionsMenu/OptionsMenuItem/OptionsMenuItem"
 
 export const MessageCardHeader = ({
   isFavorite,
+  isSubscribe,
   title,
   onClick,
   onDelele,
+  onSubscribe,
   onFavorite,
   ...props
 }) => {
+  const { role } = useContext(ApiAuthContext)
+
   const [showOptions, setShowOptions] = useState(false)
 
   const handleOnDelete = () => {
@@ -25,6 +32,11 @@ export const MessageCardHeader = ({
   const handleOnFavorite = () => {
     setShowOptions(false)
     onFavorite(isFavorite)
+  }
+
+  const handleOnSubscribe = () => {
+    setShowOptions(false)
+    onSubscribe(isSubscribe)
   }
 
   const ref = useRef(null)
@@ -59,6 +71,19 @@ export const MessageCardHeader = ({
               {isFavorite ? "Eliminar favorito" : "Favorito"}
             </Text>
           </OptionsMenuItem>
+          {role === RoleType.USER && (
+            <OptionsMenuItem onClick={handleOnSubscribe}>
+              <SubscribeIcon
+                {...ICONS_PROPS_16}
+                marginRight="4px"
+                color="blue.500"
+              />
+              <Text variant="d_xs_regular" marginRight="2px">
+                {isSubscribe ? "Darme de baja" : "Suscribirme"}
+              </Text>
+            </OptionsMenuItem>
+          )}
+
           <OptionsMenuItem onClick={handleOnDelete} isLast>
             <DeleteIcon {...ICONS_PROPS_16} marginRight="4px" color="error" />
             <Text variant="d_xs_regular" color="error" marginRight="2px">

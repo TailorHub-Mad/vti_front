@@ -1,6 +1,8 @@
 import { DeleteIcon } from "@chakra-ui/icons"
 import { Checkbox, Flex, Text } from "@chakra-ui/react"
-import React from "react"
+import React, { useContext } from "react"
+import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
+import { RoleType } from "../../../utils/constants/global"
 import { ICONS_REFERENCE } from "../../../utils/constants/icons"
 
 const notesMenuOptions = {
@@ -18,11 +20,6 @@ const notesMenuOptions = {
     label: "Sistemas de ensayo",
     activeIcon: ICONS_REFERENCE.subscribe,
     icon: ICONS_REFERENCE.subscribe_line
-  },
-  tags: {
-    label: "Tags",
-    activeIcon: ICONS_REFERENCE.tag_link,
-    icon: ICONS_REFERENCE.tag_line
   }
 }
 
@@ -33,11 +30,14 @@ export const SubscriptionsMenu = ({
   handleSelectAllRows,
   isChecked,
   onDelete,
-  selectedRows
+  selectedRows,
+  noCheck
 }) => {
+  const { role } = useContext(ApiAuthContext)
+
   const handleLabel = () => {
     switch (currentState) {
-      case "projects":
+      case "project":
         return "Proyectos"
       case "notes":
         return "Apuntes"
@@ -51,23 +51,26 @@ export const SubscriptionsMenu = ({
   return (
     <>
       <Flex alignItems="center" gridGap="16px">
-        <Flex alignItems="center" gridGap="6px">
-          <Checkbox onChange={handleSelectAllRows} isChecked={isChecked} />
-          {Object.keys(selectedRows).length > 0 && (
-            <Flex
-              alignItems="center"
-              justifyContent="center"
-              onClick={onDelete}
-              cursor="pointer"
-              gridGap="6px"
-            >
-              <DeleteIcon color="error" cursor="pointer" />
-              <Text color="error" marginTop="6px" cursor="pointer">
-                Eliminar
-              </Text>
-            </Flex>
-          )}
-        </Flex>
+        {noCheck || role === RoleType.ADMIN || (
+          <Flex alignItems="center" gridGap="6px">
+            <Checkbox onChange={handleSelectAllRows} isChecked={isChecked} />
+
+            {Object.keys(selectedRows).length > 0 && (
+              <Flex
+                alignItems="center"
+                justifyContent="center"
+                onClick={onDelete}
+                cursor="pointer"
+                gridGap="6px"
+              >
+                <DeleteIcon color="error" cursor="pointer" />
+                <Text color="error" marginTop="6px" cursor="pointer">
+                  Eliminar
+                </Text>
+              </Flex>
+            )}
+          </Flex>
+        )}
 
         {Object.entries(notesMenuOptions).map(([name, item]) => {
           const { icon, activeIcon, label } = item
@@ -81,10 +84,16 @@ export const SubscriptionsMenu = ({
               height="24px"
               align="center"
               cursor="pointer"
+              role="group"
               onClick={() => onChange(name)}
             >
-              <Icon mr="4px" color={color} />
-              <Text variant="d_s_medium" mt="4px" color={color}>
+              <Icon mr="4px" color={color} _groupHover={{ color: "blue.500" }} />
+              <Text
+                variant="d_s_medium"
+                mt="4px"
+                color={color}
+                _groupHover={{ color: "blue.500" }}
+              >
                 {label}
               </Text>
             </Flex>

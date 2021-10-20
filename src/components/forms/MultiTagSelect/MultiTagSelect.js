@@ -70,7 +70,13 @@ export const MultiTagSelect = ({
             return (
               value.value && (
                 <Flex alignItems="center" key={`${value.value}-${idx}`}>
-                  <Tag variant="pale_yellow" mb="8px" mr="8px" height="32px">
+                  <Tag
+                    variant="pale_yellow"
+                    mb="8px"
+                    mr="8px"
+                    height="32px"
+                    width="auto"
+                  >
                     {value.label}
                     <CloseIcon
                       width="16px"

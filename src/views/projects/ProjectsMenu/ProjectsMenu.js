@@ -31,6 +31,7 @@ export const ProjectsMenu = ({ fetchState = fetchType.ALL, onChange }) => {
               height="24px"
               align="center"
               cursor="pointer"
+              role="group"
               onClick={() => onChange(item.value)}
               ml={idx !== 0 ? "16px" : "0"}
             >
@@ -38,11 +39,12 @@ export const ProjectsMenu = ({ fetchState = fetchType.ALL, onChange }) => {
                 isActive ? (
                   <item.active_icon color="blue.500" />
                 ) : (
-                  <item.icon color="grey" />
+                  <item.icon color="grey" _groupHover={{ color: "blue.500" }} />
                 )
               ) : null}
               <Text
                 variant="d_s_medium"
+                _groupHover={{ color: "blue.500" }}
                 mt="4px"
                 color={isActive ? "blue.500" : "grey"}
               >

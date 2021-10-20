@@ -32,8 +32,6 @@ const user = () => {
 
   const user = projectsData && projectsData[0].users?.find((t) => t._id === userId)
 
-  console.log("pasa por aqio")
-
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (

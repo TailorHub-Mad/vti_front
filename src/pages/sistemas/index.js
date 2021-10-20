@@ -34,6 +34,7 @@ import {
 import { generateFilterQuery } from "../../utils/functions/filter"
 import { TESTSYSTEMS_FILTER_KEYS } from "../../utils/constants/filter"
 import { TestsSystemsFilterModal } from "../../views/test_systems/TestSystemsFilter/TestSystemsFilterModal"
+import useUserApi from "../../hooks/api/useUserApi"
 
 const SYSTEMS_GROUP_OPTIONS = [
   {
@@ -52,9 +53,10 @@ const SYSTEMS_GROUP_OPTIONS = [
 
 const sistemas = () => {
   // Hooks
-  const { isLoggedIn, role } = useContext(ApiAuthContext)
+  const { isLoggedIn, role, user } = useContext(ApiAuthContext)
   const { deleteSystem, createSystem } = useSystemApi()
   const { showToast } = useContext(ToastContext)
+  const { updateUser } = useUserApi()
 
   const isAdmin = role === RoleType.ADMIN
 
@@ -210,14 +212,42 @@ const sistemas = () => {
   const handleUpdate = (data) => {
     if (isGrouped) {
       const [id, { key }] = Object.entries(data)[0]
-      const project = systemsData[key].find((project) => project._id === id)
-      setSystemToUpdate(project)
+      const system = systemsData[key].find((system) => system._id === id)
+      setSystemToUpdate(system)
     } else {
-      const project = systemsData.find((project) => project._id === data)
-      setSystemToUpdate(project)
+      const system = systemsData.find((system) => system._id === data)
+      setSystemToUpdate(system)
     }
 
     setIsSystemModalOpen(true)
+  }
+
+  const formatUpdateUsers = (user, subscribed) => {
+    return {
+      alias: user.alias,
+      name: user.name,
+      subscribed,
+      department: user.department
+    }
+  }
+
+  const handleSubscribe = async (data) => {
+    const { subscribed, _id } = user
+
+    const listToUpdate = subscribed["testSystems"]
+
+    if (isGrouped) {
+      const [id] = Object.entries(data)[0]
+      listToUpdate.push(id)
+      subscribed["testSystems"] = listToUpdate
+    } else {
+      listToUpdate.push(data)
+      subscribed["testSystems"] = listToUpdate
+    }
+
+    const formatUser = formatUpdateUsers(user, subscribed)
+    await updateUser(_id, formatUser)
+    await mutate()
   }
 
   // Filters
@@ -359,6 +389,7 @@ const sistemas = () => {
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(systemsId) => handleOpenPopup(systemsId, DeleteType.MANY)}
           onEdit={handleUpdate}
+          onSubscribe={handleSubscribe}
           onGroup={handleOnGroup}
           groupOption={getGroupOptionLabel(
             SYSTEMS_GROUP_OPTIONS,

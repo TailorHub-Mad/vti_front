@@ -11,7 +11,7 @@ export const SubscriptionCard = ({
   isChecked
 }) => {
   return (
-    <Card height="162px">
+    <Card maxHeight="148px">
       <SubscriptionCardHeader
         title={subscription?.title}
         onClick={onClick}
@@ -22,10 +22,9 @@ export const SubscriptionCard = ({
       <SubscriptionCardInfo
         client={subscription?.client}
         updatedAt={new Date(subscription?.updatedAt).toLocaleDateString()}
-        marginBottom="18px"
         marginTop="6px"
       />
-      <SubscriptionCardTags tags={subscription.tags} />
+      <SubscriptionCardTags pb="16px" tags={subscription.tags} />
     </Card>
   )
 }

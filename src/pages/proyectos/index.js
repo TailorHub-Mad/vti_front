@@ -37,6 +37,7 @@ import { generateFilterQuery } from "../../utils/functions/filter"
 import { ProjectsFilterModal } from "../../views/projects/ProjectFilter/ProjectsFilterModal"
 import { PROJECTS_FILTER_KEYS } from "../../utils/constants/filter"
 import { ProjectsMenu } from "../../views/projects/ProjectsMenu/ProjectsMenu"
+import useUserApi from "../../hooks/api/useUserApi"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -55,9 +56,10 @@ const PROJECTS_GROUP_OPTIONS = [
 
 const proyectos = () => {
   // Hooks
-  const { isLoggedIn, role } = useContext(ApiAuthContext)
+  const { isLoggedIn, role, user } = useContext(ApiAuthContext)
   const { deleteProject, createProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
+  const { updateUser } = useUserApi()
 
   const isAdmin = role === RoleType.ADMIN
 
@@ -255,6 +257,34 @@ const proyectos = () => {
     setIsProjectModalOpen(true)
   }
 
+  const formatUpdateUsers = (user, subscribed) => {
+    return {
+      alias: user.alias,
+      name: user.name,
+      subscribed,
+      department: user.department
+    }
+  }
+
+  const handleSubscribe = async (data) => {
+    const { subscribed, _id } = user
+
+    const listToUpdate = subscribed["projects"]
+
+    if (isGrouped) {
+      const [id] = Object.entries(data)[0]
+      listToUpdate.push(id)
+      subscribed["projects"] = listToUpdate
+    } else {
+      listToUpdate.push(data)
+      subscribed["projects"] = listToUpdate
+    }
+
+    const formatUser = formatUpdateUsers(user, subscribed)
+    await updateUser(_id, formatUser)
+    await mutate()
+  }
+
   // Filters
   const onSearch = (search) => {
     if (!search) {
@@ -411,6 +441,7 @@ const proyectos = () => {
             fetchOptions[fetchOption.GROUP]
           )}
           handleSortElement={handleSortElement}
+          onSubscribe={handleSubscribe}
         />
       )}
     </Page>

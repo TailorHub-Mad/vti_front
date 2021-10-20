@@ -220,11 +220,20 @@ const apuntes = () => {
     setIsNoteModalOpen(true)
   }
 
-  const formatUpdateUsers = (user, favorites) => {
+  const formatUpdateUsersFavorites = (user, favorites) => {
     return {
       alias: user.alias,
       name: user.name,
       favorites,
+      department: user.department
+    }
+  }
+
+  const formatUpdateUsersSubscribed = (user, subscribed) => {
+    return {
+      alias: user.alias,
+      name: user.name,
+      subscribed,
       department: user.department
     }
   }
@@ -241,8 +250,24 @@ const apuntes = () => {
       favorites.notes.push(id)
     }
 
-    const formatUser = formatUpdateUsers(user, favorites)
+    const formatUser = formatUpdateUsersFavorites(user, favorites)
 
+    await updateUser(_id, formatUser)
+    await mutate()
+  }
+
+  const handleSubscribe = async (id, state) => {
+    const { subscribed, _id } = user
+    const { notes: subscribedNotes } = subscribed
+
+    if (state) {
+      remove(subscribedNotes, (e) => e === id)
+      subscribed.notes = subscribedNotes
+    } else {
+      subscribed.notes.push(id)
+    }
+
+    const formatUser = formatUpdateUsersSubscribed(user, subscribed)
     await updateUser(_id, formatUser)
     await mutate()
   }
@@ -452,6 +477,7 @@ const apuntes = () => {
                 checkIsFavorite={checkIsFavorite}
                 onDelete={setNoteToDelete}
                 handleFavorite={handleFavorite}
+                handleSubscribe={handleSubscribe}
               />
             )}
           </>
