@@ -13,8 +13,6 @@ export const SubscriptionsGrid = ({
     setSelectedRows([])
   }, [subscriptions?.length])
 
-  console.log("subcription", subscriptions)
-
   return (
     <Grid
       templateColumns="repeat(auto-fill, 282px)"

@@ -34,12 +34,14 @@ const suscripcion = () => {
 
   // States
   const [fetchState, setFetchState] = useState(fetchType.ALL)
+  const [currentState, setCurrentState] = useState("projects")
+  const [currentStateFetch, setCurrentStateFetch] = useState("project")
   const [fetchOptions, setFetchOptions] = useState({
-    [fetchOption.FILTER]: "project"
+    [fetchOption.FILTER]: currentStateFetch
   })
   const [deleteType, setDeleteType] = useState(null)
   const [subscriptionsToDelete, setSubscriptionsToDelete] = useState(null)
-  const [currentState, setCurrentState] = useState("projects")
+
   const [subscriptionsData, setSubscriptionsData] = useState([])
 
   // Fetch
@@ -59,7 +61,7 @@ const suscripcion = () => {
         _id: d._id,
         title: d.alias,
         updatedAt: d.updatedAt,
-        tags: d.notes.map((n) => ({ name: n.title }))
+        tags: d?.notes?.map((n) => ({ name: n.title }))
       }
     })
   }
@@ -70,7 +72,7 @@ const suscripcion = () => {
         _id: d._id,
         title: d.alias,
         updatedAt: d.updatedAt,
-        tags: d.notes.map((n) => ({ name: n.title }))
+        tags: d?.notes?.map((n) => ({ name: n.title }))
       }
     })
   }
@@ -114,15 +116,17 @@ const suscripcion = () => {
   }
 
   const handleState = (state) => {
+    const fetchState = state === "projects" ? "project" : state
+
     setFetchOptions({
-      [fetchOption.FILTER]: state === "projects" ? "project" : state
+      [fetchOption.FILTER]: fetchState
     })
     setCurrentState(state)
+    setCurrentStateFetch(fetchState)
   }
 
   // Handlers CRUD
   const handleOpenPopup = (subscriptionsToDelete, type) => {
-    console.log("estamos aqui", subscriptionsToDelete, type)
     setDeleteType(type)
     setSubscriptionsToDelete(subscriptionsToDelete)
   }
@@ -232,14 +236,14 @@ const suscripcion = () => {
     if (!search) {
       setFetchState(fetchType.ALL)
       setFetchOptions({
-        [fetchOption.SEARCH]: null
+        [fetchOption.FILTER]: currentStateFetch
       })
       return
     }
 
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: search
+      [fetchOption.SEARCH]: { data: currentStateFetch, search }
     })
   }
 
@@ -260,7 +264,9 @@ const suscripcion = () => {
       </Popup>
 
       <PageHeader>
-        <BreadCrumbs customURL={`${PATHS.subscriptions}/${subscription?.name}`} />
+        <BreadCrumbs
+          customURL={`${PATHS.subscriptions}/${subscription?.name || ""}`}
+        />
         {isToolbarHidden() && (
           <ToolBar
             onSearch={onSearch}

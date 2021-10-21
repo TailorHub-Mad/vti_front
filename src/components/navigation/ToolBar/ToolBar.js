@@ -23,6 +23,7 @@ export const ToolBar = ({
   noSearch,
   noAdd,
   fetchState,
+  searchDate,
   icon
 }) => {
   const handleOnGroup = (activeItem) => onGroup(activeItem)
@@ -54,6 +55,7 @@ export const ToolBar = ({
           <Input
             placeholder={searchPlaceholder ?? "Busqueda por ID"}
             paddingLeft="40px"
+            type={searchDate ? "date" : undefined}
             variant="white"
             onChange={(e) => onSearch(e.target.value)}
             color="yellow"

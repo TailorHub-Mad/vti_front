@@ -1,5 +1,6 @@
+import { isEmpty } from "lodash"
 import React, { useContext, useEffect, useState } from "react"
-import { NotificationActiveLineIcon } from "../components/icons/NotificationActiveLineIcon"
+import { AddNotificationIcon } from "../components/icons/AddNotificationIcon"
 import { Page } from "../components/layout/Pages/Page"
 import { PageBody } from "../components/layout/Pages/PageBody/PageBody"
 import { PageHeader } from "../components/layout/Pages/PageHeader/PageHeader"
@@ -11,11 +12,8 @@ import useNotificationApi from "../hooks/api/useNotificationApi"
 import { ApiAuthContext } from "../provider/ApiAuthProvider"
 import { ToastContext } from "../provider/ToastProvider"
 import { notificationFetchHandler } from "../swr/notification.swr"
-import { NOTIFICATIONS_FILTER_KEYS } from "../utils/constants/filter"
 import { fetchOption, fetchType } from "../utils/constants/swr"
 import { errorHandler } from "../utils/errors"
-import { generateFilterQuery } from "../utils/functions/filter"
-import { checkDataIsEmpty } from "../utils/functions/global"
 import { LoadingView } from "../views/common/LoadingView"
 import { ViewEmptyState } from "../views/common/ViewEmptyState"
 import { ViewNotFoundState } from "../views/common/ViewNotFoundState"
@@ -24,47 +22,10 @@ import { NotificationsFilterModal } from "../views/notifications/NotificationsFi
 import { NotificationsGroup } from "../views/notifications/NotificationsGroup/NotificationsGroup"
 import { NotificationsMenu } from "../views/notifications/NotificationsMenu/NotificationsMenu"
 
-const mock = {
-  yesterday: [
-    {
-      _id: "987132984798137fdg298498127ss3",
-      description: "El proyecto *AliasPR tiene un nuevo apunte.",
-      urls: [
-        {
-          label: "AliasPR",
-          model: "project",
-          id: "9871329847981372984981ss273"
-        }
-      ],
-      deleteTime: false,
-      unRead: true,
-      type: "Proyecto",
-      pin: true,
-      owner: "Administrador"
-    },
-    {
-      _id: "9871329847981372dfgdfg984981273",
-      description: "El proyecto *AliasPR tiene un nuevo apunte.",
-      urls: [
-        {
-          label: "AliasPR",
-          model: "project",
-          id: "9871329847981372984981273"
-        }
-      ],
-      deleteTime: true,
-      unRead: false,
-      type: "Proyecto",
-      pin: false,
-      owner: "María losada"
-    }
-  ]
-}
-
 const notificaciones = () => {
   // Hooks
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { deleteNotification } = useNotificationApi()
+  const { deleteNotification, pinNotification } = useNotificationApi()
   const { showToast } = useContext(ToastContext)
 
   // States
@@ -85,11 +46,10 @@ const notificaciones = () => {
 
   const handleNotificationsData = (isEmptyData) => {
     if (!data || isEmptyData) return null
-    return mock
-    // return data[0]?.notifications
+    return data
   }
 
-  const isEmptyData = checkDataIsEmpty(data)
+  const isEmptyData = isEmpty(data)
   const notificationsData = handleNotificationsData(isEmptyData)
 
   // Handlers views
@@ -102,7 +62,7 @@ const notificaciones = () => {
 
   const isMenuHidden = () => {
     if (isLoading) return false
-    if (isEmptyData && fetchState === fetchType.FILTER) return false
+    if (fetchState === fetchType.FILTER) return false
     if (isEmptyData && fetchState === fetchType.ALL) return false
 
     return true
@@ -129,7 +89,7 @@ const notificaciones = () => {
   const handleDelete = async () => {
     try {
       await deleteNotification(notificationToDelete)
-      showToast("Notificación borrado correctamente")
+      showToast("Notificación borrada correctamente")
       await mutate()
       setNotificationToDelete(null)
     } catch (error) {
@@ -137,9 +97,10 @@ const notificaciones = () => {
     }
   }
 
-  const handleOnPin = () => {
+  const handleOnPin = async (id) => {
     try {
-      console.log("OnPin")
+      await pinNotification(id)
+      await mutate()
     } catch (error) {
       errorHandler(error)
     }
@@ -170,7 +131,7 @@ const notificaciones = () => {
       return
     }
 
-    const filter = generateFilterQuery(NOTIFICATIONS_FILTER_KEYS, values)
+    const filter = values.join("&type=")
 
     setFetchState(fetchType.FILTER)
     setFetchOptions({
@@ -229,10 +190,11 @@ const notificaciones = () => {
             onFilter={handleOnOpenFilter}
             addLabel="Añadir notificación"
             searchPlaceholder="Busqueda por ID, Proyecto"
-            icon={<NotificationActiveLineIcon />}
+            icon={<AddNotificationIcon />}
             fetchState={fetchState}
             noGroup
             noImport
+            searchDate
           />
         )}
       </PageHeader>
@@ -247,8 +209,8 @@ const notificaciones = () => {
       </PageMenu>
       <PageBody height="calc(100vh - 140px)">
         {isLoading ? <LoadingView mt="-200px" /> : null}
-        {isEmptyData && fetchState !== fetchType.ALL ? (
-          <ViewNotFoundState />
+        {isEmptyData ? (
+          <ViewNotFoundState noBack text="No hay notificaciones" />
         ) : isEmptyData ? (
           <ViewEmptyState
             message="Añadir notificaciones a la plataforma"

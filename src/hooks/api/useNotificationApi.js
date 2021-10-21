@@ -1,31 +1,36 @@
 import NotificationService from "../../services/notification.service"
 
 const useNotificationApi = () => {
-  const noteService = NotificationService()
+  const notificationService = NotificationService()
 
   // CRUD
-  const getNotifications = () => noteService.getNotifications()
-  const getNotification = (_, id) => noteService.getNotification(id)
-  const createNotification = (data) => noteService.createNotification(data)
-  const deleteNotification = (id) => noteService.deleteNotification(id)
+  const getNotifications = () => notificationService.getNotifications()
+  const getNotification = (_, id) => notificationService.getNotification(id)
+  const createNotification = (data) => notificationService.createNotification(data)
+  const deleteNotification = (id) => notificationService.deleteNotification(id)
+  const pinNotification = (id) => notificationService.pinNotification(id)
 
   // GROUP & FILTER
   const getFilterNotifications = (_, data) =>
-    noteService.getFilterNotifications(data)
+    notificationService.getFilterNotifications(data)
   const getSearchNotifications = (_, data) =>
-    noteService.getSearchNotifications(data)
+    notificationService.getSearchNotifications(data)
 
-  const getNotesNotifications = () => noteService.getNotesNotifications()
-  const getContainerNotifications = () => noteService.getContainerNotifications()
-  const getManteinanceNotifications = () => noteService.getManteinanceNotifications()
-  const getBehaviourNotifications = () => noteService.getBehaviourNotifications()
-  const getFixedNotifications = () => noteService.getFixedNotifications()
+  const getNotesNotifications = () => notificationService.getNotesNotifications()
+  const getContainerNotifications = () =>
+    notificationService.getContainerNotifications()
+  const getManteinanceNotifications = () =>
+    notificationService.getManteinanceNotifications()
+  const getBehaviourNotifications = () =>
+    notificationService.getBehaviourNotifications()
+  const getFixedNotifications = () => notificationService.getFixedNotifications()
 
   return {
     getNotifications,
     getNotification,
     createNotification,
     deleteNotification,
+    pinNotification,
 
     getFilterNotifications,
     getSearchNotifications,
