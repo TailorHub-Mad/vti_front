@@ -8,7 +8,7 @@ export const TagRow = ({ tags = [], variant, ...props }) => {
   const ref = useRef()
 
   const [remainingTagsCount, setRemainingTagsCount] = useState(0)
-  const [size, setSize] = useState([0, 0])
+  const [size, setSize] = useState()
   const [max, setMax] = useState(tags?.length)
 
   useEffect(() => {
@@ -16,15 +16,15 @@ export const TagRow = ({ tags = [], variant, ...props }) => {
     setMax(newMax)
     setRemainingTagsCount(tags.length < newMax ? 0 : tags.length - newMax)
   }, [size])
-
+  function updateSize() {
+    setSize(ref?.current?.offsetWidth)
+  }
   useEffect(() => {
-    function updateSize() {
-      setSize(ref?.current?.offsetWidth)
-    }
     window?.addEventListener("resize", updateSize)
     updateSize()
+
     return () => window?.removeEventListener("resize", updateSize)
-  }, [])
+  }, [updateSize])
 
   return (
     <Box

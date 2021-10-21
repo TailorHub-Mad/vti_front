@@ -54,19 +54,19 @@ const suscripciones = () => {
 
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: search
+      [fetchOption.SEARCH]: { data: "", search }
     })
   }
 
-  const handleSortElement = (data) => {
-    const { name, order } = data
+  // const handleSortElement = (data) => {
+  //   const { name, order } = data
 
-    if (!name || !order) return
+  //   if (!name || !order) return
 
-    setFetchOptions({
-      [fetchOption.ORDER]: `&testSystems_${name}=${order}`
-    })
-  }
+  //   setFetchOptions({
+  //     [fetchOption.ORDER]: `&testSystems_${name}=${order}`
+  //   })
+  // }
 
   useEffect(() => {
     if (!user) return
@@ -99,7 +99,7 @@ const suscripciones = () => {
           ) : (
             <SubscriptionsTable
               subscriptions={subscriptionsData}
-              handleSortElement={handleSortElement}
+              // handleSortElement={handleSortElement}
             />
           )}
         </>

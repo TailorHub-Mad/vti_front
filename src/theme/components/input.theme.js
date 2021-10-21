@@ -11,6 +11,9 @@ const inputThemes = {
         fontSize: ["16px", "17px"],
         lineHeight: ["21px", "18.70px"],
         boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)",
+        placeholder: {
+          color: "red"
+        },
         _disabled: {
           _hover: {
             borderColor: "light_grey"

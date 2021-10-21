@@ -11,3 +11,7 @@ export const destructuringDate = (value) => {
 export const formatDateToInput = ({ year, month, day }) => {
   return `${year}-${String(month).padStart(2, "0")}-${String(+day).padStart(2, "0")}`
 }
+
+export const formatDateToFetch = ({ year, month, day }) => {
+  return `${String(+day).padStart(2, "0")}/${String(month).padStart(2, "0")}/${year}`
+}

@@ -76,7 +76,7 @@ export const Login = () => {
               <FormController
                 label="Email"
                 mb="24px"
-                error={hasError && "Ha ocurrido un error"}
+                error={hasError && "Las credenciales no son correctas"}
               >
                 <Input
                   name="email"

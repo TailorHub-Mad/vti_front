@@ -29,7 +29,7 @@ export const NewNotificationModal = ({ isOpen, onClose, ...props }) => {
   const handleSubmit = async () => {
     try {
       setIsSubmitting(true)
-      await createNotification({ ...values })
+      await createNotification(values)
       setValues(initialValues)
       await mutate(SWR_CACHE_KEYS.notifications)
       showToast("Notificación enviada")

@@ -13,6 +13,7 @@ export const TABLE_COMPONENTS = {
   count: <Text />,
   link: <LinkItem />,
   selector: <Checkbox marginLeft="8px" colorScheme="blue" />,
+  other: <Checkbox marginLeft="8px" colorScheme="blue" />,
   tags: <TagRow variant={variantGeneralTag.NOTE} />,
   options: <OptionsMenuRow />
 }

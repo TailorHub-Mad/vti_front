@@ -4,7 +4,7 @@ import { ToastContext } from "../../../provider/ToastProvider"
 import { TabBar } from "../../navigation/TabBar/TabBar"
 import { Popup } from "../../overlay/Popup/Popup"
 
-export const Page = ({ children }) => {
+export const Page = ({ children, ...props }) => {
   const [isOpen, setIsOpen] = useState(true)
   const { isToastOpen, message, toastType } = useContext(ToastContext)
 
@@ -27,6 +27,7 @@ export const Page = ({ children }) => {
         bgSize="cover"
         bgPosition="center"
         h="100vh"
+        {...props}
       >
         {children}
       </Box>

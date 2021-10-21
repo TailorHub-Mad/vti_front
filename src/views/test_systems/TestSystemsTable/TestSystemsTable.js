@@ -1,10 +1,12 @@
-import { useMemo } from "react"
+import { useContext, useMemo } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
 import useTableActions from "../../../hooks/useTableActions"
+import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
+import { RoleType } from "../../../utils/constants/global"
 import { fetchType } from "../../../utils/constants/swr"
 import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
-import { formatSystem, TABLE_SYSTEMS_HEAD } from "./utils"
+import { formatSystem, TABLE_SYSTEMS_HEAD, TABLE_SYSTEMS_HEAD_USER } from "./utils"
 
 export const TestSystemsTable = ({
   systems,
@@ -16,8 +18,11 @@ export const TestSystemsTable = ({
   onSubscribe,
   onFilter,
   groupOption,
-  handleSortElement
+  handleSortElement,
+  onFavorite
 }) => {
+  const { role } = useContext(ApiAuthContext)
+
   const isGrouped = fetchState === fetchType.GROUP
 
   const { selectedRows, setSelectedRows, handleSelectAllRows, handleRowSelect } =
@@ -36,17 +41,21 @@ export const TestSystemsTable = ({
     return isGrouped ? onDelete(selectedRows) : onDelete(systemsId[0])
   }
 
+  const systemsHead =
+    role === RoleType.ADMIN ? TABLE_SYSTEMS_HEAD : TABLE_SYSTEMS_HEAD_USER
+
   const systemsData = formatSystem(systems, fetchState)
   const configTable = {
     components: TABLE_COMPONENTS,
     head: {
-      ...TABLE_SYSTEMS_HEAD,
+      ...systemsHead,
       options: {
-        ...TABLE_SYSTEMS_HEAD.options,
+        ...systemsHead.options,
         onDelete,
         onEdit,
         onSubscribe,
-        isGrouped
+        isGrouped,
+        onFavorite
       }
     }
   }

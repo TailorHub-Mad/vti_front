@@ -110,8 +110,9 @@ export const ProjectNotes = ({ notesData = [], project, onGroup, onFilter }) => 
     try {
       await deleteNote(noteToDelete)
       showToast("Apunte borrado correctamente")
-      await mutate(SWR_CACHE_KEYS.project)
+      await mutate([SWR_CACHE_KEYS.project, project._id])
       if (showNoteDetails) setShowNoteDetails(false)
+      setNoteToDelete(null)
     } catch (error) {
       errorHandler(error)
     }
@@ -219,7 +220,7 @@ export const ProjectNotes = ({ notesData = [], project, onGroup, onFilter }) => 
         cancelText="Cancelar"
         color="error"
         isOpen={noteToDelete}
-        onConfirm={handleDelete}
+        onConfirm={() => handleDelete(noteToDelete)}
         onClose={() => setNoteToDelete(null)}
       >
         {`¿Desea eliminar ${getFieldObjectById(notesData, "ref", noteToDelete)}?`}
@@ -322,7 +323,7 @@ export const ProjectNotes = ({ notesData = [], project, onGroup, onFilter }) => 
                 subscribedUsers={null} // TOPO -> review
                 checkIsSubscribe={checkIsSubscribe}
                 checkIsFavorite={checkIsFavorite}
-                onDelete={setNoteToDelete}
+                onDelete={(id) => setNoteToDelete(id)}
                 handleFavorite={handleFavorite}
               />
             )}

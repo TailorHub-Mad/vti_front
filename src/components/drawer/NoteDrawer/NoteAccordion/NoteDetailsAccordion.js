@@ -38,7 +38,7 @@ export const NoteDetailsAccordion = ({
   }
 
   return (
-    <Accordion allowToggle allowMultiple {...props}>
+    <Accordion width="100%" allowToggle allowMultiple {...props}>
       {!isMessage && description ? (
         <NoteAccordionItem title="Descripción" icon={<PageLineIcon mr="8px" />}>
           {description}
@@ -74,10 +74,15 @@ export const NoteDetailsAccordion = ({
       ) : null}
 
       {!isMessage && noteTags ? (
-        <NoteAccordionItem title="Tags de apunte" icon={<TagLineIcon mr="8px" />}>
+        <NoteAccordionItem
+          width="100%"
+          title="Tags de apunte"
+          icon={<TagLineIcon mr="8px" />}
+        >
           <TagRow
             tags={formatTags(noteTags, "name")}
             variant={variantGeneralTag.NOTE}
+            width="100%"
           />
         </NoteAccordionItem>
       ) : null}

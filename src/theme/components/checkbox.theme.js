@@ -17,6 +17,11 @@ export const Checkbox = {
       label: {
         fontSize: "14px",
         lineHeight: "normal"
+      },
+      multi: {
+        input: {
+          bgColor: "red"
+        }
       }
     }
   }

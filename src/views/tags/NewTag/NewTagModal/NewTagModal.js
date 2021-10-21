@@ -38,7 +38,7 @@ export const NewTagModal = ({
 
   const { mutate } = useSWRConfig()
 
-  const [values, setValues] = useState()
+  const [values, setValues] = useState(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)

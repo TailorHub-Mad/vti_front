@@ -1,10 +1,16 @@
-import React, { useMemo } from "react"
+import React, { useContext, useMemo } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import useTableActions from "../../../hooks/useTableActions"
+import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
+import { RoleType } from "../../../utils/constants/global"
 import { fetchType } from "../../../utils/constants/swr"
 import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
 import { ProjectsTableHeader } from "./ProjectsTableHeader"
-import { formatProject, TABLE_PROJECTS_HEAD } from "./utils"
+import {
+  formatProject,
+  TABLE_PROJECTS_HEAD,
+  TABLE_PROJECTS_HEAD_USER
+} from "./utils"
 
 export const ProjectsTable = ({
   projects,
@@ -17,8 +23,11 @@ export const ProjectsTable = ({
   onFilter,
   groupOption,
   handleSortElement,
-  onSubscribe
+  onSubscribe,
+  onFavorite
 }) => {
+  const { role } = useContext(ApiAuthContext)
+
   const isGrouped = fetchState === fetchType.GROUP
 
   const { selectedRows, setSelectedRows, handleSelectAllRows, handleRowSelect } =
@@ -37,18 +46,22 @@ export const ProjectsTable = ({
     return isGrouped ? onDelete(selectedRows) : onDelete(projectsId[0])
   }
 
+  const projectsHead =
+    role === RoleType.ADMIN ? TABLE_PROJECTS_HEAD : TABLE_PROJECTS_HEAD_USER
+
   const projectsData = formatProject(projects, fetchState)
   const configTable = {
     components: TABLE_COMPONENTS,
     head: {
-      ...TABLE_PROJECTS_HEAD,
+      ...projectsHead,
       options: {
-        ...TABLE_PROJECTS_HEAD.options,
+        ...projectsHead.options,
         onDelete,
         onEdit,
         onClose,
         isGrouped,
-        onSubscribe
+        onSubscribe,
+        onFavorite
       }
     }
   }
@@ -68,6 +81,7 @@ export const ProjectsTable = ({
           onGroup={onGroup}
           onFilter={onFilter}
           groupOption={groupOption}
+          role={role}
         />
       }
       {...TABLE_STYLE}

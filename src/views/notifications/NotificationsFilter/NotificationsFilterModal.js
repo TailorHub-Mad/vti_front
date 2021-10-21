@@ -4,8 +4,9 @@ import {
   ModalOverlay,
   Box,
   Flex,
-  Radio,
-  RadioGroup,
+  HStack,
+  Checkbox,
+  CheckboxGroup,
   Button
 } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
@@ -15,43 +16,47 @@ import { CustomModalHeader } from "../../../components/overlay/Modal/CustomModal
 const options = [
   {
     label: "Apunte creado",
-    value: "1"
+    value: "Apunte creado"
   },
   {
     label: "Apunte respondido",
-    value: "2"
+    value: "Apunte respondido"
   },
   {
     label: "Mensaje cerrado/formalizado",
-    value: "3"
+    value: "Mensaje cerrado/formalizado"
   },
   {
     label: "Mensajes modificados",
-    value: "4"
+    value: "Mensajes modificados"
   },
   {
     label: "Nuevo proyecto",
-    value: "5"
+    value: "Nuevo proyecto"
   },
   {
     label: "Nuevo sistema de ensayo",
-    value: "6"
+    value: "Nuevo sistema de ensayo"
   },
   {
     label: "Notificación administrador",
-    value: "7"
+    value: "Notificación administrador"
   },
   {
     label: "Notificación mantenimiento",
-    value: "8"
+    value: "Notificación mantenimiento"
   },
   {
     label: "Nuevo tag de apunte",
-    value: "9"
+    value: "Nuevo tag de apunte"
+  },
+  {
+    label: "Nuevo tag de proyecto",
+    value: "Nuevo tag de proyecto"
   },
   {
     label: "Nueva suscripción",
-    value: "10"
+    value: "Nueva suscripción"
   }
 ]
 
@@ -61,16 +66,20 @@ export const NotificationsFilterModal = ({
   onFilter,
   ...props
 }) => {
-  const [activeItem, setActiveItem] = useState([])
+  const [values, setVaues] = useState([])
 
   const handleOnClose = () => {
-    setActiveItem(null)
+    setVaues([])
     onClose()
+  }
+
+  const handleOnChange = (value) => {
+    setVaues(value)
   }
 
   useEffect(() => {
     if (isOpen) return
-    setActiveItem(null)
+    setVaues([])
   }, [isOpen])
 
   return (
@@ -94,28 +103,37 @@ export const NotificationsFilterModal = ({
               onClose={onClose}
               pb="24px"
             />
-            <RadioGroup onChange={setActiveItem} value={activeItem}>
-              {options.map((option) => (
-                <Flex
-                  key={option.value}
-                  bgColor="light_grey"
-                  width="100%"
-                  p="8px"
-                  h="44px"
-                  onClick={() => setActiveItem(option.value)}
-                  cursor="pointer"
-                  mb="8px"
-                >
-                  <Radio value={option.value}>{option.label}</Radio>
+            <CheckboxGroup onChange={handleOnChange} colorScheme="green">
+              <HStack>
+                <Flex flexDirection="column" flex="1">
+                  {options.map((option) => (
+                    <Flex
+                      key={option.value}
+                      bgColor="light_grey"
+                      width="100%"
+                      p="8px"
+                      h="44px"
+                      cursor="pointer"
+                      mb="8px"
+                    >
+                      <Checkbox
+                        variant="multi"
+                        value={option.value}
+                        color="blue.500"
+                      >
+                        {option.label}
+                      </Checkbox>
+                    </Flex>
+                  ))}
                 </Flex>
-              ))}
-            </RadioGroup>
+              </HStack>
+            </CheckboxGroup>
             <Button
-              onClick={() => onFilter(activeItem)}
+              onClick={() => onFilter(values)}
               display="block"
               margin="0 auto"
               mt="32px"
-              isDisabled={!activeItem}
+              isDisabled={values.length === 0}
             >
               Filtrar
             </Button>
