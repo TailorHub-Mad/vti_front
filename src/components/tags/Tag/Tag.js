@@ -14,6 +14,7 @@ export const Tag = React.forwardRef(
         variant={variant}
         borderRadius="full"
         width="62px"
+        maxW="250px"
         {...props}
       >
         <TagLabel textAlign="center">{label || children}</TagLabel>
