@@ -5,31 +5,35 @@ const NotificationService = () => {
 
   // CRUD
   const getNotifications = (limit = 0, offset = 0) =>
-    execute(instance.get(`/projects?limit=${limit}&offset=${offset}`))
+    execute(instance.get(`/notification?limit=${limit}&offset=${offset}`))
   const getNotification = (/*id*/) => execute(instance.get(``))
   const createNotification = (data) =>
-    execute(
-      instance.post(``, data, {
-        headers: { "content-type": "multipart/form-data" }
-      })
-    )
-  const deleteNotification = (/*id*/) => execute(instance.delete(``))
+    execute(instance.post(`/notification/create`, data))
+  const deleteNotification = (id) => execute(instance.delete(`/notification/${id}`))
+  const pinNotification = (id) => execute(instance.get(`/notification/pin/${id}`))
 
   // GROUP & FILTER
-  const getFilterNotifications = (data) => console.log("onFilter", data)
-  const getSearchNotifications = (data) => console.log("onSearch", data)
+  const getFilterNotifications = (data) =>
+    execute(instance.get(`/notification?type=${data}`))
+  const getSearchNotifications = (data) =>
+    execute(instance.get(`/notification?date=${data}`))
 
-  const getNotesNotifications = () => console.log("on filter notes")
-  const getContainerNotifications = () => console.log("on filter container")
-  const getManteinanceNotifications = () => console.log("on filter manteinance")
-  const getBehaviourNotifications = () => console.log("on filter behaviour")
-  const getFixedNotifications = () => console.log("on filter fixed")
+  const getNotesNotifications = () =>
+    execute(instance.get(`/notification?type=Apunte respondido&type=Apunte creado`))
+  const getContainerNotifications = () =>
+    execute(instance.get(`/notification?type=Notificación mantenimiento`))
+  const getManteinanceNotifications = () =>
+    execute(instance.get(`/notification?type=Notificación mantenimiento`))
+  const getBehaviourNotifications = () =>
+    execute(instance.get(`/notification?type=Notificación mantenimiento`))
+  const getFixedNotifications = () => execute(instance.get(`/notification?pin=true`))
 
   return {
     getNotifications,
     getNotification,
     createNotification,
     deleteNotification,
+    pinNotification,
 
     getFilterNotifications,
     getSearchNotifications,

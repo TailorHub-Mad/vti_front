@@ -76,9 +76,13 @@ export const MessageCardHeader = ({
               <SubscribeIcon
                 {...ICONS_PROPS_16}
                 marginRight="4px"
-                color="blue.500"
+                color={isSubscribe ? "error" : "blue.500"}
               />
-              <Text variant="d_xs_regular" marginRight="2px">
+              <Text
+                variant="d_xs_regular"
+                marginRight="2px"
+                color={isSubscribe ? "error" : "blue.500"}
+              >
                 {isSubscribe ? "Darme de baja" : "Suscribirme"}
               </Text>
             </OptionsMenuItem>

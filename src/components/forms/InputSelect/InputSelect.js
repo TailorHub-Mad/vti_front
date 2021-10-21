@@ -88,6 +88,7 @@ export const InputSelect = ({
           value={inputValue}
           autoComplete="off"
           pr="48px"
+          color={isDisabled ? "grey" : "blue.500"}
         />
         <ChevronDownIcon
           position="absolute"

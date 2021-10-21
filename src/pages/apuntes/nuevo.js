@@ -75,7 +75,7 @@ const nuevo = () => {
   }
 
   return (
-    <Page>
+    <Page overflowY="auto">
       <PageHeader title="Nuevo apunte" />
 
       <Center>

@@ -12,8 +12,8 @@ const useSubscriptionApi = () => {
   const deleteSubscription = (id) => subscriptionService.deleteSubscription(id)
 
   // GROUP & FILTER
-  const getSearchSubscriptions = (_, data) =>
-    subscriptionService.getSearchSubscriptions(data)
+  const getSearchSubscriptions = (_, { data, search }) =>
+    subscriptionService.getSearchSubscriptions(data, search)
 
   return {
     getSubscriptions,

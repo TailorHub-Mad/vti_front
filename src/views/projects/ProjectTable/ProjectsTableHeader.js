@@ -1,6 +1,7 @@
 import { CloseIcon, DeleteIcon } from "@chakra-ui/icons"
 import { chakra, Checkbox, Flex, Text } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
+import { RoleType } from "../../../utils/constants/global"
 import { fetchType } from "../../../utils/constants/swr"
 
 export const ProjectsTableHeader = ({
@@ -12,7 +13,8 @@ export const ProjectsTableHeader = ({
   fetchState,
   onGroup,
   onFilter,
-  groupOption
+  groupOption,
+  role
 }) => {
   const [isChecked, setIsChecked] = useState(checked)
 
@@ -36,43 +38,47 @@ export const ProjectsTableHeader = ({
               .toUpperCase()}`}</Text>
           </Flex>
           {Object.keys(selectedRows)?.length > 0 ? (
-            <Flex
-              alignItems="center"
-              justifyContent="center"
-              onClick={() => onDelete(selectedRows)}
-              cursor="pointer"
-              ml="24px"
-            >
-              <DeleteIcon mr="6px" color="error" />
-              <Text color="error" marginTop="6px">
-                Eliminar
-              </Text>
-            </Flex>
-          ) : null}
-        </Flex>
-      ) : (
-        <Flex>
-          <Flex mr="15px">
-            <Checkbox
-              pl="6px"
-              mr="15px"
-              onChange={selectAllRows}
-              isChecked={isChecked}
-            />
-            {Object.keys(selectedRows)?.length > 0 ? (
+            role === RoleType.ADMIN ? (
               <Flex
                 alignItems="center"
                 justifyContent="center"
                 onClick={() => onDelete(selectedRows)}
                 cursor="pointer"
+                ml="24px"
               >
                 <DeleteIcon mr="6px" color="error" />
                 <Text color="error" marginTop="6px">
                   Eliminar
                 </Text>
               </Flex>
-            ) : null}
-          </Flex>
+            ) : null
+          ) : null}
+        </Flex>
+      ) : (
+        <Flex>
+          {role === RoleType.ADMIN ? (
+            <Flex mr="15px">
+              <Checkbox
+                pl="6px"
+                mr="15px"
+                onChange={selectAllRows}
+                isChecked={isChecked}
+              />
+              {Object.keys(selectedRows)?.length > 0 ? (
+                <Flex
+                  alignItems="center"
+                  justifyContent="center"
+                  onClick={() => onDelete(selectedRows)}
+                  cursor="pointer"
+                >
+                  <DeleteIcon mr="6px" color="error" />
+                  <Text color="error" marginTop="6px">
+                    Eliminar
+                  </Text>
+                </Flex>
+              ) : null}
+            </Flex>
+          ) : null}
 
           {fetchState === fetchType.FILTER ? (
             <Flex alignItems="center" ml="24px">

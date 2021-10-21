@@ -17,7 +17,7 @@ export const NotificationCard = ({ notification, onPin, onDelete, ...props }) =>
     let cont = 0
     const splitChain = description.split(" ")
     const formatChain = splitChain.map((c) => {
-      if (!c.includes("*")) return c
+      if (!c.match(/\*(.*)\*/g)) return c
       const link = urls[cont]
       return link
     })
@@ -28,17 +28,19 @@ export const NotificationCard = ({ notification, onPin, onDelete, ...props }) =>
     const { id, model } = element
 
     switch (model) {
-      case "project":
+      case "projects":
         return `proyectos/${id}`
-      case "note":
+      case "notes":
         return `proyectos/${id}`
-      case "testSytem":
+      case "testSytems":
         return `sistemas/${id}`
+      default:
+        return ""
     }
   }
 
   const handleOnClickRevert = (id) => {
-    console.log("revert", id)
+    id
   }
 
   return (
@@ -65,7 +67,7 @@ export const NotificationCard = ({ notification, onPin, onDelete, ...props }) =>
         <Card width={["100%", null, null, "428px"]} bgColor="white" {...props}>
           <Flex justify="space-between" marginBottom="12px">
             <Flex alignItems="center">
-              {unRead && (
+              {!unRead && (
                 <EventNotificationIcon
                   width="24px"
                   height="28px"
@@ -88,7 +90,7 @@ export const NotificationCard = ({ notification, onPin, onDelete, ...props }) =>
                 height="16px"
                 color={pin ? "blue.500" : "grey"}
                 cursor="pointer"
-                onClick={onPin}
+                onClick={() => onPin(notification._id)}
                 transform={pin ? "rotate(-45deg)" : "none"}
               />
               <DeleteIcon
@@ -105,30 +107,31 @@ export const NotificationCard = ({ notification, onPin, onDelete, ...props }) =>
           </Flex>
           <Box>
             {formatDescription().map((e, idx) => {
-              if (!e?.label)
+              if (e?.label) {
                 return (
-                  <Text
-                    display="inline"
-                    variant="d_s_regular"
-                    marginBottom="8px"
+                  <LinkItemSpan
                     key={`${e.id}-${idx}`}
+                    href={handleLinkRef(e)}
+                    style={{ textDecoration: "underline" }}
                   >
-                    {" "}
-                    {e}{" "}
-                  </Text>
+                    {`${e.label.toUpperCase()}`}
+                  </LinkItemSpan>
                 )
+              }
               return (
-                <LinkItemSpan
+                <Text
+                  display="inline"
+                  variant="d_s_regular"
+                  marginBottom="8px"
                   key={`${e.id}-${idx}`}
-                  href={handleLinkRef(e)}
-                  style={{ textDecoration: "underline" }}
                 >
-                  {`${e.label}`}
-                </LinkItemSpan>
+                  {" "}
+                  {e}{" "}
+                </Text>
               )
             })}
           </Box>
-          <Text variant="d_xs_regular" color="start">
+          <Text variant="d_xs_regular" color="start" mt="16px">
             {notification?.type}
           </Text>
         </Card>

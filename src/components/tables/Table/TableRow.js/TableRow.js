@@ -1,7 +1,10 @@
 import { Grid } from "@chakra-ui/react"
-import React from "react"
+import React, { useContext } from "react"
+import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
+import { RoleType } from "../../../../utils/constants/global"
 import { MIN_TABLE_WIDTH } from "../../../../utils/constants/tables"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
+import { TableIcon } from "../TableIcon/TableIcon"
 
 export const TableRow = ({
   item,
@@ -18,6 +21,13 @@ export const TableRow = ({
 }) => {
   const { isFinished } = item?.config || {}
   const colorConfig = { color: isFinished ? "correct.500" : "blue.500" }
+
+  const { user, role } = useContext(ApiAuthContext)
+
+  const checkIsSubscribeSystem = (id) => user?.subscribed?.testSystems?.includes(id)
+
+  const checkIsFavoriteProject = (id) => user?.favorites?.projects?.includes(id)
+  const checkIsSubscribeProject = (id) => user?.subscribed?.projects?.includes(id)
 
   return (
     <Grid
@@ -71,12 +81,25 @@ export const TableRow = ({
 
         // SELECTOR
         if (head[name]?.type === "selector") {
-          return React.cloneElement(components[head[name]?.type], {
-            isChecked: isSelected,
-            onChange: onRowSelect,
-            key: `${name}-${idx}`,
-            mb: "12px"
-          })
+          const { code } = item
+
+          return role === RoleType.ADMIN ? (
+            React.cloneElement(components[head[name]?.type], {
+              isChecked: isSelected,
+              onChange: onRowSelect,
+              key: `${name}-${idx}`,
+              mb: "12px"
+            })
+          ) : (
+            <TableIcon
+              isSubscribe={
+                code
+                  ? checkIsSubscribeSystem(item.id.value)
+                  : checkIsSubscribeProject(item.id.value)
+              }
+              isFavorite={code ? null : checkIsFavoriteProject(item.id.value)}
+            />
+          )
         }
 
         // TAGS
@@ -91,13 +114,19 @@ export const TableRow = ({
         }
 
         if (head[name]?.type === "options") {
+          const { code } = item
+
           return React.cloneElement(components[head[name]?.type], {
             ...head[name],
             id: item.id.value,
             keyGroup: keyGroup,
             key: `${name}-${idx}`,
             disabled: optionsDisabled,
-            ...head[name].config
+            ...head[name].config,
+            isSubscribe: code
+              ? checkIsSubscribeSystem(item.id.value)
+              : checkIsSubscribeProject(item.id.value),
+            isFavorite: code ?? checkIsFavoriteProject(item.id.value)
           })
         }
 

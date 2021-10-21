@@ -117,7 +117,7 @@ export const NewNoteModal = ({
       : await mutate(SWR_CACHE_KEYS.notes)
     showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s apunte/s!")
     setIsSubmitting(false)
-    onClose()
+    handleOnClose()
   }
 
   const handleCreateNote = async () => {

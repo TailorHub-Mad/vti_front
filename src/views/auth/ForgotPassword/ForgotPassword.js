@@ -13,14 +13,21 @@ export const ForgotPassword = () => {
   const router = useRouter()
   const { sendRecoveryPassword } = useAuthApi()
 
-  const [hasError] = useState(false)
+  const [hasError, setHasError] = useState(false)
   const [showMessage, setShowMessage] = useState(false)
   const [email, setEmail] = useState(null)
 
+  // Su email no pertenece a la compañía
   const handleSubmit = async (data) => {
     setEmail(data.email)
-    await sendRecoveryPassword(data)
-    setShowMessage(true)
+    const { error } = await sendRecoveryPassword(data)
+
+    if (!error) return setShowMessage(true)
+
+    setHasError(true)
+    setTimeout(() => {
+      setHasError(false)
+    }, 3000)
   }
   return (
     <Center

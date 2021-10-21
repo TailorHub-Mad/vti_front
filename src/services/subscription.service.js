@@ -13,8 +13,12 @@ const SubscriptionService = () => {
   const deleteSubscription = (id) => execute(instance.delete(`/testSystem/${id}`))
 
   // GROUP & FILTER
-  const getSearchSubscriptions = (data) =>
-    execute(instance.get(`/sector/filter?title=${data}&ref=${data}`))
+  const getSearchSubscriptions = (data = "", search = "", limit = 0, offset = 0) =>
+    execute(
+      instance.get(
+        `/subscribed/${data}?limit=${limit}&offset=${offset}&alias=${search}`
+      )
+    )
 
   return {
     getSubscriptions,
