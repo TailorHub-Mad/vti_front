@@ -37,8 +37,6 @@ export const MainFilter = ({
   return (
     <Box
       width="460px"
-      maxHeight="calc(100vh - 120px)"
-      overflowY="scroll"
       position="absolute"
       top="50px"
       left={moveToLeft ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}

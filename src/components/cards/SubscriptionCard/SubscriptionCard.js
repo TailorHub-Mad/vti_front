@@ -1,3 +1,4 @@
+import { useRouter } from "next/router"
 import { Card } from "../Card"
 import { SubscriptionCardHeader } from "./SubscriptionCardHeader/SubscriptionCardHeader"
 import { SubscriptionCardInfo } from "./SubscriptionCardInfo/SubscriptionCardInfo"
@@ -5,16 +6,17 @@ import { SubscriptionCardTags } from "./SubscriptionCardTags/SubscriptionCardTag
 
 export const SubscriptionCard = ({
   subscription,
-  onClick,
   onDelete,
   onCardSelected,
   isChecked
 }) => {
+  const router = useRouter()
+
   return (
     <Card maxHeight="148px">
       <SubscriptionCardHeader
         title={subscription?.title}
-        onClick={onClick}
+        onClick={() => router.push(`${subscription._id}/apuntes`)}
         onDelele={onDelete}
         onCardSelected={onCardSelected}
         checked={isChecked}
