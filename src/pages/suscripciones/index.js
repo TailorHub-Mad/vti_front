@@ -58,15 +58,7 @@ const suscripciones = () => {
     })
   }
 
-  // const handleSortElement = (data) => {
-  //   const { name, order } = data
-
-  //   if (!name || !order) return
-
-  //   setFetchOptions({
-  //     [fetchOption.ORDER]: `&testSystems_${name}=${order}`
-  //   })
-  // }
+  const handleSortElement = () => {}
 
   useEffect(() => {
     if (!user) return
@@ -99,7 +91,7 @@ const suscripciones = () => {
           ) : (
             <SubscriptionsTable
               subscriptions={subscriptionsData}
-              // handleSortElement={handleSortElement}
+              handleSortElement={handleSortElement}
             />
           )}
         </>

@@ -33,17 +33,26 @@ export const AddSelect = ({
 
   useEffect(() => {
     const valuesSelected = inputValues.map((inputValue) => inputValue?.value)
-    const availableOptions = options?.filter(
+    const nextOptions = options?.filter(
       (option) => !valuesSelected.includes(option.value)
     )
 
-    setAvailableOptions(availableOptions)
+    setAvailableOptions(nextOptions)
   }, [inputValues])
 
   useEffect(() => {
     if (!isReset) return
     setInputValues([{ label: "", value: "" }])
   }, [isReset])
+
+  useEffect(() => {
+    const valuesSelected = inputValues.map((inputValue) => inputValue?.value)
+    const nextOptions = options?.filter(
+      (option) => !valuesSelected.includes(option.value)
+    )
+
+    setAvailableOptions(nextOptions)
+  }, [options])
 
   const renderDeleteItem = (itemPosition) => {
     if (inputDisabled) return null
@@ -123,7 +132,7 @@ export const AddSelect = ({
                 onChange={(selected) => handleChange(selected, idx)}
                 placeholder={placeholder}
                 options={availableOptions}
-                isDisabled={inputDisabled}
+                isDisabled={inputDisabled || availableOptions.length === 0}
               />
               <>
                 {options && (

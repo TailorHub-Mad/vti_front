@@ -295,12 +295,12 @@ export const ProjectNotes = ({ notesData = [], project, onGroup, onFilter }) => 
           />
         </Flex>
       </Flex>
-      <PageBody height="calc(100vh - 260px)">
+      <PageBody h={"calc(100vh - 400px)"} overflowY="none">
         {isLoading ? <LoadingView mt="-200px" /> : null}
         {isEmptyData && isSearch ? (
           <ViewNotFoundState />
         ) : isEmptyData ? (
-          <ViewNotFoundState text="No hay apuntes asociados" />
+          <ViewNotFoundState text="No hay apuntes asociados" h="40vh" noBack />
         ) : null}
         {notesData ? (
           <>

@@ -123,8 +123,29 @@ export const NewProjectModal = ({
   }
 
   const handleOnClose = () => {
-    setValues(initialValues)
+    if (!projectDetail) setValues(initialValues)
     onClose()
+  }
+
+  //TODO Esta función se repite en todos los apoyos, se podría refactorizar para meterla en utils
+  const handleTagSelect = (_tags) => {
+    const refTags = values.tags
+    const refUsed = usedProjectTags
+    let nextTags = refTags ? [...refTags] : []
+
+    _tags.forEach((_tag) => {
+      if (nextTags.map((t) => t.label).includes(_tag)) {
+        nextTags = nextTags.filter((rt) => rt.label !== _tag)
+        return
+      }
+      const [tagInfo] = refUsed.filter((t) => _tag === t.name)
+      const selectedTag = { label: tagInfo.name, value: tagInfo._id }
+      nextTags.push(selectedTag)
+    })
+    setValues({
+      ...values,
+      tags: nextTags
+    })
   }
 
   useEffect(() => {
@@ -148,27 +169,6 @@ export const NewProjectModal = ({
 
     setValues(_project)
   }, [projectToUpdate])
-
-  //TODO Esta función se repite en todos los apoyos, se podría refactorizar para meterla en utils
-  const handleTagSelect = (_tags) => {
-    const refTags = values.tags
-    const refUsed = usedProjectTags
-    let nextTags = refTags ? [...refTags] : []
-
-    _tags.forEach((_tag) => {
-      if (nextTags.map((t) => t.label).includes(_tag)) {
-        nextTags = nextTags.filter((rt) => rt.label !== _tag)
-        return
-      }
-      const [tagInfo] = refUsed.filter((t) => _tag === t.name)
-      const selectedTag = { label: tagInfo.name, value: tagInfo._id }
-      nextTags.push(selectedTag)
-    })
-    setValues({
-      ...values,
-      tags: nextTags
-    })
-  }
 
   useEffect(() => {
     const fetchCriteria = async () => {

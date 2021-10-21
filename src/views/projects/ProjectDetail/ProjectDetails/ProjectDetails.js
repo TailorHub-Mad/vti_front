@@ -7,8 +7,9 @@ import { TestSystemLineIcon } from "../../../../components/icons/TestSystemLineI
 import { PATHS } from "../../../../utils/constants/global"
 import Link from "next/link"
 import { Tag } from "../../../../components/tags/Tag/Tag"
-import { variantGeneralTag } from "../../../../utils/constants/tabs"
+import { formatTags, variantGeneralTag } from "../../../../utils/constants/tabs"
 import { CalendarIcon } from "@chakra-ui/icons"
+import { TagRow } from "../../../../components/tags/TagRow/TagRow"
 
 export const ProjectDetails = ({
   focusPoint,
@@ -83,12 +84,12 @@ export const ProjectDetails = ({
             <Text variant="d_m_regular">Tags del proyecto</Text>
           </Flex>
           <Flex ml="32px">
-            {tags?.length > 0 &&
-              tags.map((tag, idx) => (
-                <Tag variant={variantGeneralTag.NOTE} key={`${tag}-${idx}`} mr="8px">
-                  {tag.name}
-                </Tag>
-              ))}
+            <TagRow
+              tags={formatTags(tags, "name")}
+              variant={variantGeneralTag.NOTE}
+              width="100%"
+              noCollapse
+            />
           </Flex>
         </Box>
         <Box mt="16px" mb="32px">

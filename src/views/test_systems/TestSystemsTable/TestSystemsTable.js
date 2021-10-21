@@ -1,7 +1,6 @@
 import { useContext, useMemo } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
-import useTableActions from "../../../hooks/useTableActions"
 import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 import { RoleType } from "../../../utils/constants/global"
 import { fetchType } from "../../../utils/constants/swr"
@@ -19,19 +18,20 @@ export const TestSystemsTable = ({
   onFilter,
   groupOption,
   handleSortElement,
-  onFavorite
+  onFavorite,
+  selectedRows,
+  setSelectedRows,
+  handleRowSelect,
+  handleSelectAllRows
 }) => {
   const { role } = useContext(ApiAuthContext)
 
   const isGrouped = fetchState === fetchType.GROUP
 
-  const { selectedRows, setSelectedRows, handleSelectAllRows, handleRowSelect } =
-    useTableActions(isGrouped)
-
-  const selectedRowsKeys = Object.keys(selectedRows)
+  const selectedRowsKeys = selectedRows && Object.keys(selectedRows)
 
   useMemo(() => {
-    setSelectedRows([])
+    setSelectedRows && setSelectedRows([])
   }, [systems?.length])
 
   const handleOnDelete = () => {
@@ -61,7 +61,7 @@ export const TestSystemsTable = ({
   }
 
   const allRowsAreSelected =
-    systemsData?.length > 0 && selectedRowsKeys.length === systemsData?.length
+    systemsData?.length > 0 && selectedRowsKeys?.length === systemsData?.length
 
   return (
     <Table
@@ -84,7 +84,7 @@ export const TestSystemsTable = ({
       content={systemsData}
       selectedRows={selectedRows}
       onRowSelect={handleRowSelect}
-      optionsDisabled={selectedRowsKeys.length > 1}
+      optionsDisabled={selectedRowsKeys?.length > 1}
       isGrouped={fetchState === fetchType.GROUP}
       handleSortElement={handleSortElement}
     />

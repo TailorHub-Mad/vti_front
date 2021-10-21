@@ -57,7 +57,7 @@ export const ProjectsTableHeader = ({
       ) : (
         <Flex>
           {role === RoleType.ADMIN ? (
-            <Flex mr="15px">
+            <Flex mr="15px" minH="22px" alignItems="center">
               <Checkbox
                 pl="6px"
                 mr="15px"
