@@ -14,6 +14,7 @@ import { ToastContext } from "../provider/ToastProvider"
 import { notificationFetchHandler } from "../swr/notification.swr"
 import { fetchOption, fetchType } from "../utils/constants/swr"
 import { errorHandler } from "../utils/errors"
+import { destructuringDate, formatDateToFetch } from "../utils/functions/date"
 import { LoadingView } from "../views/common/LoadingView"
 import { ViewEmptyState } from "../views/common/ViewEmptyState"
 import { ViewNotFoundState } from "../views/common/ViewNotFoundState"
@@ -108,6 +109,7 @@ const notificaciones = () => {
 
   // Filters
   const onSearch = (search) => {
+    const date = destructuringDate(new Date(search))
     if (!search) {
       setFetchState(fetchType.ALL)
       setFetchOptions({
@@ -115,10 +117,9 @@ const notificaciones = () => {
       })
       return
     }
-
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: search
+      [fetchOption.SEARCH]: formatDateToFetch(date)
     })
   }
 

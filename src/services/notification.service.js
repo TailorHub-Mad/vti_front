@@ -16,7 +16,7 @@ const NotificationService = () => {
   const getFilterNotifications = (data) =>
     execute(instance.get(`/notification?type=${data}`))
   const getSearchNotifications = (data) =>
-    execute(instance.get(`/notification?type=${data}`))
+    execute(instance.get(`/notification?date=${data}`))
 
   const getNotesNotifications = () =>
     execute(instance.get(`/notification?type=Apunte respondido&type=Apunte creado`))

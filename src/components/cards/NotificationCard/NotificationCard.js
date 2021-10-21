@@ -24,10 +24,6 @@ export const NotificationCard = ({ notification, onPin, onDelete, ...props }) =>
     return formatChain
   }
 
-  const formatLinkLabel = (label) => {
-    return label.split("*")[1].toUpperCase()
-  }
-
   const handleLinkRef = (element) => {
     const { id, model } = element
 
@@ -118,7 +114,7 @@ export const NotificationCard = ({ notification, onPin, onDelete, ...props }) =>
                     href={handleLinkRef(e)}
                     style={{ textDecoration: "underline" }}
                   >
-                    {`${formatLinkLabel(e.label)}`}
+                    {`${e.label.toUpperCase()}`}
                   </LinkItemSpan>
                 )
               }

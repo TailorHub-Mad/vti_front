@@ -58,7 +58,6 @@ export const ToolBar = ({
             type={searchDate ? "date" : undefined}
             variant="white"
             onChange={(e) => onSearch(e.target.value)}
-            color="yellow"
             sx={{
               _placeholder: {
                 color: "grey"
