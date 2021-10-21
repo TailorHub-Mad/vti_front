@@ -1,7 +1,6 @@
 import { useMemo } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
-import useTableActions from "../../../hooks/useTableActions"
 import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
 import { formatClient, TABLE_CLIENT_HEAD } from "./utils"
 
@@ -10,11 +9,12 @@ export const ClientsTable = ({
   onDelete,
   onEdit,
   onDeleteMany,
-  handleSortElement
+  handleSortElement,
+  selectedRows,
+  setSelectedRows,
+  handleRowSelect,
+  handleSelectAllRows
 }) => {
-  const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
-    useTableActions()
-
   const selectedRowsKeys = Object.keys(selectedRows)
 
   useMemo(() => {

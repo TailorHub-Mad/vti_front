@@ -27,7 +27,7 @@ export const CloudButton = ({ onImport, onExport, isDisabled }) => {
         isDisabled={isDisabled}
         borderWidth="1px"
       >
-        <UploadCloudIcon />
+        <UploadCloudIcon color={isDisabled ? "blue.200" : "blue.500"} />
       </Button>
       <OptionsMenu
         onClose={onClose}

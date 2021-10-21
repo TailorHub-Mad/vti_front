@@ -1,7 +1,6 @@
 import { useContext, useMemo } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
-import useTableActions from "../../../hooks/useTableActions"
 import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 import { RoleType } from "../../../utils/constants/global"
 import { fetchType } from "../../../utils/constants/swr"
@@ -19,14 +18,15 @@ export const TestSystemsTable = ({
   onFilter,
   groupOption,
   handleSortElement,
-  onFavorite
+  onFavorite,
+  selectedRows,
+  setSelectedRows,
+  handleRowSelect,
+  handleSelectAllRows
 }) => {
   const { role } = useContext(ApiAuthContext)
 
   const isGrouped = fetchState === fetchType.GROUP
-
-  const { selectedRows, setSelectedRows, handleSelectAllRows, handleRowSelect } =
-    useTableActions(isGrouped)
 
   const selectedRowsKeys = Object.keys(selectedRows)
 

@@ -1,7 +1,6 @@
 import { useMemo } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
-import useTableActions from "../../../hooks/useTableActions"
 import { fetchType } from "../../../utils/constants/swr"
 import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
 import { formatUser, TABLE_USERS_HEAD } from "./utils"
@@ -16,12 +15,13 @@ export const UsersTable = ({
   onGroup,
   onFilter,
   groupOption,
-  handleSortElement
+  handleSortElement,
+  selectedRows,
+  setSelectedRows,
+  handleRowSelect,
+  handleSelectAllRows
 }) => {
   const isGrouped = fetchState === fetchType.GROUP
-
-  const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
-    useTableActions(isGrouped)
 
   const selectedRowsKeys = Object.keys(selectedRows)
 

@@ -475,7 +475,6 @@ const apuntes = () => {
               <NotesGrid
                 notes={notesData}
                 onSeeDetails={handleOpenDetail}
-                subscribedUsers={null} // TOPO -> review
                 checkIsSubscribe={checkIsSubscribe}
                 checkIsFavorite={checkIsFavorite}
                 onDelete={setNoteToDelete}
