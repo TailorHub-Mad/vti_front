@@ -15,10 +15,10 @@ export const SectorsTable = ({
   handleRowSelect,
   handleSelectAllRows
 }) => {
-  const selectedRowsKeys = Object.keys(selectedRows)
+  const selectedRowsKeys = selectedRows && Object.keys(selectedRows)
 
   useMemo(() => {
-    setSelectedRows([])
+    setSelectedRows && setSelectedRows([])
   }, [sectors?.length])
 
   const handleOnDelete = () => {
@@ -36,7 +36,7 @@ export const SectorsTable = ({
   }
 
   const allRowsAreSelected =
-    sectorsData?.length > 0 && selectedRowsKeys.length === sectorsData?.length
+    sectorsData?.length > 0 && selectedRowsKeys?.length === sectorsData?.length
 
   return (
     <Table
@@ -55,7 +55,7 @@ export const SectorsTable = ({
       content={sectorsData}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
-      optionsDisabled={selectedRowsKeys.length > 1}
+      optionsDisabled={selectedRowsKeys?.length > 1}
       handleSortElement={handleSortElement}
     />
   )

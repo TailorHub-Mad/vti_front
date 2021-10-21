@@ -10,7 +10,7 @@ export const SubscriptionsGrid = ({
   handleRowSelect
 }) => {
   useMemo(() => {
-    setSelectedRows([])
+    setSelectedRows && setSelectedRows([])
   }, [subscriptions?.length])
 
   return (

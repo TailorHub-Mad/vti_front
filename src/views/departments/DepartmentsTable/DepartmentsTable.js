@@ -15,10 +15,10 @@ export const DepartmentsTable = ({
   handleRowSelect,
   handleSelectAllRows
 }) => {
-  const selectedRowsKeys = Object.keys(selectedRows)
+  const selectedRowsKeys = selectedRows && Object.keys(selectedRows)
 
   useMemo(() => {
-    setSelectedRows([])
+    setSelectedRows && setSelectedRows([])
   }, [departments?.length])
 
   const handleOnDelete = () => {
@@ -37,7 +37,7 @@ export const DepartmentsTable = ({
 
   const allRowsAreSelected =
     departmentsData?.length > 0 &&
-    selectedRowsKeys.length === departmentsData?.length
+    selectedRowsKeys?.length === departmentsData?.length
 
   return (
     <Table
@@ -56,7 +56,7 @@ export const DepartmentsTable = ({
       content={departmentsData}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
-      optionsDisabled={selectedRowsKeys.length > 1}
+      optionsDisabled={selectedRowsKeys?.length > 1}
       handleSortElement={handleSortElement}
     />
   )

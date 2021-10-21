@@ -23,10 +23,10 @@ export const UsersTable = ({
 }) => {
   const isGrouped = fetchState === fetchType.GROUP
 
-  const selectedRowsKeys = Object.keys(selectedRows)
+  const selectedRowsKeys = selectedRows && Object.keys(selectedRows)
 
   useMemo(() => {
-    setSelectedRows([])
+    setSelectedRows && setSelectedRows([])
   }, [users?.length])
 
   const handleOnDelete = () => {
@@ -44,7 +44,7 @@ export const UsersTable = ({
   }
 
   const allRowsAreSelected =
-    usersData?.length > 0 && selectedRowsKeys.length === usersData?.length
+    usersData?.length > 0 && selectedRowsKeys?.length === usersData?.length
 
   return (
     <Table
@@ -67,7 +67,7 @@ export const UsersTable = ({
       content={usersData}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
-      optionsDisabled={selectedRowsKeys.length > 1}
+      optionsDisabled={selectedRowsKeys?.length > 1}
       isGrouped={fetchState === fetchType.GROUP}
       handleSortElement={handleSortElement}
     />

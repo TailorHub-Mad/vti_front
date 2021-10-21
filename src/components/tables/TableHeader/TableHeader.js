@@ -57,7 +57,7 @@ export const TableHeader = ({
         </Flex>
       ) : (
         <Flex>
-          <Flex>
+          <Flex minH="22px" alignItems="center">
             <Checkbox
               pl="6px"
               mr="15px"

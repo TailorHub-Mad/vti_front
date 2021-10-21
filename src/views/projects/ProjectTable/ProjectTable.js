@@ -33,10 +33,10 @@ export const ProjectsTable = ({
 
   const isGrouped = fetchState === fetchType.GROUP
 
-  const selectedRowsKeys = Object.keys(selectedRows)
+  const selectedRowsKeys = selectedRows && Object.keys(selectedRows)
 
   useMemo(() => {
-    setSelectedRows([])
+    setSelectedRows && setSelectedRows([])
   }, [projects?.length])
 
   const handleOnDelete = () => {
@@ -66,7 +66,7 @@ export const ProjectsTable = ({
     }
   }
   const allRowsAreSelected =
-    projectsData?.length > 0 && selectedRowsKeys.length === projectsData?.length
+    projectsData?.length > 0 && selectedRowsKeys?.length === projectsData?.length
 
   return (
     <Table
@@ -89,7 +89,7 @@ export const ProjectsTable = ({
       content={projectsData}
       selectedRows={selectedRows}
       onRowSelect={handleRowSelect}
-      optionsDisabled={selectedRowsKeys.length > 1}
+      optionsDisabled={selectedRowsKeys?.length > 1}
       isGrouped={isGrouped}
       handleSortElement={handleSortElement}
     />

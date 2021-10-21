@@ -15,10 +15,10 @@ export const CodesTable = ({
   handleRowSelect,
   handleSelectAllRows
 }) => {
-  const selectedRowsKeys = Object.keys(selectedRows)
+  const selectedRowsKeys = selectedRows && Object.keys(selectedRows)
 
   useMemo(() => {
-    setSelectedRows([])
+    setSelectedRows && setSelectedRows([])
   }, [codes?.length])
 
   const handleOnDelete = () => {
@@ -36,7 +36,7 @@ export const CodesTable = ({
   }
 
   const allRowsAreSelected =
-    codesData?.length > 0 && selectedRowsKeys.length === codesData?.length
+    codesData?.length > 0 && selectedRowsKeys?.length === codesData?.length
 
   return (
     <Table
@@ -55,7 +55,7 @@ export const CodesTable = ({
       content={codesData}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
-      optionsDisabled={selectedRowsKeys.length > 1}
+      optionsDisabled={selectedRowsKeys?.length > 1}
       handleSortElement={handleSortElement}
     />
   )

@@ -15,10 +15,10 @@ export const ClientsTable = ({
   handleRowSelect,
   handleSelectAllRows
 }) => {
-  const selectedRowsKeys = Object.keys(selectedRows)
+  const selectedRowsKeys = selectedRows && Object.keys(selectedRows)
 
   useMemo(() => {
-    setSelectedRows([])
+    setSelectedRows && setSelectedRows([])
   }, [clients?.length])
 
   const handleOnDelete = () => {
@@ -36,7 +36,7 @@ export const ClientsTable = ({
   }
 
   const allRowsAreSelected =
-    clientsData?.length > 0 && selectedRowsKeys.length === clientsData?.length
+    clientsData?.length > 0 && selectedRowsKeys?.length === clientsData?.length
 
   return (
     <Table
