@@ -36,6 +36,7 @@ import { TESTSYSTEMS_FILTER_KEYS } from "../../utils/constants/filter"
 import { TestsSystemsFilterModal } from "../../views/test_systems/TestSystemsFilter/TestSystemsFilterModal"
 import useUserApi from "../../hooks/api/useUserApi"
 import { remove } from "lodash"
+import useTableActions from "../../hooks/useTableActions"
 
 const SYSTEMS_GROUP_OPTIONS = [
   {
@@ -89,6 +90,9 @@ const sistemas = () => {
 
   const isEmptyData = checkDataIsEmpty(data)
   const systemsData = handleSystemsData(isEmptyData)
+
+  const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
+    useTableActions(fetchState === fetchType.GROUP)
 
   const isGrouped = fetchState == fetchType.GROUP
 
@@ -377,6 +381,7 @@ const sistemas = () => {
             fetchState={fetchState}
             noAdd={!isAdmin}
             noImport={!isAdmin}
+            selectedRows={selectedRows}
           />
         ) : null}
       </PageHeader>
@@ -405,6 +410,10 @@ const sistemas = () => {
             fetchOptions[fetchOption.GROUP]
           )}
           handleSortElement={handleSortElement}
+          selectedRows={selectedRows}
+          setSelectedRows={setSelectedRows}
+          handleRowSelect={handleRowSelect}
+          handleSelectAllRows={handleSelectAllRows}
         />
       )}
     </Page>

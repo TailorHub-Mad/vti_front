@@ -1,7 +1,6 @@
 import React, { useMemo } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
-import useTableActions from "../../../hooks/useTableActions"
 import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
 import { formatCode, TABLE_CODES_HEAD } from "./utils"
 
@@ -10,15 +9,16 @@ export const CodesTable = ({
   onDelete,
   onEdit,
   onDeleteMany,
-  handleSortElement
+  handleSortElement,
+  selectedRows,
+  setSelectedRows,
+  handleRowSelect,
+  handleSelectAllRows
 }) => {
-  const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
-    useTableActions()
-
-  const selectedRowsKeys = Object.keys(selectedRows)
+  const selectedRowsKeys = selectedRows && Object.keys(selectedRows)
 
   useMemo(() => {
-    setSelectedRows([])
+    setSelectedRows && setSelectedRows([])
   }, [codes?.length])
 
   const handleOnDelete = () => {
@@ -36,7 +36,7 @@ export const CodesTable = ({
   }
 
   const allRowsAreSelected =
-    codesData?.length > 0 && selectedRowsKeys.length === codesData?.length
+    codesData?.length > 0 && selectedRowsKeys?.length === codesData?.length
 
   return (
     <Table
@@ -55,7 +55,7 @@ export const CodesTable = ({
       content={codesData}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
-      optionsDisabled={selectedRowsKeys.length > 1}
+      optionsDisabled={selectedRowsKeys?.length > 1}
       handleSortElement={handleSortElement}
     />
   )

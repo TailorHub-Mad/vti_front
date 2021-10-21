@@ -45,6 +45,7 @@ export const InputSelect = ({
     const nextOptions = [...options]?.filter((option) =>
       option.label.toLowerCase().includes(_value.toLowerCase())
     )
+
     setAvailableOptions(nextOptions)
   }
 

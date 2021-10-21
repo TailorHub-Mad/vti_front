@@ -205,28 +205,28 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
     with_links: {
       type: "switch",
       config: {
-        children: "Adjunto Link No/Sí",
+        children: "Solo con archivos adjuntos",
         marginBottom: "12px"
       }
     },
     formalized: {
       type: "switch",
       config: {
-        children: "Formalizado No/Sí",
+        children: "Solo formalizados",
         marginBottom: "12px"
       }
     },
     closed: {
       type: "switch",
       config: {
-        children: "Cerrado No/Sí",
+        children: "Solo cerrados",
         marginBottom: "12px"
       }
     },
     with_responses: {
       type: "switch",
       config: {
-        children: "Con respuestas No/Sí"
+        children: "Solo con respuesta"
       }
     }
   }

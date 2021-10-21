@@ -11,6 +11,7 @@ import useProjectApi from "../../../../hooks/api/useProjectApi"
 import useTagApi from "../../../../hooks/api/useTagApi"
 
 export const NewNoteForm = ({
+  openAuxModal,
   value,
   onChange,
   noteToUpdate,
@@ -106,7 +107,9 @@ export const NewNoteForm = ({
         options: tagOptions,
         label: "Tags de apunte",
         additemlabel: "Añadir ",
-        removeitemlabel: "Eliminar "
+        removeitemlabel: "Eliminar ",
+        helper: "Abrir ventana de ayuda",
+        onHelperClick: () => openAuxModal()
       }
     },
     link: {

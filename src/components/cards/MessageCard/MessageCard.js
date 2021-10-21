@@ -7,13 +7,19 @@ import { MessageCardTags } from "./MessageCardTags/MessageCardTags"
 export const MessageCard = ({
   note,
   onSeeDetails,
-  subscribedUsers,
   isSubscribe,
   isFavorite,
   onDelete,
   handleFavorite,
   handleSubscribe
 }) => {
+  const setOwners = new Set(
+    note?.messages.map((m) => {
+      return m.owner[0]?.alias
+    })
+  )
+  const owners = Array.from(setOwners).filter((e) => e)
+
   return (
     <Card>
       <MessageCardHeader
@@ -39,7 +45,7 @@ export const MessageCard = ({
         isFormalized={note?.formalized}
         messagesCount={note?.messages?.filter((m) => m?.createdAt).length}
         attachmentsCount={note?.documents?.length}
-        subscribedUsers={subscribedUsers}
+        subscribedUsers={owners.length > 0 ? owners : null}
         marginTop="16px"
       />
     </Card>

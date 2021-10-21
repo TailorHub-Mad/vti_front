@@ -38,7 +38,7 @@ export const NewUserForm = ({ value, onChange, objectToUpdate }) => {
     email: {
       type: "text",
       config: {
-        placeholder: "Escrube tu email",
+        placeholder: "Escribe tu email",
         label: "Email*",
         disabled: Boolean(objectToUpdate)
       }

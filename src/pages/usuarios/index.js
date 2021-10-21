@@ -30,6 +30,7 @@ import { USERS_FILTER_KEYS } from "../../utils/constants/filter"
 import { generateFilterQuery } from "../../utils/functions/filter"
 import { UsersFilterModal } from "../../views/users/UsersFilter/UsersFilterModal"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
+import useTableActions from "../../hooks/useTableActions"
 
 const USERS_GROUP_OPTIONS = [
   {
@@ -66,6 +67,9 @@ const usuarios = () => {
 
   const isEmptyData = checkDataIsEmpty(data)
   const usersData = data && !isEmptyData ? data : null
+
+  const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
+    useTableActions(fetchState === fetchType.GROUP)
 
   // Handlers views
   const isToolbarHidden = () => {
@@ -277,6 +281,7 @@ const usuarios = () => {
             groupOptions={USERS_GROUP_OPTIONS}
             noAdd={!isAdmin}
             noImport={!isAdmin}
+            selectedRows={selectedRows}
           />
         ) : null}
       </PageHeader>
@@ -307,6 +312,10 @@ const usuarios = () => {
             fetchOptions[fetchOption.GROUP]
           )}
           handleSortElement={handleSortElement}
+          selectedRows={selectedRows}
+          setSelectedRows={setSelectedRows}
+          handleRowSelect={handleRowSelect}
+          handleSelectAllRows={handleSelectAllRows}
         />
       )}
     </Page>

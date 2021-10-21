@@ -16,7 +16,7 @@ const SubscriptionService = () => {
   const getSearchSubscriptions = (data = "", search = "", limit = 0, offset = 0) =>
     execute(
       instance.get(
-        `/subscribed/${data}?limit=${limit}&offset=${offset}&alias=${search}`
+        `/subscribed/${data}?limit=${limit}&offset=${offset}&alias=${search}&ref=${search}`
       )
     )
 

@@ -103,7 +103,7 @@ export const NotificationsFilterModal = ({
               onClose={onClose}
               pb="24px"
             />
-            <CheckboxGroup onChange={handleOnChange} colorScheme="green">
+            <CheckboxGroup onChange={handleOnChange}>
               <HStack>
                 <Flex flexDirection="column" flex="1">
                   {options.map((option) => (

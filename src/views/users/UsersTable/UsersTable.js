@@ -1,7 +1,6 @@
 import { useMemo } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
-import useTableActions from "../../../hooks/useTableActions"
 import { fetchType } from "../../../utils/constants/swr"
 import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
 import { formatUser, TABLE_USERS_HEAD } from "./utils"
@@ -16,17 +15,18 @@ export const UsersTable = ({
   onGroup,
   onFilter,
   groupOption,
-  handleSortElement
+  handleSortElement,
+  selectedRows,
+  setSelectedRows,
+  handleRowSelect,
+  handleSelectAllRows
 }) => {
   const isGrouped = fetchState === fetchType.GROUP
 
-  const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
-    useTableActions(isGrouped)
-
-  const selectedRowsKeys = Object.keys(selectedRows)
+  const selectedRowsKeys = selectedRows && Object.keys(selectedRows)
 
   useMemo(() => {
-    setSelectedRows([])
+    setSelectedRows && setSelectedRows([])
   }, [users?.length])
 
   const handleOnDelete = () => {
@@ -44,7 +44,7 @@ export const UsersTable = ({
   }
 
   const allRowsAreSelected =
-    usersData?.length > 0 && selectedRowsKeys.length === usersData?.length
+    usersData?.length > 0 && selectedRowsKeys?.length === usersData?.length
 
   return (
     <Table
@@ -67,7 +67,7 @@ export const UsersTable = ({
       content={usersData}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
-      optionsDisabled={selectedRowsKeys.length > 1}
+      optionsDisabled={selectedRowsKeys?.length > 1}
       isGrouped={fetchState === fetchType.GROUP}
       handleSortElement={handleSortElement}
     />

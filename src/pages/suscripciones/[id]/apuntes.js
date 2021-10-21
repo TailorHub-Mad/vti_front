@@ -1,46 +1,38 @@
 import { remove } from "lodash"
 import React, { useContext, useEffect, useState } from "react"
-import { jsonToCSV } from "react-papaparse"
-import { NoteDrawer } from "../../components/drawer/NoteDrawer/NoteDrawer"
-import { AddNoteIcon } from "../../components/icons/AddNoteIcon"
-import { Page } from "../../components/layout/Pages/Page"
-import { PageBody } from "../../components/layout/Pages/PageBody/PageBody"
-import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
-import { PageMenu } from "../../components/layout/Pages/PageMenu/PageMenu"
-import { BreadCrumbs } from "../../components/navigation/BreadCrumbs/BreadCrumbs"
-import { ToolBar } from "../../components/navigation/ToolBar/ToolBar"
-import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
-import { ImportFilesModal } from "../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
-import { Popup } from "../../components/overlay/Popup/Popup"
-import useNoteApi from "../../hooks/api/useNoteApi"
-import useUserApi from "../../hooks/api/useUserApi"
-import { ApiAuthContext } from "../../provider/ApiAuthProvider"
-import { ToastContext } from "../../provider/ToastProvider"
-import { noteFetchHandler } from "../../swr/note.swr"
-import { fetchOption, fetchType } from "../../utils/constants/swr"
-import { errorHandler } from "../../utils/errors"
+import { NoteDrawer } from "../../../components/drawer/NoteDrawer/NoteDrawer"
+import { AddNoteIcon } from "../../../components/icons/AddNoteIcon"
+import { Page } from "../../../components/layout/Pages/Page"
+import { PageBody } from "../../../components/layout/Pages/PageBody/PageBody"
+import { PageHeader } from "../../../components/layout/Pages/PageHeader/PageHeader"
+import { PageMenu } from "../../../components/layout/Pages/PageMenu/PageMenu"
+import { BreadCrumbs } from "../../../components/navigation/BreadCrumbs/BreadCrumbs"
+import { ToolBar } from "../../../components/navigation/ToolBar/ToolBar"
+import { Popup } from "../../../components/overlay/Popup/Popup"
+import useNoteApi from "../../../hooks/api/useNoteApi"
+import useUserApi from "../../../hooks/api/useUserApi"
+import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
+import { ToastContext } from "../../../provider/ToastProvider"
+import { fetchOption, fetchType } from "../../../utils/constants/swr"
+import { errorHandler } from "../../../utils/errors"
 import {
   checkDataIsEmpty,
   getFieldGRoupObjectById,
   getFieldObjectById
-} from "../../utils/functions/global"
-import {
-  noteDataTransform,
-  transformNotesToExport
-} from "../../utils/functions/import_export/notes_helpers"
-import { LoadingView } from "../../views/common/LoadingView"
-import { ViewEmptyState } from "../../views/common/ViewEmptyState"
-import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
-import { NewNoteModal } from "../../views/notes/NewNote/NewNoteModal/NewNoteModal"
-import { NotesGrid } from "../../views/notes/NotesGrid/NotesGrid"
-import { NotesGroup } from "../../views/notes/NotesGroup/NotesGroup"
-import { NotesMenu } from "../../views/notes/NotesMenu/NotesMenu"
-import { ResponseModal } from "../../views/notes/Response/ResponseModal/ResponseModal"
-import download from "downloadjs"
-import { NotesFilterModal } from "../../views/notes/NotesFilter/NotesFilterModal"
-import { NOTES_FILTER_KEYS } from "../../utils/constants/filter"
-import { generateFilterQuery } from "../../utils/functions/filter"
-import { getGroupOptionLabel } from "../../utils/functions/objects"
+} from "../../../utils/functions/global"
+import { LoadingView } from "../../../views/common/LoadingView"
+import { ViewEmptyState } from "../../../views/common/ViewEmptyState"
+import { ViewNotFoundState } from "../../../views/common/ViewNotFoundState"
+import { NewNoteModal } from "../../../views/notes/NewNote/NewNoteModal/NewNoteModal"
+import { NotesGrid } from "../../../views/notes/NotesGrid/NotesGrid"
+import { NotesGroup } from "../../../views/notes/NotesGroup/NotesGroup"
+import { ResponseModal } from "../../../views/notes/Response/ResponseModal/ResponseModal"
+import { NotesFilterModal } from "../../../views/notes/NotesFilter/NotesFilterModal"
+import { NOTES_FILTER_KEYS } from "../../../utils/constants/filter"
+import { generateFilterQuery } from "../../../utils/functions/filter"
+import { getGroupOptionLabel } from "../../../utils/functions/objects"
+import { useRouter } from "next/router"
+import { projectFetchHandler } from "../../../swr/project.swr"
 
 const NOTES_GROUP_OPTIONS = [
   {
@@ -61,16 +53,15 @@ const NOTES_GROUP_OPTIONS = [
   }
 ]
 
-const apuntes = () => {
+const apuntesSuscripciones = () => {
   // Hooks
+  const router = useRouter()
   const { isLoggedIn, user } = useContext(ApiAuthContext)
-  const { deleteNote, deleteMessage, createNote } = useNoteApi()
+  const { deleteNote, deleteMessage } = useNoteApi()
   const { updateUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
 
   // States
-  const [showImportModal, setShowImportModal] = useState(false)
-  const [showExportModal, setShowExportModal] = useState(false)
   const [showFilterModal, setShowFilterModal] = useState(false)
 
   const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
@@ -84,18 +75,14 @@ const apuntes = () => {
   const [noteToDelete, setNoteToDelete] = useState(null)
   const [messageToDelete, setMessageToDelete] = useState(null)
 
-  // Fetch
-  const { data, error, isLoading, mutate } = noteFetchHandler(
-    fetchState,
-    fetchOptions
-  )
+  const { data, error, isLoading, mutate } = projectFetchHandler(fetchType.ID, {
+    [fetchOption.ID]: router.query.id
+  })
 
   const handleNotesData = (isEmptyData) => {
     if (!data || isEmptyData) return null
     if (fetchState == fetchType.GROUP) return data
-    return data[0]?.notes
-
-    // TODO FILTER
+    return data[0]?.projects[0].notes
   }
 
   const isEmptyData = checkDataIsEmpty(data)
@@ -109,15 +96,6 @@ const apuntes = () => {
   // Handlers views
   const isToolbarHidden = () => {
     if (isLoading) return false
-    if (isEmptyData && fetchState === fetchType.ALL) return false
-
-    return true
-  }
-
-  const isMenuHidden = () => {
-    if (isLoading) return false
-    if (fetchState === fetchType.GROUP) return false
-    if (isEmptyData && fetchState === fetchType.FILTER) return false
     if (isEmptyData && fetchState === fetchType.ALL) return false
 
     return true
@@ -151,27 +129,6 @@ const apuntes = () => {
       ? getFieldGRoupObjectById(notesData, "name", noteToDelete.id, noteToDelete.key)
       : getFieldObjectById(notesData, "name", noteToDelete)
     return `¿Desea eliminar ${label}?`
-  }
-
-  const handleImportNotes = async (data) => {
-    //TODO Gestión de errores y update de SWR
-
-    try {
-      for (let index = 0; index < data.length; index++) {
-        await createNote(data[index])
-      }
-
-      setShowImportModal(false)
-      showToast("Proyectos importados correctamente")
-    } catch (error) {
-      errorHandler(error)
-    }
-  }
-
-  const handleExportNotes = () => {
-    setShowExportModal(false)
-    const _data = jsonToCSV(transformNotesToExport(notesData))
-    download(_data, `apuntes_export_${new Date().toLocaleDateString()}`, "text/csv")
   }
 
   const handleDelete = async () => {
@@ -379,19 +336,6 @@ const apuntes = () => {
         onClose={handleOnCloseModal}
       />
 
-      <ExportFilesModal
-        isOpen={showExportModal}
-        onClose={() => setShowExportModal(false)}
-        onExport={() => handleExportNotes()}
-      />
-
-      <ImportFilesModal
-        isOpen={showImportModal}
-        onClose={() => setShowImportModal(false)}
-        onUpload={(data) => handleImportNotes(data)}
-        onDropDataTransform={(info) => noteDataTransform(info)}
-      />
-
       <NoteDrawer
         note={noteToDetail}
         isOpen={showNoteDetails}
@@ -419,25 +363,16 @@ const apuntes = () => {
             onSearch={onSearch}
             onGroup={handleOnGroup}
             onFilter={handleOnOpenFilter}
-            onImport={() => setShowImportModal(true)}
-            onExport={() => setShowExportModal(true)}
             addLabel="Añadir apunte"
             searchPlaceholder="Busqueda por ID, Proyecto"
             groupOptions={NOTES_GROUP_OPTIONS}
             icon={<AddNoteIcon />}
             fetchState={fetchState}
+            noImport
           />
         )}
       </PageHeader>
-      <PageMenu>
-        {isMenuHidden() ? (
-          <NotesMenu
-            fetchState={fetchState}
-            notesCount={notesData?.length}
-            onChange={(state) => setFetchState(state)}
-          />
-        ) : null}
-      </PageMenu>
+      <PageMenu></PageMenu>
       <PageBody height="calc(100vh - 140px)">
         {isLoading ? <LoadingView mt="-200px" /> : null}
         {isEmptyData && fetchState !== fetchType.ALL ? (
@@ -445,10 +380,9 @@ const apuntes = () => {
         ) : isEmptyData ? (
           <ViewEmptyState
             message="Añadir apuntes a la plataforma"
-            importButtonText="Importar"
             addButtonText="Añadir apunte"
-            onImport={() => setShowImportModal(true)}
             onAdd={() => setIsNoteModalOpen(true)}
+            noImport
           />
         ) : null}
 
@@ -475,6 +409,7 @@ const apuntes = () => {
               <NotesGrid
                 notes={notesData}
                 onSeeDetails={handleOpenDetail}
+                subscribedUsers={null} // TOPO -> review
                 checkIsSubscribe={checkIsSubscribe}
                 checkIsFavorite={checkIsFavorite}
                 onDelete={setNoteToDelete}
@@ -489,4 +424,4 @@ const apuntes = () => {
   )
 }
 
-export default apuntes
+export default apuntesSuscripciones

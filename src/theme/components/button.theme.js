@@ -40,7 +40,13 @@ export const Button = {
       color: "blue.500",
       minW: "48px",
       w: "48px",
-      h: "48px"
+      h: "48px",
+      _disabled: {
+        opacity: 1,
+        bgColor: "#EBEEF2",
+        pointerEvents: "none",
+        border: "none"
+      }
     },
     secondary: {
       minW: "194px",

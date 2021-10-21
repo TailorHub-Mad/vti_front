@@ -69,9 +69,11 @@ export const TABLE_USERS_HEAD = {
   department: {
     label: "Departamento",
     width: calcColWidth(50),
-    type: "tags",
+    type: "tag",
     config: {
-      variant: variantGeneralTag.SYSTEM
+      variant: variantGeneralTag.SYSTEM,
+      width: "100%",
+      noCollapse: true
     }
   },
   focusPoint: {

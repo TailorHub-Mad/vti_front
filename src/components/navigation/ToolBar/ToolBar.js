@@ -24,7 +24,8 @@ export const ToolBar = ({
   noAdd,
   fetchState,
   searchDate,
-  icon
+  icon,
+  selectedRows
 }) => {
   const handleOnGroup = (activeItem) => onGroup(activeItem)
   const handleOnFilter = (activeItem) => onFilter(activeItem)
@@ -71,7 +72,9 @@ export const ToolBar = ({
           onImport={onImport}
           onExport={onExport}
           isDisabled={
-            fetchState === fetchType.FILTER || fetchState === fetchType.GROUP
+            fetchState === fetchType.FILTER ||
+            fetchState === fetchType.GROUP ||
+            (selectedRows && Object.keys(selectedRows)?.length > 0)
           }
         />
       )}

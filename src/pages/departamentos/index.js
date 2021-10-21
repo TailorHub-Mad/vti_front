@@ -27,6 +27,7 @@ import {
 } from "../../utils/functions/import_export/departments_helpers.js"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
 import { Text } from "@chakra-ui/layout"
+import useTableActions from "../../hooks/useTableActions"
 
 const departamentos = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -54,6 +55,9 @@ const departamentos = () => {
 
   const isEmptyData = checkDataIsEmpty(data)
   const departmentsData = data && !isEmptyData ? data : null
+
+  const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
+    useTableActions(fetchState === fetchType.GROUP)
 
   const isSearch = fetchState == fetchType.SEARCH
 
@@ -247,6 +251,7 @@ const departamentos = () => {
             icon={<AddDepartmentIcon />}
             noFilter
             noGroup
+            selectedRows={selectedRows}
           />
         ) : null}
       </PageHeader>
@@ -270,6 +275,10 @@ const departamentos = () => {
           }
           onEdit={handleUpdate}
           handleSortElement={handleSortElement}
+          selectedRows={selectedRows}
+          setSelectedRows={setSelectedRows}
+          handleRowSelect={handleRowSelect}
+          handleSelectAllRows={handleSelectAllRows}
         />
       )}
     </Page>

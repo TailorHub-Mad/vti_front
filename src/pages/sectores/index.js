@@ -26,6 +26,7 @@ import {
 } from "../../utils/functions/import_export/sectors_helper"
 import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
+import useTableActions from "../../hooks/useTableActions"
 
 const sectores = () => {
   // Hooks
@@ -51,6 +52,9 @@ const sectores = () => {
 
   const isEmptyData = checkDataIsEmpty(data)
   const sectorsData = data && !isEmptyData ? data : null
+
+  const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
+    useTableActions(fetchState === fetchType.GROUP)
 
   const isSearch = fetchState == fetchType.SEARCH
 
@@ -218,6 +222,7 @@ const sectores = () => {
             icon={<AddSectorIcon />}
             noFilter
             noGroup
+            selectedRows={selectedRows}
           />
         ) : null}
       </PageHeader>
@@ -239,6 +244,10 @@ const sectores = () => {
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
           onEdit={handleUpdate}
           handleSortElement={handleSortElement}
+          selectedRows={selectedRows}
+          setSelectedRows={setSelectedRows}
+          handleRowSelect={handleRowSelect}
+          handleSelectAllRows={handleSelectAllRows}
         />
       )}
     </Page>
