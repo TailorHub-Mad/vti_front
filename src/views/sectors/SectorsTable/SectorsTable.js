@@ -1,7 +1,6 @@
 import React, { useMemo } from "react"
 import { Table } from "../../../components/tables/Table/Table"
 import { TableHeader } from "../../../components/tables/TableHeader/TableHeader"
-import useTableActions from "../../../hooks/useTableActions"
 import { TABLE_COMPONENTS, TABLE_STYLE } from "../../../utils/constants/tables"
 import { formatSector, TABLE_SECTORS_HEAD } from "./utils"
 
@@ -10,15 +9,16 @@ export const SectorsTable = ({
   onDelete,
   onEdit,
   onDeleteMany,
-  handleSortElement
+  handleSortElement,
+  selectedRows,
+  setSelectedRows,
+  handleRowSelect,
+  handleSelectAllRows
 }) => {
-  const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
-    useTableActions()
-
-  const selectedRowsKeys = Object.keys(selectedRows)
+  const selectedRowsKeys = selectedRows && Object.keys(selectedRows)
 
   useMemo(() => {
-    setSelectedRows([])
+    setSelectedRows && setSelectedRows([])
   }, [sectors?.length])
 
   const handleOnDelete = () => {
@@ -36,7 +36,7 @@ export const SectorsTable = ({
   }
 
   const allRowsAreSelected =
-    sectorsData?.length > 0 && selectedRowsKeys.length === sectorsData?.length
+    sectorsData?.length > 0 && selectedRowsKeys?.length === sectorsData?.length
 
   return (
     <Table
@@ -55,7 +55,7 @@ export const SectorsTable = ({
       content={sectorsData}
       selectedRows={selectedRows}
       onRowSelect={(idx) => handleRowSelect(idx)}
-      optionsDisabled={selectedRowsKeys.length > 1}
+      optionsDisabled={selectedRowsKeys?.length > 1}
       handleSortElement={handleSortElement}
     />
   )

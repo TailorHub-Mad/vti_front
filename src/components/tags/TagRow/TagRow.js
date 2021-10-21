@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react"
 import React, { useEffect, useRef, useState } from "react"
 import { Tooltip, Tag } from "../Tag/Tag"
 
-export const TagRow = ({ tags = [], variant, ...props }) => {
+export const TagRow = ({ tags = [], variant, noCollapse, ...props }) => {
   const TAG_WIDTH_NUM = 82
 
   const ref = useRef()
@@ -11,14 +11,16 @@ export const TagRow = ({ tags = [], variant, ...props }) => {
   const [size, setSize] = useState()
   const [max, setMax] = useState(tags?.length)
 
+  function updateSize() {
+    setSize(ref?.current?.offsetWidth)
+  }
+
   useEffect(() => {
     const newMax = Math.trunc(size / TAG_WIDTH_NUM)
     setMax(newMax)
     setRemainingTagsCount(tags.length < newMax ? 0 : tags.length - newMax)
   }, [size])
-  function updateSize() {
-    setSize(ref?.current?.offsetWidth)
-  }
+
   useEffect(() => {
     window?.addEventListener("resize", updateSize)
     updateSize()
@@ -39,7 +41,7 @@ export const TagRow = ({ tags = [], variant, ...props }) => {
         <Tooltip
           key={`${tag}-${idx}`}
           variant={variant}
-          width={"62px"}
+          width={noCollapse ? "auto" : "62px"}
           minWidth={"62px"}
         >
           {tag}

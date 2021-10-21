@@ -1,12 +1,16 @@
-import { Modal, ModalOverlay, ModalContent, Button } from "@chakra-ui/react"
+import { Modal, ModalOverlay, ScaleFade, Button, Box, Flex } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
+import { CustomModalContent } from "../../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
+import useHelpApi from "../../../../hooks/api/useHelpApi"
 import useNoteApi from "../../../../hooks/api/useNoteApi"
+import useTagApi from "../../../../hooks/api/useTagApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
 import { createFormData } from "../../../../utils/functions/formdata"
+import { SupportModal } from "../../../helps/NewCriterion/NewCriterionModal/SupportModal/SupportModal"
 import { NewNoteForm } from "../NewNoteForm/NewNoteForm"
 
 const initialValues = {
@@ -28,10 +32,16 @@ export const NewNoteModal = ({
 }) => {
   const { showToast } = useContext(ToastContext)
   const { createNote, updateNote } = useNoteApi()
+  const { getProjectHelps } = useHelpApi()
+  const { getProjectTags } = useTagApi()
   const { mutate } = useSWRConfig()
 
+  const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [values, setValues] = useState(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const [usedProjectTags, setUsedProjectTags] = useState([])
+  const [projectCriteria, setProjectCriteria] = useState([])
 
   const isUpdate = Boolean(noteToUpdate)
 
@@ -147,6 +157,42 @@ export const NewNoteModal = ({
     onClose()
   }
 
+  const handleTagSelect = (_tags) => {
+    const refTags = values.tags
+    const refUsed = usedProjectTags
+    let nextTags = refTags ? [...refTags] : []
+
+    _tags.forEach((_tag) => {
+      if (nextTags.map((t) => t.label).includes(_tag)) {
+        nextTags = nextTags.filter((rt) => rt.label !== _tag)
+        return
+      }
+      const [tagInfo] = refUsed.filter((t) => _tag === t.name)
+      const selectedTag = { label: tagInfo.name, value: tagInfo._id }
+      nextTags.push(selectedTag)
+    })
+    setValues({
+      ...values,
+      tags: nextTags
+    })
+  }
+
+  useEffect(() => {
+    const fetchCriteria = async () => {
+      const _data = await getProjectHelps()
+      setProjectCriteria(_data)
+    }
+
+    const fetchTags = async () => {
+      const _tags = await getProjectTags()
+      const _used = _tags.filter((tag) => !tag.isUsed)
+      setUsedProjectTags(_used)
+    }
+
+    fetchCriteria()
+    fetchTags()
+  }, [])
+
   useEffect(() => {
     if (!noteToUpdate) return
 
@@ -171,32 +217,62 @@ export const NewNoteModal = ({
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
-      <ModalContent p="48px 32px" borderRadius="2px">
-        <CustomModalHeader
-          title={isUpdate ? "Editar apunte" : "Añadir nuevo apunte"}
-          onClose={handleOnClose}
-          pb="24px"
-        />
-        <NewNoteForm
-          value={values}
-          onChange={(val) => setValues(val)}
-          noteToUpdate={noteToUpdate}
-          noteFromProject={noteFromProject}
-          submitIsDisabled={submitIsDisabled}
-          isUpdate={Boolean(noteToUpdate)}
-        />
-        <Button
-          w="194px"
-          margin="0 auto"
-          mt="24px"
-          disabled={submitIsDisabled}
-          onClick={handleSubmit}
-          isLoading={isSubmitting}
-          pointerEvents={isSubmitting ? "none" : "all"}
+      <CustomModalContent zIndex="10001">
+        <ScaleFade
+          padding="100px"
+          in={showSecondaryContent || !showSecondaryContent}
         >
-          Guardar
-        </Button>
-      </ModalContent>
+          <Box
+            width="460px"
+            height="fit-content"
+            position="absolute"
+            top="50px"
+            left={showSecondaryContent ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}
+            transition="left 0.18s ease-in-out"
+            bgColor="white"
+            borderRadius="2px"
+            padding="32px"
+            {...props}
+          >
+            <CustomModalHeader
+              title={isUpdate ? "Editar apunte" : "Añadir nuevo apunte"}
+              onClose={handleOnClose}
+              pb="24px"
+            />
+            <NewNoteForm
+              value={values}
+              onChange={(val) => setValues(val)}
+              noteToUpdate={noteToUpdate}
+              noteFromProject={noteFromProject}
+              submitIsDisabled={submitIsDisabled}
+              isUpdate={Boolean(noteToUpdate)}
+              openAuxModal={() => setShowSecondaryContent(true)}
+            />
+            <Flex width="100%" justifyContent="center">
+              <Button
+                w="194px"
+                margin="0 auto"
+                mt="24px"
+                disabled={submitIsDisabled}
+                onClick={handleSubmit}
+                isLoading={isSubmitting}
+                pointerEvents={isSubmitting ? "none" : "all"}
+              >
+                Guardar
+              </Button>
+            </Flex>
+          </Box>
+        </ScaleFade>
+        {showSecondaryContent ? (
+          <SupportModal
+            onClose={() => setShowSecondaryContent(false)}
+            usedTags={usedProjectTags}
+            criteria={projectCriteria}
+            onTagsSelect={(tags) => handleTagSelect(tags, true)}
+            selectedTags={values?.tags?.map((t) => t.label) || []}
+          />
+        ) : null}
+      </CustomModalContent>
     </Modal>
   )
 }

@@ -2,6 +2,7 @@ import { Checkbox } from "@chakra-ui/checkbox"
 import { Text } from "@chakra-ui/layout"
 import { LinkItem } from "../../components/navigation/LinkItem/LinkItem"
 import { OptionsMenuRow } from "../../components/navigation/OptionsMenu/OptionsMenuRow/OptionsMenuRow"
+import { Tag } from "../../components/tags/Tag/Tag"
 import { TagRow } from "../../components/tags/TagRow/TagRow"
 import { getPercentage } from "../functions/global"
 import { variantGeneralTag } from "./tabs"
@@ -15,6 +16,7 @@ export const TABLE_COMPONENTS = {
   selector: <Checkbox marginLeft="8px" colorScheme="blue" />,
   other: <Checkbox marginLeft="8px" colorScheme="blue" />,
   tags: <TagRow variant={variantGeneralTag.NOTE} />,
+  tag: <Tag variant={variantGeneralTag.SYSTEM} />,
   options: <OptionsMenuRow />
 }
 export const TABLE_STYLE = {

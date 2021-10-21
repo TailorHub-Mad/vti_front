@@ -16,6 +16,8 @@ export const MessageCardTags = ({ note }) => {
         <TagRow
           tags={formatTags(note.projects, "alias")}
           variant={variantGeneralTag.PROJECT}
+          width="100%"
+          noCollapse
         />
       ) : (
         <Box w="100%" height="28px"></Box>
@@ -24,6 +26,8 @@ export const MessageCardTags = ({ note }) => {
         <TagRow
           tags={formatTags(note.testSystems, "alias")}
           variant={variantGeneralTag.SYSTEM}
+          width="100%"
+          noCollapse
         />
       ) : (
         <Box w="100%" height="28px"></Box>
@@ -32,6 +36,8 @@ export const MessageCardTags = ({ note }) => {
         <TagRow
           tags={formatTags(note.tags, "name")}
           variant={variantGeneralTag.NOTE}
+          width="100%"
+          noCollapse
         />
       ) : (
         <Box w="100%" height="28px"></Box>

@@ -39,6 +39,7 @@ import { PROJECTS_FILTER_KEYS } from "../../utils/constants/filter"
 import { ProjectsMenu } from "../../views/projects/ProjectsMenu/ProjectsMenu"
 import useUserApi from "../../hooks/api/useUserApi"
 import { remove } from "lodash"
+import useTableActions from "../../hooks/useTableActions"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -94,6 +95,9 @@ const proyectos = () => {
 
   const isEmptyData = checkDataIsEmpty(data)
   const projectsData = handleProjectsData(isEmptyData)
+
+  const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
+    useTableActions(fetchState === fetchType.GROUP)
 
   const isGrouped = fetchState == fetchType.GROUP
 
@@ -447,6 +451,7 @@ const proyectos = () => {
             fetchState={fetchState}
             noAdd={!isAdmin}
             noImport={!isAdmin}
+            selectedRows={selectedRows}
           />
         ) : null}
       </PageHeader>
@@ -486,6 +491,10 @@ const proyectos = () => {
           handleSortElement={handleSortElement}
           onSubscribe={handleSubscribe}
           onFavorite={handleFavorite}
+          selectedRows={selectedRows}
+          setSelectedRows={setSelectedRows}
+          handleRowSelect={handleRowSelect}
+          handleSelectAllRows={handleSelectAllRows}
         />
       )}
     </Page>

@@ -41,7 +41,9 @@ export const NoteDetailsAccordion = ({
     <Accordion width="100%" allowToggle allowMultiple {...props}>
       {!isMessage && description ? (
         <NoteAccordionItem title="Descripción" icon={<PageLineIcon mr="8px" />}>
-          {description}
+          {description?.split("\n").map((e, idx) => (
+            <Text key={idx}>{e === "" ? "\n" : e}</Text>
+          ))}
         </NoteAccordionItem>
       ) : null}
 
@@ -83,6 +85,7 @@ export const NoteDetailsAccordion = ({
             tags={formatTags(noteTags, "name")}
             variant={variantGeneralTag.NOTE}
             width="100%"
+            noCollapse
           />
         </NoteAccordionItem>
       ) : null}
@@ -127,6 +130,8 @@ export const NoteDetailsAccordion = ({
       {files ? (
         <NoteAccordionItem title="Adjuntos" icon={<CloudLineIcon mr="8px" />}>
           {files.map((file, idx) => {
+            const { url } = file
+            const [, type] = url.split(".")
             const name = file.url?.split("-")[1]
             return (
               <Button
@@ -143,7 +148,7 @@ export const NoteDetailsAccordion = ({
                   whiteSpace="nowrap"
                   overflow="hidden"
                 >
-                  {file.type === "image" ? <ImageTypeIcon /> : <PdfTypeIcon />}
+                  {type === "pdf" ? <PdfTypeIcon /> : <ImageTypeIcon />}
                   {name}
                 </Text>
               </Button>

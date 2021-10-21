@@ -1,6 +1,5 @@
 import React, { useContext, useMemo } from "react"
 import { Table } from "../../../components/tables/Table/Table"
-import useTableActions from "../../../hooks/useTableActions"
 import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 import { RoleType } from "../../../utils/constants/global"
 import { fetchType } from "../../../utils/constants/swr"
@@ -24,19 +23,20 @@ export const ProjectsTable = ({
   groupOption,
   handleSortElement,
   onSubscribe,
-  onFavorite
+  onFavorite,
+  selectedRows,
+  setSelectedRows,
+  handleRowSelect,
+  handleSelectAllRows
 }) => {
   const { role } = useContext(ApiAuthContext)
 
   const isGrouped = fetchState === fetchType.GROUP
 
-  const { selectedRows, setSelectedRows, handleSelectAllRows, handleRowSelect } =
-    useTableActions(isGrouped)
-
-  const selectedRowsKeys = Object.keys(selectedRows)
+  const selectedRowsKeys = selectedRows && Object.keys(selectedRows)
 
   useMemo(() => {
-    setSelectedRows([])
+    setSelectedRows && setSelectedRows([])
   }, [projects?.length])
 
   const handleOnDelete = () => {
@@ -66,7 +66,7 @@ export const ProjectsTable = ({
     }
   }
   const allRowsAreSelected =
-    projectsData?.length > 0 && selectedRowsKeys.length === projectsData?.length
+    projectsData?.length > 0 && selectedRowsKeys?.length === projectsData?.length
 
   return (
     <Table
@@ -89,7 +89,7 @@ export const ProjectsTable = ({
       content={projectsData}
       selectedRows={selectedRows}
       onRowSelect={handleRowSelect}
-      optionsDisabled={selectedRowsKeys.length > 1}
+      optionsDisabled={selectedRowsKeys?.length > 1}
       isGrouped={isGrouped}
       handleSortElement={handleSortElement}
     />

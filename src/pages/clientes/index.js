@@ -26,6 +26,7 @@ import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModa
 import download from "downloadjs"
 import { jsonToCSV } from "react-papaparse"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
+import useTableActions from "../../hooks/useTableActions"
 
 const clientes = () => {
   // Hooks
@@ -51,6 +52,9 @@ const clientes = () => {
 
   const isEmptyData = checkDataIsEmpty(data)
   const clientsData = data && !isEmptyData ? data : []
+
+  const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
+    useTableActions(fetchState === fetchType.GROUP)
 
   const isSearch = fetchState == fetchType.SEARCH
 
@@ -216,6 +220,7 @@ const clientes = () => {
             noFilter
             noGroup
             icon={<AddClientIcon />}
+            selectedRows={selectedRows}
           />
         ) : null}
       </PageHeader>
@@ -237,6 +242,10 @@ const clientes = () => {
           onDeleteMany={(clientsId) => handleOpenPopup(clientsId, DeleteType.MANY)}
           onEdit={handleUpdate}
           handleSortElement={handleSortElement}
+          selectedRows={selectedRows}
+          setSelectedRows={setSelectedRows}
+          handleRowSelect={handleRowSelect}
+          handleSelectAllRows={handleSelectAllRows}
         />
       )}
     </Page>
