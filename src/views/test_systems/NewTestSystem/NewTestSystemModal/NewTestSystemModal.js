@@ -43,7 +43,7 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
     return systems.map((value) => {
       const { clientAlias, year, vtiCode, alias } = value
       return {
-        vtiCode,
+        vtiCode: vtiCode.value,
         alias,
         date: {
           year
