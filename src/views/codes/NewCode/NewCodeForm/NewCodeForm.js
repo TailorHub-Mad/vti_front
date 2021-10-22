@@ -10,7 +10,7 @@ export const NewCodeForm = ({ value, onChange }) => {
   }
 
   const formInputs = {
-    title: {
+    name: {
       type: "text",
       config: {
         placeholder: "Nombre",

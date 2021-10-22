@@ -257,7 +257,7 @@ const departamentos = () => {
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData && isSearch ? (
-        <ViewNotFoundState />
+        <ViewNotFoundState noBack />
       ) : isEmptyData ? (
         <ViewEmptyState
           message="Añadir departamentos a la plataforma"

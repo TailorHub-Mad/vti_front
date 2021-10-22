@@ -34,7 +34,7 @@ export const NewCodeModal = ({ isOpen, onClose, codeToUpdate, ...props }) => {
   }
 
   const checkInputsAreEmpty = () => {
-    return values.some((value) => !value.title)
+    return values.some((value) => !value.name)
   }
 
   const handleSubmit = async () => {
@@ -50,7 +50,10 @@ export const NewCodeModal = ({ isOpen, onClose, codeToUpdate, ...props }) => {
   const handleCreateCode = async () => {
     try {
       const codesToCreate = [...values]
-      await createCode(codesToCreate)
+
+      for (let index = 0; index < codesToCreate.length; index++) {
+        await createCode(codesToCreate[index])
+      }
     } catch (error) {
       errorHandler(error)
     }
@@ -73,8 +76,8 @@ export const NewCodeModal = ({ isOpen, onClose, codeToUpdate, ...props }) => {
 
   useEffect(() => {
     if (!codeToUpdate) return
-    const { title } = codeToUpdate
-    setValues([{ title }])
+    const { name } = codeToUpdate
+    setValues([{ name }])
   }, [codeToUpdate])
 
   useEffect(() => {
