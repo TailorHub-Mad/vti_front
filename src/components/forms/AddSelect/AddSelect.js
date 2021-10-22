@@ -132,7 +132,7 @@ export const AddSelect = ({
                 onChange={(selected) => handleChange(selected, idx)}
                 placeholder={placeholder}
                 options={availableOptions}
-                isDisabled={inputDisabled || availableOptions.length === 0}
+                isDisabled={inputDisabled || availableOptions?.length === 0}
               />
               <>
                 {options && (
