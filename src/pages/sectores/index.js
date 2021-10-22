@@ -228,7 +228,7 @@ const sectores = () => {
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData && isSearch ? (
-        <ViewNotFoundState />
+        <ViewNotFoundState noBack />
       ) : isEmptyData ? (
         <ViewEmptyState
           message="Añadir sectores a la plataforma"

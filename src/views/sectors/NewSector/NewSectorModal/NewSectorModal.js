@@ -50,7 +50,10 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToUpdate, ...props }) =>
   const handleCreateSector = async () => {
     try {
       const sectorsToCreate = [...values]
-      await createSector(sectorsToCreate)
+
+      for (let index = 0; index < sectorsToCreate.length; index++) {
+        await createSector([sectorsToCreate[index]])
+      }
     } catch (error) {
       errorHandler(error)
     }

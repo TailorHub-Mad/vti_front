@@ -2,25 +2,31 @@ import React, { useEffect, useState } from "react"
 import { InputSelect } from "../../../../components/forms/InputSelect/InputSelect"
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
 import useClientApi from "../../../../hooks/api/useClientApi"
+import useCodeApi from "../../../../hooks/api/useCodeApi"
 
 export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
   const { getClients } = useClientApi()
+  const { getCodes } = useCodeApi()
 
   const [clientOptions, setClientOptions] = useState([])
+  const [codeOptions, setCodeOptions] = useState([])
 
-  const isObject = typeof value.clientAlias === "object"
+  const _values = { ...value }
 
-  const formatValues = !objectToUpdate
-    ? { ...value }
-    : {
-        ...value,
-        clientAlias: isObject
-          ? value.clientAlias
-          : { label: value.clientAlias, value: "" }
-      }
+  // const formatValues = !objectToUpdate
+  //   ? { ...value }
+  //   : {
+  //       ...value,
+  //       clientAlias: isObject
+  //         ? value.clientAlias
+  //         : { label: value.clientAlias, value: "" }
+  //     }
 
   const formatClients = (_clients) =>
     _clients.map((cl) => ({ label: cl.alias, value: cl._id }))
+
+  const formatCodes = (_codes) =>
+    _codes.map((co) => ({ label: co.name, value: co._id }))
 
   const handleFormChange = (input, _value) => {
     onChange({
@@ -31,17 +37,18 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
 
   const formInputs = {
     vtiCode: {
-      type: "text",
+      type: "select",
       config: {
-        placeholder: "Cod",
-        label: "Cod VTI",
-        disabled: Boolean(objectToUpdate)
+        placeholder: "Selecciona",
+        label: "Código VTI",
+        disabled: Boolean(objectToUpdate),
+        options: codeOptions
       }
     },
     clientAlias: {
       type: "select",
       config: {
-        placeholder: "AliasCL",
+        placeholder: "Selecciona",
         label: "Cliente",
         disabled: Boolean(objectToUpdate),
         options: clientOptions
@@ -73,7 +80,12 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
       const clients = await getClients()
       setClientOptions(formatClients(clients))
     }
+    const _getCodes = async () => {
+      const codes = await getCodes()
+      setCodeOptions(formatCodes(codes))
+    }
     _getClients()
+    _getCodes()
   }, [])
 
   useEffect(() => {
@@ -90,7 +102,7 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
     <>
       {Object.entries(formInputs).map(([name, { type, config }], index) => {
         return React.cloneElement(inputRefObj[type], {
-          value: formatValues[name],
+          value: _values[name],
           onChange: (val) => handleFormChange(name, val),
           marginBottom: "24px",
           isDisabled:

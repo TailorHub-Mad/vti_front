@@ -6,17 +6,17 @@ const CodeService = () => {
   // CRUD
 
   const getCodes = (data = "", limit = 0, offset = 0) =>
-    execute(instance.get(`/sector?limit=${limit}&offset=${offset}${data}`))
-  const getCode = (id) => execute(instance.get(`/sector/${id}`))
-  const createCode = (data) => execute(instance.post(`/sector/create`, data))
+    execute(instance.get(`/vtiCode?limit=${limit}&offset=${offset}${data}`))
+  const getCode = (id) => execute(instance.get(`/vtiCode/${id}`))
+  const createCode = (data) => execute(instance.post(`/vtiCode/create`, data))
   const updateCode = (id, data) =>
-    execute(instance.put(`/sector/update/${id}`, data))
-  const deleteCode = (id) => execute(instance.delete(`/sector/delete/${id}`))
+    execute(instance.put(`/vtiCode/update/${id}`, data))
+  const deleteCode = (id) => execute(instance.delete(`/vtiCode/delete/${id}`))
 
   // GROUP & FILTER
 
   const getSearchCodes = (data) =>
-    execute(instance.get(`/sector/filter?title=${data}&ref=${data}`))
+    execute(instance.get(`/vtiCode/filter?name=${data}&ref=${data}`))
 
   return {
     getCodes,

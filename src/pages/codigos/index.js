@@ -26,6 +26,7 @@ import {
 } from "../../utils/functions/import_export/codes_helper"
 import { ExportFilesModal } from "../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
 import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
+import useTableActions from "../../hooks/useTableActions"
 
 const codigos = () => {
   // Hooks
@@ -48,6 +49,9 @@ const codigos = () => {
     fetchState,
     fetchOptions
   )
+
+  const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
+    useTableActions(fetchState === fetchType.GROUP)
 
   const isEmptyData = checkDataIsEmpty(data)
   const codesData = data && !isEmptyData ? data : null
@@ -104,7 +108,7 @@ const codigos = () => {
 
     if (deleteType === DeleteType.MANY)
       return "¿Desea eliminar los códigos seleccionados?"
-    const label = getFieldObjectById(codesData, "title", codesToDelete)
+    const label = getFieldObjectById(codesData, "name", codesToDelete)
     return `¿Desea eliminar ${label}?`
   }
 
@@ -119,7 +123,7 @@ const codigos = () => {
   const deleteOne = async (id, codes) => {
     try {
       await deleteCode(id)
-      showToast("Code borrado correctamente")
+      showToast("Código borrado correctamente")
       return codes.filter((code) => code._id !== id)
     } catch (error) {
       errorHandler(error)
@@ -165,7 +169,7 @@ const codigos = () => {
     if (!name || !order) return
 
     setFetchOptions({
-      [fetchOption.ORDER]: `&projects_${name}=${order}`
+      [fetchOption.ORDER]: `&vtiCode_${name}=${order}`
     })
   }
 
@@ -217,12 +221,13 @@ const codigos = () => {
             icon={<AddSectorIcon />}
             noFilter
             noGroup
+            selectedRows={selectedRows}
           />
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData && isSearch ? (
-        <ViewNotFoundState />
+        <ViewNotFoundState noBack />
       ) : isEmptyData ? (
         <ViewEmptyState
           message="Añadir códigos a la plataforma"
@@ -238,6 +243,10 @@ const codigos = () => {
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
           onEdit={handleUpdate}
           handleSortElement={handleSortElement}
+          selectedRows={selectedRows}
+          setSelectedRows={setSelectedRows}
+          handleRowSelect={handleRowSelect}
+          handleSelectAllRows={handleSelectAllRows}
         />
       )}
     </Page>
