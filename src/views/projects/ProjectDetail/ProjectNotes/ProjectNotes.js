@@ -129,8 +129,8 @@ export const ProjectNotes = ({ notesData = [], project, onGroup, onFilter }) => 
     }
   }
 
+  // TODO -> falta que llegue toda la información de la nota desde el BACK
   const handleUpdate = (id) => {
-    // TODO -> create full notes
     const note = notesData.find((note) => note._id === id)
 
     setNoteToUpdate(note)
@@ -146,7 +146,6 @@ export const ProjectNotes = ({ notesData = [], project, onGroup, onFilter }) => 
     }
   }
 
-  // state === true ? deleteFavorite : createFavorite
   const handleFavorite = async (id, state) => {
     const { favorites, _id } = user
     const { notes: favoritesNotes } = favorites
