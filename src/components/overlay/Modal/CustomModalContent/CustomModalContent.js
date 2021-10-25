@@ -6,9 +6,10 @@ export const CustomModalContent = ({ children, ...props }) => {
     <Box
       width="100vw"
       height="100vh"
-      position="fixed"
+      position="absolute"
       top="0"
       left="0"
+      bottom="40"
       bgColor="#052E5780"
       zIndex="1400"
       overflowY="scroll"

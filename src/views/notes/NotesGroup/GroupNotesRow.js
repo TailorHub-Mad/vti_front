@@ -10,7 +10,8 @@ export const GroupNotesRow = ({
   checkIsSubscribe,
   checkIsFavorite,
   onDelete,
-  handleFavorite
+  handleFavorite,
+  handleSubscribe
 }) => {
   const { isOpen, onToggle } = useDisclosure()
 
@@ -25,11 +26,11 @@ export const GroupNotesRow = ({
           <NotesGrid
             notes={item.value}
             onSeeDetails={onSeeDetails}
-            subscribedUsers={null} // TOPO -> review
             checkIsSubscribe={checkIsSubscribe}
             checkIsFavorite={checkIsFavorite}
             onDelete={onDelete}
             handleFavorite={handleFavorite}
+            handleSubscribe={handleSubscribe}
           />
         ) : null}
       </Box>

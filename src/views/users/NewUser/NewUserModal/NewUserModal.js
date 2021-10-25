@@ -47,8 +47,7 @@ export const NewUserModal = ({ isOpen, onClose, userToUpdate }) => {
         alias: user.alias,
         name: user.name,
         email: user.email,
-        department: user.department.value,
-        password: Math.random().toString(8) // TODO -> provisional
+        department: user.department.value
       }
     })
   }

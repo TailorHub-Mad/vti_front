@@ -21,6 +21,8 @@ import { LoadingView } from "../views/common/LoadingView"
 import { CriterionContainer } from "../views/helps/CriterionContainer/CriterionContainer"
 import { TagsAlphabeticContainer } from "../views/tags/TagsAlphabeticContainer/TagsAlphabeticContainer"
 import useTagApi from "../hooks/api/useTagApi"
+import { ViewEmptyState } from "../views/common/ViewEmptyState"
+
 const HELP_MENU_TABS = {
   projects_board: "projects_board",
   projects_alphabetic: "projects_alphabetic",
@@ -253,9 +255,7 @@ const apoyo = () => {
         height="calc(100vh - 105px)"
       >
         {isLoading ? <LoadingView mt="-200px" /> : null}
-        {/* {isEmptyData && isSearch ? (
-          <ViewNotFoundState />
-        ) : isEmptyData ? (
+        {isEmptyData ? (
           <ViewEmptyState
             message="Añadir criterios a la plataforma"
             importButtonText="Importar"
@@ -263,9 +263,7 @@ const apoyo = () => {
             onImport={() => setShowImportModal(true)}
             onAdd={() => setIsCriterionModalOpen(true)}
           />
-        ) : null} */}
-
-        {criteriaData ? (
+        ) : (
           <>
             <HelpHeader
               activeItem={activeTab}
@@ -314,7 +312,7 @@ const apoyo = () => {
               <TagsAlphabeticContainer tags={usedTags} onDelete={handleTagsDelete} />
             ) : null}
           </>
-        ) : null}
+        )}
       </PageBody>
     </Page>
   )

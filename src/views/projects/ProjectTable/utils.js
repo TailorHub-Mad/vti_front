@@ -36,8 +36,6 @@ export const transformProjectData = (project) => ({
   config: { isFinished: Boolean(project.closed) }
 })
 
-//Para el cálculo  del ancho: Todas las columnas deben sumar MIN_TABLE_WIDTH - [(nº columnas - 1) * 32]
-
 export const TABLE_PROJECTS_HEAD = {
   selector: {
     label: "",
@@ -108,7 +106,7 @@ export const TABLE_PROJECTS_HEAD = {
 export const TABLE_PROJECTS_HEAD_USER = {
   selector: {
     label: "",
-    width: calcColWidth(20),
+    width: calcColWidth(30),
     type: "selector"
   },
   id: {
@@ -119,7 +117,7 @@ export const TABLE_PROJECTS_HEAD_USER = {
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(80),
+    width: calcColWidth(70),
     type: "text",
     config: { sort: true, name: "alias" }
   },

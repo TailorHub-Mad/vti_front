@@ -34,8 +34,6 @@ export const transformSystemData = (system) => ({
   options: ""
 })
 
-//Para el cálculo  del ancho: Todas las columnas deben sumar MIN_TABLE_WIDTH - [(nº columnas - 1) * 32]
-
 export const TABLE_SYSTEMS_HEAD = {
   selector: {
     label: "",

@@ -163,10 +163,10 @@ export const NewTagModal = ({
       <CustomModalContent p="48px 32px" borderRadius="2px" zIndex="10001">
         <Box
           width="460px"
-          height="fit-content"
-          position="absolute"
+          position="relative"
           top="50px"
-          left={showSecondaryContent ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}
+          marginBottom="50px"
+          left={showSecondaryContent ? "calc(50vw - 540px)" : "calc(50vw - 230px)"}
           transition="left 0.18s ease-in-out"
           bgColor="white"
           borderRadius="2px"

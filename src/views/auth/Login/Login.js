@@ -73,11 +73,7 @@ export const Login = () => {
         >
           {(props) => (
             <form onSubmit={props.handleSubmit} style={{ width: "100%" }}>
-              <FormController
-                label="Email"
-                mb="24px"
-                error={hasError && "Las credenciales no son correctas"}
-              >
+              <FormController label="Email" mb="24px">
                 <Input
                   name="email"
                   placeholder="Escribe tu email"
@@ -88,7 +84,6 @@ export const Login = () => {
                   errorBorderColor="#F95C5C"
                 />
               </FormController>
-
               <ForgotPassword onClick={handleOnClickForgotPassword}>
                 <Text variant="d_s_regular" color="#052E57" cursor="pointer">
                   ¿No recuerdas tu contraseña?
@@ -116,6 +111,11 @@ export const Login = () => {
                 >
                   Entrar
                 </Button>
+              </Flex>
+              <Flex justifyContent="center" mt="24px">
+                <Text variant="d_s_regular" color="error">
+                  {hasError && "Las credenciales no son correctas"}
+                </Text>
               </Flex>
             </form>
           )}

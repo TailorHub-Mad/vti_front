@@ -289,8 +289,7 @@ export const ProjectsByObject = ({
           backText={backText}
           onClick={() => router.push(hrefBack)}
         />
-      ) : null}
-      {projectsData ? (
+      ) : (
         <ProjectsTable
           // fetchState={fetchState} -> Provisional to filters
           projects={projectsData}
@@ -305,7 +304,7 @@ export const ProjectsByObject = ({
             fetchOptions[fetchOption.GROUP]
           )}
         />
-      ) : null}
+      )}
     </>
   )
 }

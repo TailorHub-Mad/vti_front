@@ -26,6 +26,7 @@ export const NoteMainInfo = ({
   onEdit,
   onDelete,
   isMessage = false,
+  fromProjectDetail,
   note
 }) => {
   const router = useRouter()
@@ -63,7 +64,9 @@ export const NoteMainInfo = ({
         return null
     }
 
-    await mutate(SWR_CACHE_KEYS.notes)
+    fromProjectDetail
+      ? await mutate([SWR_CACHE_KEYS.project, fromProjectDetail])
+      : await mutate(SWR_CACHE_KEYS.notes)
   }
 
   const isProjectHidden = () => {

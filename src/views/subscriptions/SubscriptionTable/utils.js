@@ -17,8 +17,6 @@ export const transformSubscriptionData = (subscription) => ({
   notes: subscription.subscribed.notes.map((s) => s.title)
 })
 
-//Para el cálculo  del ancho: Todas las columnas deben sumar MIN_TABLE_WIDTH - [(nº columnas - 1) * 32]
-
 export const TABLE_SUBSCRIPTIONS_HEAD = {
   id: {
     label: "Alias",

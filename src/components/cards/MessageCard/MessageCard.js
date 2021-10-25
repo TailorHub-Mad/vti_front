@@ -11,7 +11,8 @@ export const MessageCard = ({
   isFavorite,
   onDelete,
   handleFavorite,
-  handleSubscribe
+  handleSubscribe,
+  fromProjectDetail
 }) => {
   const setOwners = new Set(
     note?.messages.map((m) => {
@@ -38,7 +39,7 @@ export const MessageCard = ({
         marginBottom="18px"
         marginTop="6px"
       />
-      <MessageCardTags note={note} />
+      <MessageCardTags note={note} fromProjectDetail={fromProjectDetail} />
       <MessageCardFooter
         isClosed={note?.isClosed}
         isSubscribe={isSubscribe}
