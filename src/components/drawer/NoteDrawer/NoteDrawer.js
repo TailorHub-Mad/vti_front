@@ -15,6 +15,7 @@ export const NoteDrawer = ({
   onResponse,
   onEditResponse,
   onDeleteResponse,
+  fromProjectDetail,
   ...props
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -80,7 +81,12 @@ export const NoteDrawer = ({
             borderRadius="2px"
             boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
           >
-            <NoteMainInfo item={note} onEdit={onEdit} onDelete={onDelete} />
+            <NoteMainInfo
+              item={note}
+              onEdit={onEdit}
+              onDelete={onDelete}
+              fromProjectDetail={fromProjectDetail}
+            />
             <NoteDetailsAccordion
               name={note.name}
               link={note.link}

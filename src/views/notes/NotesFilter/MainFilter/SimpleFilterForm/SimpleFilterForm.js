@@ -223,6 +223,13 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
         marginBottom: "12px"
       }
     },
+    opend: {
+      type: "switch",
+      config: {
+        children: "Solo abiertos",
+        marginBottom: "12px"
+      }
+    },
     with_responses: {
       type: "switch",
       config: {

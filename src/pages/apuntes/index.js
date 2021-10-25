@@ -457,7 +457,6 @@ const apuntes = () => {
               <NotesGroup
                 notes={notesData}
                 onSeeDetails={handleOpenDetail}
-                subscribedUsers={null} // TOPO -> review
                 checkIsSubscribe={checkIsSubscribe}
                 checkIsFavorite={checkIsFavorite}
                 onDelete={(id, key) => setNoteToDelete({ id, key })}
@@ -469,6 +468,7 @@ const apuntes = () => {
                 )}
                 isGrouped={isGrouped}
                 fetchState={fetchState}
+                handleSubscribe={handleSubscribe}
               />
             ) : (
               <NotesGrid

@@ -22,7 +22,6 @@ import {
   checkDataIsEmpty,
   getFieldObjectById
 } from "../../../../utils/functions/global"
-import { LoadingView } from "../../../common/LoadingView"
 import { ViewNotFoundState } from "../../../common/ViewNotFoundState"
 import { NewNoteModal } from "../../../notes/NewNote/NewNoteModal/NewNoteModal"
 import { NotesGrid } from "../../../notes/NotesGrid/NotesGrid"
@@ -48,7 +47,7 @@ const NOTES_GROUP_OPTIONS = [
   }
 ]
 
-export const ProjectNotes = ({ notesData = [], project, onGroup, onFilter }) => {
+export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) => {
   const { user } = useContext(ApiAuthContext)
   const { deleteNote, deleteMessage } = useNoteApi()
   const { updateUser } = useUserApi()
@@ -77,12 +76,8 @@ export const ProjectNotes = ({ notesData = [], project, onGroup, onFilter }) => 
   const [noteToDetail, setNoteToDetail] = useState(null)
   const [noteToDelete, setNoteToDelete] = useState(null)
 
-  // ************ PROVISIONAL
-  const isLoading = false // TODO -> provisional
-
   const isEmptyData = checkDataIsEmpty(notesData)
   const isSearch = fetchState == fetchType.SEARCH
-  // PROVISIONAL *****************
 
   const checkIsFavorite = (id) => user?.favorites?.notes?.includes(id)
   const checkIsSubscribe = (id) => user?.subscribed?.notes?.includes(id)
@@ -122,7 +117,7 @@ export const ProjectNotes = ({ notesData = [], project, onGroup, onFilter }) => 
     try {
       await deleteMessage(messageToDelete.noteId, messageToDelete.messageId)
       showToast("Mensaje borrado correctamente")
-      await mutate()
+      await mutate([SWR_CACHE_KEYS.project, project._id])
       setMessageToDelete(null)
     } catch (error) {
       errorHandler(error)
@@ -160,7 +155,32 @@ export const ProjectNotes = ({ notesData = [], project, onGroup, onFilter }) => 
     const formatUser = formatUpdateUsers(user, favorites)
 
     await updateUser(_id, formatUser)
-    await mutate()
+    await mutate([SWR_CACHE_KEYS.project, project._id])
+  }
+
+  const formatUpdateUsersSubscribed = (user, subscribed) => {
+    return {
+      alias: user.alias,
+      name: user.name,
+      subscribed,
+      department: user.department
+    }
+  }
+
+  const handleSubscribe = async (id, state) => {
+    const { subscribed, _id } = user
+    const { notes: subscribedNotes } = subscribed
+
+    if (state) {
+      remove(subscribedNotes, (e) => e === id)
+      subscribed.notes = subscribedNotes
+    } else {
+      subscribed.notes.push(id)
+    }
+
+    const formatUser = formatUpdateUsersSubscribed(user, subscribed)
+    await updateUser(_id, formatUser)
+    await mutate([SWR_CACHE_KEYS.project, project._id])
   }
 
   // Filters
@@ -270,6 +290,7 @@ export const ProjectNotes = ({ notesData = [], project, onGroup, onFilter }) => 
             messageId
           })
         }
+        fromProjectDetail={project._id}
       />
 
       <Flex justify="space-between" align="center" mt="24px" mb="24px">
@@ -295,39 +316,46 @@ export const ProjectNotes = ({ notesData = [], project, onGroup, onFilter }) => 
         </Flex>
       </Flex>
       <PageBody h={"calc(100vh - 400px)"} overflowY="none">
-        {isLoading ? <LoadingView mt="-200px" /> : null}
         {isEmptyData && isSearch ? (
           <ViewNotFoundState />
         ) : isEmptyData ? (
-          <ViewNotFoundState text="No hay apuntes asociados" h="40vh" noBack />
-        ) : null}
-        {notesData ? (
+          <ViewNotFoundState
+            text="No hay apuntes asociados a este proyecto"
+            h="40vh"
+            noBack
+          />
+        ) : (
           <>
             {fetchState === fetchType.GROUP ? (
               <NotesGroup
                 notes={notesData}
                 onSeeDetails={handleOpenDetail}
-                subscribedUsers={null} // TOPO -> review
                 checkIsSubscribe={checkIsSubscribe}
                 checkIsFavorite={checkIsFavorite}
-                onDelete={setNoteToDelete}
+                onDelete={(id, key) => setNoteToDelete({ id, key })}
+                onGroup={handleOnGroup}
                 handleFavorite={handleFavorite}
-                onGroup={onGroup}
-                onFilter={onFilter}
+                // groupOption={getGroupOptionLabel(
+                //   NOTES_GROUP_OPTIONS,
+                //   fetchOptions[fetchOption.GROUP]
+                // )}
+                // isGrouped={isGrouped}
+                fetchState={fetchState}
               />
             ) : (
               <NotesGrid
                 notes={notesData}
                 onSeeDetails={handleOpenDetail}
-                subscribedUsers={null} // TOPO -> review
                 checkIsSubscribe={checkIsSubscribe}
                 checkIsFavorite={checkIsFavorite}
-                onDelete={(id) => setNoteToDelete(id)}
+                onDelete={setNoteToDelete}
                 handleFavorite={handleFavorite}
+                handleSubscribe={handleSubscribe}
+                fromProjectDetail
               />
             )}
           </>
-        ) : null}
+        )}
       </PageBody>
     </>
   )

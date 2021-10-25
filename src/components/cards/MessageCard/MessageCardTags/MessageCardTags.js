@@ -3,7 +3,7 @@ import React from "react"
 import { formatTags, variantGeneralTag } from "../../../../utils/constants/tabs"
 import { TagRow } from "../../../tags/TagRow/TagRow"
 
-export const MessageCardTags = ({ note }) => {
+export const MessageCardTags = ({ note, fromProjectDetail }) => {
   return (
     <Box
       display="grid"
@@ -19,9 +19,9 @@ export const MessageCardTags = ({ note }) => {
           width="100%"
           noCollapse
         />
-      ) : (
+      ) : !fromProjectDetail ? (
         <Box w="100%" height="28px"></Box>
-      )}
+      ) : null}
       {note.testSystems?.length > 0 ? (
         <TagRow
           tags={formatTags(note.testSystems, "alias")}

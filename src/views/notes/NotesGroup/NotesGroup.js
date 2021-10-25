@@ -16,7 +16,8 @@ export const NotesGroup = ({
   onFilter,
   handleFavorite,
   groupOption,
-  fetchState
+  fetchState,
+  handleSubscribe
 }) => {
   const formatNotes = groupTable(notes)
 
@@ -51,11 +52,11 @@ export const NotesGroup = ({
                 key={`${item.key}-${idx}`}
                 item={item}
                 onSeeDetails={onSeeDetails}
-                subscribedUsers={null} // TOPO -> review
                 checkIsSubscribe={checkIsSubscribe}
                 checkIsFavorite={checkIsFavorite}
                 onDelete={(value) => onDelete(value, item.key)}
                 handleFavorite={handleFavorite}
+                handleSubscribe={handleSubscribe}
               />
             )
           })}
