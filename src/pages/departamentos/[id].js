@@ -6,7 +6,6 @@ import { fetchOption, fetchType } from "../../utils/constants/swr"
 import { PATHS } from "../../utils/constants/global"
 import { errorHandler } from "../../utils/errors"
 import { LoadingView } from "../../views/common/LoadingView"
-import { checkDataIsEmpty } from "../../utils/functions/global"
 import { UsersByObject } from "../../views/users/UsersByObject/UsersByObject"
 import { departmentFetchHandler } from "../../swr/department.swr"
 
@@ -27,7 +26,7 @@ const department = () => {
   )
 
   const notFound = !isValidating && !data
-  const isEmptyData = checkDataIsEmpty(data)
+  const isEmptyData = !data || data?.users?.length === 0
   const usersData = data && !isEmptyData ? data.users : null
 
   if (!isLoggedIn) return null
@@ -36,17 +35,17 @@ const department = () => {
     <Page>
       {isLoading || !data ? <LoadingView mt="-200px" /> : null}
       {notFound && <>Error. No se ha encontrado el departamento.</>}
-      {data && (
-        <UsersByObject
-          usersData={usersData}
-          customURL={`${PATHS.departments}/${data?.ref}`}
-          setFetchState={setFetchState}
-          setFetchOptions={setFetchOptions}
-          fetchState={fetchState}
-          fetchOptions={fetchOptions}
-          isEmptyData={isEmptyData}
-        />
-      )}
+      <UsersByObject
+        usersData={usersData}
+        customURL={`${PATHS.departments}/${data?.ref}`}
+        setFetchState={setFetchState}
+        setFetchOptions={setFetchOptions}
+        fetchState={fetchState}
+        fetchOptions={fetchOptions}
+        isEmptyData={isEmptyData}
+        hrefBack={PATHS.departments}
+        backText={"Volver a departamentos"}
+      />
     </Page>
   )
 }

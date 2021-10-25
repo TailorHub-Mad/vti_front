@@ -1,5 +1,6 @@
 import { Input } from "@chakra-ui/react"
-import React from "react"
+import React, { useState } from "react"
+import { checkIsYear } from "../../../utils/functions/forms"
 import { FormController } from "../FormItemWrapper/FormController"
 
 export const SimpleInput = ({
@@ -11,9 +12,16 @@ export const SimpleInput = ({
   onHelperClick,
   isDisabled = false,
   type = "text",
+  isYear,
   ...props
 }) => {
-  // const [activeDate, setActiveDate] = useState(false)
+  const [hasError, setHasError] = useState(false)
+
+  const handleOnBlur = () => {
+    if (!isYear) return
+    if (!checkIsYear(value)) return setHasError(true)
+    if (hasError) return setHasError(false)
+  }
 
   return (
     <FormController
@@ -21,15 +29,19 @@ export const SimpleInput = ({
       helper={helper}
       onHelperClick={onHelperClick}
       isDisabled={isDisabled}
+      isInvalid={hasError}
+      error={hasError && "El año no es correcto"}
       {...props}
     >
       <Input
         placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          checkIsYear(e.target.value)
+          onChange(e.target.value)
+        }}
+        onBlur={handleOnBlur}
         value={value}
-        // value={activeDate && defaultValue ? defaultValue : value}
         type={type}
-        // onClick={() => setActiveDate(true)}
       />
     </FormController>
   )

@@ -1,4 +1,5 @@
 import download from "downloadjs"
+import { useRouter } from "next/router"
 import { useContext, useState } from "react"
 import { jsonToCSV } from "react-papaparse"
 import { useSWRConfig } from "swr"
@@ -38,12 +39,15 @@ export const UsersByObject = ({
   setFetchState,
   fetchOptions,
   setFetchOptions,
-  isEmptyData
+  isEmptyData,
+  hrefBack,
+  backText
 }) => {
   // Hooks
   const { deleteUser, createUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
   const { mutate } = useSWRConfig()
+  const router = useRouter()
 
   // States
   const [showImportModal, setShowImportModal] = useState(false)
@@ -79,8 +83,6 @@ export const UsersByObject = ({
 
   // Handlers CRUD
   const handleImportUsers = async (data) => {
-    //TODO Gestión de errores y update de SWR
-
     try {
       for (let index = 0; index < data.length; index++) {
         await createUser(data[index])
@@ -220,7 +222,10 @@ export const UsersByObject = ({
       />
 
       <PageHeader>
-        <BreadCrumbs customURL={customURL} lastElement="Usuarios" />
+        {usersData ? (
+          <BreadCrumbs customURL={customURL} lastElement="Usuarios" />
+        ) : null}
+
         {isToolbarHidden() ? (
           <ToolBar
             onAdd={() => setIsUserModalOpen(true)}
@@ -239,8 +244,13 @@ export const UsersByObject = ({
           />
         ) : null}
       </PageHeader>
-      {isEmptyData ? <ViewNotFoundState text="No hay usuarios asociados" /> : null}
-      {usersData ? (
+      {isEmptyData ? (
+        <ViewNotFoundState
+          text="No hay usuarios asociados"
+          backText={backText}
+          onClick={() => router.push(hrefBack)}
+        />
+      ) : (
         <UsersTable
           fetchState={fetchState}
           users={usersData}
@@ -253,7 +263,7 @@ export const UsersByObject = ({
             fetchOptions[fetchOption.GROUP]
           )}
         />
-      ) : null}
+      )}
     </>
   )
 }

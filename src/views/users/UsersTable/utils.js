@@ -34,8 +34,6 @@ export const transformUserData = (user) => ({
   options: ""
 })
 
-//Para el cálculo  del ancho: Todas las columnas deben sumar MIN_TABLE_WIDTH - [(nº columnas - 1) * 32]
-
 export const TABLE_USERS_HEAD = {
   selector: {
     label: "",

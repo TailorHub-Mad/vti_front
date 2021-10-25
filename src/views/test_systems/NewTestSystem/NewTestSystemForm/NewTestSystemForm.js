@@ -13,15 +13,6 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
 
   const _values = { ...value }
 
-  // const formatValues = !objectToUpdate
-  //   ? { ...value }
-  //   : {
-  //       ...value,
-  //       clientAlias: isObject
-  //         ? value.clientAlias
-  //         : { label: value.clientAlias, value: "" }
-  //     }
-
   const formatClients = (_clients) =>
     _clients.map((cl) => ({ label: cl.alias, value: cl._id }))
 
@@ -36,6 +27,20 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
   }
 
   const formInputs = {
+    alias: {
+      type: "text",
+      config: {
+        placeholder: "Alias",
+        label: "Alias"
+      }
+    },
+    year: {
+      type: "text",
+      config: {
+        placeholder: new Date().getFullYear(),
+        label: "Año"
+      }
+    },
     vtiCode: {
       type: "select",
       config: {
@@ -52,20 +57,6 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
         label: "Cliente",
         disabled: Boolean(objectToUpdate),
         options: clientOptions
-      }
-    },
-    alias: {
-      type: "text",
-      config: {
-        placeholder: "Alias",
-        label: "Alias"
-      }
-    },
-    year: {
-      type: "text",
-      config: {
-        placeholder: new Date().getFullYear(),
-        label: "Año"
       }
     }
   }
@@ -106,9 +97,10 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
           onChange: (val) => handleFormChange(name, val),
           marginBottom: "24px",
           isDisabled:
-            config.disabled ||
+            config?.disabled ||
             (index !== 0 && !value[Object.keys(value)[index - 1]]),
           key: `${name}-${index}`,
+          isYear: name === "year",
           ...config
         })
       })}

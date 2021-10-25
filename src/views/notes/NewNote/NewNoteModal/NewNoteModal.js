@@ -224,9 +224,9 @@ export const NewNoteModal = ({
         >
           <Box
             width="460px"
-            height="fit-content"
-            position="absolute"
+            position="relative"
             top="50px"
+            marginBottom="50px"
             left={showSecondaryContent ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}
             transition="left 0.18s ease-in-out"
             bgColor="white"

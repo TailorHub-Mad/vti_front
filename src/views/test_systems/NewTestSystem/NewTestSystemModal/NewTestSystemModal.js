@@ -7,6 +7,7 @@ import useSystemApi from "../../../../hooks/api/useSystemApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
+import { checkIsYear } from "../../../../utils/functions/forms"
 import { NewTestSystemForm } from "../NewTestSystemForm/NewTestSystemForm"
 
 const initialValues = [{}]
@@ -35,7 +36,12 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
 
   const checkInputsAreEmpty = () => {
     return values.some(
-      (value) => !value.vtiCode || !value.clientAlias || !value.alias || !value.year
+      (value) =>
+        !checkIsYear(value.year) ||
+        !value.vtiCode ||
+        !value.clientAlias ||
+        !value.alias ||
+        !value.year
     )
   }
 

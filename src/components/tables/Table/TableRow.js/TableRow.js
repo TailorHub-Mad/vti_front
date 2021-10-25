@@ -70,7 +70,6 @@ export const TableRow = ({
             children: element?.label?.toString(),
             url: element?.link,
             key: `${name}-${idx}`,
-
             // textOverflow: "ellipsis",
             // whiteSpace: "nowrap",
             // overflow: "hidden",
