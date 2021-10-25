@@ -13,9 +13,17 @@ export const MenuItem = ({ label, icon, href, submenu, disabled, ...props }) => 
   })
 
   const router = useRouter()
-  const { asPath } = router
 
-  const compare = (href) => !asPath.localeCompare(href)
+  const { asPath, pathname, query } = router
+  const compare = (href) => {
+    const isDetail = pathname.includes("[id]")
+    if (isDetail) {
+      const { id, alias } = query
+      return !asPath.localeCompare(`${href}/${id || alias}`)
+    } else {
+      return !asPath.localeCompare(href)
+    }
+  }
 
   useEffect(() => {
     if (href && submenu) {

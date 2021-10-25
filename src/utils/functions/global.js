@@ -27,7 +27,7 @@ export const getFieldGRoupObjectById = (collection, field, id, key) => {
 }
 
 export const checkDataIsEmpty = (data) => {
-  if (!data) return false
+  if (!data) return true
   if (data?.length === 0) return true
 }
 
