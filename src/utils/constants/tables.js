@@ -25,4 +25,5 @@ export const TABLE_STYLE = {
   pb: "0"
 }
 
+// Para el cálculo  del ancho: Todas las columnas deben sumar MIN_TABLE_WIDTH - [(nº columnas - 1) * 32]
 export const calcColWidth = (width) => `${getPercentage(MIN_TABLE_WIDTH, width)}%`

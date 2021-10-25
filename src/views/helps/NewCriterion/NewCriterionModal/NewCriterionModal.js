@@ -160,8 +160,6 @@ export const NewCriterionModal = ({
         overflowY="scroll"
         padding-bottom="120px"
       >
-        {/* <ScaleFade in={showSupportModal}> */}
-
         <Box
           width="460px"
           height="fit-content"

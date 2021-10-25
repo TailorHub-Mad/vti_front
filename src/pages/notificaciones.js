@@ -208,7 +208,10 @@ const notificaciones = () => {
           />
         ) : null}
       </PageMenu>
-      <PageBody height="calc(100vh - 140px)">
+      <PageBody
+        overflowY={isEmptyData ? "hidden" : "scroll"}
+        height="calc(100vh - 140px)"
+      >
         {isLoading ? <LoadingView mt="-200px" /> : null}
         {isEmptyData ? (
           <ViewNotFoundState noBack text="No hay notificaciones" />
@@ -219,15 +222,13 @@ const notificaciones = () => {
             onAdd={() => setIsNotificationModalOpen(true)}
             noImport
           />
-        ) : null}
-
-        {notificationsData ? (
+        ) : (
           <NotificationsGroup
             notifications={notificationsData}
             onDelete={(id) => setNotificationToDelete(id)}
             onPin={handleOnPin}
           />
-        ) : null}
+        )}
       </PageBody>
     </Page>
   )

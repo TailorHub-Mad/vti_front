@@ -9,7 +9,7 @@ export const NotificationsGroup = ({ notifications, onDelete, onPin }) => {
 
   return (
     <>
-      <Flex overflow="hidden" width="100%" position="relative">
+      <Flex width="100%" position="relative" overflow="hidden">
         <Grid minWidth={MIN_TABLE_WIDTH} maxWidth={MAX_TABLE_WIDTH} width="100%">
           {formatNotifications.map((item, idx) => {
             return (

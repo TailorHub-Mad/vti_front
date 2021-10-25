@@ -127,7 +127,6 @@ export const NewProjectModal = ({
     onClose()
   }
 
-  //TODO Esta función se repite en todos los apoyos, se podría refactorizar para meterla en utils
   const handleTagSelect = (_tags) => {
     const refTags = values.tags
     const refUsed = usedProjectTags

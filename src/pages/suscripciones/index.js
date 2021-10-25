@@ -32,16 +32,6 @@ const suscripciones = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const subscriptionsData = data && !isEmptyData ? data : null
 
-  const isSearch = fetchState == fetchType.SEARCH
-
-  // Handlers views
-  const isToolbarHidden = () => {
-    if (isLoading) return false
-    if (isEmptyData && !isSearch) return false
-
-    return true
-  }
-
   // Filters
   const onSearch = (search) => {
     if (!search) {
@@ -74,7 +64,7 @@ const suscripciones = () => {
         <>
           <PageHeader>
             <BreadCrumbs />
-            {isToolbarHidden ? (
+            {!isEmptyData ? (
               <ToolBar
                 onSearch={onSearch}
                 searchPlaceholder="Busqueda por ID, Alias"
@@ -87,7 +77,7 @@ const suscripciones = () => {
           </PageHeader>
           {isLoading ? <LoadingView mt="-200px" /> : null}
           {isEmptyData ? (
-            <ViewNotFoundState />
+            <ViewNotFoundState noBack text="No te has suscrito a nada" />
           ) : (
             <SubscriptionsTable
               subscriptions={subscriptionsData}
