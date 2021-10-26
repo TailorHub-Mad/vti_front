@@ -1,4 +1,3 @@
-import { remove } from "lodash"
 import React, { useContext, useEffect, useState } from "react"
 import { NoteDrawer } from "../../../components/drawer/NoteDrawer/NoteDrawer"
 import { AddNoteIcon } from "../../../components/icons/AddNoteIcon"
@@ -10,7 +9,6 @@ import { BreadCrumbs } from "../../../components/navigation/BreadCrumbs/BreadCru
 import { ToolBar } from "../../../components/navigation/ToolBar/ToolBar"
 import { Popup } from "../../../components/overlay/Popup/Popup"
 import useNoteApi from "../../../hooks/api/useNoteApi"
-import useUserApi from "../../../hooks/api/useUserApi"
 import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 import { ToastContext } from "../../../provider/ToastProvider"
 import { fetchOption, fetchType } from "../../../utils/constants/swr"
@@ -21,7 +19,6 @@ import {
   getFieldObjectById
 } from "../../../utils/functions/global"
 import { LoadingView } from "../../../views/common/LoadingView"
-import { ViewEmptyState } from "../../../views/common/ViewEmptyState"
 import { ViewNotFoundState } from "../../../views/common/ViewNotFoundState"
 import { NewNoteModal } from "../../../views/notes/NewNote/NewNoteModal/NewNoteModal"
 import { NotesGrid } from "../../../views/notes/NotesGrid/NotesGrid"
@@ -33,6 +30,8 @@ import { generateFilterQuery } from "../../../utils/functions/filter"
 import { getGroupOptionLabel } from "../../../utils/functions/objects"
 import { useRouter } from "next/router"
 import { projectFetchHandler } from "../../../swr/project.swr"
+import { PATHS } from "../../../utils/constants/global"
+import { systemFetchHandler } from "../../../swr/systems.swr"
 
 const NOTES_GROUP_OPTIONS = [
   {
@@ -56,10 +55,13 @@ const NOTES_GROUP_OPTIONS = [
 const apuntesSuscripciones = () => {
   // Hooks
   const router = useRouter()
-  const { isLoggedIn, user } = useContext(ApiAuthContext)
+  const { isLoggedIn } = useContext(ApiAuthContext)
   const { deleteNote, deleteMessage } = useNoteApi()
-  const { updateUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
+
+  const {
+    query: { type: typeObject }
+  } = router
 
   // States
   const [showFilterModal, setShowFilterModal] = useState(false)
@@ -75,23 +77,33 @@ const apuntesSuscripciones = () => {
   const [noteToDelete, setNoteToDelete] = useState(null)
   const [messageToDelete, setMessageToDelete] = useState(null)
 
-  const { data, error, isLoading, mutate } = projectFetchHandler(fetchType.ID, {
-    [fetchOption.ID]: router.query.id
+  const fetcher =
+    typeObject === "projects" ? projectFetchHandler : systemFetchHandler
+
+  const { data, error, isLoading, mutate } = fetcher(fetchType.ID, {
+    [fetchOption.ID]: router.query.object
   })
 
   const handleNotesData = (isEmptyData) => {
     if (!data || isEmptyData) return null
     if (fetchState == fetchType.GROUP) return data
-    return data[0]?.projects[0].notes
+    const { projects, testSystems } = data[0]
+    const { notes } = typeObject === "projects" ? projects[0] : testSystems[0]
+    return notes.map((n) => {
+      return {
+        ...n,
+        projects:
+          typeObject === "projects"
+            ? [{ alias: data[0]?.projects[0].alias }]
+            : [{ alias: "" }]
+      }
+    })
   }
 
   const isEmptyData = checkDataIsEmpty(data)
   const notesData = handleNotesData(isEmptyData)
 
   const isGrouped = fetchState == fetchType.GROUP
-
-  const checkIsFavorite = (id) => user?.favorites?.notes?.includes(id)
-  const checkIsSubscribe = (id) => user?.subscribed?.notes?.includes(id)
 
   // Handlers views
   const isToolbarHidden = () => {
@@ -104,11 +116,6 @@ const apuntesSuscripciones = () => {
   const handleOnCloseModal = () => {
     setNoteToUpdate(null)
     setIsNoteModalOpen(false)
-  }
-
-  const handleOpenDetail = (note) => {
-    setNoteToDetail(note)
-    setShowNoteDetails(true)
   }
 
   const handleOpenEditResponse = (message) => {
@@ -175,57 +182,6 @@ const apuntesSuscripciones = () => {
     const note = notesData.find((note) => note._id === id)
     setNoteToUpdate(note)
     setIsNoteModalOpen(true)
-  }
-
-  const formatUpdateUsersFavorites = (user, favorites) => {
-    return {
-      alias: user.alias,
-      name: user.name,
-      favorites,
-      department: user.department
-    }
-  }
-
-  const formatUpdateUsersSubscribed = (user, subscribed) => {
-    return {
-      alias: user.alias,
-      name: user.name,
-      subscribed,
-      department: user.department
-    }
-  }
-
-  const handleFavorite = async (id, state) => {
-    const { favorites, _id } = user
-    const { notes: favoritesNotes } = favorites
-
-    if (state) {
-      remove(favoritesNotes, (e) => e === id)
-      favorites.notes = favoritesNotes
-    } else {
-      favorites.notes.push(id)
-    }
-
-    const formatUser = formatUpdateUsersFavorites(user, favorites)
-
-    await updateUser(_id, formatUser)
-    await mutate()
-  }
-
-  const handleSubscribe = async (id, state) => {
-    const { subscribed, _id } = user
-    const { notes: subscribedNotes } = subscribed
-
-    if (state) {
-      remove(subscribedNotes, (e) => e === id)
-      subscribed.notes = subscribedNotes
-    } else {
-      subscribed.notes.push(id)
-    }
-
-    const formatUser = formatUpdateUsersSubscribed(user, subscribed)
-    await updateUser(_id, formatUser)
-    await mutate()
   }
 
   // Filters
@@ -355,7 +311,12 @@ const apuntesSuscripciones = () => {
       />
 
       <PageHeader>
-        <BreadCrumbs />
+        <BreadCrumbs
+          customURL={`${PATHS.subscriptions}/${router.query.owner}`}
+          lastElement={`/${
+            typeObject === "projects" ? "Proyectos" : "Sistemas ensayo"
+          }/apuntes`}
+        />
         {isToolbarHidden() && (
           <ToolBar
             onAdd={() => setIsNoteModalOpen(true)}
@@ -368,35 +329,30 @@ const apuntesSuscripciones = () => {
             icon={<AddNoteIcon />}
             fetchState={fetchState}
             noImport
+            noAdd
+            noFilter
+            noGroup
           />
         )}
       </PageHeader>
       <PageMenu></PageMenu>
       <PageBody height="calc(100vh - 140px)">
         {isLoading ? <LoadingView mt="-200px" /> : null}
-        {isEmptyData && fetchState !== fetchType.ALL ? (
-          <ViewNotFoundState noBack />
-        ) : isEmptyData ? (
-          <ViewEmptyState
-            message="Añadir apuntes a la plataforma"
-            addButtonText="Añadir apunte"
-            onAdd={() => setIsNoteModalOpen(true)}
-            noImport
-          />
-        ) : null}
-
-        {notesData ? (
+        {isEmptyData ? (
+          <ViewNotFoundState noBack text="No hay apuntes asociados" />
+        ) : (
           <>
             {fetchState === fetchType.GROUP ? (
               <NotesGroup
                 notes={notesData}
-                onSeeDetails={handleOpenDetail}
-                subscribedUsers={null} // TOPO -> review
-                checkIsSubscribe={checkIsSubscribe}
-                checkIsFavorite={checkIsFavorite}
-                onDelete={(id, key) => setNoteToDelete({ id, key })}
+                onSeeDetails={() => {}}
+                checkIsSubscribe={() => {}}
+                checkIsFavorite={() => {}}
+                onDelete={() => {}}
+                handleFavorite={() => {}}
+                handleSubscribe={() => {}}
+                notesFromSubscription
                 onGroup={handleOnGroup}
-                handleFavorite={handleFavorite}
                 groupOption={getGroupOptionLabel(
                   NOTES_GROUP_OPTIONS,
                   fetchOptions[fetchOption.GROUP]
@@ -407,17 +363,17 @@ const apuntesSuscripciones = () => {
             ) : (
               <NotesGrid
                 notes={notesData}
-                onSeeDetails={handleOpenDetail}
-                subscribedUsers={null} // TOPO -> review
-                checkIsSubscribe={checkIsSubscribe}
-                checkIsFavorite={checkIsFavorite}
-                onDelete={setNoteToDelete}
-                handleFavorite={handleFavorite}
-                handleSubscribe={handleSubscribe}
+                onSeeDetails={() => {}}
+                checkIsSubscribe={() => {}}
+                checkIsFavorite={() => {}}
+                onDelete={() => {}}
+                handleFavorite={() => {}}
+                handleSubscribe={() => {}}
+                notesFromSubscription
               />
             )}
           </>
-        ) : null}
+        )}
       </PageBody>
     </Page>
   )

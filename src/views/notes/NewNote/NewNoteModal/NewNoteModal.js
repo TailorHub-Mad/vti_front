@@ -197,7 +197,9 @@ export const NewNoteModal = ({
     if (!noteToUpdate) return
 
     const _note = {
-      project: noteToUpdate.projects[0].alias,
+      project: noteFromProject
+        ? noteFromProject.project
+        : noteToUpdate?.projects[0]?.alias,
       system: noteToUpdate.testSystems.map((ts) => ts.alias),
       title: noteToUpdate.title,
       description: noteToUpdate.description,

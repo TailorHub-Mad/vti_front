@@ -1,3 +1,5 @@
+import { useContext, useEffect, useState } from "react"
+import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 import { Card } from "../Card"
 import { MessageCardFooter } from "./MessageCardFooter/MessageCardFooter"
 import { MessageCardHeader } from "./MessageCardHeader/MessageCardHeader"
@@ -12,14 +14,29 @@ export const MessageCard = ({
   onDelete,
   handleFavorite,
   handleSubscribe,
-  fromProjectDetail
+  fromProjectDetail,
+  notesFromSubscription
 }) => {
+  const [isRead, setIsRead] = useState(false)
+
+  const { user } = useContext(ApiAuthContext)
+
   const setOwners = new Set(
-    note?.messages.map((m) => {
+    note?.messages?.map((m) => {
       return m.owner[0]?.alias
     })
   )
+  const ownerMessage = note.owner[0]?.alias
+  setOwners.add(ownerMessage)
   const owners = Array.from(setOwners).filter((e) => e)
+
+  useEffect(() => {
+    const found = note.readBy.find((id) => {
+      return user?._id === id
+    })
+
+    setIsRead(found)
+  }, [user])
 
   return (
     <Card>
@@ -31,6 +48,7 @@ export const MessageCard = ({
         onDelele={onDelete}
         onFavorite={handleFavorite}
         onSubscribe={handleSubscribe}
+        notesFromSubscription={notesFromSubscription}
       />
       <MessageCardInfo
         id={note?.ref}
@@ -47,6 +65,7 @@ export const MessageCard = ({
         messagesCount={note?.messages?.filter((m) => m?.createdAt).length}
         attachmentsCount={note?.documents?.length}
         subscribedUsers={owners.length > 0 ? owners : null}
+        isRead={isRead}
         marginTop="16px"
       />
     </Card>

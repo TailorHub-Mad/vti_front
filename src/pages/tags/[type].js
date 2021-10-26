@@ -23,7 +23,6 @@ import {
   transformTagsToExport
 } from "../../utils/functions/import_export/tags_helper"
 import { LoadingView } from "../../views/common/LoadingView"
-import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { NewTagModal } from "../../views/tags/NewTag/NewTagModal/NewTagModal"
 import { TagsHeader } from "../../views/tags/TagsHeader/TagsHeader"
 import download from "downloadjs"
@@ -258,17 +257,7 @@ const tags = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData && fetchState !== fetchType.ALL ? (
-        <ViewNotFoundState />
-      ) : isEmptyData ? (
-        <ViewEmptyState
-          message="Añadir tags a la plataforma"
-          importButtonText="Importar"
-          addButtonText="Añadir tag"
-          onImport={() => setShowImportModal(true)}
-          onAdd={() => setIsTagModalOpen(true)}
-        />
-      ) : null}
+      {isEmptyData ? <ViewNotFoundState text="No hya tags creados" /> : null}
       {tagData ? (
         <PageBody
           p="32px"

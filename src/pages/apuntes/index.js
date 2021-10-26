@@ -468,7 +468,7 @@ const apuntes = () => {
           />
         ) : null}
       </PageMenu>
-      <PageBody height="calc(100vh - 140px)">
+      <PageBody height="calc(100vh - 140px)" overflowY="auto">
         {isLoading ? <LoadingView mt="-200px" /> : null}
         {isEmptyData && fetchState !== fetchType.ALL ? (
           <ViewNotFoundState noBack />

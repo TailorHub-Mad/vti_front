@@ -19,14 +19,14 @@ export const Page = ({ children, ...props }) => {
         pl={["30px", null, null, isOpen ? "239px" : "63px"]}
         pt={["88px", null, null, "32px"]}
         pr={["20px", null, null, "24px"]}
-        pb="0"
         overflow={"hidden"}
         background={"url(/images/backgrounds/general_bg.svg)"}
         bgRepeat="no-repeat"
         bgAttachment="fixed"
         bgSize="cover"
         bgPosition="center"
-        h="100vh"
+        minH="100vh"
+        pb="50px"
         {...props}
       >
         {children}

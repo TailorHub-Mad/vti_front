@@ -18,6 +18,7 @@ export const NewTagForm = ({
   const _values = { ...value }
 
   const handleFormChange = (input, _value) => {
+    if (_value[_value?.length - 1] === " ") return
     onChange({
       ...value,
       [input]: _value

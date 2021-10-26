@@ -1,7 +1,7 @@
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons"
 import { Box, Flex, Text } from "@chakra-ui/react"
 import { useRouter } from "next/router"
-import React, { useContext } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
 import useNoteApi from "../../../../hooks/api/useNoteApi"
 import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
@@ -34,10 +34,11 @@ export const NoteMainInfo = ({
   const { mutate } = useSWRConfig()
   const { role, user } = useContext(ApiAuthContext)
 
-  const { _id } = user
+  const [userId, setUserId] = useState()
+
   const ownerMessage = item?.owner && item?.owner[0]?._id
 
-  const isMyMessage = ownerMessage === _id
+  const isMyMessage = ownerMessage === userId
 
   const updateLimitDate = isMyMessage ? item?.updateLimitDate : null
   const editAllowed = updateLimitDate ? new Date() < new Date(updateLimitDate) : null
@@ -78,6 +79,10 @@ export const NoteMainInfo = ({
 
     return true
   }
+
+  useEffect(() => {
+    setUserId(user?._id)
+  }, [user])
 
   return (
     <>
