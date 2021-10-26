@@ -21,7 +21,7 @@ const HelpService = () => {
   const createNoteGroup = (id, data) =>
     execute(instance.put(`/criterion/notes/${id}`, data))
   const deleteProjectCriterion = (id) =>
-    execute(instance.delete(`/criterion/project/${id}`))
+    execute(instance.delete(`/criterion/projects/${id}`))
   const deleteNoteCriterion = (id) =>
     execute(instance.delete(`/criterion/notes/${id}`))
 

@@ -154,9 +154,42 @@ const apuntes = () => {
   }
 
   const handleImportNotes = async (data) => {
+    const formatCreateNote = (note) => {
+      // console.log("FORMel console log no salta xDAT", note)
+      const formatData = {
+        project: note?.project,
+        title: note?.title,
+        description: note?.description
+      }
+      if (note?.testSystems?.length > 0) {
+        formatData["testSystems"] = note?.testSystems?.map((s) => s)
+      }
+      if (note?.tags) formatData["tags"] = note?.tags?.map((t) => t)
+      if (note?.link) formatData["link"] = note.link
+      if (note?.documents) formatData["file"] = note.documents
+      const formData = new FormData()
+
+      Object.entries(formatData).forEach(([key, value]) => {
+        Array.isArray(value)
+          ? value.forEach((v) => formData.append(key, v))
+          : formData.append(key, value)
+      })
+
+      return formData
+    }
+
+    const handleCreateNote = async (info) => {
+      try {
+        const note = formatCreateNote(info)
+        await createNote(note)
+      } catch (error) {
+        errorHandler(error)
+      }
+    }
+
     try {
       for (let index = 0; index < data.length; index++) {
-        await createNote(data[index])
+        await handleCreateNote(data[index])
       }
 
       setShowImportModal(false)
