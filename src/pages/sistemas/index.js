@@ -383,7 +383,7 @@ const sistemas = () => {
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData && fetchState !== fetchType.ALL ? (
-        <ViewNotFoundState />
+        <ViewNotFoundState noBack />
       ) : isEmptyData && !isValidating ? (
         <ViewEmptyState
           message="Añadir sistemas a la plataforma"

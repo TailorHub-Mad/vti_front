@@ -247,7 +247,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
     text: <SimpleInput />,
     select: <InputSelect isReset={isReset} />,
     add_select: <AddSelect isReset={isReset} />,
-    checkbox: <Checkbox />,
+    checkbox: <Checkbox isChecked={isReset ? false : true} />,
     switch: <Switch />,
     multitag_select: <MultiTagSelect isReset={isReset} />
   }

@@ -48,7 +48,6 @@ export const NewCriterionModal = ({
   }
 
   const checkInputsAreEmpty = () => {
-    console.log(values)
     return !values.title || !values.group_title || !values.relatedTags
   }
 
