@@ -157,11 +157,11 @@ const apuntes = () => {
     //TODO Gestión de errores y update de SWR
     const formatCreateNote = (note) => {
       const formatData = {
-        project: note.project.value,
-        testSystems: note.system.map((s) => s.value),
-        title: note.title,
-        description: note.description,
-        tags: note.tags.map((t) => t.value)
+        project: note?.project.value,
+        testSystems: note?.system?.map((s) => s?.value),
+        title: note?.title,
+        description: note?.description,
+        tags: note?.tags?.map((t) => t?.value)
       }
 
       if (note?.link) formatData["link"] = note.link
