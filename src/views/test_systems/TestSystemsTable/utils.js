@@ -48,7 +48,7 @@ export const TABLE_SYSTEMS_HEAD = {
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(130),
+    width: calcColWidth(120),
     type: "text",
     config: { sort: true, name: "alias" }
   },
@@ -66,7 +66,7 @@ export const TABLE_SYSTEMS_HEAD = {
   },
   year: {
     label: "Año",
-    width: calcColWidth(20),
+    width: calcColWidth(30),
     type: "text",
     config: { sort: true, name: "date" }
   },
@@ -110,7 +110,7 @@ export const TABLE_SYSTEMS_HEAD_USER = {
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(120),
+    width: calcColWidth(110),
     type: "text",
     config: { sort: true, name: "alias" }
   },
@@ -128,7 +128,7 @@ export const TABLE_SYSTEMS_HEAD_USER = {
   },
   year: {
     label: "Año",
-    width: calcColWidth(20),
+    width: calcColWidth(30),
     type: "text",
     config: { sort: true, name: "date" }
   },

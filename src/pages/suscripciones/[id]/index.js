@@ -23,6 +23,7 @@ import {
 } from "../../../utils/functions/global"
 import { LoadingView } from "../../../views/common/LoadingView"
 import { ViewNotFoundState } from "../../../views/common/ViewNotFoundState"
+import { NotesGrid } from "../../../views/notes/NotesGrid/NotesGrid"
 import { SubscriptionsGrid } from "../../../views/subscriptions/SubscriptionsGrid/SubscriptionsGrid"
 import { SubscriptionsMenu } from "../../../views/subscriptions/SubscriptionsMenu/SubscriptionsMenu"
 
@@ -302,9 +303,22 @@ const suscripcion = () => {
         {isLoading ? <LoadingView mt="-200px" /> : null}
         {subscriptionsData.length === 0 ? (
           <ViewNotFoundState text="No se ha suscrito a nada" noBack />
+        ) : currentState === "notes" ? (
+          <NotesGrid
+            notes={subscriptionsData}
+            onSeeDetails={() => {}}
+            checkIsSubscribe={() => {}}
+            checkIsFavorite={() => {}}
+            onDelete={() => {}}
+            handleFavorite={() => {}}
+            handleSubscribe={() => {}}
+            notesFromSubscription
+          />
         ) : (
           <SubscriptionsGrid
             subscriptions={subscriptionsData}
+            currentState={currentState}
+            owner={subscription?.name}
             onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}

@@ -4,5 +4,5 @@ export const checkFormIsEmpty = (values) => {
 
 export const checkIsYear = (year) => {
   const currentYear = new Date().getFullYear()
-  return year > "1900" && year < currentYear
+  return year > "1900" && year <= currentYear
 }
