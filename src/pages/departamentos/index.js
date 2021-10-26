@@ -37,7 +37,7 @@ const departamentos = () => {
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
 
-  const { data, error, isLoading, mutate } = departmentFetchHandler(
+  const { data, error, isLoading, mutate, isValidating } = departmentFetchHandler(
     fetchState,
     fetchOptions
   )
@@ -86,8 +86,6 @@ const departamentos = () => {
 
   // Handle CRUD
   const handleImportSectors = async (data) => {
-    //TODO Gestión de errores y update de SWR
-
     try {
       for (let index = 0; index < data.length; index++) {
         await createDepartment(data[index])
@@ -258,7 +256,7 @@ const departamentos = () => {
       {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData && isSearch ? (
         <ViewNotFoundState noBack />
-      ) : isEmptyData ? (
+      ) : isEmptyData && !isValidating ? (
         <ViewEmptyState
           message="Añadir departamentos a la plataforma"
           importButtonText="Importar"

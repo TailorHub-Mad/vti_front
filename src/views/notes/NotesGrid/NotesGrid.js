@@ -13,7 +13,6 @@ export const NotesGrid = ({
   fromProjectDetail,
   notesFromSubscription
 }) => {
-  console.log("NOTES", notes)
   return (
     <Grid
       templateColumns="repeat(auto-fill, 282px)"

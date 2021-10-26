@@ -24,7 +24,7 @@ const suscripciones = () => {
   const [fetchOptions, setFetchOptions] = useState({})
 
   // Fetch
-  const { data, error, isLoading } = subscriptionFetchHandler(
+  const { data, error, isLoading, isValidating } = subscriptionFetchHandler(
     fetchState,
     fetchOptions
   )
@@ -77,7 +77,7 @@ const suscripciones = () => {
             ) : null}
           </PageHeader>
           {isLoading ? <LoadingView mt="-200px" /> : null}
-          {isEmptyData ? (
+          {isEmptyData && !isValidating ? (
             <ViewNotFoundState noBack text="No te has suscrito a nada" />
           ) : (
             <SubscriptionsTable

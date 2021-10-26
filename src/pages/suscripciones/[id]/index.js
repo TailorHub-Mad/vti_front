@@ -54,8 +54,6 @@ const suscripcion = () => {
     fetchOptions
   )
 
-  console.log("DATA", data)
-
   const subscriptionId = router.query.id
   const isEmptyData = checkDataIsEmpty(data)
   const subscription =

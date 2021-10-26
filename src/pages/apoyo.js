@@ -120,7 +120,7 @@ const apoyo = () => {
   }
 
   // const handleImportHelps = async (data) => {
-  //   //TODO Gestión de errores y update de SWR
+  //
 
   //   try {
   //     const func = isProjectCriteria ? createProjectHelp : createNoteHelp
