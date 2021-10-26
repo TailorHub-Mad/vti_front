@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
+import { RoleType } from "../../../utils/constants/global"
 import { Card } from "../Card"
 import { MessageCardFooter } from "./MessageCardFooter/MessageCardFooter"
 import { MessageCardHeader } from "./MessageCardHeader/MessageCardHeader"
@@ -19,24 +20,27 @@ export const MessageCard = ({
 }) => {
   const [isRead, setIsRead] = useState(false)
 
-  const { user } = useContext(ApiAuthContext)
+  const { user, role } = useContext(ApiAuthContext)
 
   const setOwners = new Set(
     note?.messages?.map((m) => {
       return m.owner[0]?.alias
     })
   )
-  const ownerMessage = note.owner[0]?.alias
+
+  const ownerMessage = note?.owner[0]?.alias
   setOwners.add(ownerMessage)
   const owners = Array.from(setOwners).filter((e) => e)
 
   useEffect(() => {
+    if (!note?.readBy) return
+
     const found = note.readBy.find((id) => {
       return user?._id === id
     })
 
     setIsRead(found)
-  }, [user])
+  }, [user, note])
 
   return (
     <Card>
@@ -52,7 +56,8 @@ export const MessageCard = ({
       />
       <MessageCardInfo
         id={note?.ref}
-        author={note?.clientAlias}
+        isAdmin={RoleType.ADMIN === role}
+        author={note?.owner[0]?.alias}
         updatedAt={new Date(note?.updatedAt).toLocaleDateString()}
         marginBottom="18px"
         marginTop="6px"

@@ -45,7 +45,7 @@ const codigos = () => {
   const [codesToDelete, setCodesToDelete] = useState(null)
 
   // Fetch
-  const { data, error, isLoading, mutate } = codeFetchHandler(
+  const { data, error, isLoading, mutate, isValidating } = codeFetchHandler(
     fetchState,
     fetchOptions
   )
@@ -67,8 +67,6 @@ const codigos = () => {
   }
 
   const handleImportCodes = async (data) => {
-    //TODO Gestión de errores y update de SWR
-
     try {
       for (let index = 0; index < data.length; index++) {
         await createCode([data[index]])
@@ -228,7 +226,7 @@ const codigos = () => {
       {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData && isSearch ? (
         <ViewNotFoundState noBack />
-      ) : isEmptyData ? (
+      ) : isEmptyData && !isValidating ? (
         <ViewEmptyState
           message="Añadir códigos a la plataforma"
           importButtonText="Importar"

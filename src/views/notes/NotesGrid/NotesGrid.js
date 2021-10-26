@@ -20,7 +20,7 @@ export const NotesGrid = ({
       width="100%"
       marginBottom="32px"
     >
-      {notes.map((note, idx) => (
+      {notes?.map((note, idx) => (
         <MessageCard
           key={`${note.title}-${idx}`}
           note={note}

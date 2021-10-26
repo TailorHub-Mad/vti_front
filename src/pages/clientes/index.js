@@ -45,7 +45,7 @@ const clientes = () => {
   const [clientsToDelete, setClientsToDelete] = useState(null)
 
   // fetch
-  const { data, error, isLoading, mutate } = clientFetchHandler(
+  const { data, error, isLoading, mutate, isValidating } = clientFetchHandler(
     fetchState,
     fetchOptions
   )
@@ -83,8 +83,6 @@ const clientes = () => {
 
   // Handlers CRUD
   const handleImportClients = async (data) => {
-    //TODO Gestión de errores y update de SWR
-
     try {
       for (let index = 0; index < data.length; index++) {
         await createClient([data[index]])
@@ -227,7 +225,7 @@ const clientes = () => {
       {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData && isSearch ? (
         <ViewNotFoundState />
-      ) : isEmptyData ? (
+      ) : isEmptyData && !isValidating ? (
         <ViewEmptyState
           message="Añadir clientes a la plataforma"
           importButtonText="Importar"

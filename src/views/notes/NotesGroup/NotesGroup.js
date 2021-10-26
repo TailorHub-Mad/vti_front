@@ -51,7 +51,7 @@ export const NotesGroup = ({
               <GroupNotesRow
                 key={`${item.key}-${idx}`}
                 item={item}
-                onSeeDetails={onSeeDetails}
+                onSeeDetails={(note) => onSeeDetails(note, item.key)}
                 checkIsSubscribe={checkIsSubscribe}
                 checkIsFavorite={checkIsFavorite}
                 onDelete={(value) => onDelete(value, item.key)}
