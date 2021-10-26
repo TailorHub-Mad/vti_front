@@ -13,6 +13,7 @@ export const NotesGrid = ({
   fromProjectDetail,
   notesFromSubscription
 }) => {
+  console.log("NOTES", notes)
   return (
     <Grid
       templateColumns="repeat(auto-fill, 282px)"
@@ -20,7 +21,7 @@ export const NotesGrid = ({
       width="100%"
       marginBottom="32px"
     >
-      {notes.map((note, idx) => (
+      {notes?.map((note, idx) => (
         <MessageCard
           key={`${note.title}-${idx}`}
           note={note}

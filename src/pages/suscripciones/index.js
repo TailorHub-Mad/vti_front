@@ -72,6 +72,7 @@ const suscripciones = () => {
                 noGroup
                 noAdd
                 noImport
+                noSearch={isEmptyData ? false : true}
               />
             ) : null}
           </PageHeader>

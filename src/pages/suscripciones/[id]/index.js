@@ -54,13 +54,15 @@ const suscripcion = () => {
     fetchOptions
   )
 
+  console.log("DATA", data)
+
   const subscriptionId = router.query.id
   const isEmptyData = checkDataIsEmpty(data)
   const subscription =
     data && !isEmptyData ? data.find((d) => d._id === subscriptionId) : null
 
   const formatSubscriptionProjects = (data) => {
-    return data.map((d) => {
+    return data?.map((d) => {
       return {
         _id: d._id,
         title: d.alias,
@@ -71,7 +73,7 @@ const suscripcion = () => {
   }
 
   const formatSubscriptionSystem = (data) => {
-    return data.map((d) => {
+    return data?.map((d) => {
       return {
         _id: d._id,
         title: d.alias,
@@ -103,12 +105,6 @@ const suscripcion = () => {
   }, [subscription, currentState])
 
   // Handlers views
-  const isToolbarHidden = () => {
-    if (isLoading) return false
-    if (isEmptyData && fetchState === fetchType.ALL) return false
-
-    return true
-  }
 
   const isMenuHidden = () => {
     if (isLoading) return false
@@ -271,7 +267,7 @@ const suscripcion = () => {
         <BreadCrumbs
           customURL={`${PATHS.subscriptions}/${subscription?.name || ""}`}
         />
-        {isToolbarHidden() && (
+        {!isEmptyData ? (
           <ToolBar
             onSearch={onSearch}
             searchPlaceholder="Buscar"
@@ -280,8 +276,9 @@ const suscripcion = () => {
             noImport
             noFilter
             noGroup
+            noSearch={subscriptionsData.length === 0}
           />
-        )}
+        ) : null}
       </PageHeader>
       <PageMenu>
         {isMenuHidden() ? (
@@ -302,10 +299,10 @@ const suscripcion = () => {
       <PageBody height="calc(100vh - 140px)">
         {isLoading ? <LoadingView mt="-200px" /> : null}
         {subscriptionsData.length === 0 ? (
-          <ViewNotFoundState text="No se ha suscrito a nada" noBack />
+          <ViewNotFoundState text="No te has suscrito a nada" noBack />
         ) : currentState === "notes" ? (
           <NotesGrid
-            notes={subscriptionsData}
+            notes={subscription?.subscribed.notes}
             onSeeDetails={() => {}}
             checkIsSubscribe={() => {}}
             checkIsFavorite={() => {}}
@@ -316,7 +313,9 @@ const suscripcion = () => {
           />
         ) : (
           <SubscriptionsGrid
-            subscriptions={subscriptionsData}
+            subscriptions={formatSubscriptionSystem(
+              subscription?.subscribed[currentState]
+            )}
             currentState={currentState}
             owner={subscription?.name}
             onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
