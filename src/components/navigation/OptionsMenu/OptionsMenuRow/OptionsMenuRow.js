@@ -41,7 +41,7 @@ export const OptionsMenuRow = ({
           </Text>
         </OptionsMenuItem>
       ) : null}
-      {subscribed && role === RoleType.USER ? (
+      {subscribed ? (
         <OptionsMenuItem
           onClick={() =>
             onSubscribe(isGrouped ? { [id]: { key: keyGroup } } : id, isSubscribe)

@@ -7,19 +7,30 @@ import { SubscriptionCardTags } from "./SubscriptionCardTags/SubscriptionCardTag
 export const SubscriptionCard = ({
   subscription,
   onDelete,
+  owner,
   onCardSelected,
-  isChecked
+  isChecked,
+  currentState
 }) => {
   const router = useRouter()
+
+  const isClickable = subscription?.tags.length > 0
 
   return (
     <Card maxHeight="148px">
       <SubscriptionCardHeader
         title={subscription?.title}
-        onClick={() => router.push(`${subscription._id}/apuntes`)}
+        onClick={() =>
+          isClickable
+            ? router.push(
+                `${router.query.id}/${subscription._id}?owner=${owner}&type=${currentState}`
+              )
+            : null
+        }
         onDelele={onDelete}
         onCardSelected={onCardSelected}
         checked={isChecked}
+        isClickable={isClickable}
       />
       <SubscriptionCardInfo
         client={subscription?.client}

@@ -13,7 +13,8 @@ export const SubscriptionCardHeader = ({
   onClick,
   onDelele,
   onCardSelected,
-  checked
+  checked,
+  isClickable
 }) => {
   const { role } = useContext(ApiAuthContext)
 
@@ -37,7 +38,7 @@ export const SubscriptionCardHeader = ({
       justify={role === RoleType.ADMIN ? "flex-start" : "space-between"}
       alignItems={role === RoleType.ADMIN ? "flex-start" : "center"}
     >
-      <Flex onClick={onClick} cursor="pointer">
+      <Flex onClick={onClick} cursor={isClickable ? "pointer" : "deafult"}>
         {role === RoleType.USER && (
           <Checkbox
             mb="16px"
