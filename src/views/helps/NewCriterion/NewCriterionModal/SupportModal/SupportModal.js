@@ -34,12 +34,30 @@ export const SupportModal = ({
   ...props
 }) => {
   const [activeTab, setActiveTab] = useState(ORDER.board)
+  const [expandAll, setExpandAll] = useState(false)
+  const [expandedItems, setExpandedItems] = useState([])
+  const handleExpandedItems = (_idx) => {
+    if (expandedItems.includes(_idx)) {
+      const nextItems = expandedItems.filter((idx) => idx !== _idx)
+      setExpandedItems(nextItems)
+    } else {
+      setExpandedItems([...expandedItems, _idx])
+    }
+  }
+  const handleExpandAll = (isExpanding) => {
+    if (isExpanding) {
+      setExpandedItems(new Array(30).fill("").map((_, idx) => idx))
+    } else {
+      setExpandedItems([])
+    }
+  }
+
   return (
     <Box
       w="620px"
       h="fit-content"
       position="absolute"
-      top="100px"
+      top="50px"
       right="calc(50vw - 620px)"
       bgColor="transparent"
       zIndex="3000"
@@ -50,42 +68,56 @@ export const SupportModal = ({
       <Box bgColor="white" padding="32px">
         <CustomModalHeader title="Ventana de apoyo" onClose={onClose} />
         <Flex direction="column" mt="24px">
-          <Flex mb="24px">
-            <Flex
-              align="center"
-              onClick={() => setActiveTab(ORDER.board)}
-              cursor="pointer"
-            >
-              <DepartmentIcon
-                mr="2px"
-                color={activeTab === ORDER.board ? "blue.500" : "grey"}
-              />
-              <Text
-                variant="d_s_medium"
-                mt="4px"
-                color={activeTab === ORDER.board ? "blue.500" : "grey"}
+          <Flex mb="24px" justify="space-between" align="center" w="100%">
+            <Flex>
+              <Flex
+                align="center"
+                onClick={() => setActiveTab(ORDER.board)}
+                cursor="pointer"
               >
-                Tablero
-              </Text>
-            </Flex>
-            <Flex
-              align="center"
-              ml="16px"
-              onClick={() => setActiveTab(ORDER.alphabetic)}
-              cursor="pointer"
-            >
-              <ProjectsIcon
-                mr="2px"
-                color={activeTab === ORDER.alphabetic ? "blue.500" : "grey"}
-              />
-              <Text
-                variant="d_s_medium"
-                mt="4px"
-                color={activeTab === ORDER.alphabetic ? "blue.500" : "grey"}
+                <DepartmentIcon
+                  mr="2px"
+                  color={activeTab === ORDER.board ? "blue.500" : "grey"}
+                />
+                <Text
+                  variant="d_s_medium"
+                  mt="4px"
+                  color={activeTab === ORDER.board ? "blue.500" : "grey"}
+                >
+                  Tablero
+                </Text>
+              </Flex>
+              <Flex
+                align="center"
+                ml="16px"
+                onClick={() => setActiveTab(ORDER.alphabetic)}
+                cursor="pointer"
               >
-                Alfabético
-              </Text>
+                <ProjectsIcon
+                  mr="2px"
+                  color={activeTab === ORDER.alphabetic ? "blue.500" : "grey"}
+                />
+                <Text
+                  variant="d_s_medium"
+                  mt="4px"
+                  color={activeTab === ORDER.alphabetic ? "blue.500" : "grey"}
+                >
+                  Alfabético
+                </Text>
+              </Flex>
+              <Flex />
             </Flex>
+            <Text
+              mt="4px"
+              variant="d_s_medium"
+              cursor="pointer"
+              onClick={() => {
+                handleExpandAll(!expandAll)
+                setExpandAll(!expandAll)
+              }}
+            >
+              {expandAll ? "Contraer todos" : "Expandir todos"}
+            </Text>
           </Flex>
 
           {unusedTags?.length > 0 ? (
@@ -122,12 +154,12 @@ export const SupportModal = ({
               </Flex>
             </Box>
           ) : null}
-          <Accordion allowToggle allowMultiple>
+          <Accordion allowToggle allowMultiple index={expandedItems}>
             {activeTab === ORDER.board
               ? criteria
                   .sort((a, b) => (b.order > a.order ? -1 : 1))
                   .filter((cr) => cr.group.length >= 1)
-                  .map((criterion) => (
+                  .map((criterion, idx) => (
                     <AccordionItem
                       key={criterion._id}
                       border="0px"
@@ -142,6 +174,7 @@ export const SupportModal = ({
                             p={"0px 8px"}
                             mb={"0px"}
                             mt="8px"
+                            onClick={() => handleExpandedItems(idx)}
                           >
                             <Flex align="center">
                               <Text variant="d_m_medium" mt="4px">
@@ -168,7 +201,7 @@ export const SupportModal = ({
                     </AccordionItem>
                   ))
               : Object.entries(sortAlphabetic(usedTags.map((t) => t.name))).map(
-                  ([name, group]) => (
+                  ([name, group], idx) => (
                     <AccordionItem
                       key={name}
                       border="0px"
@@ -182,6 +215,7 @@ export const SupportModal = ({
                             _focus={{ outline: "none" }}
                             p={"8px"}
                             mb={"8px"}
+                            onClick={() => handleExpandedItems(idx)}
                           >
                             <Flex align="center">
                               <Text variant="d_s_medium" mt="4px">
