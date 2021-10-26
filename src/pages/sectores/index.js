@@ -45,7 +45,7 @@ const sectores = () => {
   const [sectorsToDelete, setSectorsToDelete] = useState(null)
 
   // Fetch
-  const { data, error, isLoading, mutate } = sectorFetchHandler(
+  const { data, error, isLoading, mutate, isValidating } = sectorFetchHandler(
     fetchState,
     fetchOptions
   )
@@ -68,8 +68,6 @@ const sectores = () => {
   }
 
   const handleImportSectors = async (data) => {
-    //TODO Gestión de errores y update de SWR
-
     try {
       for (let index = 0; index < data.length; index++) {
         await createSector([data[index]])
@@ -229,7 +227,7 @@ const sectores = () => {
       {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData && isSearch ? (
         <ViewNotFoundState noBack />
-      ) : isEmptyData ? (
+      ) : isEmptyData && !isValidating ? (
         <ViewEmptyState
           message="Añadir sectores a la plataforma"
           importButtonText="Importar"

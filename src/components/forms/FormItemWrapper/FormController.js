@@ -11,7 +11,6 @@ export const FormController = ({
   isDisabled,
   ...props
 }) => {
-  //TODO helper y ventana de apoyo
   return (
     <FormControl {...props}>
       {label ? (

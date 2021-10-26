@@ -4,10 +4,12 @@ import { SubscriptionCard } from "../../../components/cards/SubscriptionCard/Sub
 
 export const SubscriptionsGrid = ({
   subscriptions,
+  owner,
   onDelete,
   selectedRows,
   setSelectedRows,
-  handleRowSelect
+  handleRowSelect,
+  currentState
 }) => {
   useMemo(() => {
     setSelectedRows && setSelectedRows([])
@@ -24,7 +26,9 @@ export const SubscriptionsGrid = ({
         return (
           <SubscriptionCard
             key={`${subscription.title}-${idx}`}
+            currentState={currentState}
             subscription={subscription}
+            owner={owner}
             onDelete={() => onDelete(subscription._id)}
             onCardSelected={() => handleRowSelect(subscription._id)}
             isChecked={selectedRows[subscription._id]}

@@ -23,5 +23,13 @@ export const CUSTOM_SCROLLBAR = {
   },
   "&::-webkit-scrollbar-thumb:hover": {
     backgroundColor: `blue.500`
+  },
+  "&.scroller": {
+    overflowY: "scroll",
+    scrollbarColor: `blue.500`
+  },
+  "&.scroller:hover": {
+    overflowY: "scroll",
+    backgroundColor: `blue.500`
   }
 }

@@ -23,7 +23,6 @@ import {
   transformTagsToExport
 } from "../../utils/functions/import_export/tags_helper"
 import { LoadingView } from "../../views/common/LoadingView"
-import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 import { NewTagModal } from "../../views/tags/NewTag/NewTagModal/NewTagModal"
 import { TagsHeader } from "../../views/tags/TagsHeader/TagsHeader"
 import download from "downloadjs"
@@ -76,15 +75,13 @@ const tags = () => {
   const [isTagModalOpen, setIsTagModalOpen] = useState(false)
   const [tagToUpdate, setTagToUpdate] = useState(null)
   const [tagToDelete, setTagToDelete] = useState(null)
-  // TODO -> review order in back & ENUM
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
 
   // Fetch
-  // TODO -> review  ENUM
   const isProjectTag = type === "proyecto"
 
-  const { data, error, isLoading, mutate } = tagFetchHandler(
+  const { data, error, isLoading, mutate, isValidating } = tagFetchHandler(
     fetchState,
     fetchOptions,
     isProjectTag
@@ -125,8 +122,6 @@ const tags = () => {
 
   // Handlers CRUD
   const handleImportTags = async (data) => {
-    //TODO Gestión de errores y update de SWR
-
     try {
       const func = isProjectTag ? createProjectTag : createNoteTag
       for (let index = 0; index < data.length; index++) {
@@ -270,16 +265,8 @@ const tags = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData && fetchState !== fetchType.ALL ? (
-        <ViewNotFoundState />
-      ) : isEmptyData ? (
-        <ViewEmptyState
-          message="Añadir tags a la plataforma"
-          importButtonText="Importar"
-          addButtonText="Añadir tag"
-          onImport={() => setShowImportModal(true)}
-          onAdd={() => setIsTagModalOpen(true)}
-        />
+      {isEmptyData && !isValidating ? (
+        <ViewNotFoundState text="No hya tags creados" />
       ) : null}
       {tagData ? (
         <PageBody

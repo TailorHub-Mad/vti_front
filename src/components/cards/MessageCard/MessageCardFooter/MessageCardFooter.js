@@ -22,6 +22,7 @@ export const MessageCardFooter = ({
   messagesCount = 0,
   attachmentsCount = 0,
   subscribedUsers,
+  isRead,
   ...props
 }) => {
   const areMultipleUsers = subscribedUsers?.length > 1
@@ -44,17 +45,31 @@ export const MessageCardFooter = ({
       {isFormalized ? <BadgeIcon {...icon_props} color={"blue.500"} /> : null}
 
       <Box display="flex" alignItems="center">
-        <Text color="grey" variant="d_xs_regular" marginRight="2px">
+        <Text
+          color={isRead || messagesCount === 0 ? "grey" : "yellow"}
+          variant="d_xs_regular"
+          marginRight="2px"
+        >
           {messagesCount}
         </Text>
-        <MessagesIcon {...icon_props} />
+        <MessagesIcon
+          {...icon_props}
+          color={isRead || messagesCount === 0 ? "grey" : "yellow"}
+        />
       </Box>
 
       <Box display="flex" alignItems="center">
-        <Text color="grey" variant="d_xs_regular" marginRight="2px">
+        <Text
+          color={attachmentsCount === 0 ? "grey" : "yellow"}
+          variant="d_xs_regular"
+          marginRight="2px"
+        >
           {attachmentsCount}
         </Text>
-        <AttachmentIcon {...icon_props} />
+        <AttachmentIcon
+          {...icon_props}
+          color={attachmentsCount === 0 ? "grey" : "yellow"}
+        />
       </Box>
 
       {subscribedUsers ? (
@@ -76,7 +91,7 @@ export const MessageCardFooter = ({
             bg="blue.500"
           >
             <Text color="white" transform="uppercase" variant="d_xs_regular">
-              {getAcronym(subscribedUsers[0])}
+              {getAcronym(subscribedUsers[subscribedUsers.length - 1])}
             </Text>
           </Circle>
         </Box>

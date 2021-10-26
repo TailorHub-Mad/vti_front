@@ -35,7 +35,7 @@ export const Table = ({
       bgColor="white"
       sx={CUSTOM_SCROLLBAR}
       {...props}
-      overflow="scroll"
+      overflow="hidden"
     >
       {header ? <Box>{header}</Box> : null}
 
@@ -44,13 +44,14 @@ export const Table = ({
         maxHeight={tableHeight || `calc(100vh - ${header ? "310px" : "230px"})`}
         position="relative"
         sx={CUSTOM_SCROLLBAR}
-        overflow="scroll"
+        overflowY="auto"
       >
         <Grid
           minWidth={MIN_TABLE_WIDTH}
           maxWidth={MAX_TABLE_WIDTH}
           width="100%"
           height="fit-content"
+          overflowY="auto"
         >
           <TableHead
             templateColumns={templateColumns}

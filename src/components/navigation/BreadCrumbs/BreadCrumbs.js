@@ -26,7 +26,7 @@ export const BreadCrumbs = ({ customURL, lastElement }) => {
 
   const items = splitURL(customURL ?? router.asPath)
 
-  lastElement && items.push(lastElement)
+  lastElement && items.push(...splitURL(lastElement))
 
   return (
     <Flex alignItems="center" justifyContent="center">
@@ -48,6 +48,7 @@ export const BreadCrumbs = ({ customURL, lastElement }) => {
                   color="blue.400"
                   as="a"
                   cursor={lock ? "pointer" : "default"}
+                  _hover={{ color: "blue.500" }}
                 >
                   {navItem}
                 </Text>

@@ -18,7 +18,8 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
     project: { label: "", value: "" },
     test_system: { label: "", value: "" },
     client: { label: "", value: "" },
-    dates: [{ label: "", value: "" }],
+    dateFrom: "",
+    dateTo: "",
     users: [{ label: "", value: "" }],
     vti_code: [{ label: "", value: "" }],
     project_tags: [{ label: "", value: "" }],
@@ -57,7 +58,6 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
     onClose()
   }
 
-  //TODO Esta función se repite en todos los apoyos, se podría refactorizar para meterla en utils
   const handleTagSelect = (_tags, isProject) => {
     const refTags = isProject ? filterValues.project_tags : filterValues.note_tags
     const refUsed = isProject ? usedProjectTags : usedNoteTags

@@ -80,8 +80,6 @@ export const ProjectsByObject = ({
   }
 
   const handleImportProjects = async (data) => {
-    //TODO Gestión de errores y update de SWR
-
     try {
       for (let index = 0; index < data.length; index++) {
         await createProject(data[index])
