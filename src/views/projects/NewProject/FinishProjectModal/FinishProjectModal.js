@@ -45,7 +45,7 @@ export const FinishProjectModal = ({
       ? await mutate(SWR_CACHE_KEYS.groupProjects)
       : await mutate(SWR_CACHE_KEYS.projects)
 
-    showToast("Ha finalizado el proyecto")
+    showToast({ message: "Ha finalizado el proyecto" })
     setIsSubmitting(false)
     setValues(initialValues)
     onClose()

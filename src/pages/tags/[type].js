@@ -129,7 +129,7 @@ const tags = () => {
       }
 
       setShowImportModal(false)
-      showToast("Tags importadas correctamente")
+      showToast({ message: "Tags importadas correctamente" })
     } catch (error) {
       errorHandler(error)
     }
@@ -147,7 +147,7 @@ const tags = () => {
         ? await deleteProjectTag(tagToDelete)
         : await deleteNoteTag(tagToDelete)
       await mutate()
-      showToast("Tag borrada correctamente")
+      showToast({ message: "Tag borrada correctamente" })
       setTagToDelete(null)
     } catch (error) {
       errorHandler(error)

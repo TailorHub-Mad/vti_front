@@ -133,7 +133,12 @@ export const NewNoteModal = ({
     noteFromProject
       ? await mutate([SWR_CACHE_KEYS.project, noteFromProject.project.value])
       : await mutate(SWR_CACHE_KEYS.notes)
-    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s apunte/s!")
+    showToast({
+      message: isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s apunte/s!",
+      secondaryMessage: isUpdate
+        ? null
+        : "Tiene una hora para editarlo antes de que se publique, después de ese tiempo, tendrá que solicitarlo al administrador"
+    })
     setIsSubmitting(false)
     handleOnClose()
   }

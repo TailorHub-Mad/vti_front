@@ -42,7 +42,9 @@ export const NewClientModal = ({ isOpen, onClose, clientToUpdate }) => {
     isUpdate ? await handleUpdateClient() : await handleCreateClient()
     setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.clients)
-    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s cliente/s!")
+    showToast({
+      message: isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s cliente/s!"
+    })
     setIsSubmitting(false)
     onClose()
   }

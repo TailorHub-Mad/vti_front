@@ -194,7 +194,7 @@ const apuntes = () => {
       }
 
       setShowImportModal(false)
-      showToast("Proyectos importados correctamente")
+      showToast({ message: "Proyectos importados correctamente" })
     } catch (error) {
       errorHandler(error)
     }
@@ -210,13 +210,13 @@ const apuntes = () => {
     try {
       if (isGrouped) {
         await await deleteNote(noteToDelete.id)
-        showToast("Apunte borrado correctamente")
+        showToast({ message: "Apunte borrado correctamente" })
         setNoteToDelete(null)
         return await mutate()
       }
 
       await deleteNote(noteToDelete)
-      showToast("Apunte borrado correctamente")
+      showToast({ message: "Apunte borrado correctamente" })
 
       const updatedNotes = []
       const filterNotes = notesData.filter((note) => note._id !== noteToDelete)
@@ -238,7 +238,7 @@ const apuntes = () => {
   const handleDeleteMessage = async () => {
     try {
       await deleteMessage(messageToDelete.noteId, messageToDelete.messageId)
-      showToast("Mensaje borrado correctamente")
+      showToast({ messgage: "Mensaje borrado correctamente" })
       await mutate()
       setMessageToDelete(null)
     } catch (error) {

@@ -55,7 +55,9 @@ export const NewCriterionModal = ({
     setIsSubmitting(true)
     isUpdate ? await handleUpdateCriterion() : await handleCreateCriterion()
     setValues({})
-    showToast(isUpdate ? "Criterio editado correctamente" : addSuccessMsg)
+    showToast({
+      message: isUpdate ? "Criterio editado correctamente" : addSuccessMsg
+    })
     fetchData()
     setIsSubmitting(false)
     onClose()

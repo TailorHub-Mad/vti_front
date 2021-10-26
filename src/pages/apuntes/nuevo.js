@@ -67,7 +67,7 @@ const nuevo = () => {
       await createNote(note)
 
       setValues(initialValues)
-      showToast("¡Has añadido nuevo/s apunte/s!")
+      showToast({ message: "¡Has añadido nuevo/s apunte/s!" })
       setIsSubmitting(false)
     } catch (error) {
       errorHandler(error)
