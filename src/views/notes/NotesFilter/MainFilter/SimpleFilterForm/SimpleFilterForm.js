@@ -1,6 +1,5 @@
 import { Checkbox, Switch } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
-import { MOCK_SELECT_OPTIONS } from "../../../../../mock/mock"
 import { AddSelect } from "../../../../../components/forms/AddSelect/AddSelect"
 import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
 import useProjectApi from "../../../../../hooks/api/useProjectApi"
@@ -9,6 +8,7 @@ import useClientApi from "../../../../../hooks/api/useClientApi"
 import useUserApi from "../../../../../hooks/api/useUserApi"
 import useTagApi from "../../../../../hooks/api/useTagApi"
 import { MultiTagSelect } from "../../../../../components/forms/MultiTagSelect/MultiTagSelect"
+import { SimpleInput } from "../../../../../components/forms/SimpleInput/SimpleInput"
 
 export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => {
   const { getProjects } = useProjectApi()
@@ -120,15 +120,20 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
         label: "Cliente"
       }
     },
-    dates: {
-      type: "add_select",
+    dateFrom: {
+      type: "text",
       config: {
-        placeholder: "Desde 00/00/0000 hasta 00/00/0000",
-        options: MOCK_SELECT_OPTIONS,
-        label: "Fechas",
-        additemlabel: "Añadir ",
-        removeitemlabel: "Eliminar ",
-        isDisabled: true
+        type: "date",
+        placeholder: "Desde 00/00/0000",
+        label: "Fecha desde"
+      }
+    },
+    dateTo: {
+      type: "text",
+      config: {
+        type: "date",
+        placeholder: "Hasta 00/00/0000",
+        label: "Fecha hasta"
       }
     },
     users: {
@@ -239,6 +244,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
   }
 
   const inputRefObj = {
+    text: <SimpleInput />,
     select: <InputSelect isReset={isReset} />,
     add_select: <AddSelect isReset={isReset} />,
     checkbox: <Checkbox />,

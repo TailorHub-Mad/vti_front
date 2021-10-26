@@ -187,9 +187,17 @@ export const NewNoteForm = ({
 
     if (!data?.testSystems) return
 
-    setSystemOptions(
-      noteFromProject ? data?.testSystems : formatSelectOption(data?.testSystems)
-    )
+    const _systemsOptions = noteFromProject
+      ? data?.testSystems
+      : formatSelectOption(data?.testSystems)
+
+    const allSystems = {
+      label: "Todos",
+      value: _systemsOptions.map((so) => so.value)
+    }
+    const noSystems = { label: "Ninguno", value: [] }
+
+    setSystemOptions([allSystems, noSystems, ..._systemsOptions])
   }
 
   useEffect(() => {
