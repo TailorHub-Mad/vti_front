@@ -93,6 +93,18 @@ const tags = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const tagData = data && !isEmptyData ? data : null
 
+  const tagsByParent =
+    tagData &&
+    tagData
+      .filter((tag) => tag?.relatedTags?.length === 0)
+      .reduce((ac, tag) => {
+        const parentName = tag?.parent?.name
+        if (parentName) {
+          ac[parentName] = ac[parentName] ? [...ac[parentName], tag] : [tag]
+        } else ac["zulu"] = ac["zulu"] ? [...ac["zulu"], tag] : [tag]
+        return ac
+      }, {})
+
   // Handlers views
   const isToolbarHidden = () => {
     if (isLoading) return false
@@ -306,25 +318,30 @@ const tags = () => {
               </Grid>
 
               <Text variant="d_s_medium">Grado Cero</Text>
-              <Grid
-                templateColumns="repeat(auto-fill, 266px)"
-                gap="16px"
-                width="100%"
-                mt="8px"
-                mb="24px"
-              >
-                {tagData
-                  .filter((tag) => tag?.relatedTags?.length === 0)
-                  .map((tag) => (
-                    <TagCard
-                      onEdit={() => handleUpdate(tag)}
-                      onDelete={() => setTagToDelete(tag._id)}
-                      key={tag.name}
-                      tag={tag}
-                      isProjectTag={isProjectTag}
-                    />
-                  ))}
-              </Grid>
+              {Object.entries(tagsByParent)
+                .sort((a, b) => a[0].localeCompare(b[0]))
+                .map(([groupName, tags]) => (
+                  <Grid
+                    templateColumns="repeat(auto-fill, 266px)"
+                    gap="16px"
+                    width="100%"
+                    mt="8px"
+                    mb="24px"
+                    key={groupName}
+                  >
+                    {tags
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map((tag) => (
+                        <TagCard
+                          onEdit={() => handleUpdate(tag)}
+                          onDelete={() => setTagToDelete(tag._id)}
+                          key={tag.name}
+                          tag={tag}
+                          isProjectTag={isProjectTag}
+                        />
+                      ))}
+                  </Grid>
+                ))}
             </>
           ) : null}
 
