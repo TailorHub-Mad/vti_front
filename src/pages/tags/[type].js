@@ -75,12 +75,10 @@ const tags = () => {
   const [isTagModalOpen, setIsTagModalOpen] = useState(false)
   const [tagToUpdate, setTagToUpdate] = useState(null)
   const [tagToDelete, setTagToDelete] = useState(null)
-  // TODO -> review order in back & ENUM
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
 
   // Fetch
-  // TODO -> review  ENUM
   const isProjectTag = type === "proyecto"
 
   const { data, error, isLoading, mutate, isValidating } = tagFetchHandler(

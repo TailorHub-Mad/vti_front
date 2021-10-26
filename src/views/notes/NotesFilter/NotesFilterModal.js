@@ -57,7 +57,6 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
     onClose()
   }
 
-  //TODO Esta función se repite en todos los apoyos, se podría refactorizar para meterla en utils
   const handleTagSelect = (_tags, isProject) => {
     const refTags = isProject ? filterValues.project_tags : filterValues.note_tags
     const refUsed = isProject ? usedProjectTags : usedNoteTags
