@@ -156,17 +156,18 @@ const apuntes = () => {
   const handleImportNotes = async (data) => {
     //TODO Gestión de errores y update de SWR
     const formatCreateNote = (note) => {
+      // console.log("FORMel console log no salta xDAT", note)
       const formatData = {
-        project: note?.project.value,
-        testSystems: note?.system?.map((s) => s?.value),
+        project: note?.project,
         title: note?.title,
-        description: note?.description,
-        tags: note?.tags?.map((t) => t?.value)
+        description: note?.description
       }
-
+      if (note?.testSystems?.length > 0) {
+        formatData["testSystems"] = note?.testSystems?.map((s) => s)
+      }
+      if (note?.tags) formatData["tags"] = note?.tags?.map((t) => t)
       if (note?.link) formatData["link"] = note.link
       if (note?.documents) formatData["file"] = note.documents
-
       const formData = new FormData()
 
       Object.entries(formatData).forEach(([key, value]) => {
