@@ -37,11 +37,14 @@ export const NoteMainInfo = ({
   const [userId, setUserId] = useState()
 
   const ownerMessage = item?.owner && item?.owner[0]?._id
-
+  const isAdmin = role === RoleType.ADMIN
   const isMyMessage = ownerMessage === userId
 
   const updateLimitDate = isMyMessage ? item?.updateLimitDate : null
-  const editAllowed = updateLimitDate ? new Date() < new Date(updateLimitDate) : null
+  const editAllowed =
+    (isMyMessage && updateLimitDate
+      ? new Date() < new Date(updateLimitDate)
+      : null) || isAdmin
 
   const handleUpdateNote = async (action) => {
     switch (action) {
@@ -93,7 +96,7 @@ export const NoteMainInfo = ({
         <Flex>
           {!isMessage || isMyMessage ? (
             <>
-              {!isMessage ? (
+              {editAllowed || isAdmin ? (
                 <ActionLink
                   onClick={onEdit}
                   color="blue.500"
@@ -101,40 +104,30 @@ export const NoteMainInfo = ({
                   label="Editar"
                 />
               ) : null}
-
-              {isMessage && editAllowed ? (
-                <ActionLink
-                  onClick={onEdit}
-                  color="blue.500"
-                  icon={<EditIcon />}
-                  label="Editar"
-                />
-              ) : null}
-
-              <ActionLink
-                onClick={() => handleUpdateNote(actionType.CLOSE)}
-                color="blue.500"
-                icon={item.isClosed ? <LockCloseIcon /> : <LockOpenIcon />}
-                label={item.isClosed ? "Cerrado" : "Cerrar"}
-              />
-
-              {role === RoleType.USER && isMessage ? null : (
+              {isAdmin ? (
                 <>
+                  <ActionLink
+                    onClick={() => handleUpdateNote(actionType.CLOSE)}
+                    color="blue.500"
+                    icon={item.isClosed ? <LockCloseIcon /> : <LockOpenIcon />}
+                    label={item.isClosed ? "Cerrado" : "Cerrar"}
+                  />
                   <ActionLink
                     onClick={() => handleUpdateNote(actionType.FORMALIZED)}
                     color="blue.500"
                     icon={<FormalizedIcon fill="blue.500" />}
                     label={item.formalized ? "Formalizado" : "Formalizar"}
                   />
-
-                  <ActionLink
-                    onClick={onDelete}
-                    color="error"
-                    icon={<DeleteIcon />}
-                    label="Eliminar"
-                  />
                 </>
-              )}
+              ) : null}
+              {editAllowed || isAdmin ? (
+                <ActionLink
+                  onClick={onDelete}
+                  color="error"
+                  icon={<DeleteIcon />}
+                  label="Eliminar"
+                />
+              ) : null}
             </>
           ) : null}
         </Flex>
