@@ -75,7 +75,7 @@ const sistemas = () => {
   const [systemsToDelete, setSystemsToDelete] = useState(null)
 
   // Fetch
-  const { data, error, isLoading, mutate } = systemFetchHandler(
+  const { data, error, isLoading, mutate, isValidating } = systemFetchHandler(
     fetchState,
     fetchOptions
   )
@@ -84,8 +84,6 @@ const sistemas = () => {
     if (!data || isEmptyData) return []
     if (fetchState == fetchType.GROUP) return data
     return data[0].testSystems
-
-    // TODO FILTER
   }
 
   const isEmptyData = checkDataIsEmpty(data)
@@ -105,8 +103,6 @@ const sistemas = () => {
   }
 
   const handleImportProjects = async (data) => {
-    //TODO Gestión de errores y update de SWR
-
     try {
       for (let index = 0; index < data.length; index++) {
         await createSystem(data[index])
@@ -387,8 +383,8 @@ const sistemas = () => {
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData && fetchState !== fetchType.ALL ? (
-        <ViewNotFoundState />
-      ) : isEmptyData ? (
+        <ViewNotFoundState noBack />
+      ) : isEmptyData && !isValidating ? (
         <ViewEmptyState
           message="Añadir sistemas a la plataforma"
           importButtonText="Importar"

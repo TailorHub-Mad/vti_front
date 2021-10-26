@@ -48,7 +48,7 @@ export const NewCriterionModal = ({
   }
 
   const checkInputsAreEmpty = () => {
-    return Object.entries(values).some(([, value]) => !value)
+    return !values.title || !values.group_title || !values.relatedTags
   }
 
   const handleSubmit = async () => {

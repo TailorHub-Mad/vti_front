@@ -27,10 +27,7 @@ export const ImportFilesModal = ({
     onUpload(data)
   }
 
-  const handleOnDrop = (jsonInfo) => {
-    //TODO Gestión de errores al transformar la data
-    setData(onDropDataTransform(jsonInfo))
-  }
+  const handleOnDrop = (jsonInfo) => setData(onDropDataTransform(jsonInfo))
 
   const handleOnError = (e) => errorHandler(e)
 

@@ -75,15 +75,13 @@ const tags = () => {
   const [isTagModalOpen, setIsTagModalOpen] = useState(false)
   const [tagToUpdate, setTagToUpdate] = useState(null)
   const [tagToDelete, setTagToDelete] = useState(null)
-  // TODO -> review order in back & ENUM
   const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [fetchOptions, setFetchOptions] = useState({})
 
   // Fetch
-  // TODO -> review  ENUM
   const isProjectTag = type === "proyecto"
 
-  const { data, error, isLoading, mutate } = tagFetchHandler(
+  const { data, error, isLoading, mutate, isValidating } = tagFetchHandler(
     fetchState,
     fetchOptions,
     isProjectTag
@@ -112,8 +110,6 @@ const tags = () => {
 
   // Handlers CRUD
   const handleImportTags = async (data) => {
-    //TODO Gestión de errores y update de SWR
-
     try {
       const func = isProjectTag ? createProjectTag : createNoteTag
       for (let index = 0; index < data.length; index++) {
@@ -257,7 +253,9 @@ const tags = () => {
         ) : null}
       </PageHeader>
       {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData ? <ViewNotFoundState text="No hya tags creados" /> : null}
+      {isEmptyData && !isValidating ? (
+        <ViewNotFoundState text="No hya tags creados" />
+      ) : null}
       {tagData ? (
         <PageBody
           p="32px"

@@ -39,7 +39,7 @@ export const SupportModal = ({
       w="620px"
       h="fit-content"
       position="absolute"
-      top="100px"
+      top="50px"
       right="calc(50vw - 620px)"
       bgColor="transparent"
       zIndex="3000"
@@ -102,6 +102,7 @@ export const SupportModal = ({
                     variant="violete"
                     mr="8px"
                     mb="8px"
+                    width="auto"
                   >
                     <Checkbox
                       size="sm"

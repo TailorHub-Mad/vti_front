@@ -60,7 +60,7 @@ const usuarios = () => {
   const [usersToDelete, setUsersToDelete] = useState(null)
 
   // Fetch
-  const { data, error, isLoading, mutate } = userFetchHandler(
+  const { data, error, isLoading, mutate, isValidating } = userFetchHandler(
     fetchState,
     fetchOptions
   )
@@ -101,8 +101,6 @@ const usuarios = () => {
 
   // Handlers CRUD
   const handleImportProjects = async (data) => {
-    //TODO Gestión de errores y update de SWR
-
     try {
       for (let index = 0; index < data.length; index++) {
         await createUser(data[index])
@@ -290,7 +288,7 @@ const usuarios = () => {
 
       {isEmptyData && fetchState !== fetchType.ALL ? (
         <ViewNotFoundState />
-      ) : isEmptyData ? (
+      ) : isEmptyData && !isValidating ? (
         <ViewEmptyState
           message="Añadir usuarios a la plataforma"
           importButtonText="Importar"

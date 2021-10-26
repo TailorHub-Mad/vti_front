@@ -117,7 +117,6 @@ export const NewTagModal = ({
     setValues([{ relatedTag: parent?.name, name }])
   }, [tagToUpdate])
 
-  //TODO Esta función se repite en todos los apoyos, se podría refactorizar para meterla en utils
   const handleTagSelect = (_tags) => {
     const refTags = values
     const refUsed = usedTags

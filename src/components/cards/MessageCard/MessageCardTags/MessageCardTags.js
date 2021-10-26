@@ -39,9 +39,9 @@ export const MessageCardTags = ({ note, fromProjectDetail }) => {
           width="100%"
           noCollapse
         />
-      ) : (
+      ) : Array.isArray(note.tags) ? (
         <Box w="100%" height="28px"></Box>
-      )}
+      ) : null}
     </Box>
   )
 }
