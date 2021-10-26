@@ -120,7 +120,7 @@ const apoyo = () => {
   }
 
   // const handleImportHelps = async (data) => {
-  //   //TODO Gestión de errores y update de SWR
+  //
 
   //   try {
   //     const func = isProjectCriteria ? createProjectHelp : createNoteHelp
@@ -250,8 +250,8 @@ const apoyo = () => {
       </PageHeader>
       <PageBody
         p="32px"
-        bgColor="white"
-        boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
+        bgColor={isEmptyData ? undefined : "white"}
+        boxShadow={isEmptyData ? undefined : "0px 0px 8px rgba(5, 46, 87, 0.1)"}
         height="calc(100vh - 105px)"
       >
         {isLoading ? <LoadingView mt="-200px" /> : null}
@@ -278,7 +278,13 @@ const apoyo = () => {
                 </Text>
                 <Flex width="100%" wrap="wrap">
                   {unusedTags.map((tag, idx) => (
-                    <Tag key={`${tag}-${idx}`} variant="violete" mr="8px" mb="8px">
+                    <Tag
+                      key={`${tag}-${idx}`}
+                      variant="violete"
+                      mr="8px"
+                      mb="8px"
+                      width="auto"
+                    >
                       {tag.name}
                     </Tag>
                   ))}

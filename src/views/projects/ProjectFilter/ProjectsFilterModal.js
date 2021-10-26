@@ -43,7 +43,6 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
     onClose()
   }
 
-  //TODO Esta función se repite en todos los apoyos, se podría refactorizar para meterla en utils
   const handleTagSelect = (_tags) => {
     const refTags = filterValues.tag_project
     const refUsed = usedProjectTags

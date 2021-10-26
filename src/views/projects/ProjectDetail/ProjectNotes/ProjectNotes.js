@@ -90,8 +90,10 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
     setIsNoteModalOpen(false)
   }
 
-  const handleOpenDetail = (note) => {
-    setNoteToDetail(note)
+  const handleOpenDetail = (note, key) => {
+    if (fetchState === fetchType.GROUP) {
+      setNoteToDetail({ note, key })
+    } else setNoteToDetail(note)
     setShowNoteDetails(true)
   }
 
@@ -124,9 +126,17 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
     }
   }
 
-  // TODO -> falta que llegue toda la información de la nota desde el BACK
-  const handleUpdate = (id) => {
-    const note = notesData.find((note) => note._id === id)
+  const handleUpdate = () => {
+    let note = null
+    if (fetchState == fetchType.GROUP) {
+      const {
+        note: { _id },
+        key
+      } = noteToDetail
+      note = notesData[key].find((note) => note._id === _id)
+    } else {
+      note = notesData.find((note) => note._id === noteToDetail._id)
+    }
 
     setNoteToUpdate(note)
     setIsNoteModalOpen(true)
@@ -224,7 +234,14 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
   useEffect(() => {
     if (!noteToDetail) return
 
-    const newNoteToDetail = notesData.find((note) => note._id === noteToDetail._id)
+    let newNoteToDetail = null
+    if (fetchState === fetchType.GROUP) {
+      newNoteToDetail = notesData[noteToDetail.key].find(
+        (note) => note._id === noteToDetail?.note._id
+      )
+    } else {
+      newNoteToDetail = notesData.find((note) => note._id === noteToDetail._id)
+    }
 
     if (!newNoteToDetail) return
 

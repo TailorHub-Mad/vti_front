@@ -1,4 +1,4 @@
-export const generateFilterQuery = (keyRef, values) => {
+export const generateFilterQuery = (keyRef, values, noUnion) => {
   const queryList = Object.entries(values).reduce((acc, [name, value]) => {
     if (!value) return acc
     if (!keyRef[name]) return acc
@@ -26,8 +26,7 @@ export const generateFilterQuery = (keyRef, values) => {
     return acc
   }, [])
 
-  // TODO -> review OR / AND
-  queryList.push("union=true")
+  if (!noUnion) queryList.push("union=true")
 
   const filter = queryList.join("&")
 

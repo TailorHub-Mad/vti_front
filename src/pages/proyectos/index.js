@@ -80,7 +80,7 @@ const proyectos = () => {
   const [fetchOptions, setFetchOptions] = useState({})
 
   // Fetch
-  const { data, error, isLoading, mutate } = projectFetchHandler(
+  const { data, error, isLoading, mutate, isValidating } = projectFetchHandler(
     fetchState,
     fetchOptions
   )
@@ -89,8 +89,6 @@ const proyectos = () => {
     if (!data || isEmptyData) return []
     if (fetchState == fetchType.GROUP) return data
     return data[0].projects
-
-    // TODO FILTER
   }
 
   const isEmptyData = checkDataIsEmpty(data)
@@ -118,8 +116,6 @@ const proyectos = () => {
   }
 
   const handleImportProjects = async (data) => {
-    //TODO Gestión de errores y update de SWR
-
     try {
       for (let index = 0; index < data.length; index++) {
         await createProject(data[index])
@@ -466,7 +462,7 @@ const proyectos = () => {
       {isLoading ? <LoadingView mt="-200px" /> : null}
       {isEmptyData && fetchState !== fetchType.ALL ? (
         <ViewNotFoundState noBack />
-      ) : isEmptyData ? (
+      ) : isEmptyData && !isValidating ? (
         <ViewEmptyState
           message="Añadir proyectos a la plataforma"
           importButtonText="Importar"

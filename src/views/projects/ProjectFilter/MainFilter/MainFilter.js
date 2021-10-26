@@ -32,6 +32,10 @@ export const MainFilter = ({
   const handleOnReset = () => {
     setIsReset(true)
     onReset()
+
+    setTimeout(() => {
+      setIsReset(false)
+    }, 1000)
   }
 
   return (

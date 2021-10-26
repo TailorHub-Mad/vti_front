@@ -1,8 +1,6 @@
 import { DeleteIcon } from "@chakra-ui/icons"
 import { Box, Flex, Text, useOutsideClick } from "@chakra-ui/react"
-import React, { useContext, useRef, useState } from "react"
-import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
-import { RoleType } from "../../../../utils/constants/global"
+import React, { useRef, useState } from "react"
 import { ICONS_PROPS_16 } from "../../../../utils/constants/icons"
 import { HeartIcon } from "../../../icons/HeartIcon"
 import { OptionsIcon } from "../../../icons/OptionsIcon"
@@ -18,10 +16,9 @@ export const MessageCardHeader = ({
   onDelele,
   onSubscribe,
   onFavorite,
+  notesFromSubscription,
   ...props
 }) => {
-  const { role } = useContext(ApiAuthContext)
-
   const [showOptions, setShowOptions] = useState(false)
 
   const handleOnDelete = () => {
@@ -48,7 +45,7 @@ export const MessageCardHeader = ({
 
   return (
     <Flex height="32px" justify="space-between" alignItems="center" {...props}>
-      <Flex onClick={onClick} cursor="pointer">
+      <Flex onClick={onClick} cursor={notesFromSubscription ? "default" : "pointer"}>
         {isFavorite ? (
           <HeartIcon color="error" {...ICONS_PROPS_16} marginRight="4px" />
         ) : null}
@@ -56,22 +53,23 @@ export const MessageCardHeader = ({
           {title}
         </Text>
       </Flex>
-      <Box position="relative" ref={ref}>
-        <OptionsIcon
-          cursor="pointer"
-          width="16px"
-          heigth="16px"
-          color="grey"
-          onClick={() => setShowOptions(true)}
-        />
-        <OptionsMenu isOpen={showOptions} onClose={() => setShowOptions(false)}>
-          <OptionsMenuItem onClick={handleOnFavorite}>
-            <HeartIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
-            <Text variant="d_xs_regular" marginRight="2px">
-              {isFavorite ? "Eliminar favorito" : "Favorito"}
-            </Text>
-          </OptionsMenuItem>
-          {role === RoleType.USER && (
+      {notesFromSubscription ? null : (
+        <Box position="relative" ref={ref}>
+          <OptionsIcon
+            cursor="pointer"
+            width="16px"
+            heigth="16px"
+            color="grey"
+            onClick={() => setShowOptions(true)}
+          />
+          <OptionsMenu isOpen={showOptions} onClose={() => setShowOptions(false)}>
+            <OptionsMenuItem onClick={handleOnFavorite}>
+              <HeartIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
+              <Text variant="d_xs_regular" marginRight="2px">
+                {isFavorite ? "Eliminar favorito" : "Favorito"}
+              </Text>
+            </OptionsMenuItem>
+
             <OptionsMenuItem onClick={handleOnSubscribe}>
               <SubscribeIcon
                 {...ICONS_PROPS_16}
@@ -86,16 +84,16 @@ export const MessageCardHeader = ({
                 {isSubscribe ? "Darme de baja" : "Suscribirme"}
               </Text>
             </OptionsMenuItem>
-          )}
 
-          <OptionsMenuItem onClick={handleOnDelete} isLast>
-            <DeleteIcon {...ICONS_PROPS_16} marginRight="4px" color="error" />
-            <Text variant="d_xs_regular" color="error" marginRight="2px">
-              Eliminar
-            </Text>
-          </OptionsMenuItem>
-        </OptionsMenu>
-      </Box>
+            <OptionsMenuItem onClick={handleOnDelete} isLast>
+              <DeleteIcon {...ICONS_PROPS_16} marginRight="4px" color="error" />
+              <Text variant="d_xs_regular" color="error" marginRight="2px">
+                Eliminar
+              </Text>
+            </OptionsMenuItem>
+          </OptionsMenu>
+        </Box>
+      )}
     </Flex>
   )
 }

@@ -10,7 +10,8 @@ export const NotesGrid = ({
   onDelete,
   handleFavorite,
   handleSubscribe,
-  fromProjectDetail
+  fromProjectDetail,
+  notesFromSubscription
 }) => {
   return (
     <Grid
@@ -19,7 +20,7 @@ export const NotesGrid = ({
       width="100%"
       marginBottom="32px"
     >
-      {notes.map((note, idx) => (
+      {notes?.map((note, idx) => (
         <MessageCard
           key={`${note.title}-${idx}`}
           note={note}
@@ -30,6 +31,7 @@ export const NotesGrid = ({
           handleFavorite={(state) => handleFavorite(note._id, state)}
           handleSubscribe={(state) => handleSubscribe(note._id, state)}
           fromProjectDetail={fromProjectDetail}
+          notesFromSubscription={notesFromSubscription}
         />
       ))}
     </Grid>

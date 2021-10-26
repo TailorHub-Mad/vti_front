@@ -85,7 +85,7 @@ const apuntes = () => {
   const [messageToDelete, setMessageToDelete] = useState(null)
 
   // Fetch
-  const { data, error, isLoading, mutate } = noteFetchHandler(
+  const { data, error, isLoading, mutate, isValidating } = noteFetchHandler(
     fetchState,
     fetchOptions
   )
@@ -94,8 +94,6 @@ const apuntes = () => {
     if (!data || isEmptyData) return null
     if (fetchState == fetchType.GROUP) return data
     return data[0]?.notes
-
-    // TODO FILTER
   }
 
   const isEmptyData = checkDataIsEmpty(data)
@@ -128,8 +126,10 @@ const apuntes = () => {
     setIsNoteModalOpen(false)
   }
 
-  const handleOpenDetail = (note) => {
-    setNoteToDetail(note)
+  const handleOpenDetail = (note, key) => {
+    if (fetchState === fetchType.GROUP) {
+      setNoteToDetail({ note, key })
+    } else setNoteToDetail(note)
     setShowNoteDetails(true)
   }
 
@@ -154,7 +154,6 @@ const apuntes = () => {
   }
 
   const handleImportNotes = async (data) => {
-    //TODO Gestión de errores y update de SWR
     const formatCreateNote = (note) => {
       // console.log("FORMel console log no salta xDAT", note)
       const formatData = {
@@ -246,8 +245,18 @@ const apuntes = () => {
     }
   }
 
-  const handleUpdate = (id) => {
-    const note = notesData.find((note) => note._id === id)
+  const handleUpdate = () => {
+    let note = null
+    if (fetchState == fetchType.GROUP) {
+      const {
+        note: { _id },
+        key
+      } = noteToDetail
+      note = notesData[key].find((note) => note._id === _id)
+    } else {
+      note = notesData.find((note) => note._id === noteToDetail._id)
+    }
+
     setNoteToUpdate(note)
     setIsNoteModalOpen(true)
   }
@@ -356,7 +365,14 @@ const apuntes = () => {
   useEffect(() => {
     if (!noteToDetail) return
 
-    const newNoteToDetail = notesData.find((note) => note._id === noteToDetail._id)
+    let newNoteToDetail = null
+    if (fetchState === fetchType.GROUP) {
+      newNoteToDetail = notesData[noteToDetail.key].find(
+        (note) => note._id === noteToDetail?.note._id
+      )
+    } else {
+      newNoteToDetail = notesData.find((note) => note._id === noteToDetail._id)
+    }
 
     if (!newNoteToDetail) return
 
@@ -366,7 +382,7 @@ const apuntes = () => {
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (
-    <Page>
+    <Page pb="0">
       <Popup
         variant="twoButtons"
         confirmText="Eliminar"
@@ -424,14 +440,14 @@ const apuntes = () => {
       />
 
       <NoteDrawer
-        note={noteToDetail}
+        note={fetchState === fetchType.GROUP ? noteToDetail?.note : noteToDetail}
         isOpen={showNoteDetails}
         onClose={() => {
           setShowNoteDetails(false)
           setNoteToDetail(null)
         }}
         onDelete={() => setNoteToDelete(noteToDetail._id)}
-        onEdit={() => handleUpdate(noteToDetail._id)}
+        onEdit={handleUpdate}
         onResponse={() => setIsResponseModalOpen(true)}
         onEditResponse={(message) => handleOpenEditResponse(message)}
         onDeleteResponse={(noteId, messageId) =>
@@ -469,11 +485,11 @@ const apuntes = () => {
           />
         ) : null}
       </PageMenu>
-      <PageBody height="calc(100vh - 140px)">
+      <PageBody height="calc(100vh - 140px)" overflowY="auto">
         {isLoading ? <LoadingView mt="-200px" /> : null}
         {isEmptyData && fetchState !== fetchType.ALL ? (
           <ViewNotFoundState noBack />
-        ) : isEmptyData ? (
+        ) : isEmptyData && !isValidating ? (
           <ViewEmptyState
             message="Añadir apuntes a la plataforma"
             importButtonText="Importar"
@@ -481,9 +497,7 @@ const apuntes = () => {
             onImport={() => setShowImportModal(true)}
             onAdd={() => setIsNoteModalOpen(true)}
           />
-        ) : null}
-
-        {notesData ? (
+        ) : (
           <>
             {fetchState === fetchType.GROUP ? (
               <NotesGroup
@@ -514,7 +528,7 @@ const apuntes = () => {
               />
             )}
           </>
-        ) : null}
+        )}
       </PageBody>
     </Page>
   )

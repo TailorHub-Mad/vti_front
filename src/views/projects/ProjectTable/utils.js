@@ -50,13 +50,13 @@ export const TABLE_PROJECTS_HEAD = {
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(80),
+    width: calcColWidth(70),
     type: "text",
     config: { sort: true, name: "alias" }
   },
   sector: {
     label: "Sector",
-    width: calcColWidth(40),
+    width: calcColWidth(50),
     type: "text",
     config: { sort: true, name: "sector" }
   },
@@ -123,7 +123,7 @@ export const TABLE_PROJECTS_HEAD_USER = {
   },
   sector: {
     label: "Sector",
-    width: calcColWidth(30),
+    width: calcColWidth(50),
     type: "text",
     config: { sort: true, name: "sector" }
   },
@@ -135,7 +135,7 @@ export const TABLE_PROJECTS_HEAD_USER = {
   },
   testSystems: {
     label: "Sistemas de ensayo",
-    width: calcColWidth(115),
+    width: calcColWidth(95),
     type: "tags",
     config: {
       variant: variantGeneralTag.SYSTEM
@@ -143,7 +143,7 @@ export const TABLE_PROJECTS_HEAD_USER = {
   },
   tags: {
     label: "Tags de proyecto",
-    width: calcColWidth(115),
+    width: calcColWidth(95),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE

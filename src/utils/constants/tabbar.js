@@ -40,6 +40,11 @@ const TABBAR_LINKS = {
   test_systems: {
     label: "Sistemas ensayo",
     icon: ICONS_REFERENCE.machine_line,
+    href: PATHS.testSystems
+  },
+  test_systems_admin: {
+    label: "Sistemas ensayo",
+    icon: ICONS_REFERENCE.machine_line,
     href: PATHS.testSystems,
     disabled: false,
     submenu: [
@@ -120,6 +125,7 @@ const {
   projects,
   projects_admin,
   test_systems,
+  test_systems_admin,
   tags,
   clients,
   users,
@@ -139,7 +145,7 @@ export const TABBAR_USER_LINKS = [
 export const TABBAR_ADMIN_LINKS = [
   notes,
   projects_admin,
-  test_systems,
+  test_systems_admin,
   tags,
   clients,
   users,

@@ -58,13 +58,21 @@ export const NewNoteModal = ({
   const submitIsDisabled = checkInputsAreEmpty()
 
   const formatCreateNote = (note) => {
+    const formatSystems =
+      note.system[0].label === "Todos"
+        ? [...note.system[0].value]
+        : note.system[0].label === "Ninguno"
+        ? null
+        : note.system.map((s) => s.value)
+
     const formatData = {
       project: note.project.value,
-      testSystems: note.system.map((s) => s.value),
       title: note.title,
       description: note.description,
       tags: note.tags.map((t) => t.value)
     }
+
+    if (formatSystems) formatData["testSystems"] = formatSystems
 
     if (note?.link) formatData["link"] = note.link
     if (note?.documents) formatData["file"] = note.documents
@@ -197,7 +205,9 @@ export const NewNoteModal = ({
     if (!noteToUpdate) return
 
     const _note = {
-      project: noteToUpdate.projects[0].alias,
+      project: noteFromProject
+        ? noteFromProject.project
+        : noteToUpdate?.projects[0]?.alias,
       system: noteToUpdate.testSystems.map((ts) => ts.alias),
       title: noteToUpdate.title,
       description: noteToUpdate.description,

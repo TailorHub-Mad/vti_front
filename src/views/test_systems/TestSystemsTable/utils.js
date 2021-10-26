@@ -42,13 +42,13 @@ export const TABLE_SYSTEMS_HEAD = {
   },
   id: {
     label: "ID",
-    width: calcColWidth(30),
+    width: calcColWidth(40),
     type: "link",
     config: { sort: true, name: "ref" }
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(130),
+    width: calcColWidth(110),
     type: "text",
     config: { sort: true, name: "alias" }
   },
@@ -66,7 +66,7 @@ export const TABLE_SYSTEMS_HEAD = {
   },
   year: {
     label: "Año",
-    width: calcColWidth(20),
+    width: calcColWidth(30),
     type: "text",
     config: { sort: true, name: "date" }
   },
@@ -104,13 +104,13 @@ export const TABLE_SYSTEMS_HEAD_USER = {
   },
   id: {
     label: "ID",
-    width: calcColWidth(30),
+    width: calcColWidth(40),
     type: "link",
     config: { sort: true, name: "ref" }
   },
   alias: {
     label: "Alias",
-    width: calcColWidth(120),
+    width: calcColWidth(100),
     type: "text",
     config: { sort: true, name: "alias" }
   },
@@ -128,7 +128,7 @@ export const TABLE_SYSTEMS_HEAD_USER = {
   },
   year: {
     label: "Año",
-    width: calcColWidth(20),
+    width: calcColWidth(30),
     type: "text",
     config: { sort: true, name: "date" }
   },
