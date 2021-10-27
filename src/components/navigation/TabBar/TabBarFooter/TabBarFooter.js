@@ -1,6 +1,7 @@
 import { Box, Flex, Icon, Text } from "@chakra-ui/react"
 import React, { useContext, useState } from "react"
 import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
+import { NotificationContext } from "../../../../provider/NotificationProvider"
 import { PATHS } from "../../../../utils/constants/global"
 import { NotificationActiveLineIcon } from "../../../icons/NotificationActiveLineIcon"
 import { NotificationLineIcon } from "../../../icons/NotificationLineIcon"
@@ -8,8 +9,9 @@ import { SignOutLineIcon } from "../../../icons/SignOutLineIcon"
 import { Popup } from "../../../overlay/Popup/Popup"
 import { MenuItem } from "../TabBarMenuItem/TabBarMenuItem"
 
-export const TabBarFooter = ({ areActiveNotifications }) => {
+export const TabBarFooter = () => {
   const { logout } = useContext(ApiAuthContext)
+  const { newNotification } = useContext(NotificationContext)
 
   const [isOpen, setIsOpen] = useState(false)
 
@@ -39,11 +41,7 @@ export const TabBarFooter = ({ areActiveNotifications }) => {
         href={PATHS.notifications}
         disabled={false}
         icon={
-          areActiveNotifications ? (
-            <NotificationActiveLineIcon />
-          ) : (
-            <NotificationLineIcon />
-          )
+          newNotification ? <NotificationActiveLineIcon /> : <NotificationLineIcon />
         }
       />
       <Flex marginBottom="42px" cursor="pointer" onClick={() => setIsOpen(true)}>

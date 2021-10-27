@@ -1,3 +1,4 @@
+import { Text } from "@chakra-ui/layout"
 import { useContext, useEffect, useState } from "react"
 import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 import { RoleType } from "../../../utils/constants/global"
@@ -19,19 +20,24 @@ export const MessageCard = ({
   notesFromSubscription
 }) => {
   const [isRead, setIsRead] = useState(false)
+  const [userId, setUserId] = useState()
 
   const { user, role } = useContext(ApiAuthContext)
 
   const setOwners = new Set(
     note?.messages?.map((m) => {
-      console.log("M", m)
       return Array.isArray(m.owner) ? m.owner[0]?.alias : ""
     })
   )
 
-  const ownerMessage = Array.isArray(note?.owner) ? note?.owner[0]?.alias : ""
+  const ownerMessage = note?.owner && Array.isArray(note.owner) && note.owner[0]?._id
+  const isMyNote = ownerMessage === userId
+
   setOwners.add(ownerMessage)
   const owners = Array.from(setOwners).filter((e) => e)
+
+  const updateLimitDate = isMyNote ? note?.updateLimitDate : null
+  const editAllowed = updateLimitDate ? new Date() < new Date(updateLimitDate) : null
 
   useEffect(() => {
     if (!note?.readBy) return
@@ -42,6 +48,10 @@ export const MessageCard = ({
 
     setIsRead(found)
   }, [user, note])
+
+  useEffect(() => {
+    setUserId(user?._id)
+  }, [user])
 
   return (
     <Card>
@@ -64,16 +74,23 @@ export const MessageCard = ({
         marginTop="6px"
       />
       <MessageCardTags note={note} fromProjectDetail={fromProjectDetail} />
-      <MessageCardFooter
-        isClosed={note?.isClosed}
-        isSubscribe={isSubscribe}
-        isFormalized={note?.formalized}
-        messagesCount={note?.messages?.filter((m) => m?.createdAt).length}
-        attachmentsCount={note?.documents?.length}
-        subscribedUsers={owners.length > 0 ? owners : null}
-        isRead={isRead}
-        marginTop="16px"
-      />
+
+      {isMyNote && editAllowed ? (
+        <Text variant="d_s_regular" color="error" m={0} mt="24px">
+          No publicado
+        </Text>
+      ) : (
+        <MessageCardFooter
+          isClosed={note?.isClosed}
+          isSubscribe={isSubscribe}
+          isFormalized={note?.formalized}
+          messagesCount={note?.messages?.filter((m) => m?.createdAt).length}
+          attachmentsCount={note?.documents?.length}
+          subscribedUsers={owners.length > 0 ? owners : null}
+          isRead={isRead}
+          marginTop="16px"
+        />
+      )}
     </Card>
   )
 }

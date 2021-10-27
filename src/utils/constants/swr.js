@@ -20,6 +20,8 @@ export const SWR_CACHE_KEYS = {
   activeProjects: "projects/active",
   filterProjects: "projects/filter",
   searchProjects: "projects/search",
+  subscribeProjects: "projects/subscribe",
+  favsProjects: "projects/favs",
 
   // SYSTEMS
   systems: "systems/",
@@ -91,7 +93,9 @@ export const fetchType = {
   ACTIVE: "active",
   GROUP: "group",
   FILTER: "filter",
-  SEARCH: "search"
+  SEARCH: "search",
+  FAVS: "favs",
+  SUBSCRIBED: "subscribed"
 }
 
 export const fetchOption = {

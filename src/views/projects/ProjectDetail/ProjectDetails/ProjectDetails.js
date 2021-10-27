@@ -16,7 +16,8 @@ export const ProjectDetails = ({
   testSystems,
   closeInfo,
   tags,
-  users
+  users,
+  projectId
 }) => {
   const [showProjectDetails, setShowProjectDetails] = useState(true)
 
@@ -100,7 +101,11 @@ export const ProjectDetails = ({
           <Flex ml="32px">
             {testSystems &&
               testSystems.map((ts) => (
-                <Link key={ts._id} href={`${PATHS.testSystems}/${ts._id}`} passHref>
+                <Link
+                  key={ts._id}
+                  href={`${PATHS.projects}/${projectId}/${ts._id}`}
+                  passHref
+                >
                   <Button variant="note_content" maxW="500px" mr="8px" mb="8px">
                     {ts.alias}
                   </Button>

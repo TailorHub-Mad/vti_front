@@ -7,6 +7,7 @@ import theme from "../theme/"
 import Meta from "../components/layout/Meta/Meta"
 import "focus-visible/dist/focus-visible"
 import "../theme/nofocus.css"
+import NotificationProvider from "../provider/NotificationProvider"
 
 function MyApp({ Component, pageProps }) {
   const swrConfig = { provider: () => new Map() }
@@ -16,10 +17,12 @@ function MyApp({ Component, pageProps }) {
       <SWRConfig value={swrConfig}>
         <ApiAuthProvider>
           <ErrorProvider>
-            <ToastProvider>
-              <Meta />
-              <Component {...pageProps} />
-            </ToastProvider>
+            <NotificationProvider>
+              <ToastProvider>
+                <Meta />
+                <Component {...pageProps} />
+              </ToastProvider>
+            </NotificationProvider>
           </ErrorProvider>
         </ApiAuthProvider>
       </SWRConfig>

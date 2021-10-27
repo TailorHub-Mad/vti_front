@@ -137,7 +137,11 @@ const apuntesSuscripciones = () => {
             {fetchState === fetchType.GROUP ? (
               <NotesGroup
                 notes={notesData}
-                onSeeDetails={() => {}}
+                onSeeDetails={(note) =>
+                  router.push(
+                    `${PATHS.projects}/${router.query.object}?note=${note._id}`
+                  )
+                }
                 checkIsSubscribe={() => {}}
                 checkIsFavorite={() => {}}
                 onDelete={() => {}}
@@ -154,7 +158,11 @@ const apuntesSuscripciones = () => {
             ) : (
               <NotesGrid
                 notes={notesData}
-                onSeeDetails={() => {}}
+                onSeeDetails={(note) =>
+                  router.push(
+                    `${PATHS.projects}/${router.query.object}?note=${note._id}`
+                  )
+                }
                 checkIsSubscribe={() => {}}
                 checkIsFavorite={() => {}}
                 onDelete={() => {}}

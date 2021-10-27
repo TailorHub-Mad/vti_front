@@ -18,7 +18,7 @@ export const ServiceConstructor = {
       const { data } = await request
       return data
     } catch (error) {
-      if (error.response.config.method !== "post") throw error
+      if (error?.response?.config?.method !== "post") throw error
       return {
         error: {
           status: error.response.status,

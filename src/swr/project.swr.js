@@ -11,7 +11,9 @@ export const projectFetchHandler = (state, options) => {
     getGroupProjects,
     getActiveProjects,
     getFilterProjects,
-    getSearchProjects
+    getSearchProjects,
+    getFavsProjects,
+    getSubscribeProjects
   } = useProjectApi()
 
   const fetchHandler = {
@@ -39,6 +41,10 @@ export const projectFetchHandler = (state, options) => {
 
       return useFetchSWR([SWR_CACHE_KEYS.filterProjects, query], getFilterProjects)
     },
+
+    favs: () => useFetchSWR(SWR_CACHE_KEYS.favsProjects, getFavsProjects),
+    subscribed: () =>
+      useFetchSWR(SWR_CACHE_KEYS.subscribeProjects, getSubscribeProjects),
     search: () =>
       useFetchSWR(
         [SWR_CACHE_KEYS.searchProjects, options[fetchOption.SEARCH]],

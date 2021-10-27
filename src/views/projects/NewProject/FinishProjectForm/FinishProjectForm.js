@@ -1,8 +1,13 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { InputSelect } from "../../../../components/forms/InputSelect/InputSelect"
 import { SimpleInput } from "../../../../components/forms/SimpleInput/SimpleInput"
+import useUserApi from "../../../../hooks/api/useUserApi"
 
-export const FinishProjectForm = ({ value, onChange, project }) => {
+export const FinishProjectForm = ({ value, onChange }) => {
+  const { getUsers } = useUserApi()
+
+  const [userOptions, setUserOptions] = useState([])
+
   const handleFormChange = (input, _value) => {
     onChange({
       ...value,
@@ -10,10 +15,8 @@ export const FinishProjectForm = ({ value, onChange, project }) => {
     })
   }
 
-  const userOptions = project?.focusPoint.map((fp) => ({
-    label: fp.alias,
-    value: fp._id
-  }))
+  const formatUsers = (_users) =>
+    _users.map((user) => ({ label: user.alias, value: user._id }))
 
   const formInputs = {
     date: {
@@ -33,6 +36,15 @@ export const FinishProjectForm = ({ value, onChange, project }) => {
       }
     }
   }
+
+  useEffect(() => {
+    const _getUsers = async () => {
+      const users = await getUsers()
+      setUserOptions(formatUsers(users))
+    }
+
+    _getUsers()
+  }, [])
 
   const inputRefObj = {
     text: <SimpleInput />,

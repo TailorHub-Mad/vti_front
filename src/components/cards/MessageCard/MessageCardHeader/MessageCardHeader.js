@@ -45,7 +45,7 @@ export const MessageCardHeader = ({
 
   return (
     <Flex height="32px" justify="space-between" alignItems="center" {...props}>
-      <Flex onClick={onClick} cursor={notesFromSubscription ? "default" : "pointer"}>
+      <Flex onClick={onClick} cursor={"pointer"}>
         {isFavorite ? (
           <HeartIcon color="error" {...ICONS_PROPS_16} marginRight="4px" />
         ) : null}

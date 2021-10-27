@@ -10,6 +10,7 @@ import { ToolBar } from "../components/navigation/ToolBar/ToolBar"
 import { Popup } from "../components/overlay/Popup/Popup"
 import useNotificationApi from "../hooks/api/useNotificationApi"
 import { ApiAuthContext } from "../provider/ApiAuthProvider"
+import { NotificationContext } from "../provider/NotificationProvider"
 import { ToastContext } from "../provider/ToastProvider"
 import { notificationFetchHandler } from "../swr/notification.swr"
 import { fetchOption, fetchType } from "../utils/constants/swr"
@@ -28,6 +29,7 @@ const notificaciones = () => {
   const { isLoggedIn } = useContext(ApiAuthContext)
   const { deleteNotification, pinNotification } = useNotificationApi()
   const { showToast } = useContext(ToastContext)
+  const { newNotification, setNewNotification } = useContext(NotificationContext)
 
   // States
   const [showFilterModal, setShowFilterModal] = useState(false)
@@ -143,6 +145,7 @@ const notificaciones = () => {
   }
 
   useEffect(() => {
+    setNewNotification(false)
     if (!notificationToDetail) return
 
     const newNotificationToDetail = notificationsData.find(
@@ -153,6 +156,11 @@ const notificaciones = () => {
 
     setNotificationToDetail(newNotificationToDetail)
   }, [notificationsData])
+
+  useEffect(() => {
+    if (!newNotification) return
+    setNewNotification(false)
+  }, [])
 
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
