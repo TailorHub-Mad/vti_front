@@ -159,7 +159,7 @@ const apoyo = () => {
     isProjectCriteria
       ? await deleteProjectCriterion(criterionToDelete)
       : await deleteNoteCriterion(criterionToDelete)
-    showToast("Criterio eliminado correctamente")
+    showToast({ message: "Criterio eliminado correctamente" })
     setData(data.filter((cr) => cr._id !== criterionToDelete))
     setCriterionToDelete(null)
   }

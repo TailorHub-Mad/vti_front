@@ -208,7 +208,7 @@ const suscripcion = () => {
       subscribed[currentState] = listToUpdate
 
       await handleSubscribed(_id, subscribed)
-      showToast("Suscripción borrada correctamente")
+      showToast({ message: "Suscripción borrada correctamente" })
     } catch (error) {
       errorHandler(error)
     }
@@ -223,7 +223,7 @@ const suscripcion = () => {
       subscribed[currentState] = listToUpdate
 
       await handleSubscribed(_id, subscribed)
-      showToast("Suscripciones borradas correctamente")
+      showToast({ message: "Suscripciones borradas correctamente" })
     } catch (error) {
       errorHandler(error)
     }

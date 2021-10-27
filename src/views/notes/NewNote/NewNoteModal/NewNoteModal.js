@@ -32,16 +32,16 @@ export const NewNoteModal = ({
 }) => {
   const { showToast } = useContext(ToastContext)
   const { createNote, updateNote } = useNoteApi()
-  const { getProjectHelps } = useHelpApi()
-  const { getProjectTags } = useTagApi()
+  const { getNoteHelps } = useHelpApi()
+  const { getNoteTags } = useTagApi()
   const { mutate } = useSWRConfig()
 
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [values, setValues] = useState(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const [usedProjectTags, setUsedProjectTags] = useState([])
-  const [projectCriteria, setProjectCriteria] = useState([])
+  const [usedNoteTags, setUsedNoteTags] = useState([])
+  const [noteCriteria, setNoteCriteria] = useState([])
 
   const isUpdate = Boolean(noteToUpdate)
 
@@ -133,7 +133,12 @@ export const NewNoteModal = ({
     noteFromProject
       ? await mutate([SWR_CACHE_KEYS.project, noteFromProject.project.value])
       : await mutate(SWR_CACHE_KEYS.notes)
-    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s apunte/s!")
+    showToast({
+      message: isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s apunte/s!",
+      secondaryMessage: isUpdate
+        ? null
+        : "Tiene una hora para editarlo antes de que se publique, después de ese tiempo, tendrá que solicitarlo al administrador"
+    })
     setIsSubmitting(false)
     handleOnClose()
   }
@@ -167,7 +172,7 @@ export const NewNoteModal = ({
 
   const handleTagSelect = (_tags) => {
     const refTags = values.tags
-    const refUsed = usedProjectTags
+    const refUsed = usedNoteTags
     let nextTags = refTags ? [...refTags] : []
 
     _tags.forEach((_tag) => {
@@ -187,14 +192,14 @@ export const NewNoteModal = ({
 
   useEffect(() => {
     const fetchCriteria = async () => {
-      const _data = await getProjectHelps()
-      setProjectCriteria(_data)
+      const _data = await getNoteHelps()
+      setNoteCriteria(_data)
     }
 
     const fetchTags = async () => {
-      const _tags = await getProjectTags()
+      const _tags = await getNoteTags()
       const _used = _tags.filter((tag) => !tag.isUsed)
-      setUsedProjectTags(_used)
+      setUsedNoteTags(_used)
     }
 
     fetchCriteria()
@@ -276,8 +281,8 @@ export const NewNoteModal = ({
         {showSecondaryContent ? (
           <SupportModal
             onClose={() => setShowSecondaryContent(false)}
-            usedTags={usedProjectTags}
-            criteria={projectCriteria}
+            usedTags={usedNoteTags}
+            criteria={noteCriteria}
             onTagsSelect={(tags) => handleTagSelect(tags, true)}
             selectedTags={values?.tags?.map((t) => t.label) || []}
           />

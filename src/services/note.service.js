@@ -7,12 +7,13 @@ const NoteService = () => {
   const getNotes = (limit = 0, offset = 0) =>
     execute(instance.get(`/notes?limit=${limit}&offset=${offset}`))
   const getNote = (id) => execute(instance.get(`/notes/${id}`))
-  const createNote = (data) =>
-    execute(
+  const createNote = (data) => {
+    return execute(
       instance.post(`/notes/create`, data, {
         headers: { "content-type": "multipart/form-data" }
       })
     )
+  }
   const updateNote = (id, data) => execute(instance.put(`/notes/${id}`, data))
   const deleteNote = (id) => execute(instance.delete(`/notes/${id}`))
   const createMessage = (id, data) =>

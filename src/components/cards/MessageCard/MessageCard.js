@@ -26,14 +26,14 @@ export const MessageCard = ({
 
   const setOwners = new Set(
     note?.messages?.map((m) => {
-      return m.owner[0]?.alias
+      return Array.isArray(m.owner) ? m.owner[0]?.alias : ""
     })
   )
 
   const ownerMessage = note?.owner && Array.isArray(note.owner) && note.owner[0]?._id
   const isMyNote = ownerMessage === userId
 
-  setOwners.add(typeof ownerMessage)
+  setOwners.add(ownerMessage)
   const owners = Array.from(setOwners).filter((e) => e)
 
   const updateLimitDate = isMyNote ? note?.updateLimitDate : null
@@ -68,7 +68,7 @@ export const MessageCard = ({
       <MessageCardInfo
         id={note?.ref}
         isAdmin={RoleType.ADMIN === role}
-        author={note?.owner[0]?.alias}
+        author={Array.isArray(note?.owner) ? note?.owner[0]?.alias : ""}
         updatedAt={new Date(note?.updatedAt).toLocaleDateString()}
         marginBottom="18px"
         marginTop="6px"

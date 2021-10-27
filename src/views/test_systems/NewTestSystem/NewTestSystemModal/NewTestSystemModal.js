@@ -76,7 +76,9 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
     isUpdate ? await handleUpdateSystem() : await handleCreateSystem()
     setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.systems)
-    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!")
+    showToast({
+      message: isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sistema/s!"
+    })
     setIsSubmitting(false)
     onClose()
   }

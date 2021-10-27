@@ -92,7 +92,7 @@ const departamentos = () => {
       }
 
       setShowImportModal(false)
-      showToast("Departamentos importados correctamente")
+      showToast({ message: "Departamentos importados correctamente" })
     } catch (error) {
       errorHandler(error)
     }
@@ -149,7 +149,7 @@ const departamentos = () => {
   const deleteOne = async (id, departments) => {
     try {
       await deleteDepartment(id)
-      showToast("Departamento borrado correctamente")
+      showToast({ message: "Departamento borrado correctamente" })
       return departments.filter((department) => department._id !== id)
     } catch (error) {
       errorHandler(error)
@@ -160,7 +160,7 @@ const departamentos = () => {
     try {
       const departmentsQueue = departmentsId.map((id) => deleteDepartment(id))
       await Promise.all(departmentsQueue)
-      showToast("Departamentos borrados correctamente")
+      showToast({ message: "Departamentos borrados correctamente" })
       return departments.filter(
         (department) => !departmentsId.includes(department._id)
       )

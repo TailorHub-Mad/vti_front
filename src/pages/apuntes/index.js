@@ -159,17 +159,18 @@ const apuntes = () => {
   const handleImportNotes = async (data) => {
     //TODO Gestión de errores y update de SWR
     const formatCreateNote = (note) => {
+      // console.log("FORMel console log no salta xDAT", note)
       const formatData = {
-        project: note?.project.value,
-        testSystems: note?.system?.map((s) => s?.value),
+        project: note?.project,
         title: note?.title,
-        description: note?.description,
-        tags: note?.tags?.map((t) => t?.value)
+        description: note?.description
       }
-
+      if (note?.testSystems?.length > 0) {
+        formatData["testSystems"] = note?.testSystems?.map((s) => s)
+      }
+      if (note?.tags) formatData["tags"] = note?.tags?.map((t) => t)
       if (note?.link) formatData["link"] = note.link
       if (note?.documents) formatData["file"] = note.documents
-
       const formData = new FormData()
 
       Object.entries(formatData).forEach(([key, value]) => {
@@ -196,7 +197,7 @@ const apuntes = () => {
       }
 
       setShowImportModal(false)
-      showToast("Proyectos importados correctamente")
+      showToast({ message: "Proyectos importados correctamente" })
     } catch (error) {
       errorHandler(error)
     }
@@ -212,13 +213,13 @@ const apuntes = () => {
     try {
       if (isGrouped) {
         await await deleteNote(noteToDelete.id)
-        showToast("Apunte borrado correctamente")
+        showToast({ message: "Apunte borrado correctamente" })
         setNoteToDelete(null)
         return await mutate()
       }
 
       await deleteNote(noteToDelete)
-      showToast("Apunte borrado correctamente")
+      showToast({ message: "Apunte borrado correctamente" })
 
       const updatedNotes = []
       const filterNotes = notesData.filter((note) => note._id !== noteToDelete)
@@ -243,7 +244,7 @@ const apuntes = () => {
   const handleDeleteMessage = async () => {
     try {
       await deleteMessage(messageToDelete.noteId, messageToDelete.messageId)
-      showToast("Mensaje borrado correctamente")
+      showToast({ messgage: "Mensaje borrado correctamente" })
       await mutate()
       setMessageToDelete(null)
     } catch (error) {

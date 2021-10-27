@@ -108,7 +108,7 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
   const handleDelete = async (noteToDelete) => {
     try {
       await deleteNote(noteToDelete)
-      showToast("Apunte borrado correctamente")
+      showToast({ message: "Apunte borrado correctamente" })
       await mutate([SWR_CACHE_KEYS.project, project._id])
       if (showNoteDetails) setShowNoteDetails(false)
       setNoteToDelete(null)
@@ -120,7 +120,7 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
   const handleDeleteMessage = async () => {
     try {
       await deleteMessage(messageToDelete.noteId, messageToDelete.messageId)
-      showToast("Mensaje borrado correctamente")
+      showToast({ message: "Mensaje borrado correctamente" })
       await mutate([SWR_CACHE_KEYS.project, project._id])
       setMessageToDelete(null)
     } catch (error) {

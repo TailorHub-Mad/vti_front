@@ -73,7 +73,7 @@ const codigos = () => {
       }
 
       setShowImportModal(false)
-      showToast("Códigos importados correctamente")
+      showToast({ message: "Códigos importados correctamente" })
     } catch (error) {
       errorHandler(error)
     }
@@ -121,7 +121,7 @@ const codigos = () => {
   const deleteOne = async (id, codes) => {
     try {
       await deleteCode(id)
-      showToast("Código borrado correctamente")
+      showToast({ message: "Código borrado correctamente" })
       return codes.filter((code) => code._id !== id)
     } catch (error) {
       errorHandler(error)
@@ -132,7 +132,7 @@ const codigos = () => {
     try {
       const codesQueue = codesId.map((id) => deleteCode(id))
       await Promise.all(codesQueue)
-      showToast("Códigos borrados correctamente")
+      showToast({ message: "Códigos borrados correctamente" })
       return codes.filter((code) => !codesId.includes(code._id))
     } catch (error) {
       errorHandler(error)

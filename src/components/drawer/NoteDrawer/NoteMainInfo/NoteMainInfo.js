@@ -39,11 +39,15 @@ export const NoteMainInfo = ({
   const ownerMessage = item?.owner && item?.owner[0]?._id
   const ownerNote = note?.owner && note?.owner[0]?._id
 
+  const isAdmin = role === RoleType.ADMIN
   const isMyMessage = ownerMessage === userId
   const isMyNote = ownerNote === userId
 
   const updateLimitDate = isMyMessage ? item?.updateLimitDate : null
-  const editAllowed = updateLimitDate ? new Date() < new Date(updateLimitDate) : null
+  const editAllowed =
+    (isMyMessage && updateLimitDate
+      ? new Date() < new Date(updateLimitDate)
+      : null) || isAdmin
 
   const handleUpdateNote = async (action) => {
     switch (action) {

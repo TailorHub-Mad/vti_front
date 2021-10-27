@@ -93,7 +93,7 @@ export const MessageCardFooter = ({
             bg="blue.500"
           >
             <Text color="white" transform="uppercase" variant="d_xs_regular">
-              {getAcronym(subscribedUsers[subscribedUsers.length - 1])}
+              {getAcronym(subscribedUsers[0])}
             </Text>
           </Circle>
         </Box>

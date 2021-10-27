@@ -47,9 +47,11 @@ export const NewDepartmentModal = ({
     isUpdate ? await handleUpdateDepartment() : await handleCreateDepartment()
     setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.departments)
-    showToast(
-      isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s departamentos/s!"
-    )
+    showToast({
+      message: isUpdate
+        ? "Editado correctamente"
+        : "¡Has añadido nuevo/s departamentos/s!"
+    })
     setIsSubmitting(false)
     onClose()
   }
