@@ -89,7 +89,7 @@ export const UsersByObject = ({
       }
 
       setShowImportModal(false)
-      showToast("Proyectos importados correctamente")
+      showToast({ message: "Proyectos importados correctamente" })
     } catch (error) {
       errorHandler(error)
     }
@@ -121,7 +121,7 @@ export const UsersByObject = ({
   const deleteOne = async (id, users) => {
     try {
       await deleteUser(id)
-      showToast("Usuario borrado correctamente")
+      showToast({ message: "Usuario borrado correctamente" })
       return users.filter((user) => user._id !== id)
     } catch (error) {
       errorHandler(error)
@@ -132,7 +132,7 @@ export const UsersByObject = ({
     try {
       const usersQueue = usersId.map((id) => deleteUser(id))
       await Promise.all(usersQueue)
-      showToast("Usuarios borrados correctamente")
+      showToast({ message: "Usuarios borrados correctamente" })
       return users.filter((user) => !usersId.includes(user._id))
     } catch (error) {
       errorHandler(error)

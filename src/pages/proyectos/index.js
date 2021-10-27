@@ -124,7 +124,7 @@ const proyectos = () => {
       await mutate()
 
       setShowImportModal(false)
-      showToast("Proyectos importados correctamente")
+      showToast({ message: "Proyectos importados correctamente" })
     } catch (error) {
       errorHandler(error)
     }
@@ -212,12 +212,12 @@ const proyectos = () => {
     try {
       if (isGrouped) {
         await deleteProject(data.id)
-        showToast("Proyecto borrado correctamente")
+        showToast({ message: "Proyecto borrado correctamente" })
         return
       }
 
       await deleteProject(data)
-      showToast("Proyecto borrado correctamente")
+      showToast({ message: "Proyecto borrado correctamente" })
       const updatedProjects = []
       const filterProjects = projects.filter((system) => system._id !== data)
       updatedProjects.push({
@@ -233,7 +233,7 @@ const proyectos = () => {
     try {
       const projectsQueue = projectsId.map((id) => deleteProject(id))
       await Promise.all(projectsQueue)
-      showToast("Proyectos borrados correctamente")
+      showToast({ message: "Proyectos borrados correctamente" })
       const updatedProjects = []
       const filterProjects = projects.filter(
         (project) => !projectsId.includes(project._id)

@@ -88,7 +88,7 @@ export const ProjectsByObject = ({
       await mutate()
 
       setShowImportModal(false)
-      showToast("Proyectos importados correctamente")
+      showToast({ message: "Proyectos importados correctamente" })
     } catch (error) {
       errorHandler(error)
     }
@@ -149,7 +149,7 @@ export const ProjectsByObject = ({
   const deleteOne = async (id, projects) => {
     try {
       await deleteProject(id)
-      showToast("Proyecto borrado correctamente")
+      showToast({ message: "Proyecto borrado correctamente" })
       const updatedProjects = []
       const filterProjects = projects.filter((system) => system._id !== id)
       updatedProjects.push({
@@ -165,7 +165,7 @@ export const ProjectsByObject = ({
     try {
       const projectsQueue = projectsId.map((id) => deleteProject(id))
       await Promise.all(projectsQueue)
-      showToast("Proyectos borrados correctamente")
+      showToast({ message: "Proyectos borrados correctamente" })
       const updatedProjects = []
       const filterProjects = projects.filter(
         (project) => !projectsId.includes(project._id)
