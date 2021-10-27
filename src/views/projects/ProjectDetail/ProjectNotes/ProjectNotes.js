@@ -1,5 +1,6 @@
 import { Flex, Text } from "@chakra-ui/react"
 import { remove } from "lodash"
+import { useRouter } from "next/router"
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
 import { NoteDrawer } from "../../../../components/drawer/NoteDrawer/NoteDrawer"
@@ -53,6 +54,7 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
   const { updateUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
   const { mutate } = useSWRConfig()
+  const router = useRouter()
 
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
@@ -247,6 +249,14 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
 
     setNoteToDetail(newNoteToDetail)
   }, [notesData])
+
+  useEffect(() => {
+    if (!router.query?.note) return
+
+    const noteDetail = notesData.find((n) => n._id === router.query?.note)
+    setNoteToDetail(noteDetail)
+    setShowNoteDetails(true)
+  }, [])
 
   return (
     <>

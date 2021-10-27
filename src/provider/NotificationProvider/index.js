@@ -40,8 +40,6 @@ const NotificationProvider = ({ children }) => {
     const notificationsDataSize = getSizeNotifications(notificationsData)
     const notificationsSize = getSizeNotifications(notifications)
 
-    console.log(notificationsDataSize, notificationsSize)
-
     if (notifications && notificationsDataSize > notificationsSize)
       setNewNotification(true)
 
