@@ -109,7 +109,7 @@ const sistemas = () => {
       }
 
       setShowImportModal(false)
-      showToast("Sistemas importados correctamente")
+      showToast({ message: "Sistemas importados correctamente" })
     } catch (error) {
       errorHandler(error)
     }
@@ -178,12 +178,12 @@ const sistemas = () => {
     try {
       if (isGrouped) {
         await deleteSystem(data.id)
-        showToast("Proyecto borrado correctamente")
+        showToast({ message: "Proyecto borrado correctamente" })
         return
       }
 
       await deleteSystem(data)
-      showToast("Sistema borrado correctamente")
+      showToast({ message: "Sistema borrado correctamente" })
 
       const filterSystems = systems.filter((system) => system._id !== data)
       return [
@@ -200,7 +200,7 @@ const sistemas = () => {
     try {
       const systemsQueue = systemsId.map((id) => deleteSystem(id))
       await Promise.all(systemsQueue)
-      showToast("Sistemas borrados correctamente")
+      showToast({ message: "Sistemas borrados correctamente" })
       const filterSystems = systems.filter(
         (system) => !systemsId.includes(system._id)
       )

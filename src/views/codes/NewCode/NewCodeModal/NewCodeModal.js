@@ -42,7 +42,9 @@ export const NewCodeModal = ({ isOpen, onClose, codeToUpdate, ...props }) => {
     isUpdate ? await handleUpdateCode() : await handleCreateCode()
     setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.codes)
-    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s códigos/s!")
+    showToast({
+      message: isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s códigos/s!"
+    })
     setIsSubmitting(false)
     onClose()
   }

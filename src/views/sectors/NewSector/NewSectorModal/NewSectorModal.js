@@ -42,7 +42,9 @@ export const NewSectorModal = ({ isOpen, onClose, sectorToUpdate, ...props }) =>
     isUpdate ? await handleUpdateSector() : await handleCreateSector()
     setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.sectors)
-    showToast(isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sector/s!")
+    showToast({
+      message: isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s sector/s!"
+    })
     setIsSubmitting(false)
     onClose()
   }

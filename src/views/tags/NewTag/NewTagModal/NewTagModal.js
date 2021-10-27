@@ -79,7 +79,7 @@ export const NewTagModal = ({
     isUpdate ? await handleUpdateTag() : await handleCreateTag()
     setValues(initialValues)
     await mutate(isProjectTag ? SWR_CACHE_KEYS.projectTags : SWR_CACHE_KEYS.noteTags)
-    showToast(isUpdate ? editSuccessMsg : addSuccessMsg)
+    showToast({ message: isUpdate ? editSuccessMsg : addSuccessMsg })
     setIsSubmitting(false)
     onClose()
   }

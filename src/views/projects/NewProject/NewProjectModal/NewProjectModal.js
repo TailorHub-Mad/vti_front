@@ -96,9 +96,11 @@ export const NewProjectModal = ({
     projectDetail
       ? await mutate([SWR_CACHE_KEYS.project, projectToUpdate._id])
       : await mutate(SWR_CACHE_KEYS.projects)
-    showToast(
-      isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s proyecto/s!"
-    )
+    showToast({
+      message: isUpdate
+        ? "Editado correctamente"
+        : "¡Has añadido nuevo/s proyecto/s!"
+    })
     setIsSubmitting(false)
     onClose()
   }

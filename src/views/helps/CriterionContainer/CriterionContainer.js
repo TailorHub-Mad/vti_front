@@ -103,7 +103,7 @@ export const CriterionContainer = ({
 
     fetchData()
     setInfoToDeleteTags(null)
-    showToast("Tags eliminadas correctamente")
+    showToast({ message: "Tags eliminadas correctamente" })
   }
 
   const getTagName = () => {

@@ -91,7 +91,7 @@ export const ResponseModal = ({
     isUpdate ? await handleUpdateMessage() : await handleCreateMessage()
     setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.notes)
-    showToast(isUpdate ? "Editado correctamente" : "¡Mensaje enviado!")
+    showToast({ message: isUpdate ? "Editado correctamente" : "¡Mensaje enviado!" })
     setIsSubmitting(false)
     onClose()
   }
