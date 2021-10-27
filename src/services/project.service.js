@@ -23,6 +23,10 @@ const ProjectService = () => {
       instance.get(`/projects/filter?projects.alias=${data}&projects.ref=${data}`)
     )
 
+  const getFavsProjects = () => execute(instance.get(`/user/favorite/projects`))
+  const getSubscribeProjects = () =>
+    execute(instance.get(`/user/subscribed/projects`))
+
   return {
     getProjects,
     getProject,
@@ -33,7 +37,9 @@ const ProjectService = () => {
     getGroupProjects,
     getActiveProjects,
     getFilterProjects,
-    getSearchProjects
+    getSearchProjects,
+    getFavsProjects,
+    getSubscribeProjects
   }
 }
 

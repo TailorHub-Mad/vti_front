@@ -15,6 +15,8 @@ const useProjectApi = () => {
   const getActiveProjects = (_, data) => projectService.getActiveProjects(data)
   const getFilterProjects = (_, data) => projectService.getFilterProjects(data)
   const getSearchProjects = (_, data) => projectService.getSearchProjects(data)
+  const getFavsProjects = () => projectService.getFavsProjects()
+  const getSubscribeProjects = () => projectService.getSubscribeProjects()
 
   return {
     getProjects,
@@ -26,7 +28,9 @@ const useProjectApi = () => {
     getGroupProjects,
     getActiveProjects,
     getFilterProjects,
-    getSearchProjects
+    getSearchProjects,
+    getFavsProjects,
+    getSubscribeProjects
   }
 }
 

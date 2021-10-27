@@ -18,18 +18,21 @@ import useProjectApi from "../../hooks/api/useProjectApi"
 import { ToastContext } from "../../provider/ToastProvider"
 import { PATHS } from "../../utils/constants/global"
 import { NewProjectModal } from "../../views/projects/NewProject/NewProjectModal/NewProjectModal"
+import { remove } from "lodash"
+import useUserApi from "../../hooks/api/useUserApi"
 
 const project = () => {
   const router = useRouter()
-  const { isLoggedIn } = useContext(ApiAuthContext)
+  const { isLoggedIn, user } = useContext(ApiAuthContext)
   const { deleteProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
+  const { updateUser } = useUserApi()
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [openUpdateModal, setOpenUpdateModal] = useState(false)
   const [openFinishModal, setOpenFinishModal] = useState(false)
 
-  const { data, error, isLoading, isValidating } = projectFetchHandler(
+  const { data, error, mutate, isLoading, isValidating } = projectFetchHandler(
     fetchType.ID,
     {
       [fetchOption.ID]: router.query.alias
@@ -39,6 +42,10 @@ const project = () => {
   const notFound = !isValidating && !data
   const projectData = data && !checkDataIsEmpty(data) ? data[0].projects[0] : null
 
+  const checkIsFavorite = () => user?.favorites?.projects?.includes(projectData?._id)
+  const checkIsSubscribe = () =>
+    user?.subscribed?.projects?.includes(projectData?._id)
+
   const handleOnDelete = async () => {
     try {
       await deleteProject(projectData._id)
@@ -47,6 +54,59 @@ const project = () => {
     } catch (error) {
       errorHandler(error)
     }
+  }
+
+  const handleSubscribe = async (state) => {
+    const { subscribed, _id } = user
+
+    const listToUpdate = subscribed["projects"]
+
+    if (state) {
+      remove(listToUpdate, (e) => e === projectData?._id)
+    } else {
+      listToUpdate.push(projectData?._id)
+    }
+
+    subscribed["projects"] = listToUpdate
+
+    const formatUser = formatUpdateUsersSubscribe(user, subscribed)
+    await updateUser(_id, formatUser)
+    await mutate()
+  }
+
+  const formatUpdateUsersSubscribe = (user, subscribed) => {
+    return {
+      alias: user.alias,
+      name: user.name,
+      subscribed,
+      department: user.department
+    }
+  }
+
+  const formatUpdateUsersFavorites = (user, favorites) => {
+    return {
+      alias: user.alias,
+      name: user.name,
+      favorites,
+      department: user.department
+    }
+  }
+
+  const handleFavorite = async (state) => {
+    const { favorites, _id } = user
+
+    const listToUpdate = favorites["projects"]
+
+    if (state) {
+      remove(listToUpdate, (e) => e === projectData?._id)
+    } else {
+      listToUpdate.push(projectData?._id)
+    }
+
+    favorites["projects"] = listToUpdate
+    const formatUser = formatUpdateUsersFavorites(user, favorites)
+    await updateUser(_id, formatUser)
+    await mutate()
   }
 
   if (!isLoggedIn) return null
@@ -88,6 +148,10 @@ const project = () => {
               onEdit={() => setOpenUpdateModal(true)}
               onClose={() => setOpenFinishModal(true)}
               onDelete={() => setOpenDeleteModal(true)}
+              onSubscribe={handleSubscribe}
+              onFavorite={handleFavorite}
+              isSubscribe={checkIsSubscribe()}
+              isFavorite={checkIsFavorite()}
               isClosed={Boolean(projectData.closed)}
             />
             <ProjectInfoBar
@@ -105,6 +169,7 @@ const project = () => {
               tags={projectData?.tags}
               users={projectData?.users}
               closeInfo={projectData?.closed}
+              projectId={projectData?._id}
             />
             <ProjectNotes
               notesData={projectData?.notes.filter((n) => n?._id)}
