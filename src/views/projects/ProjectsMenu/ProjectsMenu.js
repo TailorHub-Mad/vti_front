@@ -1,7 +1,9 @@
 import { Flex, Text } from "@chakra-ui/react"
-import React from "react"
+import React, { useContext } from "react"
 import { fetchType } from "../../../utils/constants/swr"
 import { ICONS_REFERENCE } from "../../../utils/constants/icons"
+import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
+import { RoleType } from "../../../utils/constants/global"
 
 const projectsMenuOptions = {
   all: {
@@ -30,11 +32,37 @@ const projectsMenuOptions = {
   }
 }
 
+const projectsMenuOptionsAdmin = {
+  all: {
+    label: "Todos",
+    value: fetchType.ALL,
+    active_icon: ICONS_REFERENCE.notes,
+    icon: ICONS_REFERENCE.notes
+  },
+  active: {
+    label: "Activos",
+    value: fetchType.ACTIVE,
+    active_icon: ICONS_REFERENCE.active,
+    icon: ICONS_REFERENCE.active
+  },
+  subscribed: {
+    label: "Suscritos",
+    value: fetchType.SUBSCRIBED,
+    active_icon: ICONS_REFERENCE.subscribe,
+    icon: ICONS_REFERENCE.subscribe_line
+  }
+}
+
 export const ProjectsMenu = ({ fetchState, onChange }) => {
+  const { role } = useContext(ApiAuthContext)
+
+  const menu =
+    role === RoleType.ADMIN ? projectsMenuOptionsAdmin : projectsMenuOptions
+
   return (
     <>
       <Flex mb="16px" ml="34px">
-        {Object.entries(projectsMenuOptions).map(([name, item], idx) => {
+        {Object.entries(menu).map(([name, item], idx) => {
           const isActive = name === fetchState
 
           return (
