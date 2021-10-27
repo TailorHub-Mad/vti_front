@@ -42,7 +42,7 @@ const project = () => {
   const handleOnDelete = async () => {
     try {
       await deleteProject(projectData._id)
-      showToast("Proyecto borrado correctamente")
+      showToast({ message: "Proyecto borrado correctamente" })
       router.push(PATHS.projects)
     } catch (error) {
       errorHandler(error)

@@ -74,7 +74,7 @@ const sectores = () => {
       }
 
       setShowImportModal(false)
-      showToast("Sectores importados correctamente")
+      showToast({ message: "Sectores importados correctamente" })
     } catch (error) {
       errorHandler(error)
     }
@@ -122,7 +122,7 @@ const sectores = () => {
   const deleteOne = async (id, sectors) => {
     try {
       await deleteSector(id)
-      showToast("Sector borrado correctamente")
+      showToast({ message: "Sector borrado correctamente" })
       return sectors.filter((sector) => sector._id !== id)
     } catch (error) {
       errorHandler(error)
@@ -133,7 +133,7 @@ const sectores = () => {
     try {
       const sectorsQueue = sectorsId.map((id) => deleteSector(id))
       await Promise.all(sectorsQueue)
-      showToast("Sectores borrados correctamente")
+      showToast({ message: "Sectores borrados correctamente" })
       return sectors.filter((sector) => !sectorsId.includes(sector._id))
     } catch (error) {
       errorHandler(error)

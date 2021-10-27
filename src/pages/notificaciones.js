@@ -90,7 +90,7 @@ const notificaciones = () => {
   const handleDelete = async () => {
     try {
       await deleteNotification(notificationToDelete)
-      showToast("Notificación borrada correctamente")
+      showToast({ message: "Notificación borrada correctamente" })
       await mutate()
       setNotificationToDelete(null)
     } catch (error) {

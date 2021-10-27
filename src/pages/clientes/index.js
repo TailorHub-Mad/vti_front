@@ -89,7 +89,7 @@ const clientes = () => {
       }
       await mutate()
       setShowImportModal(false)
-      showToast("Clientes importados correctamente")
+      showToast({ message: "Clientes importados correctamente" })
     } catch (error) {
       errorHandler(error)
     }
@@ -121,7 +121,7 @@ const clientes = () => {
   const deleteOne = async (id, clients) => {
     try {
       await deleteClient(id)
-      showToast("Cliente borrado correctamente")
+      showToast({ message: "Cliente borrado correctamente" })
       return clients.filter((client) => client._id !== id)
     } catch (error) {
       errorHandler(error)
@@ -132,7 +132,7 @@ const clientes = () => {
     try {
       const clientsQueue = clientsId.map((id) => deleteClient(id))
       await Promise.all(clientsQueue)
-      showToast("Clientes borrados correctamente")
+      showToast({ message: "Clientes borrados correctamente" })
       return clients.filter((client) => !clientsId.includes(client._id))
     } catch (error) {
       errorHandler(error)

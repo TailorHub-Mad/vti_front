@@ -32,7 +32,7 @@ export const NewNotificationModal = ({ isOpen, onClose, ...props }) => {
       await createNotification(values)
       setValues(initialValues)
       await mutate(SWR_CACHE_KEYS.notifications)
-      showToast("Notificación enviada")
+      showToast({ message: "Notificación enviada" })
       setIsSubmitting(false)
       onClose()
     } catch (error) {
