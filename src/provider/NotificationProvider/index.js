@@ -12,7 +12,7 @@ const NotificationProvider = ({ children }) => {
 
   const { getNotifications } = useNotificationApi()
 
-  const { data } = useFetchSWR(SWR_CACHE_KEYS.notifications, getNotifications, 10000)
+  const { data } = useFetchSWR(SWR_CACHE_KEYS.notifications, getNotifications)
 
   const handleNotificationsData = (isEmptyData) => {
     if (!data || isEmptyData) return null
