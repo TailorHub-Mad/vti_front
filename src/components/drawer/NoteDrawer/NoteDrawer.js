@@ -86,6 +86,7 @@ export const NoteDrawer = ({
               onEdit={onEdit}
               onDelete={onDelete}
               fromProjectDetail={fromProjectDetail}
+              note={note}
             />
             <NoteDetailsAccordion
               name={note.name}
