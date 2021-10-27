@@ -11,7 +11,7 @@ import { TabBarFooter } from "./TabBarFooter/TabBarFooter"
 import { TabBarMenu } from "./TabBarMenu/TabBarMenu"
 import { TabBarToggle } from "./TabBarToggle/TabBarToggle"
 
-export const TabBar = ({ isOpen, setIsOpen, areActiveNotifications = true }) => {
+export const TabBar = ({ isOpen, setIsOpen }) => {
   const { role } = useContext(ApiAuthContext)
   const onToggle = () => setIsOpen(!isOpen)
   const navMenuItems =
@@ -44,7 +44,7 @@ export const TabBar = ({ isOpen, setIsOpen, areActiveNotifications = true }) => 
         />
         <Flex direction="column" justify="space-between" height="100vh">
           <TabBarMenu navMenuItems={navMenuItems} />
-          <TabBarFooter areActiveNotifications={areActiveNotifications} />
+          <TabBarFooter />
         </Flex>
       </Box>
     </>

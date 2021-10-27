@@ -15,10 +15,22 @@ const projectsMenuOptions = {
     value: fetchType.ACTIVE,
     active_icon: ICONS_REFERENCE.active,
     icon: ICONS_REFERENCE.active
+  },
+  favs: {
+    label: "Favoritos",
+    value: fetchType.FAVS,
+    active_icon: ICONS_REFERENCE.heart,
+    icon: ICONS_REFERENCE.heart_line
+  },
+  subscribed: {
+    label: "Suscritos",
+    value: fetchType.SUBSCRIBED,
+    active_icon: ICONS_REFERENCE.subscribe,
+    icon: ICONS_REFERENCE.subscribe_line
   }
 }
 
-export const ProjectsMenu = ({ fetchState = fetchType.ALL, onChange }) => {
+export const ProjectsMenu = ({ fetchState, onChange }) => {
   return (
     <>
       <Flex mb="16px" ml="34px">

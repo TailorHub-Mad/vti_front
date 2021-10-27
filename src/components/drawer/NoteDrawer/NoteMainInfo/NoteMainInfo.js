@@ -37,8 +37,11 @@ export const NoteMainInfo = ({
   const [userId, setUserId] = useState()
 
   const ownerMessage = item?.owner && item?.owner[0]?._id
+  const ownerNote = note?.owner && note?.owner[0]?._id
+
   const isAdmin = role === RoleType.ADMIN
   const isMyMessage = ownerMessage === userId
+  const isMyNote = ownerNote === userId
 
   const updateLimitDate = isMyMessage ? item?.updateLimitDate : null
   const editAllowed =
@@ -94,41 +97,101 @@ export const NoteMainInfo = ({
           {new Date(item.updatedAt)?.toLocaleDateString()}
         </Text>
         <Flex>
-          {!isMessage || isMyMessage ? (
-            <>
-              {editAllowed || isAdmin ? (
-                <ActionLink
-                  onClick={onEdit}
-                  color="blue.500"
-                  icon={<EditIcon />}
-                  label="Editar"
-                />
-              ) : null}
-              {isAdmin ? (
-                <>
-                  <ActionLink
-                    onClick={() => handleUpdateNote(actionType.CLOSE)}
-                    color="blue.500"
-                    icon={item.isClosed ? <LockCloseIcon /> : <LockOpenIcon />}
-                    label={item.isClosed ? "Cerrado" : "Cerrar"}
-                  />
-                  <ActionLink
-                    onClick={() => handleUpdateNote(actionType.FORMALIZED)}
-                    color="blue.500"
-                    icon={<FormalizedIcon fill="blue.500" />}
-                    label={item.formalized ? "Formalizado" : "Formalizar"}
-                  />
-                </>
-              ) : null}
-              {editAllowed || isAdmin ? (
-                <ActionLink
-                  onClick={onDelete}
-                  color="error"
-                  icon={<DeleteIcon />}
-                  label="Eliminar"
-                />
-              ) : null}
-            </>
+          {!isMessage && role === RoleType.ADMIN ? (
+            <ActionLink
+              onClick={onEdit}
+              color="blue.500"
+              icon={<EditIcon />}
+              label="Editar"
+            />
+          ) : !isMessage && role === RoleType.USER && isMyNote ? (
+            <ActionLink
+              onClick={onEdit}
+              color="blue.500"
+              icon={<EditIcon />}
+              label="Editar"
+            />
+          ) : isMessage && isMyMessage && role === RoleType.ADMIN ? (
+            <ActionLink
+              onClick={onEdit}
+              color="blue.500"
+              icon={<EditIcon />}
+              label="Editar"
+            />
+          ) : isMessage && isMyMessage && role === RoleType.ADMIN && editAllowed ? (
+            <ActionLink
+              onClick={onEdit}
+              color="blue.500"
+              icon={<EditIcon />}
+              label="Editar"
+            />
+          ) : null}
+
+          {role === RoleType.ADMIN ? (
+            <ActionLink
+              onClick={() => handleUpdateNote(actionType.CLOSE)}
+              color="blue.500"
+              icon={
+                item.isClosed ? (
+                  <LockCloseIcon color="blue.500" />
+                ) : (
+                  <LockOpenIcon fill="#C4C4C4" />
+                )
+              }
+              label={item.isClosed ? "Cerrado" : "Cerrar"}
+            />
+          ) : item.isClosed ? (
+            <ActionLink
+              onClick={() => {}}
+              color="blue.500"
+              icon={<LockCloseIcon color="blue.500" />}
+              label={"Cerrado"}
+              cursor={"default"}
+            />
+          ) : null}
+
+          {role === RoleType.ADMIN ? (
+            <ActionLink
+              onClick={() => {
+                handleUpdateNote(actionType.FORMALIZED)
+              }}
+              color="blue.500"
+              icon={
+                <FormalizedIcon fill={item.formalized ? "blue.500" : "#C4C4C4"} />
+              }
+              label={item.formalized ? "Formalizado" : "Formalizar"}
+            />
+          ) : item.formalized ? (
+            <ActionLink
+              onClick={() => {}}
+              color="blue.500"
+              icon={<FormalizedIcon fill={"blue.500"} />}
+              label={"Formalizado"}
+              cursor={"default"}
+            />
+          ) : null}
+
+          {!isMessage && role === RoleType.ADMIN ? (
+            <ActionLink
+              onClick={onDelete}
+              color="error"
+              icon={<DeleteIcon />}
+              label="Eliminar"
+            />
+          ) : isMessage && isMyMessage && role === RoleType.USER ? (
+            <ActionLink
+              onClick={onDelete}
+              color="error"
+              icon={<DeleteIcon />}
+              label="Eliminar"
+            />
+          ) : isMyMessage ? (
+            <ActionLink
+              onClick={onDelete}
+              color="error"
+              icon={<DeleteIcon />}
+              label="Eliminar"
+            />
           ) : null}
         </Flex>
       </Flex>

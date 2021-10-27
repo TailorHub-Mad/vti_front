@@ -41,6 +41,7 @@ import { NotesFilterModal } from "../../views/notes/NotesFilter/NotesFilterModal
 import { NOTES_FILTER_KEYS } from "../../utils/constants/filter"
 import { generateFilterQuery } from "../../utils/functions/filter"
 import { getGroupOptionLabel } from "../../utils/functions/objects"
+import { useRouter } from "next/router"
 
 const NOTES_GROUP_OPTIONS = [
   {
@@ -67,6 +68,7 @@ const apuntes = () => {
   const { deleteNote, deleteMessage, createNote } = useNoteApi()
   const { updateUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
+  const router = useRouter()
 
   // States
   const [showImportModal, setShowImportModal] = useState(false)
@@ -131,6 +133,7 @@ const apuntes = () => {
       setNoteToDetail({ note, key })
     } else setNoteToDetail(note)
     setShowNoteDetails(true)
+    router.replace(`${router.pathname}`, { query: { note: note?._id } })
   }
 
   const handleOpenEditResponse = (message) => {
@@ -228,7 +231,10 @@ const apuntes = () => {
         ? await mutate(updatedNotes, false)
         : await mutate()
 
-      if (showNoteDetails) setShowNoteDetails(false)
+      if (showNoteDetails) {
+        setShowNoteDetails(false)
+        router.replace(`${router.pathname}`)
+      }
       setNoteToDelete(null)
     } catch (error) {
       errorHandler(error)
@@ -380,6 +386,15 @@ const apuntes = () => {
     setNoteToDetail(newNoteToDetail)
   }, [notesData])
 
+  useEffect(() => {
+    if (!router.query?.note || !notesData) return
+
+    const noteDetail = notesData.find((n) => n._id === router.query?.note)
+
+    setNoteToDetail(noteDetail)
+    setShowNoteDetails(true)
+  }, [router.query, notesData])
+
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (
@@ -445,6 +460,7 @@ const apuntes = () => {
         isOpen={showNoteDetails}
         onClose={() => {
           setShowNoteDetails(false)
+          router.replace(`${router.pathname}`)
           setNoteToDetail(null)
         }}
         onDelete={() => setNoteToDelete(noteToDetail._id)}
@@ -460,7 +476,7 @@ const apuntes = () => {
       />
 
       <PageHeader>
-        <BreadCrumbs />
+        <BreadCrumbs customURL={"/apuntes"} />
         {isToolbarHidden() && (
           <ToolBar
             onAdd={() => setIsNoteModalOpen(true)}

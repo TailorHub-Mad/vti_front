@@ -33,8 +33,8 @@ const NoteService = () => {
   const getSearchNotes = (data) =>
     execute(instance.get(`/notes/filter?notes.title=${data}&notes.ref=${data}`))
 
-  const getFavsNotes = () => execute(instance.get(`/user/favorite`))
-  const getSubscribeNotes = () => execute(instance.get(`/user/subscribed`))
+  const getFavsNotes = () => execute(instance.get(`/user/favorite/notes`))
+  const getSubscribeNotes = () => execute(instance.get(`/user/subscribed/notes`))
   const getUnreadNotes = () => execute(instance.get(`/user/noRead`))
   const getActiveNotes = () => execute(instance.get(`/user/active`))
 

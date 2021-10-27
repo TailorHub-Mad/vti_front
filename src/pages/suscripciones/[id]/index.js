@@ -301,7 +301,11 @@ const suscripcion = () => {
         ) : currentState === "notes" ? (
           <NotesGrid
             notes={subscription?.subscribed.notes}
-            onSeeDetails={() => {}}
+            onSeeDetails={(note) =>
+              router.push(
+                `${PATHS.projects}/${note.projects[0]?._id}?note=${note._id}`
+              )
+            }
             checkIsSubscribe={() => {}}
             checkIsFavorite={() => {}}
             onDelete={() => {}}

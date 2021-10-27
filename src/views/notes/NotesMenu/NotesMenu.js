@@ -14,7 +14,7 @@ const notesMenuOptions = {
     activeIcon: ICONS_REFERENCE.heart,
     icon: ICONS_REFERENCE.heart_line
   },
-  suscribed: {
+  subscribed: {
     label: "Suscritos",
     activeIcon: ICONS_REFERENCE.subscribe,
     icon: ICONS_REFERENCE.subscribe_line
@@ -24,11 +24,6 @@ const notesMenuOptions = {
     activeIcon: ICONS_REFERENCE.hide,
     icon: ICONS_REFERENCE.hide_line
   }
-  // active: {
-  //   label: "Activos",
-  //   activeIcon: ICONS_REFERENCE.active,
-  //   icon: ICONS_REFERENCE.active
-  // }
 }
 
 export const NotesMenu = ({
