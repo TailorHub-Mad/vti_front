@@ -35,14 +35,16 @@ export const MessageCardFooter = ({
       {...props}
     >
       {isClosed ? (
-        <LockCloseIcon {...icon_props} />
+        <LockCloseIcon {...icon_props} fill="blue.500" />
       ) : (
-        <LockOpenIcon {...icon_props} />
+        <LockOpenIcon {...icon_props} fill="#C4C4C4" />
       )}
 
       {isSubscribe ? <SubscribeIcon {...icon_props} color={"blue.500"} /> : null}
 
-      {isFormalized ? <BadgeIcon {...icon_props} color={"blue.500"} /> : null}
+      {isFormalized ? (
+        <BadgeIcon {...icon_props} color={isFormalized ? "blue.500" : "#C4C4C4"} />
+      ) : null}
 
       <Box display="flex" alignItems="center">
         <Text
