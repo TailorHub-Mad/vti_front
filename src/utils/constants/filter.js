@@ -1,9 +1,10 @@
 export const NOTES_FILTER_KEYS = {
   client: "notes.clientId",
-  note_tags: "notes.tags",
+  note_tags: "notes.tags._id",
+  project_tags: "notes.projects.tags",
   users: "notes.owner",
   test_system: "notes.testSystems._id",
-  vti_code: "notes.testSystems.vtiCode._id",
+  vti_code: "notes.testSystems.vtiCode",
   project: "notes.projects._id",
   formalized: "notes.formalized",
   closed: "notes.isClosed",
@@ -12,11 +13,11 @@ export const NOTES_FILTER_KEYS = {
 export const PROJECTS_FILTER_KEYS = {
   client: "projects.clientAlias",
   test_system: "projects.testSystems._id",
-  year: "projects.year",
-  vti_code: "projects.vtiCode._id",
-  focus_point: "projects.focusPoint",
+  year: "projects.date.year",
+  vti_code: "projects.testSystems.vtiCode",
+  focus_point: "projects.focusPoint._id",
   sector: "projects.sector._id",
-  tag_project: "projects.tags.name"
+  tag_project: "projects.tags._id"
 }
 
 export const TESTSYSTEMS_FILTER_KEYS = {
@@ -24,7 +25,7 @@ export const TESTSYSTEMS_FILTER_KEYS = {
   year: "testSystems.year",
   vti_code: "testSystems.vtiCode",
   sector: "testSystems.projects.sector",
-  project_tags: "testSystems.projects.tags.name"
+  project_tags: "testSystems.projects.tags._id"
 }
 
 export const TAGS_FILTER_KEYS = {

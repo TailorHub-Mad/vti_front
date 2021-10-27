@@ -3352,6 +3352,11 @@ minimist@^1.2.0, minimist@^1.2.5:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
 
+mongo-query-generator@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/mongo-query-generator/-/mongo-query-generator-0.1.0.tgz#e8297252666e16d87983206f32cf311268f9f6c6"
+  integrity sha1-6ClyUmZuFth5gyBvMs8xEmj59sY=
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
