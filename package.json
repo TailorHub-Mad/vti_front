@@ -25,6 +25,7 @@
     "formik": "^2.2.9",
     "framer-motion": "^4.0.3",
     "lodash": "^4.17.21",
+    "mongo-query-generator": "^0.1.0",
     "next": "latest",
     "next-translate": "^1.0.7",
     "nookies": "^2.5.2",
