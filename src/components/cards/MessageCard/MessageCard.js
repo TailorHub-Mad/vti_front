@@ -84,7 +84,7 @@ export const MessageCard = ({
           isClosed={note?.isClosed}
           isSubscribe={isSubscribe}
           isFormalized={note?.formalized}
-          messagesCount={note?.messages?.filter((m) => m?.createdAt).length}
+          messagesCount={note?.messages?.filter((m) => m?.message).length}
           attachmentsCount={note?.documents?.length}
           subscribedUsers={owners.length > 0 ? owners : null}
           isRead={isRead}

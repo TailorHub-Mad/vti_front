@@ -30,6 +30,7 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
     with_links: false,
     formalized: false,
     closed: false,
+    opened: false,
     with_responses: false
   }
 

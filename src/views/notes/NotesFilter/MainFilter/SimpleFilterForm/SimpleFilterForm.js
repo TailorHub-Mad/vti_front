@@ -228,7 +228,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
         marginBottom: "12px"
       }
     },
-    opend: {
+    opened: {
       type: "switch",
       config: {
         children: "Solo abiertos",
@@ -247,7 +247,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
     text: <SimpleInput />,
     select: <InputSelect isReset={isReset} />,
     add_select: <AddSelect isReset={isReset} />,
-    checkbox: <Checkbox isChecked={isReset ? false : true} />,
+    checkbox: <Checkbox />,
     switch: <Switch />,
     multitag_select: <MultiTagSelect isReset={isReset} />
   }
@@ -255,7 +255,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
   const handleFilterChange = (input, _value) => {
     onChange({
       ...value,
-      [input]: _value?.target?.checked ? _value.target.checked : _value
+      [input]: _value?.target?.checked ?? _value
     })
   }
 
@@ -267,6 +267,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
           onChange: (val) => handleFilterChange(name, val),
           marginBottom: "24px",
           key: `${name}-${idx}`,
+          ischecked: value[name],
           ...config
         })
       })}
