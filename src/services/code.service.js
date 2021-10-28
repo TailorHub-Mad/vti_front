@@ -5,7 +5,7 @@ const CodeService = () => {
 
   // CRUD
 
-  const getCodes = (data = "", limit = 2, offset = 0) =>
+  const getCodes = (data = "", limit = 0, offset = 0) =>
     execute(instance.get(`/vtiCode?limit=${limit}&offset=${offset}${data}`))
   const getCode = (id) => execute(instance.get(`/vtiCode/${id}`))
   const createCode = (data) => execute(instance.post(`/vtiCode/create`, data))

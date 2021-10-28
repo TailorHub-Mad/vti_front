@@ -113,9 +113,10 @@ const project = () => {
   if (error) return errorHandler(error)
   return (
     <Page>
-      {isLoading || !projectData ? <LoadingView mt="-200px" /> : null}
       {notFound && <>Error. No se ha encontrado el sector.</>}
-      {projectData && (
+      {isLoading ? (
+        <LoadingView mt="-200px" />
+      ) : projectData ? (
         <>
           <Popup
             variant="twoButtons"
@@ -171,13 +172,10 @@ const project = () => {
               closeInfo={projectData?.closed}
               projectId={projectData?._id}
             />
-            <ProjectNotes
-              notesData={projectData?.notes.filter((n) => n?._id)}
-              project={projectData}
-            />
+            <ProjectNotes project={projectData} />
           </Box>
         </>
-      )}
+      ) : null}
     </Page>
   )
 }

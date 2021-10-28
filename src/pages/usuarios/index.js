@@ -284,9 +284,9 @@ const usuarios = () => {
         ) : null}
       </PageHeader>
 
-      {isLoading ? <LoadingView mt="-200px" /> : null}
-
-      {isEmptyData && fetchState !== fetchType.ALL ? (
+      {isLoading ? (
+        <LoadingView mt="-200px" />
+      ) : isEmptyData && fetchState !== fetchType.ALL ? (
         <ViewNotFoundState />
       ) : isEmptyData && !isValidating ? (
         <ViewEmptyState

@@ -4,7 +4,7 @@ const NoteService = () => {
   const { instance, execute } = ServiceConstructor
 
   // CRUD
-  const getNotes = (limit = 2, offset = 0) =>
+  const getNotes = (limit = 0, offset = 0) =>
     execute(instance.get(`/notes?limit=${limit}&offset=${offset}`))
   const getNote = (id) => execute(instance.get(`/notes/${id}`))
   const createNote = (data) => {
@@ -30,8 +30,7 @@ const NoteService = () => {
   const getGroupNotes = (data) =>
     execute(instance.get(`/notes/group?group=${data}&real=true`))
   const getFilterNotes = (data) => execute(instance.get(`/notes/filter?${data}`))
-  const getSearchNotes = (data) =>
-    execute(instance.get(`/notes/filter?notes.title=${data}&notes.ref=${data}`))
+  const getSearchNotes = (data) => execute(instance.get(`/notes/filter?${data}`))
 
   const getFavsNotes = () => execute(instance.get(`/user/favorite/notes`))
   const getSubscribeNotes = () => execute(instance.get(`/user/subscribed/notes`))

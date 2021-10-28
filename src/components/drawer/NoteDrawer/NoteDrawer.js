@@ -106,7 +106,6 @@ export const NoteDrawer = ({
               />
             </Box>
             {note.messages.map((msg, idx) => {
-              console.log(msg)
               if (!msg.owner[0]) return null
               return (
                 <Box

@@ -296,8 +296,9 @@ const suscripcion = () => {
         ) : null}
       </PageMenu>
       <PageBody height="calc(100vh - 140px)">
-        {isLoading ? <LoadingView mt="-200px" /> : null}
-        {subscriptionsData.length === 0 && !isValidating ? (
+        {isLoading ? (
+          <LoadingView mt="-200px" />
+        ) : subscriptionsData.length === 0 && !isValidating ? (
           <ViewNotFoundState text="No te has suscrito a nada" noBack />
         ) : currentState === "notes" ? (
           <NotesGrid

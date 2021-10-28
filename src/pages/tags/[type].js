@@ -264,11 +264,11 @@ const tags = () => {
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData && !isValidating ? (
+      {isLoading ? (
+        <LoadingView mt="-200px" />
+      ) : isEmptyData && !isValidating ? (
         <ViewNotFoundState text="No hya tags creados" />
-      ) : null}
-      {tagData ? (
+      ) : (
         <PageBody
           p="32px"
           bgColor="white"
@@ -352,7 +352,7 @@ const tags = () => {
             </Grid>
           ) : null}
         </PageBody>
-      ) : null}
+      )}
     </Page>
   )
 }

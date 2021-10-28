@@ -36,19 +36,22 @@ const user = () => {
   if (error) return errorHandler(error)
   return (
     <Page>
-      {isLoading || !data ? <LoadingView mt="-200px" /> : null}
       {notFound && <>Error. No se ha encontrado el cliente.</>}
-      <ProjectsByObject
-        projects={projectsData}
-        customURL={`${PATHS.users}/${user?.ref || userId}`}
-        setFetchState={setFetchState}
-        setFetchOptions={setFetchOptions}
-        fetchState={fetchState}
-        fetchOptions={fetchOptions}
-        isEmptyData={isEmptyData}
-        hrefBack={PATHS.users}
-        backText={"Volver a usuarios"}
-      />
+      {isLoading || !data ? (
+        <LoadingView mt="-200px" />
+      ) : (
+        <ProjectsByObject
+          projects={projectsData}
+          customURL={`${PATHS.users}/${user?.ref || userId}`}
+          setFetchState={setFetchState}
+          setFetchOptions={setFetchOptions}
+          fetchState={fetchState}
+          fetchOptions={fetchOptions}
+          isEmptyData={isEmptyData}
+          hrefBack={PATHS.users}
+          backText={"Volver a usuarios"}
+        />
+      )}
     </Page>
   )
 }

@@ -4,7 +4,7 @@ const ProjectService = () => {
   const { instance, execute } = ServiceConstructor
 
   // CRUD
-  const getProjects = (data = "", limit = 2, offset = 0) =>
+  const getProjects = (data = "", limit = 0, offset = 0) =>
     execute(instance.get(`/projects?limit=${limit}&offset=${offset}${data}`))
   const getProject = (id) => execute(instance.get(`/projects/${id}`))
   const createProject = (data) => execute(instance.post(`/projects/`, data))

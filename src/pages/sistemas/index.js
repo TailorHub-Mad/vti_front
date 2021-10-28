@@ -381,8 +381,9 @@ const sistemas = () => {
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData && fetchState !== fetchType.ALL ? (
+      {isLoading ? (
+        <LoadingView mt="-200px" />
+      ) : isEmptyData && fetchState !== fetchType.ALL ? (
         <ViewNotFoundState noBack />
       ) : isEmptyData && !isValidating ? (
         <ViewEmptyState
