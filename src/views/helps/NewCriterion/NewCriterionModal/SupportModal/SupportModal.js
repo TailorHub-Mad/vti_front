@@ -134,7 +134,6 @@ export const SupportModal = ({
                     variant="violete"
                     mr="8px"
                     mb="8px"
-                    width="auto"
                   >
                     <Checkbox
                       size="sm"
