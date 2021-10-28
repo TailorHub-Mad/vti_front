@@ -76,8 +76,9 @@ const suscripciones = () => {
               />
             ) : null}
           </PageHeader>
-          {isLoading ? <LoadingView mt="-200px" /> : null}
-          {isEmptyData && !isValidating ? (
+          {isLoading ? (
+            <LoadingView mt="-200px" />
+          ) : isEmptyData && !isValidating ? (
             <ViewNotFoundState noBack text="No te has suscrito a nada" />
           ) : (
             <SubscriptionsTable

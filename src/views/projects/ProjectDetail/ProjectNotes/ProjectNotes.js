@@ -13,18 +13,25 @@ import useNoteApi from "../../../../hooks/api/useNoteApi"
 import useUserApi from "../../../../hooks/api/useUserApi"
 import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
 import { ToastContext } from "../../../../provider/ToastProvider"
+import { noteFetchHandler } from "../../../../swr/note.swr"
+import { NOTES_FILTER_KEYS } from "../../../../utils/constants/filter"
+import { PATHS } from "../../../../utils/constants/global"
 import {
   fetchOption,
   fetchType,
   SWR_CACHE_KEYS
 } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
+import { generateFilterQuery } from "../../../../utils/functions/filter"
 import {
   checkDataIsEmpty,
   getFieldObjectById
 } from "../../../../utils/functions/global"
+import { getGroupOptionLabel } from "../../../../utils/functions/objects"
+import { LoadingView } from "../../../common/LoadingView"
 import { ViewNotFoundState } from "../../../common/ViewNotFoundState"
 import { NewNoteModal } from "../../../notes/NewNote/NewNoteModal/NewNoteModal"
+import { NotesFilterModal } from "../../../notes/NotesFilter/NotesFilterModal"
 import { NotesGrid } from "../../../notes/NotesGrid/NotesGrid"
 import { NotesGroup } from "../../../notes/NotesGroup/NotesGroup"
 import { ResponseModal } from "../../../notes/Response/ResponseModal/ResponseModal"
@@ -48,7 +55,7 @@ const NOTES_GROUP_OPTIONS = [
   }
 ]
 
-export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) => {
+export const ProjectNotes = ({ project }) => {
   const { user } = useContext(ApiAuthContext)
   const { deleteNote, deleteMessage } = useNoteApi()
   const { updateUser } = useUserApi()
@@ -56,14 +63,13 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
   const { mutate } = useSWRConfig()
   const router = useRouter()
 
+  const [showFilterModal, setShowFilterModal] = useState(false)
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
-  const [fetchState, setFetchState] = useState(fetchType.ALL)
   const [messageToDelete, setMessageToDelete] = useState(null)
   const [isResponseModalOpen, setIsResponseModalOpen] = useState(false)
   const [messageToUpdate, setMessageToUpdate] = useState(null)
   const [showNoteDetails, setShowNoteDetails] = useState(false)
-  const [, /*fetchOptions*/ setFetchOptions] = useState({})
   const [noteFromProject] = useState({
     project: {
       label: project.alias,
@@ -77,15 +83,38 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
   const [noteToUpdate, setNoteToUpdate] = useState(null)
   const [noteToDetail, setNoteToDetail] = useState(null)
   const [noteToDelete, setNoteToDelete] = useState(null)
+  const [isFilter, setIsFilter] = useState(false)
 
-  const isEmptyData = checkDataIsEmpty(notesData)
+  const [fetchState, setFetchState] = useState(fetchType.FILTER)
+  const [fetchOptions, setFetchOptions] = useState({
+    [fetchOption.FILTER]: `notes.projects._id=${project._id}`
+  })
+
+  const handleNotesData = (isEmptyData) => {
+    if (!data || isEmptyData) return null
+    if (fetchState == fetchType.GROUP) return data
+    return data[0]?.notes
+  }
+
+  const { data, isLoading, isValidating } = noteFetchHandler(
+    fetchState,
+    fetchOptions
+  )
+
+  const isEmptyData = checkDataIsEmpty(data)
+  const notesData = handleNotesData(isEmptyData)
+
+  const isGrouped = fetchState == fetchType.GROUP
   const isSearch = fetchState == fetchType.SEARCH
 
   const checkIsFavorite = (id) => user?.favorites?.notes?.includes(id)
   const checkIsSubscribe = (id) => user?.subscribed?.notes?.includes(id)
 
   // Handlers views
-  const handleExport = () => {}
+  const handleOnOpenFilter = () => {
+    if (fetchState === fetchType.FILTER) handleOnFilter(null)
+    else setShowFilterModal(true)
+  }
 
   const handleOnCloseModal = () => {
     setNoteToUpdate(null)
@@ -97,6 +126,10 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
       setNoteToDetail({ note, key })
     } else setNoteToDetail(note)
     setShowNoteDetails(true)
+    router.replace(`${PATHS.projects}/[alias]`, {
+      pathname: `${PATHS.projects}/${project._id}`,
+      query: { note: note?._id }
+    })
   }
 
   const handleOpenEditResponse = (message) => {
@@ -107,10 +140,30 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
   // Handlers CRUD
   const handleDelete = async (noteToDelete) => {
     try {
+      if (isGrouped) {
+        await await deleteNote(noteToDelete.id)
+        showToast({ message: "Apunte borrado correctamente" })
+        setNoteToDelete(null)
+        return await mutate()
+      }
+
       await deleteNote(noteToDelete)
       showToast({ message: "Apunte borrado correctamente" })
-      await mutate([SWR_CACHE_KEYS.project, project._id])
-      if (showNoteDetails) setShowNoteDetails(false)
+
+      const updatedNotes = []
+      const filterNotes = notesData.filter((note) => note._id !== noteToDelete)
+      updatedNotes.push({
+        notes: filterNotes
+      })
+
+      updatedNotes[0].notes.length > 0
+        ? await mutate(updatedNotes, false)
+        : await mutate()
+
+      if (showNoteDetails) {
+        setShowNoteDetails(false)
+        router.replace(`${PATHS.projects}/${project._id}`)
+      }
       setNoteToDelete(null)
     } catch (error) {
       errorHandler(error)
@@ -198,39 +251,60 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
   // Filters
   const onSearch = (search) => {
     if (!search) {
-      setFetchState(fetchType.ALL)
+      setFetchState(fetchType.FILTER)
+      setIsFilter(false)
       setFetchOptions({
-        [fetchOption.SEARCH]: null
+        [fetchOption.FILTER]: `notes.projects._id=${project._id}`
       })
       return
     }
 
+    setIsFilter(true)
+
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: search
+      [fetchOption.SEARCH]: `notes.title=${search}&notes.ref=${search}&notes.projects._id=${project._id}&union=true`
     })
   }
 
   const handleOnGroup = (group) => {
     if (!group) {
-      setFetchState(fetchType.ALL)
+      setFetchState(fetchType.FILTER)
+      setIsFilter(false)
       setFetchOptions({
-        [fetchOption.GROUP]: null
+        [fetchOption.FILTER]: `notes.projects._id=${project._id}`
       })
       return
     }
 
+    setIsFilter(true)
+
     setFetchState(fetchType.GROUP)
     setFetchOptions({
-      [fetchOption.GROUP]: group
+      [fetchOption.GROUP]: `${group}&notes.projects._id=${project._id}`
     })
   }
 
-  const handleOnFilter = (filter) => {
+  const handleOnFilter = (values) => {
+    if (!values) {
+      setFetchState(fetchType.FILTER)
+      setIsFilter(false)
+      setFetchOptions({
+        [fetchOption.FILTER]: `notes.projects._id=${project._id}`
+      })
+      return
+    }
+
+    setIsFilter(true)
+
+    const filter = generateFilterQuery(NOTES_FILTER_KEYS, values)
+
     setFetchState(fetchType.FILTER)
     setFetchOptions({
       [fetchOption.FILTER]: filter
     })
+
+    setShowFilterModal(false)
   }
 
   useEffect(() => {
@@ -291,6 +365,12 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
         noteId={noteToDetail?._id}
       />
 
+      <NotesFilterModal
+        isOpen={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onFilter={(values) => handleOnFilter(values)}
+      />
+
       <NewNoteModal
         noteToUpdate={noteToUpdate}
         noteFromProject={noteFromProject}
@@ -306,7 +386,11 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
       <NoteDrawer
         note={noteToDetail}
         isOpen={showNoteDetails}
-        onClose={() => setShowNoteDetails(false)}
+        onClose={() => {
+          setShowNoteDetails(false)
+          router.replace(`${PATHS.projects}/${project._id}`)
+          setNoteToDetail(null)
+        }}
         onDelete={() => setNoteToDelete(noteToDetail._id)}
         onEdit={() => handleUpdate(noteToDetail._id)}
         onResponse={() => setIsResponseModalOpen(true)}
@@ -320,32 +404,30 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
         fromProjectDetail={project._id}
       />
 
-      <Flex justify="space-between" align="center" mt="24px" mb="24px">
+      <Flex justify="space-between" align="center" mt="24px">
         <Text variant="d_l_regular">Apuntes</Text>
         <Flex width="fit-content">
-          <ToolBar
-            onAdd={() => setIsNoteModalOpen(true)}
-            onSearch={onSearch}
-            onGroup={handleOnGroup}
-            onFilter={handleOnFilter}
-            onImport={() => setShowImportModal(true)}
-            onExport={handleExport}
-            addLabel="Añadir apunte"
-            searchPlaceholder="Busqueda por ID, Proyecto"
-            groupOptions={NOTES_GROUP_OPTIONS}
-            icon={<AddNoteIcon />}
-            fetchState={fetchState}
-            noFilter={Boolean(notesData)}
-            noGroup={Boolean(notesData)}
-            noSearch={Boolean(notesData)}
-            noImport
-          />
+          {!isEmptyData ? (
+            <ToolBar
+              onAdd={() => setIsNoteModalOpen(true)}
+              onSearch={onSearch}
+              onGroup={handleOnGroup}
+              onFilter={handleOnOpenFilter}
+              addLabel="Añadir apunte"
+              searchPlaceholder="Busqueda por ID, Proyecto"
+              groupOptions={NOTES_GROUP_OPTIONS}
+              icon={<AddNoteIcon />}
+              fetchState={!isFilter ? fetchType.ALL : fetchState}
+              noImport
+            />
+          ) : null}
         </Flex>
       </Flex>
-      <PageBody h={"calc(100vh - 400px)"} overflowY="none">
-        {isEmptyData && isSearch ? (
-          <ViewNotFoundState />
-        ) : isEmptyData ? (
+      <PageBody overflowY="none" mt="32px">
+        {isLoading ? <LoadingView mt="-400px" /> : null}
+        {isEmptyData && isSearch && !isValidating ? (
+          <ViewNotFoundState noBack h="40vh" />
+        ) : isEmptyData && !isValidating ? (
           <ViewNotFoundState
             text="No hay apuntes asociados a este proyecto"
             h="40vh"
@@ -362,11 +444,11 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
                 onDelete={(id, key) => setNoteToDelete({ id, key })}
                 onGroup={handleOnGroup}
                 handleFavorite={handleFavorite}
-                // groupOption={getGroupOptionLabel(
-                //   NOTES_GROUP_OPTIONS,
-                //   fetchOptions[fetchOption.GROUP]
-                // )}
-                // isGrouped={isGrouped}
+                groupOption={getGroupOptionLabel(
+                  NOTES_GROUP_OPTIONS,
+                  fetchOptions[fetchOption.GROUP]
+                )}
+                isGrouped={isGrouped}
                 fetchState={fetchState}
               />
             ) : (

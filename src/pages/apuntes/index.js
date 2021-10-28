@@ -157,9 +157,7 @@ const apuntes = () => {
   }
 
   const handleImportNotes = async (data) => {
-    //TODO Gestión de errores y update de SWR
     const formatCreateNote = (note) => {
-      // console.log("FORMel console log no salta xDAT", note)
       const formatData = {
         project: note?.project,
         title: note?.title,
@@ -331,7 +329,7 @@ const apuntes = () => {
 
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: search
+      [fetchOption.SEARCH]: `notes.title=${search}&notes.ref=${search}`
     })
   }
 
@@ -503,8 +501,9 @@ const apuntes = () => {
         ) : null}
       </PageMenu>
       <PageBody height="calc(100vh - 140px)" overflowY="auto">
-        {isLoading ? <LoadingView mt="-200px" /> : null}
-        {isEmptyData && fetchState !== fetchType.ALL ? (
+        {isLoading ? (
+          <LoadingView mt="-200px" />
+        ) : isEmptyData && fetchState !== fetchType.ALL ? (
           <ViewNotFoundState noBack />
         ) : isEmptyData && !isValidating ? (
           <ViewEmptyState

@@ -222,8 +222,9 @@ const clientes = () => {
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData && isSearch ? (
+      {isLoading ? (
+        <LoadingView mt="-200px" />
+      ) : isEmptyData && isSearch ? (
         <ViewNotFoundState />
       ) : isEmptyData && !isValidating ? (
         <ViewEmptyState

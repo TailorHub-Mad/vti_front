@@ -14,7 +14,6 @@ export const noteDataTransform = (data) => {
       _item.link = item.data[3]
     }
     if (item.data[4]) {
-      console.log("EN TEORia tiene", item.data[4])
       _item.testSystems = item.data[4].split(" ").map((item) => item.trim())
     }
     if (item.data[5]) {

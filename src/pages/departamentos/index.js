@@ -253,8 +253,9 @@ const departamentos = () => {
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData && isSearch ? (
+      {isLoading ? (
+        <LoadingView mt="-200px" />
+      ) : isEmptyData && isSearch ? (
         <ViewNotFoundState noBack />
       ) : isEmptyData && !isValidating ? (
         <ViewEmptyState
