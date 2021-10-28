@@ -7,7 +7,7 @@ import { CollapseIconHor } from "../../icons/CollapseIconHor"
 import useNoteApi from "../../../hooks/api/useNoteApi"
 
 export const NoteDrawer = ({
-  note,
+  note: noteFromProject,
   isOpen,
   onClose,
   onEdit,
@@ -21,16 +21,23 @@ export const NoteDrawer = ({
   const [isExpanded, setIsExpanded] = useState(false)
   const { getNote } = useNoteApi()
 
+  const [note, setNote] = useState()
+
   const formatMessage = (msg) => ({
     ...msg,
     isClosed: msg.approved
   })
 
   useEffect(() => {
-    if (note) getNote(null, note._id)
-  }, [note])
+    if (!noteFromProject) return
+    const _getNote = async () => {
+      const newNote = await getNote(null, noteFromProject._id)
+      setNote(newNote[0].notes[0])
+    }
+    _getNote()
+  }, [noteFromProject])
 
-  if (!note) return null
+  if (!noteFromProject) return null
   return (
     <>
       {isOpen ? (
@@ -45,91 +52,94 @@ export const NoteDrawer = ({
           opacity="0.8"
         />
       ) : null}
-      <Box
-        transform={`translateX(${isOpen ? "0px" : "536.5px"})`}
-        onClose={onClose}
-        top="0"
-        right="-10px"
-        position="fixed"
-        width={isExpanded && isOpen ? "100vw" : "536.5px"}
-        transition="all 0.3s ease-in"
-        zIndex="999"
-        {...props}
-      >
-        <Box p="38.25px" bgColor="light_grey" h="100vh" overflowY="scroll">
-          <Flex justify="space-between" align="center">
-            <Text variant="d_l_medium">{note.title}</Text>
-            <CloseIcon onClick={onClose} cursor="pointer" />
-          </Flex>
-          <Flex
-            height="100vh"
-            width="32px"
-            alignItems="center"
-            justifyContent="center"
-            onClick={() => setIsExpanded(!isExpanded)}
-            position="absolute"
-            left="0px"
-            top="0"
-            cursor="pointer"
-          >
-            <CollapseIconHor />
-          </Flex>
-          <Box
-            bgColor="white"
-            mt="24px"
-            p="32px"
-            borderRadius="2px"
-            boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
-          >
-            <NoteMainInfo
-              item={note}
-              onEdit={onEdit}
-              onDelete={onDelete}
-              fromProjectDetail={fromProjectDetail}
-              note={note}
-            />
-            <NoteDetailsAccordion
-              name={note.name}
-              link={note.link}
-              description={note.description}
-              noteTags={note.tags.length > 0 && note.tags}
-              testSystems={note.testSystems}
-              files={note.documents?.length > 0 ? note.documents : null}
-            />
+      {note ? (
+        <Box
+          transform={`translateX(${isOpen ? "0px" : "536.5px"})`}
+          onClose={onClose}
+          top="0"
+          right="-10px"
+          position="fixed"
+          width={isExpanded && isOpen ? "100vw" : "536.5px"}
+          transition="all 0.3s ease-in"
+          zIndex="999"
+          {...props}
+        >
+          <Box p="38.25px" bgColor="light_grey" h="100vh" overflowY="scroll">
+            <Flex justify="space-between" align="center">
+              <Text variant="d_l_medium">{note.title}</Text>
+              <CloseIcon onClick={onClose} cursor="pointer" />
+            </Flex>
+            <Flex
+              height="100vh"
+              width="32px"
+              alignItems="center"
+              justifyContent="center"
+              onClick={() => setIsExpanded(!isExpanded)}
+              position="absolute"
+              left="0px"
+              top="0"
+              cursor="pointer"
+            >
+              <CollapseIconHor />
+            </Flex>
+            <Box
+              bgColor="white"
+              mt="24px"
+              p="32px"
+              borderRadius="2px"
+              boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
+            >
+              <NoteMainInfo
+                item={note}
+                onEdit={onEdit}
+                onDelete={onDelete}
+                fromProjectDetail={fromProjectDetail}
+                note={note}
+              />
+              <NoteDetailsAccordion
+                name={note.name}
+                link={note.link}
+                description={note.description}
+                noteTags={note.tags.length > 0 && note.tags}
+                testSystems={note.testSystems}
+                files={note.documents?.length > 0 ? note.documents : null}
+              />
+            </Box>
+            {note.messages.map((msg, idx) => {
+              console.log(msg)
+              if (!msg.owner[0]) return null
+              return (
+                <Box
+                  key={`${msg._id}-${idx}`}
+                  bgColor="white"
+                  mt="24px"
+                  p="32px"
+                  borderRadius="2px"
+                  boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
+                >
+                  <NoteMainInfo
+                    item={formatMessage(msg)}
+                    onEdit={() => onEditResponse(msg)}
+                    onDelete={() => onDeleteResponse(note._id, msg._id)}
+                    isMessage
+                    note={note}
+                  />
+                  <NoteDetailsAccordion
+                    isMessage
+                    name={msg.owner[0]?.alias}
+                    link={msg.link}
+                    files={msg.documents?.length > 0 ? msg.documents : null}
+                    message={msg.message}
+                  />
+                </Box>
+              )
+            })}
+            <Button mt="24px" onClick={onResponse}>
+              Escribir respuesta
+            </Button>
           </Box>
-          {note.messages.map((msg, idx) => {
-            if (!msg.owner[0]) return null
-            return (
-              <Box
-                key={`${msg._id}-${idx}`}
-                bgColor="white"
-                mt="24px"
-                p="32px"
-                borderRadius="2px"
-                boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
-              >
-                <NoteMainInfo
-                  item={formatMessage(msg)}
-                  onEdit={() => onEditResponse(msg)}
-                  onDelete={() => onDeleteResponse(note._id, msg._id)}
-                  isMessage
-                  note={note}
-                />
-                <NoteDetailsAccordion
-                  isMessage
-                  name={msg.owner[0]?.alias}
-                  link={msg.link}
-                  files={msg.documents?.length > 0 ? msg.documents : null}
-                  message={msg.message}
-                />
-              </Box>
-            )
-          })}
-          <Button mt="24px" onClick={onResponse}>
-            Escribir respuesta
-          </Button>
         </Box>
-      </Box>
+      ) : null}
     </>
   )
 }

@@ -5,7 +5,7 @@ const SubscriptionService = () => {
 
   // CRUD
 
-  const getSubscriptions = (data = "", limit = 0, offset = 0) =>
+  const getSubscriptions = (data = "", limit = 2, offset = 0) =>
     execute(instance.get(`/subscribed/${data}?limit=${limit}&offset=${offset}`))
   const getSubscription = (id) => execute(instance.get(`/sector/${id}`))
   const createSubscription = (system) =>
@@ -13,7 +13,7 @@ const SubscriptionService = () => {
   const deleteSubscription = (id) => execute(instance.delete(`/testSystem/${id}`))
 
   // GROUP & FILTER
-  const getSearchSubscriptions = (data = "", search = "", limit = 0, offset = 0) =>
+  const getSearchSubscriptions = (data = "", search = "", limit = 2, offset = 0) =>
     execute(
       instance.get(
         `/subscribed/${data}?limit=${limit}&offset=${offset}&alias=${search}&ref=${search}`

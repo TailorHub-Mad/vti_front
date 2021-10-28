@@ -4,7 +4,7 @@ const SystemService = () => {
   const { instance, execute } = ServiceConstructor
 
   // CRUD
-  const getSystems = (data = "", limit = 0, offset = 0) =>
+  const getSystems = (data = "", limit = 2, offset = 0) =>
     execute(instance.get(`/testSystem?limit=${limit}&offset=${offset}${data}`))
   const getSystem = (id) => execute(instance.get(`/testSystem/${id}`))
   const createSystem = (system) => execute(instance.post("/testSystem", system))

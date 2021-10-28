@@ -4,7 +4,7 @@ const DepartmentService = () => {
   const { instance, execute } = ServiceConstructor
 
   // CRUD
-  const getDepartments = (data = "", limit = 0, offset = 0) =>
+  const getDepartments = (data = "", limit = 2, offset = 0) =>
     execute(instance.get(`/department?limit=${limit}&offset=${offset}${data}`))
   const getDepartment = (id) => execute(instance.get(`/department/${id}`))
   const createDepartment = (data) =>

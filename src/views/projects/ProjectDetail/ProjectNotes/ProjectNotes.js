@@ -320,7 +320,7 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
         fromProjectDetail={project._id}
       />
 
-      <Flex justify="space-between" align="center" mt="24px" mb="24px">
+      <Flex justify="space-between" align="center" mt="24px">
         <Text variant="d_l_regular">Apuntes</Text>
         <Flex width="fit-content">
           <ToolBar
@@ -342,7 +342,7 @@ export const ProjectNotes = ({ notesData = [], project /*onGroup, onFilter*/ }) 
           />
         </Flex>
       </Flex>
-      <PageBody h={"calc(100vh - 400px)"} overflowY="none">
+      <PageBody overflowY="none">
         {isEmptyData && isSearch ? (
           <ViewNotFoundState />
         ) : isEmptyData ? (

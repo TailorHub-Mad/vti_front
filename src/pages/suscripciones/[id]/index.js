@@ -49,7 +49,7 @@ const suscripcion = () => {
   const [subscriptionsData, setSubscriptionsData] = useState([])
 
   // Fetch
-  const { data, error, isLoading, mutate } = subscriptionFetchHandler(
+  const { data, error, isLoading, mutate, isValidating } = subscriptionFetchHandler(
     fetchState,
     fetchOptions
   )
@@ -286,7 +286,8 @@ const suscripcion = () => {
             onChange={handleState}
             handleSelectAllRows={() => handleSelectAllRows(subscriptionsData)}
             isChecked={
-              Object.keys(selectedRows)?.length === subscriptionsData?.length
+              Object.keys(selectedRows)?.length === subscriptionsData?.length &&
+              subscriptionsData?.length > 0
             }
             noCheck={subscriptionsData.length === 0}
             selectedRows={selectedRows}
@@ -296,7 +297,7 @@ const suscripcion = () => {
       </PageMenu>
       <PageBody height="calc(100vh - 140px)">
         {isLoading ? <LoadingView mt="-200px" /> : null}
-        {subscriptionsData.length === 0 ? (
+        {subscriptionsData.length === 0 && !isValidating ? (
           <ViewNotFoundState text="No te has suscrito a nada" noBack />
         ) : currentState === "notes" ? (
           <NotesGrid

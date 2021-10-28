@@ -4,7 +4,7 @@ const NoteService = () => {
   const { instance, execute } = ServiceConstructor
 
   // CRUD
-  const getNotes = (limit = 0, offset = 0) =>
+  const getNotes = (limit = 2, offset = 0) =>
     execute(instance.get(`/notes?limit=${limit}&offset=${offset}`))
   const getNote = (id) => execute(instance.get(`/notes/${id}`))
   const createNote = (data) => {

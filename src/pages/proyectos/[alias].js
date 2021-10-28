@@ -112,7 +112,7 @@ const project = () => {
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (
-    <Page overflowY="auto" pb="150px">
+    <Page>
       {isLoading || !projectData ? <LoadingView mt="-200px" /> : null}
       {notFound && <>Error. No se ha encontrado el sector.</>}
       {projectData && (

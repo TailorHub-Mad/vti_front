@@ -4,7 +4,7 @@ const NotificationService = () => {
   const { instance, execute } = ServiceConstructor
 
   // CRUD
-  const getNotifications = (limit = 0, offset = 0) =>
+  const getNotifications = (limit = 2, offset = 0) =>
     execute(instance.get(`/notification?limit=${limit}&offset=${offset}`))
   const getNotification = (/*id*/) => execute(instance.get(``))
   const createNotification = (data) =>

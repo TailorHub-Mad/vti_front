@@ -18,7 +18,7 @@ export const NotesGrid = ({
       templateColumns="repeat(auto-fill, 282px)"
       gap="16px"
       width="100%"
-      marginBottom="32px"
+      marginBottom="132px"
     >
       {notes?.map((note, idx) => (
         <MessageCard
