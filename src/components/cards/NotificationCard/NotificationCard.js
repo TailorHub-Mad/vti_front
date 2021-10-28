@@ -34,6 +34,10 @@ export const NotificationCard = ({ notification, onPin, onDelete, ...props }) =>
         return `proyectos/${id}`
       case "testSytems":
         return `sistemas/${id}`
+      case "tagProjects":
+        return `tags/proyectos/${id}`
+      case "tagNotes":
+        return `tag/apunte/${id}`
       default:
         return ""
     }
