@@ -3,6 +3,25 @@ export const generateFilterQuery = (keyRef, values, noUnion) => {
     if (!value) return acc
     if (!keyRef[name]) return acc
 
+    if (name === "dateFrom") {
+      const { dateFrom, dateTo } = values
+      if (dateFrom && dateTo) {
+        acc.push(`${[keyRef["date"]]}=${dateFrom};${dateTo}`)
+      } else if (dateFrom) {
+        acc.push(`${[keyRef["date"]]}=${dateFrom};${new Date()}`)
+      } else if (dateTo) {
+        acc.push(`${[keyRef["date"]]}=${new Date()};${dateTo}`)
+      }
+
+      return acc
+    }
+    if (name === "dateTo") return acc
+
+    if (name === "opened") {
+      acc.push(`${[keyRef[name]]}=false`)
+      return acc
+    }
+
     if (Array.isArray(value)) {
       value.forEach((v) => {
         if (v.value !== "") {
