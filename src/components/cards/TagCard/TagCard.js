@@ -27,9 +27,10 @@ export const TagCard = ({ tag, onEdit, onDelete, isProjectTag }) => {
         parent={tag?.parent?.name}
         onEdit={onEdit}
         onDelete={onDelete}
-        isProjectTag={isProjectTag}
-        onClick={
-          isProjectTag ? () => router.push(`${PATHS.projectTags}/${tag?._id}`) : null
+        onClick={() =>
+          isProjectTag
+            ? router.push(`${PATHS.projectTags}/${tag?._id}`)
+            : router.push(`${PATHS.noteTags}/${tag?._id}`)
         }
       />
 

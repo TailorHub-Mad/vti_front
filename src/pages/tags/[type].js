@@ -88,7 +88,7 @@ const tags = () => {
   )
 
   const isEmptyData = checkDataIsEmpty(data)
-  const tagData = data && !isEmptyData ? data : null
+  const tagData = data && !isEmptyData ? data : []
 
   const tagsByParent =
     tagData &&
@@ -264,11 +264,11 @@ const tags = () => {
           />
         ) : null}
       </PageHeader>
-      {isLoading ? <LoadingView mt="-200px" /> : null}
-      {isEmptyData && !isValidating ? (
+      {isLoading ? (
+        <LoadingView mt="-200px" />
+      ) : isEmptyData && !isValidating ? (
         <ViewNotFoundState text="No hya tags creados" />
-      ) : null}
-      {tagData ? (
+      ) : (
         <PageBody
           p="32px"
           bgColor="white"
@@ -278,7 +278,7 @@ const tags = () => {
           <TagsHeader
             activeItem={activeTab}
             onChange={(value) => setActiveTab(value)}
-            tagsCount={tagData.length}
+            tagsCount={tagData?.length}
           />
 
           {activeTab === ORDER.inheritance ? (
@@ -352,7 +352,7 @@ const tags = () => {
             </Grid>
           ) : null}
         </PageBody>
-      ) : null}
+      )}
     </Page>
   )
 }

@@ -33,19 +33,22 @@ const department = () => {
   if (error) return errorHandler(error)
   return (
     <Page>
-      {isLoading || !data ? <LoadingView mt="-200px" /> : null}
       {notFound && <>Error. No se ha encontrado el departamento.</>}
-      <UsersByObject
-        usersData={usersData}
-        customURL={`${PATHS.departments}/${data?.ref}`}
-        setFetchState={setFetchState}
-        setFetchOptions={setFetchOptions}
-        fetchState={fetchState}
-        fetchOptions={fetchOptions}
-        isEmptyData={isEmptyData}
-        hrefBack={PATHS.departments}
-        backText={"Volver a departamentos"}
-      />
+      {isLoading || !data ? (
+        <LoadingView mt="-200px" />
+      ) : (
+        <UsersByObject
+          usersData={usersData}
+          customURL={`${PATHS.departments}/${data?.ref}`}
+          setFetchState={setFetchState}
+          setFetchOptions={setFetchOptions}
+          fetchState={fetchState}
+          fetchOptions={fetchOptions}
+          isEmptyData={isEmptyData}
+          hrefBack={PATHS.departments}
+          backText={"Volver a departamentos"}
+        />
+      )}
     </Page>
   )
 }

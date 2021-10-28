@@ -28,7 +28,7 @@ export const NotesGroup = ({
 
   return (
     <>
-      {fetchState === fetchType.GROUP ? (
+      {fetchState === fetchType.GROUP && formatNotes?.length > 0 ? (
         <Flex alignItems="center" mb="24px" cursor="pointer" onClick={handleOnClick}>
           <CloseIcon mr="8px" h="12px" />
           <Text marginTop="6px">{`Agrupado por ${groupOption
@@ -37,7 +37,7 @@ export const NotesGroup = ({
         </Flex>
       ) : null}
 
-      {fetchState === fetchType.FILTER ? (
+      {fetchState === fetchType.FILTER && formatNotes?.length > 0 ? (
         <Flex alignItems="center" onClick={handleOnClick} cursor="pointer">
           <CloseIcon mr="8px" h="12px" />
           <Text marginTop="6px">{`Eliminar filtro`}</Text>
@@ -46,7 +46,7 @@ export const NotesGroup = ({
 
       <Flex overflow="hidden" width="100%" position="relative">
         <Grid minWidth={MIN_TABLE_WIDTH} maxWidth={MAX_TABLE_WIDTH} width="100%">
-          {formatNotes.map((item, idx) => {
+          {formatNotes?.map((item, idx) => {
             return (
               <GroupNotesRow
                 key={`${item.key}-${idx}`}
