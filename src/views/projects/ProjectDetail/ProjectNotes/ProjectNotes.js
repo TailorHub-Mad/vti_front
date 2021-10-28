@@ -327,7 +327,7 @@ export const ProjectNotes = ({ project }) => {
   useEffect(() => {
     if (!router.query?.note) return
 
-    const noteDetail = notesData.find((n) => n._id === router.query?.note)
+    const noteDetail = notesData?.find((n) => n._id === router.query?.note)
     setNoteToDetail(noteDetail)
     setShowNoteDetails(true)
   }, [])
