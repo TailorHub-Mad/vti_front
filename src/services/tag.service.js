@@ -5,6 +5,7 @@ const TagService = () => {
 
   // CRUD
   const getNoteTags = () => execute(instance.get("/tag/notes"))
+  const getNoteTag = (id) => execute(instance.get(`/tag/notes/${id}`))
   const getProjectTags = () => execute(instance.get("/tag/projects"))
   const createProjectTag = (data) => execute(instance.post(`/tag/projects`, data))
   const createNoteTag = (data) => execute(instance.post(`/tag/notes`, data))
@@ -26,6 +27,7 @@ const TagService = () => {
 
   return {
     getNoteTags,
+    getNoteTag,
     getProjectTags,
     createProjectTag,
     createNoteTag,

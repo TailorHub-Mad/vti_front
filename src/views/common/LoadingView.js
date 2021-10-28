@@ -4,7 +4,13 @@ import { Spinner } from "../../components/spinner/Spinner"
 
 export const LoadingView = ({ ...props }) => {
   return (
-    <Flex h="100vh" justifyContent="center" alignItems="center" {...props}>
+    <Flex
+      h="100vh"
+      justifyContent="center"
+      alignItems="center"
+      overflowY="hidden"
+      {...props}
+    >
       <Spinner />
     </Flex>
   )

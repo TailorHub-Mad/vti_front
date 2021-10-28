@@ -220,8 +220,9 @@ const notificaciones = () => {
         overflowY={isEmptyData ? "hidden" : "scroll"}
         height="calc(100vh - 140px)"
       >
-        {isLoading ? <LoadingView mt="-200px" /> : null}
-        {isEmptyData ? (
+        {isLoading ? (
+          <LoadingView mt="-200px" />
+        ) : isEmptyData ? (
           <ViewNotFoundState noBack text="No hay notificaciones" />
         ) : isEmptyData ? (
           <ViewEmptyState

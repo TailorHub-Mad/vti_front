@@ -42,20 +42,22 @@ const tag = () => {
   if (error) return errorHandler(error)
   return (
     <Page>
-      {isLoading ? <LoadingView mt="-200px" /> : null}
       {notFound ? <>Error. No se ha encontrado el tag.</> : null}
-
-      <ProjectsByObject
-        projects={projectsData}
-        customURL={`Tags/${tag?.name}`}
-        setFetchState={setFetchState}
-        setFetchOptions={setFetchOptions}
-        fetchState={fetchState}
-        fetchOptions={fetchOptions}
-        isEmptyData={isEmptyData}
-        hrefBack={PATHS.projectTags}
-        backText={"Volver a tags"}
-      />
+      {isLoading ? (
+        <LoadingView mt="-200px" />
+      ) : (
+        <ProjectsByObject
+          projects={projectsData}
+          customURL={`Tags/${tag?.name}`}
+          setFetchState={setFetchState}
+          setFetchOptions={setFetchOptions}
+          fetchState={fetchState}
+          fetchOptions={fetchOptions}
+          isEmptyData={isEmptyData}
+          hrefBack={PATHS.projectTags}
+          backText={"Volver a tags"}
+        />
+      )}
     </Page>
   )
 }

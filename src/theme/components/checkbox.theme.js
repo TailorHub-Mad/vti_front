@@ -1,9 +1,17 @@
 export const Checkbox = {
   baseStyle: {
     input: {
-      outline: "none"
+      outline: "none",
+      _disabled: {
+        borderRadius: "50% !important",
+        border: "2px solid #C4C4C4"
+      }
     },
-    outline: "none"
+    outline: "none",
+    _disabled: {
+      borderRadius: "50% !important",
+      border: "2px solid #C4C4C4"
+    }
   },
   variants: {
     filter: {
@@ -19,7 +27,11 @@ export const Checkbox = {
     multi: {
       container: {},
       input: {
-        borderRadius: "50% !important"
+        borderRadius: "50% !important",
+        _disabled: {
+          borderRadius: "50% !important",
+          border: "2px solid #C4C4C4"
+        }
       },
       control: {
         borderRadius: "50% !important"

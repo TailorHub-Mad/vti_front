@@ -5,8 +5,7 @@ import { PageBody } from "../../../components/layout/Pages/PageBody/PageBody"
 import { PageHeader } from "../../../components/layout/Pages/PageHeader/PageHeader"
 import { BreadCrumbs } from "../../../components/navigation/BreadCrumbs/BreadCrumbs"
 import { ToolBar } from "../../../components/navigation/ToolBar/ToolBar"
-import useProjectApi from "../../../hooks/api/useProjectApi"
-import useSystemApi from "../../../hooks/api/useSystemApi"
+import useTagApi from "../../../hooks/api/useTagApi"
 import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 import { noteFetchHandler } from "../../../swr/note.swr"
 import { PATHS } from "../../../utils/constants/global"
@@ -21,17 +20,15 @@ const apuntesDeSistemas = () => {
   // Hooks
   const router = useRouter()
   const { isLoggedIn } = useContext(ApiAuthContext)
-  const { getProject } = useProjectApi()
-  const { getSystem } = useSystemApi()
+  const { getNoteTag } = useTagApi()
 
   // Fetch
 
   const [fetchState, setFetchState] = useState(fetchType.FILTER)
   const [fetchOptions, setFetchOptions] = useState({
-    [fetchOption.FILTER]: `notes.testSystems._id=${router.query?.system}`
+    [fetchOption.FILTER]: `notes.tags._id=${router.query?.id}`
   })
-  const [project, setProject] = useState("")
-  const [system, setSystem] = useState("")
+  const [noteTag, setNoteTag] = useState("")
 
   const handleSystemsData = (isEmptyData) => {
     if (!data || isEmptyData) return []
@@ -50,34 +47,26 @@ const apuntesDeSistemas = () => {
     if (!search) {
       setFetchState(fetchType.FILTER)
       setFetchOptions({
-        [fetchOption.FILTER]: `notes.testSystems._id=${router.query?.system}`
+        [fetchOption.FILTER]: `notes.tags._id=${router.query?.system}`
       })
       return
     }
 
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: `notes.ref=${search}&notes.alias=${search}&notes.testSystems._id=${router.query?.system}`
+      [fetchOption.SEARCH]: `notes.ref=${search}&notes.title=${search}&notes.tags._id=${router.query?.system}`
     })
   }
 
   useEffect(() => {
-    if (!router.query?.alias) return
+    if (!router.query?.id) return
 
-    const _getProject = async () => {
-      const _project = await getProject(null, router.query.alias)
-
-      setProject(_project[0].projects[0].alias)
+    const _getTag = async () => {
+      const _tag = await getNoteTag(router.query.id)
+      setNoteTag(_tag.name)
     }
 
-    const _getSystem = async () => {
-      const _system = await getSystem(null, router.query.system)
-
-      setSystem(_system[0].testSystems[0].alias)
-    }
-
-    _getProject()
-    _getSystem()
+    _getTag()
   }, [router])
 
   if (!isLoggedIn) return null
@@ -86,7 +75,8 @@ const apuntesDeSistemas = () => {
     <Page>
       <PageHeader>
         <BreadCrumbs
-          customURL={`${PATHS.projects}/${project}/Apuntes de ${system}`}
+          customURL={`${PATHS.noteTags}/${noteTag}`}
+          lastElement="apuntes"
         />
         <ToolBar
           noAdd

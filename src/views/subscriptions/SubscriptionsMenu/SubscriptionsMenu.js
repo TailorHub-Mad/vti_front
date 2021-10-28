@@ -51,9 +51,13 @@ export const SubscriptionsMenu = ({
   return (
     <>
       <Flex alignItems="center" gridGap="16px">
-        {noCheck || role === RoleType.ADMIN || (
+        {role === RoleType.ADMIN || (
           <Flex alignItems="center" gridGap="6px">
-            <Checkbox onChange={handleSelectAllRows} isChecked={isChecked} />
+            <Checkbox
+              onChange={handleSelectAllRows}
+              isChecked={isChecked}
+              isDisabled={noCheck}
+            />
 
             {Object.keys(selectedRows).length > 0 && (
               <Flex
