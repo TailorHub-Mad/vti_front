@@ -30,7 +30,6 @@ export const ToolBar = ({
   const handleOnGroup = (activeItem) => onGroup(activeItem)
   const handleOnFilter = (activeItem) => onFilter(activeItem)
 
-  console.log("STATE", fetchState)
   return (
     <Flex>
       {noFilter || (
