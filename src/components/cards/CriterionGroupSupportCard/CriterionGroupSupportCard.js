@@ -95,7 +95,9 @@ export const CriterionGroupSupportCard = ({
                 onChange={() => onTagsSelect([tag.name])}
                 isChecked={selectedTags && selectedTags.includes(tag.name)}
               />
-              <Tag variant="pale_yellow">{tag.name}</Tag>
+              <Tag variant="pale_yellow" width="auto" maxW="100px">
+                {tag.name}
+              </Tag>
             </Flex>
           </Flex>
         ))}

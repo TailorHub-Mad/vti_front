@@ -1,4 +1,4 @@
-import { Box, Button, Flex } from "@chakra-ui/react"
+import { Box, Button, Flex, Modal, ModalOverlay } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
@@ -9,6 +9,7 @@ import { ToastContext } from "../../provider/ToastProvider"
 import { errorHandler } from "../../utils/errors"
 import { SupportModal } from "../../views/helps/NewCriterion/NewCriterionModal/SupportModal/SupportModal"
 import { NewNoteForm } from "../../views/notes/NewNote/NewNoteForm/NewNoteForm"
+import { ProjectSupportModal } from "../../views/projects/ProjectFilter/ProjectSupportModal/ProjectSupportModal"
 
 const initialValues = {
   project: undefined,
@@ -26,7 +27,9 @@ const nuevo = () => {
   const { getNoteHelps } = useHelpApi()
   const { getNoteTags } = useTagApi()
 
-  const [showSecondaryContent, setShowSecondaryContent] = useState(false)
+  const [showTagSupportModal, setShowTagSupportModal] = useState(false)
+  const [showProjectSearchModal, setShowProjectSearchModal] = useState(false)
+
   const [values, setValues] = useState(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -44,6 +47,10 @@ const nuevo = () => {
   }
 
   const submitIsDisabled = checkInputsAreEmpty()
+
+  const handleProjectSelect = (_project) => {
+    setValues({ ...values, project: _project })
+  }
 
   const handleTagSelect = (_tags) => {
     const refTags = values.tags
@@ -120,8 +127,8 @@ const nuevo = () => {
   }, [])
   return (
     <Page overflowY="auto">
-      <PageHeader title="Nuevo apunte" position="fixed" top="20px" />
-      <Flex justify="center">
+      <PageHeader title="Nuevo apunte" position="fixed" top="32px" />
+      <Flex justify="center" pt="100px" height="fit-content">
         <Flex
           minH="990px"
           w="460px"
@@ -132,10 +139,11 @@ const nuevo = () => {
           boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
           mb="90px"
           width="460px"
-          position="relative"
+          position="sticky"
           top="0"
           marginBottom="50px"
-          // left={showSecondaryContent ? "calc(50vw - 675px)" : "calc(50vw - 400px)"}
+          height="fit-content"
+          // left={showTagSupportModal ? "calc(50vw - 675px)" : "calc(50vw - 400px)"}
           transition="left 0.18s ease-in-out"
           padding="32px"
         >
@@ -143,7 +151,10 @@ const nuevo = () => {
             value={values}
             onChange={(val) => setValues(val)}
             submitIsDisabled={submitIsDisabled}
-            openAuxModal={() => setShowSecondaryContent(true)}
+            openAuxModal={() => setShowTagSupportModal(true)}
+            openProjectSearchModal={() => {
+              setShowProjectSearchModal(true)
+            }}
           />
 
           <Button
@@ -154,23 +165,24 @@ const nuevo = () => {
             onClick={handleSubmit}
             isLoading={isSubmitting}
             pointerEvents={isSubmitting ? "none" : "all"}
-            openAuxModal={() => setShowSecondaryContent(true)}
+            openAuxModal={() => setShowTagSupportModal(true)}
           >
             Guardar
           </Button>
         </Flex>
 
-        {showSecondaryContent ? (
+        {showTagSupportModal ? (
           <SupportModal
-            onClose={() => setShowSecondaryContent(false)}
+            onClose={() => setShowTagSupportModal(false)}
             usedTags={usedNoteTags}
             criteria={noteCriteria}
             onTagsSelect={(tags) => handleTagSelect(tags, true)}
             selectedTags={values?.tags?.map((t) => t.label) || []}
-            // top="104px"
-            // right="calc(50vw - 675px)"
-            positon="relative"
+            position="relative"
+            top="auto"
+            left="auto"
             right="auto"
+            ml="50px"
             sx={{
               ">div:first-of-type": {
                 boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)"
@@ -179,6 +191,14 @@ const nuevo = () => {
           />
         ) : null}
       </Flex>
+
+      <ProjectSupportModal
+        isOpen={showProjectSearchModal}
+        onClose={() => setShowProjectSearchModal(false)}
+        onProjectSelect={handleProjectSelect}
+        onTagsSelect={(tags) => handleTagSelect(tags, true)}
+        selectedTags={values?.tags?.map((t) => t.label) || []}
+      />
     </Page>
   )
 }
