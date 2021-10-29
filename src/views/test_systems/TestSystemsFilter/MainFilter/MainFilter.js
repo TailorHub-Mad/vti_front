@@ -17,14 +17,28 @@ import { SimpleFilterIcon } from "../../../../components/icons/SimpleFilterIcon"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import useFilterApi from "../../../../hooks/api/useFilterApi"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
-import { AdvancedFilter } from "../../../projects/ProjectFilter/MainFilter/AdvancedFilter/AdvancedFilter"
+import { AdvancedFilter } from "./AdvancedFilter/AdvancedFilter"
 
 import { SimpleFilterForm } from "./SimpleFilterForm/SimpleFilterForm"
+
+const criteria = [
+  { label: "TagAp", value: "TagAp" },
+  { label: "TagProy", value: "TagProy" },
+  { label: "AliasProy", value: "AliasProy" },
+  { label: "AliasSis", value: "AliasSis" },
+  { label: "TitleAp", value: "TitleAp" },
+  { label: "RefProy", value: "RefProy" },
+  { label: "RefSis", value: "RefSis" },
+  { label: "RefAp", value: "RefAp" },
+  { label: "Vticode", value: "Vticode" },
+  { label: "AliasCl", value: "AliasCl" }
+]
 
 export const MainFilter = ({
   onClose,
   onSecondaryOpen,
   onSimpleFilterChange,
+  onSimpleComplexChange,
   onFilter,
   simpleFilterValues,
   moveToLeft,
@@ -149,7 +163,11 @@ export const MainFilter = ({
                 rowFilter(filterComplex)
               )}
             </Box>
-            <AdvancedFilter />
+            <AdvancedFilter
+              criteria={criteria}
+              value={simpleFilterValues}
+              onChange={onSimpleComplexChange}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>

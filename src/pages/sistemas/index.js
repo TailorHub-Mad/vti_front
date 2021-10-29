@@ -73,6 +73,8 @@ const sistemas = () => {
   const [systemToUpdate, setSystemToUpdate] = useState(null)
   const [deleteType, setDeleteType] = useState(null)
   const [systemsToDelete, setSystemsToDelete] = useState(null)
+  const [queryFilter, setQueryFilter] = useState(null)
+  const [queryGroup, setQueryGroup] = useState(null)
 
   // Fetch
   const { data, error, isLoading, mutate, isValidating } = systemFetchHandler(
@@ -142,7 +144,7 @@ const sistemas = () => {
   }
 
   const handleOnOpenFilter = () => {
-    if (fetchState === fetchType.FILTER) handleOnFilter(null)
+    if (fetchState === fetchType.FILTER || queryFilter) handleOnFilter(null)
     else setShowFilterModal(true)
   }
 
@@ -261,6 +263,9 @@ const sistemas = () => {
 
   // Filters
   const onSearch = (search) => {
+    if (queryFilter) setQueryFilter(null)
+    if (queryGroup) setQueryGroup(null)
+
     if (!search) {
       setFetchState(fetchType.ALL)
       setFetchOptions({
@@ -275,36 +280,115 @@ const sistemas = () => {
     })
   }
 
+  // const handleOnGroup = (group) => {
+  //   if (!group) {
+  //     setFetchState(fetchType.ALL)
+  //     setFetchOptions({
+  //       [fetchOption.GROUP]: null
+  //     })
+  //     return
+  //   }
+
+  //   setFetchState(fetchType.GROUP)
+  //   setFetchOptions({
+  //     [fetchOption.GROUP]: group
+  //   })
+  // }
   const handleOnGroup = (group) => {
     if (!group) {
-      setFetchState(fetchType.ALL)
-      setFetchOptions({
-        [fetchOption.GROUP]: null
-      })
-      return
+      setQueryGroup(null)
+      if (queryFilter) {
+        setFetchState(fetchType.FILTER)
+        setFetchOptions({
+          [fetchOption.FILTER]: queryFilter
+        })
+        return
+      } else {
+        setFetchState(fetchType.ALL)
+        setFetchOptions({
+          [fetchOption.GROUP]: null
+        })
+        return
+      }
     }
 
-    setFetchState(fetchType.GROUP)
-    setFetchOptions({
-      [fetchOption.GROUP]: group
-    })
+    setQueryGroup(group)
+
+    if (fetchState === fetchType.FILTER) {
+      const newGroup = `${group}&${queryFilter}`
+      setFetchState(fetchType.GROUP)
+      setFetchOptions({
+        [fetchOption.GROUP]: newGroup
+      })
+    } else {
+      setFetchState(fetchType.GROUP)
+
+      setFetchOptions({
+        [fetchOption.GROUP]: group
+      })
+    }
   }
 
-  const handleOnFilter = (values) => {
+  // const handleOnFilter = (values) => {
+  //   if (!values) {
+  //     setFetchState(fetchType.ALL)
+  //     setFetchOptions({
+  //       [fetchOption.FILTER]: null
+  //     })
+  //     return
+  //   }
+
+  //   const filter = generateFilterQuery(TESTSYSTEMS_FILTER_KEYS, values)
+
+  //   setFetchState(fetchType.FILTER)
+  //   setFetchOptions({
+  //     [fetchOption.FILTER]: filter
+  //   })
+
+  //   setShowFilterModal(false)
+  // }
+
+  const handleOnFilter = (values, type) => {
     if (!values) {
-      setFetchState(fetchType.ALL)
-      setFetchOptions({
-        [fetchOption.FILTER]: null
-      })
-      return
+      setQueryFilter(null)
+
+      if (queryGroup) {
+        setFetchState(fetchType.GROUP)
+        setFetchOptions({
+          [fetchOption.GROUP]: queryGroup
+        })
+        return
+      } else {
+        setFetchState(fetchType.ALL)
+
+        setFetchOptions({
+          [fetchOption.FILTER]: null
+        })
+        return
+      }
     }
 
-    const filter = generateFilterQuery(TESTSYSTEMS_FILTER_KEYS, values)
+    let filter = null
+    if (type !== "complex") {
+      filter = generateFilterQuery(TESTSYSTEMS_FILTER_KEYS, values)
+    } else {
+      filter = `query=${values}`
+    }
 
-    setFetchState(fetchType.FILTER)
-    setFetchOptions({
-      [fetchOption.FILTER]: filter
-    })
+    setQueryFilter(filter)
+
+    if (fetchState === fetchType.GROUP) {
+      const newGroup = `${queryGroup}&${filter}`
+      setFetchState(fetchType.GROUP)
+      setFetchOptions({
+        [fetchOption.GROUP]: newGroup
+      })
+    } else {
+      setFetchState(fetchType.FILTER)
+      setFetchOptions({
+        [fetchOption.FILTER]: filter
+      })
+    }
 
     setShowFilterModal(false)
   }
@@ -338,7 +422,7 @@ const sistemas = () => {
       <TestsSystemsFilterModal
         isOpen={showFilterModal}
         onClose={() => setShowFilterModal(false)}
-        onFilter={(values) => handleOnFilter(values)}
+        onFilter={(values, type) => handleOnFilter(values, type)}
       />
 
       <NewTestSystemModal

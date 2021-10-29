@@ -394,7 +394,7 @@ const apuntes = () => {
     }
 
     let filter = null
-    if (type === "complex") {
+    if (type !== "complex") {
       filter = generateFilterQuery(NOTES_FILTER_KEYS, values)
     } else {
       filter = `query=${values}`
@@ -475,7 +475,7 @@ const apuntes = () => {
       <NotesFilterModal
         isOpen={showFilterModal}
         onClose={() => setShowFilterModal(false)}
-        onFilter={(values) => handleOnFilter(values)}
+        onFilter={(values, type) => handleOnFilter(values, type)}
       />
 
       <ResponseModal

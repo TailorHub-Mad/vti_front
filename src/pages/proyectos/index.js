@@ -333,6 +333,9 @@ const proyectos = () => {
 
   // Filters
   const onSearch = (search) => {
+    if (queryFilter) setQueryFilter(null)
+    if (queryGroup) setQueryGroup(null)
+
     if (!search) {
       setFetchState(fetchType.ALL)
       setFetchOptions({
@@ -447,7 +450,7 @@ const proyectos = () => {
     }
 
     let filter = null
-    if (type === "complex") {
+    if (type !== "complex") {
       filter = generateFilterQuery(PROJECTS_FILTER_KEYS, values)
     } else {
       filter = `query=${values}`
@@ -489,7 +492,7 @@ const proyectos = () => {
       <ProjectsFilterModal
         isOpen={showFilterModal}
         onClose={() => setShowFilterModal(false)}
-        onFilter={(values) => handleOnFilter(values)}
+        onFilter={(values, type) => handleOnFilter(values, type)}
       />
       <NewProjectModal
         projectToUpdate={projectToUpdate}
@@ -531,6 +534,8 @@ const proyectos = () => {
             noAdd={!isAdmin}
             noImport={!isAdmin}
             selectedRows={selectedRows}
+            queryFilter={queryFilter}
+            queryGroup={queryGroup}
           />
         ) : null}
       </PageHeader>
