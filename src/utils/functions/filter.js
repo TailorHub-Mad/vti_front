@@ -60,7 +60,7 @@ export const COMPLEX_OBJECT = {
   PROJECTS: "projects"
 }
 
-export const parseComplexQuery = (expression) => {
+export const parseComplexQuery = (expression, object) => {
   let _expression = expression
 
   // NOT
@@ -69,6 +69,13 @@ export const parseComplexQuery = (expression) => {
   _expression = _expression.replaceAll(":", "===")
   // AND
   _expression = _expression.replaceAll("&", "&&")
+
+  object
+
+  // if (object === COMPLEX_OBJECT.NOTES) {
+  // } else if (object === COMPLEX_OBJECT.PROJECTS) {
+  // } else {
+  // }
 
   // TagAp
   _expression = _expression.replaceAll("TagAp", "notes.tags.name")
