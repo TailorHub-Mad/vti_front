@@ -57,7 +57,7 @@ const apuntesDeSistemas = () => {
 
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: `notes.ref=${search}&notes.alias=${search}&notes.testSystems._id=${router.query?.system}`
+      [fetchOption.SEARCH]: `notes.ref=${search}&notes.title=${search}&notes.testSystems._id=${router.query?.system}&union=true`
     })
   }
 

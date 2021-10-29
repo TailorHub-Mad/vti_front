@@ -40,6 +40,7 @@ import { ProjectsMenu } from "../../views/projects/ProjectsMenu/ProjectsMenu"
 import useUserApi from "../../hooks/api/useUserApi"
 import { remove } from "lodash"
 import useTableActions from "../../hooks/useTableActions"
+import { PageBody } from "../../components/layout/Pages/PageBody/PageBody"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -452,48 +453,50 @@ const proyectos = () => {
         ) : null}
       </PageHeader>
 
-      {isMenuHidden() ? (
-        <ProjectsMenu
-          fetchState={fetchState}
-          onChange={(state) => setFetchState(state)}
-        />
-      ) : null}
+      <PageBody overflow="hidden">
+        {isMenuHidden() ? (
+          <ProjectsMenu
+            fetchState={fetchState}
+            onChange={(state) => setFetchState(state)}
+          />
+        ) : null}
 
-      {isLoading ? (
-        <LoadingView mt="-200px" />
-      ) : isEmptyData && fetchState !== fetchType.ALL ? (
-        <ViewNotFoundState noBack />
-      ) : isEmptyData && !isValidating ? (
-        <ViewEmptyState
-          message="Añadir proyectos a la plataforma"
-          importButtonText="Importar"
-          addButtonText="Añadir proyecto"
-          onImport={() => setShowImportModal(true)}
-          onAdd={() => setIsProjectModalOpen(true)}
-        />
-      ) : (
-        <ProjectsTable
-          fetchState={fetchState}
-          projects={projectsData}
-          onClose={handleOnOpenFinishProjectModal}
-          onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
-          onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
-          onEdit={handleUpdate}
-          onGroup={handleOnGroup}
-          onFilter={handleOnFilter}
-          groupOption={getGroupOptionLabel(
-            PROJECTS_GROUP_OPTIONS,
-            fetchOptions[fetchOption.GROUP]
-          )}
-          handleSortElement={handleSortElement}
-          onSubscribe={handleSubscribe}
-          onFavorite={handleFavorite}
-          selectedRows={selectedRows}
-          setSelectedRows={setSelectedRows}
-          handleRowSelect={handleRowSelect}
-          handleSelectAllRows={handleSelectAllRows}
-        />
-      )}
+        {isLoading ? (
+          <LoadingView mt="-200px" />
+        ) : isEmptyData && fetchState !== fetchType.ALL ? (
+          <ViewNotFoundState noBack />
+        ) : isEmptyData && !isValidating ? (
+          <ViewEmptyState
+            message="Añadir proyectos a la plataforma"
+            importButtonText="Importar"
+            addButtonText="Añadir proyecto"
+            onImport={() => setShowImportModal(true)}
+            onAdd={() => setIsProjectModalOpen(true)}
+          />
+        ) : (
+          <ProjectsTable
+            fetchState={fetchState}
+            projects={projectsData}
+            onClose={handleOnOpenFinishProjectModal}
+            onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
+            onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
+            onEdit={handleUpdate}
+            onGroup={handleOnGroup}
+            onFilter={handleOnFilter}
+            groupOption={getGroupOptionLabel(
+              PROJECTS_GROUP_OPTIONS,
+              fetchOptions[fetchOption.GROUP]
+            )}
+            handleSortElement={handleSortElement}
+            onSubscribe={handleSubscribe}
+            onFavorite={handleFavorite}
+            selectedRows={selectedRows}
+            setSelectedRows={setSelectedRows}
+            handleRowSelect={handleRowSelect}
+            handleSelectAllRows={handleSelectAllRows}
+          />
+        )}
+      </PageBody>
     </Page>
   )
 }
