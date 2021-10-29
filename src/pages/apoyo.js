@@ -252,7 +252,7 @@ const apoyo = () => {
         p="32px"
         bgColor={isEmptyData ? undefined : "white"}
         boxShadow={isEmptyData ? undefined : "0px 0px 8px rgba(5, 46, 87, 0.1)"}
-        height="calc(100vh - 105px)"
+        height="calc(100vh - 155px)"
       >
         {isLoading ? (
           <LoadingView mt="-200px" />

@@ -20,7 +20,7 @@ export const TABLE_COMPONENTS = {
   options: <OptionsMenuRow />
 }
 export const TABLE_STYLE = {
-  tableHeight: "calc(100vh - 190px)",
+  tableHeight: "calc(100vh - 300px)",
   p: "32px",
   pb: "0"
 }

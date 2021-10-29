@@ -14,7 +14,7 @@ export const TabBarToggle = ({ isOpen, onToggle }) => {
         height="100vh"
         position="fixed"
         top="0"
-        left={!isOpen ? "0" : "176px"}
+        left={!isOpen ? "0" : "191px"}
         transition={"left 0.15s ease-in-out"}
         cursor="pointer"
         onClick={onToggle}
