@@ -80,6 +80,7 @@ export const TestSystemsTable = ({
         />
       }
       {...TABLE_STYLE}
+      tableHeight={"calc(100vh - 250px)"}
       config={configTable}
       content={systemsData}
       selectedRows={selectedRows}
