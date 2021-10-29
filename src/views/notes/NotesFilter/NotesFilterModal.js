@@ -1,7 +1,6 @@
 import { ScaleFade, Modal, ModalOverlay } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { MainFilter } from "./MainFilter/MainFilter"
-import { SupportFilter } from "./SupportFilter/SupportFilter"
 import { SaveFilterModal } from "./SaveFilterModal/SaveFilterModal"
 import { CustomModalContent } from "../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
 import { SupportModal } from "../../helps/NewCriterion/NewCriterionModal/SupportModal/SupportModal"
@@ -12,7 +11,6 @@ import { ProjectSupportModal } from "../../projects/ProjectFilter/ProjectSupport
 export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const [showMainContent] = useState(true)
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
-  const [showAuxContent, setShowAuxContent] = useState(false)
   const [showSaveFilter, setShowSaveFilter] = useState(false)
 
   const initialValues = {
