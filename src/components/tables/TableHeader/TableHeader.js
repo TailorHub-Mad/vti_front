@@ -58,18 +58,14 @@ export const TableHeader = ({
       ) : (
         <Flex>
           <Flex minH="22px" alignItems="center">
-            <Checkbox
-              pl="6px"
-              mr="15px"
-              onChange={selectAllRows}
-              isChecked={isChecked}
-            />
+            <Checkbox pl="6px" onChange={selectAllRows} isChecked={isChecked} />
             {Object.keys(selectedRows)?.length > 0 ? (
               <Flex
                 alignItems="center"
                 justifyContent="center"
                 onClick={() => onDelete(selectedRows)}
                 cursor="pointer"
+                ml="16px"
               >
                 <DeleteIcon mr="6px" color="error" cursor="pointer" />
                 <Text color="error" marginTop="6px" cursor="pointer">
@@ -82,8 +78,8 @@ export const TableHeader = ({
             <Flex
               cursor="pointer"
               alignItems="center"
-              ml="24px"
               onClick={handleOnClick}
+              ml="16px"
             >
               <CloseIcon mr="8px" h="12px" />
               <Text marginTop="6px" cursor="pointer">

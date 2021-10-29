@@ -7,6 +7,7 @@ import useUserApi from "../../../../../hooks/api/useUserApi"
 import useTagApi from "../../../../../hooks/api/useTagApi"
 import useSectorApi from "../../../../../hooks/api/useSectorApi"
 import { MultiTagSelect } from "../../../../../components/forms/MultiTagSelect/MultiTagSelect"
+import useCodeApi from "../../../../../hooks/api/useCodeApi"
 
 export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => {
   const { getSystems } = useSystemApi()
@@ -14,6 +15,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
   const { getUsers } = useUserApi()
   const { getProjectTags } = useTagApi()
   const { getSectors } = useSectorApi()
+  const { getCodes } = useCodeApi()
 
   // Filter Options
   const [clientsOpt, setClientsOpt] = useState(null)
@@ -27,12 +29,11 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
     if (!testSystemsOpt) {
       const fetchTestSystems = async () => {
         const data = await getSystems()
+        const dataCodes = await getCodes()
         setTestSystemsOpt(
           data[0]?.testSystems.map((ts) => ({ label: ts.alias, value: ts._id }))
         )
-        setVtiCodesOpt(
-          data[0]?.testSystems.map((ts) => ({ label: ts.vtiCode, value: ts._id }))
-        )
+        setVtiCodesOpt(dataCodes.map((ts) => ({ label: ts.name, value: ts._id })))
       }
       fetchTestSystems()
     }
@@ -95,7 +96,7 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
         label: "Sistema de ensayo"
       }
     },
-    code_vti: {
+    vti_code: {
       type: "add_select",
       config: {
         placeholder: "Código",
