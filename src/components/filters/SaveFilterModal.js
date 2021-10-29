@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Input, Switch, Text } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
-import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
-import useFilterApi from "../../../../hooks/api/useFilterApi"
+import useFilterApi from "../../hooks/api/useFilterApi"
+import { CustomModalHeader } from "../overlay/Modal/CustomModalHeader/CustomModalHeader"
 
 const initialValues = {
   name: "",
@@ -10,10 +10,11 @@ const initialValues = {
 
 export const SaveFilterModal = ({
   filter,
-  filterId,
+  filterMetadata,
   type,
   isUpdateFilter,
   onClose,
+  object,
   ...props
 }) => {
   const { deleteFilter, updateFilter, createFilter } = useFilterApi()
@@ -21,20 +22,30 @@ export const SaveFilterModal = ({
   const [values, setValues] = useState(initialValues)
 
   const handleOnDelete = async () => {
-    await deleteFilter(filterId)
+    await deleteFilter(filterMetadata._id)
   }
 
   const handleOnSubmit = async () => {
-    const data = {
-      name: values.name,
-      type,
-      query: JSON.stringify(filter),
-      public: values.public
-    }
-
     if (isUpdateFilter) {
-      await updateFilter()
+      const newData = {
+        name: filterMetadata.name,
+        public: filterMetadata.public,
+        type: filterMetadata.type,
+        object: filterMetadata.object,
+        ...values,
+        query: JSON.stringify(filter)
+      }
+
+      await updateFilter(filterMetadata._id, newData)
     } else {
+      const data = {
+        name: values.name,
+        type,
+        object,
+        query: JSON.stringify(filter),
+        public: values.public
+      }
+
       await createFilter(data)
     }
 
@@ -42,7 +53,10 @@ export const SaveFilterModal = ({
   }
 
   useEffect(() => {
-    if (!filter) return
+    if (!filter || !filterMetadata) return
+
+    const { name, public: publicFilter } = filterMetadata
+    setValues({ name, public: publicFilter })
   }, [isUpdateFilter])
 
   return (
@@ -65,6 +79,7 @@ export const SaveFilterModal = ({
       <Input
         placeholder="Filtro 1"
         mb="24px"
+        value={values.name}
         onChange={(e) =>
           setValues({
             ...values,
@@ -73,6 +88,7 @@ export const SaveFilterModal = ({
         }
       />
       <Switch
+        isChecked={values.public}
         onChange={(e) =>
           setValues({
             ...values,

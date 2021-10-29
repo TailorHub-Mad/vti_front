@@ -41,7 +41,6 @@ export const AddSelect = ({
   }, [inputValues])
 
   useEffect(() => {
-    console.log(value)
     setInputValues(value)
   }, [value])
 
@@ -131,7 +130,6 @@ export const AddSelect = ({
     <FormController label={label} {...props} isDisabled={inputDisabled}>
       <Box>
         {inputValues?.map((value, idx) => {
-          // console.log("VALUE", array)
           return (
             <Box key={`${value}-${idx}`} marginBottom="16px">
               <InputSelect

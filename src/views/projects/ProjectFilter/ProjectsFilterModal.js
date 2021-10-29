@@ -1,11 +1,11 @@
 import { ScaleFade, Modal, ModalOverlay } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { MainFilter } from "./MainFilter/MainFilter"
-import { SaveFilterModal } from "./SaveFilterModal/SaveFilterModal"
 import { CustomModalContent } from "../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
 import useHelpApi from "../../../hooks/api/useHelpApi"
 import useTagApi from "../../../hooks/api/useTagApi"
 import { SupportModal } from "../../helps/NewCriterion/NewCriterionModal/SupportModal/SupportModal"
+import { SaveFilterModal } from "../../../components/filters/SaveFilterModal"
 
 export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
@@ -28,6 +28,9 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
   const [filterValues, setFilterValues] = useState(initialValues)
   const [usedProjectTags, setUsedProjectTags] = useState([])
   const [projectCriteria, setProjectCriteria] = useState([])
+  const [filterMetadata, setfilterMetadata] = useState(null)
+  const [isUpdateFilter, setIsUpdateFilter] = useState(false)
+  const [changeValueFilter, setChangeValueFilter] = useState(false)
 
   const handleOnReset = () => {
     setFilterValues(initialValues)
@@ -65,6 +68,12 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
     })
   }
 
+  const handleEditFilter = (filter) => {
+    setfilterMetadata(filter)
+    setIsUpdateFilter(true)
+    setShowSaveFilter(true)
+  }
+
   useEffect(() => {
     const fetchCriteria = async () => {
       const _data = await getProjectHelps()
@@ -81,6 +90,10 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
     fetchTags()
   }, [])
 
+  useEffect(() => {
+    setChangeValueFilter(true)
+  }, [filterValues])
+
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
@@ -89,10 +102,11 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
           {showSaveFilter ? (
             <SaveFilterModal
               onClose={() => setShowSaveFilter(false)}
-              filter={filterValues}
-              filterId={""}
-              isUpdateFilter={false}
+              filter={!changeValueFilter ? filterMetadata.query : filterValues}
+              filterMetadata={filterMetadata}
+              isUpdateFilter={isUpdateFilter}
               type={tab === 0 ? "simple" : "complex"}
+              object="projects"
             />
           ) : (
             <MainFilter
@@ -105,6 +119,7 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
               onFilter={handleOnFilter}
               onReset={handleOnReset}
               setTab={setTab}
+              onEdit={handleEditFilter}
             />
           )}
         </ScaleFade>

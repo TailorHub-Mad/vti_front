@@ -30,6 +30,7 @@ export const MainFilter = ({
   openSaveModal,
   onReset,
   setTab,
+  onEdit,
   ...props
 }) => {
   const [isReset, setIsReset] = useState(false)
@@ -47,8 +48,8 @@ export const MainFilter = ({
     }, 1000)
   }
 
-  const handleEditFilter = () => {
-    console.log("eedita")
+  const handleEditFilter = (filter) => {
+    onEdit(filter)
   }
 
   const handleChargeFilter = (filter) => {
@@ -58,14 +59,14 @@ export const MainFilter = ({
 
   useEffect(() => {
     const _getFilters = async () => {
-      const simple = await getFilterSimple()
-      const complex = await getFilterComplex()
+      const simple = await getFilterSimple("projects")
+      const complex = await getFilterComplex("projects")
 
       setFilterSimple(simple)
       setFilterComplex(complex)
     }
     _getFilters()
-  }, [])
+  }, [onClose])
 
   const rowFilter = (filters) => {
     return (
