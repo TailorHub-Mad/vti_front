@@ -1,21 +1,27 @@
 import { Button, Flex, Grid, Input, Text } from "@chakra-ui/react"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
 
-export const AdvancedFilter = () => {
+export const AdvancedFilter = ({ criteria, onChange }) => {
   const symbols = ["(", ")", "&", "||", "Not"]
-  const criteria = [
-    { value: "project", label: "Proyecto" },
-    { value: "test_system", label: "Sistema de ensayo" },
-    { value: "project_tag", label: "Tag de proyecto" },
-    { value: "note_tag", label: "Tag de apunte" }
-  ]
+
+  const [value, setValue] = useState("")
+  const [criterio, setCriterio] = useState("")
+
+  useEffect(() => {
+    onChange(value)
+  }, [value])
+
   return (
     <>
       <Text variant="d_s_medium" mb="2px">
         Escriba o seleccione una combinación
       </Text>
-      <Input placeholder={`TAproy:GOM&((TagAp:Incidencias))`} />
+      <Input
+        placeholder={`TAproy:GOM&((TagAp:Incidencias))`}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
       <Text
         variant="d_xs_regular"
         color="grey"
@@ -26,7 +32,11 @@ export const AdvancedFilter = () => {
       </Text>
       <Grid templateColumns="repeat(5, 36px)" gap="8px">
         {symbols.map((symbol) => (
-          <Button key={symbol} variant="filter_button">
+          <Button
+            key={symbol}
+            variant="filter_button"
+            onClick={() => setValue(value + symbol)}
+          >
             {symbol}
           </Button>
         ))}
@@ -38,15 +48,14 @@ export const AdvancedFilter = () => {
         options={criteria}
         placeholder="Seleccione tipo de criterio"
         mb="8px"
-      />
-      <InputSelect
-        options={criteria}
-        placeholder="Seleccione valor"
-        mb="8px"
-        isDisabled
+        onChange={(option) => setValue(value + `${option.value}:`)}
       />
       <Flex>
-        <Input placeholder="Escriba" />{" "}
+        <Input
+          placeholder="Escriba"
+          value={criterio}
+          onChange={(e) => setCriterio(e.target.value)}
+        />{" "}
         <Button
           variant="filter_button"
           ml="8px"
@@ -55,6 +64,10 @@ export const AdvancedFilter = () => {
           maxHeight="48px"
           height="48px"
           fontSize="20px"
+          onClick={() => {
+            setValue(value + `"${criterio}"`)
+            setCriterio("")
+          }}
         >
           +
         </Button>
