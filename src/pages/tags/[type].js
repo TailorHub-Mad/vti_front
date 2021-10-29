@@ -88,7 +88,7 @@ const tags = () => {
   )
 
   const isEmptyData = checkDataIsEmpty(data)
-  const tagData = data && !isEmptyData ? data : null
+  const tagData = data && !isEmptyData ? data : []
 
   const tagsByParent =
     tagData &&
@@ -278,7 +278,7 @@ const tags = () => {
           <TagsHeader
             activeItem={activeTab}
             onChange={(value) => setActiveTab(value)}
-            tagsCount={tagData.length}
+            tagsCount={tagData?.length}
           />
 
           {activeTab === ORDER.inheritance ? (

@@ -254,8 +254,9 @@ const apoyo = () => {
         boxShadow={isEmptyData ? undefined : "0px 0px 8px rgba(5, 46, 87, 0.1)"}
         height="calc(100vh - 105px)"
       >
-        {isLoading ? <LoadingView mt="-200px" /> : null}
-        {isEmptyData ? (
+        {isLoading ? (
+          <LoadingView mt="-200px" />
+        ) : isEmptyData ? (
           <ViewEmptyState
             message="Añadir criterios a la plataforma"
             importButtonText="Importar"

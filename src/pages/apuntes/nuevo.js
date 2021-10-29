@@ -1,4 +1,4 @@
-import { Button, Flex } from "@chakra-ui/react"
+import { Box, Button, Flex } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
@@ -26,7 +26,7 @@ const nuevo = () => {
   const { getNoteHelps } = useHelpApi()
   const { getNoteTags } = useTagApi()
 
-  const [showSecondaryContent, setShowSecondaryContent] = useState(true)
+  const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [values, setValues] = useState(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -120,56 +120,65 @@ const nuevo = () => {
   }, [])
   return (
     <Page overflowY="auto">
-      <PageHeader title="Nuevo apunte" />
-
-      <Flex
-        minH="990px"
-        w="460px"
-        p="48px 32px"
-        borderRadius="2px"
-        bgColor="white"
-        flexDirection="column"
-        boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
-        mb="90px"
-        width="460px"
-        position="relative"
-        top="0"
-        marginBottom="50px"
-        left={showSecondaryContent ? "calc(50vw - 750px)" : "calc(50vw - 460px)"}
-        transition="left 0.18s ease-in-out"
-        padding="32px"
-      >
-        <NewNoteForm
-          value={values}
-          onChange={(val) => setValues(val)}
-          submitIsDisabled={submitIsDisabled}
-          openAuxModal={() => setShowSecondaryContent(true)}
-        />
-
-        <Button
-          w="194px"
-          margin="0 auto"
-          mt="24px"
-          disabled={submitIsDisabled}
-          onClick={handleSubmit}
-          isLoading={isSubmitting}
-          pointerEvents={isSubmitting ? "none" : "all"}
-          openAuxModal={() => setShowSecondaryContent(true)}
+      <PageHeader title="Nuevo apunte" position="fixed" top="20px" />
+      <Flex justify="center">
+        <Flex
+          minH="990px"
+          w="460px"
+          p="48px 32px"
+          borderRadius="2px"
+          bgColor="white"
+          flexDirection="column"
+          boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
+          mb="90px"
+          width="460px"
+          position="relative"
+          top="0"
+          marginBottom="50px"
+          // left={showSecondaryContent ? "calc(50vw - 675px)" : "calc(50vw - 400px)"}
+          transition="left 0.18s ease-in-out"
+          padding="32px"
         >
-          Guardar
-        </Button>
-      </Flex>
+          <NewNoteForm
+            value={values}
+            onChange={(val) => setValues(val)}
+            submitIsDisabled={submitIsDisabled}
+            openAuxModal={() => setShowSecondaryContent(true)}
+          />
 
-      {showSecondaryContent ? (
-        <SupportModal
-          onClose={() => setShowSecondaryContent(false)}
-          usedTags={usedNoteTags}
-          criteria={noteCriteria}
-          onTagsSelect={(tags) => handleTagSelect(tags, true)}
-          selectedTags={values?.tags?.map((t) => t.label) || []}
-          top="100px"
-        />
-      ) : null}
+          <Button
+            w="194px"
+            margin="0 auto"
+            mt="24px"
+            disabled={submitIsDisabled}
+            onClick={handleSubmit}
+            isLoading={isSubmitting}
+            pointerEvents={isSubmitting ? "none" : "all"}
+            openAuxModal={() => setShowSecondaryContent(true)}
+          >
+            Guardar
+          </Button>
+        </Flex>
+
+        {showSecondaryContent ? (
+          <SupportModal
+            onClose={() => setShowSecondaryContent(false)}
+            usedTags={usedNoteTags}
+            criteria={noteCriteria}
+            onTagsSelect={(tags) => handleTagSelect(tags, true)}
+            selectedTags={values?.tags?.map((t) => t.label) || []}
+            // top="104px"
+            // right="calc(50vw - 675px)"
+            positon="relative"
+            right="auto"
+            sx={{
+              ">div:first-of-type": {
+                boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)"
+              }
+            }}
+          />
+        ) : null}
+      </Flex>
     </Page>
   )
 }

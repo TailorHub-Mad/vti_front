@@ -8,7 +8,15 @@ export const NOTES_FILTER_KEYS = {
   project: "notes.projects._id",
   formalized: "notes.formalized",
   closed: "notes.isClosed",
-  link: "notes.link"
+  opened: "notes.isClosed",
+  only_suscribed: "subscribed",
+  only_favs: "favorites",
+  only_unread: "noRead",
+  with_links: "notes.isDocuments",
+  with_responses: "notes.isAnswered",
+  date: "notes.createdAt",
+  dateFrom: "notes",
+  dateTo: "notes"
 }
 export const PROJECTS_FILTER_KEYS = {
   client: "projects.clientAlias",

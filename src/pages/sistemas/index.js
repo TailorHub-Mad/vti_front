@@ -271,7 +271,7 @@ const sistemas = () => {
 
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: search
+      [fetchOption.SEARCH]: `testSystems.ref=${search}&testSystems.alias=${search}`
     })
   }
 

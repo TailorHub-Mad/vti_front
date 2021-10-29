@@ -387,7 +387,7 @@ const apuntes = () => {
   useEffect(() => {
     if (!router.query?.note || !notesData) return
 
-    const noteDetail = notesData.find((n) => n._id === router.query?.note)
+    const noteDetail = notesData?.find((n) => n._id === router.query?.note)
 
     setNoteToDetail(noteDetail)
     setShowNoteDetails(true)
