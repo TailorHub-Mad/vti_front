@@ -1,4 +1,4 @@
-import { Box, Button, Modal, ModalContent, ModalOverlay } from "@chakra-ui/react"
+import { Box, Button, Modal, ModalOverlay } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { MOCK_YEAR_OPTIONS } from "../../../../mock/mock"
 import { FormController } from "../../../../components/forms/FormItemWrapper/FormController"
