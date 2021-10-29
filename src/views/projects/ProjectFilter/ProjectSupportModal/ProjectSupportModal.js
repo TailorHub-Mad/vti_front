@@ -14,6 +14,7 @@ import useClientApi from "../../../../hooks/api/useClientApi"
 import useSystemApi from "../../../../hooks/api/useSystemApi"
 import { generateFilterQuery } from "../../../../utils/functions/filter"
 import { PROJECTS_FILTER_KEYS } from "../../../../utils/constants/filter"
+import { CustomModalContent } from "../../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
 
 export const ProjectSupportModal = ({
   onClose,
@@ -139,7 +140,6 @@ export const ProjectSupportModal = ({
   }, [])
 
   useEffect(() => {
-    console.log("VALUES", Object.values(values))
     if (
       Object.values(values).some((value) =>
         Array.isArray(value) ? value.length > 0 : value
@@ -148,7 +148,7 @@ export const ProjectSupportModal = ({
       const searchProjects = async () => {
         const query = generateFilterQuery(PROJECTS_FILTER_KEYS, values, true)
         const results = await getFilterProjects(null, query)
-        setProjects(results && results[0].projects)
+        setProjects(results && results[0]?.projects ? results[0]?.projects : [])
       }
       searchProjects()
     }
@@ -163,14 +163,15 @@ export const ProjectSupportModal = ({
         onClose()
       }}
     >
-      <ModalOverlay />
-      <ModalContent
+      <ModalOverlay zIndex="10002" />
+      <CustomModalContent
+        display="flex"
         bgColor="transparent"
-        justify="center"
+        justifyContent="center"
+        pt="50px"
         flexDirection="row"
-        width="fit-content"
-        maxWidth="100vw"
         boxShadow="none"
+        zIndex="10005"
       >
         <Box
           width="460px"
@@ -179,6 +180,7 @@ export const ProjectSupportModal = ({
           transition="left 0.18s ease-in-out"
           bgColor="white"
           padding="32px"
+          zIndex="10005"
           {...props}
         >
           <CustomModalHeader
@@ -241,6 +243,7 @@ export const ProjectSupportModal = ({
         </Box>
         {showTagSupportModal ? (
           <SupportModal
+            zIndex="10005"
             onClose={() => setShowTagSupportModal(false)}
             usedTags={usedProjectTags}
             criteria={projectCriteria}
@@ -264,7 +267,7 @@ export const ProjectSupportModal = ({
             selectedProject={selectedProject}
           />
         )}
-      </ModalContent>
+      </CustomModalContent>
     </Modal>
   )
 }

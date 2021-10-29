@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Modal, ModalOverlay } from "@chakra-ui/react"
+import { Button, Flex } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
