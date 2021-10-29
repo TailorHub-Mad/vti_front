@@ -1,12 +1,16 @@
-export const getAcronym = (fullName) => {
-  return fullName
-    ? fullName
-        .split(" ")
-        .slice(0, 2)
-        .map((name) => name.slice(0, 1))
-        .join("")
-        .toUpperCase()
-    : fullName
+export const getAcronym = (name) => {
+  console.log("NAME", name)
+  if (!name) return ""
+  if (name?.length <= 3) {
+    return name
+  }
+
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .map((_name) => _name.slice(0, 1))
+    .join("")
+    .toUpperCase()
 }
 
 export const capitalize = (word) => {

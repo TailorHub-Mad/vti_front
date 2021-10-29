@@ -134,7 +134,6 @@ export const SupportModal = ({
                     variant="violete"
                     mr="8px"
                     mb="8px"
-                    width="auto"
                   >
                     <Checkbox
                       size="sm"
@@ -231,7 +230,7 @@ export const SupportModal = ({
                           </AccordionButton>
                           <AccordionPanel p={"8px"} pb={"8px"}>
                             <Grid
-                              templateColumns="auto auto auto"
+                              templateColumns="33% 33% 33%"
                               gap="8px"
                               width="100%"
                             >
@@ -245,6 +244,8 @@ export const SupportModal = ({
                                   <Tag
                                     variant={"pale_yellow"}
                                     onClick={() => onTagsSelect([tag])}
+                                    width="auto"
+                                    maxW="100px"
                                   >
                                     {tag}
                                   </Tag>

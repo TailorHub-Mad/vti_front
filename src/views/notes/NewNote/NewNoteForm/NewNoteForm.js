@@ -12,6 +12,7 @@ import useTagApi from "../../../../hooks/api/useTagApi"
 
 export const NewNoteForm = ({
   openAuxModal,
+  openProjectSearchModal,
   value,
   onChange,
   noteToUpdate,
@@ -72,7 +73,9 @@ export const NewNoteForm = ({
         placeholder: "Selecciona",
         label: "Selecciona el proyecto*",
         options: projectOptions,
-        isDisabled: Boolean(noteToUpdate) || Boolean(noteFromProject)
+        isDisabled: Boolean(noteToUpdate) || Boolean(noteFromProject),
+        helper: "Abrir ventana de apoyo",
+        onHelperClick: () => openProjectSearchModal()
       }
     },
     system: {

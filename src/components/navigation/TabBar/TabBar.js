@@ -24,7 +24,7 @@ export const TabBar = ({ isOpen, setIsOpen }) => {
         flexDirection="column"
         position="fixed"
         top="0"
-        left={["0", null, null, isOpen ? "0" : "-176px"]}
+        left={["0", null, null, isOpen ? "0" : "-191px"]}
         width={["100%", null, null, "215px"]}
         height={[isOpen ? "100vh" : "64px", null, null, "100vh"]}
         padding={["20px", null, null, "32px 32px"]}
