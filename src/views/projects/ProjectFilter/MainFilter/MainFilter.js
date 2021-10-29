@@ -7,14 +7,18 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  Text
+  Text,
+  Tag
 } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import { AdvancedFilterIcon } from "../../../../components/icons/AdvancedFilterIcon"
 import { SimpleFilterIcon } from "../../../../components/icons/SimpleFilterIcon"
 import { AdvancedFilter } from "./AdvancedFilter/AdvancedFilter"
 import { SimpleFilterForm } from "./SimpleFilterForm/SimpleFilterForm"
+import useFilterApi from "../../../../hooks/api/useFilterApi"
+import { EditIcon } from "@chakra-ui/icons"
+import { variantGeneralTag } from "../../../../utils/constants/tabs"
 
 export const MainFilter = ({
   onClose,
@@ -25,9 +29,15 @@ export const MainFilter = ({
   moveToLeft,
   openSaveModal,
   onReset,
+  setTab,
+  onEdit,
   ...props
 }) => {
   const [isReset, setIsReset] = useState(false)
+
+  const [filterSimple, setFilterSimple] = useState([])
+  const [filterComplex, setFilterComplex] = useState([])
+  const { getFilterSimple, getFilterComplex } = useFilterApi()
 
   const handleOnReset = () => {
     setIsReset(true)
@@ -36,6 +46,57 @@ export const MainFilter = ({
     setTimeout(() => {
       setIsReset(false)
     }, 1000)
+  }
+
+  const handleEditFilter = (filter) => {
+    onEdit(filter)
+  }
+
+  const handleChargeFilter = (filter) => {
+    const { query } = filter
+    onSimpleFilterChange(JSON.parse(query))
+  }
+
+  useEffect(() => {
+    const _getFilters = async () => {
+      const simple = await getFilterSimple("projects")
+      const complex = await getFilterComplex("projects")
+
+      setFilterSimple(simple)
+      setFilterComplex(complex)
+    }
+    _getFilters()
+  }, [onClose])
+
+  const rowFilter = (filters) => {
+    return (
+      <Flex mt="12px" width="100%" wrap="wrap" height="fit-content">
+        {filters.map((value, idx) => {
+          return (
+            <Tag
+              key={`${value._id}-${idx}`}
+              variant={variantGeneralTag.SYSTEM}
+              mb="8px"
+              mr="8px"
+              height="32px"
+              width="auto"
+              cursor="pointer"
+            >
+              <Flex align="center">
+                <Text onClick={() => handleChargeFilter(value)}>{value.name}</Text>
+                <EditIcon
+                  width="16px"
+                  cursor="pointer"
+                  mb="3px"
+                  ml="8px"
+                  onClick={() => handleEditFilter(value)}
+                />
+              </Flex>
+            </Tag>
+          )
+        })}
+      </Flex>
+    )
   }
 
   return (
@@ -52,7 +113,7 @@ export const MainFilter = ({
       {...props}
     >
       <CustomModalHeader title="Filtrar" onClose={onClose} pb="24px" />
-      <Tabs mb="24px">
+      <Tabs mb="24px" onChange={(index) => setTab(index)}>
         <TabList>
           <Tab _focus={{ outline: "none" }} pl={0} alignItems="center">
             <SimpleFilterIcon mr="2px" />
@@ -66,7 +127,11 @@ export const MainFilter = ({
         <TabPanels>
           <TabPanel p={0}>
             <Box m="16px 0">
-              <Text color="grey">No hay filtros guardados para recordar</Text>
+              {filterSimple.length === 0 ? (
+                <Text color="grey">No hay filtros guardados para recordar</Text>
+              ) : (
+                rowFilter(filterSimple)
+              )}
             </Box>
             <SimpleFilterForm
               value={simpleFilterValues}
@@ -75,9 +140,14 @@ export const MainFilter = ({
               isReset={isReset}
             />
           </TabPanel>
+
           <TabPanel p={0}>
             <Box m="16px 0">
-              <Text color="grey">No hay filtros guardados para recordar</Text>
+              {filterComplex.length === 0 ? (
+                <Text color="grey">No hay filtros guardados para recordar</Text>
+              ) : (
+                rowFilter(filterComplex)
+              )}
             </Box>
             <AdvancedFilter />
           </TabPanel>

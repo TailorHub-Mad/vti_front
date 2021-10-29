@@ -1,3 +1,5 @@
+const mqg = require("mongo-query-generator")
+
 export const generateFilterQuery = (keyRef, values, noUnion) => {
   const queryList = Object.entries(values).reduce((acc, [name, value]) => {
     if (!value) return acc
@@ -50,4 +52,32 @@ export const generateFilterQuery = (keyRef, values, noUnion) => {
   const filter = queryList.join("&")
 
   return filter
+}
+
+export const COMPLEX_OBJECT = {
+  NOTES: "notes",
+  TEST_SYSTEMS: "testSystmems",
+  PROJECTS: "projects"
+}
+
+export const parseComplexQuery = (expression) => {
+  let _expression = expression
+
+  // NOT
+  _expression = _expression.replaceAll(":NOT:", "!==")
+  // EQUAL
+  _expression = _expression.replaceAll(":", "===")
+  // AND
+  _expression = _expression.replaceAll("&", "&&")
+
+  // TagAp
+  _expression = _expression.replaceAll("TagAp", "notes.tags.name")
+  // TagProy
+  _expression = _expression.replaceAll("TagProy", "notes.projects.tags.name")
+  // Proy
+  _expression = _expression.replaceAll("Proy", "note.projects.alias")
+  // Sis
+  _expression = _expression.replaceAll("Sis", "note.testSystems.alias")
+
+  return mqg(_expression)
 }

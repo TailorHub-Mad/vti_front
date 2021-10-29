@@ -1,16 +1,17 @@
 import { ScaleFade, Modal, ModalOverlay } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { AuxFilter } from "./AuxFilter/AuxFilter"
 import { MainFilter } from "./MainFilter/MainFilter"
 import { SupportFilter } from "./SupportFilter/SupportFilter"
-import { SaveFilterModal } from "./SaveFilterModal/SaveFilterModal"
 import { CustomModalContent } from "../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
+import { SaveFilterModal } from "../../../components/filters/SaveFilterModal"
 
 export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const [showMainContent] = useState(true)
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [showAuxContent, setShowAuxContent] = useState(false)
   const [showSaveFilter, setShowSaveFilter] = useState(false)
+  const [tab, setTab] = useState(0)
 
   const initialValues = {
     client: [{ label: "", value: "" }],
@@ -21,6 +22,9 @@ export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props })
   }
 
   const [filterValues, setFilterValues] = useState(initialValues)
+  const [filterMetadata, setfilterMetadata] = useState(null)
+  const [isUpdateFilter, setIsUpdateFilter] = useState(false)
+  const [changeValueFilter, setChangeValueFilter] = useState(false)
 
   const handleOnReset = () => {
     setFilterValues(initialValues)
@@ -36,6 +40,16 @@ export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props })
     setFilterValues(initialValues)
     onClose()
   }
+
+  const handleEditFilter = (filter) => {
+    setfilterMetadata(filter)
+    setIsUpdateFilter(true)
+    setShowSaveFilter(true)
+  }
+
+  useEffect(() => {
+    setChangeValueFilter(true)
+  }, [filterValues])
 
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
@@ -57,10 +71,19 @@ export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props })
             openSaveModal={() => setShowSaveFilter(true)}
             onFilter={handleOnFilter}
             onReset={handleOnReset}
+            setTab={setTab}
+            onEdit={handleEditFilter}
           />
         </ScaleFade>
         {showSaveFilter ? (
-          <SaveFilterModal onClose={() => setShowSaveFilter(false)} />
+          <SaveFilterModal
+            onClose={() => setShowSaveFilter(false)}
+            filter={!changeValueFilter ? filterMetadata.query : filterValues}
+            filterMetadata={filterMetadata}
+            isUpdateFilter={isUpdateFilter}
+            type={tab === 0 ? "simple" : "complex"}
+            object="testSystems"
+          />
         ) : null}
         {!showSaveFilter && showSecondaryContent === "project" ? (
           <SupportFilter

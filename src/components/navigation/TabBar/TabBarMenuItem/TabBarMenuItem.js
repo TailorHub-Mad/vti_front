@@ -68,7 +68,7 @@ export const MenuItem = ({ label, icon, href, submenu, disabled, ...props }) => 
           })
         : null
     }
-  }, [])
+  }, [router])
 
   return (
     <>

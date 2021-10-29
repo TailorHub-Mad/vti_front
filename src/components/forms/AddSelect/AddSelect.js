@@ -32,7 +32,7 @@ export const AddSelect = ({
   }, [options])
 
   useEffect(() => {
-    const valuesSelected = inputValues.map((inputValue) => inputValue?.value)
+    const valuesSelected = inputValues?.map((inputValue) => inputValue?.value)
     const nextOptions = options?.filter(
       (option) => !valuesSelected.includes(option.value)
     )
@@ -41,12 +41,16 @@ export const AddSelect = ({
   }, [inputValues])
 
   useEffect(() => {
+    setInputValues(value)
+  }, [value])
+
+  useEffect(() => {
     if (!isReset) return
     setInputValues([{ label: "", value: "" }])
   }, [isReset])
 
   useEffect(() => {
-    const valuesSelected = inputValues.map((inputValue) => inputValue?.value)
+    const valuesSelected = inputValues?.map((inputValue) => inputValue?.value)
     const nextOptions = options?.filter(
       (option) => !valuesSelected.includes(option.value)
     )
@@ -56,7 +60,8 @@ export const AddSelect = ({
 
   const renderDeleteItem = (itemPosition) => {
     if (inputDisabled) return null
-    if (inputValues.length === 1 && inputValues[0]?.value === "") return null
+
+    if (inputValues?.length === 1 && inputValues[0]?.value === "") return null
 
     const handleOnClick = () => {
       const newValues = [...inputValues].filter((_, index) => itemPosition !== index)
@@ -85,13 +90,13 @@ export const AddSelect = ({
 
   const renderAddItem = (itemPosition) => {
     if (inputDisabled) return null
-    if (inputValues.length > 1 && itemPosition !== inputValues.length - 1)
+    if (inputValues?.length > 1 && itemPosition !== inputValues?.length - 1)
       return null
-    if (inputValues.length === options?.length) return null
+    if (inputValues?.length === options?.length) return null
 
     const handleOnClick = () => setInputValues([...inputValues, undefined])
 
-    const isDisabled = inputValues.length === 1 && inputValues[0]?.value === ""
+    const isDisabled = inputValues?.length === 1 && inputValues[0]?.value === ""
 
     return (
       <>
@@ -124,7 +129,7 @@ export const AddSelect = ({
   return (
     <FormController label={label} {...props} isDisabled={inputDisabled}>
       <Box>
-        {inputValues.map((value, idx) => {
+        {inputValues?.map((value, idx) => {
           return (
             <Box key={`${value}-${idx}`} marginBottom="16px">
               <InputSelect

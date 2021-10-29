@@ -22,7 +22,7 @@ export const PROJECTS_FILTER_KEYS = {
   client: "projects.clientAlias",
   test_system: "projects.testSystems._id",
   year: "projects.date.year",
-  vti_code: "projects.testSystems.vtiCode",
+  vti_code: "projects.testSystems.vtiCode._id",
   focus_point: "projects.focusPoint._id",
   sector: "projects.sector._id",
   tag_project: "projects.tags._id"

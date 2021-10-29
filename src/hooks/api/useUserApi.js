@@ -15,8 +15,6 @@ const useUserApi = () => {
   const getSearchUsers = (_, data) => userService.getSearchUsers(data)
   const getFilterUsers = (_, data) => userService.getFilterUsers(data)
 
-  getSearchUsers
-
   return {
     getUsers,
     getUser,
@@ -25,7 +23,8 @@ const useUserApi = () => {
     deleteUser,
 
     getGroupUsers,
-    getFilterUsers
+    getFilterUsers,
+    getSearchUsers
   }
 }
 
