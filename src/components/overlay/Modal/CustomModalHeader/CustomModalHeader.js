@@ -4,9 +4,9 @@ import { CloseIcon } from "../../../icons/CloseIcon"
 
 export const CustomModalHeader = ({ onClose, title, ...props }) => {
   return (
-    <Flex justify="space-between" align="center" {...props}>
+    <Flex justify="space-between" align="center" height="33px" {...props}>
       <Text variant="d_l_medium">{title}</Text>
-      <CloseIcon cursor="pointer" onClick={onClose} />
+      {onClose && <CloseIcon cursor="pointer" onClick={onClose} />}
     </Flex>
   )
 }
