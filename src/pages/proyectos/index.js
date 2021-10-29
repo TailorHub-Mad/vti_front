@@ -71,6 +71,8 @@ const proyectos = () => {
   const [showExportModal, setShowExportModal] = useState(false)
   const [showFilterModal, setShowFilterModal] = useState(false)
 
+  const [queryFilter, setQueryFilter] = useState(null)
+  const [queryGroup, setQueryGroup] = useState(null)
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
   const [projectToUpdate, setProjectToUpdate] = useState(null)
   const [deleteType, setDeleteType] = useState(null)
@@ -177,7 +179,7 @@ const proyectos = () => {
   }
 
   const handleOnOpenFilter = () => {
-    if (fetchState === fetchType.FILTER) handleOnFilter(null)
+    if (fetchState === fetchType.FILTER || queryFilter) handleOnFilter(null)
     else setShowFilterModal(true)
   }
 
@@ -345,39 +347,74 @@ const proyectos = () => {
     })
   }
 
+  // const handleOnGroup = (group) => {
+  //   if (!group) {
+  //     setFetchState(fetchType.ALL)
+  //     setFetchOptions({
+  //       [fetchOption.GROUP]: null
+  //     })
+  //     return
+  //   }
+
+  //   setFetchState(fetchType.GROUP)
+  //   setFetchOptions({
+  //     [fetchOption.GROUP]: group
+  //   })
+  // }
+
   const handleOnGroup = (group) => {
     if (!group) {
-      setFetchState(fetchType.ALL)
-      setFetchOptions({
-        [fetchOption.GROUP]: null
-      })
-      return
+      setQueryGroup(null)
+      if (queryFilter) {
+        setFetchState(fetchType.FILTER)
+        setFetchOptions({
+          [fetchOption.FILTER]: queryFilter
+        })
+        return
+      } else {
+        setFetchState(fetchType.ALL)
+        setFetchOptions({
+          [fetchOption.GROUP]: null
+        })
+        return
+      }
     }
 
-    setFetchState(fetchType.GROUP)
-    setFetchOptions({
-      [fetchOption.GROUP]: group
-    })
-  }
+    setQueryGroup(group)
 
-  const handleOnFilter = (values) => {
-    if (!values) {
-      setFetchState(fetchType.ALL)
+    if (fetchState === fetchType.FILTER) {
+      const newGroup = `${group}&${queryFilter}`
+      setFetchState(fetchType.GROUP)
       setFetchOptions({
-        [fetchOption.FILTER]: null
+        [fetchOption.GROUP]: newGroup
       })
-      return
+    } else {
+      setFetchState(fetchType.GROUP)
+
+      setFetchOptions({
+        [fetchOption.GROUP]: group
+      })
     }
-
-    const filter = generateFilterQuery(PROJECTS_FILTER_KEYS, values)
-
-    setFetchState(fetchType.FILTER)
-    setFetchOptions({
-      [fetchOption.FILTER]: filter
-    })
-
-    setShowFilterModal(false)
   }
+
+  // const handleOnFilter = (values) => {
+  //   if (!values) {
+  //     setFetchState(fetchType.ALL)
+  //     setFetchOptions({
+  //       [fetchOption.FILTER]: null
+  //     })
+  //     return
+  //   }
+
+  //   const filter = generateFilterQuery(PROJECTS_FILTER_KEYS, values)
+
+  //   setFetchState(fetchType.FILTER)
+  //   setFetchOptions({
+  //     [fetchOption.FILTER]: filter
+  //   })
+
+  //   setShowFilterModal(false)
+  // }
 
   const handleSortElement = (data) => {
     const { name, order } = data
@@ -387,6 +424,51 @@ const proyectos = () => {
       ...fetchOptions,
       [fetchOption.ORDER]: `&projects_${name}=${order}`
     })
+  }
+
+  const handleOnFilter = (values, type) => {
+    if (!values) {
+      setQueryFilter(null)
+
+      if (queryGroup) {
+        setFetchState(fetchType.GROUP)
+        setFetchOptions({
+          [fetchOption.GROUP]: queryGroup
+        })
+        return
+      } else {
+        setFetchState(fetchType.ALL)
+
+        setFetchOptions({
+          [fetchOption.FILTER]: null
+        })
+        return
+      }
+    }
+
+    let filter = null
+    if (type === "complex") {
+      filter = generateFilterQuery(PROJECTS_FILTER_KEYS, values)
+    } else {
+      filter = `query=${values}`
+    }
+
+    setQueryFilter(filter)
+
+    if (fetchState === fetchType.GROUP) {
+      const newGroup = `${queryGroup}&${filter}`
+      setFetchState(fetchType.GROUP)
+      setFetchOptions({
+        [fetchOption.GROUP]: newGroup
+      })
+    } else {
+      setFetchState(fetchType.FILTER)
+      setFetchOptions({
+        [fetchOption.FILTER]: filter
+      })
+    }
+
+    setShowFilterModal(false)
   }
 
   if (!isLoggedIn) return null

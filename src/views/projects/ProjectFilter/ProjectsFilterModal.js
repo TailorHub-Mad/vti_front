@@ -6,6 +6,7 @@ import useHelpApi from "../../../hooks/api/useHelpApi"
 import useTagApi from "../../../hooks/api/useTagApi"
 import { SupportModal } from "../../helps/NewCriterion/NewCriterionModal/SupportModal/SupportModal"
 import { SaveFilterModal } from "../../../components/filters/SaveFilterModal"
+import { COMPLEX_OBJECT, parseComplexQuery } from "../../../utils/functions/filter"
 
 export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
@@ -31,6 +32,7 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
   const [filterMetadata, setfilterMetadata] = useState(null)
   const [isUpdateFilter, setIsUpdateFilter] = useState(false)
   const [changeValueFilter, setChangeValueFilter] = useState(false)
+  const [filterComplexValues, setFilterComplexValues] = useState(null)
 
   const handleOnReset = () => {
     setFilterValues(initialValues)
@@ -38,8 +40,13 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
   }
 
   const handleOnFilter = () => {
-    onFilter(filterValues)
-    setFilterValues(initialValues)
+    if (filterComplexValues) {
+      const query = parseComplexQuery(filterComplexValues, COMPLEX_OBJECT.PROJECTS)
+      onFilter(query, "complex")
+    } else {
+      setFilterValues(initialValues)
+      onFilter(filterValues)
+    }
   }
 
   const handleOnClose = () => {
@@ -120,6 +127,7 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
               onReset={handleOnReset}
               setTab={setTab}
               onEdit={handleEditFilter}
+              onSimpleComplexChange={(val) => setFilterComplexValues(val)}
             />
           )}
         </ScaleFade>

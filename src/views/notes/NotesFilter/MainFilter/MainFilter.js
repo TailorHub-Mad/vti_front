@@ -27,7 +27,7 @@ const criteria = [
   { label: "RefSis", value: "RefSis" },
   { label: "AliasSis", value: "AliasSis" },
   { label: "Cerrado", value: "Cerrado" },
-  { label: "Foramlizado", value: "Foramlizado" },
+  { label: "Formalizado", value: "Formalizado" },
   { label: "Respuestas", value: "Respuestas" },
   { label: "TagAp", value: "TagAp" },
   { label: "TagProy", value: "TagProy" },

@@ -80,7 +80,7 @@ export const parseComplexQuery = (expression, object) => {
     parseQuery = parseQuery.replaceAll("RefSis", "notes.testSystems.ref")
     parseQuery = parseQuery.replaceAll("AliasSis", "notes.testSystems.alias")
     parseQuery = parseQuery.replaceAll("Cerrado", "notes.isClosed")
-    parseQuery = parseQuery.replaceAll("Foramlizado", "notes.formalized")
+    parseQuery = parseQuery.replaceAll("Formalizado", "notes.formalized")
     parseQuery = parseQuery.replaceAll("Respuestas", "notes.isAnswered")
     parseQuery = parseQuery.replaceAll("TagAp", "notes.tags._id")
     parseQuery = parseQuery.replaceAll("TagProy", "notes.projects.tags._id")
