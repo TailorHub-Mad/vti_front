@@ -72,19 +72,57 @@ export const parseComplexQuery = (expression, object) => {
 
   object
 
-  // if (object === COMPLEX_OBJECT.NOTES) {
-  // } else if (object === COMPLEX_OBJECT.PROJECTS) {
-  // } else {
-  // }
+  if (object === COMPLEX_OBJECT.NOTES) {
+    _expression = _expression.replaceAll("AliasCL", "notes.clientAlias")
+    _expression = _expression.replaceAll("AliasProy", "notes.projects.alias")
+    _expression = _expression.replaceAll("RefProy", "notes.projects.ref")
+    _expression = _expression.replaceAll("RefSis", "notes.testSystems.ref")
+    _expression = _expression.replaceAll("AliasSis", "notes.testSystems.alias")
+    _expression = _expression.replaceAll("Cerrado", "notes.isClosed")
+    _expression = _expression.replaceAll("Foramlizado", "notes.formalized")
+    _expression = _expression.replaceAll("Respuestas", "notes.isAnswered")
+    _expression = _expression.replaceAll("TagAp", "notes.tags._id")
+    _expression = _expression.replaceAll("TagProy", "notes.projects.tags._id")
+    _expression = _expression.replaceAll("RefAp", "notes.ref")
+    _expression = _expression.replaceAll("TitleAp", "notes.title")
+    _expression = _expression.replaceAll("Description", "notes.description")
+    _expression = _expression.replaceAll("Documents", "notes.isDocuments")
+    _expression = _expression.replaceAll("VtiCode", "notes.testSystems.vtiCode")
+  } else if (object === COMPLEX_OBJECT.PROJECTS) {
+    _expression = _expression.replaceAll("TagAp", "projects.notes.tags.name")
+    _expression = _expression.replaceAll("TagProy", "projects.tags.name")
+    _expression = _expression.replaceAll("AliasProy", "projects.alias")
+    _expression = _expression.replaceAll("AliasSis", "projects.testSystems.alias")
+    _expression = _expression.replaceAll(
+      "AliasFocusPoint",
+      "projects.focusPoint.alias"
+    )
+    _expression = _expression.replaceAll("RefProy", "projects.ref")
+    _expression = _expression.replaceAll("RefSis", "projects.testSystems.ref")
+    _expression = _expression.replaceAll("VtiCode", "projects.testSystems.vtiCode")
+    _expression = _expression.replaceAll("RefAp", "projects.notes.ref")
+    _expression = _expression.replaceAll("TitleAp", "projects.notes.title")
+    _expression = _expression.replaceAll("Sector", "projects.sector.title")
+    _expression = _expression.replaceAll("Year", "projects.date.year")
+    _expression = _expression.replaceAll("Closed", "projects.isActive")
+    _expression = _expression.replaceAll("AliasCl", "projects.clientAlias")
+  } else {
+    _expression = _expression.replaceAll("TagAp", "testSystems.notes.tags.name")
+    _expression = _expression.replaceAll("TagProy", "testSystems.projects.tags.name")
+    _expression = _expression.replaceAll("AliasProy", "testSystems.projects.alias")
+    _expression = _expression.replaceAll("AliasSis", "testSystems.alias")
+    _expression = _expression.replaceAll("TitleAp", "testSystems.title")
+    _expression = _expression.replaceAll("RefProy", "testSystems.projects.ref")
+    _expression = _expression.replaceAll("RefSis", "testSystems.ref")
+    _expression = _expression.replaceAll("RefAp", "testSystems.notes.ref")
+    _expression = _expression.replaceAll("Vticode", "testSystems.vtiCode")
+    _expression = _expression.replaceAll("AliasCl", "testSystems.clientAlias")
+  }
 
-  // TagAp
-  _expression = _expression.replaceAll("TagAp", "notes.tags.name")
-  // TagProy
-  _expression = _expression.replaceAll("TagProy", "notes.projects.tags.name")
-  // Proy
-  _expression = _expression.replaceAll("Proy", "note.projects.alias")
-  // Sis
-  _expression = _expression.replaceAll("Sis", "note.testSystems.alias")
+  const query = mqg(_expression)
+  const parseQuery = JSON.stringify(query)
 
-  return mqg(_expression)
+  console.log(query)
+
+  return parseQuery
 }

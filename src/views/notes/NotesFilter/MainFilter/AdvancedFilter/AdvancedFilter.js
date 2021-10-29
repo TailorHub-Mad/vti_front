@@ -1,5 +1,5 @@
 import { Button, Flex, Grid, Input, Text } from "@chakra-ui/react"
-import React from "react"
+import React, { useState } from "react"
 import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
 
 export const AdvancedFilter = () => {
@@ -10,12 +10,23 @@ export const AdvancedFilter = () => {
     { value: "project_tag", label: "Tag de proyecto" },
     { value: "note_tag", label: "Tag de apunte" }
   ]
+
+  const [value, setValue] = useState("")
+
+  const handleOnClickSymbol = (symbol) => {
+    setValue(value + symbol)
+  }
+
   return (
     <>
       <Text variant="d_s_medium" mb="2px">
         Escriba o seleccione una combinación
       </Text>
-      <Input placeholder={`TAproy:GOM&((TagAp:Incidencias))`} />
+      <Input
+        placeholder={`TAproy:GOM&((TagAp:Incidencias))`}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
       <Text
         variant="d_xs_regular"
         color="grey"
@@ -26,7 +37,11 @@ export const AdvancedFilter = () => {
       </Text>
       <Grid templateColumns="repeat(5, 36px)" gap="8px">
         {symbols.map((symbol) => (
-          <Button key={symbol} variant="filter_button">
+          <Button
+            key={symbol}
+            variant="filter_button"
+            onClick={() => handleOnClickSymbol(symbol)}
+          >
             {symbol}
           </Button>
         ))}
