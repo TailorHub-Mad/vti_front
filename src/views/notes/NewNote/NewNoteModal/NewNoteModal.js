@@ -11,6 +11,7 @@ import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
 import { errorHandler } from "../../../../utils/errors"
 import { createFormData } from "../../../../utils/functions/formdata"
 import { SupportModal } from "../../../helps/NewCriterion/NewCriterionModal/SupportModal/SupportModal"
+import { ProjectSupportModal } from "../../../projects/ProjectFilter/ProjectSupportModal/ProjectSupportModal"
 import { NewNoteForm } from "../NewNoteForm/NewNoteForm"
 
 const initialValues = {
@@ -36,7 +37,9 @@ export const NewNoteModal = ({
   const { getNoteTags } = useTagApi()
   const { mutate } = useSWRConfig()
 
+  const [showProjectSearchModal, setShowProjectSearchModal] = useState(false)
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
+
   const [values, setValues] = useState(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -124,6 +127,10 @@ export const NewNoteModal = ({
     })
 
     return formData
+  }
+
+  const handleProjectSelect = (_project) => {
+    setValues({ ...values, project: _project })
   }
 
   const handleSubmit = async () => {
@@ -261,6 +268,7 @@ export const NewNoteModal = ({
               noteFromProject={noteFromProject}
               submitIsDisabled={submitIsDisabled}
               isUpdate={Boolean(noteToUpdate)}
+              openProjectSearchModal={() => setShowProjectSearchModal(true)}
               openAuxModal={() => setShowSecondaryContent(true)}
             />
             <Flex width="100%" justifyContent="center">
@@ -287,6 +295,13 @@ export const NewNoteModal = ({
             selectedTags={values?.tags?.map((t) => t.label) || []}
           />
         ) : null}
+        <ProjectSupportModal
+          isOpen={showProjectSearchModal}
+          onClose={() => setShowProjectSearchModal(false)}
+          onProjectSelect={handleProjectSelect}
+          onTagsSelect={(tags) => handleTagSelect(tags, true)}
+          selectedTags={values?.tags?.map((t) => t.label) || []}
+        />
       </CustomModalContent>
     </Modal>
   )
