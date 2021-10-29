@@ -25,7 +25,9 @@ export const ToolBar = ({
   fetchState,
   searchDate,
   icon,
-  selectedRows
+  selectedRows,
+  queryGroup,
+  queryFilter
 }) => {
   const handleOnGroup = (activeItem) => onGroup(activeItem)
   const handleOnFilter = (activeItem) => onFilter(activeItem)
@@ -35,16 +37,14 @@ export const ToolBar = ({
       {noFilter || (
         <FilterButton
           onFilter={handleOnFilter}
-          active={fetchState === fetchType.FILTER}
-          isDisabled={fetchState === fetchType.GROUP}
+          active={fetchState === fetchType.FILTER || queryFilter}
         />
       )}
       {noGroup || (
         <Group
           onGroup={handleOnGroup}
           options={groupOptions}
-          active={fetchState === fetchType.GROUP}
-          isDisabled={fetchState === fetchType.FILTER}
+          active={fetchState === fetchType.GROUP || queryGroup}
         />
       )}
       {noSearch || (
