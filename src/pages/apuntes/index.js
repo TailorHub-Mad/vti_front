@@ -85,6 +85,8 @@ const apuntes = () => {
   const [noteToDetail, setNoteToDetail] = useState(null)
   const [noteToDelete, setNoteToDelete] = useState(null)
   const [messageToDelete, setMessageToDelete] = useState(null)
+  const [queryFilter, setQueryFilter] = useState(null)
+  const [queryGroup, setQueryGroup] = useState(null)
 
   // Fetch
   const { data, error, isLoading, mutate, isValidating } = noteFetchHandler(
@@ -142,7 +144,7 @@ const apuntes = () => {
   }
 
   const handleOnOpenFilter = () => {
-    if (fetchState === fetchType.FILTER) handleOnFilter(null)
+    if (fetchState === fetchType.FILTER || queryFilter) handleOnFilter(null)
     else setShowFilterModal(true)
   }
 
@@ -319,6 +321,9 @@ const apuntes = () => {
 
   // Filters
   const onSearch = (search) => {
+    if (queryFilter) setQueryFilter(null)
+    if (queryGroup) setQueryGroup(null)
+
     if (!search) {
       setFetchState(fetchType.ALL)
       setFetchOptions({
@@ -335,34 +340,74 @@ const apuntes = () => {
 
   const handleOnGroup = (group) => {
     if (!group) {
-      setFetchState(fetchType.ALL)
-      setFetchOptions({
-        [fetchOption.GROUP]: null
-      })
-      return
+      setQueryGroup(null)
+      if (queryFilter) {
+        setFetchState(fetchType.FILTER)
+        setFetchOptions({
+          [fetchOption.FILTER]: queryFilter
+        })
+        return
+      } else {
+        setFetchState(fetchType.ALL)
+        setFetchOptions({
+          [fetchOption.GROUP]: null
+        })
+        return
+      }
     }
 
-    setFetchState(fetchType.GROUP)
-    setFetchOptions({
-      [fetchOption.GROUP]: group
-    })
+    setQueryGroup(group)
+
+    if (fetchState === fetchType.FILTER) {
+      const newGroup = `${group}&${queryFilter}`
+      setFetchState(fetchType.GROUP)
+      setFetchOptions({
+        [fetchOption.GROUP]: newGroup
+      })
+    } else {
+      setFetchState(fetchType.GROUP)
+
+      setFetchOptions({
+        [fetchOption.GROUP]: group
+      })
+    }
   }
 
   const handleOnFilter = (values) => {
     if (!values) {
-      setFetchState(fetchType.ALL)
-      setFetchOptions({
-        [fetchOption.FILTER]: null
-      })
-      return
+      setQueryFilter(null)
+
+      if (queryGroup) {
+        setFetchState(fetchType.GROUP)
+        setFetchOptions({
+          [fetchOption.GROUP]: queryGroup
+        })
+        return
+      } else {
+        setFetchState(fetchType.ALL)
+
+        setFetchOptions({
+          [fetchOption.FILTER]: null
+        })
+        return
+      }
     }
 
     const filter = generateFilterQuery(NOTES_FILTER_KEYS, values)
+    setQueryFilter(filter)
 
-    setFetchState(fetchType.FILTER)
-    setFetchOptions({
-      [fetchOption.FILTER]: filter
-    })
+    if (fetchState === fetchType.GROUP) {
+      const newGroup = `${queryGroup}&${filter}`
+      setFetchState(fetchType.GROUP)
+      setFetchOptions({
+        [fetchOption.GROUP]: newGroup
+      })
+    } else {
+      setFetchState(fetchType.FILTER)
+      setFetchOptions({
+        [fetchOption.FILTER]: filter
+      })
+    }
 
     setShowFilterModal(false)
   }
@@ -488,6 +533,8 @@ const apuntes = () => {
             groupOptions={NOTES_GROUP_OPTIONS}
             icon={<AddNoteIcon />}
             fetchState={fetchState}
+            queryFilter={queryFilter}
+            queryGroup={queryGroup}
           />
         )}
       </PageHeader>
@@ -519,6 +566,7 @@ const apuntes = () => {
               <NotesGroup
                 notes={notesData}
                 onSeeDetails={handleOpenDetail}
+                onFilter={handleOnOpenFilter}
                 checkIsSubscribe={checkIsSubscribe}
                 checkIsFavorite={checkIsFavorite}
                 onDelete={(id, key) => setNoteToDelete({ id, key })}
@@ -531,6 +579,8 @@ const apuntes = () => {
                 isGrouped={isGrouped}
                 fetchState={fetchState}
                 handleSubscribe={handleSubscribe}
+                queryFilter={queryFilter}
+                queryGroup={queryGroup}
               />
             ) : (
               <NotesGrid
@@ -541,6 +591,9 @@ const apuntes = () => {
                 onDelete={setNoteToDelete}
                 handleFavorite={handleFavorite}
                 handleSubscribe={handleSubscribe}
+                fetchState={fetchState}
+                queryFilter={queryFilter}
+                onFilter={handleOnOpenFilter}
               />
             )}
           </>

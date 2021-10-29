@@ -17,32 +17,43 @@ export const NotesGroup = ({
   handleFavorite,
   groupOption,
   fetchState,
-  handleSubscribe
+  handleSubscribe,
+  queryFilter,
+  queryGroup
 }) => {
   const formatNotes = groupTable(notes)
 
-  const handleOnClick = () => {
-    if (fetchState === fetchType.GROUP) return onGroup(null)
-    if (fetchState === fetchType.FILTER) return onFilter(null)
-  }
-
   return (
     <>
-      {fetchState === fetchType.GROUP && formatNotes?.length > 0 ? (
-        <Flex alignItems="center" mb="24px" cursor="pointer" onClick={handleOnClick}>
-          <CloseIcon mr="8px" h="12px" />
-          <Text marginTop="6px">{`Agrupado por ${groupOption
-            .toString()
-            .toUpperCase()}`}</Text>
-        </Flex>
-      ) : null}
+      <Flex align="center" gridGap="24px">
+        {(fetchState === fetchType.GROUP || queryGroup) &&
+        formatNotes?.length > 0 ? (
+          <Flex
+            alignItems="center"
+            mb="24px"
+            cursor="pointer"
+            onClick={() => onGroup(null)}
+          >
+            <CloseIcon mr="8px" h="12px" />
+            <Text marginTop="6px">{`Agrupado por ${groupOption
+              .toString()
+              .toUpperCase()}`}</Text>
+          </Flex>
+        ) : null}
 
-      {fetchState === fetchType.FILTER && formatNotes?.length > 0 ? (
-        <Flex alignItems="center" onClick={handleOnClick} cursor="pointer">
-          <CloseIcon mr="8px" h="12px" />
-          <Text marginTop="6px">{`Eliminar filtro`}</Text>
-        </Flex>
-      ) : null}
+        {(fetchState === fetchType.FILTER || queryFilter) &&
+        formatNotes?.length > 0 ? (
+          <Flex
+            alignItems="center"
+            onClick={() => onFilter(null)}
+            cursor="pointer"
+            mb="24px"
+          >
+            <CloseIcon mr="8px" h="12px" />
+            <Text marginTop="6px">{`Eliminar filtro`}</Text>
+          </Flex>
+        ) : null}
+      </Flex>
 
       <Flex overflow="hidden" width="100%" position="relative">
         <Grid minWidth={MIN_TABLE_WIDTH} maxWidth={MAX_TABLE_WIDTH} width="100%">
