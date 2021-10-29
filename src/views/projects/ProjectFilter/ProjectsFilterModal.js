@@ -10,9 +10,10 @@ import { SupportModal } from "../../helps/NewCriterion/NewCriterionModal/Support
 export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [showSaveFilter, setShowSaveFilter] = useState(false)
+  const [tab, setTab] = useState(0)
 
   const initialValues = {
-    client: undefined,
+    client: [{ label: "", value: "" }],
     test_system: [{ label: "", value: "" }],
     year: undefined,
     vti_code: [{ label: "", value: "" }],
@@ -34,8 +35,8 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
   }
 
   const handleOnFilter = () => {
-    setFilterValues(initialValues)
     onFilter(filterValues)
+    setFilterValues(initialValues)
   }
 
   const handleOnClose = () => {
@@ -85,20 +86,28 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
       <ModalOverlay />
       <CustomModalContent zIndex="10001">
         <ScaleFade in={showSecondaryContent || !showSecondaryContent}>
-          <MainFilter
-            simpleFilterValues={filterValues}
-            onClose={handleOnClose}
-            moveToLeft={showSecondaryContent}
-            onSecondaryOpen={() => setShowSecondaryContent(true)}
-            onSimpleFilterChange={(val) => setFilterValues(val)}
-            openSaveModal={() => setShowSaveFilter(true)}
-            onFilter={handleOnFilter}
-            onReset={handleOnReset}
-          />
+          {showSaveFilter ? (
+            <SaveFilterModal
+              onClose={() => setShowSaveFilter(false)}
+              filter={filterValues}
+              filterId={""}
+              isUpdateFilter={false}
+              type={tab === 0 ? "simple" : "complex"}
+            />
+          ) : (
+            <MainFilter
+              simpleFilterValues={filterValues}
+              onClose={handleOnClose}
+              moveToLeft={showSecondaryContent}
+              onSecondaryOpen={() => setShowSecondaryContent(true)}
+              onSimpleFilterChange={(val) => setFilterValues(val)}
+              openSaveModal={() => setShowSaveFilter(true)}
+              onFilter={handleOnFilter}
+              onReset={handleOnReset}
+              setTab={setTab}
+            />
+          )}
         </ScaleFade>
-        {showSaveFilter ? (
-          <SaveFilterModal onClose={() => setShowSaveFilter(false)} />
-        ) : null}
         {showSecondaryContent ? (
           <SupportModal
             onClose={() => setShowSecondaryContent(false)}
