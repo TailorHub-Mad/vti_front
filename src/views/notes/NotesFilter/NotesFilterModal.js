@@ -7,6 +7,7 @@ import { CustomModalContent } from "../../../components/overlay/Modal/CustomModa
 import { SupportModal } from "../../helps/NewCriterion/NewCriterionModal/SupportModal/SupportModal"
 import useHelpApi from "../../../hooks/api/useHelpApi"
 import useTagApi from "../../../hooks/api/useTagApi"
+import { ProjectSupportModal } from "../../projects/ProjectFilter/ProjectSupportModal/ProjectSupportModal"
 
 export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const [showMainContent] = useState(true)
@@ -43,6 +44,9 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const { getProjectHelps, getNoteHelps } = useHelpApi()
 
   const { getProjectTags, getNoteTags } = useTagApi()
+  const handleProjectSelect = (_project) => {
+    setFilterValues({ ...filterValues, project: _project })
+  }
 
   const handleOnReset = () => {
     setFilterValues(initialValues)
@@ -127,13 +131,7 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
         {showSaveFilter ? (
           <SaveFilterModal onClose={() => setShowSaveFilter(false)} />
         ) : null}
-        {!showSaveFilter && showSecondaryContent === "project" ? (
-          <SupportFilter
-            onClose={() => setShowSecondaryContent(false)}
-            onSecondaryOpen={() => setShowAuxContent(true)}
-            isAuxOpen={showAuxContent}
-          />
-        ) : null}
+
         {!showSaveFilter && showSecondaryContent === "project_tags" ? (
           <SupportModal
             onClose={() => setShowSecondaryContent(false)}
@@ -153,13 +151,11 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
           />
         ) : null}
 
-        {!showSaveFilter && showAuxContent && showSecondaryContent === "project" ? (
-          <SupportModal
-            onClose={() => setShowAuxContent(false)}
-            usedTags={usedProjectTags}
-            criteria={projectCriteria}
-            onTagsSelect={(tags) => handleTagSelect(tags, true)}
-            selectedTags={filterValues.project_tags.map((t) => t.label)}
+        {!showSaveFilter && showSecondaryContent === "project" ? (
+          <ProjectSupportModal
+            isOpen={showSecondaryContent === "project"}
+            onClose={() => setShowSecondaryContent(false)}
+            onProjectSelect={handleProjectSelect}
           />
         ) : null}
       </CustomModalContent>
