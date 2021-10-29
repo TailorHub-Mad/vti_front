@@ -38,6 +38,10 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const [usedNoteTags, setUsedNoteTags] = useState([])
   const [projectCriteria, setProjectCriteria] = useState([])
   const [noteCriteria, setNoteCriteria] = useState([])
+  const [filterMetadata, setfilterMetadata] = useState(null)
+  const [isUpdateFilter, setIsUpdateFilter] = useState(false)
+  const [changeValueFilter, setChangeValueFilter] = useState(false)
+  const [tab, setTab] = useState(0)
 
   const { getProjectHelps, getNoteHelps } = useHelpApi()
 
@@ -59,6 +63,12 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const handleOnClose = () => {
     setFilterValues(initialValues)
     onClose()
+  }
+
+  const handleEditFilter = (filter) => {
+    setfilterMetadata(filter)
+    setIsUpdateFilter(true)
+    setShowSaveFilter(true)
   }
 
   const handleTagSelect = (_tags, isProject) => {
@@ -104,6 +114,10 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
     fetchTags()
   }, [])
 
+  useEffect(() => {
+    setChangeValueFilter(true)
+  }, [filterValues])
+
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
@@ -124,10 +138,19 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
             openSaveModal={() => setShowSaveFilter(true)}
             onFilter={handleOnFilter}
             onReset={handleOnReset}
+            setTab={setTab}
+            onEdit={handleEditFilter}
           />
         </ScaleFade>
         {showSaveFilter ? (
-          <SaveFilterModal onClose={() => setShowSaveFilter(false)} />
+          <SaveFilterModal
+            onClose={() => setShowSaveFilter(false)}
+            filter={!changeValueFilter ? filterMetadata.query : filterValues}
+            filterMetadata={filterMetadata}
+            isUpdateFilter={isUpdateFilter}
+            type={tab === 0 ? "simple" : "complex"}
+            object="notes"
+          />
         ) : null}
 
         {!showSaveFilter && showSecondaryContent === "project_tags" ? (

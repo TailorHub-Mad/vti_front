@@ -1,5 +1,4 @@
 export const getAcronym = (name) => {
-  console.log("NAME", name)
   if (!name) return ""
   if (name?.length <= 3) {
     return name

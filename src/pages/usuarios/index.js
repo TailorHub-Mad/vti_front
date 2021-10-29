@@ -287,7 +287,7 @@ const usuarios = () => {
       {isLoading ? (
         <LoadingView mt="-200px" />
       ) : isEmptyData && fetchState !== fetchType.ALL ? (
-        <ViewNotFoundState />
+        <ViewNotFoundState noBack />
       ) : isEmptyData && !isValidating ? (
         <ViewEmptyState
           message="Añadir usuarios a la plataforma"

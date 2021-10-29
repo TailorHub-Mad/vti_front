@@ -84,7 +84,6 @@ export const ProjectNotes = ({ project }) => {
   const [noteToDetail, setNoteToDetail] = useState(null)
   const [noteToDelete, setNoteToDelete] = useState(null)
   const [isFilter, setIsFilter] = useState(false)
-
   const [fetchState, setFetchState] = useState(fetchType.FILTER)
   const [fetchOptions, setFetchOptions] = useState({
     [fetchOption.FILTER]: `notes.projects._id=${project._id}`
@@ -112,7 +111,7 @@ export const ProjectNotes = ({ project }) => {
 
   // Handlers views
   const handleOnOpenFilter = () => {
-    if (fetchState === fetchType.FILTER) handleOnFilter(null)
+    if (isFilter) handleOnFilter(null)
     else setShowFilterModal(true)
   }
 
@@ -301,7 +300,7 @@ export const ProjectNotes = ({ project }) => {
 
     setFetchState(fetchType.FILTER)
     setFetchOptions({
-      [fetchOption.FILTER]: filter
+      [fetchOption.FILTER]: `notes.projects._id=${project._id}&${filter}`
     })
 
     setShowFilterModal(false)
@@ -331,6 +330,8 @@ export const ProjectNotes = ({ project }) => {
     setNoteToDetail(noteDetail)
     setShowNoteDetails(true)
   }, [])
+
+  console.log(showFilterModal)
 
   return (
     <>

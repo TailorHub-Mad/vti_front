@@ -1,18 +1,19 @@
 import { ScaleFade, Modal, ModalOverlay } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { MainFilter } from "./MainFilter/MainFilter"
-import { SaveFilterModal } from "./SaveFilterModal/SaveFilterModal"
 import { CustomModalContent } from "../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
 import useHelpApi from "../../../hooks/api/useHelpApi"
 import useTagApi from "../../../hooks/api/useTagApi"
 import { SupportModal } from "../../helps/NewCriterion/NewCriterionModal/SupportModal/SupportModal"
+import { SaveFilterModal } from "../../../components/filters/SaveFilterModal"
 
 export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [showSaveFilter, setShowSaveFilter] = useState(false)
+  const [tab, setTab] = useState(0)
 
   const initialValues = {
-    client: undefined,
+    client: [{ label: "", value: "" }],
     test_system: [{ label: "", value: "" }],
     year: undefined,
     vti_code: [{ label: "", value: "" }],
@@ -27,6 +28,9 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
   const [filterValues, setFilterValues] = useState(initialValues)
   const [usedProjectTags, setUsedProjectTags] = useState([])
   const [projectCriteria, setProjectCriteria] = useState([])
+  const [filterMetadata, setfilterMetadata] = useState(null)
+  const [isUpdateFilter, setIsUpdateFilter] = useState(false)
+  const [changeValueFilter, setChangeValueFilter] = useState(false)
 
   const handleOnReset = () => {
     setFilterValues(initialValues)
@@ -34,8 +38,8 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
   }
 
   const handleOnFilter = () => {
-    setFilterValues(initialValues)
     onFilter(filterValues)
+    setFilterValues(initialValues)
   }
 
   const handleOnClose = () => {
@@ -64,6 +68,12 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
     })
   }
 
+  const handleEditFilter = (filter) => {
+    setfilterMetadata(filter)
+    setIsUpdateFilter(true)
+    setShowSaveFilter(true)
+  }
+
   useEffect(() => {
     const fetchCriteria = async () => {
       const _data = await getProjectHelps()
@@ -80,25 +90,39 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
     fetchTags()
   }, [])
 
+  useEffect(() => {
+    setChangeValueFilter(true)
+  }, [filterValues])
+
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
       <CustomModalContent zIndex="10001">
         <ScaleFade in={showSecondaryContent || !showSecondaryContent}>
-          <MainFilter
-            simpleFilterValues={filterValues}
-            onClose={handleOnClose}
-            moveToLeft={showSecondaryContent}
-            onSecondaryOpen={() => setShowSecondaryContent(true)}
-            onSimpleFilterChange={(val) => setFilterValues(val)}
-            openSaveModal={() => setShowSaveFilter(true)}
-            onFilter={handleOnFilter}
-            onReset={handleOnReset}
-          />
+          {showSaveFilter ? (
+            <SaveFilterModal
+              onClose={() => setShowSaveFilter(false)}
+              filter={!changeValueFilter ? filterMetadata.query : filterValues}
+              filterMetadata={filterMetadata}
+              isUpdateFilter={isUpdateFilter}
+              type={tab === 0 ? "simple" : "complex"}
+              object="projects"
+            />
+          ) : (
+            <MainFilter
+              simpleFilterValues={filterValues}
+              onClose={handleOnClose}
+              moveToLeft={showSecondaryContent}
+              onSecondaryOpen={() => setShowSecondaryContent(true)}
+              onSimpleFilterChange={(val) => setFilterValues(val)}
+              openSaveModal={() => setShowSaveFilter(true)}
+              onFilter={handleOnFilter}
+              onReset={handleOnReset}
+              setTab={setTab}
+              onEdit={handleEditFilter}
+            />
+          )}
         </ScaleFade>
-        {showSaveFilter ? (
-          <SaveFilterModal onClose={() => setShowSaveFilter(false)} />
-        ) : null}
         {showSecondaryContent ? (
           <SupportModal
             onClose={() => setShowSecondaryContent(false)}
