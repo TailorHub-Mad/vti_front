@@ -373,7 +373,7 @@ const apuntes = () => {
     }
   }
 
-  const handleOnFilter = (values) => {
+  const handleOnFilter = (values, type) => {
     if (!values) {
       setQueryFilter(null)
 
@@ -393,7 +393,13 @@ const apuntes = () => {
       }
     }
 
-    const filter = generateFilterQuery(NOTES_FILTER_KEYS, values)
+    let filter = null
+    if (type === "complex") {
+      filter = generateFilterQuery(NOTES_FILTER_KEYS, values)
+    } else {
+      filter = `query=${values}`
+    }
+
     setQueryFilter(filter)
 
     if (fetchState === fetchType.GROUP) {

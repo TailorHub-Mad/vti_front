@@ -1,12 +1,13 @@
 import { ScaleFade, Modal, ModalOverlay } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { MainFilter } from "./MainFilter/MainFilter"
-import { SaveFilterModal } from "./SaveFilterModal/SaveFilterModal"
 import { CustomModalContent } from "../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
 import { SupportModal } from "../../helps/NewCriterion/NewCriterionModal/SupportModal/SupportModal"
 import useHelpApi from "../../../hooks/api/useHelpApi"
 import useTagApi from "../../../hooks/api/useTagApi"
 import { ProjectSupportModal } from "../../projects/ProjectFilter/ProjectSupportModal/ProjectSupportModal"
+import { SaveFilterModal } from "../../../components/filters/SaveFilterModal"
+import { COMPLEX_OBJECT, parseComplexQuery } from "../../../utils/functions/filter"
 
 export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const [showMainContent] = useState(true)
@@ -34,6 +35,7 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   }
 
   const [filterValues, setFilterValues] = useState(initialValues)
+  const [filterComplexValues, setFilterComplexValues] = useState(null)
   const [usedProjectTags, setUsedProjectTags] = useState([])
   const [usedNoteTags, setUsedNoteTags] = useState([])
   const [projectCriteria, setProjectCriteria] = useState([])
@@ -56,8 +58,13 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   }
 
   const handleOnFilter = () => {
-    setFilterValues(initialValues)
-    onFilter(filterValues)
+    if (filterComplexValues) {
+      const query = parseComplexQuery(filterComplexValues, COMPLEX_OBJECT.NOTES)
+      onFilter(query, "complex")
+    } else {
+      setFilterValues(initialValues)
+      onFilter(filterValues)
+    }
   }
 
   const handleOnClose = () => {
@@ -140,6 +147,7 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
             onReset={handleOnReset}
             setTab={setTab}
             onEdit={handleEditFilter}
+            onSimpleComplexChange={(val) => setFilterComplexValues(val)}
           />
         </ScaleFade>
         {showSaveFilter ? (

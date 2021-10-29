@@ -331,8 +331,6 @@ export const ProjectNotes = ({ project }) => {
     setShowNoteDetails(true)
   }, [])
 
-  console.log(showFilterModal)
-
   return (
     <>
       <Popup

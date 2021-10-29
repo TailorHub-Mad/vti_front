@@ -20,6 +20,24 @@ import useFilterApi from "../../../../hooks/api/useFilterApi"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
 import { EditIcon } from "@chakra-ui/icons"
 
+const criteria = [
+  { label: "AliasCL", value: "AliasCL" },
+  { label: "AliasProy", value: "AliasProy" },
+  { label: "RefProy", value: "RefProy" },
+  { label: "RefSis", value: "RefSis" },
+  { label: "AliasSis", value: "AliasSis" },
+  { label: "Cerrado", value: "Cerrado" },
+  { label: "Foramlizado", value: "Foramlizado" },
+  { label: "Respuestas", value: "Respuestas" },
+  { label: "TagAp", value: "TagAp" },
+  { label: "TagProy", value: "TagProy" },
+  { label: "RefAp", value: "RefAp" },
+  { label: "TitleAp", value: "TitleAp" },
+  { label: "Description", value: "Description" },
+  { label: "Documents", value: "Documents" },
+  { label: "VtiCode", value: "VtiCode" }
+]
+
 export const MainFilter = ({
   onClose,
   onSecondaryOpen,
@@ -31,6 +49,7 @@ export const MainFilter = ({
   onReset,
   setTab,
   onEdit,
+  onSimpleComplexChange,
   ...props
 }) => {
   const [isReset, setIsReset] = useState(false)
@@ -147,7 +166,11 @@ export const MainFilter = ({
                   rowFilter(filterComplex)
                 )}
               </Box>
-              <AdvancedFilter />
+              <AdvancedFilter
+                criteria={criteria}
+                value={simpleFilterValues}
+                onChange={onSimpleComplexChange}
+              />
             </TabPanel>
           </TabPanels>
         </Tabs>
