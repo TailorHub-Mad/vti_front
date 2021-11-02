@@ -119,7 +119,7 @@ export const NoteMainInfo = ({
               icon={<EditIcon />}
               label="Editar"
             />
-          ) : isMessage && isMyMessage && role === RoleType.ADMIN && editAllowed ? (
+          ) : isMessage && isMyMessage && role === RoleType.USER && editAllowed ? (
             <ActionLink
               onClick={onEdit}
               color="blue.500"

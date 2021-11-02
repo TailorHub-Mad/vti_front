@@ -80,7 +80,7 @@ export const NewNoteForm = ({
         onHelperClick: () => openProjectSearchModal()
       }
     },
-    system: {
+    testSystems: {
       type: "add_select",
       config: {
         placeholder: "Selecciona",
@@ -88,7 +88,8 @@ export const NewNoteForm = ({
         options: systemOptions,
         additemlabel: "Añadir ",
         removeitemlabel: "Eliminar ",
-        isReset: isReset
+        isReset: isReset,
+        isDisabled: Boolean(noteToUpdate)
       }
     },
     title: {

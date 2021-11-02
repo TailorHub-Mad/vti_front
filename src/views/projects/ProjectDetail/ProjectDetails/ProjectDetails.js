@@ -74,7 +74,7 @@ export const ProjectDetails = ({
                   mr="8px"
                   variant={variantGeneralTag.NOTE}
                 >
-                  {user}
+                  {user.alias}
                 </Tag>
               ))}
           </Flex>
