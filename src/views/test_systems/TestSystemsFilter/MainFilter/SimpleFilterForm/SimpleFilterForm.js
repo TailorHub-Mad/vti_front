@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react"
 import { AddSelect } from "../../../../../components/forms/AddSelect/AddSelect"
-import useSystemApi from "../../../../../hooks/api/useSystemApi"
 import useClientApi from "../../../../../hooks/api/useClientApi"
 import useTagApi from "../../../../../hooks/api/useTagApi"
 import useSectorApi from "../../../../../hooks/api/useSectorApi"
 import { MultiTagSelect } from "../../../../../components/forms/MultiTagSelect/MultiTagSelect"
+import useCodeApi from "../../../../../hooks/api/useCodeApi"
 
 export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => {
-  const { getSystems } = useSystemApi()
   const { getClients } = useClientApi()
   const { getSectors } = useSectorApi()
   const { getProjectTags } = useTagApi()
+  const { getCodes } = useCodeApi()
 
   // Filter Options
   const [clientsOpt, setClientsOpt] = useState(null)
@@ -21,10 +21,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
   useEffect(() => {
     if (!vtiCodesOpt) {
       const fetchTestSystems = async () => {
-        const data = await getSystems()
-        setVtiCodesOpt(
-          data[0]?.testSystems.map((ts) => ({ label: ts.vtiCode, value: ts._id }))
-        )
+        const dataCodes = await getCodes()
+        setVtiCodesOpt(dataCodes.map((c) => ({ label: c.name, value: c._id })))
       }
       fetchTestSystems()
     }

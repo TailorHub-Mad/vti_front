@@ -40,9 +40,9 @@ export const AddSelect = ({
     setAvailableOptions(nextOptions)
   }, [inputValues])
 
-  useEffect(() => {
-    setInputValues(value)
-  }, [value])
+  // useEffect(() => {
+  //   setInputValues(value)
+  // }, [value])
 
   useEffect(() => {
     if (!isReset) return

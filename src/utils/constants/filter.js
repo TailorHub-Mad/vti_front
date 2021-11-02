@@ -2,7 +2,7 @@ export const NOTES_FILTER_KEYS = {
   client: "notes.clientId",
   note_tags: "notes.tags._id",
   project_tags: "notes.projects.tags",
-  users: "notes.owner",
+  users: "notes.owner._id",
   test_system: "notes.testSystems._id",
   vti_code: "notes.testSystems.vtiCode",
   project: "notes.projects._id",
@@ -22,7 +22,7 @@ export const PROJECTS_FILTER_KEYS = {
   client: "projects.clientAlias",
   test_system: "projects.testSystems._id",
   year: "projects.date.year",
-  vti_code: "projects.testSystems.vtiCode._id",
+  vti_code: "projects.testSystems.vtiCode",
   focus_point: "projects.focusPoint._id",
   sector: "projects.sector._id",
   tag_project: "projects.tags._id"
@@ -30,10 +30,10 @@ export const PROJECTS_FILTER_KEYS = {
 
 export const TESTSYSTEMS_FILTER_KEYS = {
   client: "testSystems.clientAlias",
-  year: "testSystems.year",
+  year: "testSystems.date.year",
   vti_code: "testSystems.vtiCode",
   sector: "testSystems.projects.sector",
-  project_tags: "testSystems.projects.tags._id"
+  project_tags: "testSystems.projects.tags"
 }
 
 export const TAGS_FILTER_KEYS = {
@@ -44,7 +44,7 @@ export const TAGS_FILTER_KEYS = {
 export const USERS_FILTER_KEYS = {
   project: "projectsComments._id",
   department: "department._id",
-  focus_point: "focusPoint._id"
+  focus_point: "focusPoint.focusPoint"
 }
 
 export const NOTIFICATIONS_FILTER_KEYS = {

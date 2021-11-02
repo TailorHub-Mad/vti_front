@@ -83,7 +83,7 @@ export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props })
             onReset={handleOnReset}
             setTab={setTab}
             onEdit={handleEditFilter}
-            onSimpleComplexChange={(val) => setFilterComplexValues(val)}
+            onFilterComplexChange={(val) => setFilterComplexValues(val)}
           />
         </ScaleFade>
         {showSaveFilter ? (

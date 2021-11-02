@@ -49,7 +49,9 @@ export const MainFilter = ({
   onReset,
   setTab,
   onEdit,
-  onSimpleComplexChange,
+  onFilterComplexChange,
+  errorComplexFilter,
+  showSaveFilter,
   ...props
 }) => {
   const [isReset, setIsReset] = useState(false)
@@ -76,16 +78,21 @@ export const MainFilter = ({
     onSimpleFilterChange(JSON.parse(query))
   }
 
-  useEffect(() => {
-    const _getFilters = async () => {
-      const simple = await getFilterSimple("notes")
-      const complex = await getFilterComplex("notes")
+  const _getFilters = async () => {
+    const simple = await getFilterSimple("notes")
+    const complex = await getFilterComplex("notes")
 
-      setFilterSimple(simple)
-      setFilterComplex(complex)
-    }
+    setFilterSimple(simple)
+    setFilterComplex(complex)
+  }
+
+  useEffect(() => {
     _getFilters()
-  }, [onClose])
+  }, [])
+
+  useEffect(() => {
+    _getFilters()
+  }, [showSaveFilter])
 
   const rowFilter = (filters) => {
     return (
@@ -169,7 +176,8 @@ export const MainFilter = ({
               <AdvancedFilter
                 criteria={criteria}
                 value={simpleFilterValues}
-                onChange={onSimpleComplexChange}
+                onChange={onFilterComplexChange}
+                errorComplexFilter={errorComplexFilter}
               />
             </TabPanel>
           </TabPanels>

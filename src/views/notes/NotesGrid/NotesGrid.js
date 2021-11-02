@@ -38,6 +38,7 @@ export const NotesGrid = ({
         gap="16px"
         width="100%"
         marginBottom="24px"
+        alignItems="center"
       >
         {notes?.map((note, idx) => (
           <MessageCard

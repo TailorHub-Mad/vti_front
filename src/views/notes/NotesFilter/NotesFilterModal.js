@@ -44,6 +44,7 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const [isUpdateFilter, setIsUpdateFilter] = useState(false)
   const [changeValueFilter, setChangeValueFilter] = useState(false)
   const [tab, setTab] = useState(0)
+  const [errorComplexFilter, setErrorComplexFilter] = useState(false)
 
   const { getProjectHelps, getNoteHelps } = useHelpApi()
 
@@ -60,7 +61,15 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const handleOnFilter = () => {
     if (filterComplexValues) {
       const query = parseComplexQuery(filterComplexValues, COMPLEX_OBJECT.NOTES)
-      onFilter(query, "complex")
+      if (!query) {
+        setErrorComplexFilter(true)
+
+        setTimeout(() => {
+          setErrorComplexFilter(false)
+        }, 3000)
+      } else {
+        onFilter(query, "complex")
+      }
     } else {
       setFilterValues(initialValues)
       onFilter(filterValues)
@@ -147,7 +156,9 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
             onReset={handleOnReset}
             setTab={setTab}
             onEdit={handleEditFilter}
-            onSimpleComplexChange={(val) => setFilterComplexValues(val)}
+            onFilterComplexChange={(val) => setFilterComplexValues(val)}
+            errorComplexFilter={errorComplexFilter}
+            showSaveFilter={showSaveFilter}
           />
         </ScaleFade>
         {showSaveFilter ? (

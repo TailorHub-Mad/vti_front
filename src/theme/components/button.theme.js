@@ -48,6 +48,24 @@ export const Button = {
         border: "none"
       }
     },
+    icon_only_secondary_mobile: {
+      bg: "white",
+      color: "blue.500",
+      border: "none",
+      minW: "48px",
+      w: "48px",
+      h: "48px",
+      boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)",
+      css: {
+        boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)"
+      },
+      _disabled: {
+        opacity: 1,
+        bgColor: "#EBEEF2",
+        pointerEvents: "none",
+        border: "none"
+      }
+    },
     secondary: {
       minW: "194px",
       bg: "white",
