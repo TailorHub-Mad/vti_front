@@ -96,6 +96,7 @@ export const NewNoteModal = ({
     const formatData = {
       title: note.title,
       description: note.description,
+      testSystems: note?.testSystems || [],
       tags: note.tags.map((t) => t.value)
     }
 
@@ -216,16 +217,24 @@ export const NewNoteModal = ({
   useEffect(() => {
     if (!noteToUpdate) return
 
+    const ts = noteToUpdate.testSystems.map((ts) => ({
+      label: ts.alias,
+      value: ts._id
+    }))
+
     const _note = {
       project: noteFromProject
         ? noteFromProject.project
         : noteToUpdate?.projects[0]?.alias,
-      system: noteToUpdate.testSystems.map((ts) => ts.alias),
+      system: ts.length > 0 ? ts : undefined,
       title: noteToUpdate.title,
       description: noteToUpdate.description,
       link: noteToUpdate.link,
       documents: noteToUpdate.documents,
-      tags: noteToUpdate.tags.map((t) => t.name)
+      tags: noteToUpdate.tags.map((t) => ({
+        label: t.name,
+        value: t._id
+      }))
     }
 
     setValues(_note)

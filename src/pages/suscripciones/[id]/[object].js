@@ -66,11 +66,7 @@ const apuntesSuscripciones = () => {
     const { notes } = typeObject === "projects" ? projects[0] : testSystems[0]
     return notes.map((n) => {
       return {
-        ...n,
-        projects:
-          typeObject === "projects"
-            ? [{ alias: data[0]?.projects[0].alias }]
-            : [{ alias: "" }]
+        ...n
       }
     })
   }
@@ -140,7 +136,9 @@ const apuntesSuscripciones = () => {
                 notes={notesData}
                 onSeeDetails={(note) =>
                   router.push(
-                    `${PATHS.projects}/${router.query.object}?note=${note._id}`
+                    typeObject === "projects"
+                      ? `${PATHS.projects}/${router.query.object}?note=${note._id}`
+                      : `${PATHS.notes}?note=${note._id}`
                   )
                 }
                 checkIsSubscribe={() => {}}
@@ -161,7 +159,9 @@ const apuntesSuscripciones = () => {
                 notes={notesData}
                 onSeeDetails={(note) =>
                   router.push(
-                    `${PATHS.projects}/${router.query.object}?note=${note._id}`
+                    typeObject === "projects"
+                      ? `${PATHS.projects}/${router.query.object}?note=${note._id}`
+                      : `${PATHS.notes}?note=${note._id}`
                   )
                 }
                 checkIsSubscribe={() => {}}

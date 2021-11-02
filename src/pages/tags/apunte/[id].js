@@ -47,14 +47,14 @@ const apuntesDeSistemas = () => {
     if (!search) {
       setFetchState(fetchType.FILTER)
       setFetchOptions({
-        [fetchOption.FILTER]: `notes.tags._id=${router.query?.system}`
+        [fetchOption.FILTER]: `notes.tags._id=${router.query?.id}`
       })
       return
     }
 
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: `notes.ref=${search}&notes.title=${search}&notes.tags._id=${router.query?.system}`
+      [fetchOption.SEARCH]: `notes.ref=${search}&notes.title=${search}&notes.tags._id=${router.query?.id}&union=true`
     })
   }
 

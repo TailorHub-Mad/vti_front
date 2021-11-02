@@ -56,6 +56,8 @@ const tag = () => {
           isEmptyData={isEmptyData}
           hrefBack={PATHS.projectTags}
           backText={"Volver a tags"}
+          isValidating={isValidating}
+          filterQuery={filterQuery}
         />
       )}
     </Page>

@@ -30,25 +30,27 @@ export const NewNoteForm = ({
 
   const [isReset, setIsReset] = useState(false)
 
-  const formatValues = !noteToUpdate
-    ? { ...value }
-    : {
-        ...value,
-        testSystems:
-          noteToUpdate.testSystems.length > 0
-            ? noteToUpdate.testSystems.map((system) => ({
-                label: system.alias,
-                value: system._id
-              }))
-            : undefined,
-        tags:
-          noteToUpdate.tags.length > 0
-            ? noteToUpdate.tags.map((tag) => ({
-                label: tag.name,
-                value: tag._id
-              }))
-            : undefined
-      }
+  const _values = { ...value }
+
+  // const formatValues = !noteToUpdate
+  //   ? { ...value }
+  //   : {
+  //       ...value,
+  //       testSystems:
+  //         noteToUpdate.testSystems.length > 0
+  //           ? noteToUpdate.testSystems.map((system) => ({
+  //               label: system.alias,
+  //               value: system._id
+  //             }))
+  //           : undefined,
+  //       tags:
+  //         noteToUpdate.tags.length > 0
+  //           ? noteToUpdate.tags.map((tag) => ({
+  //               label: tag.name,
+  //               value: tag._id
+  //             }))
+  //           : undefined
+  //     }
 
   const formatSelectOption = (data) =>
     data.map((d) => ({ label: d.alias, value: d._id }))
@@ -226,7 +228,7 @@ export const NewNoteForm = ({
     <>
       {Object.entries(formInputs).map(([name, { type, config }], index) => {
         return React.cloneElement(inputRefObj[type], {
-          value: formatValues[name],
+          value: _values[name],
           onChange: (val) => handleFormChange(name, val),
           marginBottom: "24px",
           isDisabled:
