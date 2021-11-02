@@ -20,10 +20,28 @@ import useFilterApi from "../../../../hooks/api/useFilterApi"
 import { EditIcon } from "@chakra-ui/icons"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
 
+const criteria = [
+  { label: "TagAp", value: "TagAp" },
+  { label: "TagProy", value: "TagProy" },
+  { label: "AliasProy", value: "AliasProy" },
+  { label: "AliasSis", value: "AliasSis" },
+  { label: "AliasFocusPoint", value: "AliasFocusPoint" },
+  { label: "RefProy", value: "RefProy" },
+  { label: "RefSis", value: "RefSis" },
+  { label: "VtiCode", value: "VtiCode" },
+  { label: "RefAp", value: "RefAp" },
+  { label: "TitleAp", value: "TitleAp" },
+  { label: "Sector", value: "Sector" },
+  { label: "Year", value: "Year" },
+  { label: "Closed", value: "Closed" },
+  { label: "AliasCl", value: "AliasCl" }
+]
+
 export const MainFilter = ({
   onClose,
   onSecondaryOpen,
   onSimpleFilterChange,
+  onFilterComplexChange,
   onFilter,
   simpleFilterValues,
   moveToLeft,
@@ -149,7 +167,11 @@ export const MainFilter = ({
                 rowFilter(filterComplex)
               )}
             </Box>
-            <AdvancedFilter />
+            <AdvancedFilter
+              criteria={criteria}
+              value={simpleFilterValues}
+              onChange={onFilterComplexChange}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>

@@ -5,6 +5,7 @@ import { MainFilter } from "./MainFilter/MainFilter"
 import { SupportFilter } from "./SupportFilter/SupportFilter"
 import { CustomModalContent } from "../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
 import { SaveFilterModal } from "../../../components/filters/SaveFilterModal"
+import { COMPLEX_OBJECT, parseComplexQuery } from "../../../utils/functions/filter"
 
 export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   const [showMainContent] = useState(true)
@@ -22,6 +23,7 @@ export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props })
   }
 
   const [filterValues, setFilterValues] = useState(initialValues)
+  const [filterComplexValues, setFilterComplexValues] = useState(null)
   const [filterMetadata, setfilterMetadata] = useState(null)
   const [isUpdateFilter, setIsUpdateFilter] = useState(false)
   const [changeValueFilter, setChangeValueFilter] = useState(false)
@@ -32,8 +34,16 @@ export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props })
   }
 
   const handleOnFilter = () => {
-    setFilterValues(initialValues)
-    onFilter(filterValues)
+    if (filterComplexValues) {
+      const query = parseComplexQuery(
+        filterComplexValues,
+        COMPLEX_OBJECT.TEST_SYSTEMS
+      )
+      onFilter(query, "complex")
+    } else {
+      setFilterValues(initialValues)
+      onFilter(filterValues)
+    }
   }
 
   const handleOnClose = () => {
@@ -73,6 +83,7 @@ export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props })
             onReset={handleOnReset}
             setTab={setTab}
             onEdit={handleEditFilter}
+            onFilterComplexChange={(val) => setFilterComplexValues(val)}
           />
         </ScaleFade>
         {showSaveFilter ? (

@@ -1,4 +1,4 @@
-import { Flex, Text } from "@chakra-ui/react"
+import { Flex, Text, useMediaQuery } from "@chakra-ui/react"
 import React from "react"
 import { fetchType } from "../../../utils/constants/swr"
 import { ICONS_REFERENCE } from "../../../utils/constants/icons"
@@ -31,10 +31,12 @@ export const NotesMenu = ({
   notesCount = 0,
   onChange
 }) => {
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   return (
     <>
-      <Flex>
-        {Object.entries(notesMenuOptions).map(([name, item], idx) => {
+      <Flex gridGap="16px">
+        {Object.entries(notesMenuOptions).map(([name, item]) => {
           const { icon, activeIcon, label } = item
           const isActive = name === fetchState
           const color = isActive ? "blue.500" : "grey"
@@ -48,22 +50,23 @@ export const NotesMenu = ({
               cursor="pointer"
               role="group"
               onClick={() => onChange(name)}
-              ml={idx !== 0 ? "16px" : "0"}
             >
               <Icon mr="4px" color={color} _groupHover={{ color: "blue.500" }} />
-              <Text
-                variant="d_s_medium"
-                mt="4px"
-                color={color}
-                _groupHover={{ color: "blue.500" }}
-              >
-                {label}
-              </Text>
+              {isScreen ? (
+                <Text
+                  variant="d_s_medium"
+                  mt="4px"
+                  color={color}
+                  _groupHover={{ color: "blue.500" }}
+                >
+                  {label}
+                </Text>
+              ) : null}
             </Flex>
           )
         })}
       </Flex>
-      <Text color="#C9C9C9" variant="d_s_medium">
+      <Text color="#C9C9C9" variant="d_s_medium" pr={["18px", null, null, null]}>
         {`${notesCount} Apuntes`}
       </Text>
     </>

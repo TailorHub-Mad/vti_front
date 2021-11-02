@@ -87,6 +87,7 @@ const apuntes = () => {
   const [messageToDelete, setMessageToDelete] = useState(null)
   const [queryFilter, setQueryFilter] = useState(null)
   const [queryGroup, setQueryGroup] = useState(null)
+  const [querySearch, setQuerySearch] = useState(null)
 
   // Fetch
   const { data, error, isLoading, mutate, isValidating } = noteFetchHandler(
@@ -320,24 +321,6 @@ const apuntes = () => {
   }
 
   // Filters
-  const onSearch = (search) => {
-    if (queryFilter) setQueryFilter(null)
-    if (queryGroup) setQueryGroup(null)
-
-    if (!search) {
-      setFetchState(fetchType.ALL)
-      setFetchOptions({
-        [fetchOption.SEARCH]: null
-      })
-      return
-    }
-
-    setFetchState(fetchType.SEARCH)
-    setFetchOptions({
-      [fetchOption.SEARCH]: `notes.title=${search}&notes.ref=${search}`
-    })
-  }
-
   const handleOnGroup = (group) => {
     if (!group) {
       setQueryGroup(null)
@@ -357,23 +340,51 @@ const apuntes = () => {
     }
 
     setQueryGroup(group)
+    let query = group
+    if (queryFilter) query = `${query}&${queryFilter}`
+    if (querySearch) query = `${query}&${querySearch}`
+    setFetchState(fetchType.GROUP)
+    setFetchOptions({
+      [fetchOption.GROUP]: query
+    })
+  }
 
-    if (fetchState === fetchType.FILTER) {
-      const newGroup = `${group}&${queryFilter}`
+  const onSearch = (search) => {
+    if (!search) {
+      if (queryGroup) {
+        setFetchState(fetchType.GROUP)
+        setFetchOptions({
+          [fetchOption.GROUP]: queryGroup
+        })
+        return
+      } else {
+        setFetchState(fetchType.ALL)
+        setQueryFilter(null)
+        setFetchOptions({
+          [fetchOption.SEARCH]: null
+        })
+        return
+      }
+    }
+
+    setQueryFilter(null)
+    setQuerySearch(`notes.title=${search}&notes.ref=${search}`)
+    let query = `notes.title=${search}&notes.ref=${search}`
+
+    if (fetchState === fetchType.GROUP) {
       setFetchState(fetchType.GROUP)
       setFetchOptions({
-        [fetchOption.GROUP]: newGroup
+        [fetchOption.GROUP]: `${queryGroup}&${query}`
       })
     } else {
-      setFetchState(fetchType.GROUP)
-
+      setFetchState(fetchType.SEARCH)
       setFetchOptions({
-        [fetchOption.GROUP]: group
+        [fetchOption.SEARCH]: query
       })
     }
   }
 
-  const handleOnFilter = (values) => {
+  const handleOnFilter = (values, type) => {
     if (!values) {
       setQueryFilter(null)
 
@@ -393,7 +404,14 @@ const apuntes = () => {
       }
     }
 
-    const filter = generateFilterQuery(NOTES_FILTER_KEYS, values)
+    let filter = null
+    if (type !== "complex") {
+      filter = generateFilterQuery(NOTES_FILTER_KEYS, values)
+    } else {
+      filter = `query=${values}`
+    }
+
+    setQuerySearch(null)
     setQueryFilter(filter)
 
     if (fetchState === fetchType.GROUP) {
@@ -469,7 +487,7 @@ const apuntes = () => {
       <NotesFilterModal
         isOpen={showFilterModal}
         onClose={() => setShowFilterModal(false)}
-        onFilter={(values) => handleOnFilter(values)}
+        onFilter={(values, type) => handleOnFilter(values, type)}
       />
 
       <ResponseModal

@@ -20,6 +20,24 @@ import useFilterApi from "../../../../hooks/api/useFilterApi"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
 import { EditIcon } from "@chakra-ui/icons"
 
+const criteria = [
+  { label: "AliasCL", value: "AliasCL" },
+  { label: "AliasProy", value: "AliasProy" },
+  { label: "RefProy", value: "RefProy" },
+  { label: "RefSis", value: "RefSis" },
+  { label: "AliasSis", value: "AliasSis" },
+  { label: "Cerrado", value: "Cerrado" },
+  { label: "Formalizado", value: "Formalizado" },
+  { label: "Respuestas", value: "Respuestas" },
+  { label: "TagAp", value: "TagAp" },
+  { label: "TagProy", value: "TagProy" },
+  { label: "RefAp", value: "RefAp" },
+  { label: "TitleAp", value: "TitleAp" },
+  { label: "Description", value: "Description" },
+  { label: "Documents", value: "Documents" },
+  { label: "VtiCode", value: "VtiCode" }
+]
+
 export const MainFilter = ({
   onClose,
   onSecondaryOpen,
@@ -31,6 +49,9 @@ export const MainFilter = ({
   onReset,
   setTab,
   onEdit,
+  onFilterComplexChange,
+  errorComplexFilter,
+  showSaveFilter,
   ...props
 }) => {
   const [isReset, setIsReset] = useState(false)
@@ -57,16 +78,21 @@ export const MainFilter = ({
     onSimpleFilterChange(JSON.parse(query))
   }
 
-  useEffect(() => {
-    const _getFilters = async () => {
-      const simple = await getFilterSimple("notes")
-      const complex = await getFilterComplex("notes")
+  const _getFilters = async () => {
+    const simple = await getFilterSimple("notes")
+    const complex = await getFilterComplex("notes")
 
-      setFilterSimple(simple)
-      setFilterComplex(complex)
-    }
+    setFilterSimple(simple)
+    setFilterComplex(complex)
+  }
+
+  useEffect(() => {
     _getFilters()
-  }, [onClose])
+  }, [])
+
+  useEffect(() => {
+    _getFilters()
+  }, [showSaveFilter])
 
   const rowFilter = (filters) => {
     return (
@@ -147,7 +173,12 @@ export const MainFilter = ({
                   rowFilter(filterComplex)
                 )}
               </Box>
-              <AdvancedFilter />
+              <AdvancedFilter
+                criteria={criteria}
+                value={simpleFilterValues}
+                onChange={onFilterComplexChange}
+                errorComplexFilter={errorComplexFilter}
+              />
             </TabPanel>
           </TabPanels>
         </Tabs>

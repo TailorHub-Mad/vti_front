@@ -20,9 +20,11 @@ export const SaveFilterModal = ({
   const { deleteFilter, updateFilter, createFilter } = useFilterApi()
 
   const [values, setValues] = useState(initialValues)
+  const [errorCreate, setErrorCreate] = useState(false)
 
   const handleOnDelete = async () => {
     await deleteFilter(filterMetadata._id)
+    onClose()
   }
 
   const handleOnSubmit = async () => {
@@ -46,10 +48,18 @@ export const SaveFilterModal = ({
         public: values.public
       }
 
-      await createFilter(data)
-    }
+      const { error } = await createFilter(data)
 
-    onClose()
+      if (error) {
+        setErrorCreate(true)
+        setTimeout(() => {
+          setErrorCreate(false)
+        }, 3000)
+      } else {
+        setValues(initialValues)
+        onClose()
+      }
+    }
   }
 
   useEffect(() => {
@@ -112,6 +122,14 @@ export const SaveFilterModal = ({
           {isUpdateFilter ? "Editar" : "Guardar"}
         </Button>
       </Flex>
+
+      {errorCreate ? (
+        <Flex justifyContent="center" mt="24px">
+          <Text variant="d_s_regular" color="error">
+            No puede haber dos filtros con el mismo nombre
+          </Text>
+        </Flex>
+      ) : null}
     </Box>
   )
 }

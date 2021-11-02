@@ -127,8 +127,13 @@ const nuevo = () => {
   }, [])
   return (
     <Page overflowY="auto">
-      <PageHeader title="Nuevo apunte" position="fixed" top="32px" />
-      <Flex justify="center" pt="100px" height="fit-content">
+      <PageHeader
+        title="Nuevo apunte"
+        position="fixed"
+        top="32px"
+        display={["none", "none", "block", "block"]}
+      />
+      <Flex justify="center" pt={["0", "0", "0", "100px"]} height="fit-content">
         <Flex
           minH="990px"
           w="460px"
