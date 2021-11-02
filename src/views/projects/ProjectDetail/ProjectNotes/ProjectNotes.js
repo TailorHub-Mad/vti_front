@@ -88,6 +88,9 @@ export const ProjectNotes = ({ project }) => {
   const [fetchOptions, setFetchOptions] = useState({
     [fetchOption.FILTER]: `notes.projects._id=${project._id}`
   })
+  const [queryFilter] = useState(null)
+  const [, setQueryGroup] = useState(null)
+  const [querySearch] = useState(null)
 
   const handleNotesData = (isEmptyData) => {
     if (!data || isEmptyData) return null
@@ -268,19 +271,30 @@ export const ProjectNotes = ({ project }) => {
 
   const handleOnGroup = (group) => {
     if (!group) {
-      setFetchState(fetchType.FILTER)
-      setIsFilter(false)
-      setFetchOptions({
-        [fetchOption.FILTER]: `notes.projects._id=${project._id}`
-      })
-      return
+      setQueryGroup(null)
+      if (queryFilter) {
+        setFetchState(fetchType.FILTER)
+        setFetchOptions({
+          [fetchOption.FILTER]: queryFilter
+        })
+        return
+      } else {
+        setFetchState(fetchType.ALL)
+        setFetchOptions({
+          [fetchOption.FILTER]: `notes.projects._id=${project._id}`
+        })
+        return
+      }
     }
 
-    setIsFilter(true)
-
+    setQueryGroup(group)
+    let query = group
+    if (queryFilter) query = `${query}&${queryFilter}`
+    if (querySearch) query = `${query}&${querySearch}`
+    query = `${query}&notes.projects._id=${project._id}`
     setFetchState(fetchType.GROUP)
     setFetchOptions({
-      [fetchOption.GROUP]: `${group}&notes.projects._id=${project._id}`
+      [fetchOption.GROUP]: query
     })
   }
 

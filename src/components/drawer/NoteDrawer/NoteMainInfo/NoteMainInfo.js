@@ -44,6 +44,7 @@ export const NoteMainInfo = ({
   const isMyNote = ownerNote === userId
 
   const updateLimitDate = isMyMessage ? item?.updateLimitDate : null
+
   const editAllowed =
     (isMyMessage && updateLimitDate
       ? new Date() < new Date(updateLimitDate)
@@ -118,7 +119,7 @@ export const NoteMainInfo = ({
               icon={<EditIcon />}
               label="Editar"
             />
-          ) : isMessage && isMyMessage && role === RoleType.ADMIN && editAllowed ? (
+          ) : isMessage && isMyMessage && role === RoleType.USER && editAllowed ? (
             <ActionLink
               onClick={onEdit}
               color="blue.500"
@@ -196,7 +197,7 @@ export const NoteMainInfo = ({
         </Flex>
       </Flex>
 
-      {isProjectHidden() && (
+      {isProjectHidden() && !fromProjectDetail && (
         <Box mt="24px">
           <Flex justify="space-between">
             <Flex align="center">
