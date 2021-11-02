@@ -40,7 +40,7 @@ export const SimpleInput = ({
           onChange(e.target.value)
         }}
         onBlur={handleOnBlur}
-        value={value}
+        value={value || ""}
         type={type}
       />
     </FormController>

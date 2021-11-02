@@ -36,11 +36,7 @@ export const Popup = ({
         p="40px 83px"
         zIndex="9999"
       >
-        <ModalBody>
-          <Text textAlign="center" color={color}>
-            {children || message}
-          </Text>
-        </ModalBody>
+        <ModalBody>{children || message}</ModalBody>
         {variant === "info" && (
           <Img
             pos="absolute"

@@ -15,7 +15,7 @@ export const Page = ({ children, ...props }) => {
     <>
       <TabBar isOpen={isOpen} setIsOpen={(val) => setIsOpen(val)} />
       <Popup isOpen={isToastOpen} variant="info" type={toastType}>
-        <Text variant="d_m_regular" mb="4px">
+        <Text textAlign="center" color={"blue.500"} variant="d_m_regular" mb="4px">
           {message}
         </Text>
         {secondaryMessage && <Text variant="d_xs_regular">{secondaryMessage}</Text>}

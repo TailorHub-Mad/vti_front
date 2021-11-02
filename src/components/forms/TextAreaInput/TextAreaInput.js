@@ -23,7 +23,7 @@ export const TextAreaInput = ({
       <Textarea
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        value={value}
+        value={value || ""}
       />
     </FormController>
   )
