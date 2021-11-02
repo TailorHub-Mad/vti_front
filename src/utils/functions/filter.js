@@ -61,64 +61,68 @@ export const COMPLEX_OBJECT = {
 }
 
 export const parseComplexQuery = (expression, object) => {
-  let _expression = expression
+  try {
+    let _expression = expression
 
-  // NOT
-  _expression = _expression.replaceAll(":NOT:", "!==")
-  // EQUAL
-  _expression = _expression.replaceAll(":", "===")
-  // AND
-  _expression = _expression.replaceAll("&", "&&")
+    // NOT
+    _expression = _expression.replaceAll(":NOT:", "!==")
+    // EQUAL
+    _expression = _expression.replaceAll(":", "===")
+    // AND
+    _expression = _expression.replaceAll("&", "&&")
 
-  let query = mqg(_expression)
-  let parseQuery = JSON.stringify(query)
+    let query = mqg(_expression)
+    let parseQuery = JSON.stringify(query)
 
-  if (object === COMPLEX_OBJECT.NOTES) {
-    parseQuery = parseQuery.replaceAll("AliasCL", "notes.clientAlias")
-    parseQuery = parseQuery.replaceAll("AliasProy", "notes.projects.alias")
-    parseQuery = parseQuery.replaceAll("RefProy", "notes.projects.ref")
-    parseQuery = parseQuery.replaceAll("RefSis", "notes.testSystems.ref")
-    parseQuery = parseQuery.replaceAll("AliasSis", "notes.testSystems.alias")
-    parseQuery = parseQuery.replaceAll("Cerrado", "notes.isClosed")
-    parseQuery = parseQuery.replaceAll("Formalizado", "notes.formalized")
-    parseQuery = parseQuery.replaceAll("Respuestas", "notes.isAnswered")
-    parseQuery = parseQuery.replaceAll("TagAp", "notes.tags._id")
-    parseQuery = parseQuery.replaceAll("TagProy", "notes.projects.tags._id")
-    parseQuery = parseQuery.replaceAll("RefAp", "notes.ref")
-    parseQuery = parseQuery.replaceAll("TitleAp", "notes.title")
-    parseQuery = parseQuery.replaceAll("Description", "notes.description")
-    parseQuery = parseQuery.replaceAll("Documents", "notes.isDocuments")
-    parseQuery = parseQuery.replaceAll("VtiCode", "notes.testSystems.vtiCode")
-  } else if (object === COMPLEX_OBJECT.PROJECTS) {
-    parseQuery = parseQuery.replaceAll("TagAp", "projects.notes.tags.name")
-    parseQuery = parseQuery.replaceAll("TagProy", "projects.tags.name")
-    parseQuery = parseQuery.replaceAll("AliasProy", "projects.alias")
-    parseQuery = parseQuery.replaceAll("AliasSis", "projects.testSystems.alias")
-    parseQuery = parseQuery.replaceAll(
-      "AliasFocusPoint",
-      "projects.focusPoint.alias"
-    )
-    parseQuery = parseQuery.replaceAll("RefProy", "projects.ref")
-    parseQuery = parseQuery.replaceAll("RefSis", "projects.testSystems.ref")
-    parseQuery = parseQuery.replaceAll("VtiCode", "projects.testSystems.vtiCode")
-    parseQuery = parseQuery.replaceAll("RefAp", "projects.notes.ref")
-    parseQuery = parseQuery.replaceAll("TitleAp", "projects.notes.title")
-    parseQuery = parseQuery.replaceAll("Sector", "projects.sector.title")
-    parseQuery = parseQuery.replaceAll("Year", "projects.date.year")
-    parseQuery = parseQuery.replaceAll("Closed", "projects.isActive")
-    parseQuery = parseQuery.replaceAll("AliasCl", "projects.clientAlias")
-  } else {
-    parseQuery = parseQuery.replaceAll("TagAp", "testSystems.notes.tags.name")
-    parseQuery = parseQuery.replaceAll("TagProy", "testSystems.projects.tags.name")
-    parseQuery = parseQuery.replaceAll("AliasProy", "testSystems.projects.alias")
-    parseQuery = parseQuery.replaceAll("AliasSis", "testSystems.alias")
-    parseQuery = parseQuery.replaceAll("TitleAp", "testSystems.title")
-    parseQuery = parseQuery.replaceAll("RefProy", "testSystems.projects.ref")
-    parseQuery = parseQuery.replaceAll("RefSis", "testSystems.ref")
-    parseQuery = parseQuery.replaceAll("RefAp", "testSystems.notes.ref")
-    parseQuery = parseQuery.replaceAll("Vticode", "testSystems.vtiCode")
-    parseQuery = parseQuery.replaceAll("AliasCl", "testSystems.clientAlias")
+    if (object === COMPLEX_OBJECT.NOTES) {
+      parseQuery = parseQuery.replaceAll("AliasCL", "notes.clientAlias")
+      parseQuery = parseQuery.replaceAll("AliasProy", "notes.projects.alias")
+      parseQuery = parseQuery.replaceAll("RefProy", "notes.projects.ref")
+      parseQuery = parseQuery.replaceAll("RefSis", "notes.testSystems.ref")
+      parseQuery = parseQuery.replaceAll("AliasSis", "notes.testSystems.alias")
+      parseQuery = parseQuery.replaceAll("Cerrado", "notes.isClosed")
+      parseQuery = parseQuery.replaceAll("Formalizado", "notes.formalized")
+      parseQuery = parseQuery.replaceAll("Respuestas", "notes.isAnswered")
+      parseQuery = parseQuery.replaceAll("TagAp", "notes.tags._id")
+      parseQuery = parseQuery.replaceAll("TagProy", "notes.projects.tags._id")
+      parseQuery = parseQuery.replaceAll("RefAp", "notes.ref")
+      parseQuery = parseQuery.replaceAll("TitleAp", "notes.title")
+      parseQuery = parseQuery.replaceAll("Description", "notes.description")
+      parseQuery = parseQuery.replaceAll("Documents", "notes.isDocuments")
+      parseQuery = parseQuery.replaceAll("VtiCode", "notes.testSystems.vtiCode")
+    } else if (object === COMPLEX_OBJECT.PROJECTS) {
+      parseQuery = parseQuery.replaceAll("TagAp", "projects.notes.tags.name")
+      parseQuery = parseQuery.replaceAll("TagProy", "projects.tags.name")
+      parseQuery = parseQuery.replaceAll("AliasProy", "projects.alias")
+      parseQuery = parseQuery.replaceAll("AliasSis", "projects.testSystems.alias")
+      parseQuery = parseQuery.replaceAll(
+        "AliasFocusPoint",
+        "projects.focusPoint.alias"
+      )
+      parseQuery = parseQuery.replaceAll("RefProy", "projects.ref")
+      parseQuery = parseQuery.replaceAll("RefSis", "projects.testSystems.ref")
+      parseQuery = parseQuery.replaceAll("VtiCode", "projects.testSystems.vtiCode")
+      parseQuery = parseQuery.replaceAll("RefAp", "projects.notes.ref")
+      parseQuery = parseQuery.replaceAll("TitleAp", "projects.notes.title")
+      parseQuery = parseQuery.replaceAll("Sector", "projects.sector.title")
+      parseQuery = parseQuery.replaceAll("Year", "projects.date.year")
+      parseQuery = parseQuery.replaceAll("Closed", "projects.isActive")
+      parseQuery = parseQuery.replaceAll("AliasCl", "projects.clientAlias")
+    } else {
+      parseQuery = parseQuery.replaceAll("TagAp", "testSystems.notes.tags.name")
+      parseQuery = parseQuery.replaceAll("TagProy", "testSystems.projects.tags.name")
+      parseQuery = parseQuery.replaceAll("AliasProy", "testSystems.projects.alias")
+      parseQuery = parseQuery.replaceAll("AliasSis", "testSystems.alias")
+      parseQuery = parseQuery.replaceAll("TitleAp", "testSystems.title")
+      parseQuery = parseQuery.replaceAll("RefProy", "testSystems.projects.ref")
+      parseQuery = parseQuery.replaceAll("RefSis", "testSystems.ref")
+      parseQuery = parseQuery.replaceAll("RefAp", "testSystems.notes.ref")
+      parseQuery = parseQuery.replaceAll("Vticode", "testSystems.vtiCode")
+      parseQuery = parseQuery.replaceAll("AliasCl", "testSystems.clientAlias")
+    }
+
+    return parseQuery
+  } catch (error) {
+    return null
   }
-
-  return parseQuery
 }

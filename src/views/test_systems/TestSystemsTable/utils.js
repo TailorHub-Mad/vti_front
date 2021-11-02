@@ -30,7 +30,10 @@ export const transformSystemData = (system) => ({
   code: system.vtiCode,
   year: system.date?.year,
   projects: system.projects.filter((p) => !Array.isArray(p)).map((p) => p.alias),
-  notes: system.notes.filter((n) => !Array.isArray(n)).map((n) => n.title),
+  notes: system.notes
+    .filter((n) => !Array.isArray(n))
+    .map((n) => n.title)
+    .filter((e) => e),
   options: ""
 })
 

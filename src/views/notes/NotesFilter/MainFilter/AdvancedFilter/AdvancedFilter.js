@@ -2,7 +2,7 @@ import { Button, Flex, Grid, Input, Text } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
 
-export const AdvancedFilter = ({ criteria, onChange }) => {
+export const AdvancedFilter = ({ criteria, onChange, errorComplexFilter }) => {
   const symbols = ["(", ")", "&", "||", "Not"]
 
   const [value, setValue] = useState("")
@@ -21,11 +21,18 @@ export const AdvancedFilter = ({ criteria, onChange }) => {
         placeholder={`TAproy:GOM&((TagAp:Incidencias))`}
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        color={errorComplexFilter ? "error" : null}
       />
-      <Text
-        variant="d_xs_regular"
-        color="grey"
-      >{`Ejemplo TagProy:GOM & ((TagAp:Incidencias & TagAp:clientes) || Riesgos)`}</Text>
+      {errorComplexFilter ? (
+        <Text variant="d_xs_regular" cursor="pointer" color="error">
+          La sintaxis no es correcta
+        </Text>
+      ) : (
+        <Text
+          variant="d_xs_regular"
+          color="grey"
+        >{`Ejemplo TagProy:GOM & ((TagAp:Incidencias & TagAp:clientes) || Riesgos)`}</Text>
+      )}
 
       <Text variant="d_s_medium" mb="2px" mt="16px">
         Seleccione símbolo

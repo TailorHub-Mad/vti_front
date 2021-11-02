@@ -24,16 +24,21 @@ export const MessageCard = ({
 
   const { user, role } = useContext(ApiAuthContext)
 
-  const setOwners = new Set(
-    note?.messages?.map((m) => {
-      return Array.isArray(m.owner) ? m.owner[0]?.alias : ""
+  // Note owner
+  const ownerNote = note?.owner && Array.isArray(note.owner) && note.owner[0]
+  const isMyNote = ownerNote?._id === userId
+
+  // Messages owners
+  const ownersMessages = note?.messages
+    ?.map((m) => {
+      return Array.isArray(m.owner) ? m.owner[0]?.alias : undefined
     })
-  )
+    .filter((e) => e)
+  const setOwners = new Set()
 
-  const ownerMessage = note?.owner && Array.isArray(note.owner) && note.owner[0]?._id
-  const isMyNote = ownerMessage === userId
-
-  setOwners.add(ownerMessage)
+  // Notes participants
+  setOwners.add(ownerNote?.alias)
+  ownersMessages.forEach((e) => setOwners.add(e))
   const owners = Array.from(setOwners).filter((e) => e)
 
   const updateLimitDate = isMyNote ? note?.updateLimitDate : null

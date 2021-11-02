@@ -41,7 +41,7 @@ export const MainFilter = ({
   onClose,
   onSecondaryOpen,
   onSimpleFilterChange,
-  onSimpleComplexChange,
+  onFilterComplexChange,
   onFilter,
   simpleFilterValues,
   moveToLeft,
@@ -170,7 +170,7 @@ export const MainFilter = ({
             <AdvancedFilter
               criteria={criteria}
               value={simpleFilterValues}
-              onChange={onSimpleComplexChange}
+              onChange={onFilterComplexChange}
             />
           </TabPanel>
         </TabPanels>
