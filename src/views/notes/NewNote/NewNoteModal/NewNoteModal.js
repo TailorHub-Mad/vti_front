@@ -16,7 +16,7 @@ import { NewNoteForm } from "../NewNoteForm/NewNoteForm"
 
 const initialValues = {
   project: undefined,
-  system: undefined,
+  testSystems: undefined,
   title: undefined,
   description: undefined,
   tags: undefined,
@@ -51,7 +51,7 @@ export const NewNoteModal = ({
   const checkInputsAreEmpty = () => {
     return (
       !values.project ||
-      !values.system ||
+      !values.testSystems ||
       !values.title ||
       !values.description ||
       !values.tags
@@ -62,11 +62,11 @@ export const NewNoteModal = ({
 
   const formatCreateNote = (note) => {
     const formatSystems =
-      note.system[0].label === "Todos"
-        ? [...note.system[0].value]
-        : note.system[0].label === "Ninguno"
+      note.testSystems[0].label === "Todos"
+        ? [...note.testSystems[0].value]
+        : note.testSystems[0].label === "Ninguno"
         ? null
-        : note.system.map((s) => s.value)
+        : note.testSystems.map((s) => s.value)
 
     const formatData = {
       project: note.project.value,
@@ -95,6 +95,7 @@ export const NewNoteModal = ({
     const _formatData = {}
     const formatData = {
       title: note.title,
+      testSystems: note.testSystems[0].value !== "" ? note.testSystems : null,
       description: note.description,
       tags: note.tags.map((t) => t.value)
     }
@@ -216,16 +217,24 @@ export const NewNoteModal = ({
   useEffect(() => {
     if (!noteToUpdate) return
 
+    const ts = noteToUpdate.testSystems.map((ts) => ({
+      label: ts.alias,
+      value: ts._id
+    }))
+
     const _note = {
       project: noteFromProject
         ? noteFromProject.project
         : noteToUpdate?.projects[0]?.alias,
-      system: noteToUpdate.testSystems.map((ts) => ts.alias),
+      testSystems: ts.length > 0 ? ts : undefined,
       title: noteToUpdate.title,
       description: noteToUpdate.description,
       link: noteToUpdate.link,
       documents: noteToUpdate.documents,
-      tags: noteToUpdate.tags.map((t) => t.name)
+      tags: noteToUpdate.tags.map((t) => ({
+        label: t.name,
+        value: t._id
+      }))
     }
 
     setValues(_note)

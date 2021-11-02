@@ -1,9 +1,12 @@
 import { Box } from "@chakra-ui/react"
+import { useRouter } from "next/router"
 import React from "react"
 import { formatTags, variantGeneralTag } from "../../../../utils/constants/tabs"
 import { TagRow } from "../../../tags/TagRow/TagRow"
 
-export const MessageCardTags = ({ note, fromProjectDetail }) => {
+export const MessageCardTags = ({ note }) => {
+  const router = useRouter()
+
   return (
     <Box
       display="grid"
@@ -19,7 +22,7 @@ export const MessageCardTags = ({ note, fromProjectDetail }) => {
           width="100%"
           noCollapse
         />
-      ) : !fromProjectDetail ? (
+      ) : !router.query.type === "projects" ? (
         <Box w="100%" height="28px"></Box>
       ) : null}
       {note.testSystems?.length > 0 ? (
@@ -29,7 +32,7 @@ export const MessageCardTags = ({ note, fromProjectDetail }) => {
           width="100%"
           noCollapse
         />
-      ) : (
+      ) : router.query.type === "testSystems" ? null : (
         <Box w="100%" height="28px"></Box>
       )}
       {note.tags?.length > 0 ? (

@@ -51,7 +51,8 @@ export const ProjectsByObject = ({
   setFetchOptions,
   isEmptyData,
   hrefBack,
-  backText
+  backText,
+  isValidating
 }) => {
   // Hooks
   const { deleteProject, createProject } = useProjectApi()
@@ -281,7 +282,7 @@ export const ProjectsByObject = ({
           />
         ) : null}
       </PageHeader>
-      {isEmptyData ? (
+      {isEmptyData && !isValidating ? (
         <ViewNotFoundState
           text="No hay proyectos asociados"
           backText={backText}

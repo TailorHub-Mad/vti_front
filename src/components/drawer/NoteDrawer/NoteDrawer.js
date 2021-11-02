@@ -101,7 +101,7 @@ export const NoteDrawer = ({
                 link={note.link}
                 description={note.description}
                 noteTags={note.tags.length > 0 && note.tags}
-                testSystems={note.testSystems}
+                testSystems={note?.testSystems.length > 0 ? note.testSystems : null}
                 files={note.documents?.length > 0 ? note.documents : null}
               />
             </Box>

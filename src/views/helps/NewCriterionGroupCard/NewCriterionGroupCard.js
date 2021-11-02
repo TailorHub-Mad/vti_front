@@ -46,7 +46,7 @@ export const NewCriterionGroupCard = ({ createCriterionGroup, ...props }) => {
           <chakra.input
             mt="2px"
             color="blue.500"
-            value={value}
+            value={value || ""}
             onChange={(e) => handleChange(e)}
             placeholder="Escríbe el título"
             outline="none"

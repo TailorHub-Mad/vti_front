@@ -133,7 +133,7 @@ export const AddSelect = ({
           return (
             <Box key={`${value}-${idx}`} marginBottom="16px">
               <InputSelect
-                value={value}
+                value={value || ""}
                 onChange={(selected) => handleChange(selected, idx)}
                 placeholder={placeholder}
                 options={availableOptions}

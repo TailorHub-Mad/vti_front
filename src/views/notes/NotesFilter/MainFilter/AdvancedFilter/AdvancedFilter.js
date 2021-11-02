@@ -19,7 +19,7 @@ export const AdvancedFilter = ({ criteria, onChange, errorComplexFilter }) => {
       </Text>
       <Input
         placeholder={`TAproy:GOM&((TagAp:Incidencias))`}
-        value={value}
+        value={value || ""}
         onChange={(e) => setValue(e.target.value)}
         color={errorComplexFilter ? "error" : null}
       />
