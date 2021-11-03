@@ -26,14 +26,15 @@ export const GroupModal = ({ isOpen, onClose, onGroup, options = [], ...props })
       <CustomModalContent zIndex="10001">
         <ScaleFade in={isOpen}>
           <Box
-            width="460px"
+            width={["100%", null, null, "460px"]}
             height="fit-content"
             position="fixed"
-            top="50px"
-            left={"calc(50vw - 230px)"}
+            top={["50vw", null, null, "50px"]}
+            left={["0", null, null, "calc(50vw - 230px)"]}
             transition="left 0.18s ease-in-out"
             bgColor="white"
-            padding="32px"
+            zIndex="10001"
+            padding={["16px", null, null, "32px"]}
             {...props}
           >
             <CustomModalHeader title="Agrupar" onClose={onClose} pb="24px" />
