@@ -1,13 +1,13 @@
-import { Box, Text, useMediaQuery } from "@chakra-ui/react"
+import { Box, Text } from "@chakra-ui/react"
 import React, { useContext, useState } from "react"
 import { ToastContext } from "../../../provider/ToastProvider"
 import { TabBar } from "../../navigation/TabBar/TabBar"
 import { Popup } from "../../overlay/Popup/Popup"
 
 export const Page = ({ children, ...props }) => {
-  const [isScreen] = useMediaQuery("(min-width: 475px)")
+  // const [isScreen] = useMediaQuery("(min-width: 475px)")
 
-  const [isOpen, setIsOpen] = useState(isScreen)
+  const [isOpen, setIsOpen] = useState(true)
   const { isToastOpen, message, secondaryMessage, toastType } =
     useContext(ToastContext)
 
