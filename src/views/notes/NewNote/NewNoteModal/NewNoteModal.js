@@ -95,7 +95,8 @@ export const NewNoteModal = ({
     const _formatData = {}
     const formatData = {
       title: note.title,
-      testSystems: note.testSystems[0].value !== "" ? note.testSystems : null,
+      testSystems:
+        note.testSystems[0].value !== "" ? note.testSystems[0].value : null,
       description: note.description,
       tags: note.tags.map((t) => t.value)
     }

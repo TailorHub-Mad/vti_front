@@ -8,7 +8,8 @@ import {
   TabPanels,
   Tabs,
   Text,
-  Tag
+  Tag,
+  useMediaQuery
 } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
@@ -58,6 +59,8 @@ export const MainFilter = ({
   ...props
 }) => {
   const [isReset, setIsReset] = useState(false)
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   const { role } = useContext(ApiAuthContext)
 
   const [filterSimple, setFilterSimple] = useState([])
@@ -131,12 +134,17 @@ export const MainFilter = ({
 
   return (
     <Box
-      width="460px"
+      width={["100%", null, null, "460px"]}
       height="fit-content"
       position="absolute"
-      top="50px"
-      left={moveToLeft ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}
-      transition="left 0.18s ease-in-out"
+      top={["0", null, null, "50px"]}
+      left={[
+        "0",
+        null,
+        null,
+        moveToLeft ? "calc(50vw - 500px)" : "calc(50vw - 230px)"
+      ]}
+      transition={["none", null, null, "left 0.18s ease-in-out"]}
       zIndex="1400"
       {...props}
     >
@@ -144,11 +152,20 @@ export const MainFilter = ({
         <CustomModalHeader title="Filtrar" onClose={onClose} pb="24px" />
         <Tabs mb="24px" onChange={(index) => setTab(index)}>
           <TabList>
-            <Tab _focus={{ outline: "none" }} pl={0} alignItems="center">
+            <Tab
+              _focus={{ outline: "none" }}
+              pl={0}
+              alignItems={isScreen ? "center" : "left"}
+            >
               <SimpleFilterIcon mr="2px" />
-              <Text variant="d_s_medium">Filtrado sencillo</Text>
+              <Text variant={"d_s_medium"}>Filtrado sencillo</Text>
             </Tab>
-            <Tab _focus={{ outline: "none" }} pl={0} ml="24px" alignItems="center">
+            <Tab
+              _focus={{ outline: "none" }}
+              pl={0}
+              ml="24px"
+              alignItems={isScreen ? "center" : "left"}
+            >
               <AdvancedFilterIcon mr="2px" />
               <Text variant="d_s_medium">Filtrado complejo</Text>
             </Tab>
@@ -210,7 +227,7 @@ export const MainFilter = ({
           </Text>
         </Flex>
       </Box>
-      <Box h="200px" />
+      <Box h="200px" display={["none", null, null, "block"]} />
     </Box>
   )
 }
