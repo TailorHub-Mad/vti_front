@@ -10,7 +10,7 @@ import {
   Text,
   Tag
 } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import { AdvancedFilterIcon } from "../../../../components/icons/AdvancedFilterIcon"
 import { SimpleFilterIcon } from "../../../../components/icons/SimpleFilterIcon"
@@ -19,6 +19,8 @@ import { SimpleFilterForm } from "./SimpleFilterForm/SimpleFilterForm"
 import useFilterApi from "../../../../hooks/api/useFilterApi"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
 import { EditIcon } from "@chakra-ui/icons"
+import { RoleType } from "../../../../utils/constants/global"
+import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
 
 const criteria = [
   { label: "AliasCL", value: "AliasCL" },
@@ -55,6 +57,7 @@ export const MainFilter = ({
   ...props
 }) => {
   const [isReset, setIsReset] = useState(false)
+  const { role } = useContext(ApiAuthContext)
 
   const [filterSimple, setFilterSimple] = useState([])
   const [filterComplex, setFilterComplex] = useState([])
@@ -183,10 +186,12 @@ export const MainFilter = ({
           </TabPanels>
         </Tabs>
 
-        <Flex justifyContent="space-between">
-          <Button variant="secondary" onClick={openSaveModal}>
-            Recordar
-          </Button>
+        <Flex justifyContent={role === RoleType.USER ? "center" : "space-between"}>
+          {role === RoleType.ADMIN ? (
+            <Button variant="secondary" onClick={openSaveModal}>
+              Recordar
+            </Button>
+          ) : null}
           <Button onClick={onFilter} ml="8px">
             Filtrar
           </Button>

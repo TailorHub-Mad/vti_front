@@ -11,11 +11,13 @@ import {
   Text,
   Tag
 } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { AdvancedFilterIcon } from "../../../../components/icons/AdvancedFilterIcon"
 import { SimpleFilterIcon } from "../../../../components/icons/SimpleFilterIcon"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import useFilterApi from "../../../../hooks/api/useFilterApi"
+import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
+import { RoleType } from "../../../../utils/constants/global"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
 import { AdvancedFilter } from "./AdvancedFilter/AdvancedFilter"
 
@@ -49,6 +51,7 @@ export const MainFilter = ({
   ...props
 }) => {
   const [isReset, setIsReset] = useState(false)
+  const { role } = useContext(ApiAuthContext)
 
   const [filterSimple, setFilterSimple] = useState([])
   const [filterComplex, setFilterComplex] = useState([])
@@ -171,10 +174,12 @@ export const MainFilter = ({
           </TabPanel>
         </TabPanels>
       </Tabs>
-      <Flex justifyContent="space-between">
-        <Button variant="secondary" onClick={openSaveModal}>
-          Recordar
-        </Button>
+      <Flex justifyContent={role === RoleType.USER ? "center" : "space-between"}>
+        {role === RoleType.ADMIN ? (
+          <Button variant="secondary" onClick={openSaveModal}>
+            Recordar
+          </Button>
+        ) : null}
         <Button onClick={onFilter}>Filtrar</Button>
       </Flex>
       <Flex justifyContent="center">
