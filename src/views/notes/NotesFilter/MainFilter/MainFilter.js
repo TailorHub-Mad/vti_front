@@ -8,8 +8,7 @@ import {
   TabPanels,
   Tabs,
   Text,
-  Tag,
-  useMediaQuery
+  Tag
 } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
@@ -59,7 +58,6 @@ export const MainFilter = ({
   ...props
 }) => {
   const [isReset, setIsReset] = useState(false)
-  const [isScreen] = useMediaQuery("(min-width: 475px)")
 
   const { role } = useContext(ApiAuthContext)
 
@@ -148,26 +146,25 @@ export const MainFilter = ({
       zIndex="1400"
       {...props}
     >
-      <Box bgColor="white" padding="32px">
+      <Box
+        bgColor="white"
+        padding={["16px", null, null, "32px"]}
+        pb={["96px", null, null, "32px"]}
+      >
         <CustomModalHeader title="Filtrar" onClose={onClose} pb="24px" />
         <Tabs mb="24px" onChange={(index) => setTab(index)}>
           <TabList>
-            <Tab
-              _focus={{ outline: "none" }}
-              pl={0}
-              alignItems={isScreen ? "center" : "left"}
-            >
-              <SimpleFilterIcon mr="2px" />
-              <Text variant={"d_s_medium"}>Filtrado sencillo</Text>
+            <Tab _focus={{ outline: "none" }} pl={0} alignItems={"center"}>
+              <SimpleFilterIcon mr="4px" />
+              <Text mt="3px" variant={"d_s_medium"}>
+                Filtrado sencillo
+              </Text>
             </Tab>
-            <Tab
-              _focus={{ outline: "none" }}
-              pl={0}
-              ml="24px"
-              alignItems={isScreen ? "center" : "left"}
-            >
+            <Tab _focus={{ outline: "none" }} pl={0} ml="24px" alignItems={"center"}>
               <AdvancedFilterIcon mr="2px" />
-              <Text variant="d_s_medium">Filtrado complejo</Text>
+              <Text mt="3px" variant="d_s_medium">
+                Filtrado complejo
+              </Text>
             </Tab>
           </TabList>
           <TabPanels>
@@ -205,7 +202,17 @@ export const MainFilter = ({
           </TabPanels>
         </Tabs>
 
-        <Flex justifyContent={role === RoleType.USER ? "center" : "space-between"}>
+        <Flex
+          justifyContent={role === RoleType.USER ? "center" : "space-between"}
+          position={["fixed", null, null, "relative"]}
+          bottom={["0", null, null, null]}
+          left={["0", null, null, null]}
+          width="100%"
+          pb={["8px", null, null, null]}
+          pt={["8px", null, null, null]}
+          boxShadow={["0px -4px 8px rgba(5, 46, 87, 0.1)", null, null, "none"]}
+          bgColor={["white", null, null, null]}
+        >
           {role === RoleType.ADMIN ? (
             <Button variant="secondary" onClick={openSaveModal}>
               Recordar
