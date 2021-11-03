@@ -400,25 +400,6 @@ const proyectos = () => {
     }
   }
 
-  // const handleOnFilter = (values) => {
-  //   if (!values) {
-  //     setFetchState(fetchType.ALL)
-  //     setFetchOptions({
-  //       [fetchOption.FILTER]: null
-  //     })
-  //     return
-  //   }
-
-  //   const filter = generateFilterQuery(PROJECTS_FILTER_KEYS, values)
-
-  //   setFetchState(fetchType.FILTER)
-  //   setFetchOptions({
-  //     [fetchOption.FILTER]: filter
-  //   })
-
-  //   setShowFilterModal(false)
-  // }
-
   const handleSortElement = (data) => {
     const { name, order } = data
     if (!name || !order) return
@@ -450,8 +431,13 @@ const proyectos = () => {
     }
 
     let filter = null
+    const { client } = values
+    delete values["client"]
     if (type !== "complex") {
-      filter = generateFilterQuery(PROJECTS_FILTER_KEYS, values)
+      filter = generateFilterQuery(PROJECTS_FILTER_KEYS, {
+        ...values,
+        clientAlias: client
+      })
     } else {
       filter = `query=${values}`
     }

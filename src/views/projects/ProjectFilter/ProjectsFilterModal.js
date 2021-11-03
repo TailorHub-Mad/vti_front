@@ -44,8 +44,8 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
       const query = parseComplexQuery(filterComplexValues, COMPLEX_OBJECT.PROJECTS)
       onFilter(query, "complex")
     } else {
-      setFilterValues(initialValues)
       onFilter(filterValues)
+      setFilterValues(initialValues)
     }
   }
 

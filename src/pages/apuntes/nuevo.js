@@ -35,6 +35,7 @@ const nuevo = () => {
 
   const [usedNoteTags, setUsedNoteTags] = useState([])
   const [noteCriteria, setNoteCriteria] = useState([])
+  const [resetForm, setResetForm] = useState(false)
 
   const checkInputsAreEmpty = () => {
     return (
@@ -75,7 +76,7 @@ const nuevo = () => {
   const formatCreateNote = (note) => {
     const formatData = {
       project: note.project.value,
-      testSystems: note.system.map((s) => s.value),
+      testSystems: note.testSystems.map((s) => s.value),
       title: note.title,
       description: note.description,
       tags: note.tags.map((t) => t.value)
@@ -100,9 +101,14 @@ const nuevo = () => {
       setIsSubmitting(true)
 
       const note = formatCreateNote(values)
+
       await createNote(note)
 
       setValues(initialValues)
+      setResetForm(true)
+      setTimeout(() => {
+        setResetForm(false)
+      }, 1000)
       showToast({ message: "¡Has añadido nuevo/s apunte/s!" })
       setIsSubmitting(false)
     } catch (error) {
@@ -160,6 +166,7 @@ const nuevo = () => {
             openProjectSearchModal={() => {
               setShowProjectSearchModal(true)
             }}
+            resetForm={resetForm}
           />
 
           <Button

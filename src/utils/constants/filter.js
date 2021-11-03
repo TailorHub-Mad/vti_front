@@ -20,6 +20,7 @@ export const NOTES_FILTER_KEYS = {
 }
 export const PROJECTS_FILTER_KEYS = {
   client: "projects.clientId",
+  clientAlias: "projects.clientAlias",
   test_system: "projects.testSystems._id",
   year: "projects.date.year",
   vti_code: "projects.testSystems.vtiCode",
