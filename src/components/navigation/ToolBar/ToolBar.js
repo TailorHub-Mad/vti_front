@@ -83,10 +83,10 @@ export const ToolBar = ({
   })
 
   const refMenu = useRef(null)
-  useOutsideClick({
-    ref: refMenu,
-    handler: () => setMenuMobile(false)
-  })
+  // useOutsideClick({
+  //   ref: refMenu,
+  //   handler: () => setMenuMobile(false)
+  // })
 
   return (
     <Flex>
