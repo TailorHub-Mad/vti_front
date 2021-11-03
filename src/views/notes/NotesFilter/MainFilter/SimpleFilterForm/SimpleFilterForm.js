@@ -11,7 +11,13 @@ import { MultiTagSelect } from "../../../../../components/forms/MultiTagSelect/M
 import { SimpleInput } from "../../../../../components/forms/SimpleInput/SimpleInput"
 import useCodeApi from "../../../../../hooks/api/useCodeApi"
 
-export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => {
+export const SimpleFilterForm = ({
+  openAuxModal,
+  value,
+  onChange,
+  isReset,
+  noteFromProject
+}) => {
   const { getProjects } = useProjectApi()
   const { getSystems } = useSystemApi()
   const { getClients } = useClientApi()
@@ -102,7 +108,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
         options: projectsOpt,
         label: "Proyecto",
         helper: "Abrir ventana de ayuda",
-        onHelperClick: () => openAuxModal("project")
+        onHelperClick: () => openAuxModal("project"),
+        isDisabled: Boolean(noteFromProject)
       }
     },
     test_system: {

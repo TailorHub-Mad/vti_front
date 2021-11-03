@@ -88,9 +88,9 @@ export const ProjectNotes = ({ project }) => {
   const [fetchOptions, setFetchOptions] = useState({
     [fetchOption.FILTER]: `notes.projects._id=${project._id}`
   })
-  const [queryFilter] = useState(null)
-  const [, setQueryGroup] = useState(null)
-  const [querySearch] = useState(null)
+  const [queryFilter, setQueryFilter] = useState(null)
+  const [queryGroup, setQueryGroup] = useState(null)
+  const [querySearch, setQuerySearch] = useState(null)
 
   const handleNotesData = (isEmptyData) => {
     if (!data || isEmptyData) return null
@@ -298,24 +298,49 @@ export const ProjectNotes = ({ project }) => {
     })
   }
 
-  const handleOnFilter = (values) => {
+  const handleOnFilter = (values, type) => {
     if (!values) {
-      setFetchState(fetchType.FILTER)
-      setIsFilter(false)
-      setFetchOptions({
-        [fetchOption.FILTER]: `notes.projects._id=${project._id}`
-      })
-      return
+      setQueryFilter(null)
+
+      if (queryGroup) {
+        setFetchState(fetchType.GROUP)
+        setFetchOptions({
+          [fetchOption.GROUP]: queryGroup
+        })
+        return
+      } else {
+        setFetchState(fetchType.FILTER)
+        setIsFilter(false)
+        setFetchOptions({
+          [fetchOption.FILTER]: `notes.projects._id=${project._id}`
+        })
+        return
+      }
     }
 
+    let filter = null
+    if (type !== "complex") {
+      filter = generateFilterQuery(NOTES_FILTER_KEYS, values)
+    } else {
+      filter = `query=${values}`
+    }
+
+    setQuerySearch(null)
     setIsFilter(true)
+    setQueryFilter(filter)
 
-    const filter = generateFilterQuery(NOTES_FILTER_KEYS, values)
-
-    setFetchState(fetchType.FILTER)
-    setFetchOptions({
-      [fetchOption.FILTER]: `notes.projects._id=${project._id}&${filter}`
-    })
+    if (fetchState === fetchType.GROUP) {
+      const newGroup = `${queryGroup}&${filter}&notes.projects._id=${project._id}`
+      setFetchState(fetchType.GROUP)
+      setFetchOptions({
+        [fetchOption.GROUP]: newGroup
+      })
+    } else {
+      setFetchState(fetchType.FILTER)
+      setFetchOptions({
+        [fetchOption.FILTER]: `${filter}&notes.projects._id=${project._id}`
+      })
+    }
 
     setShowFilterModal(false)
   }
@@ -382,6 +407,7 @@ export const ProjectNotes = ({ project }) => {
         isOpen={showFilterModal}
         onClose={() => setShowFilterModal(false)}
         onFilter={(values) => handleOnFilter(values)}
+        noteFromProject={noteFromProject}
       />
 
       <NewNoteModal
@@ -420,20 +446,20 @@ export const ProjectNotes = ({ project }) => {
       <Flex justify="space-between" align="center" mt="24px">
         <Text variant="d_l_regular">Apuntes</Text>
         <Flex width="fit-content">
-          {!isEmptyData ? (
-            <ToolBar
-              onAdd={() => setIsNoteModalOpen(true)}
-              onSearch={onSearch}
-              onGroup={handleOnGroup}
-              onFilter={handleOnOpenFilter}
-              addLabel="Añadir apunte"
-              searchPlaceholder="Busqueda por ID, Proyecto"
-              groupOptions={NOTES_GROUP_OPTIONS}
-              icon={<AddNoteIcon />}
-              fetchState={!isFilter ? fetchType.ALL : fetchState}
-              noImport
-            />
-          ) : null}
+          <ToolBar
+            onAdd={() => setIsNoteModalOpen(true)}
+            onSearch={onSearch}
+            onGroup={handleOnGroup}
+            onFilter={handleOnOpenFilter}
+            addLabel="Añadir apunte"
+            searchPlaceholder="Busqueda por ID, Proyecto"
+            groupOptions={NOTES_GROUP_OPTIONS}
+            icon={<AddNoteIcon />}
+            fetchState={!isFilter ? fetchType.ALL : fetchState}
+            queryFilter={queryFilter}
+            queryGroup={queryGroup}
+            noImport
+          />
         </Flex>
       </Flex>
       <PageBody overflowY="none" mt="32px">
