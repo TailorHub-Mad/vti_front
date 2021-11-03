@@ -18,7 +18,8 @@ export const NewNoteForm = ({
   noteToUpdate,
   noteFromProject,
   submitIsDisabled,
-  isUpdate
+  isUpdate,
+  resetForm
 }) => {
   const { getProjects } = useProjectApi()
   const { getNoteTags } = useTagApi()
@@ -224,6 +225,10 @@ export const NewNoteForm = ({
     attachment: <FileInputForm isUpdate={isUpdate} />,
     multitag_select: <MultiTagSelect />
   }
+
+  useEffect(() => {
+    if (resetForm) setIsReset(true)
+  }, [resetForm])
 
   return (
     <>
