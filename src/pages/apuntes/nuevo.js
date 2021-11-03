@@ -39,7 +39,7 @@ const nuevo = () => {
   const checkInputsAreEmpty = () => {
     return (
       !values.project ||
-      !values.system ||
+      !values.testSystems ||
       !values.title ||
       !values.description ||
       !values.tags
