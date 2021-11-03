@@ -80,6 +80,7 @@ export const MessageCard = ({
         onFavorite={handleFavorite}
         onSubscribe={handleSubscribe}
         notesFromSubscription={notesFromSubscription}
+        isMyNote={isMyNote}
       />
       <MessageCardInfo
         id={note?.ref}

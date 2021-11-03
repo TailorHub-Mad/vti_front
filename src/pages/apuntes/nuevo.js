@@ -18,7 +18,7 @@ const initialValues = {
   description: undefined,
   tags: undefined,
   link: undefined,
-  document: undefined
+  documents: undefined
 }
 
 const nuevo = () => {
@@ -83,7 +83,7 @@ const nuevo = () => {
     }
 
     if (note?.link) formatData["link"] = note.link
-    if (note?.document) formatData["file"] = note.document
+    if (note?.documents) formatData["file"] = note.documents
 
     const formData = new FormData()
 
