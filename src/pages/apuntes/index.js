@@ -154,8 +154,13 @@ const apuntes = () => {
     if (!noteToDelete) return
 
     const label = isGrouped
-      ? getFieldGRoupObjectById(notesData, "name", noteToDelete.id, noteToDelete.key)
-      : getFieldObjectById(notesData, "name", noteToDelete)
+      ? getFieldGRoupObjectById(
+          notesData,
+          "title",
+          noteToDelete.id,
+          noteToDelete.key
+        )
+      : getFieldObjectById(notesData, "title", noteToDelete)
     return `¿Desea eliminar ${label}?`
   }
 
