@@ -368,7 +368,7 @@ export const ProjectNotes = ({ project }) => {
     const noteDetail = notesData?.find((n) => n._id === router.query?.note)
     setNoteToDetail(noteDetail)
     setShowNoteDetails(true)
-  }, [])
+  }, [notesData, router.query?.note])
 
   return (
     <>
