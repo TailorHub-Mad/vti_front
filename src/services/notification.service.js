@@ -21,11 +21,17 @@ const NotificationService = () => {
   const getNotesNotifications = () =>
     execute(instance.get(`/notification?type=Apunte respondido&type=Apunte creado`))
   const getContainerNotifications = () =>
-    execute(instance.get(`/notification?type=Notificación mantenimiento`))
+    execute(
+      instance.get(`/notification?type=Nuevo Proyecto&type=Nuevo sistema de ensayo`)
+    )
   const getManteinanceNotifications = () =>
     execute(instance.get(`/notification?type=Notificación mantenimiento`))
   const getBehaviourNotifications = () =>
-    execute(instance.get(`/notification?type=Notificación mantenimiento`))
+    execute(
+      instance.get(
+        `/notification?type=Nuevo tag de apunte&type=Nuevo tag de proyecto`
+      )
+    )
   const getFixedNotifications = () => execute(instance.get(`/notification?pin=true`))
 
   return {
