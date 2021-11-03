@@ -1,5 +1,5 @@
 export const NOTES_FILTER_KEYS = {
-  client: "notes.clientId",
+  client: "notes.clientAlias",
   note_tags: "notes.tags._id",
   project_tags: "notes.projects.tags",
   users: "notes.owner._id",
@@ -19,7 +19,7 @@ export const NOTES_FILTER_KEYS = {
   dateTo: "notes"
 }
 export const PROJECTS_FILTER_KEYS = {
-  client: "projects.clientAlias",
+  client: "projects.clientId",
   test_system: "projects.testSystems._id",
   year: "projects.date.year",
   vti_code: "projects.testSystems.vtiCode",
