@@ -9,7 +9,13 @@ import { ProjectSupportModal } from "../../projects/ProjectFilter/ProjectSupport
 import { SaveFilterModal } from "../../../components/filters/SaveFilterModal"
 import { COMPLEX_OBJECT, parseComplexQuery } from "../../../utils/functions/filter"
 
-export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
+export const NotesFilterModal = ({
+  isOpen,
+  onClose,
+  onFilter,
+  noteFromProject,
+  ...props
+}) => {
   const [showMainContent] = useState(true)
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [showSaveFilter, setShowSaveFilter] = useState(false)
@@ -134,6 +140,12 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
     setChangeValueFilter(true)
   }, [filterValues])
 
+  useEffect(() => {
+    if (!noteFromProject) return
+
+    setFilterValues({ ...filterValues, project: noteFromProject.project })
+  }, [noteFromProject])
+
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
@@ -159,6 +171,7 @@ export const NotesFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
             onFilterComplexChange={(val) => setFilterComplexValues(val)}
             errorComplexFilter={errorComplexFilter}
             showSaveFilter={showSaveFilter}
+            noteFromProject={noteFromProject}
           />
         </ScaleFade>
         {showSaveFilter ? (

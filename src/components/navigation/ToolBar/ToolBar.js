@@ -38,7 +38,7 @@ export const ToolBar = ({
   queryFilter
 }) => {
   const [isScreen] = useMediaQuery("(min-width: 475px)")
-  const [, setShowBar] = useState(false)
+  const [showBar, setShowBar] = useState(false)
 
   const handleOnGroup = (activeItem) => onGroup(activeItem)
   const handleOnFilter = (activeItem) => onFilter(activeItem)
@@ -94,7 +94,7 @@ export const ToolBar = ({
         <>
           {isScreen ? (
             searchBar
-          ) : (
+          ) : !showBar ? (
             <Button
               ref={ref}
               variant="icon_only_secondary_mobile"
@@ -103,6 +103,8 @@ export const ToolBar = ({
             >
               <SearchIcon color="blue.500" />
             </Button>
+          ) : (
+            searchBar
           )}
         </>
       )}

@@ -54,6 +54,7 @@ export const MainFilter = ({
   onFilterComplexChange,
   errorComplexFilter,
   showSaveFilter,
+  noteFromProject,
   ...props
 }) => {
   const [isReset, setIsReset] = useState(false)
@@ -166,6 +167,7 @@ export const MainFilter = ({
                 onChange={onSimpleFilterChange}
                 openAuxModal={onSecondaryOpen}
                 isReset={isReset}
+                noteFromProject={noteFromProject}
               />
             </TabPanel>
             <TabPanel p={0}>
