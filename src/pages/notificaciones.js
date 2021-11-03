@@ -13,6 +13,7 @@ import { ApiAuthContext } from "../provider/ApiAuthProvider"
 import { NotificationContext } from "../provider/NotificationProvider"
 import { ToastContext } from "../provider/ToastProvider"
 import { notificationFetchHandler } from "../swr/notification.swr"
+import { RoleType } from "../utils/constants/global"
 import { fetchOption, fetchType } from "../utils/constants/swr"
 import { errorHandler } from "../utils/errors"
 import { destructuringDate, formatDateToFetch } from "../utils/functions/date"
@@ -26,7 +27,7 @@ import { NotificationsMenu } from "../views/notifications/NotificationsMenu/Noti
 
 const notificaciones = () => {
   // Hooks
-  const { isLoggedIn } = useContext(ApiAuthContext)
+  const { isLoggedIn, role } = useContext(ApiAuthContext)
   const { deleteNotification, pinNotification } = useNotificationApi()
   const { showToast } = useContext(ToastContext)
   const { newNotification, setNewNotification } = useContext(NotificationContext)
@@ -204,6 +205,7 @@ const notificaciones = () => {
             noGroup
             noImport
             searchDate
+            noAdd={role === RoleType.USER}
           />
         )}
       </PageHeader>
