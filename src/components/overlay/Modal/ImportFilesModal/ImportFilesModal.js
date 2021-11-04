@@ -38,7 +38,7 @@ export const ImportFilesModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} {...props}>
       <ModalOverlay />
-      <ModalContent p="48px 32px" borderRadius="2px">
+      <ModalContent p={["16px", null, null, "48px 32px"]} borderRadius="2px">
         <CustomModalHeader
           title={title || "Importar archivos"}
           onClose={onClose}

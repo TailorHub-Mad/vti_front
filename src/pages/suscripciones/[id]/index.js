@@ -1,4 +1,5 @@
 import { Text } from "@chakra-ui/layout"
+import { useMediaQuery } from "@chakra-ui/media-query"
 import { remove } from "lodash"
 import { useRouter } from "next/router"
 import React, { useContext, useMemo, useState } from "react"
@@ -29,6 +30,8 @@ import { SubscriptionsMenu } from "../../../views/subscriptions/SubscriptionsMen
 
 const suscripcion = () => {
   // Hooks
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   const router = useRouter()
   const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
     useTableActions()
@@ -263,7 +266,9 @@ const suscripcion = () => {
 
       <PageHeader>
         <BreadCrumbs
-          customURL={`${PATHS.subscriptions}/${subscription?.name || ""}`}
+          customURL={`${PATHS.subscriptions}/${
+            isScreen ? subscription?.name || "" : ""
+          }`}
         />
         {!isEmptyData ? (
           <ToolBar
@@ -275,10 +280,11 @@ const suscripcion = () => {
             noFilter
             noGroup
             noSearch={subscriptionsData.length === 0}
+            noMobileMenu
           />
         ) : null}
       </PageHeader>
-      <PageMenu>
+      <PageMenu h="auto">
         {isMenuHidden() ? (
           <SubscriptionsMenu
             currentState={currentState}

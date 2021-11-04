@@ -174,10 +174,13 @@ export const ProjectSupportModal = ({
         zIndex="10005"
       >
         <Box
-          width="460px"
+          w={["100%", null, null, "460px"]}
           height="fit-content"
-          position="relative"
-          transition="left 0.18s ease-in-out"
+          position={["absolute", null, null, "relative"]}
+          left={["0", null, null, null]}
+          right={["0", null, null, null]}
+          top={["0", null, null, null]}
+          transition={[null, null, null, "left 0.18s ease-in-out"]}
           bgColor="white"
           padding="32px"
           zIndex="10005"

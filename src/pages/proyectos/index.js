@@ -41,6 +41,8 @@ import useUserApi from "../../hooks/api/useUserApi"
 import { remove } from "lodash"
 import useTableActions from "../../hooks/useTableActions"
 import { PageBody } from "../../components/layout/Pages/PageBody/PageBody"
+import { useMediaQuery } from "@chakra-ui/media-query"
+import { TableGrid } from "../../components/tables/TableGrid/TableGrid"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -59,6 +61,7 @@ const PROJECTS_GROUP_OPTIONS = [
 
 const proyectos = () => {
   // Hooks
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
   const { isLoggedIn, role, user } = useContext(ApiAuthContext)
   const { deleteProject, createProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
@@ -350,21 +353,6 @@ const proyectos = () => {
     })
   }
 
-  // const handleOnGroup = (group) => {
-  //   if (!group) {
-  //     setFetchState(fetchType.ALL)
-  //     setFetchOptions({
-  //       [fetchOption.GROUP]: null
-  //     })
-  //     return
-  //   }
-
-  //   setFetchState(fetchType.GROUP)
-  //   setFetchOptions({
-  //     [fetchOption.GROUP]: group
-  //   })
-  // }
-
   const handleOnGroup = (group) => {
     if (!group) {
       setQueryGroup(null)
@@ -546,10 +534,32 @@ const proyectos = () => {
             onImport={() => setShowImportModal(true)}
             onAdd={() => setIsProjectModalOpen(true)}
           />
-        ) : (
+        ) : isScreen ? (
           <ProjectsTable
             fetchState={fetchState}
             projects={projectsData}
+            onClose={handleOnOpenFinishProjectModal}
+            onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
+            onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
+            onEdit={handleUpdate}
+            onGroup={handleOnGroup}
+            onFilter={handleOnFilter}
+            groupOption={getGroupOptionLabel(
+              PROJECTS_GROUP_OPTIONS,
+              fetchOptions[fetchOption.GROUP]
+            )}
+            handleSortElement={handleSortElement}
+            onSubscribe={handleSubscribe}
+            onFavorite={handleFavorite}
+            selectedRows={selectedRows}
+            setSelectedRows={setSelectedRows}
+            handleRowSelect={handleRowSelect}
+            handleSelectAllRows={handleSelectAllRows}
+          />
+        ) : (
+          <TableGrid
+            fetchState={fetchState}
+            items={projectsData}
             onClose={handleOnOpenFinishProjectModal}
             onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
             onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}

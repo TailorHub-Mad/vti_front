@@ -1,13 +1,13 @@
-import { Box, Text } from "@chakra-ui/react"
+import { Box, Text, useMediaQuery } from "@chakra-ui/react"
 import React, { useContext, useState } from "react"
 import { ToastContext } from "../../../provider/ToastProvider"
 import { TabBar } from "../../navigation/TabBar/TabBar"
 import { Popup } from "../../overlay/Popup/Popup"
 
-export const Page = ({ children, ...props }) => {
-  // const [isScreen] = useMediaQuery("(min-width: 475px)")
+export const Page = ({ children, newNote, ...props }) => {
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
 
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(isScreen)
   const { isToastOpen, message, secondaryMessage, toastType } =
     useContext(ToastContext)
 
@@ -22,8 +22,8 @@ export const Page = ({ children, ...props }) => {
       </Popup>
       <Box
         transition={"padding-left 0.15s ease-in-out"}
-        pl={["15px", null, null, isOpen ? "239px" : "63px"]}
-        pt={["88px", null, null, "32px"]}
+        pl={[newNote ? "0" : "15px", null, null, isOpen ? "239px" : "63px"]}
+        pt={[newNote ? "64px" : "88px", null, null, "32px"]}
         pr={["0", null, null, "24px"]}
         overflow={"hidden"}
         background={"url(/images/backgrounds/general_bg.svg)"}
@@ -32,7 +32,7 @@ export const Page = ({ children, ...props }) => {
         bgSize="cover"
         bgPosition="center"
         minH="100vh"
-        pb="50px"
+        pb={newNote ? "0" : "50px"}
         {...props}
       >
         {children}

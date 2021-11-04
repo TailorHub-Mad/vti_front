@@ -255,15 +255,21 @@ export const NewNoteModal = ({
           in={showSecondaryContent || !showSecondaryContent}
         >
           <Box
-            width="460px"
+            width={["100%", null, null, "460px"]}
             position="relative"
-            top="50px"
-            marginBottom="50px"
-            left={showSecondaryContent ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}
-            transition="left 0.18s ease-in-out"
+            top={["0", null, null, "50px"]}
+            marginBottom={["0", null, null, "50px"]}
+            left={[
+              "0",
+              null,
+              null,
+              showSecondaryContent ? "calc(50vw - 500px)" : "calc(50vw - 230px)"
+            ]}
+            transition={["none", null, null, "left 0.18s ease-in-out"]}
             bgColor="white"
             borderRadius="2px"
-            padding="32px"
+            padding={["16px", null, null, "32px"]}
+            pb={["96px", null, null, null]}
             {...props}
           >
             <CustomModalHeader
@@ -281,7 +287,17 @@ export const NewNoteModal = ({
               openProjectSearchModal={() => setShowProjectSearchModal(true)}
               openAuxModal={() => setShowSecondaryContent(true)}
             />
-            <Flex width="100%" justifyContent="center">
+            <Flex
+              justifyContent={"center"}
+              position={["fixed", null, null, "relative"]}
+              bottom={["0", null, null, null]}
+              left={["0", null, null, null]}
+              width="100%"
+              pb={["8px", null, null, null]}
+              pt={["8px", null, null, null]}
+              boxShadow={["0px -4px 8px rgba(5, 46, 87, 0.1)", null, null, "none"]}
+              bgColor={["white", null, null, null]}
+            >
               <Button
                 w="194px"
                 margin="0 auto"
