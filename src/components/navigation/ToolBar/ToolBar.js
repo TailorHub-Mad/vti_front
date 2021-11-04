@@ -1,4 +1,4 @@
-import { CloseIcon, SearchIcon } from "@chakra-ui/icons"
+import { AddIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons"
 import {
   Button,
   Input,
@@ -41,7 +41,8 @@ export const ToolBar = ({
   icon,
   selectedRows,
   queryGroup,
-  queryFilter
+  queryFilter,
+  noMobileMenu
 }) => {
   const [isScreen] = useMediaQuery("(min-width: 475px)")
   const [showBar, setShowBar] = useState(false)
@@ -96,11 +97,12 @@ export const ToolBar = ({
       {isScreen ? null : menuMobile ? (
         <Box
           ref={refMenu}
-          position="absolute"
+          position="fixed"
           bottom="0"
           left="0"
           width="100%"
-          minH="288px"
+          h="auto"
+          maxH="50vh"
           bgColor="blue.500"
           boxShadow="0px -4px 8px rgba(5, 46, 87, 0.1)"
           borderRadius="8px 8px 0px 0px"
@@ -115,38 +117,62 @@ export const ToolBar = ({
               onClick={() => setMenuMobile(false)}
             />
           </Flex>
+
           <Flex flexDirection="column" gridGap="32px">
-            <Flex
-              align="center"
-              color="white"
-              gridGap="8px"
-              onClick={handleOnFilter}
-            >
-              <FilterIcon />
-              <Text color="white" mt="4px" variant="d_s_medium">
-                Filtrar
-              </Text>
-            </Flex>
+            {noAdd || (
+              <Flex align="center" color="white" gridGap="16px" onClick={onAdd}>
+                <AddIcon />
+                <Text color="white" mt="4px" variant="d_s_medium">
+                  Añadir
+                </Text>
+              </Flex>
+            )}
 
-            <Group
-              onGroup={handleOnGroup}
-              options={groupOptions}
-              active={fetchState === fetchType.GROUP || queryGroup}
-              isMobile
-            />
+            {noFilter || (
+              <Flex
+                align="center"
+                color="white"
+                gridGap="8px"
+                onClick={handleOnFilter}
+              >
+                <FilterIcon />
+                <Text color="white" mt="4px" variant="d_s_medium">
+                  Filtrar
+                </Text>
+              </Flex>
+            )}
 
-            <Flex align="center" color="white" gridGap="8px" onClick={onImport}>
-              <UploadCloudIcon />
-              <Text color="white" mt="4px" variant="d_s_medium">
-                Importar
-              </Text>
-            </Flex>
-            <Flex align="center" color="white" gridGap="8px">
-              <ExportIcon />
-              <Text color="white" mt="4px" variant="d_s_medium" onClick={onExport}>
-                Exportar
-              </Text>
-            </Flex>
+            {noGroup || (
+              <Group
+                onGroup={handleOnGroup}
+                options={groupOptions}
+                active={fetchState === fetchType.GROUP || queryGroup}
+                isMobile
+              />
+            )}
+
+            {noImport || (
+              <>
+                <Flex align="center" color="white" gridGap="8px" onClick={onImport}>
+                  <UploadCloudIcon />
+                  <Text color="white" mt="4px" variant="d_s_medium">
+                    Importar
+                  </Text>
+                </Flex>
+
+                <Flex align="center" color="white" gridGap="8px">
+                  <ExportIcon />
+                  <Text
+                    color="white"
+                    mt="4px"
+                    variant="d_s_medium"
+                    onClick={onExport}
+                  >
+                    Exportar
+                  </Text>
+                </Flex>
+              </>
+            )}
           </Flex>
         </Box>
       ) : null}
@@ -168,13 +194,15 @@ export const ToolBar = ({
           )}
         </>
       ) : (
-        <Button
-          variant="icon_only_secondary_mobile"
-          onClick={() => setMenuMobile(true)}
-          mr="18px"
-        >
-          <ActionMenuMobile color="blue.500" />
-        </Button>
+        noMobileMenu || (
+          <Button
+            variant="icon_only_secondary_mobile"
+            onClick={() => setMenuMobile(true)}
+            mr="18px"
+          >
+            <ActionMenuMobile color="blue.500" />
+          </Button>
+        )
       )}
 
       {noSearch || (

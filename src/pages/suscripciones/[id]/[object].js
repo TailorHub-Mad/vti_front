@@ -18,6 +18,7 @@ import { useRouter } from "next/router"
 import { projectFetchHandler } from "../../../swr/project.swr"
 import { PATHS } from "../../../utils/constants/global"
 import { systemFetchHandler } from "../../../swr/systems.swr"
+import { useMediaQuery } from "@chakra-ui/media-query"
 
 const NOTES_GROUP_OPTIONS = [
   {
@@ -40,6 +41,8 @@ const NOTES_GROUP_OPTIONS = [
 
 const apuntesSuscripciones = () => {
   // Hooks
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   const router = useRouter()
   const { isLoggedIn } = useContext(ApiAuthContext)
 
@@ -106,10 +109,18 @@ const apuntesSuscripciones = () => {
     <Page>
       <PageHeader>
         <BreadCrumbs
-          customURL={`${PATHS.subscriptions}/${router.query.owner}`}
-          lastElement={`/${
-            typeObject === "projects" ? "Proyectos" : "Sistemas ensayo"
-          }/apuntes`}
+          customURL={
+            isScreen
+              ? `${PATHS.subscriptions}/${router.query.owner}`
+              : `${PATHS.subscriptions}`
+          }
+          lastElement={
+            isScreen
+              ? `/${
+                  typeObject === "projects" ? "Proyectos" : "Sistemas ensayo"
+                }/apuntes`
+              : null
+          }
         />
         {isToolbarHidden() && (
           <ToolBar
@@ -120,6 +131,7 @@ const apuntesSuscripciones = () => {
             noAdd
             noFilter
             noGroup
+            noMobileMenu
           />
         )}
       </PageHeader>

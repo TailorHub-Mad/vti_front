@@ -37,6 +37,8 @@ import { TestsSystemsFilterModal } from "../../views/test_systems/TestSystemsFil
 import useUserApi from "../../hooks/api/useUserApi"
 import { remove } from "lodash"
 import useTableActions from "../../hooks/useTableActions"
+import { useMediaQuery } from "@chakra-ui/media-query"
+import { TableGrid } from "../../components/tables/TableGrid/TableGrid"
 
 const SYSTEMS_GROUP_OPTIONS = [
   {
@@ -55,6 +57,7 @@ const SYSTEMS_GROUP_OPTIONS = [
 
 const sistemas = () => {
   // Hooks
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
   const { isLoggedIn, role, user } = useContext(ApiAuthContext)
   const { deleteSystem, createSystem } = useSystemApi()
   const { showToast } = useContext(ToastContext)
@@ -455,10 +458,29 @@ const sistemas = () => {
           onImport={() => setShowImportModal(true)}
           onAdd={() => setIsSystemModalOpen(true)}
         />
-      ) : (
+      ) : isScreen ? (
         <TestSystemsTable
           fetchState={fetchState}
           systems={systemsData}
+          onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
+          onDeleteMany={(systemsId) => handleOpenPopup(systemsId, DeleteType.MANY)}
+          onEdit={handleUpdate}
+          onSubscribe={handleSubscribe}
+          onGroup={handleOnGroup}
+          groupOption={getGroupOptionLabel(
+            SYSTEMS_GROUP_OPTIONS,
+            fetchOptions[fetchOption.GROUP]
+          )}
+          handleSortElement={handleSortElement}
+          selectedRows={selectedRows}
+          setSelectedRows={setSelectedRows}
+          handleRowSelect={handleRowSelect}
+          handleSelectAllRows={handleSelectAllRows}
+        />
+      ) : (
+        <TableGrid
+          fetchState={fetchState}
+          items={systemsData}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(systemsId) => handleOpenPopup(systemsId, DeleteType.MANY)}
           onEdit={handleUpdate}

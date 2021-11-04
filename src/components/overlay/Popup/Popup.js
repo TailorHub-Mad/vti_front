@@ -27,8 +27,8 @@ export const Popup = ({
     <Modal isOpen={isOpen} onClose={onClose} {...props} zIndex="9999">
       <ModalOverlay />
       <ModalContent
-        minW="502px"
-        width="502px"
+        minW={["100%", null, null, "502"]}
+        width={["100%", null, null, "502"]}
         alignSelf="center"
         alignItems="center"
         borderRadius="2px"
@@ -57,6 +57,7 @@ export const Popup = ({
             display="grid"
             gridTemplateColumns={["1fr", null, null, "1fr 1fr"]}
             gridColumnGap="16px"
+            gridRowGap="16px"
           >
             <Button
               minW="160px"

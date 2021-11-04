@@ -88,15 +88,18 @@ export const NotificationsFilterModal = ({
       <CustomModalContent zIndex="10001">
         <ScaleFade in={isOpen}>
           <Box
-            width="460px"
-            height="fit-content"
-            position="fixed"
-            top="50px"
-            left={"calc(50vw - 230px)"}
-            transition="left 0.18s ease-in-out"
+            width={["100%", null, null, "460px"]}
+            height={["auto", null, null, "fit-content"]}
+            position={["fixed", null, null, "absolute"]}
+            top={["0", null, null, "50px"]}
+            left={["0", null, null, "calc(50vw - 230px)"]}
+            overflowY={["auto", null, null, null]}
+            bottom={["0", null, null, null]}
+            transition={["none", null, null, "left 0.18s ease-in-out"]}
+            zIndex="1400"
+            padding={["16px", null, null, "32px"]}
+            pb={["96px", null, null, "32px"]}
             bgColor="white"
-            padding="32px"
-            {...props}
           >
             <CustomModalHeader
               title="Filtrar tipo de notificación"
@@ -128,15 +131,27 @@ export const NotificationsFilterModal = ({
                 </Flex>
               </HStack>
             </CheckboxGroup>
-            <Button
-              onClick={() => onFilter(values)}
-              display="block"
-              margin="0 auto"
-              mt="32px"
-              isDisabled={values.length === 0}
+            <Flex
+              justifyContent={"center"}
+              position={["fixed", null, null, "relative"]}
+              bottom={["0", null, null, null]}
+              left={["0", null, null, null]}
+              width="100%"
+              pb={["8px", null, null, null]}
+              pt={["8px", null, null, null]}
+              boxShadow={["0px -4px 8px rgba(5, 46, 87, 0.1)", null, null, "none"]}
+              bgColor={["white", null, null, null]}
             >
-              Filtrar
-            </Button>
+              <Button
+                onClick={() => onFilter(values)}
+                display="block"
+                margin="0 auto"
+                mt={["0", null, null, "32px"]}
+                isDisabled={values.length === 0}
+              >
+                Filtrar
+              </Button>
+            </Flex>
           </Box>
         </ScaleFade>
       </CustomModalContent>

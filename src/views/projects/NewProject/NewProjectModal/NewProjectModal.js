@@ -1,4 +1,4 @@
-import { ScaleFade, Modal, ModalOverlay, Button, Box } from "@chakra-ui/react"
+import { ScaleFade, Modal, ModalOverlay, Button, Box, Flex } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
 import { CustomModalContent } from "../../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
@@ -188,30 +188,29 @@ export const NewProjectModal = ({
   }, [])
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={handleOnClose}
-      scrollBehavior={"inside"}
-      height="100vh"
-      margin="32px"
-      {...props}
-    >
+    <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
-      <CustomModalContent zIndex="10001">
+      <CustomModalContent zIndex="10001" position="fixed">
         <ScaleFade
           padding="100px"
           in={showSecondaryContent || !showSecondaryContent}
         >
           <Box
-            width="460px"
-            height="fit-content"
-            position="absolute"
-            top="50px"
-            left={showSecondaryContent ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}
-            transition="left 0.18s ease-in-out"
+            width={["100%", null, null, "460px"]}
+            position="relative"
+            top={["0", null, null, "50px"]}
+            marginBottom={["0", null, null, "50px"]}
+            left={[
+              "0",
+              null,
+              null,
+              showSecondaryContent ? "calc(50vw - 500px)" : "calc(50vw - 230px)"
+            ]}
+            transition={["none", null, null, "left 0.18s ease-in-out"]}
             bgColor="white"
             borderRadius="2px"
-            padding="32px"
+            padding={["16px", null, null, "32px"]}
+            pb={["96px", null, null, null]}
             {...props}
           >
             <CustomModalHeader
@@ -227,18 +226,30 @@ export const NewProjectModal = ({
               }}
               projectToUpdate={projectToUpdate}
             />
-            <Button
-              margin="0 auto"
-              mt="32px"
-              disabled={checkInputsAreEmpty()}
-              onClick={handleSubmit}
-              isLoading={isSubmitting}
-              display="flex"
-              justifyContent="center"
-              pointerEvents={isSubmitting ? "none" : "all"}
+            <Flex
+              justifyContent={"center"}
+              position={["fixed", null, null, "relative"]}
+              bottom={["0", null, null, null]}
+              left={["0", null, null, null]}
+              width="100%"
+              pb={["8px", null, null, null]}
+              pt={["8px", null, null, null]}
+              boxShadow={["0px -4px 8px rgba(5, 46, 87, 0.1)", null, null, "none"]}
+              bgColor={["white", null, null, null]}
             >
-              Guardar proyecto
-            </Button>
+              <Button
+                margin="0 auto"
+                mt="32px"
+                disabled={checkInputsAreEmpty()}
+                onClick={handleSubmit}
+                isLoading={isSubmitting}
+                display="flex"
+                justifyContent="center"
+                pointerEvents={isSubmitting ? "none" : "all"}
+              >
+                Guardar proyecto
+              </Button>
+            </Flex>
           </Box>
         </ScaleFade>
         {showSecondaryContent ? (
