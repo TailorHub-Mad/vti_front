@@ -1,4 +1,4 @@
-import { Flex, Text } from "@chakra-ui/react"
+import { Flex, Text, useMediaQuery } from "@chakra-ui/react"
 import React from "react"
 import { fetchType } from "../../../utils/constants/swr"
 import { SubscribeIcon } from "../../../components/icons/SubscribeIcon"
@@ -10,7 +10,7 @@ import { RevertIcon } from "../../../components/icons/RevertIcon"
 
 const notesMenuOptions = {
   all: {
-    label: "Todos los mensajes",
+    label: "Todos",
     icon: <LockCloseIcon />
   },
   notes: {
@@ -40,6 +40,8 @@ export const NotificationsMenu = ({
   notificationsCount = 0,
   onChange
 }) => {
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   return (
     <>
       <Flex>
@@ -63,16 +65,20 @@ export const NotificationsMenu = ({
                 height: "16px",
                 color
               })}
-              <Text variant="d_s_medium" mt="4px" color={color}>
-                {label}
-              </Text>
+              {isScreen || isActive ? (
+                <Text variant="d_s_medium" mt="4px" color={color}>
+                  {label}
+                </Text>
+              ) : null}
             </Flex>
           )
         })}
       </Flex>
-      <Text color="#C9C9C9" variant="d_s_medium">
-        {`${notificationsCount} Notificaciones`}
-      </Text>
+      {isScreen ? (
+        <Text color="#C9C9C9" variant="d_s_medium">
+          {`${notificationsCount} Notificaciones`}
+        </Text>
+      ) : null}
     </>
   )
 }

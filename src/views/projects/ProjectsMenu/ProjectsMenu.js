@@ -1,4 +1,4 @@
-import { Flex, Text } from "@chakra-ui/react"
+import { Flex, Text, useMediaQuery } from "@chakra-ui/react"
 import React, { useContext } from "react"
 import { fetchType } from "../../../utils/constants/swr"
 import { ICONS_REFERENCE } from "../../../utils/constants/icons"
@@ -54,6 +54,7 @@ const projectsMenuOptionsAdmin = {
 }
 
 export const ProjectsMenu = ({ fetchState, onChange }) => {
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
   const { role } = useContext(ApiAuthContext)
 
   const menu =
@@ -61,7 +62,7 @@ export const ProjectsMenu = ({ fetchState, onChange }) => {
 
   return (
     <>
-      <Flex mb="16px" ml="34px">
+      <Flex mb="16px" ml={["0", null, null, "34px"]}>
         {Object.entries(menu).map(([name, item], idx) => {
           const isActive = name === fetchState
 
@@ -82,14 +83,16 @@ export const ProjectsMenu = ({ fetchState, onChange }) => {
                   <item.icon color="grey" _groupHover={{ color: "blue.500" }} />
                 )
               ) : null}
-              <Text
-                variant="d_s_medium"
-                _groupHover={{ color: "blue.500" }}
-                mt="4px"
-                color={isActive ? "blue.500" : "grey"}
-              >
-                {item.label}
-              </Text>
+              {isScreen || isActive ? (
+                <Text
+                  variant="d_s_medium"
+                  _groupHover={{ color: "blue.500" }}
+                  mt="4px"
+                  color={isActive ? "blue.500" : "grey"}
+                >
+                  {item.label}
+                </Text>
+              ) : null}
             </Flex>
           )
         })}

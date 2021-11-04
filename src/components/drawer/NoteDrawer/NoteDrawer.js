@@ -57,19 +57,26 @@ export const NoteDrawer = ({
           transform={`translateX(${isOpen ? "0px" : "536.5px"})`}
           onClose={onClose}
           top="0"
-          right="-10px"
+          right={["0", null, null, "-10"]}
           position="fixed"
-          width={isExpanded && isOpen ? "100vw" : "536.5px"}
-          transition="all 0.3s ease-in"
-          zIndex="999"
+          width={isExpanded && isOpen ? "100vw" : ["100%", null, null, "536.5px"]}
+          transition={["none", null, null, "all 0.3s ease-in"]}
+          zIndex={["99999", null, null, "999"]}
           {...props}
         >
-          <Box p="38.25px" bgColor="light_grey" h="100vh" overflowY="scroll">
+          <Box
+            p={["16px", null, null, "32px"]}
+            pb={["112px", null, null, null]}
+            bgColor="light_grey"
+            h="100vh"
+            overflowY="scroll"
+          >
             <Flex justify="space-between" align="center">
               <Text variant="d_l_medium">{note.title}</Text>
               <CloseIcon onClick={onClose} cursor="pointer" />
             </Flex>
             <Flex
+              display={["none", null, null, "block"]}
               height="100vh"
               width="32px"
               alignItems="center"
@@ -85,7 +92,7 @@ export const NoteDrawer = ({
             <Box
               bgColor="white"
               mt="24px"
-              p="32px"
+              p={["16px", null, null, "32px"]}
               borderRadius="2px"
               boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
             >
@@ -133,9 +140,21 @@ export const NoteDrawer = ({
                 </Box>
               )
             })}
-            <Button mt="24px" onClick={onResponse}>
-              Escribir respuesta
-            </Button>
+            <Flex
+              justifyContent={"center"}
+              position={["fixed", null, null, "relative"]}
+              bottom={["0", null, null, null]}
+              left={["0", null, null, null]}
+              width="100%"
+              pb={["8px", null, null, null]}
+              pt={["8px", null, null, null]}
+              boxShadow={["0px -4px 8px rgba(5, 46, 87, 0.1)", null, null, "none"]}
+              bgColor={["white", null, null, null]}
+            >
+              <Button mt="24px" onClick={onResponse}>
+                Escribir respuesta
+              </Button>
+            </Flex>
           </Box>
         </Box>
       ) : null}

@@ -1,4 +1,4 @@
-import { Checkbox, Switch } from "@chakra-ui/react"
+import { Checkbox, Switch, useMediaQuery } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { AddSelect } from "../../../../../components/forms/AddSelect/AddSelect"
 import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
@@ -18,6 +18,8 @@ export const SimpleFilterForm = ({
   isReset,
   noteFromProject
 }) => {
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   const { getProjects } = useProjectApi()
   const { getSystems } = useSystemApi()
   const { getClients } = useClientApi()
@@ -107,8 +109,8 @@ export const SimpleFilterForm = ({
         placeholder: "Alias proyecto",
         options: projectsOpt,
         label: "Proyecto",
-        helper: "Abrir ventana de ayuda",
-        onHelperClick: () => openAuxModal("project"),
+        helper: isScreen ? "Abrir ventana de ayuda" : null,
+        onHelperClick: isScreen ? () => openAuxModal("project") : null,
         isDisabled: Boolean(noteFromProject)
       }
     },

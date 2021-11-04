@@ -1,4 +1,4 @@
-import { Button, Flex } from "@chakra-ui/react"
+import { Button, Flex, Text } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
@@ -132,7 +132,7 @@ const nuevo = () => {
     fetchTags()
   }, [])
   return (
-    <Page overflowY="auto">
+    <Page overflowY="auto" newNote>
       <PageHeader
         title="Nuevo apunte"
         position="fixed"
@@ -143,21 +143,22 @@ const nuevo = () => {
         <Flex
           minH="990px"
           w="460px"
-          p="48px 32px"
           borderRadius="2px"
           bgColor="white"
           flexDirection="column"
           boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
-          mb="90px"
-          width="460px"
+          mb={["0", "0", "0", "90px"]}
           position="sticky"
           top="0"
-          marginBottom="50px"
+          marginBottom={["0", "0", "0", "50px"]}
           height="fit-content"
-          // left={showTagSupportModal ? "calc(50vw - 675px)" : "calc(50vw - 400px)"}
           transition="left 0.18s ease-in-out"
-          padding="32px"
+          padding={["16px", "0", "0", "32px"]}
+          pb={["80px", null, null, null]}
         >
+          <Text variant="d_m_medium" pb="32px" pt="24px">
+            Añadir nuevo apunte
+          </Text>
           <NewNoteForm
             value={values}
             onChange={(val) => setValues(val)}
@@ -168,19 +169,30 @@ const nuevo = () => {
             }}
             resetForm={resetForm}
           />
-
-          <Button
-            w="194px"
-            margin="0 auto"
-            mt="24px"
-            disabled={submitIsDisabled}
-            onClick={handleSubmit}
-            isLoading={isSubmitting}
-            pointerEvents={isSubmitting ? "none" : "all"}
-            openAuxModal={() => setShowTagSupportModal(true)}
+          <Flex
+            justifyContent={"center"}
+            position={["fixed", null, null, "relative"]}
+            bottom={["0", null, null, null]}
+            left={["0", null, null, null]}
+            width="100%"
+            pb={["8px", null, null, null]}
+            pt={["8px", null, null, null]}
+            boxShadow={["0px -4px 8px rgba(5, 46, 87, 0.1)", null, null, "none"]}
+            bgColor={["white", null, null, null]}
           >
-            Guardar
-          </Button>
+            <Button
+              w="194px"
+              margin="0 auto"
+              mt={["0", null, null, "24px"]}
+              disabled={submitIsDisabled}
+              onClick={handleSubmit}
+              isLoading={isSubmitting}
+              pointerEvents={isSubmitting ? "none" : "all"}
+              openAuxModal={() => setShowTagSupportModal(true)}
+            >
+              Guardar
+            </Button>
+          </Flex>
         </Flex>
 
         {showTagSupportModal ? (
