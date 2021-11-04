@@ -48,7 +48,10 @@ export const ToolBar = ({
   const [menuMobile, setMenuMobile] = useState(false)
   const [searchValue, setSearchValue] = useState("")
 
-  const handleOnGroup = (activeItem) => onGroup(activeItem)
+  const handleOnGroup = (activeItem) => {
+    setMenuMobile(false)
+    onGroup(activeItem)
+  }
   const handleOnFilter = (activeItem) => onFilter(activeItem)
 
   const searchBar = (

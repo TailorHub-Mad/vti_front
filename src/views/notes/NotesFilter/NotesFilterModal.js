@@ -1,4 +1,4 @@
-import { ScaleFade, Modal, ModalOverlay } from "@chakra-ui/react"
+import { ScaleFade, Modal, ModalOverlay, useMediaQuery } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { MainFilter } from "./MainFilter/MainFilter"
 import { CustomModalContent } from "../../../components/overlay/Modal/CustomModalContent/CustomModalContent"
@@ -16,6 +16,8 @@ export const NotesFilterModal = ({
   noteFromProject,
   ...props
 }) => {
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   const [showMainContent] = useState(true)
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [showSaveFilter, setShowSaveFilter] = useState(false)
@@ -150,30 +152,34 @@ export const NotesFilterModal = ({
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
       <CustomModalContent zIndex="10001">
-        <ScaleFade
-          in={
-            !showSaveFilter &&
-            showMainContent &&
-            (!showSecondaryContent || showSecondaryContent !== "project")
-          }
-        >
-          <MainFilter
-            simpleFilterValues={filterValues}
-            onClose={handleOnClose}
-            moveToLeft={["project_tags", "note_tags"].includes(showSecondaryContent)}
-            onSecondaryOpen={(type) => setShowSecondaryContent(type)}
-            onSimpleFilterChange={(val) => setFilterValues(val)}
-            openSaveModal={() => setShowSaveFilter(true)}
-            onFilter={handleOnFilter}
-            onReset={handleOnReset}
-            setTab={setTab}
-            onEdit={handleEditFilter}
-            onFilterComplexChange={(val) => setFilterComplexValues(val)}
-            errorComplexFilter={errorComplexFilter}
-            showSaveFilter={showSaveFilter}
-            noteFromProject={noteFromProject}
-          />
-        </ScaleFade>
+        {!showSaveFilter && showSecondaryContent && !isScreen ? null : (
+          <ScaleFade
+            in={
+              !showSaveFilter &&
+              showMainContent &&
+              (!showSecondaryContent || showSecondaryContent !== "project")
+            }
+          >
+            <MainFilter
+              simpleFilterValues={filterValues}
+              onClose={handleOnClose}
+              moveToLeft={["project_tags", "note_tags"].includes(
+                showSecondaryContent
+              )}
+              onSecondaryOpen={(type) => setShowSecondaryContent(type)}
+              onSimpleFilterChange={(val) => setFilterValues(val)}
+              openSaveModal={() => setShowSaveFilter(true)}
+              onFilter={handleOnFilter}
+              onReset={handleOnReset}
+              setTab={setTab}
+              onEdit={handleEditFilter}
+              onFilterComplexChange={(val) => setFilterComplexValues(val)}
+              errorComplexFilter={errorComplexFilter}
+              showSaveFilter={showSaveFilter}
+              noteFromProject={noteFromProject}
+            />
+          </ScaleFade>
+        )}
         {showSaveFilter ? (
           <SaveFilterModal
             onClose={() => setShowSaveFilter(false)}

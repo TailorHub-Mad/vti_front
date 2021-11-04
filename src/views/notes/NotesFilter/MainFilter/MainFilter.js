@@ -133,7 +133,7 @@ export const MainFilter = ({
   return (
     <Box
       width={["100%", null, null, "460px"]}
-      height="fit-content"
+      height={["100vh", null, null, "fit-content"]}
       position="absolute"
       top={["0", null, null, "50px"]}
       left={[
@@ -184,7 +184,7 @@ export const MainFilter = ({
                 noteFromProject={noteFromProject}
               />
             </TabPanel>
-            <TabPanel p={0}>
+            <TabPanel p={0} minH={["100vh", null, null, null]}>
               <Box m="16px 0">
                 {filterComplex.length === 0 ? (
                   <Text color="grey">No hay filtros guardados para recordar</Text>

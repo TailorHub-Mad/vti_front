@@ -25,6 +25,7 @@ export const CriterionContainer = ({
   isSupport,
   selectedTags,
   fetchData,
+  isScreen,
   ...props
 }) => {
   const {
@@ -176,7 +177,9 @@ export const CriterionContainer = ({
         ) : null}
 
         <Grid
-          templateColumns={isSupport ? "auto auto" : "repeat(auto-fill, 266px)"}
+          templateColumns={
+            !isSupport ? "repeat(auto-fill, 266px)" : isScreen ? "auto auto" : "auto"
+          }
           gap="16px"
           width="100%"
           mt="8px"
