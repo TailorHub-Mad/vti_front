@@ -313,6 +313,7 @@ export const ProjectsByObject = ({
             PROJECTS_GROUP_OPTIONS,
             fetchOptions[fetchOption.GROUP]
           )}
+          type="projects"
         />
       )}
     </>

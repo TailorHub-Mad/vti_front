@@ -481,20 +481,14 @@ const sistemas = () => {
         <TableGrid
           fetchState={fetchState}
           items={systemsData}
-          onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
-          onDeleteMany={(systemsId) => handleOpenPopup(systemsId, DeleteType.MANY)}
-          onEdit={handleUpdate}
-          onSubscribe={handleSubscribe}
           onGroup={handleOnGroup}
+          onFilter={handleOnFilter}
           groupOption={getGroupOptionLabel(
             SYSTEMS_GROUP_OPTIONS,
             fetchOptions[fetchOption.GROUP]
           )}
-          handleSortElement={handleSortElement}
-          selectedRows={selectedRows}
-          setSelectedRows={setSelectedRows}
-          handleRowSelect={handleRowSelect}
-          handleSelectAllRows={handleSelectAllRows}
+          onSubscribe={handleSubscribe}
+          type="testSystems"
         />
       )}
     </Page>

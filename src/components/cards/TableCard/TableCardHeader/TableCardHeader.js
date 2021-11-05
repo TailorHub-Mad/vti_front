@@ -1,4 +1,3 @@
-import { DeleteIcon } from "@chakra-ui/icons"
 import { Box, Flex, Text, useOutsideClick } from "@chakra-ui/react"
 import React, { useRef, useState } from "react"
 import { ICONS_PROPS_16 } from "../../../../utils/constants/icons"
@@ -13,19 +12,12 @@ export const TableCardHeader = ({
   isSubscribe,
   title,
   onClick,
-  onDelele,
   onSubscribe,
   onFavorite,
-  notesFromSubscription,
-  isMyNote,
+  type,
   ...props
 }) => {
   const [showOptions, setShowOptions] = useState(false)
-
-  const handleOnDelete = () => {
-    setShowOptions(false)
-    onDelele()
-  }
 
   const handleOnFavorite = () => {
     setShowOptions(false)
@@ -46,56 +38,51 @@ export const TableCardHeader = ({
 
   return (
     <Flex height="32px" justify="space-between" alignItems="center" {...props}>
-      <Flex onClick={onClick} cursor={"pointer"}>
-        {isFavorite ? (
-          <HeartIcon color="error" {...ICONS_PROPS_16} marginRight="4px" />
+      <Flex onClick={onClick} cursor={"pointer"} gridGap="8px">
+        {type === "projects" && isFavorite ? (
+          <HeartIcon {...ICONS_PROPS_16} />
         ) : null}
+
+        {isSubscribe ? <SubscribeIcon {...ICONS_PROPS_16} /> : null}
         <Text marginTop="2px" variant="d_s_medium" noOfLines={2}>
           {title}
         </Text>
       </Flex>
-      {notesFromSubscription ? null : (
-        <Box position="relative" ref={ref}>
-          <OptionsIcon
-            cursor="pointer"
-            width="16px"
-            heigth="16px"
-            color="grey"
-            onClick={() => setShowOptions(true)}
-          />
-          <OptionsMenu isOpen={showOptions} onClose={() => setShowOptions(false)}>
+
+      <Box position="relative" ref={ref}>
+        <OptionsIcon
+          cursor="pointer"
+          width="16px"
+          heigth="16px"
+          color="grey"
+          onClick={() => setShowOptions(true)}
+        />
+        <OptionsMenu isOpen={showOptions} onClose={() => setShowOptions(false)}>
+          {type === "projects" && (
             <OptionsMenuItem onClick={handleOnFavorite}>
               <HeartIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
               <Text variant="d_xs_regular" marginRight="2px">
                 {isFavorite ? "Eliminar favorito" : "Favorito"}
               </Text>
             </OptionsMenuItem>
+          )}
 
-            <OptionsMenuItem onClick={handleOnSubscribe} isLast={!isMyNote}>
-              <SubscribeIcon
-                {...ICONS_PROPS_16}
-                marginRight="4px"
-                color={isSubscribe ? "error" : "blue.500"}
-              />
-              <Text
-                variant="d_xs_regular"
-                marginRight="2px"
-                color={isSubscribe ? "error" : "blue.500"}
-              >
-                {isSubscribe ? "Darme de baja" : "Suscribirme"}
-              </Text>
-            </OptionsMenuItem>
-            {isMyNote ? (
-              <OptionsMenuItem onClick={handleOnDelete} isLast>
-                <DeleteIcon {...ICONS_PROPS_16} marginRight="4px" color="error" />
-                <Text variant="d_xs_regular" color="error" marginRight="2px">
-                  Eliminar
-                </Text>
-              </OptionsMenuItem>
-            ) : null}
-          </OptionsMenu>
-        </Box>
-      )}
+          <OptionsMenuItem onClick={handleOnSubscribe} isLast>
+            <SubscribeIcon
+              {...ICONS_PROPS_16}
+              marginRight="4px"
+              color={isSubscribe ? "error" : "blue.500"}
+            />
+            <Text
+              variant="d_xs_regular"
+              marginRight="2px"
+              color={isSubscribe ? "error" : "blue.500"}
+            >
+              {isSubscribe ? "Darme de baja" : "Suscribirme"}
+            </Text>
+          </OptionsMenuItem>
+        </OptionsMenu>
+      </Box>
     </Flex>
   )
 }

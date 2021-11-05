@@ -9,8 +9,11 @@ import { PATHS } from "../../utils/constants/global"
 import { checkDataIsEmpty } from "../../utils/functions/global"
 import { ProjectsByObject } from "../../views/projects/ProjectsByObject/ProjectsByObject"
 import { projectFetchHandler } from "../../swr/project.swr"
+import { useMediaQuery } from "@chakra-ui/media-query"
 
 const system = () => {
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   const router = useRouter()
   const { isLoggedIn } = useContext(ApiAuthContext)
 
@@ -43,7 +46,11 @@ const system = () => {
       ) : (
         <ProjectsByObject
           projects={projectsData}
-          customURL={`${PATHS.testSystems}/${system?.ref || systemId}`}
+          customURL={
+            isScreen
+              ? `${PATHS.testSystems}/${system?.ref || systemId}`
+              : `${PATHS.testSystems}`
+          }
           setFetchState={setFetchState}
           setFetchOptions={setFetchOptions}
           fetchState={fetchState}

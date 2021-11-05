@@ -1,50 +1,22 @@
-import { CloseIcon } from "@chakra-ui/icons"
-import { Grid, Flex } from "@chakra-ui/layout"
-import { Text } from "@chakra-ui/react"
-import React, { useContext, useMemo } from "react"
-import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
+import { ChevronDownIcon, CloseIcon } from "@chakra-ui/icons"
+import { Grid, Flex, Box } from "@chakra-ui/layout"
+import { Text, useDisclosure } from "@chakra-ui/react"
+import React from "react"
 import { fetchType } from "../../../utils/constants/swr"
+import { groupTable } from "../../../views/notes/NotesGroup/utils"
 import { TableCard } from "../../cards/TableCard/TableCard"
 
 export const TableGrid = ({
   items,
-  onDelete,
-  // onClose,
-  onDeleteMany,
-  // onEdit,
   fetchState = fetchType.ALL,
-  onGroup,
   onFilter,
+  onGroup,
   groupOption,
-  // handleSortElement,
-  // onSubscribe,
-  // onFavorite,
-  selectedRows,
-  setSelectedRows,
-  // handleRowSelect,
-  handleSelectAllRows
+  onSubscribe,
+  onFavorite,
+  type
 }) => {
-  const { role } = useContext(ApiAuthContext)
-
-  const isGrouped = fetchState === fetchType.GROUP
-
-  // const selectedRowsKeys = selectedRows && Object.keys(selectedRows)
-
-  useMemo(() => {
-    setSelectedRows && setSelectedRows([])
-  }, [items?.length])
-
-  const handleOnDelete = () => {
-    const projectsId = Object.keys(selectedRows)
-    if (Object.keys(selectedRows).length > 1) return onDeleteMany(projectsId)
-
-    return isGrouped ? onDelete(selectedRows) : onDelete(projectsId[0])
-  }
-
-  // const projectsData = formatProject(items, fetchState)
-
-  // const allRowsAreSelected =
-  //   projectsData?.length > 0 && selectedRowsKeys?.length === projectsData?.length
+  const formatItems = fetchState === fetchType.GROUP && groupTable(items)
 
   return (
     <>
@@ -60,30 +32,98 @@ export const TableGrid = ({
         </Flex>
       ) : null}
 
-      <Grid
-        templateColumns={["auto", null, null, "repeat(auto-fill, 282px)"]}
-        gap="16px"
-        width="100%"
-        marginBottom="24px"
-        alignItems="center"
-      >
-        {items?.map((item, idx) => (
-          <TableCard
-            key={`${item._id}-${idx}`}
-            item={item}
-            projectsCount={0}
-            selectedRows={selectedRows}
-            onDelete={handleOnDelete}
-            selectAllRows={() => handleSelectAllRows(/*projectsData*/)}
-            checked={false}
-            fetchState={fetchState}
-            onGroup={onGroup}
-            onFilter={onFilter}
-            groupOption={groupOption}
-            role={role}
+      {fetchState === fetchType.GROUP && items?.length > 0 ? (
+        <Flex
+          alignItems="center"
+          onClick={() => onFilter(null)}
+          cursor="pointer"
+          mb="24px"
+        >
+          <CloseIcon
+            mr="8px"
+            h="12px"
+            cursor="pointer"
+            onClick={() => onGroup(null)}
           />
-        ))}
-      </Grid>
+          <Text marginTop="3px" cursor="pointer">{`Agrupado por ${groupOption
+            .toString()
+            .toUpperCase()}`}</Text>
+        </Flex>
+      ) : null}
+
+      <Flex w="100%" justifyContent="flex-end" mb="8px" mt="8px">
+        <Text mr="16px" color="grey">{`${
+          fetchState === fetchType.GROUP
+            ? formatItems.reduce((acc, val) => {
+                return acc + val.value.length
+              }, 0)
+            : items?.length
+        } ${type === "projects" ? "proyectos" : "sistemas"}`}</Text>
+      </Flex>
+
+      {fetchState === fetchType.GROUP ? (
+        formatItems?.map((item) => {
+          const { isOpen, onToggle } = useDisclosure()
+
+          return (
+            <>
+              <Box pb={isOpen ? "20px" : "10px"}>
+                <Flex
+                  onClick={onToggle}
+                  cursor="pointer"
+                  align="center"
+                  padding="10px 0"
+                >
+                  <Text variant="d_s_medium">{item.key}</Text>
+                  <ChevronDownIcon transform={isOpen ? "rotate(180deg)" : "none"} />
+                </Flex>
+                {isOpen ? (
+                  <Grid
+                    templateColumns={[
+                      "auto",
+                      null,
+                      null,
+                      "repeat(auto-fill, 282px)"
+                    ]}
+                    gap="16px"
+                    width="100%"
+                    marginBottom="24px"
+                    alignItems="center"
+                  >
+                    {item.value?.map((item, idx) => (
+                      <TableCard
+                        key={`${item._id}-${idx}`}
+                        item={item}
+                        onSubscribe={onSubscribe}
+                        onFavorite={onFavorite}
+                        type={type}
+                      />
+                    ))}
+                  </Grid>
+                ) : null}
+              </Box>
+            </>
+          )
+        })
+      ) : (
+        <Grid
+          templateColumns={["auto", null, null, "repeat(auto-fill, 282px)"]}
+          gap="16px"
+          width="100%"
+          marginBottom="24px"
+          alignItems="center"
+        >
+          {items?.map((item, idx) => (
+            <TableCard
+              key={`${item._id}-${idx}`}
+              item={item}
+              onSubscribe={onSubscribe}
+              onFavorite={onFavorite}
+              type={type}
+            />
+          ))}
+        </Grid>
+      )}
     </>
   )
 }
