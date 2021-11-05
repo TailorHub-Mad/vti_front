@@ -139,9 +139,8 @@ const nuevo = () => {
         top="32px"
         display={["none", "none", "block", "block"]}
       />
-      <Flex justify="center" pt={["0", "0", "0", "100px"]} height="fit-content">
+      <Flex justify="center" pt={["0", "0", "0", "100px"]}>
         <Flex
-          minH="990px"
           w="460px"
           borderRadius="2px"
           bgColor="white"
@@ -151,7 +150,6 @@ const nuevo = () => {
           position="sticky"
           top="0"
           marginBottom={["0", "0", "0", "50px"]}
-          height="fit-content"
           transition="left 0.18s ease-in-out"
           padding={["16px", "0", "0", "32px"]}
           pb={["80px", null, null, null]}
@@ -202,11 +200,9 @@ const nuevo = () => {
             criteria={noteCriteria}
             onTagsSelect={(tags) => handleTagSelect(tags, true)}
             selectedTags={values?.tags?.map((t) => t.label) || []}
-            position="relative"
-            top="auto"
-            left="auto"
-            right="auto"
-            ml="50px"
+            position={["absolute", null, null, "relative"]}
+            h={["100%", null, null, null]}
+            ml={[null, null, null, "50px"]}
             sx={{
               ">div:first-of-type": {
                 boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)"

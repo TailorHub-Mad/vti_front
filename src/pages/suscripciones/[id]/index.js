@@ -270,19 +270,17 @@ const suscripcion = () => {
             isScreen ? subscription?.name || "" : ""
           }`}
         />
-        {!isEmptyData ? (
-          <ToolBar
-            onSearch={onSearch}
-            searchPlaceholder="Buscar"
-            fetchState={fetchState}
-            noAdd
-            noImport
-            noFilter
-            noGroup
-            noSearch={subscriptionsData.length === 0}
-            noMobileMenu
-          />
-        ) : null}
+        <ToolBar
+          onSearch={onSearch}
+          searchPlaceholder="Buscar"
+          fetchState={fetchState}
+          noAdd
+          noImport
+          noFilter
+          noGroup
+          noSearch={subscriptionsData.length === 0}
+          noMobileMenu
+        />
       </PageHeader>
       <PageMenu h="auto">
         {isMenuHidden() ? (

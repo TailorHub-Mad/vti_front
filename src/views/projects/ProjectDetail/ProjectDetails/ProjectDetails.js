@@ -40,7 +40,12 @@ export const ProjectDetails = ({
               <Text variant="d_m_regular">Fecha de cierre</Text>
             </Flex>
             {focusPoint && (
-              <Tag variant={variantGeneralTag.PROJECT} ml="32px">
+              <Tag
+                variant={variantGeneralTag.PROJECT}
+                ml="32px"
+                width="80px"
+                noCollapse
+              >
                 {`${closeInfo.day.padStart(2, 0)}/${closeInfo.month.padStart(
                   2,
                   0

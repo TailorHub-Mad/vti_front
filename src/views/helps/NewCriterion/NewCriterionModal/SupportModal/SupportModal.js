@@ -72,7 +72,7 @@ export const SupportModal = ({
       <Box
         bgColor="white"
         padding={["16px", null, null, "32px"]}
-        minHeight={isScreen ? null : "100vh"}
+        minHeight={isScreen ? null : "100%"}
       >
         <CustomModalHeader title="Ventana de apoyo" onClose={onClose} />
         <Flex direction="column" mt="24px">
