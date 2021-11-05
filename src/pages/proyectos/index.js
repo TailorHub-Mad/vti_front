@@ -560,23 +560,15 @@ const proyectos = () => {
           <TableGrid
             fetchState={fetchState}
             items={projectsData}
-            onClose={handleOnOpenFinishProjectModal}
-            onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
-            onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
-            onEdit={handleUpdate}
             onGroup={handleOnGroup}
             onFilter={handleOnFilter}
             groupOption={getGroupOptionLabel(
               PROJECTS_GROUP_OPTIONS,
               fetchOptions[fetchOption.GROUP]
             )}
-            handleSortElement={handleSortElement}
             onSubscribe={handleSubscribe}
             onFavorite={handleFavorite}
-            selectedRows={selectedRows}
-            setSelectedRows={setSelectedRows}
-            handleRowSelect={handleRowSelect}
-            handleSelectAllRows={handleSelectAllRows}
+            type="projects"
           />
         )}
       </PageBody>

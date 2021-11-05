@@ -1,3 +1,4 @@
+import { useMediaQuery } from "@chakra-ui/media-query"
 import download from "downloadjs"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
@@ -10,6 +11,7 @@ import { ToolBar } from "../../../components/navigation/ToolBar/ToolBar"
 import { ExportFilesModal } from "../../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
 import { ImportFilesModal } from "../../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { Popup } from "../../../components/overlay/Popup/Popup"
+import { TableGrid } from "../../../components/tables/TableGrid/TableGrid"
 import useProjectApi from "../../../hooks/api/useProjectApi"
 import { ToastContext } from "../../../provider/ToastProvider"
 import { DeleteType } from "../../../utils/constants/global"
@@ -55,6 +57,8 @@ export const ProjectsByObject = ({
   isValidating
 }) => {
   // Hooks
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   const { deleteProject, createProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
   const { mutate } = useSWRConfig()
@@ -235,32 +239,27 @@ export const ProjectsByObject = ({
       >
         {handleDeleteMessage()}
       </Popup>
-
       <FinishProjectModal
         project={projectToFinish}
         isOpen={isFinishProjectModalOpen}
         onClose={handleOnCloseFinishProjectModal}
       />
-
       <NewProjectModal
         projectToUpdate={projectToUpdate}
         isOpen={isProjectModalOpen}
         onClose={handleOnCloseModal}
       />
-
       <ExportFilesModal
         isOpen={showExportModal}
         onClose={() => setShowExportModal(false)}
         onExport={() => handleExportProjects()}
       />
-
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
         onUpload={(data) => handleImportProjects(data)}
         onDropDataTransform={(info) => projectDataTransform(info)}
       />
-
       <PageHeader>
         {projectsData ? (
           <BreadCrumbs customURL={customURL} lastElement={"Proyectos"} />
@@ -277,7 +276,6 @@ export const ProjectsByObject = ({
             searchPlaceholder="Busqueda por ID, Alias"
             groupOptions={PROJECTS_GROUP_OPTIONS}
             icon={<AddProjectIcon />}
-            // fetchState={fetchState} -> Provisional to filters
             noImport
           />
         ) : null}
@@ -288,9 +286,8 @@ export const ProjectsByObject = ({
           backText={backText}
           onClick={() => router.push(hrefBack)}
         />
-      ) : (
+      ) : isScreen ? (
         <ProjectsTable
-          // fetchState={fetchState} -> Provisional to filters
           projects={projectsData}
           onClose={handleOnOpenFinishProjectModal}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
@@ -302,6 +299,21 @@ export const ProjectsByObject = ({
             PROJECTS_GROUP_OPTIONS,
             fetchOptions[fetchOption.GROUP]
           )}
+        />
+      ) : (
+        <TableGrid
+          items={projectsData}
+          onClose={handleOnOpenFinishProjectModal}
+          onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
+          onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
+          onEdit={handleUpdate}
+          onTabChange={(state) => setFetchState(state)}
+          onGroup={handleOnGroup}
+          groupOption={getGroupOptionLabel(
+            PROJECTS_GROUP_OPTIONS,
+            fetchOptions[fetchOption.GROUP]
+          )}
+          type="projects"
         />
       )}
     </>

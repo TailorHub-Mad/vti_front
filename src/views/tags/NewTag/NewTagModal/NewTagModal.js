@@ -1,4 +1,4 @@
-import { Modal, ModalOverlay, Button, Box } from "@chakra-ui/react"
+import { Modal, ModalOverlay, Button, Box, Flex } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
 import { MultipleFormContent } from "../../../../components/forms/MultipleFormContent/MultipleFormContent"
@@ -161,15 +161,18 @@ export const NewTagModal = ({
       <ModalOverlay />
       <CustomModalContent p="48px 32px" borderRadius="2px" zIndex="10001">
         <Box
-          width="460px"
-          position="relative"
-          top="50px"
-          marginBottom="50px"
-          left={showSecondaryContent ? "calc(50vw - 540px)" : "calc(50vw - 230px)"}
-          transition="left 0.18s ease-in-out"
+          width={["100%", null, null, "460px"]}
+          height={["auto", null, null, "fit-content"]}
+          position={["fixed", null, null, "absolute"]}
+          top={["0", null, null, "50px"]}
+          left={["0", null, null, "calc(50vw - 230px)"]}
+          overflowY={["auto", null, null, null]}
+          bottom={["0", null, null, null]}
+          transition={["none", null, null, "left 0.18s ease-in-out"]}
+          zIndex="1400"
+          padding={["16px", null, null, "32px"]}
+          pb={["96px", null, null, "32px"]}
           bgColor="white"
-          borderRadius="2px"
-          padding="32px"
         >
           <CustomModalHeader
             title={isUpdate ? editTitle : addTitle}
@@ -189,18 +192,30 @@ export const NewTagModal = ({
               openAuxModal={() => setShowSecondaryContent(true)}
             />
           </MultipleFormContent>
-          <Button
-            w="194px"
-            margin="0 auto"
-            display="block"
-            mt="24px"
-            disabled={checkInputsAreEmpty()}
-            onClick={handleSubmit}
-            isLoading={isSubmitting}
-            pointerEvents={isSubmitting ? "none" : "all"}
+          <Flex
+            justifyContent={"center"}
+            position={["fixed", null, null, "relative"]}
+            bottom={["0", null, null, null]}
+            left={["0", null, null, null]}
+            width="100%"
+            pb={["8px", null, null, null]}
+            pt={["8px", null, null, null]}
+            boxShadow={["0px -4px 8px rgba(5, 46, 87, 0.1)", null, null, "none"]}
+            bgColor={["white", null, null, null]}
           >
-            Guardar
-          </Button>
+            <Button
+              w="194px"
+              margin="0 auto"
+              display="block"
+              mt={["0", null, null, "24px"]}
+              disabled={checkInputsAreEmpty()}
+              onClick={handleSubmit}
+              isLoading={isSubmitting}
+              pointerEvents={isSubmitting ? "none" : "all"}
+            >
+              Guardar
+            </Button>
+          </Flex>
 
           {!isUpdate ? (
             <Button
