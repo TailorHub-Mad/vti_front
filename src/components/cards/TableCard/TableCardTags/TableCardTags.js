@@ -1,12 +1,9 @@
 import { Box } from "@chakra-ui/react"
-import { useRouter } from "next/router"
 import React from "react"
 import { formatTags, variantGeneralTag } from "../../../../utils/constants/tabs"
 import { TagRow } from "../../../tags/TagRow/TagRow"
 
-export const TableCardTags = ({ testSystems, tags }) => {
-  const router = useRouter()
-
+export const TableCardTags = ({ testSystems, projects, notes, tags, type }) => {
   return (
     <Box
       display="grid"
@@ -15,6 +12,28 @@ export const TableCardTags = ({ testSystems, tags }) => {
       gridTemplateColumns="100%"
       width="100%"
     >
+      {projects?.length > 0 ? (
+        <TagRow
+          tags={formatTags(projects, "alias")}
+          variant={variantGeneralTag.SYSTEM}
+          width="100%"
+          noCollapse
+        />
+      ) : type === "projects" ? null : (
+        <Box w="100%" height="28px"></Box>
+      )}
+
+      {notes?.length > 0 && notes[0]?.title ? (
+        <TagRow
+          tags={formatTags(notes, "title")}
+          variant={variantGeneralTag.NOTE}
+          width="100%"
+          noCollapse
+        />
+      ) : type === "projects" ? null : (
+        <Box w="100%" height="28px"></Box>
+      )}
+
       {testSystems?.length > 0 ? (
         <TagRow
           tags={formatTags(testSystems, "alias")}
@@ -22,7 +41,7 @@ export const TableCardTags = ({ testSystems, tags }) => {
           width="100%"
           noCollapse
         />
-      ) : router.query.type === "testSystems" ? null : (
+      ) : type === "testSystems" ? null : (
         <Box w="100%" height="28px"></Box>
       )}
       {tags?.length > 0 ? (
@@ -32,9 +51,9 @@ export const TableCardTags = ({ testSystems, tags }) => {
           width="100%"
           noCollapse
         />
-      ) : Array.isArray(tags) ? (
+      ) : type === "testSystems" ? null : (
         <Box w="100%" height="28px"></Box>
-      ) : null}
+      )}
     </Box>
   )
 }
