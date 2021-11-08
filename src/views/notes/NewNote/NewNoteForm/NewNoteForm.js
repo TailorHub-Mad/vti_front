@@ -201,12 +201,12 @@ export const NewNoteForm = ({
   }, [noteToUpdate, value.project])
 
   const inputRefObj = {
-    text: <SimpleInput />,
-    textarea: <TextAreaInput />,
-    select: <InputSelect />,
-    add_select: <AddSelect />,
-    attachment: <FileInputForm isUpdate={isUpdate} />,
-    multitag_select: <MultiTagSelect />
+    text: <SimpleInput marginBottom="24px" mt="16px" />,
+    textarea: <TextAreaInput marginBottom="32px" mt="24px" />,
+    select: <InputSelect marginBottom="24px" />,
+    add_select: <AddSelect marginBottom="24px" />,
+    attachment: <FileInputForm isUpdate={isUpdate} marginBottom="24px" />,
+    multitag_select: <MultiTagSelect marginBottom="24px" />
   }
 
   useEffect(() => {
@@ -219,7 +219,6 @@ export const NewNoteForm = ({
         return React.cloneElement(inputRefObj[type], {
           value: _values[name],
           onChange: (val) => handleFormChange(name, val),
-          marginBottom: "24px",
           isDisabled:
             index !== 0 && submitIsDisabled && !value[Object.keys(value)[index - 1]],
           key: `${name}-${index}`,
@@ -232,14 +231,14 @@ export const NewNoteForm = ({
 
 const FileInputForm = ({ value, onChange, isDisabled, isUpdate }) => {
   return (
-    <Flex flexDirection="column" mb="24px">
+    <Flex flexDirection="column">
       <FormLabel
         margin="0"
         marginRight="4px"
         display="flex"
         alignItems="center"
         color={isDisabled ? "#E2E8F0" : "#052E57"}
-        mb="8px"
+        marginTop="24px"
       >
         Adjunta tus documentos (opcional)
       </FormLabel>

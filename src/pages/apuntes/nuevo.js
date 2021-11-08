@@ -1,4 +1,5 @@
 import { Button, Flex, Text } from "@chakra-ui/react"
+import { useRouter } from "next/router"
 import React, { useContext, useEffect, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
@@ -6,6 +7,7 @@ import useHelpApi from "../../hooks/api/useHelpApi"
 import useNoteApi from "../../hooks/api/useNoteApi"
 import useTagApi from "../../hooks/api/useTagApi"
 import { ToastContext } from "../../provider/ToastProvider"
+import { PATHS } from "../../utils/constants/global"
 import { errorHandler } from "../../utils/errors"
 import { SupportModal } from "../../views/helps/NewCriterion/NewCriterionModal/SupportModal/SupportModal"
 import { NewNoteForm } from "../../views/notes/NewNote/NewNoteForm/NewNoteForm"
@@ -22,6 +24,7 @@ const initialValues = {
 }
 
 const nuevo = () => {
+  const router = useRouter()
   const { showToast } = useContext(ToastContext)
   const { createNote } = useNoteApi()
   const { getNoteHelps } = useHelpApi()
@@ -111,6 +114,10 @@ const nuevo = () => {
       }, 1000)
       showToast({ message: "¡Has añadido nuevo/s apunte/s!" })
       setIsSubmitting(false)
+
+      setTimeout(() => {
+        router.push(PATHS.notes)
+      }, 2000)
     } catch (error) {
       errorHandler(error)
     }

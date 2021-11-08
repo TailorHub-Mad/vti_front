@@ -12,6 +12,8 @@ export const TableCard = ({ item, onSubscribe, onFavorite, type }) => {
   const { user } = useContext(ApiAuthContext)
   const router = useRouter()
 
+  console.log(type, onFavorite, onSubscribe)
+
   const checkIsFavorite = (id) =>
     type === "projects"
       ? user?.favorites?.projects?.includes(id)

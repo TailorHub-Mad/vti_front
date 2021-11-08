@@ -18,6 +18,7 @@ export const ResponseModal = ({
   messageToUpdate,
   ...props
 }) => {
+  console.log(noteId)
   const { showToast } = useContext(ToastContext)
   const { createMessage, updateMessage } = useNoteApi()
   const { mutate } = useSWRConfig()
