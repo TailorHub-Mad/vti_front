@@ -58,7 +58,7 @@ export const SupportModal = ({
   return (
     <Box
       w={["100%", null, null, "620px"]}
-      h="fit-content"
+      h={["100vh", null, null, "fit-content"]}
       position="absolute"
       top={["0", null, null, "50px"]}
       right={["0", null, null, "calc(50vw - 620px)"]}
@@ -72,7 +72,7 @@ export const SupportModal = ({
       <Box
         bgColor="white"
         padding={["16px", null, null, "32px"]}
-        minHeight={isScreen ? null : "100vh"}
+        minHeight={isScreen ? null : "100%"}
       >
         <CustomModalHeader title="Ventana de apoyo" onClose={onClose} />
         <Flex direction="column" mt="24px">
