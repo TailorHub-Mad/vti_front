@@ -58,7 +58,7 @@ export const SupportModal = ({
   return (
     <Box
       w={["100%", null, null, "620px"]}
-      h="fit-content"
+      h={["100vh", null, null, "fit-content"]}
       position="absolute"
       top={["0", null, null, "50px"]}
       right={["0", null, null, "calc(50vw - 620px)"]}

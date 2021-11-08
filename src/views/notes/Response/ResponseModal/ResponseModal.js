@@ -133,7 +133,7 @@ export const ResponseModal = ({
   }, [messageToUpdate])
 
   return (
-    <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
+    <Modal isOpen={isOpen} onClose={handleOnClose} variant="response" {...props}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
