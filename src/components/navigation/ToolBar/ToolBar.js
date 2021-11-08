@@ -18,8 +18,6 @@ import { AddProjectIcon } from "../../icons/AddProjectIcon"
 import { fetchType } from "../../../utils/constants/swr"
 import { ActionMenuMobile } from "../../icons/ActionMenuMobile"
 import { FilterIcon } from "../../icons/FilterIcon"
-import { UploadCloudIcon } from "../../icons/UploadCloudIcon"
-import { ExportIcon } from "../../icons/ExportIcon"
 
 export const ToolBar = ({
   onAdd,
@@ -56,7 +54,10 @@ export const ToolBar = ({
   const handleOnFilter = (activeItem) => onFilter(activeItem)
 
   const searchBar = (
-    <InputGroup width="196px" marginRight="16px">
+    <InputGroup
+      width={[searchDate ? "140px" : null, null, null, "196px"]}
+      marginRight="16px"
+    >
       <InputLeftElement
         pointerEvents="none"
         children={<SearchIcon color="grey" />}
@@ -86,17 +87,10 @@ export const ToolBar = ({
     handler: () => setShowBar(false)
   })
 
-  const refMenu = useRef(null)
-  // useOutsideClick({
-  //   ref: refMenu,
-  //   handler: () => setMenuMobile(false)
-  // })
-
   return (
     <Flex>
       {isScreen ? null : menuMobile ? (
         <Box
-          ref={refMenu}
           position="fixed"
           bottom="0"
           left="0"
@@ -120,7 +114,15 @@ export const ToolBar = ({
 
           <Flex flexDirection="column" gridGap="32px">
             {noAdd || (
-              <Flex align="center" color="white" gridGap="16px" onClick={onAdd}>
+              <Flex
+                align="center"
+                color="white"
+                gridGap="16px"
+                onClick={() => {
+                  setMenuMobile(false)
+                  onAdd()
+                }}
+              >
                 <AddIcon />
                 <Text color="white" mt="4px" variant="d_s_medium">
                   Añadir
@@ -133,7 +135,10 @@ export const ToolBar = ({
                 align="center"
                 color="white"
                 gridGap="8px"
-                onClick={handleOnFilter}
+                onClick={() => {
+                  setMenuMobile(false)
+                  handleOnFilter()
+                }}
               >
                 <FilterIcon />
                 <Text color="white" mt="4px" variant="d_s_medium">
@@ -144,34 +149,14 @@ export const ToolBar = ({
 
             {noGroup || (
               <Group
-                onGroup={handleOnGroup}
+                onGroup={() => {
+                  setMenuMobile(false)
+                  handleOnGroup()
+                }}
                 options={groupOptions}
                 active={fetchState === fetchType.GROUP || queryGroup}
                 isMobile
               />
-            )}
-
-            {noImport || (
-              <>
-                <Flex align="center" color="white" gridGap="8px" onClick={onImport}>
-                  <UploadCloudIcon />
-                  <Text color="white" mt="4px" variant="d_s_medium">
-                    Importar
-                  </Text>
-                </Flex>
-
-                <Flex align="center" color="white" gridGap="8px">
-                  <ExportIcon />
-                  <Text
-                    color="white"
-                    mt="4px"
-                    variant="d_s_medium"
-                    onClick={onExport}
-                  >
-                    Exportar
-                  </Text>
-                </Flex>
-              </>
             )}
           </Flex>
         </Box>

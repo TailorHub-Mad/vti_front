@@ -49,7 +49,7 @@ export const ManagePassword = ({ title, subtitle }) => {
     >
       <Card
         width="492px"
-        p="32px 48px 56px 48px"
+        p={["32px 16px 56px 16px", null, null, "32px 48px 56px 48px"]}
         display="flex"
         flexDirection="column"
         alignItems="center"
