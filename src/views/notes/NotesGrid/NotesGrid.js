@@ -34,7 +34,7 @@ export const NotesGrid = ({
       ) : null}
 
       <Grid
-        templateColumns="repeat(auto-fill, 282px)"
+        templateColumns={["auto", null, null, "repeat(auto-fill, 282px)"]}
         gap="16px"
         width="100%"
         marginBottom="24px"

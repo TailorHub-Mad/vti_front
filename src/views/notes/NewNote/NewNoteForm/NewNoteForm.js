@@ -1,5 +1,6 @@
 import { FormLabel } from "@chakra-ui/form-control"
 import { Flex } from "@chakra-ui/layout"
+import { useMediaQuery } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { AddSelect } from "../../../../components/forms/AddSelect/AddSelect"
 import { FileInput } from "../../../../components/forms/FileInput/FileInput"
@@ -18,8 +19,11 @@ export const NewNoteForm = ({
   noteToUpdate,
   noteFromProject,
   submitIsDisabled,
-  isUpdate
+  isUpdate,
+  resetForm
 }) => {
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   const { getProjects } = useProjectApi()
   const { getNoteTags } = useTagApi()
 
@@ -30,25 +34,7 @@ export const NewNoteForm = ({
 
   const [isReset, setIsReset] = useState(false)
 
-  const formatValues = !noteToUpdate
-    ? { ...value }
-    : {
-        ...value,
-        testSystems:
-          noteToUpdate.testSystems.length > 0
-            ? noteToUpdate.testSystems.map((system) => ({
-                label: system.alias,
-                value: system._id
-              }))
-            : undefined,
-        tags:
-          noteToUpdate.tags.length > 0
-            ? noteToUpdate.tags.map((tag) => ({
-                label: tag.name,
-                value: tag._id
-              }))
-            : undefined
-      }
+  const _values = { ...value }
 
   const formatSelectOption = (data) =>
     data.map((d) => ({ label: d.alias, value: d._id }))
@@ -74,11 +60,11 @@ export const NewNoteForm = ({
         label: "Selecciona el proyecto*",
         options: projectOptions,
         isDisabled: Boolean(noteToUpdate) || Boolean(noteFromProject),
-        helper: "Abrir ventana de apoyo",
-        onHelperClick: () => openProjectSearchModal()
+        helper: isScreen ? "Abrir ventana de apoyo" : null,
+        onHelperClick: isScreen ? () => openProjectSearchModal() : null
       }
     },
-    system: {
+    testSystems: {
       type: "add_select",
       config: {
         placeholder: "Selecciona",
@@ -86,7 +72,8 @@ export const NewNoteForm = ({
         options: systemOptions,
         additemlabel: "Añadir ",
         removeitemlabel: "Eliminar ",
-        isReset: isReset
+        isReset: isReset,
+        isDisabled: Boolean(noteToUpdate)
       }
     },
     title: {
@@ -214,21 +201,24 @@ export const NewNoteForm = ({
   }, [noteToUpdate, value.project])
 
   const inputRefObj = {
-    text: <SimpleInput />,
-    textarea: <TextAreaInput />,
-    select: <InputSelect />,
-    add_select: <AddSelect />,
-    attachment: <FileInputForm isUpdate={isUpdate} />,
-    multitag_select: <MultiTagSelect />
+    text: <SimpleInput marginBottom="24px" mt="16px" />,
+    textarea: <TextAreaInput marginBottom="32px" mt="24px" />,
+    select: <InputSelect marginBottom="24px" />,
+    add_select: <AddSelect marginBottom="24px" />,
+    attachment: <FileInputForm isUpdate={isUpdate} marginBottom="24px" />,
+    multitag_select: <MultiTagSelect marginBottom="24px" />
   }
+
+  useEffect(() => {
+    if (resetForm) setIsReset(true)
+  }, [resetForm])
 
   return (
     <>
       {Object.entries(formInputs).map(([name, { type, config }], index) => {
         return React.cloneElement(inputRefObj[type], {
-          value: formatValues[name],
+          value: _values[name],
           onChange: (val) => handleFormChange(name, val),
-          marginBottom: "24px",
           isDisabled:
             index !== 0 && submitIsDisabled && !value[Object.keys(value)[index - 1]],
           key: `${name}-${index}`,
@@ -241,19 +231,19 @@ export const NewNoteForm = ({
 
 const FileInputForm = ({ value, onChange, isDisabled, isUpdate }) => {
   return (
-    <Flex flexDirection="column" mb="24px">
+    <Flex flexDirection="column">
       <FormLabel
         margin="0"
         marginRight="4px"
         display="flex"
         alignItems="center"
         color={isDisabled ? "#E2E8F0" : "#052E57"}
-        mb="8px"
+        marginTop="24px"
       >
         Adjunta tus documentos (opcional)
       </FormLabel>
       <FileInput
-        value={value}
+        value={value || ""}
         onChange={onChange}
         isDisabled={isDisabled}
         isUpdate={isUpdate}

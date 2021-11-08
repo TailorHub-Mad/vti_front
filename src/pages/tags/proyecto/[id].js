@@ -9,8 +9,11 @@ import { ProjectsByObject } from "../../../views/projects/ProjectsByObject/Proje
 import { projectFetchHandler } from "../../../swr/project.swr"
 import { checkDataIsEmpty } from "../../../utils/functions/global"
 import { PATHS } from "../../../utils/constants/global"
+import { useMediaQuery } from "@chakra-ui/media-query"
 
 const tag = () => {
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   const router = useRouter()
   const { isLoggedIn } = useContext(ApiAuthContext)
 
@@ -48,7 +51,7 @@ const tag = () => {
       ) : (
         <ProjectsByObject
           projects={projectsData}
-          customURL={`Tags/${tag?.name}`}
+          customURL={isScreen ? `Tags/${tag?.name}` : "Tags"}
           setFetchState={setFetchState}
           setFetchOptions={setFetchOptions}
           fetchState={fetchState}
@@ -56,6 +59,8 @@ const tag = () => {
           isEmptyData={isEmptyData}
           hrefBack={PATHS.projectTags}
           backText={"Volver a tags"}
+          isValidating={isValidating}
+          filterQuery={filterQuery}
         />
       )}
     </Page>

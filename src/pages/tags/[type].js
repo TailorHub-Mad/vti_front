@@ -58,6 +58,7 @@ const ORDER = {
 
 const tags = () => {
   // Hooks
+
   const router = useRouter()
   const { type } = router.query
   const { isLoggedIn } = useContext(ApiAuthContext)
@@ -270,10 +271,11 @@ const tags = () => {
         <ViewNotFoundState text="No hya tags creados" />
       ) : (
         <PageBody
-          p="32px"
+          p={["16px", null, null, "32px"]}
           bgColor="white"
           boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
           height="calc(100vh - 155px)"
+          mr={["14px", null, null, null]}
         >
           <TagsHeader
             activeItem={activeTab}
@@ -285,7 +287,7 @@ const tags = () => {
             <>
               <Text variant="d_s_medium">Primer Grado</Text>
               <Grid
-                templateColumns="repeat(auto-fill, 266px)"
+                templateColumns={["auto", null, null, "repeat(auto-fill, 266px)"]}
                 gap="16px"
                 width="100%"
                 mt="8px"
@@ -309,7 +311,12 @@ const tags = () => {
                 .sort((a, b) => a[0].localeCompare(b[0]))
                 .map(([groupName, tags]) => (
                   <Grid
-                    templateColumns="repeat(auto-fill, 266px)"
+                    templateColumns={[
+                      "auto",
+                      null,
+                      null,
+                      "repeat(auto-fill, 266px)"
+                    ]}
                     gap="16px"
                     width="100%"
                     mt="8px"
@@ -334,7 +341,7 @@ const tags = () => {
 
           {activeTab === ORDER.alphabetic ? (
             <Grid
-              templateColumns="repeat(auto-fill, 266px)"
+              templateColumns={["auto", null, null, "repeat(auto-fill, 266px)"]}
               gap="16px"
               width="100%"
               mt="8px"

@@ -18,6 +18,7 @@ export const ResponseModal = ({
   messageToUpdate,
   ...props
 }) => {
+  console.log(noteId)
   const { showToast } = useContext(ToastContext)
   const { createMessage, updateMessage } = useNoteApi()
   const { mutate } = useSWRConfig()
@@ -132,7 +133,7 @@ export const ResponseModal = ({
   }, [messageToUpdate])
 
   return (
-    <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
+    <Modal isOpen={isOpen} onClose={handleOnClose} variant="response" {...props}>
       <ModalOverlay />
       <ModalContent p="48px 32px" borderRadius="2px">
         <CustomModalHeader
@@ -140,6 +141,7 @@ export const ResponseModal = ({
           onClose={handleOnClose}
           pb="24px"
         />
+
         <ResponseForm
           value={values}
           onChange={(val) => setValues(val)}

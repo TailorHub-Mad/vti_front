@@ -27,13 +27,23 @@ export const MainFilter = ({
 
   return (
     <Box
-      width="460px"
-      position="absolute"
-      left={moveToLeft ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}
-      transition="left 0.18s ease-in-out"
-      bgColor="white"
+      width={["100%", null, null, "460px"]}
+      height={["auto", null, null, "fit-content"]}
+      position={["fixed", null, null, "absolute"]}
+      top={["0", null, null, "50px"]}
+      left={[
+        "0",
+        null,
+        null,
+        moveToLeft ? "calc(50vw - 500px)" : "calc(50vw - 230px)"
+      ]}
+      overflowY={["auto", null, null, null]}
+      bottom={["0", null, null, null]}
+      transition={["none", null, null, "left 0.18s ease-in-out"]}
       zIndex="1400"
-      padding="32px"
+      padding={["16px", null, null, "32px"]}
+      pb={["96px", null, null, "32px"]}
+      bgColor="white"
       {...props}
     >
       <CustomModalHeader title="Filtrar" onClose={onClose} pb="24px" />
@@ -44,10 +54,22 @@ export const MainFilter = ({
         isReset={isReset}
       />
 
-      <Flex direction="column" align="center">
+      <Flex
+        justifyContent={"center"}
+        position={["fixed", null, null, "relative"]}
+        bottom={["0", null, null, null]}
+        left={["0", null, null, null]}
+        width="100%"
+        pb={["8px", null, null, null]}
+        pt={["8px", null, null, null]}
+        boxShadow={["0px -4px 8px rgba(5, 46, 87, 0.1)", null, null, "none"]}
+        bgColor={["white", null, null, null]}
+      >
         <Button onClick={onFilter}>Filtrar</Button>
+      </Flex>
+      <Flex justifyContent="center">
         <Text
-          oonClick={handleOnReset}
+          onClick={handleOnReset}
           variant="d_xs_regular"
           mt="32px"
           cursor="pointer"

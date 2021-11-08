@@ -65,6 +65,7 @@ export const ProjectsTable = ({
       }
     }
   }
+
   const allRowsAreSelected =
     projectsData?.length > 0 && selectedRowsKeys?.length === projectsData?.length
 

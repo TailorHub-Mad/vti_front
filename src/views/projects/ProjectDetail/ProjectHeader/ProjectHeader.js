@@ -25,7 +25,11 @@ export const ProjectHeader = ({
   const { role } = useContext(ApiAuthContext)
 
   return (
-    <PageHeader mb="0">
+    <PageHeader
+      flexDirection={["column", null, null, "row"]}
+      align={["flex-start", null, null, "center"]}
+      mb={["32px", null, null, "0"]}
+    >
       <Flex>
         <Link href={PATHS.projects} passHref>
           <Text variant="d_l_medium" color="blue.400" cursor="pointer">
@@ -35,12 +39,13 @@ export const ProjectHeader = ({
         <ArrowRightIcon />
         <Text variant="d_l_medium">{idProject}</Text>
       </Flex>
-      <Flex>
+      <Flex mt={["16px", null, null, null]}>
         <ActionLink
           onClick={() => onSubscribe(isSubscribe)}
           label={isSubscribe ? "Darme de baja" : "Suscribirme"}
           color={isSubscribe ? "error" : "Sblue.500"}
           icon={<SubscribeIcon color={isSubscribe ? "error" : "blue.500"} />}
+          ml={["0", null, null, null]}
         />
         {role === RoleType.USER ? (
           <ActionLink

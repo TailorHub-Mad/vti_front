@@ -1,4 +1,5 @@
 import { Text } from "@chakra-ui/layout"
+import { useMediaQuery } from "@chakra-ui/media-query"
 import { remove } from "lodash"
 import { useRouter } from "next/router"
 import React, { useContext, useMemo, useState } from "react"
@@ -29,6 +30,8 @@ import { SubscriptionsMenu } from "../../../views/subscriptions/SubscriptionsMen
 
 const suscripcion = () => {
   // Hooks
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   const router = useRouter()
   const { selectedRows, setSelectedRows, handleRowSelect, handleSelectAllRows } =
     useTableActions()
@@ -263,22 +266,23 @@ const suscripcion = () => {
 
       <PageHeader>
         <BreadCrumbs
-          customURL={`${PATHS.subscriptions}/${subscription?.name || ""}`}
+          customURL={`${PATHS.subscriptions}/${
+            isScreen ? subscription?.name || "" : ""
+          }`}
         />
-        {!isEmptyData ? (
-          <ToolBar
-            onSearch={onSearch}
-            searchPlaceholder="Buscar"
-            fetchState={fetchState}
-            noAdd
-            noImport
-            noFilter
-            noGroup
-            noSearch={subscriptionsData.length === 0}
-          />
-        ) : null}
+        <ToolBar
+          onSearch={onSearch}
+          searchPlaceholder="Buscar"
+          fetchState={fetchState}
+          noAdd
+          noImport
+          noFilter
+          noGroup
+          noSearch={subscriptionsData.length === 0}
+          noMobileMenu
+        />
       </PageHeader>
-      <PageMenu>
+      <PageMenu h="auto">
         {isMenuHidden() ? (
           <SubscriptionsMenu
             currentState={currentState}
@@ -303,11 +307,7 @@ const suscripcion = () => {
         ) : currentState === "notes" ? (
           <NotesGrid
             notes={subscription?.subscribed.notes}
-            onSeeDetails={(note) =>
-              router.push(
-                `${PATHS.projects}/${note.projects[0]?._id}?note=${note._id}`
-              )
-            }
+            onSeeDetails={(note) => router.push(`${PATHS.notes}?note=${note._id}`)}
             checkIsSubscribe={() => {}}
             checkIsFavorite={() => {}}
             onDelete={() => {}}

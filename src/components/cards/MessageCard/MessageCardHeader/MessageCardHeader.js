@@ -17,6 +17,7 @@ export const MessageCardHeader = ({
   onSubscribe,
   onFavorite,
   notesFromSubscription,
+  isMyNote,
   ...props
 }) => {
   const [showOptions, setShowOptions] = useState(false)
@@ -70,7 +71,7 @@ export const MessageCardHeader = ({
               </Text>
             </OptionsMenuItem>
 
-            <OptionsMenuItem onClick={handleOnSubscribe}>
+            <OptionsMenuItem onClick={handleOnSubscribe} isLast={!isMyNote}>
               <SubscribeIcon
                 {...ICONS_PROPS_16}
                 marginRight="4px"
@@ -84,13 +85,14 @@ export const MessageCardHeader = ({
                 {isSubscribe ? "Darme de baja" : "Suscribirme"}
               </Text>
             </OptionsMenuItem>
-
-            <OptionsMenuItem onClick={handleOnDelete} isLast>
-              <DeleteIcon {...ICONS_PROPS_16} marginRight="4px" color="error" />
-              <Text variant="d_xs_regular" color="error" marginRight="2px">
-                Eliminar
-              </Text>
-            </OptionsMenuItem>
+            {isMyNote ? (
+              <OptionsMenuItem onClick={handleOnDelete} isLast>
+                <DeleteIcon {...ICONS_PROPS_16} marginRight="4px" color="error" />
+                <Text variant="d_xs_regular" color="error" marginRight="2px">
+                  Eliminar
+                </Text>
+              </OptionsMenuItem>
+            ) : null}
           </OptionsMenu>
         </Box>
       )}

@@ -5,12 +5,11 @@ export const CustomModalContent = ({ children, ...props }) => {
   return (
     <Box
       width="100vw"
-      height="100vh"
+      height={["none", null, null, "100vh"]}
       position="absolute"
       top="0"
       left="0"
-      bottom="40"
-      bgColor="#052E5780"
+      bottom={["0", null, null, "40"]}
       zIndex="1400"
       overflowY="scroll"
       {...props}

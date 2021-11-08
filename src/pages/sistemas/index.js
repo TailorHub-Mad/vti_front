@@ -37,6 +37,8 @@ import { TestsSystemsFilterModal } from "../../views/test_systems/TestSystemsFil
 import useUserApi from "../../hooks/api/useUserApi"
 import { remove } from "lodash"
 import useTableActions from "../../hooks/useTableActions"
+import { useMediaQuery } from "@chakra-ui/media-query"
+import { TableGrid } from "../../components/tables/TableGrid/TableGrid"
 
 const SYSTEMS_GROUP_OPTIONS = [
   {
@@ -55,6 +57,7 @@ const SYSTEMS_GROUP_OPTIONS = [
 
 const sistemas = () => {
   // Hooks
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
   const { isLoggedIn, role, user } = useContext(ApiAuthContext)
   const { deleteSystem, createSystem } = useSystemApi()
   const { showToast } = useContext(ToastContext)
@@ -75,6 +78,7 @@ const sistemas = () => {
   const [systemsToDelete, setSystemsToDelete] = useState(null)
   const [queryFilter, setQueryFilter] = useState(null)
   const [queryGroup, setQueryGroup] = useState(null)
+  const [querySearch, setQuerySearch] = useState(null)
 
   // Fetch
   const { data, error, isLoading, mutate, isValidating } = systemFetchHandler(
@@ -263,37 +267,40 @@ const sistemas = () => {
 
   // Filters
   const onSearch = (search) => {
-    if (queryFilter) setQueryFilter(null)
-    if (queryGroup) setQueryGroup(null)
-
     if (!search) {
-      setFetchState(fetchType.ALL)
-      setFetchOptions({
-        [fetchOption.SEARCH]: null
-      })
-      return
+      if (queryGroup) {
+        setFetchState(fetchType.GROUP)
+        setFetchOptions({
+          [fetchOption.GROUP]: queryGroup
+        })
+        return
+      } else {
+        setFetchState(fetchType.ALL)
+        setQueryFilter(null)
+        setFetchOptions({
+          [fetchOption.SEARCH]: null
+        })
+        return
+      }
     }
 
-    setFetchState(fetchType.SEARCH)
-    setFetchOptions({
-      [fetchOption.SEARCH]: `testSystems.ref=${search}&testSystems.alias=${search}`
-    })
+    setQueryFilter(null)
+    setQuerySearch(`testSystems.ref=${search}&testSystems.alias=${search}`)
+    let query = `testSystems.ref=${search}&testSystems.alias=${search}`
+
+    if (fetchState === fetchType.GROUP) {
+      setFetchState(fetchType.GROUP)
+      setFetchOptions({
+        [fetchOption.GROUP]: `${queryGroup}&${query}`
+      })
+    } else {
+      setFetchState(fetchType.SEARCH)
+      setFetchOptions({
+        [fetchOption.SEARCH]: query
+      })
+    }
   }
 
-  // const handleOnGroup = (group) => {
-  //   if (!group) {
-  //     setFetchState(fetchType.ALL)
-  //     setFetchOptions({
-  //       [fetchOption.GROUP]: null
-  //     })
-  //     return
-  //   }
-
-  //   setFetchState(fetchType.GROUP)
-  //   setFetchOptions({
-  //     [fetchOption.GROUP]: group
-  //   })
-  // }
   const handleOnGroup = (group) => {
     if (!group) {
       setQueryGroup(null)
@@ -313,40 +320,14 @@ const sistemas = () => {
     }
 
     setQueryGroup(group)
-
-    if (fetchState === fetchType.FILTER) {
-      const newGroup = `${group}&${queryFilter}`
-      setFetchState(fetchType.GROUP)
-      setFetchOptions({
-        [fetchOption.GROUP]: newGroup
-      })
-    } else {
-      setFetchState(fetchType.GROUP)
-
-      setFetchOptions({
-        [fetchOption.GROUP]: group
-      })
-    }
+    let query = group
+    if (queryFilter) query = `${query}&${queryFilter}`
+    if (querySearch) query = `${query}&${querySearch}`
+    setFetchState(fetchType.GROUP)
+    setFetchOptions({
+      [fetchOption.GROUP]: query
+    })
   }
-
-  // const handleOnFilter = (values) => {
-  //   if (!values) {
-  //     setFetchState(fetchType.ALL)
-  //     setFetchOptions({
-  //       [fetchOption.FILTER]: null
-  //     })
-  //     return
-  //   }
-
-  //   const filter = generateFilterQuery(TESTSYSTEMS_FILTER_KEYS, values)
-
-  //   setFetchState(fetchType.FILTER)
-  //   setFetchOptions({
-  //     [fetchOption.FILTER]: filter
-  //   })
-
-  //   setShowFilterModal(false)
-  // }
 
   const handleOnFilter = (values, type) => {
     if (!values) {
@@ -374,7 +355,7 @@ const sistemas = () => {
     } else {
       filter = `query=${values}`
     }
-
+    setQuerySearch(null)
     setQueryFilter(filter)
 
     if (fetchState === fetchType.GROUP) {
@@ -477,7 +458,7 @@ const sistemas = () => {
           onImport={() => setShowImportModal(true)}
           onAdd={() => setIsSystemModalOpen(true)}
         />
-      ) : (
+      ) : isScreen ? (
         <TestSystemsTable
           fetchState={fetchState}
           systems={systemsData}
@@ -495,6 +476,19 @@ const sistemas = () => {
           setSelectedRows={setSelectedRows}
           handleRowSelect={handleRowSelect}
           handleSelectAllRows={handleSelectAllRows}
+        />
+      ) : (
+        <TableGrid
+          fetchState={fetchState}
+          items={systemsData}
+          onGroup={handleOnGroup}
+          onFilter={handleOnFilter}
+          groupOption={getGroupOptionLabel(
+            SYSTEMS_GROUP_OPTIONS,
+            fetchOptions[fetchOption.GROUP]
+          )}
+          onSubscribe={handleSubscribe}
+          type="testSystems"
         />
       )}
     </Page>

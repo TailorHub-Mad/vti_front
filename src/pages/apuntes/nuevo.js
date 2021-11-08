@@ -1,4 +1,5 @@
-import { Button, Flex } from "@chakra-ui/react"
+import { Button, Flex, Text } from "@chakra-ui/react"
+import { useRouter } from "next/router"
 import React, { useContext, useEffect, useState } from "react"
 import { Page } from "../../components/layout/Pages/Page"
 import { PageHeader } from "../../components/layout/Pages/PageHeader/PageHeader"
@@ -6,6 +7,7 @@ import useHelpApi from "../../hooks/api/useHelpApi"
 import useNoteApi from "../../hooks/api/useNoteApi"
 import useTagApi from "../../hooks/api/useTagApi"
 import { ToastContext } from "../../provider/ToastProvider"
+import { PATHS } from "../../utils/constants/global"
 import { errorHandler } from "../../utils/errors"
 import { SupportModal } from "../../views/helps/NewCriterion/NewCriterionModal/SupportModal/SupportModal"
 import { NewNoteForm } from "../../views/notes/NewNote/NewNoteForm/NewNoteForm"
@@ -18,10 +20,11 @@ const initialValues = {
   description: undefined,
   tags: undefined,
   link: undefined,
-  document: undefined
+  documents: undefined
 }
 
 const nuevo = () => {
+  const router = useRouter()
   const { showToast } = useContext(ToastContext)
   const { createNote } = useNoteApi()
   const { getNoteHelps } = useHelpApi()
@@ -35,11 +38,12 @@ const nuevo = () => {
 
   const [usedNoteTags, setUsedNoteTags] = useState([])
   const [noteCriteria, setNoteCriteria] = useState([])
+  const [resetForm, setResetForm] = useState(false)
 
   const checkInputsAreEmpty = () => {
     return (
       !values.project ||
-      !values.system ||
+      !values.testSystems ||
       !values.title ||
       !values.description ||
       !values.tags
@@ -75,14 +79,14 @@ const nuevo = () => {
   const formatCreateNote = (note) => {
     const formatData = {
       project: note.project.value,
-      testSystems: note.system.map((s) => s.value),
+      testSystems: note.testSystems.map((s) => s.value),
       title: note.title,
       description: note.description,
       tags: note.tags.map((t) => t.value)
     }
 
     if (note?.link) formatData["link"] = note.link
-    if (note?.document) formatData["file"] = note.document
+    if (note?.documents) formatData["file"] = note.documents
 
     const formData = new FormData()
 
@@ -100,11 +104,20 @@ const nuevo = () => {
       setIsSubmitting(true)
 
       const note = formatCreateNote(values)
+
       await createNote(note)
 
       setValues(initialValues)
+      setResetForm(true)
+      setTimeout(() => {
+        setResetForm(false)
+      }, 1000)
       showToast({ message: "¡Has añadido nuevo/s apunte/s!" })
       setIsSubmitting(false)
+
+      setTimeout(() => {
+        router.push(PATHS.notes)
+      }, 2000)
     } catch (error) {
       errorHandler(error)
     }
@@ -126,32 +139,31 @@ const nuevo = () => {
     fetchTags()
   }, [])
   return (
-    <Page overflowY="auto">
+    <Page overflowY="auto" newNote>
       <PageHeader
         title="Nuevo apunte"
         position="fixed"
         top="32px"
         display={["none", "none", "block", "block"]}
       />
-      <Flex justify="center" pt={["0", "0", "0", "100px"]} height="fit-content">
+      <Flex justify="center" pt={["0", "0", "0", "100px"]}>
         <Flex
-          minH="990px"
           w="460px"
-          p="48px 32px"
           borderRadius="2px"
           bgColor="white"
           flexDirection="column"
           boxShadow="0px 0px 8px rgba(5, 46, 87, 0.1)"
-          mb="90px"
-          width="460px"
+          mb={["0", "0", "0", "90px"]}
           position="sticky"
           top="0"
-          marginBottom="50px"
-          height="fit-content"
-          // left={showTagSupportModal ? "calc(50vw - 675px)" : "calc(50vw - 400px)"}
+          marginBottom={["0", "0", "0", "50px"]}
           transition="left 0.18s ease-in-out"
-          padding="32px"
+          padding={["16px", "0", "0", "32px"]}
+          pb={["80px", null, null, null]}
         >
+          <Text variant="d_m_medium" pb="32px" pt="24px">
+            Añadir nuevo apunte
+          </Text>
           <NewNoteForm
             value={values}
             onChange={(val) => setValues(val)}
@@ -160,20 +172,32 @@ const nuevo = () => {
             openProjectSearchModal={() => {
               setShowProjectSearchModal(true)
             }}
+            resetForm={resetForm}
           />
-
-          <Button
-            w="194px"
-            margin="0 auto"
-            mt="24px"
-            disabled={submitIsDisabled}
-            onClick={handleSubmit}
-            isLoading={isSubmitting}
-            pointerEvents={isSubmitting ? "none" : "all"}
-            openAuxModal={() => setShowTagSupportModal(true)}
+          <Flex
+            justifyContent={"center"}
+            position={["fixed", null, null, "relative"]}
+            bottom={["0", null, null, null]}
+            left={["0", null, null, null]}
+            width="100%"
+            pb={["8px", null, null, null]}
+            pt={["8px", null, null, null]}
+            boxShadow={["0px -4px 8px rgba(5, 46, 87, 0.1)", null, null, "none"]}
+            bgColor={["white", null, null, null]}
           >
-            Guardar
-          </Button>
+            <Button
+              w="194px"
+              margin="0 auto"
+              mt={["0", null, null, "24px"]}
+              disabled={submitIsDisabled}
+              onClick={handleSubmit}
+              isLoading={isSubmitting}
+              pointerEvents={isSubmitting ? "none" : "all"}
+              openAuxModal={() => setShowTagSupportModal(true)}
+            >
+              Guardar
+            </Button>
+          </Flex>
         </Flex>
 
         {showTagSupportModal ? (
@@ -183,11 +207,9 @@ const nuevo = () => {
             criteria={noteCriteria}
             onTagsSelect={(tags) => handleTagSelect(tags, true)}
             selectedTags={values?.tags?.map((t) => t.label) || []}
-            position="relative"
-            top="auto"
-            left="auto"
-            right="auto"
-            ml="50px"
+            position={["absolute", null, null, "relative"]}
+            h={["100%", null, null, null]}
+            ml={[null, null, null, "50px"]}
             sx={{
               ">div:first-of-type": {
                 boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)"

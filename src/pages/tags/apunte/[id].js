@@ -1,3 +1,4 @@
+import { useMediaQuery } from "@chakra-ui/media-query"
 import { useRouter } from "next/router"
 import React, { useContext, useEffect, useState } from "react"
 import { Page } from "../../../components/layout/Pages/Page"
@@ -18,6 +19,8 @@ import { NotesGrid } from "../../../views/notes/NotesGrid/NotesGrid"
 
 const apuntesDeSistemas = () => {
   // Hooks
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   const router = useRouter()
   const { isLoggedIn } = useContext(ApiAuthContext)
   const { getNoteTag } = useTagApi()
@@ -47,14 +50,14 @@ const apuntesDeSistemas = () => {
     if (!search) {
       setFetchState(fetchType.FILTER)
       setFetchOptions({
-        [fetchOption.FILTER]: `notes.tags._id=${router.query?.system}`
+        [fetchOption.FILTER]: `notes.tags._id=${router.query?.id}`
       })
       return
     }
 
     setFetchState(fetchType.SEARCH)
     setFetchOptions({
-      [fetchOption.SEARCH]: `notes.ref=${search}&notes.title=${search}&notes.tags._id=${router.query?.system}`
+      [fetchOption.SEARCH]: `notes.ref=${search}&notes.title=${search}&notes.tags._id=${router.query?.id}&union=true`
     })
   }
 
@@ -75,7 +78,7 @@ const apuntesDeSistemas = () => {
     <Page>
       <PageHeader>
         <BreadCrumbs
-          customURL={`${PATHS.noteTags}/${noteTag}`}
+          customURL={isScreen ? `${PATHS.noteTags}/${noteTag}` : `Tags`}
           lastElement="apuntes"
         />
         <ToolBar

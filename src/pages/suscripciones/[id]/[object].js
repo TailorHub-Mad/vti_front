@@ -18,6 +18,7 @@ import { useRouter } from "next/router"
 import { projectFetchHandler } from "../../../swr/project.swr"
 import { PATHS } from "../../../utils/constants/global"
 import { systemFetchHandler } from "../../../swr/systems.swr"
+import { useMediaQuery } from "@chakra-ui/media-query"
 
 const NOTES_GROUP_OPTIONS = [
   {
@@ -40,6 +41,8 @@ const NOTES_GROUP_OPTIONS = [
 
 const apuntesSuscripciones = () => {
   // Hooks
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   const router = useRouter()
   const { isLoggedIn } = useContext(ApiAuthContext)
 
@@ -66,11 +69,7 @@ const apuntesSuscripciones = () => {
     const { notes } = typeObject === "projects" ? projects[0] : testSystems[0]
     return notes.map((n) => {
       return {
-        ...n,
-        projects:
-          typeObject === "projects"
-            ? [{ alias: data[0]?.projects[0].alias }]
-            : [{ alias: "" }]
+        ...n
       }
     })
   }
@@ -110,10 +109,18 @@ const apuntesSuscripciones = () => {
     <Page>
       <PageHeader>
         <BreadCrumbs
-          customURL={`${PATHS.subscriptions}/${router.query.owner}`}
-          lastElement={`/${
-            typeObject === "projects" ? "Proyectos" : "Sistemas ensayo"
-          }/apuntes`}
+          customURL={
+            isScreen
+              ? `${PATHS.subscriptions}/${router.query.owner}`
+              : `${PATHS.subscriptions}`
+          }
+          lastElement={
+            isScreen
+              ? `/${
+                  typeObject === "projects" ? "Proyectos" : "Sistemas ensayo"
+                }/apuntes`
+              : null
+          }
         />
         {isToolbarHidden() && (
           <ToolBar
@@ -124,6 +131,7 @@ const apuntesSuscripciones = () => {
             noAdd
             noFilter
             noGroup
+            noMobileMenu
           />
         )}
       </PageHeader>
@@ -140,7 +148,9 @@ const apuntesSuscripciones = () => {
                 notes={notesData}
                 onSeeDetails={(note) =>
                   router.push(
-                    `${PATHS.projects}/${router.query.object}?note=${note._id}`
+                    typeObject === "projects"
+                      ? `${PATHS.projects}/${router.query.object}?note=${note._id}`
+                      : `${PATHS.notes}?note=${note._id}`
                   )
                 }
                 checkIsSubscribe={() => {}}
@@ -161,7 +171,9 @@ const apuntesSuscripciones = () => {
                 notes={notesData}
                 onSeeDetails={(note) =>
                   router.push(
-                    `${PATHS.projects}/${router.query.object}?note=${note._id}`
+                    typeObject === "projects"
+                      ? `${PATHS.projects}/${router.query.object}?note=${note._id}`
+                      : `${PATHS.notes}?note=${note._id}`
                   )
                 }
                 checkIsSubscribe={() => {}}

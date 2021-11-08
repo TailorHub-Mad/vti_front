@@ -18,7 +18,7 @@ export const TagCard = ({ tag, onEdit, onDelete, isProjectTag }) => {
       bgColor="white"
       border="1px solid #c9c9c9"
       borderRadius="2px"
-      w="266px"
+      w={["100%", null, null, "266px"]}
       h="159px"
       p="16px"
     >

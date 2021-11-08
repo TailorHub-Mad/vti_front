@@ -1,4 +1,6 @@
+import { useMediaQuery } from "@chakra-ui/media-query"
 import download from "downloadjs"
+import { remove } from "lodash"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
 import { jsonToCSV } from "react-papaparse"
@@ -10,7 +12,10 @@ import { ToolBar } from "../../../components/navigation/ToolBar/ToolBar"
 import { ExportFilesModal } from "../../../components/overlay/Modal/ExportFilesModal/ExportFilesModal"
 import { ImportFilesModal } from "../../../components/overlay/Modal/ImportFilesModal/ImportFilesModal"
 import { Popup } from "../../../components/overlay/Popup/Popup"
+import { TableGrid } from "../../../components/tables/TableGrid/TableGrid"
 import useProjectApi from "../../../hooks/api/useProjectApi"
+import useUserApi from "../../../hooks/api/useUserApi"
+import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 import { ToastContext } from "../../../provider/ToastProvider"
 import { DeleteType } from "../../../utils/constants/global"
 import { fetchOption, fetchType } from "../../../utils/constants/swr"
@@ -51,12 +56,18 @@ export const ProjectsByObject = ({
   setFetchOptions,
   isEmptyData,
   hrefBack,
-  backText
+  backText,
+  isValidating
 }) => {
   // Hooks
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
+  const { user } = useContext(ApiAuthContext)
+
   const { deleteProject, createProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
   const { mutate } = useSWRConfig()
+  const { updateUser } = useUserApi()
 
   const router = useRouter()
 
@@ -71,6 +82,7 @@ export const ProjectsByObject = ({
   const [isFinishProjectModalOpen, setIsFinishProjectModalOpen] = useState(null)
 
   const isSearch = fetchState == fetchType.SEARCH
+  const isGrouped = fetchState == fetchType.GROUP
 
   // Handlers views
   const isToolbarHidden = () => {
@@ -183,6 +195,76 @@ export const ProjectsByObject = ({
     setIsProjectModalOpen(true)
   }
 
+  const formatUpdateUsersSubscribe = (user, subscribed) => {
+    return {
+      alias: user.alias,
+      name: user.name,
+      subscribed,
+      department: user.department
+    }
+  }
+
+  const formatUpdateUsersFavorites = (user, favorites) => {
+    return {
+      alias: user.alias,
+      name: user.name,
+      favorites,
+      department: user.department
+    }
+  }
+
+  const handleSubscribe = async (data, state) => {
+    const { subscribed, _id } = user
+
+    const listToUpdate = subscribed["projects"]
+
+    if (isGrouped) {
+      const [id] = Object.entries(data)[0]
+      if (state) {
+        remove(listToUpdate, (e) => e === id)
+      } else {
+        listToUpdate.push(id)
+      }
+    } else {
+      if (state) {
+        remove(listToUpdate, (e) => e === data)
+      } else {
+        listToUpdate.push(data)
+      }
+    }
+
+    subscribed["projects"] = listToUpdate
+
+    const formatUser = formatUpdateUsersSubscribe(user, subscribed)
+    await updateUser(_id, formatUser)
+    await mutate()
+  }
+
+  const handleFavorite = async (data, state) => {
+    const { favorites, _id } = user
+
+    const listToUpdate = favorites["projects"]
+
+    if (isGrouped) {
+      const [id] = Object.entries(data)[0]
+      if (state) {
+        remove(listToUpdate, (e) => e === id)
+      } else {
+        listToUpdate.push(id)
+      }
+    } else {
+      if (state) {
+        remove(listToUpdate, (e) => e === data)
+      } else {
+        listToUpdate.push(data)
+      }
+    }
+    favorites["projects"] = listToUpdate
+    const formatUser = formatUpdateUsersFavorites(user, favorites)
+    await updateUser(_id, formatUser)
+    await mutate()
+  }
+
   // Filters
   const onSearch = (search) => {
     if (!search) {
@@ -234,32 +316,27 @@ export const ProjectsByObject = ({
       >
         {handleDeleteMessage()}
       </Popup>
-
       <FinishProjectModal
         project={projectToFinish}
         isOpen={isFinishProjectModalOpen}
         onClose={handleOnCloseFinishProjectModal}
       />
-
       <NewProjectModal
         projectToUpdate={projectToUpdate}
         isOpen={isProjectModalOpen}
         onClose={handleOnCloseModal}
       />
-
       <ExportFilesModal
         isOpen={showExportModal}
         onClose={() => setShowExportModal(false)}
         onExport={() => handleExportProjects()}
       />
-
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
         onUpload={(data) => handleImportProjects(data)}
         onDropDataTransform={(info) => projectDataTransform(info)}
       />
-
       <PageHeader>
         {projectsData ? (
           <BreadCrumbs customURL={customURL} lastElement={"Proyectos"} />
@@ -276,31 +353,48 @@ export const ProjectsByObject = ({
             searchPlaceholder="Busqueda por ID, Alias"
             groupOptions={PROJECTS_GROUP_OPTIONS}
             icon={<AddProjectIcon />}
-            // fetchState={fetchState} -> Provisional to filters
             noImport
           />
         ) : null}
       </PageHeader>
-      {isEmptyData ? (
+      {isEmptyData && !isValidating ? (
         <ViewNotFoundState
           text="No hay proyectos asociados"
           backText={backText}
           onClick={() => router.push(hrefBack)}
         />
-      ) : (
+      ) : isScreen ? (
         <ProjectsTable
-          // fetchState={fetchState} -> Provisional to filters
           projects={projectsData}
           onClose={handleOnOpenFinishProjectModal}
           onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
           onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
           onEdit={handleUpdate}
+          onSubscribe={handleSubscribe}
+          onFavorite={handleFavorite}
           onTabChange={(state) => setFetchState(state)}
           onGroup={handleOnGroup}
           groupOption={getGroupOptionLabel(
             PROJECTS_GROUP_OPTIONS,
             fetchOptions[fetchOption.GROUP]
           )}
+        />
+      ) : (
+        <TableGrid
+          items={projectsData}
+          onClose={handleOnOpenFinishProjectModal}
+          onDelete={(id) => handleOpenPopup(id, DeleteType.ONE)}
+          onDeleteMany={(ids) => handleOpenPopup(ids, DeleteType.MANY)}
+          onEdit={handleUpdate}
+          onSubscribe={handleSubscribe}
+          onFavorite={handleFavorite}
+          onTabChange={(state) => setFetchState(state)}
+          onGroup={handleOnGroup}
+          groupOption={getGroupOptionLabel(
+            PROJECTS_GROUP_OPTIONS,
+            fetchOptions[fetchOption.GROUP]
+          )}
+          type="projects"
         />
       )}
     </>

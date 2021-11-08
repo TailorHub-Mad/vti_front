@@ -58,6 +58,17 @@ export const MessageCard = ({
     setUserId(user?._id)
   }, [user])
 
+  const getAttachmentNum = () => {
+    const num =
+      note?.documents?.length +
+      note?.messages?.reduce((acc, val) => {
+        const newAcc = val.documents?.length + acc
+        return newAcc
+      }, 0)
+
+    return num || 0
+  }
+
   return (
     <Card>
       <MessageCardHeader
@@ -69,6 +80,7 @@ export const MessageCard = ({
         onFavorite={handleFavorite}
         onSubscribe={handleSubscribe}
         notesFromSubscription={notesFromSubscription}
+        isMyNote={isMyNote}
       />
       <MessageCardInfo
         id={note?.ref}
@@ -90,7 +102,7 @@ export const MessageCard = ({
           isSubscribe={isSubscribe}
           isFormalized={note?.formalized}
           messagesCount={note?.messages?.filter((m) => m?.message).length}
-          attachmentsCount={note?.documents?.length}
+          attachmentsCount={getAttachmentNum()}
           subscribedUsers={owners.length > 0 ? owners : null}
           isRead={isRead}
           marginTop="16px"

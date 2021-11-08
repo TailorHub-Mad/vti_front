@@ -10,7 +10,7 @@ import {
   Text,
   Tag
 } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
 import { AdvancedFilterIcon } from "../../../../components/icons/AdvancedFilterIcon"
 import { SimpleFilterIcon } from "../../../../components/icons/SimpleFilterIcon"
@@ -19,6 +19,8 @@ import { SimpleFilterForm } from "./SimpleFilterForm/SimpleFilterForm"
 import useFilterApi from "../../../../hooks/api/useFilterApi"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
 import { EditIcon } from "@chakra-ui/icons"
+import { RoleType } from "../../../../utils/constants/global"
+import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
 
 const criteria = [
   { label: "AliasCL", value: "AliasCL" },
@@ -52,9 +54,12 @@ export const MainFilter = ({
   onFilterComplexChange,
   errorComplexFilter,
   showSaveFilter,
+  noteFromProject,
   ...props
 }) => {
   const [isReset, setIsReset] = useState(false)
+
+  const { role } = useContext(ApiAuthContext)
 
   const [filterSimple, setFilterSimple] = useState([])
   const [filterComplex, setFilterComplex] = useState([])
@@ -127,26 +132,39 @@ export const MainFilter = ({
 
   return (
     <Box
-      width="460px"
-      height="fit-content"
+      width={["100%", null, null, "460px"]}
+      height={["100vh", null, null, "fit-content"]}
       position="absolute"
-      top="50px"
-      left={moveToLeft ? "calc(50vw - 500px)" : "calc(50vw - 230px)"}
-      transition="left 0.18s ease-in-out"
+      top={["0", null, null, "50px"]}
+      left={[
+        "0",
+        null,
+        null,
+        moveToLeft ? "calc(50vw - 500px)" : "calc(50vw - 230px)"
+      ]}
+      transition={["none", null, null, "left 0.18s ease-in-out"]}
       zIndex="1400"
       {...props}
     >
-      <Box bgColor="white" padding="32px">
+      <Box
+        bgColor="white"
+        padding={["16px", null, null, "32px"]}
+        pb={["96px", null, null, "32px"]}
+      >
         <CustomModalHeader title="Filtrar" onClose={onClose} pb="24px" />
         <Tabs mb="24px" onChange={(index) => setTab(index)}>
           <TabList>
-            <Tab _focus={{ outline: "none" }} pl={0} alignItems="center">
-              <SimpleFilterIcon mr="2px" />
-              <Text variant="d_s_medium">Filtrado sencillo</Text>
+            <Tab _focus={{ outline: "none" }} pl={0} alignItems={"center"}>
+              <SimpleFilterIcon mr="4px" />
+              <Text mt="3px" variant={"d_s_medium"}>
+                Filtrado sencillo
+              </Text>
             </Tab>
-            <Tab _focus={{ outline: "none" }} pl={0} ml="24px" alignItems="center">
+            <Tab _focus={{ outline: "none" }} pl={0} ml="24px" alignItems={"center"}>
               <AdvancedFilterIcon mr="2px" />
-              <Text variant="d_s_medium">Filtrado complejo</Text>
+              <Text mt="3px" variant="d_s_medium">
+                Filtrado complejo
+              </Text>
             </Tab>
           </TabList>
           <TabPanels>
@@ -163,9 +181,10 @@ export const MainFilter = ({
                 onChange={onSimpleFilterChange}
                 openAuxModal={onSecondaryOpen}
                 isReset={isReset}
+                noteFromProject={noteFromProject}
               />
             </TabPanel>
-            <TabPanel p={0}>
+            <TabPanel p={0} minH={["100vh", null, null, null]}>
               <Box m="16px 0">
                 {filterComplex.length === 0 ? (
                   <Text color="grey">No hay filtros guardados para recordar</Text>
@@ -183,10 +202,22 @@ export const MainFilter = ({
           </TabPanels>
         </Tabs>
 
-        <Flex justifyContent="space-between">
-          <Button variant="secondary" onClick={openSaveModal}>
-            Recordar
-          </Button>
+        <Flex
+          justifyContent={role === RoleType.USER ? "center" : "space-between"}
+          position={["fixed", null, null, "relative"]}
+          bottom={["0", null, null, null]}
+          left={["0", null, null, null]}
+          width="100%"
+          pb={["8px", null, null, null]}
+          pt={["8px", null, null, null]}
+          boxShadow={["0px -4px 8px rgba(5, 46, 87, 0.1)", null, null, "none"]}
+          bgColor={["white", null, null, null]}
+        >
+          {role === RoleType.ADMIN ? (
+            <Button variant="secondary" onClick={openSaveModal}>
+              Recordar
+            </Button>
+          ) : null}
           <Button onClick={onFilter} ml="8px">
             Filtrar
           </Button>
@@ -203,7 +234,7 @@ export const MainFilter = ({
           </Text>
         </Flex>
       </Box>
-      <Box h="200px" />
+      <Box h="200px" display={["none", null, null, "block"]} />
     </Box>
   )
 }

@@ -7,7 +7,8 @@ import {
   Checkbox,
   Flex,
   Grid,
-  Text
+  Text,
+  useMediaQuery
 } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { ProjectsIcon } from "../../../../../components/icons/ProjectsIcon"
@@ -33,6 +34,8 @@ export const SupportModal = ({
   selectedTags,
   ...props
 }) => {
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   const [activeTab, setActiveTab] = useState(ORDER.board)
   const [expandAll, setExpandAll] = useState(false)
   const [expandedItems, setExpandedItems] = useState([])
@@ -54,18 +57,23 @@ export const SupportModal = ({
 
   return (
     <Box
-      w="620px"
-      h="fit-content"
+      w={["100%", null, null, "620px"]}
+      h={["100vh", null, null, "fit-content"]}
       position="absolute"
-      top="50px"
-      right="calc(50vw - 620px)"
+      top={["0", null, null, "50px"]}
+      right={["0", null, null, "calc(50vw - 620px)"]}
+      left={["0", null, null, null]}
       bgColor="transparent"
       zIndex="3000"
-      mb="200px"
-      pb="200px"
+      mb={["0", null, null, "200px"]}
+      pb={["0", null, null, "200px"]}
       {...props}
     >
-      <Box bgColor="white" padding="32px">
+      <Box
+        bgColor="white"
+        padding={["16px", null, null, "32px"]}
+        minHeight={isScreen ? null : "100%"}
+      >
         <CustomModalHeader title="Ventana de apoyo" onClose={onClose} />
         <Flex direction="column" mt="24px">
           <Flex mb="24px" justify="space-between" align="center" w="100%">
@@ -194,6 +202,7 @@ export const SupportModal = ({
                               criterion={criterion}
                               onTagSelect={(_tags) => onTagsSelect(_tags)}
                               isSupport
+                              isScreen={isScreen}
                             />
                           </AccordionPanel>
                         </>
@@ -230,7 +239,7 @@ export const SupportModal = ({
                           </AccordionButton>
                           <AccordionPanel p={"8px"} pb={"8px"}>
                             <Grid
-                              templateColumns="33% 33% 33%"
+                              templateColumns={isScreen ? "33% 33% 33%" : "100%"}
                               gap="8px"
                               width="100%"
                             >

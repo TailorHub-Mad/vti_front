@@ -73,7 +73,7 @@ const FileInputForm = ({ value, onChange, isDisabled, isUpdate }) => {
         Adjunta tus documentos (opcional)
       </FormLabel>
       <FileInput
-        value={value}
+        value={value || ""}
         onChange={onChange}
         isDisabled={isDisabled}
         isUpdate={isUpdate}

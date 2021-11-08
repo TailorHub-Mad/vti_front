@@ -52,7 +52,7 @@ export const NotesMenu = ({
               onClick={() => onChange(name)}
             >
               <Icon mr="4px" color={color} _groupHover={{ color: "blue.500" }} />
-              {isScreen ? (
+              {isScreen || isActive ? (
                 <Text
                   variant="d_s_medium"
                   mt="4px"

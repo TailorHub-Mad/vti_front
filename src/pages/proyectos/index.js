@@ -41,6 +41,8 @@ import useUserApi from "../../hooks/api/useUserApi"
 import { remove } from "lodash"
 import useTableActions from "../../hooks/useTableActions"
 import { PageBody } from "../../components/layout/Pages/PageBody/PageBody"
+import { useMediaQuery } from "@chakra-ui/media-query"
+import { TableGrid } from "../../components/tables/TableGrid/TableGrid"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -59,6 +61,7 @@ const PROJECTS_GROUP_OPTIONS = [
 
 const proyectos = () => {
   // Hooks
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
   const { isLoggedIn, role, user } = useContext(ApiAuthContext)
   const { deleteProject, createProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
@@ -350,21 +353,6 @@ const proyectos = () => {
     })
   }
 
-  // const handleOnGroup = (group) => {
-  //   if (!group) {
-  //     setFetchState(fetchType.ALL)
-  //     setFetchOptions({
-  //       [fetchOption.GROUP]: null
-  //     })
-  //     return
-  //   }
-
-  //   setFetchState(fetchType.GROUP)
-  //   setFetchOptions({
-  //     [fetchOption.GROUP]: group
-  //   })
-  // }
-
   const handleOnGroup = (group) => {
     if (!group) {
       setQueryGroup(null)
@@ -400,25 +388,6 @@ const proyectos = () => {
     }
   }
 
-  // const handleOnFilter = (values) => {
-  //   if (!values) {
-  //     setFetchState(fetchType.ALL)
-  //     setFetchOptions({
-  //       [fetchOption.FILTER]: null
-  //     })
-  //     return
-  //   }
-
-  //   const filter = generateFilterQuery(PROJECTS_FILTER_KEYS, values)
-
-  //   setFetchState(fetchType.FILTER)
-  //   setFetchOptions({
-  //     [fetchOption.FILTER]: filter
-  //   })
-
-  //   setShowFilterModal(false)
-  // }
-
   const handleSortElement = (data) => {
     const { name, order } = data
     if (!name || !order) return
@@ -450,8 +419,13 @@ const proyectos = () => {
     }
 
     let filter = null
+    const { client } = values
+    delete values["client"]
     if (type !== "complex") {
-      filter = generateFilterQuery(PROJECTS_FILTER_KEYS, values)
+      filter = generateFilterQuery(PROJECTS_FILTER_KEYS, {
+        ...values,
+        clientAlias: client
+      })
     } else {
       filter = `query=${values}`
     }
@@ -560,7 +534,7 @@ const proyectos = () => {
             onImport={() => setShowImportModal(true)}
             onAdd={() => setIsProjectModalOpen(true)}
           />
-        ) : (
+        ) : isScreen ? (
           <ProjectsTable
             fetchState={fetchState}
             projects={projectsData}
@@ -581,6 +555,20 @@ const proyectos = () => {
             setSelectedRows={setSelectedRows}
             handleRowSelect={handleRowSelect}
             handleSelectAllRows={handleSelectAllRows}
+          />
+        ) : (
+          <TableGrid
+            fetchState={fetchState}
+            items={projectsData}
+            onGroup={handleOnGroup}
+            onFilter={handleOnFilter}
+            groupOption={getGroupOptionLabel(
+              PROJECTS_GROUP_OPTIONS,
+              fetchOptions[fetchOption.GROUP]
+            )}
+            onSubscribe={handleSubscribe}
+            onFavorite={handleFavorite}
+            type="projects"
           />
         )}
       </PageBody>
