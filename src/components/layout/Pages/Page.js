@@ -20,7 +20,7 @@ export const Page = ({ children, newNote, ...props }) => {
         </Text>
         {secondaryMessage && <Text variant="d_xs_regular">{secondaryMessage}</Text>}
       </Popup>
-      <Box
+      {/* <Box
         transition={"padding-left 0.15s ease-in-out"}
         pl={[newNote ? "0" : "15px", null, null, isOpen ? "239px" : "63px"]}
         pt={[newNote ? "64px" : "88px", null, null, "32px"]}
@@ -32,6 +32,24 @@ export const Page = ({ children, newNote, ...props }) => {
         bgSize="cover"
         bgPosition="center"
         minH="100vh"
+        pb={newNote ? "0" : "50px"}
+        {...props}
+      >
+        {children}
+      </Box> */}
+      <Box
+        transition={"padding-left 0.15s ease-in-out"}
+        pl={[newNote ? "0" : "15px", null, null, isOpen ? "239px" : "63px"]}
+        pt={[newNote ? "64px" : "88px", null, null, "32px"]}
+        pr={["0", null, null, "24px"]}
+        overflow={["scroll", null, null, "hidden"]}
+        background={"url(/images/backgrounds/general_bg.svg)"}
+        bgRepeat="no-repeat"
+        bgAttachment="fixed"
+        bgSize="cover"
+        bgPosition="center"
+        minH="100vh"
+        maxHeight={["100vh", "none", "none", "none"]}
         pb={newNote ? "0" : "50px"}
         {...props}
       >
