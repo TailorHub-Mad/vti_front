@@ -76,7 +76,7 @@ export const NoteDrawer = ({
               <CloseIcon onClick={onClose} cursor="pointer" />
             </Flex>
             <Flex
-              display={["none", null, null, "block"]}
+              display={["none", null, null, "flex"]}
               height="100vh"
               width="32px"
               alignItems="center"
@@ -141,7 +141,7 @@ export const NoteDrawer = ({
               )
             })}
             <Flex
-              justifyContent={"center"}
+              justifyContent={["center", null, null, "flex-start"]}
               position={["fixed", null, null, "relative"]}
               bottom={["0", null, null, null]}
               left={["0", null, null, null]}
@@ -149,7 +149,7 @@ export const NoteDrawer = ({
               pb={["8px", null, null, null]}
               pt={["8px", null, null, null]}
               boxShadow={["0px -4px 8px rgba(5, 46, 87, 0.1)", null, null, "none"]}
-              bgColor={["white", null, null, null]}
+              bgColor={["white", null, null, "transparent"]}
             >
               <Button mt="24px" onClick={onResponse}>
                 Escribir respuesta
