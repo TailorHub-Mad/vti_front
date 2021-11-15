@@ -48,7 +48,7 @@ const system = () => {
           projects={projectsData}
           customURL={
             isScreen
-              ? `${PATHS.testSystems}/${system?.ref || systemId}`
+              ? `${PATHS.testSystems}/${system?.alias || systemId}`
               : `${PATHS.testSystems}`
           }
           setFetchState={setFetchState}
