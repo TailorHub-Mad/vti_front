@@ -38,7 +38,13 @@ export const NoteDetailsAccordion = ({
   }
 
   return (
-    <Accordion width="100%" allowToggle allowMultiple {...props}>
+    <Accordion
+      width="100%"
+      allowToggle
+      allowMultiple
+      {...props}
+      defaultIndex={!isMessage ? new Array(6).fill("").map((_, idx) => idx) : []}
+    >
       {!isMessage && description ? (
         <NoteAccordionItem title="Descripción" icon={<PageLineIcon mr="8px" />}>
           {description?.split("\n").map((e, idx) => (
