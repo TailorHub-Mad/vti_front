@@ -131,9 +131,9 @@ export const NewProjectForm = ({
   useEffect(() => {
     const _getClients = async () => {
       const clients = await getClients()
-      const fiteredClients = clients.filter((p) => p.testSystems.length > 0)
-      setClientData(fiteredClients)
-      setClientOptions(formatClients(fiteredClients))
+      // const fiteredClients = clients.filter((p) => p.testSystems.length > 0)
+      setClientData(clients)
+      setClientOptions(formatClients(clients))
     }
     const _getSectors = async () => {
       const sectors = await getSectors()

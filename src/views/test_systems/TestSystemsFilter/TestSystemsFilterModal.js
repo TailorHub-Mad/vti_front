@@ -41,13 +41,13 @@ export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props })
       )
       onFilter(query, "complex")
     } else {
-      setFilterValues(initialValues)
+      // setFilterValues(initialValues)
       onFilter(filterValues)
     }
   }
 
   const handleOnClose = () => {
-    setFilterValues(initialValues)
+    // setFilterValues(initialValues)
     onClose()
   }
 

@@ -14,6 +14,8 @@ export const NotesFilterModal = ({
   onClose,
   onFilter,
   noteFromProject,
+  filterValues,
+  setFilterValues,
   ...props
 }) => {
   const [isScreen] = useMediaQuery("(min-width: 475px)")
@@ -42,7 +44,6 @@ export const NotesFilterModal = ({
     with_responses: false
   }
 
-  const [filterValues, setFilterValues] = useState(initialValues)
   const [filterComplexValues, setFilterComplexValues] = useState(null)
   const [usedProjectTags, setUsedProjectTags] = useState([])
   const [usedNoteTags, setUsedNoteTags] = useState([])
@@ -79,7 +80,7 @@ export const NotesFilterModal = ({
         onFilter(query, "complex")
       }
     } else {
-      setFilterValues(initialValues)
+      // setFilterValues(initialValues)
       onFilter(filterValues)
     }
   }

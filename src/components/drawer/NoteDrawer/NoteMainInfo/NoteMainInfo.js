@@ -1,5 +1,5 @@
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons"
-import { Box, Flex, Text } from "@chakra-ui/react"
+import { Accordion, Box, Flex, Text } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
@@ -15,6 +15,7 @@ import { FormalizedIcon } from "../../../icons/FormalizedIcon"
 import { LockCloseIcon } from "../../../icons/LockCloseIcon"
 import { LockOpenIcon } from "../../../icons/LockOpenIcon"
 import { Tag } from "../../../tags/Tag/Tag"
+import { NoteAccordionItem } from "../NoteAccordion/NoteAccordionItem/NoteAccordionItem"
 
 const actionType = {
   CLOSE: "close",
@@ -115,7 +116,7 @@ export const NoteMainInfo = ({
             />
           ) : null}
 
-          {role === RoleType.ADMIN ? (
+          {!isMessage && role === RoleType.ADMIN ? (
             <ActionLink
               onClick={() => {
                 handleUpdateNote(actionType.CLOSE)
@@ -157,7 +158,7 @@ export const NoteMainInfo = ({
             />
           ) : null}
 
-          {role === RoleType.ADMIN ? (
+          {!isMessage && role === RoleType.ADMIN ? (
             <ActionLink
               onClick={() => {
                 handleUpdateNote(actionType.FORMALIZED)
@@ -198,25 +199,25 @@ export const NoteMainInfo = ({
       </Flex>
 
       {isProjectHidden() && !fromProjectDetail && (
-        <Box mt="24px">
-          <Flex justify="space-between">
-            <Flex align="center">
-              <FolderCloseIcon mr="8px" />
-              <Text variant="d_s_medium" mt="4px">
-                Proyectos
-              </Text>
-            </Flex>
-            <GoToButton
-              label="Ver proyecto"
-              onClick={() =>
-                router.push(`${PATHS.projects}/${item.projects[0]._id}`)
-              }
-            />
-          </Flex>
-
-          <Tag variant={variantGeneralTag.PROJECT} mt="8px" ml="32px" width="auto">
-            {item.projects[0]?.alias}
-          </Tag>
+        <Box position="relative" w="100%" h="fit-content">
+          <Accordion width="100%" allowToggle>
+            <NoteAccordionItem
+              mt="0"
+              title={`Proyecto`}
+              icon={<FolderCloseIcon mr="8px" />}
+            >
+              <Tag variant={variantGeneralTag.PROJECT} width="auto">
+                {item.projects[0]?.alias}
+              </Tag>
+            </NoteAccordionItem>
+          </Accordion>
+          <GoToButton
+            position="absolute"
+            right="0"
+            top="0"
+            label="Ver proyecto"
+            onClick={() => router.push(`${PATHS.projects}/${item.projects[0]._id}`)}
+          />
         </Box>
       )}
     </>

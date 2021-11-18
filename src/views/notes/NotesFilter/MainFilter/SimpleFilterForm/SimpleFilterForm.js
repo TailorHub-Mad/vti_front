@@ -212,43 +212,54 @@ export const SimpleFilterForm = ({
       type: "checkbox",
       config: {
         children: "No leídos",
-        marginBottom: "24px",
+        marginBottom: "12px",
         variant: "filter",
         display: "flex"
       }
     },
     with_links: {
-      type: "switch",
+      type: "checkbox",
       config: {
-        children: "Solo con archivos adjuntos",
-        marginBottom: "12px"
+        children: "Con archivos adjuntos",
+        marginBottom: "12px",
+        display: "flex",
+        variant: "filter"
       }
     },
     formalized: {
-      type: "switch",
+      type: "checkbox",
       config: {
-        children: "Solo formalizados",
-        marginBottom: "12px"
+        children: "Formalizados",
+        marginBottom: "12px",
+        display: "flex",
+        variant: "filter"
       }
     },
     closed: {
-      type: "switch",
+      type: "checkbox",
       config: {
-        children: "Solo cerrados",
-        marginBottom: "12px"
+        children: "Cerrados",
+        marginBottom: "12px",
+        display: "flex",
+        variant: "filter"
       }
     },
     opened: {
-      type: "switch",
+      type: "checkbox",
       config: {
-        children: "Solo abiertos",
-        marginBottom: "12px"
+        children: "Abiertos",
+        marginBottom: "12px",
+        display: "flex",
+        variant: "filter"
       }
     },
     with_responses: {
-      type: "switch",
+      type: "checkbox",
       config: {
-        children: "Solo con respuesta"
+        children: "Con respuesta",
+        marginBottom: "12px",
+        display: "flex",
+        variant: "filter"
       }
     }
   }
@@ -258,7 +269,7 @@ export const SimpleFilterForm = ({
     select: <InputSelect isReset={isReset} />,
     add_select: <AddSelect isReset={isReset} />,
     checkbox: <Checkbox />,
-    switch: <Switch />,
+    // switch: <Switch />,
     multitag_select: <MultiTagSelect isReset={isReset} />
   }
 
@@ -268,6 +279,8 @@ export const SimpleFilterForm = ({
       [input]: _value?.target?.checked ?? _value
     })
   }
+
+  console.log(value)
 
   return (
     <>
