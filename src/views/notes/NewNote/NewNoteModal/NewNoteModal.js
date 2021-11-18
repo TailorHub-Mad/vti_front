@@ -38,8 +38,6 @@ export const NewNoteModal = ({
   const { getNoteTags } = useTagApi()
   const { mutate } = useSWRConfig()
 
-  console.log(fromProjectDetail)
-
   const [showProjectSearchModal, setShowProjectSearchModal] = useState(false)
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
 
