@@ -29,6 +29,7 @@ export const NewNoteModal = ({
   onClose,
   noteToUpdate,
   noteFromProject,
+  fromProjectDetail,
   ...props
 }) => {
   const { showToast } = useContext(ToastContext)
@@ -36,6 +37,8 @@ export const NewNoteModal = ({
   const { getNoteHelps } = useHelpApi()
   const { getNoteTags } = useTagApi()
   const { mutate } = useSWRConfig()
+
+  console.log(fromProjectDetail)
 
   const [showProjectSearchModal, setShowProjectSearchModal] = useState(false)
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
@@ -139,9 +142,9 @@ export const NewNoteModal = ({
     setIsSubmitting(true)
     isUpdate ? await handleUpdateNote() : await handleCreateNote()
     setValues(initialValues)
-    noteFromProject
-      ? await mutate([SWR_CACHE_KEYS.project, noteFromProject.project.value])
-      : await mutate(SWR_CACHE_KEYS.notes)
+
+    await mutate([SWR_CACHE_KEYS.project, fromProjectDetail])
+    await mutate(SWR_CACHE_KEYS.notes)
     showToast({
       message: isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s apunte/s!",
       secondaryMessage: isUpdate

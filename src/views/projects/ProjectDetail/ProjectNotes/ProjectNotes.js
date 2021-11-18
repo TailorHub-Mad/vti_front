@@ -146,7 +146,7 @@ export const ProjectNotes = ({ project }) => {
         await await deleteNote(noteToDelete.id)
         showToast({ message: "Apunte borrado correctamente" })
         setNoteToDelete(null)
-        return await mutate()
+        return await mutate([SWR_CACHE_KEYS.project, project._id])
       }
 
       await deleteNote(noteToDelete)
@@ -158,9 +158,7 @@ export const ProjectNotes = ({ project }) => {
         notes: filterNotes
       })
 
-      updatedNotes[0].notes.length > 0
-        ? await mutate(updatedNotes, false)
-        : await mutate()
+      await mutate([SWR_CACHE_KEYS.project, project._id])
 
       if (showNoteDetails) {
         setShowNoteDetails(false)
@@ -415,6 +413,7 @@ export const ProjectNotes = ({ project }) => {
         noteFromProject={noteFromProject}
         isOpen={isNoteModalOpen}
         onClose={handleOnCloseModal}
+        fromProjectDetail={project._id}
       />
 
       <ImportFilesModal
