@@ -163,6 +163,7 @@ export const NotesFilterModal = ({
           >
             <MainFilter
               simpleFilterValues={filterValues}
+              filterComplexValues={filterComplexValues}
               onClose={handleOnClose}
               moveToLeft={["project_tags", "note_tags"].includes(
                 showSecondaryContent

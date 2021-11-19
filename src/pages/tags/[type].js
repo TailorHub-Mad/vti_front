@@ -117,8 +117,7 @@ const tags = () => {
   }
 
   const handleOnOpenFilter = () => {
-    if (fetchState === fetchType.FILTER) handleOnFilter(null)
-    else setShowFilterModal(true)
+    setShowFilterModal(true)
   }
 
   // Handlers CRUD

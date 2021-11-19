@@ -40,7 +40,6 @@ export const MainFilter = ({
   onClose,
   onSecondaryOpen,
   onSimpleFilterChange,
-  onFilterComplexChange,
   onFilter,
   simpleFilterValues,
   moveToLeft,
@@ -54,7 +53,6 @@ export const MainFilter = ({
   const { role } = useContext(ApiAuthContext)
 
   const [filterSimple, setFilterSimple] = useState([])
-  const [filterComplex, setFilterComplex] = useState([])
   const { getFilterSimple, getFilterComplex } = useFilterApi()
 
   const handleOnReset = () => {
@@ -78,10 +76,7 @@ export const MainFilter = ({
   useEffect(() => {
     const _getFilters = async () => {
       const simple = await getFilterSimple("testSystems")
-      const complex = await getFilterComplex("testSystems")
-
       setFilterSimple(simple)
-      setFilterComplex(complex)
     }
     _getFilters()
   }, [onClose])
@@ -139,49 +134,16 @@ export const MainFilter = ({
       {...props}
     >
       <CustomModalHeader title="Filtrar" onClose={onClose} pb="24px" />
-      <Tabs mb="24px" onChange={(index) => setTab(index)}>
-        <TabList>
-          <Tab _focus={{ outline: "none" }} pl={0} alignItems="center">
-            <SimpleFilterIcon mr="2px" />
-            <Text variant="d_s_medium">Filtrado sencillo</Text>
-          </Tab>
-          <Tab _focus={{ outline: "none" }} pl={0} ml="24px" alignItems="center">
-            <AdvancedFilterIcon mr="2px" />
-            <Text variant="d_s_medium">Filtrado complejo</Text>
-          </Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel p={0}>
-            <Box m="16px 0">
-              {filterSimple.length === 0 ? (
-                <Text color="grey">No hay filtros guardados para recordar</Text>
-              ) : (
-                rowFilter(filterSimple)
-              )}
-            </Box>
-            <SimpleFilterForm
-              value={simpleFilterValues}
-              onChange={onSimpleFilterChange}
-              openAuxModal={onSecondaryOpen}
-              isReset={isReset}
-            />
-          </TabPanel>
-          <TabPanel p={0}>
-            <Box m="16px 0">
-              {filterComplex.length === 0 ? (
-                <Text color="grey">No hay filtros guardados para recordar</Text>
-              ) : (
-                rowFilter(filterComplex)
-              )}
-            </Box>
-            <AdvancedFilter
-              criteria={criteria}
-              value={simpleFilterValues}
-              onChange={onFilterComplexChange}
-            />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+      <Box mt="24px">
+        <SimpleFilterForm
+          value={simpleFilterValues}
+          onChange={onSimpleFilterChange}
+          openAuxModal={onSecondaryOpen}
+          isReset={isReset}
+          mb="50px"
+        />
+      </Box>
+
       <Flex
         justifyContent={role === RoleType.USER ? "center" : "space-between"}
         position={["fixed", null, null, "relative"]}
@@ -193,12 +155,7 @@ export const MainFilter = ({
         boxShadow={["0px -4px 8px rgba(5, 46, 87, 0.1)", null, null, "none"]}
         bgColor={["white", null, null, null]}
       >
-        <Flex justifyContent={role === RoleType.USER ? "center" : "space-between"}>
-          {role === RoleType.ADMIN ? (
-            <Button variant="secondary" onClick={openSaveModal}>
-              Recordar
-            </Button>
-          ) : null}
+        <Flex justifyContent="center" w="100%">
           <Button onClick={onFilter}>Filtrar</Button>
         </Flex>
       </Flex>

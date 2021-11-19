@@ -28,12 +28,12 @@ export const TagsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
   }
 
   const handleOnFilter = () => {
-    setFilterValues(initialValues)
+    // setFilterValues(initialValues)
     onFilter(filterValues)
   }
 
   const handleOnClose = () => {
-    setFilterValues(initialValues)
+    // setFilterValues(initialValues)
     onClose()
   }
 

@@ -46,6 +46,7 @@ export const MainFilter = ({
   onSimpleFilterChange,
   onFilter,
   simpleFilterValues,
+  filterComplexValues,
   moveToLeft,
   openSaveModal,
   onReset,
@@ -194,7 +195,7 @@ export const MainFilter = ({
               </Box>
               <AdvancedFilter
                 criteria={criteria}
-                value={simpleFilterValues}
+                filterComplexValues={filterComplexValues}
                 onChange={onFilterComplexChange}
                 errorComplexFilter={errorComplexFilter}
               />
