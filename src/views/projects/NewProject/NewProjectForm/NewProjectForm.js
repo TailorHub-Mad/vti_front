@@ -251,7 +251,7 @@ export const NewProjectForm = ({
   return (
     <>
       {Object.entries(formInputs).map(([name, { type, config }], index) => {
-        let auxValue = _values[name]
+        let auxValue = _values[name]?.length > 0 ? _values[name] : undefined
 
         if (
           name === "date" &&
