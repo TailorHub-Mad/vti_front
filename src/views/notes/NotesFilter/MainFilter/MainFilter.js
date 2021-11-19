@@ -8,7 +8,8 @@ import {
   TabPanels,
   Tabs,
   Text,
-  Tag
+  Tag,
+  Accordion
 } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
@@ -62,6 +63,7 @@ export const MainFilter = ({
 
   const { role } = useContext(ApiAuthContext)
 
+  const [showFilters, setShowFilters] = useState(true)
   const [filterSimple, setFilterSimple] = useState([])
   const [filterComplex, setFilterComplex] = useState([])
   const { getFilterSimple, getFilterComplex } = useFilterApi()
@@ -102,32 +104,41 @@ export const MainFilter = ({
 
   const rowFilter = (filters) => {
     return (
-      <Flex mt="12px" width="100%" wrap="wrap" height="fit-content">
-        {filters.map((value, idx) => {
-          return (
-            <Tag
-              key={`${value._id}-${idx}`}
-              variant={variantGeneralTag.SYSTEM}
-              mb="8px"
-              mr="8px"
-              height="32px"
-              width="auto"
-              cursor="pointer"
-            >
-              <Flex align="center">
-                <Text onClick={() => handleChargeFilter(value)}>{value.name}</Text>
-                <EditIcon
-                  width="16px"
+      <Box position="relative" w="100%">
+        <Text cursor="pointer" onClick={() => setShowFilters(!showFilters)}>
+          {`${showFilters ? "Ocultar" : "Mostrar"} filtros guardados`}
+        </Text>
+        {showFilters ? (
+          <Flex mt="12px" width="100%" wrap="wrap" height="fit-content">
+            {filters.map((value, idx) => {
+              return (
+                <Tag
+                  key={`${value._id}-${idx}`}
+                  variant={variantGeneralTag.SYSTEM}
+                  mb="8px"
+                  mr="8px"
+                  height="32px"
+                  width="auto"
                   cursor="pointer"
-                  mb="3px"
-                  ml="8px"
-                  onClick={() => handleEditFilter(value)}
-                />
-              </Flex>
-            </Tag>
-          )
-        })}
-      </Flex>
+                >
+                  <Flex align="center">
+                    <Text onClick={() => handleChargeFilter(value)}>
+                      {value.name}
+                    </Text>
+                    <EditIcon
+                      width="16px"
+                      cursor="pointer"
+                      mb="3px"
+                      ml="8px"
+                      onClick={() => handleEditFilter(value)}
+                    />
+                  </Flex>
+                </Tag>
+              )
+            })}
+          </Flex>
+        ) : null}
+      </Box>
     )
   }
 
@@ -185,7 +196,7 @@ export const MainFilter = ({
                 noteFromProject={noteFromProject}
               />
             </TabPanel>
-            <TabPanel p={0} minH={["100vh", null, null, null]}>
+            <TabPanel p={0} minH={["100vh", "100vh", "fit-content", "fit-content"]}>
               <Box m="16px 0">
                 {filterComplex.length === 0 ? (
                   <Text color="grey">No hay filtros guardados para recordar</Text>

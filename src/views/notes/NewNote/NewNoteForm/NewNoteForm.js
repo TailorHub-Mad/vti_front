@@ -182,10 +182,10 @@ export const NewNoteForm = ({
       : formatSelectOption(data?.testSystems)
 
     const allSystems = {
-      label: "Todos",
+      label: "TODOS",
       value: _systemsOptions.map((so) => so.value)
     }
-    const noSystems = { label: "Ninguno", value: [] }
+    const noSystems = { label: "NINGUNO", value: [] }
 
     setSystemOptions([allSystems, noSystems, ..._systemsOptions])
   }

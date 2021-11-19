@@ -63,9 +63,9 @@ export const NewNoteModal = ({
 
   const formatCreateNote = (note) => {
     const formatSystems =
-      note.testSystems[0].label === "Todos"
+      note.testSystems[0].label === "TODOS"
         ? [...note.testSystems[0].value]
-        : note.testSystems[0].label === "Ninguno"
+        : note.testSystems[0].label === "NINGUNO"
         ? null
         : note.testSystems.map((s) => s.value)
 
