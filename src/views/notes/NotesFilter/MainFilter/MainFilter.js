@@ -21,6 +21,8 @@ import { variantGeneralTag } from "../../../../utils/constants/tabs"
 import { EditIcon } from "@chakra-ui/icons"
 import { RoleType } from "../../../../utils/constants/global"
 import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
+import { ChevronDownIcon } from "../../../../components/icons/ChevronDownIcon"
+import { ChevronUpIcon } from "../../../../components/icons/ChevronUpIcon"
 
 const criteria = [
   { label: "AliasCL", value: "AliasCL" },
@@ -104,11 +106,25 @@ export const MainFilter = ({
   const rowFilter = (filters) => {
     return (
       <Box position="relative" w="100%">
-        <Text cursor="pointer" onClick={() => setShowFilters(!showFilters)}>
-          {`${showFilters ? "Ocultar" : "Mostrar"} filtros guardados`}
-        </Text>
+        <Flex
+          width="100%"
+          justify="space-between"
+          onClick={() => setShowFilters(!showFilters)}
+          cursor="pointer"
+        >
+          <Text cursor="pointer" mt="3px">
+            {`${showFilters ? "Ocultar" : "Mostrar"} filtros guardados`}
+          </Text>
+          {showFilters ? <ChevronUpIcon /> : <ChevronDownIcon />}
+        </Flex>
         {showFilters ? (
-          <Flex mt="12px" width="100%" wrap="wrap" height="fit-content">
+          <Flex
+            mt="12px"
+            width="100%"
+            wrap="wrap"
+            height="fit-content"
+            pb="8px"
+          >
             {filters.map((value, idx) => {
               return (
                 <Tag
