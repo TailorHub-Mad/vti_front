@@ -8,8 +8,7 @@ import {
   TabPanels,
   Tabs,
   Text,
-  Tag,
-  Accordion
+  Tag
 } from "@chakra-ui/react"
 import React, { useContext, useEffect, useState } from "react"
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
