@@ -132,6 +132,22 @@ export const NoteMainInfo = ({
               }
               label={activeClose ? "Cerrado" : "Cerrar"}
             />
+          ) : !isMessage && isMyNote && role === RoleType.USER ? (
+            <ActionLink
+              onClick={() => {
+                handleUpdateNote(actionType.CLOSE)
+                setActiveClose(!activeClose)
+              }}
+              color="blue.500"
+              icon={
+                activeClose ? (
+                  <LockCloseIcon color="blue.500" />
+                ) : (
+                  <LockOpenIcon fill="#C4C4C4" />
+                )
+              }
+              label={activeClose ? "Cerrado" : "Cerrar"}
+            />
           ) : !isMessage && item.isClosed ? (
             <ActionLink
               onClick={() => {}}

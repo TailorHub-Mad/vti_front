@@ -17,6 +17,8 @@ export const SimpleFilterForm = ({ openAuxModal, value, onChange, isReset }) => 
   const { getSectors } = useSectorApi()
   const { getCodes } = useCodeApi()
 
+  console.log("VAAAAALUES", value)
+
   // Filter Options
   const [clientsOpt, setClientsOpt] = useState(null)
   const [testSystemsOpt, setTestSystemsOpt] = useState(null)

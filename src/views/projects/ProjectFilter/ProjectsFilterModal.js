@@ -128,7 +128,11 @@ export const ProjectsFilterModal = ({
               moveToLeft={showSecondaryContent}
               onSecondaryOpen={() => setShowSecondaryContent(true)}
               onSimpleFilterChange={(val) => setFilterValues(val)}
-              openSaveModal={() => setShowSaveFilter(true)}
+              openSaveModal={(type) => {
+                setShowSaveFilter(true)
+                if (type === "new") setIsUpdateFilter(false)
+                else setIsUpdateFilter(true)
+              }}
               onFilter={handleOnFilter}
               onReset={handleOnReset}
               setTab={setTab}

@@ -19,6 +19,8 @@ export const AddSelect = ({
   const [inputValues, setInputValues] = useState(value)
   const [availableOptions, setAvailableOptions] = useState([])
 
+  console.log("INPUT", value)
+
   const handleChange = (option, idx) => {
     const newInputValues = [...inputValues]
     newInputValues[idx] = option

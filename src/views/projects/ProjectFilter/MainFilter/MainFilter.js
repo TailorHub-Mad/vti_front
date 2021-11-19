@@ -200,7 +200,7 @@ export const MainFilter = ({
       >
         <Flex justifyContent={role === RoleType.USER ? "center" : "space-between"}>
           {role === RoleType.ADMIN ? (
-            <Button variant="secondary" onClick={openSaveModal}>
+            <Button variant="secondary" onClick={() => openSaveModal("new")}>
               Recordar
             </Button>
           ) : null}
