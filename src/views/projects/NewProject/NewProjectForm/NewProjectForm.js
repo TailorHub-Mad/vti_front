@@ -51,6 +51,8 @@ export const NewProjectForm = ({
     }))
   }
 
+  console.log("SYSTEMs", systemOptions)
+
   const formatTags = (_tags) =>
     _tags.map((tag) => ({ label: tag.name, value: tag._id }))
 
@@ -268,7 +270,9 @@ export const NewProjectForm = ({
           marginBottom: "24px",
           isDisabled:
             config.disabled ||
-            (index !== 0 && !value[Object.keys(value)[index - 1]]),
+            (index !== 0 &&
+              index !== Object.keys(value).length - 1 &&
+              !value[Object.keys(value)[index - 1]]),
           key: `${name}-${index}`,
           ...config
         })

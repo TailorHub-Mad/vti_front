@@ -97,7 +97,9 @@ export const MainFilter = ({
           return (
             <Tag
               key={`${value._id}-${idx}`}
-              variant={variantGeneralTag.SYSTEM}
+              variant={
+                value.public ? variantGeneralTag.PROJECT : variantGeneralTag.SYSTEM
+              }
               mb="8px"
               mr="8px"
               height="32px"
