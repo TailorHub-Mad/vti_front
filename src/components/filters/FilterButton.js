@@ -15,7 +15,7 @@ export const FilterButton = ({ onFilter, active, isDisabled }) => {
       >
         {active ? (
           <FilterIcon mr={["8px", "8px"]} />
-          ) : (
+        ) : (
           <FilterIcon mr={["8px", "8px"]} />
         )}
         Filtrar

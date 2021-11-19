@@ -72,7 +72,7 @@ export const NoteDetailsAccordion = ({
           ))}
         </NoteAccordionItem>
       ) : null}
-      
+
       {!isMessage && noteTags ? (
         <NoteAccordionItem
           width="100%"
