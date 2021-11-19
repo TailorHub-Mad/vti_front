@@ -60,10 +60,8 @@ export const ProjectNotes = ({ project }) => {
   const { deleteNote, deleteMessage } = useNoteApi()
   const { updateUser } = useUserApi()
   const { showToast } = useContext(ToastContext)
-  const { mutate, cache } = useSWRConfig()
+  const { mutate } = useSWRConfig()
   const router = useRouter()
-
-  console.log(cache)
 
   const [showFilterModal, setShowFilterModal] = useState(false)
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false)
