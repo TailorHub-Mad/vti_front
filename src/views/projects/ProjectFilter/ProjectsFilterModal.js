@@ -8,8 +8,16 @@ import { SupportModal } from "../../helps/NewCriterion/NewCriterionModal/Support
 import { SaveFilterModal } from "../../../components/filters/SaveFilterModal"
 import { COMPLEX_OBJECT, parseComplexQuery } from "../../../utils/functions/filter"
 
-export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, filterValues, setFilterValues,  filterComplexValues, setFilterComplexValues, 
-  ...props }) => {
+export const ProjectsFilterModal = ({
+  isOpen,
+  onClose,
+  onFilter,
+  filterValues,
+  setFilterValues,
+  filterComplexValues,
+  setFilterComplexValues,
+  ...props
+}) => {
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [showSaveFilter, setShowSaveFilter] = useState(false)
   const [tab, setTab] = useState(0)
@@ -98,7 +106,6 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, filterValues, s
   useEffect(() => {
     setChangeValueFilter(true)
   }, [filterValues])
-
 
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>

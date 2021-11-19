@@ -149,7 +149,10 @@ export const ProjectNotes = ({ project }) => {
         await await deleteNote(noteToDelete.id)
         showToast({ message: "Apunte borrado correctamente" })
         setNoteToDelete(null)
-        return await mutate([SWR_CACHE_KEYS.project, project._id])
+        return await mutate([
+          SWR_CACHE_KEYS.filterNotes,
+          `notes.projects._id=${project._id}`
+        ])
       }
 
       await deleteNote(noteToDelete)
@@ -161,7 +164,7 @@ export const ProjectNotes = ({ project }) => {
         notes: filterNotes
       })
 
-      await mutate([SWR_CACHE_KEYS.project, project._id])
+      await mutate([SWR_CACHE_KEYS.filterNotes, `notes.projects._id=${project._id}`])
 
       if (showNoteDetails) {
         setShowNoteDetails(false)
@@ -177,7 +180,7 @@ export const ProjectNotes = ({ project }) => {
     try {
       await deleteMessage(messageToDelete.noteId, messageToDelete.messageId)
       showToast({ message: "Mensaje borrado correctamente" })
-      await mutate([SWR_CACHE_KEYS.project, project._id])
+      await mutate([SWR_CACHE_KEYS.filterNotes, `notes.projects._id=${project._id}`])
       setMessageToDelete(null)
     } catch (error) {
       errorHandler(error)
@@ -223,7 +226,7 @@ export const ProjectNotes = ({ project }) => {
     const formatUser = formatUpdateUsers(user, favorites)
 
     await updateUser(_id, formatUser)
-    await mutate([SWR_CACHE_KEYS.project, project._id])
+    await mutate([SWR_CACHE_KEYS.filterNotes, `notes.projects._id=${project._id}`])
   }
 
   const formatUpdateUsersSubscribed = (user, subscribed) => {
@@ -248,7 +251,7 @@ export const ProjectNotes = ({ project }) => {
 
     const formatUser = formatUpdateUsersSubscribed(user, subscribed)
     await updateUser(_id, formatUser)
-    await mutate([SWR_CACHE_KEYS.project, project._id])
+    await mutate([SWR_CACHE_KEYS.filterNotes, `notes.projects._id=${project._id}`])
   }
 
   // Filters
@@ -402,6 +405,7 @@ export const ProjectNotes = ({ project }) => {
         isOpen={isResponseModalOpen}
         onClose={() => setIsResponseModalOpen(false)}
         noteId={noteToDetail?._id}
+        fromProjectDetail={project._id}
       />
 
       <NotesFilterModal

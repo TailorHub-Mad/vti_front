@@ -28,14 +28,17 @@ const NoteService = () => {
 
   // GROUP & FILTER
   const getGroupNotes = (data) =>
-    execute(instance.get(`/notes/group?group=${data}&real=true`))
-  const getFilterNotes = (data) => execute(instance.get(`/notes/filter?${data}`))
-  const getSearchNotes = (data) => execute(instance.get(`/notes/filter?${data}`))
+    execute(instance.get(`/notes/group?group=${data}&real=true&title=asc`))
+  const getFilterNotes = (data) =>
+    execute(instance.get(`/notes/filter?${data}&title=asc`))
+  const getSearchNotes = (data) =>
+    execute(instance.get(`/notes/filter?${data}&title=asc`))
 
-  const getFavsNotes = () => execute(instance.get(`/user/favorite/notes`))
-  const getSubscribeNotes = () => execute(instance.get(`/user/subscribed/notes`))
-  const getUnreadNotes = () => execute(instance.get(`/user/noRead`))
-  const getActiveNotes = () => execute(instance.get(`/user/active`))
+  const getFavsNotes = () => execute(instance.get(`/user/favorite/notes?title=asc`))
+  const getSubscribeNotes = () =>
+    execute(instance.get(`/user/subscribed/notes?title=asc`))
+  const getUnreadNotes = () => execute(instance.get(`/user/noRead?_id=asc`))
+  const getActiveNotes = () => execute(instance.get(`/user/active?_id=asc`))
 
   return {
     getNotes,
