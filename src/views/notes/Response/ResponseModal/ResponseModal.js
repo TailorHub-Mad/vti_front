@@ -16,6 +16,7 @@ export const ResponseModal = ({
   noteId,
   onClose,
   messageToUpdate,
+  fromProjectDetail,
   ...props
 }) => {
   const { showToast } = useContext(ToastContext)
@@ -91,6 +92,10 @@ export const ResponseModal = ({
     isUpdate ? await handleUpdateMessage() : await handleCreateMessage()
     setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.notes)
+    await mutate([
+      SWR_CACHE_KEYS.filterNotes,
+      `notes.projects._id=${fromProjectDetail}`
+    ])
     showToast({ message: isUpdate ? "Editado correctamente" : "¡Mensaje enviado!" })
     setIsSubmitting(false)
     onClose()

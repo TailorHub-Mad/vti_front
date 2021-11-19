@@ -132,27 +132,11 @@ export const NoteMainInfo = ({
               }
               label={activeClose ? "Cerrado" : "Cerrar"}
             />
-          ) : isMyMessage && role === RoleType.USER ? (
-            <ActionLink
-              onClick={() => {
-                handleUpdateNote(actionType.CLOSE)
-                setActiveClose(!activeClose)
-              }}
-              color="blue.500"
-              icon={
-                activeClose ? (
-                  <LockCloseIcon color="blue.500" />
-                ) : (
-                  <LockOpenIcon fill="#C4C4C4" />
-                )
-              }
-              label={activeClose ? "Cerrado" : "Cerrar"}
-            />
-          ) : item.isClosed ? (
+          ) : !isMessage && item.isClosed ? (
             <ActionLink
               onClick={() => {}}
-              color="blue.500"
-              icon={<LockCloseIcon color="blue.500" />}
+              color="#C4C4C4"
+              icon={<LockCloseIcon color="#C4C4C4" />}
               label={"Cerrado"}
               cursor={"default"}
             />
@@ -170,7 +154,7 @@ export const NoteMainInfo = ({
               }
               label={activeFormalized ? "Formalizado" : "Formalizar"}
             />
-          ) : item.formalized ? (
+          ) : !isMessage && item.formalized ? (
             <ActionLink
               onClick={() => {}}
               color="#C4C4C4"

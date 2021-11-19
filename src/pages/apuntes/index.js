@@ -531,6 +531,7 @@ const apuntes = () => {
           setShowNoteDetails(false)
           router.replace(`${router.pathname}`)
           setNoteToDetail(null)
+          mutate()
         }}
         onDelete={() => setNoteToDelete(noteToDetail._id)}
         onEdit={handleUpdate}
