@@ -1,5 +1,5 @@
 import { ScaleFade, Modal, ModalOverlay } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { AuxFilter } from "./AuxFilter/AuxFilter"
 import { MainFilter } from "./MainFilter/MainFilter"
 import { CustomModalContent } from "../../../components/overlay/Modal/CustomModalContent/CustomModalContent"

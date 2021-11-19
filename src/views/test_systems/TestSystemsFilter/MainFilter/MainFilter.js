@@ -1,40 +1,18 @@
-import { EditIcon } from "@chakra-ui/icons"
 import {
   Box,
   Button,
   Flex,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
   Text,
-  Tag
 } from "@chakra-ui/react"
-import React, { useContext, useEffect, useState } from "react"
-import { AdvancedFilterIcon } from "../../../../components/icons/AdvancedFilterIcon"
-import { SimpleFilterIcon } from "../../../../components/icons/SimpleFilterIcon"
+import React, { useContext, useState } from "react"
+
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
-import useFilterApi from "../../../../hooks/api/useFilterApi"
 import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
 import { RoleType } from "../../../../utils/constants/global"
-import { variantGeneralTag } from "../../../../utils/constants/tabs"
-import { AdvancedFilter } from "./AdvancedFilter/AdvancedFilter"
 
 import { SimpleFilterForm } from "./SimpleFilterForm/SimpleFilterForm"
 
-const criteria = [
-  { label: "TagAp", value: "TagAp" },
-  { label: "TagProy", value: "TagProy" },
-  { label: "AliasProy", value: "AliasProy" },
-  { label: "AliasSis", value: "AliasSis" },
-  { label: "TitleAp", value: "TitleAp" },
-  { label: "RefProy", value: "RefProy" },
-  { label: "RefSis", value: "RefSis" },
-  { label: "RefAp", value: "RefAp" },
-  { label: "Vticode", value: "Vticode" },
-  { label: "AliasCl", value: "AliasCl" }
-]
+
 
 export const MainFilter = ({
   onClose,
@@ -43,17 +21,11 @@ export const MainFilter = ({
   onFilter,
   simpleFilterValues,
   moveToLeft,
-  openSaveModal,
   onReset,
-  setTab,
-  onEdit,
   ...props
 }) => {
   const [isReset, setIsReset] = useState(false)
   const { role } = useContext(ApiAuthContext)
-
-  const [filterSimple, setFilterSimple] = useState([])
-  const { getFilterSimple, getFilterComplex } = useFilterApi()
 
   const handleOnReset = () => {
     setIsReset(true)
@@ -64,53 +36,6 @@ export const MainFilter = ({
     }, 1000)
   }
 
-  const handleEditFilter = (filter) => {
-    onEdit(filter)
-  }
-
-  const handleChargeFilter = (filter) => {
-    const { query } = filter
-    onSimpleFilterChange(JSON.parse(query))
-  }
-
-  useEffect(() => {
-    const _getFilters = async () => {
-      const simple = await getFilterSimple("testSystems")
-      setFilterSimple(simple)
-    }
-    _getFilters()
-  }, [onClose])
-
-  const rowFilter = (filters) => {
-    return (
-      <Flex mt="12px" width="100%" wrap="wrap" height="fit-content">
-        {filters.map((value, idx) => {
-          return (
-            <Tag
-              key={`${value._id}-${idx}`}
-              variant={variantGeneralTag.SYSTEM}
-              mb="8px"
-              mr="8px"
-              height="32px"
-              width="auto"
-              cursor="pointer"
-            >
-              <Flex align="center">
-                <Text onClick={() => handleChargeFilter(value)}>{value.name}</Text>
-                <EditIcon
-                  width="16px"
-                  cursor="pointer"
-                  mb="3px"
-                  ml="8px"
-                  onClick={() => handleEditFilter(value)}
-                />
-              </Flex>
-            </Tag>
-          )
-        })}
-      </Flex>
-    )
-  }
 
   return (
     <Box
