@@ -85,6 +85,8 @@ const apuntes = () => {
   const [noteToDetail, setNoteToDetail] = useState(null)
   const [noteToDelete, setNoteToDelete] = useState(null)
   const [messageToDelete, setMessageToDelete] = useState(null)
+
+  const [filterValues, setFilterValues] = useState({})
   const [queryFilter, setQueryFilter] = useState(null)
   const [queryGroup, setQueryGroup] = useState(null)
   const [querySearch, setQuerySearch] = useState(null)
@@ -145,8 +147,7 @@ const apuntes = () => {
   }
 
   const handleOnOpenFilter = () => {
-    if (fetchState === fetchType.FILTER || queryFilter) handleOnFilter(null)
-    else setShowFilterModal(true)
+    setShowFilterModal(true)
   }
 
   // Handlers CRUD
@@ -490,6 +491,8 @@ const apuntes = () => {
       </Popup>
 
       <NotesFilterModal
+        filterValues={filterValues}
+        setFilterValues={setFilterValues}
         isOpen={showFilterModal}
         onClose={() => setShowFilterModal(false)}
         onFilter={(values, type) => handleOnFilter(values, type)}
@@ -616,7 +619,7 @@ const apuntes = () => {
                 handleSubscribe={handleSubscribe}
                 fetchState={fetchState}
                 queryFilter={queryFilter}
-                onFilter={handleOnOpenFilter}
+                onFilter={() => handleOnFilter(null)}
               />
             )}
           </>

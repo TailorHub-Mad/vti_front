@@ -88,6 +88,8 @@ export const ProjectNotes = ({ project }) => {
   const [fetchOptions, setFetchOptions] = useState({
     [fetchOption.FILTER]: `notes.projects._id=${project._id}`
   })
+
+  const [filterValues, setFilterValues] = useState({})
   const [queryFilter, setQueryFilter] = useState(null)
   const [queryGroup, setQueryGroup] = useState(null)
   const [querySearch, setQuerySearch] = useState(null)
@@ -114,8 +116,9 @@ export const ProjectNotes = ({ project }) => {
 
   // Handlers views
   const handleOnOpenFilter = () => {
-    if (isFilter) handleOnFilter(null)
-    else setShowFilterModal(true)
+    // if (isFilter) handleOnFilter(null)
+    // else setShowFilterModal(true)
+    setShowFilterModal(true)
   }
 
   const handleOnCloseModal = () => {
@@ -146,7 +149,7 @@ export const ProjectNotes = ({ project }) => {
         await await deleteNote(noteToDelete.id)
         showToast({ message: "Apunte borrado correctamente" })
         setNoteToDelete(null)
-        return await mutate()
+        return await mutate([SWR_CACHE_KEYS.project, project._id])
       }
 
       await deleteNote(noteToDelete)
@@ -158,9 +161,7 @@ export const ProjectNotes = ({ project }) => {
         notes: filterNotes
       })
 
-      updatedNotes[0].notes.length > 0
-        ? await mutate(updatedNotes, false)
-        : await mutate()
+      await mutate([SWR_CACHE_KEYS.project, project._id])
 
       if (showNoteDetails) {
         setShowNoteDetails(false)
@@ -404,6 +405,8 @@ export const ProjectNotes = ({ project }) => {
       />
 
       <NotesFilterModal
+        filterValues={filterValues}
+        setFilterValues={setFilterValues}
         isOpen={showFilterModal}
         onClose={() => setShowFilterModal(false)}
         onFilter={(values) => handleOnFilter(values)}
@@ -415,6 +418,7 @@ export const ProjectNotes = ({ project }) => {
         noteFromProject={noteFromProject}
         isOpen={isNoteModalOpen}
         onClose={handleOnCloseModal}
+        fromProjectDetail={project._id}
       />
 
       <ImportFilesModal
@@ -492,11 +496,13 @@ export const ProjectNotes = ({ project }) => {
               />
             ) : (
               <NotesGrid
+                queryFilter={queryFilter}
                 notes={notesData}
                 onSeeDetails={handleOpenDetail}
                 checkIsSubscribe={checkIsSubscribe}
                 checkIsFavorite={checkIsFavorite}
                 onDelete={setNoteToDelete}
+                onFilter={handleOnFilter}
                 handleFavorite={handleFavorite}
                 handleSubscribe={handleSubscribe}
                 fromProjectDetail

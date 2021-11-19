@@ -46,6 +46,7 @@ export const MainFilter = ({
   onFilterComplexChange,
   onFilter,
   simpleFilterValues,
+  filterComplexValues,
   moveToLeft,
   openSaveModal,
   onReset,
@@ -180,7 +181,7 @@ export const MainFilter = ({
             </Box>
             <AdvancedFilter
               criteria={criteria}
-              value={simpleFilterValues}
+              filterComplexValues={filterComplexValues}
               onChange={onFilterComplexChange}
             />
           </TabPanel>

@@ -1,5 +1,5 @@
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons"
-import { Box, Flex, Text } from "@chakra-ui/react"
+import { Accordion, Box, Flex, Text } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import React, { useContext, useEffect, useState } from "react"
 import { useSWRConfig } from "swr"
@@ -15,6 +15,7 @@ import { FormalizedIcon } from "../../../icons/FormalizedIcon"
 import { LockCloseIcon } from "../../../icons/LockCloseIcon"
 import { LockOpenIcon } from "../../../icons/LockOpenIcon"
 import { Tag } from "../../../tags/Tag/Tag"
+import { NoteAccordionItem } from "../NoteAccordion/NoteAccordionItem/NoteAccordionItem"
 
 const actionType = {
   CLOSE: "close",
@@ -35,6 +36,8 @@ export const NoteMainInfo = ({
   const { role, user } = useContext(ApiAuthContext)
 
   const [userId, setUserId] = useState()
+  const [activeFormalized, setActiveFormalized] = useState(item.formalized)
+  const [activeClose, setActiveClose] = useState(item.isClosed)
 
   const ownerMessage = item?.owner && item?.owner[0]?._id
   const ownerNote = note?.owner && note?.owner[0]?._id
@@ -72,9 +75,8 @@ export const NoteMainInfo = ({
         return null
     }
 
-    fromProjectDetail
-      ? await mutate([SWR_CACHE_KEYS.project, fromProjectDetail])
-      : await mutate(SWR_CACHE_KEYS.notes)
+    await mutate(SWR_CACHE_KEYS.notes)
+    await mutate([SWR_CACHE_KEYS.project, fromProjectDetail])
   }
 
   const isProjectHidden = () => {
@@ -98,28 +100,14 @@ export const NoteMainInfo = ({
           {new Date(item.updatedAt)?.toLocaleDateString()}
         </Text>
         <Flex>
-          {!isMessage && role === RoleType.ADMIN ? (
+          {role === RoleType.ADMIN ? (
             <ActionLink
               onClick={onEdit}
               color="blue.500"
               icon={<EditIcon />}
               label="Editar"
             />
-          ) : !isMessage && role === RoleType.USER && isMyNote ? (
-            <ActionLink
-              onClick={onEdit}
-              color="blue.500"
-              icon={<EditIcon />}
-              label="Editar"
-            />
-          ) : isMessage && isMyMessage && role === RoleType.ADMIN ? (
-            <ActionLink
-              onClick={onEdit}
-              color="blue.500"
-              icon={<EditIcon />}
-              label="Editar"
-            />
-          ) : isMessage && isMyMessage && role === RoleType.USER && editAllowed ? (
+          ) : !isMessage && isMyNote && role === RoleType.USER && editAllowed ? (
             <ActionLink
               onClick={onEdit}
               color="blue.500"
@@ -128,18 +116,37 @@ export const NoteMainInfo = ({
             />
           ) : null}
 
-          {role === RoleType.ADMIN ? (
+          {!isMessage && role === RoleType.ADMIN ? (
             <ActionLink
-              onClick={() => handleUpdateNote(actionType.CLOSE)}
+              onClick={() => {
+                handleUpdateNote(actionType.CLOSE)
+                setActiveClose(!activeClose)
+              }}
               color="blue.500"
               icon={
-                item.isClosed ? (
+                activeClose ? (
                   <LockCloseIcon color="blue.500" />
                 ) : (
                   <LockOpenIcon fill="#C4C4C4" />
                 )
               }
-              label={item.isClosed ? "Cerrado" : "Cerrar"}
+              label={activeClose ? "Cerrado" : "Cerrar"}
+            />
+          ) : isMyMessage && role === RoleType.USER ? (
+            <ActionLink
+              onClick={() => {
+                handleUpdateNote(actionType.CLOSE)
+                setActiveClose(!activeClose)
+              }}
+              color="blue.500"
+              icon={
+                activeClose ? (
+                  <LockCloseIcon color="blue.500" />
+                ) : (
+                  <LockOpenIcon fill="#C4C4C4" />
+                )
+              }
+              label={activeClose ? "Cerrado" : "Cerrar"}
             />
           ) : item.isClosed ? (
             <ActionLink
@@ -151,42 +158,36 @@ export const NoteMainInfo = ({
             />
           ) : null}
 
-          {role === RoleType.ADMIN ? (
+          {!isMessage && role === RoleType.ADMIN ? (
             <ActionLink
               onClick={() => {
                 handleUpdateNote(actionType.FORMALIZED)
+                setActiveFormalized(!activeFormalized)
               }}
               color="blue.500"
               icon={
-                <FormalizedIcon fill={item.formalized ? "blue.500" : "#C4C4C4"} />
+                <FormalizedIcon fill={activeFormalized ? "blue.500" : "#C4C4C4"} />
               }
-              label={item.formalized ? "Formalizado" : "Formalizar"}
+              label={activeFormalized ? "Formalizado" : "Formalizar"}
             />
           ) : item.formalized ? (
             <ActionLink
               onClick={() => {}}
-              color="blue.500"
-              icon={<FormalizedIcon fill={"blue.500"} />}
+              color="#C4C4C4"
+              icon={<FormalizedIcon fill={"#C4C4C4"} />}
               label={"Formalizado"}
               cursor={"default"}
             />
           ) : null}
 
-          {!isMessage && role === RoleType.ADMIN ? (
+          {role === RoleType.ADMIN ? (
             <ActionLink
               onClick={onDelete}
               color="error"
               icon={<DeleteIcon />}
               label="Eliminar"
             />
-          ) : isMessage && isMyMessage && role === RoleType.USER ? (
-            <ActionLink
-              onClick={onDelete}
-              color="error"
-              icon={<DeleteIcon />}
-              label="Eliminar"
-            />
-          ) : isMyMessage ? (
+          ) : !isMessage && isMyNote && role === RoleType.USER && editAllowed ? (
             <ActionLink
               onClick={onDelete}
               color="error"
@@ -198,25 +199,25 @@ export const NoteMainInfo = ({
       </Flex>
 
       {isProjectHidden() && !fromProjectDetail && (
-        <Box mt="24px">
-          <Flex justify="space-between">
-            <Flex align="center">
-              <FolderCloseIcon mr="8px" />
-              <Text variant="d_s_medium" mt="4px">
-                Proyectos
-              </Text>
-            </Flex>
-            <GoToButton
-              label="Ver proyecto"
-              onClick={() =>
-                router.push(`${PATHS.projects}/${item.projects[0]._id}`)
-              }
-            />
-          </Flex>
-
-          <Tag variant={variantGeneralTag.PROJECT} mt="8px" ml="32px" width="auto">
-            {item.projects[0]?.alias}
-          </Tag>
+        <Box position="relative" w="100%" h="fit-content">
+          <Accordion width="100%" allowToggle>
+            <NoteAccordionItem
+              mt="0"
+              title={`Proyecto`}
+              icon={<FolderCloseIcon mr="8px" />}
+            >
+              <Tag variant={variantGeneralTag.PROJECT} width="auto">
+                {item.projects[0]?.alias}
+              </Tag>
+            </NoteAccordionItem>
+          </Accordion>
+          <GoToButton
+            position="absolute"
+            right="0"
+            top="0"
+            label="Ver proyecto"
+            onClick={() => router.push(`${PATHS.projects}/${item.projects[0]._id}`)}
+          />
         </Box>
       )}
     </>

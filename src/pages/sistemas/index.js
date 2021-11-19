@@ -148,8 +148,9 @@ const sistemas = () => {
   }
 
   const handleOnOpenFilter = () => {
-    if (fetchState === fetchType.FILTER || queryFilter) handleOnFilter(null)
-    else setShowFilterModal(true)
+    // if (fetchState === fetchType.FILTER || queryFilter) handleOnFilter(null)
+    // else setShowFilterModal(true)
+    setShowFilterModal(true)
   }
 
   // Handlers CRUD
@@ -466,6 +467,7 @@ const sistemas = () => {
           onDeleteMany={(systemsId) => handleOpenPopup(systemsId, DeleteType.MANY)}
           onEdit={handleUpdate}
           onSubscribe={handleSubscribe}
+          onFilter={handleOnFilter}
           onGroup={handleOnGroup}
           groupOption={getGroupOptionLabel(
             SYSTEMS_GROUP_OPTIONS,

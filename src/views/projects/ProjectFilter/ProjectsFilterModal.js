@@ -8,7 +8,8 @@ import { SupportModal } from "../../helps/NewCriterion/NewCriterionModal/Support
 import { SaveFilterModal } from "../../../components/filters/SaveFilterModal"
 import { COMPLEX_OBJECT, parseComplexQuery } from "../../../utils/functions/filter"
 
-export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => {
+export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, filterValues, setFilterValues,  filterComplexValues, setFilterComplexValues, 
+  ...props }) => {
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [showSaveFilter, setShowSaveFilter] = useState(false)
   const [tab, setTab] = useState(0)
@@ -25,14 +26,11 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
 
   const { getProjectHelps } = useHelpApi()
   const { getProjectTags } = useTagApi()
-
-  const [filterValues, setFilterValues] = useState(initialValues)
   const [usedProjectTags, setUsedProjectTags] = useState([])
   const [projectCriteria, setProjectCriteria] = useState([])
   const [filterMetadata, setfilterMetadata] = useState(null)
   const [isUpdateFilter, setIsUpdateFilter] = useState(false)
   const [changeValueFilter, setChangeValueFilter] = useState(false)
-  const [filterComplexValues, setFilterComplexValues] = useState(null)
 
   const handleOnReset = () => {
     setFilterValues(initialValues)
@@ -44,13 +42,13 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
       const query = parseComplexQuery(filterComplexValues, COMPLEX_OBJECT.PROJECTS)
       onFilter(query, "complex")
     } else {
-      onFilter(filterValues)
-      setFilterValues(initialValues)
+      onFilter()
+      // setFilterValues(initialValues)
     }
   }
 
   const handleOnClose = () => {
-    setFilterValues(initialValues)
+    // setFilterValues(initialValues)
     onClose()
   }
 
@@ -101,6 +99,7 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
     setChangeValueFilter(true)
   }, [filterValues])
 
+
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
@@ -127,6 +126,7 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, ...props }) => 
               onReset={handleOnReset}
               setTab={setTab}
               onEdit={handleEditFilter}
+              filterComplexValues={filterComplexValues}
               onFilterComplexChange={(val) => setFilterComplexValues(val)}
             />
           )}

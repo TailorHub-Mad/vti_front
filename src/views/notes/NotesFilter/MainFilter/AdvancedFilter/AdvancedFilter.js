@@ -2,10 +2,10 @@ import { Button, Flex, Grid, Input, Text } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
 
-export const AdvancedFilter = ({ criteria, onChange, errorComplexFilter }) => {
+export const AdvancedFilter = ({ criteria, onChange, errorComplexFilter,filterComplexValues }) => {
   const symbols = ["(", ")", "&", "||", "Not"]
 
-  const [value, setValue] = useState("")
+  const [value, setValue] = useState(filterComplexValues)
   const [criterio, setCriterio] = useState("")
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export const AdvancedFilter = ({ criteria, onChange, errorComplexFilter }) => {
       </Text>
       <Input
         placeholder={`TAproy:GOM&((TagAp:Incidencias))`}
-        value={value || ""}
+        value={filterComplexValues || ""}
         onChange={(e) => setValue(e.target.value)}
         color={errorComplexFilter ? "error" : null}
       />

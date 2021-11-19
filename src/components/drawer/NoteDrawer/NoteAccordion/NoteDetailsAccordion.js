@@ -38,15 +38,13 @@ export const NoteDetailsAccordion = ({
   }
 
   return (
-    <Accordion width="100%" allowToggle allowMultiple {...props}>
-      {!isMessage && description ? (
-        <NoteAccordionItem title="Descripción" icon={<PageLineIcon mr="8px" />}>
-          {description?.split("\n").map((e, idx) => (
-            <Text key={idx}>{e === "" ? "\n" : e}</Text>
-          ))}
-        </NoteAccordionItem>
-      ) : null}
-
+    <Accordion
+      width="100%"
+      allowToggle
+      allowMultiple
+      {...props}
+      defaultIndex={!isMessage ? [1] : []}
+    >
       {!isMessage && testSystems ? (
         <NoteAccordionItem
           title="Sistema de ensayo del proyecto"
@@ -74,7 +72,7 @@ export const NoteDetailsAccordion = ({
           ))}
         </NoteAccordionItem>
       ) : null}
-
+      
       {!isMessage && noteTags ? (
         <NoteAccordionItem
           width="100%"
@@ -87,6 +85,18 @@ export const NoteDetailsAccordion = ({
             width="100%"
             noCollapse
           />
+        </NoteAccordionItem>
+      ) : null}
+
+      {!isMessage && description ? (
+        <NoteAccordionItem
+          mt="0"
+          title={`Mensaje creado por ${name}`}
+          icon={<PageLineIcon mr="8px" />}
+        >
+          {description?.split("\n").map((e, idx) => (
+            <Text key={idx}>{e === "" ? "\n" : e}</Text>
+          ))}
         </NoteAccordionItem>
       ) : null}
 
