@@ -36,7 +36,6 @@ export const NoteDrawer = ({
     }
     _getNote()
   }, [noteFromProject])
-
   if (!noteFromProject) return null
   return (
     <>
@@ -102,9 +101,10 @@ export const NoteDrawer = ({
                 onDelete={onDelete}
                 fromProjectDetail={fromProjectDetail}
                 note={note}
+              
               />
               <NoteDetailsAccordion
-                name={note.name}
+                name={note.owner[0].name}
                 link={note.link}
                 description={note.description}
                 noteTags={note.tags.length > 0 && note.tags}

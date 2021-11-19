@@ -165,7 +165,12 @@ export const NewTagModal = ({
           height={["auto", null, null, "fit-content"]}
           position={["fixed", null, null, "absolute"]}
           top={["0", null, null, "50px"]}
-          left={["0", null, null, "calc(50vw - 230px)"]}
+          left={[
+            "0",
+            null,
+            null,
+            showSecondaryContent ? "calc(50vw - 510px)" : "calc(50vw - 230px)"
+          ]}
           overflowY={["auto", null, null, null]}
           bottom={["0", null, null, null]}
           transition={["none", null, null, "left 0.18s ease-in-out"]}

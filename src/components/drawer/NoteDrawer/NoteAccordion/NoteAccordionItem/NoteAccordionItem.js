@@ -35,7 +35,7 @@ export const NoteAccordionItem = ({ title, icon, children, ...props }) => {
               )}
             </Flex>
           </AccordionButton>
-          <AccordionPanel pl={"32px"}>
+          <AccordionPanel pl={"32px"} pb="0">
             {isExpanded
               ? Array.isArray(children)
                 ? children?.map((child, index) => {

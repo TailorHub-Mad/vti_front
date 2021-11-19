@@ -74,6 +74,9 @@ const proyectos = () => {
   const [showExportModal, setShowExportModal] = useState(false)
   const [showFilterModal, setShowFilterModal] = useState(false)
 
+  const [filterValues, setFilterValues] = useState({})
+  const [filterComplexValues, setFilterComplexValues] = useState(null)
+
   const [queryFilter, setQueryFilter] = useState(null)
   const [queryGroup, setQueryGroup] = useState(null)
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
@@ -182,8 +185,9 @@ const proyectos = () => {
   }
 
   const handleOnOpenFilter = () => {
-    if (fetchState === fetchType.FILTER || queryFilter) handleOnFilter(null)
-    else setShowFilterModal(true)
+    // if (fetchState === fetchType.FILTER || queryFilter) handleOnFilter(null)
+    // else setShowFilterModal(true)
+    setShowFilterModal(true)
   }
 
   // Handlers CRUD
@@ -388,6 +392,13 @@ const proyectos = () => {
     }
   }
 
+  // const handleResetOrder = () => {
+  //if queryGroup
+  //if queryFilter
+  //else all
+  //   setFetchState(fetchType.ALL)
+  // }
+
   const handleSortElement = (data) => {
     const { name, order } = data
     if (!name || !order) return
@@ -419,17 +430,15 @@ const proyectos = () => {
     }
 
     let filter = null
-    const { client } = values
-    delete values["client"]
+    const { client, ...rest } = { ...values } || {}
     if (type !== "complex") {
       filter = generateFilterQuery(PROJECTS_FILTER_KEYS, {
-        ...values,
+        ...rest,
         clientAlias: client
       })
     } else {
       filter = `query=${values}`
     }
-
     setQueryFilter(filter)
 
     if (fetchState === fetchType.GROUP) {
@@ -466,7 +475,14 @@ const proyectos = () => {
       <ProjectsFilterModal
         isOpen={showFilterModal}
         onClose={() => setShowFilterModal(false)}
-        onFilter={(values, type) => handleOnFilter(values, type)}
+        onFilter={(values, type) => {
+          handleOnFilter(values || filterValues, type)
+          setShowFilterModal(false)
+        }}
+        filterValues={filterValues}
+        setFilterValues={setFilterValues}
+        filterComplexValues={filterComplexValues}
+        setFilterComplexValues={setFilterComplexValues}
       />
       <NewProjectModal
         projectToUpdate={projectToUpdate}

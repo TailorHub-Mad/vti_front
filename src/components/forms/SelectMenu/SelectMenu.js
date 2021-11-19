@@ -6,7 +6,7 @@ export const SelectMenu = ({ onSelect, options = [], ...props }) => {
     <UnorderedList
       width="100%"
       bgColor="light_grey"
-      maxHeight="320px"
+      maxHeight="450px"
       overflowY="scroll"
       borderRadius="2px"
       marginLeft="0"

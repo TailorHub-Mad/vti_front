@@ -5,7 +5,7 @@ const NoteService = () => {
 
   // CRUD
   const getNotes = (limit = 0, offset = 0) =>
-    execute(instance.get(`/notes?limit=${limit}&offset=${offset}`))
+    execute(instance.get(`/notes?limit=${limit}&offset=${offset}&title=asc`))
   const getNote = (id) => execute(instance.get(`/notes/${id}`))
   const createNote = (data) => {
     return execute(
