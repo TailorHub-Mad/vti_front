@@ -118,13 +118,7 @@ export const MainFilter = ({
           {showFilters ? <ChevronUpIcon /> : <ChevronDownIcon />}
         </Flex>
         {showFilters ? (
-          <Flex
-            mt="12px"
-            width="100%"
-            wrap="wrap"
-            height="fit-content"
-            pb="8px"
-          >
+          <Flex mt="12px" width="100%" wrap="wrap" height="fit-content" pb="8px">
             {filters.map((value, idx) => {
               return (
                 <Tag
