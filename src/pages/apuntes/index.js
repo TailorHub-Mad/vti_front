@@ -85,9 +85,13 @@ const apuntes = () => {
   const [noteToDetail, setNoteToDetail] = useState(null)
   const [noteToDelete, setNoteToDelete] = useState(null)
   const [messageToDelete, setMessageToDelete] = useState(null)
+
+  const [filterValues, setFilterValues] = useState({})
   const [queryFilter, setQueryFilter] = useState(null)
   const [queryGroup, setQueryGroup] = useState(null)
-  const [querySearch, setQuerySearch] = useState(null)
+  const [, setQuerySearch] = useState(null)
+  const [queryDirectFilter, setQueryDirectFilter] = useState(null)
+  const [fetchDirectFilter, setFetchDirectFilter] = useState("all")
 
   // Fetch
   const { data, error, isLoading, mutate, isValidating } = noteFetchHandler(
@@ -119,7 +123,6 @@ const apuntes = () => {
 
   const isMenuHidden = () => {
     if (isLoading) return false
-    if (fetchState === fetchType.GROUP) return false
     if (isEmptyData && fetchState === fetchType.FILTER) return false
     if (isEmptyData && fetchState === fetchType.ALL) return false
 
@@ -145,8 +148,7 @@ const apuntes = () => {
   }
 
   const handleOnOpenFilter = () => {
-    if (fetchState === fetchType.FILTER || queryFilter) handleOnFilter(null)
-    else setShowFilterModal(true)
+    setShowFilterModal(true)
   }
 
   // Handlers CRUD
@@ -326,34 +328,6 @@ const apuntes = () => {
   }
 
   // Filters
-  const handleOnGroup = (group) => {
-    if (!group) {
-      setQueryGroup(null)
-      if (queryFilter) {
-        setFetchState(fetchType.FILTER)
-        setFetchOptions({
-          [fetchOption.FILTER]: queryFilter
-        })
-        return
-      } else {
-        setFetchState(fetchType.ALL)
-        setFetchOptions({
-          [fetchOption.GROUP]: null
-        })
-        return
-      }
-    }
-
-    setQueryGroup(group)
-    let query = group
-    if (queryFilter) query = `${query}&${queryFilter}`
-    if (querySearch) query = `${query}&${querySearch}`
-    setFetchState(fetchType.GROUP)
-    setFetchOptions({
-      [fetchOption.GROUP]: query
-    })
-  }
-
   const onSearch = (search) => {
     if (!search) {
       if (queryGroup) {
@@ -389,24 +363,89 @@ const apuntes = () => {
     }
   }
 
+  const handleOnGroup = (group) => {
+    if (!group) {
+      setQueryGroup(null)
+
+      if (queryFilter && queryDirectFilter) {
+        setFetchState(fetchType.FILTER)
+        setFetchOptions({
+          [fetchOption.FILTER]: `${queryFilter}&${queryDirectFilter}`
+        })
+      } else if (queryFilter) {
+        setFetchState(fetchType.FILTER)
+        setFetchOptions({
+          [fetchOption.FILTER]: `${queryFilter}`
+        })
+      } else if (queryDirectFilter) {
+        setFetchState(queryDirectFilter.split("=")[0])
+      } else {
+        setFetchState(fetchType.ALL)
+        setFetchOptions({
+          [fetchOption.GROUP]: null
+        })
+      }
+
+      return
+    }
+
+    setQueryGroup(group)
+    let query = group
+
+    if (queryFilter && queryDirectFilter) {
+      const newGroup = `${query}&${queryFilter}&${queryDirectFilter}`
+      setFetchState(fetchType.GROUP)
+      setFetchOptions({
+        [fetchOption.GROUP]: newGroup
+      })
+      return
+    } else if (queryFilter) {
+      const newGroup = `${queryGroup}&${queryFilter}`
+      setFetchState(fetchType.GROUP)
+      setFetchOptions({
+        [fetchOption.GROUP]: newGroup
+      })
+      return
+    } else if (queryDirectFilter) {
+      setFetchState(fetchType.GROUP)
+      setFetchOptions({
+        [fetchOption.GROUP]: `${query}&${queryDirectFilter}`
+      })
+    } else {
+      setFetchState(fetchType.GROUP)
+      setFetchOptions({
+        [fetchOption.GROUP]: query
+      })
+    }
+  }
+
   const handleOnFilter = (values, type) => {
     if (!values) {
       setQueryFilter(null)
 
-      if (queryGroup) {
+      if (queryGroup && queryDirectFilter) {
+        const newGroup = `${queryGroup}&${queryDirectFilter}`
         setFetchState(fetchType.GROUP)
         setFetchOptions({
-          [fetchOption.GROUP]: queryGroup
+          [fetchOption.GROUP]: newGroup
         })
-        return
+      } else if (queryGroup) {
+        const newGroup = `${queryGroup}`
+        setFetchState(fetchType.GROUP)
+        setFetchOptions({
+          [fetchOption.GROUP]: newGroup
+        })
+      } else if (queryDirectFilter) {
+        console.log(queryDirectFilter, queryDirectFilter.split("=")[0])
+        setFetchState(queryDirectFilter.split("=")[0])
       } else {
         setFetchState(fetchType.ALL)
-
         setFetchOptions({
           [fetchOption.FILTER]: null
         })
-        return
       }
+
+      return
     }
 
     let filter = null
@@ -419,11 +458,24 @@ const apuntes = () => {
     setQuerySearch(null)
     setQueryFilter(filter)
 
-    if (fetchState === fetchType.GROUP) {
+    if (queryGroup && queryDirectFilter) {
+      const newGroup = `${queryGroup}&${filter}&${queryDirectFilter}`
+      setFetchState(fetchType.GROUP)
+      setFetchOptions({
+        [fetchOption.GROUP]: newGroup
+      })
+      return
+    } else if (queryGroup) {
       const newGroup = `${queryGroup}&${filter}`
       setFetchState(fetchType.GROUP)
       setFetchOptions({
         [fetchOption.GROUP]: newGroup
+      })
+      return
+    } else if (queryDirectFilter) {
+      setFetchState(fetchType.FILTER)
+      setFetchOptions({
+        [fetchOption.FILTER]: `${filter}&${queryDirectFilter}`
       })
     } else {
       setFetchState(fetchType.FILTER)
@@ -433,6 +485,77 @@ const apuntes = () => {
     }
 
     setShowFilterModal(false)
+  }
+
+  const handleOnChangeDirectFilter = (state) => {
+    setFetchDirectFilter(state)
+
+    if (state === "all") {
+      setQueryDirectFilter(null)
+
+      if (queryGroup && queryFilter) {
+        const newGroup = `${queryGroup}&${queryFilter}`
+        setFetchState(fetchType.GROUP)
+        setFetchOptions({
+          [fetchOption.GROUP]: newGroup
+        })
+        return
+      } else if (queryGroup) {
+        setFetchState(fetchType.GROUP)
+        setFetchOptions({
+          [fetchOption.GROUP]: queryGroup
+        })
+        return
+      } else if (queryFilter) {
+        setFetchState(fetchType.FILTER)
+        setFetchOptions({
+          [fetchOption.FILTER]: queryFilter
+        })
+        return
+      } else {
+        setFetchState(fetchType.ALL)
+
+        setFetchOptions({
+          [fetchOption.FILTER]: null,
+          [fetchOption.GROUP]: null
+        })
+        return
+      }
+    }
+
+    setQuerySearch(null)
+    let filter = `${state}=true`
+
+    setQueryDirectFilter(filter)
+
+    if (queryGroup && queryFilter) {
+      const newGroup = `${queryGroup}&${queryFilter}&${filter}`
+      setFetchState(fetchType.GROUP)
+      setFetchOptions({
+        [fetchOption.GROUP]: newGroup
+      })
+      return
+    } else if (queryGroup) {
+      setFetchState(fetchType.GROUP)
+      setFetchOptions({
+        [fetchOption.GROUP]: `${queryGroup}&${filter}`
+      })
+      return
+    } else if (queryFilter) {
+      setFetchState(fetchType.FILTER)
+      setFetchOptions({
+        [fetchOption.FILTER]: `${queryFilter}&${filter}`
+      })
+      return
+    } else {
+      setFetchState(state)
+
+      setFetchOptions({
+        [fetchOption.FILTER]: null,
+        [fetchOption.GROUP]: null
+      })
+      return
+    }
   }
 
   useEffect(() => {
@@ -490,6 +613,8 @@ const apuntes = () => {
       </Popup>
 
       <NotesFilterModal
+        filterValues={filterValues}
+        setFilterValues={setFilterValues}
         isOpen={showFilterModal}
         onClose={() => setShowFilterModal(false)}
         onFilter={(values, type) => handleOnFilter(values, type)}
@@ -528,6 +653,7 @@ const apuntes = () => {
           setShowNoteDetails(false)
           router.replace(`${router.pathname}`)
           setNoteToDetail(null)
+          mutate()
         }}
         onDelete={() => setNoteToDelete(noteToDetail._id)}
         onEdit={handleUpdate}
@@ -566,7 +692,8 @@ const apuntes = () => {
           <NotesMenu
             fetchState={fetchState}
             notesCount={notesData?.length}
-            onChange={(state) => setFetchState(state)}
+            onChange={handleOnChangeDirectFilter}
+            fetchDirectFilter={fetchDirectFilter}
           />
         ) : null}
       </PageMenu>
@@ -616,7 +743,7 @@ const apuntes = () => {
                 handleSubscribe={handleSubscribe}
                 fetchState={fetchState}
                 queryFilter={queryFilter}
-                onFilter={handleOnOpenFilter}
+                onFilter={() => handleOnFilter(null)}
               />
             )}
           </>

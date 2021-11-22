@@ -20,12 +20,12 @@ export const UsersFilterModal = ({ isOpen, onClose, onFilter }) => {
   }
 
   const handleOnFilter = () => {
-    setFilterValues(initialValues)
+    // setFilterValues(initialValues)
     onFilter(filterValues)
   }
 
   const handleOnClose = () => {
-    setFilterValues(initialValues)
+    // setFilterValues(initialValues)
     onClose()
   }
 

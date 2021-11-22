@@ -1,6 +1,5 @@
 import { Flex, Text, useMediaQuery } from "@chakra-ui/react"
 import React from "react"
-import { fetchType } from "../../../utils/constants/swr"
 import { ICONS_REFERENCE } from "../../../utils/constants/icons"
 
 const notesMenuOptions = {
@@ -9,28 +8,27 @@ const notesMenuOptions = {
     activeIcon: ICONS_REFERENCE.notes,
     icon: ICONS_REFERENCE.notes
   },
-  favs: {
+  favorites: {
     label: "Favoritos",
     activeIcon: ICONS_REFERENCE.heart,
-    icon: ICONS_REFERENCE.heart_line
+    icon: ICONS_REFERENCE.heart_line,
+    query: `favorites=true`
   },
   subscribed: {
     label: "Suscritos",
     activeIcon: ICONS_REFERENCE.subscribe,
-    icon: ICONS_REFERENCE.subscribe_line
+    icon: ICONS_REFERENCE.subscribe_line,
+    query: `subscribed=true`
   },
-  unread: {
+  noRead: {
     label: "No leídos",
     activeIcon: ICONS_REFERENCE.hide,
-    icon: ICONS_REFERENCE.hide_line
+    icon: ICONS_REFERENCE.hide_line,
+    query: `noRead=true`
   }
 }
 
-export const NotesMenu = ({
-  fetchState = fetchType.ALL,
-  notesCount = 0,
-  onChange
-}) => {
+export const NotesMenu = ({ notesCount = 0, onChange, fetchDirectFilter }) => {
   const [isScreen] = useMediaQuery("(min-width: 475px)")
 
   return (
@@ -38,7 +36,7 @@ export const NotesMenu = ({
       <Flex gridGap="16px">
         {Object.entries(notesMenuOptions).map(([name, item]) => {
           const { icon, activeIcon, label } = item
-          const isActive = name === fetchState
+          const isActive = name === fetchDirectFilter
           const color = isActive ? "blue.500" : "grey"
           const Icon = isActive ? activeIcon : icon
 

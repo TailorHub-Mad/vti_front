@@ -16,9 +16,9 @@ export const ResponseModal = ({
   noteId,
   onClose,
   messageToUpdate,
+  fromProjectDetail,
   ...props
 }) => {
-  console.log(noteId)
   const { showToast } = useContext(ToastContext)
   const { createMessage, updateMessage } = useNoteApi()
   const { mutate } = useSWRConfig()
@@ -92,6 +92,10 @@ export const ResponseModal = ({
     isUpdate ? await handleUpdateMessage() : await handleCreateMessage()
     setValues(initialValues)
     await mutate(SWR_CACHE_KEYS.notes)
+    await mutate([
+      SWR_CACHE_KEYS.filterNotes,
+      `notes.projects._id=${fromProjectDetail}`
+    ])
     showToast({ message: isUpdate ? "Editado correctamente" : "¡Mensaje enviado!" })
     setIsSubmitting(false)
     onClose()

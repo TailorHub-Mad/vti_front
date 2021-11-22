@@ -1,5 +1,5 @@
 import { AttachmentIcon } from "@chakra-ui/icons"
-import { Box, Circle, Text } from "@chakra-ui/react"
+import { Box, Circle, Grid, Text } from "@chakra-ui/react"
 import React from "react"
 import { getAcronym } from "../../../../utils/functions/global"
 import { BadgeIcon } from "../../../icons/BadgeIcon"
@@ -27,11 +27,11 @@ export const MessageCardFooter = ({
 }) => {
   const areMultipleUsers = subscribedUsers?.length > 1
   return (
-    <Box
-      display="flex"
-      justifyContent="space-between"
+    <Grid
       height="24px"
       alignItems="center"
+      templateColumns="24px 24px 24px 24px 24px 42px"
+      justifyContent="space-between"
       {...props}
     >
       {isClosed ? (
@@ -40,24 +40,19 @@ export const MessageCardFooter = ({
         <LockOpenIcon {...icon_props} fill="#C4C4C4" />
       )}
 
-      {isSubscribe ? <SubscribeIcon {...icon_props} color={"blue.500"} /> : null}
+      <SubscribeIcon {...icon_props} color={isSubscribe ? "blue.500" : "#C4C4C4"} />
 
-      {isFormalized ? (
-        <BadgeIcon {...icon_props} color={isFormalized ? "blue.500" : "#C4C4C4"} />
-      ) : null}
+      <BadgeIcon {...icon_props} color={isFormalized ? "blue.500" : "#C4C4C4"} />
 
       <Box display="flex" alignItems="center">
         <Text
-          color={isRead || messagesCount === 0 ? "grey" : "yellow"}
+          color={isRead ? "grey" : "yellow"}
           variant="d_xs_regular"
           marginRight="2px"
         >
           {messagesCount}
         </Text>
-        <MessagesIcon
-          {...icon_props}
-          color={isRead || messagesCount === 0 ? "grey" : "yellow"}
-        />
+        <MessagesIcon {...icon_props} color={isRead ? "grey" : "yellow"} />
       </Box>
 
       <Box display="flex" alignItems="center">
@@ -98,6 +93,6 @@ export const MessageCardFooter = ({
           </Circle>
         </Box>
       ) : null}
-    </Box>
+    </Grid>
   )
 }

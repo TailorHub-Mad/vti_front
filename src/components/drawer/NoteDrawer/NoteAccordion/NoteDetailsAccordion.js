@@ -37,16 +37,31 @@ export const NoteDetailsAccordion = ({
     downloadFile(response, name)
   }
 
-  return (
-    <Accordion width="100%" allowToggle allowMultiple {...props}>
-      {!isMessage && description ? (
-        <NoteAccordionItem title="Descripción" icon={<PageLineIcon mr="8px" />}>
-          {description?.split("\n").map((e, idx) => (
-            <Text key={idx}>{e === "" ? "\n" : e}</Text>
-          ))}
-        </NoteAccordionItem>
-      ) : null}
+  const getActiveIndex = () => {
+    if (isMessage) return [0, 1, 2]
+    if (testSystems) {
+      if (noteTags) {
+        return [2, 3, 4]
+      } else {
+        return [1, 2, 3]
+      }
+    } else {
+      if (noteTags) {
+        return [1, 2, 3]
+      } else {
+        return [0, 1, 2]
+      }
+    }
+  }
 
+  return (
+    <Accordion
+      width="100%"
+      allowToggle
+      allowMultiple
+      {...props}
+      defaultIndex={getActiveIndex()}
+    >
       {!isMessage && testSystems ? (
         <NoteAccordionItem
           title="Sistema de ensayo del proyecto"
@@ -87,6 +102,18 @@ export const NoteDetailsAccordion = ({
             width="100%"
             noCollapse
           />
+        </NoteAccordionItem>
+      ) : null}
+
+      {!isMessage && description ? (
+        <NoteAccordionItem
+          mt="0"
+          title={`Mensaje creado por ${name}`}
+          icon={<PageLineIcon mr="8px" />}
+        >
+          {description?.split("\n").map((e, idx) => (
+            <Text key={idx}>{e === "" ? "\n" : e}</Text>
+          ))}
         </NoteAccordionItem>
       ) : null}
 

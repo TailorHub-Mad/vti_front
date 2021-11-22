@@ -21,6 +21,8 @@ import { variantGeneralTag } from "../../../../utils/constants/tabs"
 import { EditIcon } from "@chakra-ui/icons"
 import { RoleType } from "../../../../utils/constants/global"
 import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
+import { ChevronDownIcon } from "../../../../components/icons/ChevronDownIcon"
+import { ChevronUpIcon } from "../../../../components/icons/ChevronUpIcon"
 
 const criteria = [
   { label: "AliasCL", value: "AliasCL" },
@@ -46,6 +48,7 @@ export const MainFilter = ({
   onSimpleFilterChange,
   onFilter,
   simpleFilterValues,
+  filterComplexValues,
   moveToLeft,
   openSaveModal,
   onReset,
@@ -61,6 +64,7 @@ export const MainFilter = ({
 
   const { role } = useContext(ApiAuthContext)
 
+  const [showFilters, setShowFilters] = useState(true)
   const [filterSimple, setFilterSimple] = useState([])
   const [filterComplex, setFilterComplex] = useState([])
   const { getFilterSimple, getFilterComplex } = useFilterApi()
@@ -101,33 +105,49 @@ export const MainFilter = ({
 
   const rowFilter = (filters) => {
     return (
-      <Flex mt="12px" width="100%" wrap="wrap" height="fit-content">
-        {filters.map((value, idx) => {
-          console.log(value)
-          return (
-            <Tag
-              key={`${value._id}-${idx}`}
-              variant={value.public ? variantGeneralTag.SYSTEM : variantGeneralTag.PROJECT }
-              mb="8px"
-              mr="8px"
-              height="32px"
-              width="auto"
-              cursor="pointer"
-            >
-              <Flex align="center">
-                <Text onClick={() => handleChargeFilter(value)}>{value.name}</Text>
-                <EditIcon
-                  width="16px"
+      <Box position="relative" w="100%">
+        <Flex
+          width="100%"
+          justify="space-between"
+          onClick={() => setShowFilters(!showFilters)}
+          cursor="pointer"
+        >
+          <Text cursor="pointer" mt="3px">
+            {`${showFilters ? "Ocultar" : "Mostrar"} filtros guardados`}
+          </Text>
+          {showFilters ? <ChevronUpIcon /> : <ChevronDownIcon />}
+        </Flex>
+        {showFilters ? (
+          <Flex mt="12px" width="100%" wrap="wrap" height="fit-content" pb="8px">
+            {filters.map((value, idx) => {
+              return (
+                <Tag
+                  key={`${value._id}-${idx}`}
+                  variant={variantGeneralTag.SYSTEM}
+                  mb="8px"
+                  mr="8px"
+                  height="32px"
+                  width="auto"
                   cursor="pointer"
-                  mb="3px"
-                  ml="8px"
-                  onClick={() => handleEditFilter(value)}
-                />
-              </Flex>
-            </Tag>
-          )
-        })}
-      </Flex>
+                >
+                  <Flex align="center">
+                    <Text onClick={() => handleChargeFilter(value)}>
+                      {value.name}
+                    </Text>
+                    <EditIcon
+                      width="16px"
+                      cursor="pointer"
+                      mb="3px"
+                      ml="8px"
+                      onClick={() => handleEditFilter(value)}
+                    />
+                  </Flex>
+                </Tag>
+              )
+            })}
+          </Flex>
+        ) : null}
+      </Box>
     )
   }
 
@@ -185,7 +205,7 @@ export const MainFilter = ({
                 noteFromProject={noteFromProject}
               />
             </TabPanel>
-            <TabPanel p={0} minH={["100vh", null, null, null]}>
+            <TabPanel p={0} minH={["100vh", "100vh", "fit-content", "fit-content"]}>
               <Box m="16px 0">
                 {filterComplex.length === 0 ? (
                   <Text color="grey">No hay filtros guardados para recordar</Text>
@@ -195,7 +215,7 @@ export const MainFilter = ({
               </Box>
               <AdvancedFilter
                 criteria={criteria}
-                value={simpleFilterValues}
+                filterComplexValues={filterComplexValues}
                 onChange={onFilterComplexChange}
                 errorComplexFilter={errorComplexFilter}
               />
