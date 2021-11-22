@@ -103,10 +103,11 @@ export const MainFilter = ({
     return (
       <Flex mt="12px" width="100%" wrap="wrap" height="fit-content">
         {filters.map((value, idx) => {
+          console.log(value)
           return (
             <Tag
               key={`${value._id}-${idx}`}
-              variant={variantGeneralTag.SYSTEM}
+              variant={value.public ? variantGeneralTag.SYSTEM : variantGeneralTag.PROJECT }
               mb="8px"
               mr="8px"
               height="32px"
