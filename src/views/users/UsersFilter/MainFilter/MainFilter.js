@@ -40,14 +40,13 @@ export const MainFilter = ({
     >
       <CustomModalHeader title="Filtrar" onClose={onClose} pb="24px" />
       <Box mt="16px">
-
-      <SimpleFilterForm
-        value={simpleFilterValues}
-        onChange={onSimpleFilterChange}
-        openAuxModal={onSecondaryOpen}
-        isReset={isReset}
+        <SimpleFilterForm
+          value={simpleFilterValues}
+          onChange={onSimpleFilterChange}
+          openAuxModal={onSecondaryOpen}
+          isReset={isReset}
         />
-        </Box>
+      </Box>
 
       <Flex direction="column" align="center">
         <Button onClick={onFilter}>Filtrar</Button>

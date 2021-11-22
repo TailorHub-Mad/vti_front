@@ -8,8 +8,16 @@ import { SupportModal } from "../../helps/NewCriterion/NewCriterionModal/Support
 import { SaveFilterModal } from "../../../components/filters/SaveFilterModal"
 import { COMPLEX_OBJECT, parseComplexQuery } from "../../../utils/functions/filter"
 
-export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, filterValues, setFilterValues,  filterComplexValues, setFilterComplexValues, 
-  ...props }) => {
+export const ProjectsFilterModal = ({
+  isOpen,
+  onClose,
+  onFilter,
+  filterValues,
+  setFilterValues,
+  filterComplexValues,
+  setFilterComplexValues,
+  ...props
+}) => {
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
   const [showSaveFilter, setShowSaveFilter] = useState(false)
   const [tab, setTab] = useState(0)
@@ -99,7 +107,6 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, filterValues, s
     setChangeValueFilter(true)
   }, [filterValues])
 
-
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
       <ModalOverlay />
@@ -121,7 +128,11 @@ export const ProjectsFilterModal = ({ isOpen, onClose, onFilter, filterValues, s
               moveToLeft={showSecondaryContent}
               onSecondaryOpen={() => setShowSecondaryContent(true)}
               onSimpleFilterChange={(val) => setFilterValues(val)}
-              openSaveModal={() => setShowSaveFilter(true)}
+              openSaveModal={(type) => {
+                setShowSaveFilter(true)
+                if (type === "new") setIsUpdateFilter(false)
+                else setIsUpdateFilter(true)
+              }}
               onFilter={handleOnFilter}
               onReset={handleOnReset}
               setTab={setTab}

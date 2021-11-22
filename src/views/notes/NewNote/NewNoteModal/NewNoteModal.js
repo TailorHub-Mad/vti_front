@@ -63,9 +63,9 @@ export const NewNoteModal = ({
 
   const formatCreateNote = (note) => {
     const formatSystems =
-      note.testSystems[0].label === "Todos"
+      note.testSystems[0].label === "TODOS"
         ? [...note.testSystems[0].value]
-        : note.testSystems[0].label === "Ninguno"
+        : note.testSystems[0].label === "NINGUNO"
         ? null
         : note.testSystems.map((s) => s.value)
 
@@ -141,7 +141,10 @@ export const NewNoteModal = ({
     isUpdate ? await handleUpdateNote() : await handleCreateNote()
     setValues(initialValues)
 
-    await mutate([SWR_CACHE_KEYS.project, fromProjectDetail])
+    await mutate([
+      SWR_CACHE_KEYS.filterNotes,
+      `notes.projects._id=${fromProjectDetail}`
+    ])
     await mutate(SWR_CACHE_KEYS.notes)
     showToast({
       message: isUpdate ? "Editado correctamente" : "¡Has añadido nuevo/s apunte/s!",

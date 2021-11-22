@@ -1,9 +1,4 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Text,
-} from "@chakra-ui/react"
+import { Box, Button, Flex, Text } from "@chakra-ui/react"
 import React, { useContext, useState } from "react"
 
 import { CustomModalHeader } from "../../../../components/overlay/Modal/CustomModalHeader/CustomModalHeader"
@@ -11,8 +6,6 @@ import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
 import { RoleType } from "../../../../utils/constants/global"
 
 import { SimpleFilterForm } from "./SimpleFilterForm/SimpleFilterForm"
-
-
 
 export const MainFilter = ({
   onClose,
@@ -35,7 +28,6 @@ export const MainFilter = ({
       setIsReset(false)
     }, 1000)
   }
-
 
   return (
     <Box

@@ -21,6 +21,8 @@ import { EditIcon } from "@chakra-ui/icons"
 import { variantGeneralTag } from "../../../../utils/constants/tabs"
 import { ApiAuthContext } from "../../../../provider/ApiAuthProvider"
 import { RoleType } from "../../../../utils/constants/global"
+import { ChevronDownIcon } from "../../../../components/icons/ChevronDownIcon"
+import { ChevronUpIcon } from "../../../../components/icons/ChevronUpIcon"
 
 const criteria = [
   { label: "TagAp", value: "TagAp" },
@@ -56,6 +58,8 @@ export const MainFilter = ({
 }) => {
   const [isReset, setIsReset] = useState(false)
   const { role } = useContext(ApiAuthContext)
+
+  const [showFilters, setShowFilters] = useState(true)
 
   const [filterSimple, setFilterSimple] = useState([])
   const [filterComplex, setFilterComplex] = useState([])
@@ -97,7 +101,9 @@ export const MainFilter = ({
           return (
             <Tag
               key={`${value._id}-${idx}`}
-              variant={variantGeneralTag.SYSTEM}
+              variant={
+                value.public ? variantGeneralTag.PROJECT : variantGeneralTag.SYSTEM
+              }
               mb="8px"
               mr="8px"
               height="32px"
@@ -160,7 +166,20 @@ export const MainFilter = ({
               {filterSimple.length === 0 ? (
                 <Text color="grey">No hay filtros guardados para recordar</Text>
               ) : (
-                rowFilter(filterSimple)
+                <>
+                  <Flex
+                    width="100%"
+                    justify="space-between"
+                    onClick={() => setShowFilters(!showFilters)}
+                    cursor="pointer"
+                  >
+                    <Text cursor="pointer" mt="3px">
+                      {`${showFilters ? "Ocultar" : "Mostrar"} filtros guardados`}
+                    </Text>
+                    {showFilters ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                  </Flex>
+                  {showFilters ? rowFilter(filterSimple) : null}
+                </>
               )}
             </Box>
             <SimpleFilterForm
@@ -176,7 +195,20 @@ export const MainFilter = ({
               {filterComplex.length === 0 ? (
                 <Text color="grey">No hay filtros guardados para recordar</Text>
               ) : (
-                rowFilter(filterComplex)
+                <>
+                  <Flex
+                    width="100%"
+                    justify="space-between"
+                    onClick={() => setShowFilters(!showFilters)}
+                    cursor="pointer"
+                  >
+                    <Text cursor="pointer" mt="3px">
+                      {`${showFilters ? "Ocultar" : "Mostrar"} filtros guardados`}
+                    </Text>
+                    {showFilters ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                  </Flex>
+                  {showFilters ? rowFilter(filterComplex) : null}
+                </>
               )}
             </Box>
             <AdvancedFilter
@@ -200,7 +232,7 @@ export const MainFilter = ({
       >
         <Flex justifyContent={role === RoleType.USER ? "center" : "space-between"}>
           {role === RoleType.ADMIN ? (
-            <Button variant="secondary" onClick={openSaveModal}>
+            <Button variant="secondary" onClick={() => openSaveModal("new")}>
               Recordar
             </Button>
           ) : null}

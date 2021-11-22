@@ -35,9 +35,9 @@ export const noteFetchHandler = (state, options) => {
         getSearchNotes
       ),
 
-    favs: () => useFetchSWR(SWR_CACHE_KEYS.favsNotes, getFavsNotes),
+    favorites: () => useFetchSWR(SWR_CACHE_KEYS.favsNotes, getFavsNotes),
     subscribed: () => useFetchSWR(SWR_CACHE_KEYS.subscribeNotes, getSubscribeNotes),
-    unread: () => useFetchSWR(SWR_CACHE_KEYS.unreadNotes, getUnreadNotes),
+    noRead: () => useFetchSWR(SWR_CACHE_KEYS.unreadNotes, getUnreadNotes),
     active: () => useFetchSWR(SWR_CACHE_KEYS.activeNotes, getActiveNotes)
   }
 

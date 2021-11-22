@@ -46,7 +46,7 @@ export const NewTestSystemForm = ({ value, onChange, objectToUpdate }) => {
       config: {
         placeholder: "Selecciona",
         label: "Código VTI",
-        disabled: Boolean(objectToUpdate),
+        // disabled: Boolean(objectToUpdate),
         options: codeOptions
       }
     },
