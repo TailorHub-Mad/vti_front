@@ -1,4 +1,4 @@
-import { Checkbox,  useMediaQuery } from "@chakra-ui/react"
+import { Checkbox, useMediaQuery } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { AddSelect } from "../../../../../components/forms/AddSelect/AddSelect"
 import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
@@ -279,7 +279,6 @@ export const SimpleFilterForm = ({
       [input]: _value?.target?.checked ?? _value
     })
   }
-
 
   return (
     <>

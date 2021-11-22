@@ -19,16 +19,13 @@ export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props })
 
   const [filterValues, setFilterValues] = useState(initialValues)
 
-
   const handleOnReset = () => {
     setFilterValues(initialValues)
     onFilter(null)
   }
 
   const handleOnFilter = () => {
-  
-      onFilter(filterValues)
-    
+    onFilter(filterValues)
   }
 
   const handleOnClose = () => {
@@ -38,8 +35,6 @@ export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props })
   const handleEditFilter = () => {
     setShowSaveFilter(true)
   }
-
-
 
   return (
     <Modal isOpen={isOpen} onClose={handleOnClose} {...props}>
@@ -68,8 +63,6 @@ export const TestsSystemsFilterModal = ({ isOpen, onClose, onFilter, ...props })
         {!showSaveFilter && showSecondaryContent === "project_tags" ? (
           <AuxFilter onClose={() => setShowSecondaryContent(false)} />
         ) : null}
-
-
       </CustomModalContent>
     </Modal>
   )

@@ -83,7 +83,7 @@ export const NewProjectModal = ({
 
     if (project.testSystems)
       formatData["testSystems"] = project.testSystems?.map((system) => system.value)
-
+    if (project.focusPoint) formatData["focusPoint"] = project.focusPoint.value
     if (project.tags) formatData["tags"] = project.tags?.map((tag) => tag.value)
 
     return formatData
@@ -115,6 +115,7 @@ export const NewProjectModal = ({
   }
 
   const handleUpdateProject = async () => {
+    console.log("AVLUES", values)
     try {
       const { _id } = projectToUpdate
       const project = formatUpdateProject(values)

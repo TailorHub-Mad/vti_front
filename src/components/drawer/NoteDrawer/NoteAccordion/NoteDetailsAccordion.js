@@ -37,13 +37,30 @@ export const NoteDetailsAccordion = ({
     downloadFile(response, name)
   }
 
+  const getActiveIndex = () => {
+    if (isMessage) return [0, 1, 2]
+    if (testSystems) {
+      if (noteTags) {
+        return [2, 3, 4]
+      } else {
+        return [1, 2, 3]
+      }
+    } else {
+      if (noteTags) {
+        return [1, 2, 3]
+      } else {
+        return [0, 1, 2]
+      }
+    }
+  }
+
   return (
     <Accordion
       width="100%"
       allowToggle
       allowMultiple
       {...props}
-      defaultIndex={!isMessage ? [1] : []}
+      defaultIndex={getActiveIndex()}
     >
       {!isMessage && testSystems ? (
         <NoteAccordionItem
@@ -72,7 +89,7 @@ export const NoteDetailsAccordion = ({
           ))}
         </NoteAccordionItem>
       ) : null}
-      
+
       {!isMessage && noteTags ? (
         <NoteAccordionItem
           width="100%"

@@ -2,7 +2,7 @@ export const Tag = {
   baseStyle: {
     label: {
       fontSize: "10px",
-      display:"inline-block"
+      display: "inline-block"
     },
     container: {
       padding: "8px 0",

@@ -39,6 +39,7 @@ export const SaveFilterModal = ({
       }
 
       await updateFilter(filterMetadata._id, newData)
+      onClose()
     } else {
       const data = {
         name: values.name,

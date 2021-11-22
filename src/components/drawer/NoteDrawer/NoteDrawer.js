@@ -101,10 +101,9 @@ export const NoteDrawer = ({
                 onDelete={onDelete}
                 fromProjectDetail={fromProjectDetail}
                 note={note}
-              
               />
               <NoteDetailsAccordion
-                name={note.owner[0].name}
+                name={note?.owner[0]?.name}
                 link={note.link}
                 description={note.description}
                 noteTags={note.tags.length > 0 && note.tags}

@@ -2,7 +2,12 @@ import { Button, Flex, Grid, Input, Text } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
 
-export const AdvancedFilter = ({ criteria, onChange, errorComplexFilter,filterComplexValues }) => {
+export const AdvancedFilter = ({
+  criteria,
+  onChange,
+  errorComplexFilter,
+  filterComplexValues
+}) => {
   const symbols = ["(", ")", "&", "||", "Not"]
 
   const [value, setValue] = useState(filterComplexValues)
