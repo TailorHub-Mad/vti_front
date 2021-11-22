@@ -436,7 +436,6 @@ const apuntes = () => {
           [fetchOption.GROUP]: newGroup
         })
       } else if (queryDirectFilter) {
-        console.log(queryDirectFilter, queryDirectFilter.split("=")[0])
         setFetchState(queryDirectFilter.split("=")[0])
       } else {
         setFetchState(fetchType.ALL)
