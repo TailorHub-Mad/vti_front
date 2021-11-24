@@ -78,8 +78,12 @@ export const MainFilter = ({
     onEdit(filter)
   }
 
-  const handleChargeFilter = (filter) => {
+  const handleChargeFilter = (filter, isComplex) => {
     const { query } = filter
+    if (isComplex) {
+      onFilterComplexChange(JSON.parse(query))
+      return
+    }
     onSimpleFilterChange(JSON.parse(query))
   }
 
@@ -94,7 +98,7 @@ export const MainFilter = ({
     _getFilters()
   }, [onClose])
 
-  const rowFilter = (filters) => {
+  const rowFilter = (filters, isComplex) => {
     return (
       <Flex mt="12px" width="100%" wrap="wrap" height="fit-content">
         {filters.map((value, idx) => {
@@ -111,7 +115,7 @@ export const MainFilter = ({
               cursor="pointer"
             >
               <Flex align="center">
-                <Text onClick={() => handleChargeFilter(value)}>{value.name}</Text>
+                <Text onClick={() => handleChargeFilter(value, isComplex)}>{value.name}</Text>
                 <EditIcon
                   width="16px"
                   cursor="pointer"
@@ -207,7 +211,7 @@ export const MainFilter = ({
                     </Text>
                     {showFilters ? <ChevronUpIcon /> : <ChevronDownIcon />}
                   </Flex>
-                  {showFilters ? rowFilter(filterComplex) : null}
+                  {showFilters ? rowFilter(filterComplex, true) : null}
                 </>
               )}
             </Box>

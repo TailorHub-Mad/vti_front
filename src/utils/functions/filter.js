@@ -66,6 +66,8 @@ export const parseComplexQuery = (expression, object) => {
 
     // NOT
     _expression = _expression.replaceAll(":NOT:", "!==")
+    _expression = _expression.replaceAll(":Not:", "!==")
+    _expression = _expression.replaceAll(":not:", "!==")
     // EQUAL
     _expression = _expression.replaceAll(":", "===")
     // AND

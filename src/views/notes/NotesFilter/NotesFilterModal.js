@@ -64,6 +64,7 @@ export const NotesFilterModal = ({
 
   const handleOnReset = () => {
     setFilterValues(initialValues)
+    setFilterComplexValues(null)
     onFilter(null)
   }
 
@@ -189,7 +190,13 @@ export const NotesFilterModal = ({
               setShowSaveFilter(false)
               setIsUpdateFilter(false)
             }}
-            filter={!changeValueFilter ? filterMetadata.query : filterValues}
+            filter={
+              !changeValueFilter
+                ? filterMetadata.query
+                : tab === 0
+                ? filterValues
+                : filterComplexValues
+            }
             filterMetadata={filterMetadata}
             isUpdateFilter={isUpdateFilter}
             type={tab === 0 ? "simple" : "complex"}
