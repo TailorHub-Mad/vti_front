@@ -184,7 +184,11 @@ export const NotesFilterModal = ({
         )}
         {showSaveFilter ? (
           <SaveFilterModal
-            onClose={() => setShowSaveFilter(false)}
+            onClose={() => {
+              setfilterMetadata(null)
+              setShowSaveFilter(false)
+              setIsUpdateFilter(false)
+            }}
             filter={!changeValueFilter ? filterMetadata.query : filterValues}
             filterMetadata={filterMetadata}
             isUpdateFilter={isUpdateFilter}

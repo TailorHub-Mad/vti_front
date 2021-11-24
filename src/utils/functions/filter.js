@@ -120,9 +120,10 @@ export const parseComplexQuery = (expression, object) => {
       parseQuery = parseQuery.replaceAll("Vticode", "testSystems.vtiCode")
       parseQuery = parseQuery.replaceAll("AliasCl", "testSystems.clientAlias")
     }
-
+    console.log("query parsiada", parseQuery)
     return parseQuery
   } catch (error) {
+    console.log("ERROR PARSEO", error)
     return null
   }
 }

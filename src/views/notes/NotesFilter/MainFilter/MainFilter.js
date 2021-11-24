@@ -138,13 +138,15 @@ export const MainFilter = ({
                     <Text onClick={() => handleChargeFilter(value)}>
                       {value.name}
                     </Text>
-                    <EditIcon
-                      width="16px"
-                      cursor="pointer"
-                      mb="3px"
-                      ml="8px"
-                      onClick={() => handleEditFilter(value)}
-                    />
+                    {RoleType.ADMIN === role ? (
+                      <EditIcon
+                        width="16px"
+                        cursor="pointer"
+                        mb="3px"
+                        ml="8px"
+                        onClick={() => handleEditFilter(value)}
+                      />
+                    ) : null}
                   </Flex>
                 </Tag>
               )
