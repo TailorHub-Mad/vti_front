@@ -16,12 +16,24 @@ export const AddSelect = ({
   isReset,
   ...props
 }) => {
-  // const [inputValues, setInputValues] = useState(value)
   const [availableOptions, setAvailableOptions] = useState([])
   const handleChange = (option, idx) => {
-    const newInputValues = [...value]
-    newInputValues[idx] = option
+    let newInputValues =[]
+    if(idx >= 0){
+      newInputValues = [...value]
+      newInputValues[idx] = option
+    }
+    if(idx !== 0 && !idx){
+
+      newInputValues = option
+    }
     // setInputValues(newInputValues)
+    const valuesSelected = [...newInputValues]?.map((inputValue) => inputValue?.value)
+    const nextOptions = options?.filter(
+      (option) => !valuesSelected.includes(option.value)
+    )
+
+    setAvailableOptions(nextOptions)
     onChange(newInputValues)
   }
 
@@ -29,22 +41,10 @@ export const AddSelect = ({
     setAvailableOptions(options)
   }, [options])
 
-  useEffect(() => {
-    const valuesSelected = value?.map((inputValue) => inputValue?.value)
-    const nextOptions = options?.filter(
-      (option) => !valuesSelected.includes(option.value)
-    )
-
-    setAvailableOptions(nextOptions)
-  }, [value])
-
-  // useEffect(() => {
-  //   setInputValues(value)
-  // }, [value])
 
   useEffect(() => {
     if (!isReset) return
-    onChange([{ label: "", value: "" }])
+    handleChange([{ label: "", value: "" }])
     // setInputValues([{ label: "", value: "" }])
   }, [isReset])
 
@@ -66,9 +66,7 @@ export const AddSelect = ({
       const newValues = [...value].filter((_, index) => itemPosition !== index)
       const checkValues =
         newValues.length === 0 ? [{ label: "", value: "" }] : newValues
-
-      // setInputValues(checkValues)
-      onChange(checkValues)
+      handleChange(checkValues)
     }
 
     return (
@@ -93,7 +91,7 @@ export const AddSelect = ({
       return null
     if (value?.length === options?.length) return null
 
-    const handleOnClick = () => onChange([...value, undefined])
+    const handleOnClick = () => handleChange([...value, undefined])
 
     const isDisabled = value?.length === 1 && value[0]?.value === ""
 

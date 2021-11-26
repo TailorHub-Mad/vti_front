@@ -282,6 +282,7 @@ export const SimpleFilterForm = ({
   return (
     <>
       {Object.entries(filterInputs).map(([name, { type, config }], idx) => {
+
         return React.cloneElement(inputRefObj[type], {
           value: value[name],
           isChecked: type === "checkbox" ? value[name] : null,
