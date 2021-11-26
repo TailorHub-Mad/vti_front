@@ -19,7 +19,6 @@ export const SimpleFilterForm = ({
   noteFromProject
 }) => {
   const [isScreen] = useMediaQuery("(min-width: 475px)")
-console.log(value)
   const { getProjects } = useProjectApi()
   const { getSystems } = useSystemApi()
   const { getClients } = useClientApi()
