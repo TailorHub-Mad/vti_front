@@ -19,7 +19,6 @@ export const SimpleFilterForm = ({
   noteFromProject
 }) => {
   const [isScreen] = useMediaQuery("(min-width: 475px)")
-
   const { getProjects } = useProjectApi()
   const { getSystems } = useSystemApi()
   const { getClients } = useClientApi()
@@ -283,8 +282,10 @@ export const SimpleFilterForm = ({
   return (
     <>
       {Object.entries(filterInputs).map(([name, { type, config }], idx) => {
+
         return React.cloneElement(inputRefObj[type], {
           value: value[name],
+          isChecked: type === "checkbox" ? value[name] : null,
           onChange: (val) => handleFilterChange(name, val),
           marginBottom: "24px",
           key: `${name}-${idx}`,
