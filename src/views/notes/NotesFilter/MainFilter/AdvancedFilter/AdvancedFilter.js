@@ -1,4 +1,4 @@
-import { Button, filter, Flex, Grid, Input, Text } from "@chakra-ui/react"
+import { Button, Flex, Grid, Input, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
 
