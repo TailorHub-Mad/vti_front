@@ -8,7 +8,6 @@ import useHelpApi from "../../../../hooks/api/useHelpApi"
 import useTagApi from "../../../../hooks/api/useTagApi"
 import { ToastContext } from "../../../../provider/ToastProvider"
 import { SWR_CACHE_KEYS } from "../../../../utils/constants/swr"
-import { errorHandler } from "../../../../utils/errors"
 import { SupportModal } from "../../../helps/NewCriterion/NewCriterionModal/SupportModal/SupportModal"
 import { NewTagForm } from "../NewTagForm/NewTagForm"
 
@@ -75,35 +74,45 @@ export const NewTagModal = ({
   }
 
   const handleSubmit = async () => {
-    setIsSubmitting(true)
-    isUpdate ? await handleUpdateTag() : await handleCreateTag()
-    setValues(initialValues)
-    await mutate(isProjectTag ? SWR_CACHE_KEYS.projectTags : SWR_CACHE_KEYS.noteTags)
-    showToast({ message: isUpdate ? editSuccessMsg : addSuccessMsg })
-    setIsSubmitting(false)
-    onClose()
+    try {
+      setIsSubmitting(true)
+      isUpdate ? await handleUpdateTag() : await handleCreateTag()
+      setValues(initialValues)
+      await mutate(
+        isProjectTag ? SWR_CACHE_KEYS.projectTags : SWR_CACHE_KEYS.noteTags
+      )
+      showToast({ message: isUpdate ? editSuccessMsg : addSuccessMsg })
+      setIsSubmitting(false)
+      onClose()
+    } catch (error) {
+      showToast({
+        message: "Ha ocorrido un error. No puede haber dos tags con el mismo nombre."
+      })
+      setIsSubmitting(false)
+      onClose()
+    }
   }
 
   const handleCreateTag = async () => {
-    try {
-      const tagsToCreate = formatTags(values)
-      const func = isProjectTag ? createProjectTag : createNoteTag
-      const tagsQueue = tagsToCreate.map((tag) => func(tag))
-      await Promise.all(tagsQueue)
-    } catch (error) {
-      errorHandler(error)
-    }
+    const tagsToCreate = formatTags(values)
+    const func = isProjectTag ? createProjectTag : createNoteTag
+    const tagsQueue = tagsToCreate.map((tag) => func(tag))
+    const response = await Promise.all(tagsQueue)
+
+    response.forEach(({ error }) => {
+      if (error) throw error
+    })
   }
 
   const handleUpdateTag = async () => {
-    try {
-      const { _id } = tagToUpdate
-      const [data] = formatTags(values)
-      const func = isProjectTag ? updateProjectTag : updateNoteTag
-      await func(_id, data)
-    } catch (error) {
-      errorHandler(error)
-    }
+    const { _id } = tagToUpdate
+    const [data] = formatTags(values)
+    const func = isProjectTag ? updateProjectTag : updateNoteTag
+    const response = await func(_id, data)
+
+    response.forEach(({ error }) => {
+      if (error) throw error
+    })
   }
 
   const handleOnClose = () => {

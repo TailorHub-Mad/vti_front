@@ -33,7 +33,8 @@ export const transformSystemData = (system) => ({
   notes: system.notes
     .filter((n) => !Array.isArray(n))
     .map((n) => n.title)
-    .filter((e) => e),
+    .filter((e) => e)
+    .reverse(),
   options: ""
 })
 

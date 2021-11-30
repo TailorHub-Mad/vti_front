@@ -41,8 +41,7 @@ export const NotesGroup = ({
           </Flex>
         ) : null}
 
-        {(fetchState === fetchType.FILTER || queryFilter) &&
-        formatNotes?.length > 0 ? (
+        {fetchState === fetchType.FILTER || queryFilter ? (
           <Flex
             alignItems="center"
             onClick={() => onFilter(null)}

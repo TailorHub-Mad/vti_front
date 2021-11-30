@@ -43,6 +43,8 @@ import useTableActions from "../../hooks/useTableActions"
 import { PageBody } from "../../components/layout/Pages/PageBody/PageBody"
 import { useMediaQuery } from "@chakra-ui/media-query"
 import { TableGrid } from "../../components/tables/TableGrid/TableGrid"
+import { Flex, Text } from "@chakra-ui/layout"
+import { CloseIcon } from "@chakra-ui/icons"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -541,7 +543,20 @@ const proyectos = () => {
         {isLoading ? (
           <LoadingView mt="-200px" />
         ) : isEmptyData && fetchState !== fetchType.ALL ? (
-          <ViewNotFoundState noBack />
+          <>
+            {fetchState === fetchType.FILTER && (
+              <Flex
+                alignItems="center"
+                onClick={() => handleOnFilter(null)}
+                cursor="pointer"
+                mb="24px"
+              >
+                <CloseIcon mr="8px" h="12px" />
+                <Text marginTop="6px">{`Eliminar filtro`}</Text>
+              </Flex>
+            )}
+            <ViewNotFoundState noBack />
+          </>
         ) : isEmptyData && !isValidating ? (
           <ViewEmptyState
             message="Añadir proyectos a la plataforma"
