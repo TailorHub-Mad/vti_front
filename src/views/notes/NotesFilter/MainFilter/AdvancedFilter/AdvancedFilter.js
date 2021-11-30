@@ -1,4 +1,4 @@
-import { Button, Flex, Grid, Input, Text } from "@chakra-ui/react"
+import { Button, filter, Flex, Grid, Input, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
 
@@ -8,10 +8,31 @@ export const AdvancedFilter = ({
   errorComplexFilter,
   filterComplexValues
 }) => {
-  const symbols = ["(", ")", "&", "||", "NOT"]
+  const symbols = ["(", ")", "&", "||"]
 
   const [criterio, setCriterio] = useState("")
   const [isCriterioBoolean, setIsCriterioBoolean] = useState(false)
+  const isAddButtonDisabled =
+    !filterComplexValues ||
+    !["&", "|", "("].includes(filterComplexValues[filterComplexValues.length - 1]) ||
+    (!criterio || !criterio?.includes(":") || isCriterioBoolean
+      ? !criterio?.includes("true") && !criterio?.includes("false")
+      : !criterio?.includes('"'))
+
+  const addFirstSentencePart = (substr) => {
+    if (!criterio) {
+      return `${substr}:`
+    }
+    const parts = criterio.split(":")
+    return `${substr}:${parts[1]}`
+  }
+
+  // const addSecondSentencePart = (substr) => {
+  //   if (!criterio) {
+  //     return ""
+  //   }
+  //   return `${criterio}:"${substr}"`
+  // }
 
   return (
     <>
@@ -50,9 +71,20 @@ export const AdvancedFilter = ({
         Seleccione símbolo
       </Text>
       <Grid templateColumns="repeat(5, 36px)" gap="8px">
-        {symbols.map((symbol) => (
+        {symbols.map((symbol, idx) => (
           <Button
             key={symbol}
+            disabled={
+              (idx === 2 || idx === 3) &&
+              (!filterComplexValues ||
+                ["(", "&", "|"].includes(
+                  filterComplexValues[filterComplexValues.length - 1]
+                )) || (idx === 0 || idx === 1) &&
+                (filterComplexValues &&
+                  ["&", "|"].includes(
+                    filterComplexValues[filterComplexValues.length - 1]
+                  ))
+            }
             variant="filter_button"
             onClick={() =>
               onChange(filterComplexValues ? filterComplexValues + symbol : symbol)
@@ -71,29 +103,21 @@ export const AdvancedFilter = ({
         mb="8px"
         onChange={(option) => {
           setIsCriterioBoolean(option.isBoolean)
-          onChange(
-            filterComplexValues
-              ? filterComplexValues + `${option.value}:`
-              : `${option.value}:`
-          )
+          option.isBoolean
+            ? setCriterio(`${option.value}`)
+            : setCriterio(addFirstSentencePart(option.value))
         }}
       />
       <Flex>
         {isCriterioBoolean ? (
           <InputSelect
             options={[
-              { label: "Si", value: true },
-              { label: "No", value: false }
+              { label: "Si", value: `${criterio}:true` },
+              { label: "No", value: `${criterio}:false` }
             ]}
             placeholder="Selecciona valor"
             mb="8px"
-            onChange={(option) => {
-              onChange(
-                filterComplexValues
-                  ? filterComplexValues + `${option.value}`
-                  : `${option.value}`
-              )
-            }}
+            onChange={(option) => setCriterio(option.value)}
           />
         ) : (
           <>
@@ -102,27 +126,24 @@ export const AdvancedFilter = ({
               value={criterio}
               onChange={(e) => setCriterio(e.target.value)}
             />
-            <Button
-              variant="filter_button"
-              ml="8px"
-              width="48px"
-              maxWidth="48px"
-              maxHeight="48px"
-              height="48px"
-              fontSize="20px"
-              onClick={() => {
-                onChange(
-                  filterComplexValues
-                    ? filterComplexValues + `"${criterio}"`
-                    : `"${criterio}"`
-                )
-                setCriterio("")
-              }}
-            >
-              +
-            </Button>
           </>
         )}
+        <Button
+          disabled={isAddButtonDisabled}
+          variant="filter_button"
+          ml="8px"
+          width="48px"
+          maxWidth="48px"
+          maxHeight="48px"
+          height="48px"
+          fontSize="20px"
+          onClick={() => {
+            onChange(filterComplexValues ? filterComplexValues + criterio : criterio)
+            setCriterio("")
+          }}
+        >
+          +
+        </Button>
       </Flex>
     </>
   )
