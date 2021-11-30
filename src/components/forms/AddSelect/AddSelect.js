@@ -16,14 +16,24 @@ export const AddSelect = ({
   isReset,
   ...props
 }) => {
-  const [inputValues, setInputValues] = useState(value)
   const [availableOptions, setAvailableOptions] = useState([])
-
   const handleChange = (option, idx) => {
-    const newInputValues = [...inputValues]
-    newInputValues[idx] = option
+    let newInputValues =[]
+    if(idx >= 0){
+      newInputValues = [...value]
+      newInputValues[idx] = option
+    }
+    if(idx !== 0 && !idx){
 
-    setInputValues(newInputValues)
+      newInputValues = option
+    }
+    // setInputValues(newInputValues)
+    const valuesSelected = [...newInputValues]?.map((inputValue) => inputValue?.value)
+    const nextOptions = options?.filter(
+      (option) => !valuesSelected.includes(option.value)
+    )
+
+    setAvailableOptions(nextOptions)
     onChange(newInputValues)
   }
 
@@ -31,26 +41,15 @@ export const AddSelect = ({
     setAvailableOptions(options)
   }, [options])
 
-  useEffect(() => {
-    const valuesSelected = inputValues?.map((inputValue) => inputValue?.value)
-    const nextOptions = options?.filter(
-      (option) => !valuesSelected.includes(option.value)
-    )
-
-    setAvailableOptions(nextOptions)
-  }, [inputValues])
-
-  // useEffect(() => {
-  //   setInputValues(value)
-  // }, [value])
 
   useEffect(() => {
     if (!isReset) return
-    setInputValues([{ label: "", value: "" }])
+    handleChange([{ label: "", value: "" }])
+    // setInputValues([{ label: "", value: "" }])
   }, [isReset])
 
   useEffect(() => {
-    const valuesSelected = inputValues?.map((inputValue) => inputValue?.value)
+    const valuesSelected = value?.map((inputValue) => inputValue?.value)
     const nextOptions = options?.filter(
       (option) => !valuesSelected.includes(option.value)
     )
@@ -61,15 +60,13 @@ export const AddSelect = ({
   const renderDeleteItem = (itemPosition) => {
     if (inputDisabled) return null
 
-    if (inputValues?.length === 1 && inputValues[0]?.value === "") return null
+    if (value?.length === 1 && value[0]?.value === "") return null
 
     const handleOnClick = () => {
-      const newValues = [...inputValues].filter((_, index) => itemPosition !== index)
+      const newValues = [...value].filter((_, index) => itemPosition !== index)
       const checkValues =
         newValues.length === 0 ? [{ label: "", value: "" }] : newValues
-
-      setInputValues(checkValues)
-      onChange(checkValues)
+      handleChange(checkValues)
     }
 
     return (
@@ -90,13 +87,13 @@ export const AddSelect = ({
 
   const renderAddItem = (itemPosition) => {
     if (inputDisabled) return null
-    if (inputValues?.length > 1 && itemPosition !== inputValues?.length - 1)
+    if (value?.length > 1 && itemPosition !== value?.length - 1)
       return null
-    if (inputValues?.length === options?.length) return null
+    if (value?.length === options?.length) return null
 
-    const handleOnClick = () => setInputValues([...inputValues, undefined])
+    const handleOnClick = () => handleChange([...value, undefined])
 
-    const isDisabled = inputValues?.length === 1 && inputValues[0]?.value === ""
+    const isDisabled = value?.length === 1 && value[0]?.value === ""
 
     return (
       <>
@@ -129,11 +126,11 @@ export const AddSelect = ({
   return (
     <FormController label={label} {...props} isDisabled={inputDisabled}>
       <Box>
-        {inputValues?.map((value, idx) => {
+        {value?.map((_value, idx) => {
           return (
-            <Box key={`${value}-${idx}`} marginBottom="16px">
+            <Box key={`${_value}-${idx}`} marginBottom="16px">
               <InputSelect
-                value={value || ""}
+                value={_value || ""}
                 onChange={(selected) => handleChange(selected, idx)}
                 placeholder={placeholder}
                 options={availableOptions}

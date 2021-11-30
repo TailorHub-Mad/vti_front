@@ -30,15 +30,15 @@ const criteria = [
   { label: "RefProy", value: "RefProy" },
   { label: "RefSis", value: "RefSis" },
   { label: "AliasSis", value: "AliasSis" },
-  { label: "Cerrado", value: "Cerrado" },
-  { label: "Formalizado", value: "Formalizado" },
-  { label: "Respuestas", value: "Respuestas" },
+  { label: "Cerrado", value: "Cerrado", isBoolean: true },
+  { label: "Formalizado", value: "Formalizado", isBoolean: true },
+  { label: "Respuestas", value: "Respuestas", isBoolean: true },
   { label: "TagAp", value: "TagAp" },
   { label: "TagProy", value: "TagProy" },
   { label: "RefAp", value: "RefAp" },
   { label: "TitleAp", value: "TitleAp" },
   { label: "Description", value: "Description" },
-  { label: "Documents", value: "Documents" },
+  { label: "Documents", value: "Documents", isBoolean: true },
   { label: "VtiCode", value: "VtiCode" }
 ]
 
@@ -82,8 +82,12 @@ export const MainFilter = ({
     onEdit(filter)
   }
 
-  const handleChargeFilter = (filter) => {
+  const handleChargeFilter = (filter, isComplex) => {
     const { query } = filter
+    if (isComplex) {
+      onFilterComplexChange(query)
+      return
+    }
     onSimpleFilterChange(JSON.parse(query))
   }
 
@@ -103,7 +107,7 @@ export const MainFilter = ({
     _getFilters()
   }, [showSaveFilter])
 
-  const rowFilter = (filters) => {
+  const rowFilter = (filters, isComplex) => {
     return (
       <Box position="relative" w="100%">
         <Flex
@@ -123,7 +127,11 @@ export const MainFilter = ({
               return (
                 <Tag
                   key={`${value._id}-${idx}`}
-                  variant={variantGeneralTag.SYSTEM}
+                  variant={
+                    value.public
+                      ? variantGeneralTag.PROJECT
+                      : variantGeneralTag.SYSTEM
+                  }
                   mb="8px"
                   mr="8px"
                   height="32px"
@@ -131,16 +139,18 @@ export const MainFilter = ({
                   cursor="pointer"
                 >
                   <Flex align="center">
-                    <Text onClick={() => handleChargeFilter(value)}>
+                    <Text onClick={() => handleChargeFilter(value, isComplex)}>
                       {value.name}
                     </Text>
-                    <EditIcon
-                      width="16px"
-                      cursor="pointer"
-                      mb="3px"
-                      ml="8px"
-                      onClick={() => handleEditFilter(value)}
-                    />
+                    {RoleType.ADMIN === role ? (
+                      <EditIcon
+                        width="16px"
+                        cursor="pointer"
+                        mb="3px"
+                        ml="8px"
+                        onClick={() => handleEditFilter(value)}
+                      />
+                    ) : null}
                   </Flex>
                 </Tag>
               )
@@ -210,7 +220,7 @@ export const MainFilter = ({
                 {filterComplex.length === 0 ? (
                   <Text color="grey">No hay filtros guardados para recordar</Text>
                 ) : (
-                  rowFilter(filterComplex)
+                  rowFilter(filterComplex, true)
                 )}
               </Box>
               <AdvancedFilter

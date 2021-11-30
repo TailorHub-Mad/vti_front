@@ -1,5 +1,5 @@
 import { Button, Flex, Grid, Input, Text } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
 
 export const AdvancedFilter = ({
@@ -8,14 +8,10 @@ export const AdvancedFilter = ({
   errorComplexFilter,
   filterComplexValues
 }) => {
-  const symbols = ["(", ")", "&", "||", "Not"]
+  const symbols = ["(", ")", "&", "||", "NOT"]
 
-  const [value, setValue] = useState(filterComplexValues)
   const [criterio, setCriterio] = useState("")
-
-  useEffect(() => {
-    onChange(value)
-  }, [value])
+  const [isCriterioBoolean, setIsCriterioBoolean] = useState(false)
 
   return (
     <>
@@ -25,7 +21,7 @@ export const AdvancedFilter = ({
       <Input
         placeholder={`TAproy:GOM&((TagAp:Incidencias))`}
         value={filterComplexValues || ""}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => onChange(e?.target?.value)}
         color={errorComplexFilter ? "error" : null}
       />
       {errorComplexFilter ? (
@@ -33,10 +29,21 @@ export const AdvancedFilter = ({
           La sintaxis no es correcta
         </Text>
       ) : (
-        <Text
-          variant="d_xs_regular"
-          color="grey"
-        >{`Ejemplo TagProy:GOM & ((TagAp:Incidencias & TagAp:clientes) || Riesgos)`}</Text>
+        <>
+          <Text mt="8px" variant="d_xs_regular" color="blue.500">{`Ejemplos:`}</Text>
+          <Text
+            variant="d_xs_regular"
+            color="blue.500"
+          >{`Formalizado:true&AliasProy:"AliasProyecto"`}</Text>
+          <Text
+            variant="d_xs_regular"
+            color="blue.500"
+          >{`TagAp:NOT:"Acta"||Formalizado:false`}</Text>
+          <Text
+            variant="d_xs_regular"
+            color="blue.500"
+          >{`(TagAp:"Incidencias"&TagAp:"Subconjunto")||AliasSis:"MedVel_ADD_7"`}</Text>
+        </>
       )}
 
       <Text variant="d_s_medium" mb="2px" mt="16px">
@@ -47,7 +54,9 @@ export const AdvancedFilter = ({
           <Button
             key={symbol}
             variant="filter_button"
-            onClick={() => setValue(value + symbol)}
+            onClick={() =>
+              onChange(filterComplexValues ? filterComplexValues + symbol : symbol)
+            }
           >
             {symbol}
           </Button>
@@ -60,29 +69,60 @@ export const AdvancedFilter = ({
         options={criteria}
         placeholder="Seleccione tipo de criterio"
         mb="8px"
-        onChange={(option) => setValue(value + `${option.value}:`)}
+        onChange={(option) => {
+          setIsCriterioBoolean(option.isBoolean)
+          onChange(
+            filterComplexValues
+              ? filterComplexValues + `${option.value}:`
+              : `${option.value}:`
+          )
+        }}
       />
       <Flex>
-        <Input
-          placeholder="Escriba"
-          value={criterio}
-          onChange={(e) => setCriterio(e.target.value)}
-        />{" "}
-        <Button
-          variant="filter_button"
-          ml="8px"
-          width="48px"
-          maxWidth="48px"
-          maxHeight="48px"
-          height="48px"
-          fontSize="20px"
-          onClick={() => {
-            setValue(value + `"${criterio}"`)
-            setCriterio("")
-          }}
-        >
-          +
-        </Button>
+        {isCriterioBoolean ? (
+          <InputSelect
+            options={[
+              { label: "Si", value: true },
+              { label: "No", value: false }
+            ]}
+            placeholder="Selecciona valor"
+            mb="8px"
+            onChange={(option) => {
+              onChange(
+                filterComplexValues
+                  ? filterComplexValues + `${option.value}`
+                  : `${option.value}`
+              )
+            }}
+          />
+        ) : (
+          <>
+            <Input
+              placeholder="Escriba"
+              value={criterio}
+              onChange={(e) => setCriterio(e.target.value)}
+            />
+            <Button
+              variant="filter_button"
+              ml="8px"
+              width="48px"
+              maxWidth="48px"
+              maxHeight="48px"
+              height="48px"
+              fontSize="20px"
+              onClick={() => {
+                onChange(
+                  filterComplexValues
+                    ? filterComplexValues + `"${criterio}"`
+                    : `"${criterio}"`
+                )
+                setCriterio("")
+              }}
+            >
+              +
+            </Button>
+          </>
+        )}
       </Flex>
     </>
   )

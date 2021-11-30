@@ -140,8 +140,7 @@ export const SupportModal = ({
                     key={`${tag}-${idx}`}
                     height="32px"
                     variant="violete"
-                    mr="8px"
-                    mb="8px"
+                    m="8px"
                   >
                     <Checkbox
                       size="sm"

@@ -64,6 +64,7 @@ export const NotesFilterModal = ({
 
   const handleOnReset = () => {
     setFilterValues(initialValues)
+    setFilterComplexValues(null)
     onFilter(null)
   }
 
@@ -97,7 +98,7 @@ export const NotesFilterModal = ({
   }
 
   const handleTagSelect = (_tags, isProject) => {
-    const refTags = isProject ? filterValues.project_tags : filterValues.note_tags
+    const refTags = isProject ? filterValues?.project_tags : filterValues?.note_tags
     const refUsed = isProject ? usedProjectTags : usedNoteTags
     let nextTags = refTags ? [...refTags] : []
 
@@ -184,8 +185,18 @@ export const NotesFilterModal = ({
         )}
         {showSaveFilter ? (
           <SaveFilterModal
-            onClose={() => setShowSaveFilter(false)}
-            filter={!changeValueFilter ? filterMetadata.query : filterValues}
+            onClose={() => {
+              setfilterMetadata(null)
+              setShowSaveFilter(false)
+              setIsUpdateFilter(false)
+            }}
+            filter={
+              !changeValueFilter
+                ? filterMetadata.query
+                : tab === 0
+                ? filterValues
+                : filterComplexValues
+            }
             filterMetadata={filterMetadata}
             isUpdateFilter={isUpdateFilter}
             type={tab === 0 ? "simple" : "complex"}
@@ -199,7 +210,7 @@ export const NotesFilterModal = ({
             usedTags={usedProjectTags}
             criteria={projectCriteria}
             onTagsSelect={(tags) => handleTagSelect(tags, true)}
-            selectedTags={filterValues.project_tags.map((t) => t.label)}
+            selectedTags={filterValues?.project_tags?.map((t) => t.label)}
           />
         ) : null}
         {!showSaveFilter && showSecondaryContent === "note_tags" ? (
@@ -208,7 +219,7 @@ export const NotesFilterModal = ({
             usedTags={usedNoteTags}
             criteria={noteCriteria}
             onTagsSelect={(tags) => handleTagSelect(tags)}
-            selectedTags={filterValues.note_tags.map((t) => t.label)}
+            selectedTags={filterValues?.note_tags?.map((t) => t.label)}
           />
         ) : null}
 

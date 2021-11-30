@@ -21,7 +21,7 @@ export const NotesGrid = ({
 }) => {
   return (
     <>
-      {(fetchState === fetchType.FILTER || queryFilter) && notes?.length > 0 ? (
+      {fetchState === fetchType.FILTER || queryFilter ? (
         <Flex
           alignItems="center"
           onClick={() => onFilter(null)}

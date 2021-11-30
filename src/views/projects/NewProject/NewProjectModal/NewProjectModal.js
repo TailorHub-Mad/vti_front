@@ -115,7 +115,6 @@ export const NewProjectModal = ({
   }
 
   const handleUpdateProject = async () => {
-    console.log("AVLUES", values)
     try {
       const { _id } = projectToUpdate
       const project = formatUpdateProject(values)

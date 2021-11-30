@@ -18,7 +18,6 @@ export const SaveFilterModal = ({
   ...props
 }) => {
   const { deleteFilter, updateFilter, createFilter } = useFilterApi()
-
   const [values, setValues] = useState(initialValues)
   const [errorCreate, setErrorCreate] = useState(false)
 
@@ -35,7 +34,7 @@ export const SaveFilterModal = ({
         type: filterMetadata.type,
         object: filterMetadata.object,
         ...values,
-        query: JSON.stringify(filter)
+        query: filterMetadata.type === "complex" ? filter : JSON.stringify(filter)
       }
 
       await updateFilter(filterMetadata._id, newData)
@@ -45,7 +44,7 @@ export const SaveFilterModal = ({
         name: values.name,
         type,
         object,
-        query: JSON.stringify(filter),
+        query: type === "complex" ? filter : JSON.stringify(filter),
         public: values.public
       }
 

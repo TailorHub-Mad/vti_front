@@ -51,7 +51,6 @@ export const NewProjectForm = ({
     }))
   }
 
-
   const formatTags = (_tags) =>
     _tags.map((tag) => ({ label: tag.name, value: tag._id }))
 
