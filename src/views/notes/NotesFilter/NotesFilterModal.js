@@ -199,7 +199,7 @@ export const NotesFilterModal = ({
             usedTags={usedProjectTags}
             criteria={projectCriteria}
             onTagsSelect={(tags) => handleTagSelect(tags, true)}
-            selectedTags={filterValues.project_tags.map((t) => t.label)}
+            selectedTags={filterValues?.project_tags?.map((t) => t.label)}
           />
         ) : null}
         {!showSaveFilter && showSecondaryContent === "note_tags" ? (

@@ -20,7 +20,7 @@ export const TableGrid = ({
 
   return (
     <>
-      {fetchState === fetchType.FILTER && items?.length > 0 ? (
+      {fetchState === fetchType.FILTER ? (
         <Flex
           alignItems="center"
           onClick={() => onFilter(null)}
@@ -32,7 +32,7 @@ export const TableGrid = ({
         </Flex>
       ) : null}
 
-      {fetchState === fetchType.GROUP && items?.length > 0 ? (
+      {fetchState === fetchType.GROUP ? (
         <Flex
           alignItems="center"
           onClick={() => onFilter(null)}
