@@ -13,7 +13,7 @@ export const AdvancedFilter = ({
 
   const [criterio, setCriterio] = useState("")
   const [isCriterioBoolean, setIsCriterioBoolean] = useState(false)
-  const isAddButtonDisabled = SENTENCE_REGEX.test(criterio)
+  const isAddButtonDisabled = !SENTENCE_REGEX.test(criterio)
 
   const isNotButtonDisabled = isCriterioBoolean || !/[a-z0-9]*:/gi.test(criterio)
 
