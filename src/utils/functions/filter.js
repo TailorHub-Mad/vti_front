@@ -1,4 +1,5 @@
 const mqg = require("mongo-query-generator")
+export const SENTENCE_REGEX = new RegExp(/[a-z0-9]*:((NOT:)*"[^&()|"]+")|true|false/gi)
 
 export const generateFilterQuery = (keyRef, values, noUnion) => {
   const queryList = Object.entries(values).reduce((acc, [name, value]) => {
@@ -60,7 +61,60 @@ export const COMPLEX_OBJECT = {
   PROJECTS: "projects"
 }
 
+const ALIAS = {
+  [COMPLEX_OBJECT.NOTES]: [
+    "AliasCL",
+    "AliasProy",
+    "RefProy",
+    "RefSis",
+    "AliasSis",
+    "Cerrado",
+    "Formalizado",
+    "Respuestas",
+    "TagAp",
+    "TagProy",
+    "RefAp",
+    "TitleAp",
+    "Description",
+    "Documents",
+    "VtiCode"
+  ]
+}
+
 export const parseComplexQuery = (expression, object) => {
+  if (!expression) {
+    return { error: "La query no puede estar vacía" }
+  }
+  if (expression.includes(")(")) {
+    return { error: 'No puede haber unión de paréntesis ")("' }
+  }
+  if (expression.match(/[(]/gi)?.length !== expression.match(/[)]/gi)?.length) {
+    return { error: "Los parentesis de apertura y de cierre no son correctos" }
+  }
+
+  const queryConditionsCheck = ["(", ")", "&", "||", SENTENCE_REGEX]
+
+  const error = queryConditionsCheck.reduce((str, condition) => {
+    return str.replaceAll(condition, "")
+  }, expression)
+
+  if (error) {
+    return { error: `Revisa esta sentencia: ${error}` }
+  }
+
+  const badCriterio = expression
+    .match(/[a-z0-9]+:/gi)
+    .map((cr) => cr.replace(":", ""))
+    .filter((cr) => !ALIAS[object].includes(cr) && cr !== "NOT")
+
+  if (badCriterio.length > 0) {
+    return {
+      error: `${
+        badCriterio.length === 1 ? badCriterio[0] : badCriterio.join(", ")
+      } no son criterios válidos`
+    }
+  }
+
   try {
     let _expression = expression
 
@@ -124,6 +178,6 @@ export const parseComplexQuery = (expression, object) => {
     }
     return parseQuery
   } catch (error) {
-    return null
+    return { error: "Hay un error en la construcción de la query" }
   }
 }
