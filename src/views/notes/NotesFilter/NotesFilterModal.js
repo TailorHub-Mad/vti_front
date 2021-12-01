@@ -69,17 +69,15 @@ export const NotesFilterModal = ({
   }
 
   const handleOnFilter = () => {
+    setErrorComplexFilter(null)
+
     if (filterComplexValues) {
       const query = parseComplexQuery(filterComplexValues, COMPLEX_OBJECT.NOTES)
-      if (!query) {
-        setErrorComplexFilter(true)
-
-        setTimeout(() => {
-          setErrorComplexFilter(false)
-        }, 3000)
-      } else {
-        onFilter(query, "complex")
+      if (query.error) {
+        setErrorComplexFilter(query.error)
+        return
       }
+      onFilter(query, "complex")
     } else {
       // setFilterValues(initialValues)
       onFilter(filterValues)
