@@ -92,6 +92,8 @@ export const parseComplexQuery = (expression, object) => {
     return { error: "Los parentesis de apertura y de cierre no son correctos" }
   }
 
+  //((()())())
+
   const queryConditionsCheck = ["(", ")", "&", "||", SENTENCE_REGEX]
 
   const error = queryConditionsCheck.reduce((str, condition) => {
@@ -178,6 +180,6 @@ export const parseComplexQuery = (expression, object) => {
     }
     return parseQuery
   } catch (error) {
-    return { error: "Hay un error en la construcción de la query" }
+    return { error: "Hay un error en la sintaxis de la consulta (revisa paréntesis y conectores)" }
   }
 }
