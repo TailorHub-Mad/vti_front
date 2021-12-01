@@ -1,6 +1,7 @@
 import { Button, Flex, Grid, Input, Text } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
+import { SENTENCE_REGEX } from "../../../../../utils/functions/filter"
 
 export const AdvancedFilter = ({
   criteria,
@@ -12,27 +13,20 @@ export const AdvancedFilter = ({
 
   const [criterio, setCriterio] = useState("")
   const [isCriterioBoolean, setIsCriterioBoolean] = useState(false)
-  const isAddButtonDisabled =
-    !filterComplexValues ||
-    !["&", "|", "("].includes(filterComplexValues[filterComplexValues.length - 1]) ||
-    (!criterio || !criterio?.includes(":") || isCriterioBoolean
-      ? !criterio?.includes("true") && !criterio?.includes("false")
-      : !criterio?.includes('"'))
+  const isAddButtonDisabled = SENTENCE_REGEX.test(criterio)
+
+  const isNotButtonDisabled = isCriterioBoolean || !/[a-z0-9]*:/gi.test(criterio)
 
   const addFirstSentencePart = (substr) => {
     if (!criterio) {
       return `${substr}:`
     }
-    const parts = criterio.split(":")
-    return `${substr}:${parts[1]}`
+    const parts = criterio.match(/[a-z0-9]*:/gi)
+    if (parts?.length > 0) {
+      return criterio.replace(/[a-z0-9]*:/gi, `${substr}:`)
+    }
+    return `${substr}:`
   }
-
-  // const addSecondSentencePart = (substr) => {
-  //   if (!criterio) {
-  //     return ""
-  //   }
-  //   return `${criterio}:"${substr}"`
-  // }
 
   return (
     <>
@@ -46,8 +40,8 @@ export const AdvancedFilter = ({
         color={errorComplexFilter ? "error" : null}
       />
       {errorComplexFilter ? (
-        <Text variant="d_xs_regular" cursor="pointer" color="error">
-          La sintaxis no es correcta
+        <Text variant="d_s_regular" cursor="pointer" color="error" mt="4px">
+          {errorComplexFilter}
         </Text>
       ) : (
         <>
@@ -75,15 +69,21 @@ export const AdvancedFilter = ({
           <Button
             key={symbol}
             disabled={
-              (idx === 2 || idx === 3) &&
-              (!filterComplexValues ||
+              ((idx === 2 || idx === 3) &&
+                (!filterComplexValues ||
+                  ["(", "&", "|"].includes(
+                    filterComplexValues[filterComplexValues.length - 1]
+                  ))) ||
+              (idx === 0 &&
+                filterComplexValues &&
+                [")"].includes(
+                  filterComplexValues[filterComplexValues.length - 1]
+                )) ||
+              (idx === 1 &&
+                filterComplexValues &&
                 ["(", "&", "|"].includes(
                   filterComplexValues[filterComplexValues.length - 1]
-                )) || (idx === 0 || idx === 1) &&
-                (filterComplexValues &&
-                  ["&", "|"].includes(
-                    filterComplexValues[filterComplexValues.length - 1]
-                  ))
+                ))
             }
             variant="filter_button"
             onClick={() =>
@@ -121,6 +121,30 @@ export const AdvancedFilter = ({
           />
         ) : (
           <>
+            <Button
+              disabled={isNotButtonDisabled}
+              variant="filter_button"
+              mr="8px"
+              width="48px"
+              maxWidth="48px"
+              maxHeight="48px"
+              height="48px"
+              fontSize="16px"
+              onClick={() => {
+                if (criterio.includes("NOT:")) {
+                  setCriterio(criterio.split("NOT:").join(""))
+                  return
+                }
+                const parts = criterio.split(":")
+                if (parts[1]) {
+                  setCriterio(`${parts[0]}:NOT:${parts[1]}`)
+                  return
+                }
+                setCriterio(`${parts[0]}:NOT:`)
+              }}
+            >
+              NOT
+            </Button>
             <Input
               placeholder="Escriba"
               value={criterio}
@@ -128,6 +152,7 @@ export const AdvancedFilter = ({
             />
           </>
         )}
+
         <Button
           disabled={isAddButtonDisabled}
           variant="filter_button"
@@ -145,6 +170,11 @@ export const AdvancedFilter = ({
           +
         </Button>
       </Flex>
+      <Text
+        mt="8px"
+        variant="d_xs_regular"
+        color="blue.500"
+      >{`Ejemplos: TagAp:"Test" , TagProy:NOT:"Pro", Cerrado:true`}</Text>
     </>
   )
 }
