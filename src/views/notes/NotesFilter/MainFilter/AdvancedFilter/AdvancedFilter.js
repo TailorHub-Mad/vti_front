@@ -10,10 +10,11 @@ export const AdvancedFilter = ({
   filterComplexValues
 }) => {
   const symbols = ["(", ")", "&", "||"]
-
+  const lastCharacter =
+    filterComplexValues && filterComplexValues[filterComplexValues?.length - 1]
   const [criterio, setCriterio] = useState("")
   const [isCriterioBoolean, setIsCriterioBoolean] = useState(false)
-  const isAddButtonDisabled = SENTENCE_REGEX.test(criterio)
+  const isAddButtonDisabled = !SENTENCE_REGEX.test(criterio)
 
   const isNotButtonDisabled = isCriterioBoolean || !/[a-z0-9]*:/gi.test(criterio)
 
@@ -70,20 +71,11 @@ export const AdvancedFilter = ({
             key={symbol}
             disabled={
               ((idx === 2 || idx === 3) &&
-                (!filterComplexValues ||
-                  ["(", "&", "|"].includes(
-                    filterComplexValues[filterComplexValues.length - 1]
-                  ))) ||
-              (idx === 0 &&
-                filterComplexValues &&
-                [")"].includes(
-                  filterComplexValues[filterComplexValues.length - 1]
-                )) ||
+                (!filterComplexValues || ["(", "&", "|"].includes(lastCharacter))) ||
+              (idx === 0 && filterComplexValues && [")"].includes(lastCharacter)) ||
               (idx === 1 &&
                 filterComplexValues &&
-                ["(", "&", "|"].includes(
-                  filterComplexValues[filterComplexValues.length - 1]
-                ))
+                ["(", "&", "|"].includes(lastCharacter))
             }
             variant="filter_button"
             onClick={() =>
