@@ -174,7 +174,12 @@ export const NotesFilterModal = ({
               onReset={handleOnReset}
               setTab={setTab}
               onEdit={handleEditFilter}
-              onFilterComplexChange={(val) => setFilterComplexValues(val)}
+              onFilterComplexChange={(val) => {
+                if (errorComplexFilter) {
+                  setErrorComplexFilter(null)
+                }
+                setFilterComplexValues(val)
+              }}
               errorComplexFilter={errorComplexFilter}
               showSaveFilter={showSaveFilter}
               noteFromProject={noteFromProject}
