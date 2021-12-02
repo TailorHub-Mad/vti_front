@@ -1,5 +1,5 @@
 const mqg = require("mongo-query-generator")
-export const SENTENCE_REGEX = new RegExp(/[a-z0-9]*:((NOT:)*"[^&()|"]+")|true|false/gi)
+export const SENTENCE_REGEX = new RegExp(/[a-z0-9]*:(((NOT:))*"[^&()|"]+"|true|false)/gi)
 
 export const generateFilterQuery = (keyRef, values, noUnion) => {
   const queryList = Object.entries(values).reduce((acc, [name, value]) => {
@@ -95,10 +95,12 @@ export const parseComplexQuery = (expression, object) => {
   const queryConditionsCheck = ["(", ")", "&", "||", SENTENCE_REGEX]
 
   const error = queryConditionsCheck.reduce((str, condition) => {
+    console.log(str)
     return str.replaceAll(condition, "")
   }, expression)
 
   if (error) {
+    console.log(error)
     return { error: `Revisa esta sentencia: ${error}` }
   }
 
