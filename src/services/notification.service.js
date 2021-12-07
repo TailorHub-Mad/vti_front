@@ -25,7 +25,7 @@ const NotificationService = () => {
       instance.get(`/notification?type=Nuevo Proyecto&type=Nuevo sistema de ensayo`)
     )
   const getManteinanceNotifications = () =>
-    execute(instance.get(`/notification?type=Notificación mantenimiento`))
+    execute(instance.get(`/notification?type=Notificación mantenimiento&type=Notificación administrador`))
   const getBehaviourNotifications = () =>
     execute(
       instance.get(
