@@ -26,13 +26,12 @@ export const NotificationCard = ({ notification, onPin, onDelete, ...props }) =>
 
   const handleLinkRef = (element) => {
     const { id, model } = element
-
     switch (model) {
       case "projects":
         return `proyectos/${id}`
       case "notes":
         return `proyectos/${id}`
-      case "testSytems":
+      case "testSystems":
         return `sistemas/${id}`
       case "tagProjects":
         return `tags/proyecto/${id}`
