@@ -18,17 +18,18 @@ export const AddSelect = ({
 }) => {
   const [availableOptions, setAvailableOptions] = useState([])
   const handleChange = (option, idx) => {
-    let newInputValues =[]
-    if(idx >= 0){
+    let newInputValues = []
+    if (idx >= 0) {
       newInputValues = [...value]
       newInputValues[idx] = option
     }
-    if(idx !== 0 && !idx){
-
+    if (idx !== 0 && !idx) {
       newInputValues = option
     }
     // setInputValues(newInputValues)
-    const valuesSelected = [...newInputValues]?.map((inputValue) => inputValue?.value)
+    const valuesSelected = [...newInputValues]?.map(
+      (inputValue) => inputValue?.value
+    )
     const nextOptions = options?.filter(
       (option) => !valuesSelected.includes(option.value)
     )
@@ -40,7 +41,6 @@ export const AddSelect = ({
   useEffect(() => {
     setAvailableOptions(options)
   }, [options])
-
 
   useEffect(() => {
     if (!isReset) return
@@ -87,8 +87,7 @@ export const AddSelect = ({
 
   const renderAddItem = (itemPosition) => {
     if (inputDisabled) return null
-    if (value?.length > 1 && itemPosition !== value?.length - 1)
-      return null
+    if (value?.length > 1 && itemPosition !== value?.length - 1) return null
     if (value?.length === options?.length) return null
 
     const handleOnClick = () => handleChange([...value, undefined])
