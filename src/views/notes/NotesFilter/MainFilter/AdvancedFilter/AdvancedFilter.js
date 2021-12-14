@@ -1,5 +1,5 @@
 import { Button, Flex, Grid, Input, Text } from "@chakra-ui/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { InputSelect } from "../../../../../components/forms/InputSelect/InputSelect"
 import { SENTENCE_REGEX } from "../../../../../utils/functions/filter"
 
@@ -13,9 +13,20 @@ export const AdvancedFilter = ({
   const lastCharacter =
     filterComplexValues && filterComplexValues[filterComplexValues?.length - 1]
   const [criterio, setCriterio] = useState("")
+  const [buttonsState, setButtonsState] = useState({})
   const [isCriterioBoolean, setIsCriterioBoolean] = useState(false)
-  const isAddButtonDisabled = !SENTENCE_REGEX.test(criterio)
-  const isNotButtonDisabled = isCriterioBoolean || !/[a-z0-9]*:/gi.test(criterio)
+
+  useEffect(() => {
+    if (!criterio) {
+      setButtonsState({})
+      return
+    }
+    setButtonsState({
+      isAddButtonDisabled: !criterio.match(SENTENCE_REGEX)?.length > 0,
+      isNotButtonDisabled:
+        isCriterioBoolean || !criterio.match(/[a-z0-9]*:/gi)?.length > 0
+    })
+  }, [criterio])
 
   const addFirstSentencePart = (substr) => {
     if (!criterio) {
@@ -113,7 +124,7 @@ export const AdvancedFilter = ({
         ) : (
           <>
             <Button
-              disabled={isNotButtonDisabled}
+              disabled={buttonsState.isNotButtonDisabled}
               variant="filter_button"
               mr="8px"
               width="48px"
@@ -145,7 +156,7 @@ export const AdvancedFilter = ({
         )}
 
         <Button
-          disabled={isAddButtonDisabled}
+          disabled={buttonsState.isAddButtonDisabled}
           variant="filter_button"
           ml="8px"
           width="48px"
