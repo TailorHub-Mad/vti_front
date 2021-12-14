@@ -1,5 +1,7 @@
 const mqg = require("mongo-query-generator")
-export const SENTENCE_REGEX = new RegExp(/[a-z0-9]*:(((NOT:))*"[^&()|"]+"|true|false)/gi)
+export const SENTENCE_REGEX = new RegExp(
+  /[a-z0-9]*:(((NOT:))*"[^&()|"]+"|true|false)/gi
+)
 
 export const generateFilterQuery = (keyRef, values, noUnion) => {
   const queryList = Object.entries(values).reduce((acc, [name, value]) => {
@@ -180,6 +182,9 @@ export const parseComplexQuery = (expression, object) => {
     }
     return parseQuery
   } catch (error) {
-    return { error: "Hay un error en la sintaxis de la consulta (revisa paréntesis y conectores)" }
+    return {
+      error:
+        "Hay un error en la sintaxis de la consulta (revisa paréntesis y conectores)"
+    }
   }
 }

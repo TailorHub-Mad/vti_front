@@ -115,7 +115,9 @@ export const MainFilter = ({
               cursor="pointer"
             >
               <Flex align="center">
-                <Text onClick={() => handleChargeFilter(value, isComplex)}>{value.name}</Text>
+                <Text onClick={() => handleChargeFilter(value, isComplex)}>
+                  {value.name}
+                </Text>
                 <EditIcon
                   width="16px"
                   cursor="pointer"
