@@ -45,6 +45,7 @@ import { useMediaQuery } from "@chakra-ui/media-query"
 import { TableGrid } from "../../components/tables/TableGrid/TableGrid"
 import { Flex, Text } from "@chakra-ui/layout"
 import { CloseIcon } from "@chakra-ui/icons"
+import { DragControls } from "framer-motion"
 
 const PROJECTS_GROUP_OPTIONS = [
   {
@@ -77,7 +78,6 @@ const proyectos = () => {
   const [showFilterModal, setShowFilterModal] = useState(false)
 
   const [filterValues, setFilterValues] = useState({})
-  const [filterComplexValues, setFilterComplexValues] = useState(null)
 
   const [queryFilter, setQueryFilter] = useState(null)
   const [queryGroup, setQueryGroup] = useState(null)
@@ -412,6 +412,7 @@ const proyectos = () => {
   }
 
   const handleOnFilter = (values, type) => {
+    console.log("hola", values, type)
     if (!values) {
       setQueryFilter(null)
 
@@ -439,6 +440,7 @@ const proyectos = () => {
         clientAlias: client
       })
     } else {
+    
       filter = `query=${values}`
     }
     setQueryFilter(filter)
@@ -483,8 +485,7 @@ const proyectos = () => {
         }}
         filterValues={filterValues}
         setFilterValues={setFilterValues}
-        filterComplexValues={filterComplexValues}
-        setFilterComplexValues={setFilterComplexValues}
+
       />
       <NewProjectModal
         projectToUpdate={projectToUpdate}

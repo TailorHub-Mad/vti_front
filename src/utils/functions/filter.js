@@ -80,6 +80,38 @@ const ALIAS = {
     "Description",
     "Documents",
     "VtiCode"
+  ],
+  [COMPLEX_OBJECT.TEST_SYSTEMS]: [
+    "TagAp",
+    "TagProy",
+    "AliasProy",
+    "AliasSis",
+    "AliasFocusPoint",
+    "RefProy",
+    "RefSis",
+    "VtiCode",
+    "RefAp",
+    "TitleAp",
+    "Sector",
+    "Year",
+    "Closed",
+    "AliasCl"
+  ],
+  [COMPLEX_OBJECT.PROJECTS]: [
+    "TagAp",
+    "TagProy",
+    "AliasProy",
+    "AliasSis",
+    "AliasFocusPoint",
+    "RefProy",
+    "RefSis",
+    "VtiCode",
+    "RefAp",
+    "TitleAp",
+    "Sector",
+    "Year",
+    "Closed",
+    "AliasCl"
   ]
 }
 
@@ -109,7 +141,7 @@ export const parseComplexQuery = (expression, object) => {
   const badCriterio = expression
     .match(/[a-z0-9]+:/gi)
     .map((cr) => cr.replace(":", ""))
-    .filter((cr) => !ALIAS[object].includes(cr) && cr !== "NOT")
+    .filter((cr) => !ALIAS[object]?.includes(cr) && cr !== "NOT")
 
   if (badCriterio.length > 0) {
     return {
@@ -180,6 +212,7 @@ export const parseComplexQuery = (expression, object) => {
       parseQuery = parseQuery.replaceAll("Vticode", "testSystems.vtiCode")
       parseQuery = parseQuery.replaceAll("AliasCl", "testSystems.clientAlias")
     }
+    console.log("parse", parseQuery)
     return parseQuery
   } catch (error) {
     return {
