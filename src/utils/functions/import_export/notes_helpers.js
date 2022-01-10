@@ -1,3 +1,5 @@
+import { MessagesIcon } from "../../../components/icons/MessagesIcon"
+
 export const noteChecker = () => {}
 
 export const noteDataTransform = (data) => {
@@ -30,28 +32,53 @@ export const transformNotesToExport = (data) => {
       _id,
       ref,
       title,
+      owner,
       link,
       description,
       clientAlias,
       createdAt,
+      messages,
       documents,
+      projects,
       testSystems,
+      isClosed,
+      formalized,
       tags
     } = note
+
     return {
-      _id,
-      ref,
-      title,
-      description,
-      clientAlias,
-      createdAt: new Date(createdAt).toLocaleDateString(),
-      link,
-      documents: documents && documents.map((dc) => dc.url),
-      testSystems: testSystems.map((ts) => ts.alias),
-      tags: tags.map((tag) => tag.name)
+      "ID DB": _id,
+      "ID VTI": ref,
+      Título: title,
+      Autor: owner[0]?.name
+        ? `${owner[0]?.name} ${owner[0]?.lastName || ""}`
+        : "Sin autor",
+      Proyecto: projects[0]?.alias || "Sin definir",
+      Descripción: description,
+      "Alias cliente": clientAlias,
+      "Fecha de creación": new Date(createdAt).toLocaleDateString(),
+      Enlace: link,
+      "Documentos adjuntos": documents
+        ? documents.map((dc) => dc.url).join(", ")
+        : "Sin documentos",
+      "Sistemas de ensayo": testSystems.map((ts) => ts.alias).join(", "),
+      "Tags de apunte": tags.map((tag) => tag.name).join(", "),
+      Abierto: isClosed ? "Si" : "No",
+      Formalizado: formalized ? "Si" : "No",
+      Mensajes: messages.map(
+        (msg) => msg.message && `
+      Autor: ${msg.owner[0]?.name} 
+      Mensaje: ${msg.message}
+      ${
+        msg.documents && msg.documents[0]?.url
+          ? `Adjuntos:${msg.documents.map((doc) => doc.url).join(", ")}`
+          : "Sin adjuntos"
+      }
+      ${msg.link ? `Link:${msg.link}` : "Sin enlaces"}
+      `
+      )
     }
   })
 
-  //De momento no es posible exportar notas con los mensajes asociados.
   return _data
 }

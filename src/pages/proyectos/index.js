@@ -45,7 +45,6 @@ import { useMediaQuery } from "@chakra-ui/media-query"
 import { TableGrid } from "../../components/tables/TableGrid/TableGrid"
 import { Flex, Text } from "@chakra-ui/layout"
 import { CloseIcon } from "@chakra-ui/icons"
-import { DragControls } from "framer-motion"
 
 const PROJECTS_GROUP_OPTIONS = [
   {

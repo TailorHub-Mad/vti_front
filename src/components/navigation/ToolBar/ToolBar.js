@@ -219,7 +219,7 @@ export const ToolBar = ({
               onImport={onImport}
               onExport={onExport}
               isDisabled={
-                fetchState === fetchType.FILTER ||
+                // fetchState === fetchType.FILTER ||
                 fetchState === fetchType.GROUP ||
                 (selectedRows && Object.keys(selectedRows)?.length > 0)
               }
