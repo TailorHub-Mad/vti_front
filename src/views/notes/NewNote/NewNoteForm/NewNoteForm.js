@@ -1,6 +1,6 @@
 import { FormLabel } from "@chakra-ui/form-control"
 import { Flex } from "@chakra-ui/layout"
-import { useMediaQuery } from "@chakra-ui/react"
+// import { useMediaQuery } from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { AddSelect } from "../../../../components/forms/AddSelect/AddSelect"
 import { FileInput } from "../../../../components/forms/FileInput/FileInput"
@@ -22,7 +22,7 @@ export const NewNoteForm = ({
   isUpdate,
   resetForm
 }) => {
-  const [isScreen] = useMediaQuery("(min-width: 475px)")
+  // const [isScreen] = useMediaQuery("(min-width: 475px)")
 
   const { getProjects } = useProjectApi()
   const { getNoteTags } = useTagApi()
@@ -60,8 +60,8 @@ export const NewNoteForm = ({
         label: "Selecciona el proyecto*",
         options: projectOptions,
         isDisabled: Boolean(noteToUpdate) || Boolean(noteFromProject),
-        helper: isScreen ? "Abrir ventana de apoyo" : null,
-        onHelperClick: isScreen ? () => openProjectSearchModal() : null
+        helper: "Abrir ventana de apoyo" ,
+        onHelperClick: () => openProjectSearchModal()
       }
     },
     testSystems: {

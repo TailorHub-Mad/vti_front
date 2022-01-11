@@ -87,7 +87,6 @@ export const TableRow = ({
               isChecked: isSelected,
               onChange: onRowSelect,
               key: `${name}-${idx}`,
-              mb: "12px"
             })
           ) : (
             <TableIcon

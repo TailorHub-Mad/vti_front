@@ -21,6 +21,7 @@ export const ProjectListModal = ({
   projects,
   onSelectProject,
   selectedProject,
+  headerConfig,
   ...props
 }) => {
   const [expandAll, setExpandAll] = useState(false)
@@ -54,8 +55,8 @@ export const ProjectListModal = ({
       pb="200px"
       {...props}
     >
-      <Box bgColor="white" padding="32px">
-        <CustomModalHeader title="Proyectos" />
+      <Box bgColor="white" padding={["16px", "16px", "32px", "32px"]} h={["100vh","100vh","auto","auto"]}>
+        <CustomModalHeader title="Proyectos" {...headerConfig} />
         <Flex direction="column" mt="24px">
           <Flex mb="24px" justify="space-between" align="center" w="100%">
             <Flex>
@@ -105,7 +106,12 @@ export const ProjectListModal = ({
                       </AccordionButton>
                       <AccordionPanel p={"8px"} pb={"8px"}>
                         <Grid
-                          templateColumns="auto auto auto"
+                          templateColumns={[
+                            "auto",
+                            "auto",
+                            "auto auto auto",
+                            "auto auto auto"
+                          ]}
                           gap="8px"
                           width="100%"
                         >
