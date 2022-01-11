@@ -8,13 +8,14 @@ export const clientDataTransform = (data) => {
 
 export const transformClientsToExport = (data) => {
   const _data = data.map((client) => {
-    const { _id, alias, name, testSystems, projects } = client
+    const { _id, ref, alias, name, testSystems, projects } = client
     return {
-      _id,
-      alias,
-      name,
-      testSystems: testSystems.map((ts) => ts.alias),
-      projects: projects.map((pr) => pr.alias)
+      "ID DB": _id,
+      "ID VTI": ref,
+      Alias: alias,
+      Nombre: name,
+      "Sistemas de ensayo": testSystems.map((ts) => ts.alias).join(", "),
+      Proyectos: projects.map((pr) => pr.alias).join(", ")
     }
   })
   return _data

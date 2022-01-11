@@ -126,18 +126,21 @@ const proyectos = () => {
   }
 
   const handleImportProjects = async (data) => {
-    try {
-      for (let index = 0; index < data.length; index++) {
-        await createProject(data[index])
+    for (let index = 0; index < data.length; index++) {
+      const project = await createProject(data[index])
+      if (project.error) {
+        showToast({
+          message: `Ha habido un error en la fila ${index + 2}. La importación se ha cancelado a partir de esta fila.`,
+          time: 5000
+        })
+        return
       }
-
-      await mutate()
-
-      setShowImportModal(false)
-      showToast({ message: "Proyectos importados correctamente" })
-    } catch (error) {
-      errorHandler(error)
     }
+
+    await mutate()
+
+    setShowImportModal(false)
+    showToast({ message: "Proyectos importados correctamente" })
   }
 
   const handleExportProjects = () => {
@@ -439,7 +442,6 @@ const proyectos = () => {
         clientAlias: client
       })
     } else {
-    
       filter = `query=${values}`
     }
     setQueryFilter(filter)
@@ -484,7 +486,6 @@ const proyectos = () => {
         }}
         filterValues={filterValues}
         setFilterValues={setFilterValues}
-
       />
       <NewProjectModal
         projectToUpdate={projectToUpdate}

@@ -5,7 +5,7 @@ export const codeDataTransform = (data) => {
   items.shift()
   const _items = items.map((item) => {
     const _item = {
-      title: item.data[0]
+      name: item.data[0]
     }
     return _item
   })
@@ -13,13 +13,14 @@ export const codeDataTransform = (data) => {
   return _items
 }
 
-export const transformSectorsToExport = (data) => {
+export const transformCodesToExport = (data) => {
   const _data = data.map((code) => {
-    const { _id, title, projects } = code
+    const { _id, ref, name, testSystems } = code
     return {
-      _id,
-      title,
-      projects
+      "ID DB": _id,
+      "ID VTI": ref,
+      Nombre: name,
+      "Sistemas de ensayo": testSystems.map((ts) => ts).join(", ")
     }
   })
   return _data

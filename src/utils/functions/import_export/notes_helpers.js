@@ -1,4 +1,3 @@
-import { MessagesIcon } from "../../../components/icons/MessagesIcon"
 
 export const noteChecker = () => {}
 
@@ -71,10 +70,10 @@ export const transformNotesToExport = (data) => {
       Mensaje: ${msg.message}
       ${
         msg.documents && msg.documents[0]?.url
-          ? `Adjuntos:${msg.documents.map((doc) => doc.url).join(", ")}`
+          ? `Adjuntos: ${msg.documents.map((doc) => doc.url).join(", ")}`
           : "Sin adjuntos"
       }
-      ${msg.link ? `Link:${msg.link}` : "Sin enlaces"}
+      ${msg.link ? `Link: ${msg.link}` : "Sin enlaces"}
       `
       )
     }

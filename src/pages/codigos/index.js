@@ -67,16 +67,21 @@ const codigos = () => {
   }
 
   const handleImportCodes = async (data) => {
-    try {
-      for (let index = 0; index < data.length; index++) {
-        await createCode([data[index]])
+    for (let index = 0; index < data.length; index++) {
+      const code = await createCode(data[index])
+      if (code.error) {
+        showToast({
+          message: `Ha habido un error en la fila ${
+            index + 2
+          }. La importación se ha cancelado a partir de esta fila.`,
+          time: 5000
+        })
+        return
       }
-
-      setShowImportModal(false)
-      showToast({ message: "Códigos importados correctamente" })
-    } catch (error) {
-      errorHandler(error)
     }
+
+    setShowImportModal(false)
+    showToast({ message: "Códigos importados correctamente" })
   }
 
   const handleExportCodes = () => {
