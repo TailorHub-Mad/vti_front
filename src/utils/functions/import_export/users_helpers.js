@@ -6,7 +6,7 @@ export const userDataTransform = (data) => {
   return items.map((item) => {
     const _item = {
       email: item.data[0],
-      password: item.data[1],
+      name: item.data[1],
       alias: item.data[2],
       department: item.data[3]
     }
@@ -22,14 +22,15 @@ export const userDataTransform = (data) => {
 
 export const transformUsersToExport = (data) => {
   const _data = data.map((user) => {
-    const { _id, alias, name, lastName, department, focusPoint } = user
+    const { _id, alias, name, ref, email, department, focusPoint } = user
     return {
-      _id,
-      alias,
-      department: department && department.name,
-      name,
-      lastName,
-      focusPoint
+      "ID DB": _id,
+      "ID VTI": ref,
+      "Alias":alias,
+      "Departamento": department && department.name,
+      "Nombre":name,
+      "Email": email,
+      "Proyectos donde es punto focal": focusPoint.join(", "),
     }
   })
   return _data

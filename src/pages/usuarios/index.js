@@ -102,16 +102,21 @@ const usuarios = () => {
 
   // Handlers CRUD
   const handleImportProjects = async (data) => {
-    try {
-      for (let index = 0; index < data.length; index++) {
-        await createUser(data[index])
+    for (let index = 0; index < data.length; index++) {
+      const user = await createUser(data[index])
+      if (user.error) {
+        showToast({
+          message: `Ha habido un error en la fila ${
+            index + 2
+          }. La importación se ha cancelado a partir de esta fila.`,
+          time: 5000
+        })
+        return
       }
-
-      setShowImportModal(false)
-      showToast({ message: "Proyectos importados correctamente" })
-    } catch (error) {
-      errorHandler(error)
     }
+
+    setShowImportModal(false)
+    showToast({ message: "Proyectos importados correctamente" })
   }
 
   const handleExportProjects = () => {

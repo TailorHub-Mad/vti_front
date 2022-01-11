@@ -85,17 +85,23 @@ const departamentos = () => {
   }
 
   // Handle CRUD
-  const handleImportSectors = async (data) => {
-    try {
-      for (let index = 0; index < data.length; index++) {
-        await createDepartment(data[index])
+  const handleImportDepartments = async (data) => {
+    for (let index = 0; index < data.length; index++) {
+      const department = await createDepartment([data[index]])
+      if (department.error) {
+        showToast({
+          message: `Ha habido un error en la fila ${
+            index + 2
+          }. La importación se ha cancelado a partir de esta fila.`,
+          time: 5000
+        })
+        return
       }
-
-      setShowImportModal(false)
-      showToast({ message: "Departamentos importados correctamente" })
-    } catch (error) {
-      errorHandler(error)
     }
+    mutate()
+
+    setShowImportModal(false)
+    showToast({ message: "Departamentos importados correctamente" })
   }
 
   const handleExportSectors = () => {
@@ -232,7 +238,7 @@ const departamentos = () => {
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
-        onUpload={(data) => handleImportSectors(data)}
+        onUpload={(data) => handleImportDepartments(data)}
         onDropDataTransform={(info) => departmentDataTransform(info)}
       />
 

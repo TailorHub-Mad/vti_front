@@ -193,24 +193,26 @@ const apuntes = () => {
     }
 
     const handleCreateNote = async (info) => {
-      try {
-        const note = formatCreateNote(info)
-        await createNote(note)
-      } catch (error) {
-        errorHandler(error)
+      const _note = formatCreateNote(info)
+      const note = await createNote(_note)
+      return note
+    }
+
+    for (let index = 0; index < data.length; index++) {
+      const note = await handleCreateNote(data[index])
+      if (note.error) {
+        showToast({
+          message: `Ha habido un error en la fila ${
+            index + 2
+          }. La importación se ha cancelado a partir de esta fila.`,
+          time: 5000
+        })
+        return
       }
     }
 
-    try {
-      for (let index = 0; index < data.length; index++) {
-        await handleCreateNote(data[index])
-      }
-
-      setShowImportModal(false)
-      showToast({ message: "Proyectos importados correctamente" })
-    } catch (error) {
-      errorHandler(error)
-    }
+    setShowImportModal(false)
+    showToast({ message: "Proyectos importados correctamente" })
   }
 
   const handleExportNotes = () => {

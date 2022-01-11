@@ -9,7 +9,7 @@ export const transformClientData = (client) => ({
   id: {
     label: client.ref,
     value: client._id,
-    link: `${PATHS.clients}/${client._id}`
+    link: `${PATHS.clients}/${client.alias}`
   },
   alias: client.alias,
   name: client.name,

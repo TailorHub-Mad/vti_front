@@ -14,11 +14,11 @@ const client = () => {
   const router = useRouter()
   const { isLoggedIn } = useContext(ApiAuthContext)
 
-  const clientId = router.query.id
+  const clientAlias = router.query.id
 
   const [fetchState, setFetchState] = useState(fetchType.FILTER)
   const [fetchOptions, setFetchOptions] = useState({
-    [fetchOption.FILTER]: `projects.clientId=${clientId}`
+    [fetchOption.FILTER]: `projects.clientAlias=${clientAlias}`
   })
 
   const { data, error, isLoading, isValidating } = projectFetchHandler(
@@ -42,7 +42,7 @@ const client = () => {
       ) : (
         <ProjectsByObject
           projects={projectsData}
-          customURL={`${PATHS.clients}/${client || clientId}`}
+          customURL={`${PATHS.clients}/${client || clientAlias}`}
           setFetchState={setFetchState}
           setFetchOptions={setFetchOptions}
           fetchState={fetchState}

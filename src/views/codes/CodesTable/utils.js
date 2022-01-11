@@ -6,12 +6,11 @@ export const formatCode = (data) => data && data?.map(transformCodeData)
 
 export const transformCodeData = (code) => ({
   selector: "",
-  id: code.ref,
-  // id: {
-  //   label: code.ref,
-  //   value: code._id,
-  //   link: `${PATHS.codes}/${code._id}`
-  // },
+  // id: code.ref,
+  id: {
+    label: code.ref,
+    value: code._id
+  },
   name: code.name,
   testSystems: code.testSystems.map((ts) => ts.alias),
   options: ""
@@ -27,7 +26,7 @@ export const TABLE_CODES_HEAD = {
     label: "ID",
     width: calcColWidth(80),
     type: "text",
-    config: { sort: true, name: "ref" }
+    config: { sort: true, name: "ref"}
   },
   name: {
     label: "Nombre",

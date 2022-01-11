@@ -39,13 +39,13 @@ export const TABLE_DEPARTMENT_HEAD = {
   },
   name: {
     label: "Departamento",
-    width: calcColWidth(60),
+    width: calcColWidth(80),
     type: "text",
     config: { sort: true, name: "name" }
   },
   users: {
     label: "Usuarios",
-    width: calcColWidth(542),
+    width: calcColWidth(522),
     type: "tags",
     config: {
       variant: variantGeneralTag.NOTE
