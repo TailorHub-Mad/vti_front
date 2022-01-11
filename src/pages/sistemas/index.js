@@ -110,17 +110,37 @@ const sistemas = () => {
     return true
   }
 
-  const handleImportProjects = async (data) => {
-    try {
-      for (let index = 0; index < data.length; index++) {
-        await createSystem(data[index])
-      }
+  // const handleImportSystems = async (data) => {
+  //   try {
+  //     for (let index = 0; index < data.length; index++) {
+  //       await createSystem(data[index])
+  //     }
 
-      setShowImportModal(false)
-      showToast({ message: "Sistemas importados correctamente" })
-    } catch (error) {
-      errorHandler(error)
+  //     setShowImportModal(false)
+  //     showToast({ message: "Sistemas importados correctamente" })
+  //   } catch (error) {
+  //     errorHandler(error)
+  //   }
+  // }
+
+  const handleImportSystems = async (data) => {
+    for (let index = 0; index < data.length; index++) {
+      const system = await createSystem(data[index])
+      if (system.error) {
+        showToast({
+          message: `Ha habido un error en la fila ${
+            index + 2
+          }. La importación se ha cancelado a partir de esta fila.`,
+          time: 5000
+        })
+        return
+      }
     }
+
+    await mutate()
+
+    setShowImportModal(false)
+    showToast({ message: "Proyectos importados correctamente" })
   }
 
   const handleExportProjects = () => {
@@ -424,7 +444,7 @@ const sistemas = () => {
       <ImportFilesModal
         isOpen={showImportModal}
         onClose={() => setShowImportModal(false)}
-        onUpload={(data) => handleImportProjects(data)}
+        onUpload={(data) => handleImportSystems(data)}
         onDropDataTransform={(info) => testSystemDataTransform(info)}
       />
 

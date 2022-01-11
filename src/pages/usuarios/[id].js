@@ -14,11 +14,12 @@ const user = () => {
   const router = useRouter()
   const { isLoggedIn } = useContext(ApiAuthContext)
 
-  const userId = router.query.id
+  // const userId = router.query.id
+  const userAlias = router.query.id
 
   const [fetchState, setFetchState] = useState(fetchType.FILTER)
   const [fetchOptions, setFetchOptions] = useState({
-    [fetchOption.FILTER]: `projects.users._id=${userId}`
+    [fetchOption.FILTER]: `projects.users.alias=${userAlias}`
   })
 
   const { data, error, isLoading, isValidating } = projectFetchHandler(
@@ -30,7 +31,8 @@ const user = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const projectsData = data && !isEmptyData ? data[0].projects : null
 
-  const user = projectsData && projectsData[0].users?.find((t) => t._id === userId)
+  // const user = projectsData && projectsData[0].users?.find((t) => t._id === userId)
+  const user = projectsData && projectsData[0].users?.find((t) => t.alias === userAlias)
 
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
@@ -42,7 +44,8 @@ const user = () => {
       ) : (
         <ProjectsByObject
           projects={projectsData}
-          customURL={`${PATHS.users}/${user?.ref || userId}`}
+          // customURL={`${PATHS.users}/${user?.ref || userId}`}
+          customURL={`${PATHS.users}/${user?.ref || userAlias}`}
           setFetchState={setFetchState}
           setFetchOptions={setFetchOptions}
           fetchState={fetchState}

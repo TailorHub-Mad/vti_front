@@ -77,7 +77,6 @@ const proyectos = () => {
   const [showFilterModal, setShowFilterModal] = useState(false)
 
   const [filterValues, setFilterValues] = useState({})
-  const [filterComplexValues, setFilterComplexValues] = useState(null)
 
   const [queryFilter, setQueryFilter] = useState(null)
   const [queryGroup, setQueryGroup] = useState(null)
@@ -127,18 +126,21 @@ const proyectos = () => {
   }
 
   const handleImportProjects = async (data) => {
-    try {
-      for (let index = 0; index < data.length; index++) {
-        await createProject(data[index])
+    for (let index = 0; index < data.length; index++) {
+      const project = await createProject(data[index])
+      if (project.error) {
+        showToast({
+          message: `Ha habido un error en la fila ${index + 2}. La importación se ha cancelado a partir de esta fila.`,
+          time: 5000
+        })
+        return
       }
-
-      await mutate()
-
-      setShowImportModal(false)
-      showToast({ message: "Proyectos importados correctamente" })
-    } catch (error) {
-      errorHandler(error)
     }
+
+    await mutate()
+
+    setShowImportModal(false)
+    showToast({ message: "Proyectos importados correctamente" })
   }
 
   const handleExportProjects = () => {
@@ -412,6 +414,7 @@ const proyectos = () => {
   }
 
   const handleOnFilter = (values, type) => {
+    console.log("hola", values, type)
     if (!values) {
       setQueryFilter(null)
 
@@ -483,8 +486,6 @@ const proyectos = () => {
         }}
         filterValues={filterValues}
         setFilterValues={setFilterValues}
-        filterComplexValues={filterComplexValues}
-        setFilterComplexValues={setFilterComplexValues}
       />
       <NewProjectModal
         projectToUpdate={projectToUpdate}

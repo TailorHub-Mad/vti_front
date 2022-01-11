@@ -36,17 +36,28 @@ export const projectDataTransform = (data) => {
 
 export const transformProjectsToExport = (data) => {
   const _data = data.map((project) => {
-    const { _id, alias, sector, focusPoint, testSystems, tags, users, notes } =
-      project
-    return {
+    const {
       _id,
       alias,
-      sector: sector[0]?.title,
-      focusPoint: focusPoint[0]?.alias,
-      testSystems: testSystems?.map((ts) => ts.alias),
+      sector,
+      focusPoint,
+      testSystems,
       tags,
-      users,
-      notes: notes?.map((note) => note._id)
+      notes,
+      ref,
+      isActive
+    } = project
+    return {
+      "ID DB": _id,
+      "ID VTI": ref,
+      Alias: alias,
+      Sector: sector[0]?.title,
+      "Puntos Focales": focusPoint.map((fp) => fp?.name).join(", "),
+      "Sistemas de ensayo": testSystems?.map((ts) => ts?.alias),
+      "Tags de proyecto": tags.map((tag) => tag?.name).join(", "),
+      // users: users.map((us) => us?.alias).join(", "),
+      Apuntes: notes?.map((note) => note?.ref),
+      Finalizado: isActive ? "No" : "Si"
     }
   })
   return _data

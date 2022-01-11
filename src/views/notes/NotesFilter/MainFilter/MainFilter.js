@@ -226,7 +226,9 @@ export const MainFilter = ({
               <AdvancedFilter
                 criteria={criteria}
                 filterComplexValues={filterComplexValues}
-                onChange={onFilterComplexChange}
+                onChange={(v)=>{
+                  console.log("ONCHANGE", v)
+                  onFilterComplexChange(v)}}
                 errorComplexFilter={errorComplexFilter}
               />
             </TabPanel>

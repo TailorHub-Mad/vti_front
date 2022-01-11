@@ -54,6 +54,7 @@ export const MainFilter = ({
   onReset,
   setTab,
   onEdit,
+  errorComplexFilter,
   ...props
 }) => {
   const [isReset, setIsReset] = useState(false)
@@ -220,7 +221,11 @@ export const MainFilter = ({
             <AdvancedFilter
               criteria={criteria}
               filterComplexValues={filterComplexValues}
-              onChange={onFilterComplexChange}
+              onChange={(v) => {
+                console.log("ONCHANGE", v)
+                onFilterComplexChange(v)
+              }}
+              errorComplexFilter={errorComplexFilter}
             />
           </TabPanel>
         </TabPanels>

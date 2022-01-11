@@ -14,8 +14,6 @@ export const ProjectsFilterModal = ({
   onFilter,
   filterValues,
   setFilterValues,
-  filterComplexValues,
-  setFilterComplexValues,
   ...props
 }) => {
   const [showSecondaryContent, setShowSecondaryContent] = useState(false)
@@ -32,13 +30,16 @@ export const ProjectsFilterModal = ({
     tag_project: [{ label: "", value: "" }]
   }
 
-  const { getProjectHelps } = useHelpApi()
-  const { getProjectTags } = useTagApi()
+  const [filterComplexValues, setFilterComplexValues] = useState(null)
   const [usedProjectTags, setUsedProjectTags] = useState([])
   const [projectCriteria, setProjectCriteria] = useState([])
   const [filterMetadata, setfilterMetadata] = useState(null)
   const [isUpdateFilter, setIsUpdateFilter] = useState(false)
   const [changeValueFilter, setChangeValueFilter] = useState(false)
+  const [errorComplexFilter, setErrorComplexFilter] = useState(false)
+
+  const { getProjectHelps } = useHelpApi()
+  const { getProjectTags } = useTagApi()
 
   const handleOnReset = () => {
     setFilterValues(initialValues)
@@ -46,11 +47,16 @@ export const ProjectsFilterModal = ({
   }
 
   const handleOnFilter = () => {
+    setErrorComplexFilter(null)
+
     if (filterComplexValues) {
       const query = parseComplexQuery(filterComplexValues, COMPLEX_OBJECT.PROJECTS)
+      if (query.error) {
+        setErrorComplexFilter(query.error)
+      }
       onFilter(query, "complex")
     } else {
-      onFilter()
+      onFilter(filterValues)
       // setFilterValues(initialValues)
     }
   }
@@ -142,7 +148,14 @@ export const ProjectsFilterModal = ({
               setTab={setTab}
               onEdit={handleEditFilter}
               filterComplexValues={filterComplexValues}
-              onFilterComplexChange={(val) => setFilterComplexValues(val)}
+              onFilterComplexChange={(val) => {
+                console.log("onfiltercomplexchange", val)
+                if (errorComplexFilter) {
+                  setErrorComplexFilter(null)
+                }
+                setFilterComplexValues(val)
+              }}
+              errorComplexFilter={errorComplexFilter}
             />
           )}
         </ScaleFade>
