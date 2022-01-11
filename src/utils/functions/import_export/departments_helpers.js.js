@@ -15,11 +15,12 @@ export const departmentDataTransform = (data) => {
 
 export const transformDepartmentsToExport = (data) => {
   const _data = data.map((department) => {
-    const { _id, users, name } = department
+    const { _id, ref, users, name } = department
     return {
-      _id,
-      name,
-      users: users && users.map((us) => us.alias)
+      "ID DB": _id,
+      "ID VTI": ref,
+      Nombre: name,
+      Usuarios: users && users.map((us) => us.alias).join(", ")
     }
   })
   return _data

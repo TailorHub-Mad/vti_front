@@ -122,17 +122,22 @@ const tags = () => {
 
   // Handlers CRUD
   const handleImportTags = async (data) => {
-    try {
-      const func = isProjectTag ? createProjectTag : createNoteTag
-      for (let index = 0; index < data.length; index++) {
-        await func(data[index])
+    const func = isProjectTag ? createProjectTag : createNoteTag
+    for (let index = 0; index < data.length; index++) {
+      const tag = await func(data[index])
+      if (tag.error) {
+        showToast({
+          message: `Ha habido un error en la fila ${
+            index + 2
+          }. La importación se ha cancelado a partir de esta fila.`,
+          time: 5000
+        })
+        return
       }
-
-      setShowImportModal(false)
-      showToast({ message: "Tags importadas correctamente" })
-    } catch (error) {
-      errorHandler(error)
     }
+
+    setShowImportModal(false)
+    showToast({ message: "Tags importadas correctamente" })
   }
 
   const handleExportTags = () => {

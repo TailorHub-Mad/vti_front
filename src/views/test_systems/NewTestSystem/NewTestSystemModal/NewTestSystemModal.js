@@ -111,12 +111,9 @@ export const NewTestSystemModal = ({ isOpen, onClose, systemToUpdate }) => {
 
   useEffect(() => {
     if (!systemToUpdate) return
-    const {
-      vtiCode,
-      clientAlias,
-      alias,
-      date: { year }
-    } = systemToUpdate
+    const { vtiCode, clientAlias, alias } = systemToUpdate
+
+    const year = systemToUpdate?.date?.year || ""
     setValues([{ vtiCode, clientAlias, alias, year }])
   }, [systemToUpdate])
 

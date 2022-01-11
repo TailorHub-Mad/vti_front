@@ -20,7 +20,7 @@ export const groupTable = (users) => {
 
 export const transformUserData = (user) => ({
   selector: "",
-  id: { label: user.ref, value: user._id, link: `${PATHS.users}/${user._id}` },
+  id: { label: user.ref, value: user._id, link: `${PATHS.users}/${user.alias}` },
   alias: user.alias,
   fullName: user.name,
   email: user.email,

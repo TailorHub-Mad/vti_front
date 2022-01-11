@@ -70,7 +70,6 @@ export const NotesFilterModal = ({
 
   const handleOnFilter = () => {
     setErrorComplexFilter(null)
-
     if (filterComplexValues) {
       const query = parseComplexQuery(filterComplexValues, COMPLEX_OBJECT.NOTES)
       if (query.error) {
