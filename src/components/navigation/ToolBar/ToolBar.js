@@ -149,9 +149,9 @@ export const ToolBar = ({
 
             {noGroup || (
               <Group
-                onGroup={() => {
+                onGroup={(op) => {
                   setMenuMobile(false)
-                  handleOnGroup()
+                  handleOnGroup(op)
                 }}
                 options={groupOptions}
                 active={fetchState === fetchType.GROUP || queryGroup}

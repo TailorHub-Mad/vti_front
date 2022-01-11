@@ -1,4 +1,11 @@
-import { Box, Button, Modal, ModalOverlay } from "@chakra-ui/react"
+import {
+  Box,
+  Button,
+  Flex,
+  Modal,
+  ModalOverlay,
+  useMediaQuery
+} from "@chakra-ui/react"
 import React, { useEffect, useState } from "react"
 import { MOCK_YEAR_OPTIONS } from "../../../../mock/mock"
 import { FormController } from "../../../../components/forms/FormItemWrapper/FormController"
@@ -22,6 +29,8 @@ export const ProjectSupportModal = ({
   isOpen,
   ...props
 }) => {
+  const [isScreen] = useMediaQuery("(min-width: 475px)")
+
   const { getProjectHelps } = useHelpApi()
   const { getProjectTags } = useTagApi()
   const { getProjects, getFilterProjects } = useProjectApi()
@@ -29,6 +38,7 @@ export const ProjectSupportModal = ({
   const { getSystems } = useSystemApi()
 
   const [showTagSupportModal, setShowTagSupportModal] = useState(false)
+  const [showProjectList, setShowProjectList] = useState(false)
 
   const [clientOptions, setClientOptions] = useState([])
   const [systemOptions, setSystemOptions] = useState([])
@@ -155,122 +165,262 @@ export const ProjectSupportModal = ({
   }, [values])
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={() => {
-        setValues({})
-        fetchProjects()
-        onClose()
-      }}
-    >
-      <ModalOverlay zIndex="10002" />
-      <CustomModalContent
-        display="flex"
-        bgColor="transparent"
-        justifyContent="center"
-        pt="50px"
-        flexDirection="row"
-        boxShadow="none"
-        zIndex="10005"
+    <>
+      <Modal
+        isOpen={isScreen && isOpen}
+        onClose={() => {
+          setValues({})
+          fetchProjects()
+          onClose()
+        }}
       >
-        <Box
-          w={["100%", null, null, "460px"]}
-          height="fit-content"
-          position={["absolute", null, null, "relative"]}
-          left={["0", null, null, null]}
-          right={["0", null, null, null]}
-          top={["0", null, null, null]}
-          transition={[null, null, null, "left 0.18s ease-in-out"]}
-          bgColor="white"
-          padding="32px"
+        <ModalOverlay zIndex="10002" />
+        <CustomModalContent
+          display="flex"
+          bgColor="transparent"
+          justifyContent="center"
+          pt="50px"
+          flexDirection="row"
+          boxShadow="none"
           zIndex="10005"
-          {...props}
         >
-          <CustomModalHeader
-            title="Apoyo búsqueda de proyecto"
-            onClose={() => {
-              setValues({})
-              fetchProjects()
-              onClose()
-            }}
-          />
-          <Box paddingTop="32px">
-            <InputSelect
-              options={systemOptions}
-              name="test_system"
-              label="Sistema de ensayo"
-              placeholder="AliasSE"
-              marginBottom="32px"
-              onChange={(val) => handleFormChange("test_system", val)}
-              value={values?.test_system}
-            />
-            <InputSelect
-              name="client"
-              options={clientOptions}
-              label="Cliente"
-              placeholder="AliasCL"
-              marginBottom="32px"
-              onChange={(val) => handleFormChange("client", val)}
-              value={values?.client}
-            />
-            <MultiTagSelect
-              options={tagsOptions}
-              name="tag_project"
-              label="Tag de proyecto"
-              placeholder="Seleccione"
-              marginBottom="32px"
-              helper="Abrir ventana de apoyo"
-              onHelperClick={() => setShowTagSupportModal(true)}
-              onChange={(val) => handleFormChange("tag_project", val)}
-              value={values?.tag_project}
-            />
-            <FormController label="Año de creación" marginBottom="32px">
-              <InputSelect
-                options={MOCK_YEAR_OPTIONS}
-                name="year"
-                placeholder="Año"
-                marginBottom="32px"
-                onChange={(val) => handleFormChange("year", val)}
-                value={values?.year}
-              />
-            </FormController>
-            <Button
-              margin="0 auto"
-              display="block"
-              disabled={!selectedProject}
-              onClick={handleSubmit}
-            >
-              Aplicar proyecto
-            </Button>
-          </Box>
-        </Box>
-        {showTagSupportModal ? (
-          <SupportModal
+          <Box
+            w={["100%", null, null, "460px"]}
+            height="fit-content"
+            position={["absolute", null, null, "relative"]}
+            left={["0", null, null, null]}
+            right={["0", null, null, null]}
+            top={["0", null, null, null]}
+            transition={[null, null, null, "left 0.18s ease-in-out"]}
+            bgColor="white"
+            padding="32px"
             zIndex="10005"
-            onClose={() => setShowTagSupportModal(false)}
-            usedTags={usedProjectTags}
-            criteria={projectCriteria}
-            onTagsSelect={(tags) => handleTagSelect(tags, true)}
-            selectedTags={values?.tag_project?.map((t) => t.label) || []}
-            position="relative"
-            top="auto"
-            left="auto"
-            right="auto"
-            ml="50px"
-            sx={{
-              ">div:first-of-type": {
-                boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)"
+            {...props}
+          >
+            <CustomModalHeader
+              title="Apoyo búsqueda de proyecto"
+              onClose={() => {
+                setValues({})
+                fetchProjects()
+                onClose()
+              }}
+            />
+            <Box paddingTop="32px">
+              <InputSelect
+                options={systemOptions}
+                name="test_system"
+                label="Sistema de ensayo"
+                placeholder="AliasSE"
+                marginBottom="32px"
+                onChange={(val) => handleFormChange("test_system", val)}
+                value={values?.test_system}
+              />
+              <InputSelect
+                name="client"
+                options={clientOptions}
+                label="Cliente"
+                placeholder="AliasCL"
+                marginBottom="32px"
+                onChange={(val) => handleFormChange("client", val)}
+                value={values?.client}
+              />
+              <MultiTagSelect
+                options={tagsOptions}
+                name="tag_project"
+                label="Tag de proyecto"
+                placeholder="Seleccione"
+                marginBottom="32px"
+                helper="Abrir ventana de apoyo"
+                onHelperClick={() => setShowTagSupportModal(true)}
+                onChange={(val) => handleFormChange("tag_project", val)}
+                value={values?.tag_project}
+              />
+              <FormController label="Año de creación" marginBottom="32px">
+                <InputSelect
+                  options={MOCK_YEAR_OPTIONS}
+                  name="year"
+                  placeholder="Año"
+                  marginBottom="32px"
+                  onChange={(val) => handleFormChange("year", val)}
+                  value={values?.year}
+                />
+              </FormController>
+              <Button
+                margin="0 auto"
+                display="block"
+                disabled={!selectedProject}
+                onClick={handleSubmit}
+              >
+                Aplicar proyecto
+              </Button>
+            </Box>
+          </Box>
+          {showTagSupportModal ? (
+            <SupportModal
+              zIndex="10005"
+              onClose={() => setShowTagSupportModal(false)}
+              usedTags={usedProjectTags}
+              criteria={projectCriteria}
+              onTagsSelect={(tags) => handleTagSelect(tags, true)}
+              selectedTags={values?.tag_project?.map((t) => t.label) || []}
+              position="relative"
+              top="auto"
+              left="auto"
+              right="auto"
+              ml="50px"
+              sx={{
+                ">div:first-of-type": {
+                  boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)"
+                }
+              }}
+            />
+          ) : (
+            <ProjectListModal
+              projects={projects}
+              onSelectProject={handleProjectSelect}
+              selectedProject={selectedProject}
+            />
+          )}
+        </CustomModalContent>
+      </Modal>
+      <Modal
+        isOpen={!isScreen && isOpen}
+        onClose={() => {
+          setValues({})
+          fetchProjects()
+          onClose()
+        }}
+      >
+        <ModalOverlay zIndex="10002" />
+        <CustomModalContent
+          display="flex"
+          bgColor="transparent"
+          justifyContent="center"
+          pt="0"
+          flexDirection="row"
+          boxShadow="none"
+          zIndex="10005"
+        >
+          <Box
+            w="100%"
+            height="100vh"
+            position="absolute"
+            left="0"
+            top="0"
+            bgColor="white"
+            padding="16px"
+            zIndex="10005"
+            {...props}
+          >
+            <CustomModalHeader
+              title="Apoyo búsqueda de proyecto"
+              onClose={() => {
+                setValues({})
+                fetchProjects()
+                onClose()
+              }}
+            />
+            <Box paddingTop="32px">
+              <InputSelect
+                options={systemOptions}
+                name="test_system"
+                label="Sistema de ensayo"
+                placeholder="AliasSE"
+                marginBottom="32px"
+                onChange={(val) => handleFormChange("test_system", val)}
+                value={values?.test_system}
+              />
+              <InputSelect
+                name="client"
+                options={clientOptions}
+                label="Cliente"
+                placeholder="AliasCL"
+                marginBottom="32px"
+                onChange={(val) => handleFormChange("client", val)}
+                value={values?.client}
+              />
+              <MultiTagSelect
+                options={tagsOptions}
+                name="tag_project"
+                label="Tag de proyecto"
+                placeholder="Seleccione"
+                marginBottom="32px"
+                helper="Abrir ventana de apoyo"
+                onHelperClick={() => setShowTagSupportModal(true)}
+                onChange={(val) => handleFormChange("tag_project", val)}
+                value={values?.tag_project}
+              />
+              <FormController label="Año de creación" marginBottom="32px">
+                <InputSelect
+                  options={MOCK_YEAR_OPTIONS}
+                  name="year"
+                  placeholder="Año"
+                  marginBottom="32px"
+                  onChange={(val) => handleFormChange("year", val)}
+                  value={values?.year}
+                />
+              </FormController>
+            </Box>
+          </Box>
+          <Flex
+            position="fixed"
+            zIndex="10010"
+            bottom="0"
+            left="0"
+            right="0"
+            margin="0 auto"
+            w="100vw"
+            h="68px"
+            justifyContent="center"
+            align="center"
+            bgColor="white"
+            boxShadow="0px -4px 8px rgba(5, 46, 87, 0.1)"
+          >
+            <Button
+              disabled={showProjectList && !selectedProject}
+              onClick={() =>
+                showProjectList ? handleSubmit() : setShowProjectList(true)
               }
-            }}
-          />
-        ) : (
-          <ProjectListModal
-            projects={projects}
-            onSelectProject={handleProjectSelect}
-            selectedProject={selectedProject}
-          />
-        )}
-      </CustomModalContent>
-    </Modal>
+            >
+              {showProjectList ? "Aplicar Proyecto" : "Aplicar Búsqueda"}
+            </Button>
+          </Flex>
+
+          {!isScreen && showTagSupportModal ? (
+            <SupportModal
+              zIndex="10005"
+              onClose={() => setShowTagSupportModal(false)}
+              usedTags={usedProjectTags}
+              criteria={projectCriteria}
+              onTagsSelect={(tags) => handleTagSelect(tags, true)}
+              selectedTags={values?.tag_project?.map((t) => t.label) || []}
+              sx={{
+                ">div:first-of-type": {
+                  boxShadow: "0px 0px 8px rgba(5, 46, 87, 0.1)"
+                }
+              }}
+            />
+          ) : null}
+
+          {!isScreen && showProjectList && (
+            <ProjectListModal
+              projects={projects}
+              onSelectProject={(pr) => {
+                handleProjectSelect(pr)
+              }}
+              selectedProject={selectedProject}
+              zIndex="10006"
+              w="100vw"
+              h="100vh"
+              top="0"
+              left="0"
+              m="0"
+              p="0"
+              headerConfig={{ onClose: () => setShowProjectList(false) }}
+            />
+          )}
+        </CustomModalContent>
+      </Modal>
+    </>
   )
 }
