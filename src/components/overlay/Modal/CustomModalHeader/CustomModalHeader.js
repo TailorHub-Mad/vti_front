@@ -11,7 +11,7 @@ export const CustomModalHeader = ({ onClose, title, ...props }) => {
       align="center"
       height="33px"
       {...props}
-      mt={["32px", null, null, "0"]}
+      mt={["0", null, null, "0"]}
       mb={["24px", null, null, "0"]}
     >
       <Text variant={isScreen ? "d_l_medium" : "d_m_medium"}>{title}</Text>

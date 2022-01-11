@@ -106,12 +106,12 @@ export const TABLE_PROJECTS_HEAD = {
 export const TABLE_PROJECTS_HEAD_USER = {
   selector: {
     label: "",
-    width: calcColWidth(30),
+    width: calcColWidth(10),
     type: "selector"
   },
   id: {
     label: "ID",
-    width: calcColWidth(40),
+    width: calcColWidth(45),
     type: "link",
     config: { sort: true, name: "ref" }
   },
@@ -123,13 +123,13 @@ export const TABLE_PROJECTS_HEAD_USER = {
   },
   sector: {
     label: "Sector",
-    width: calcColWidth(50),
+    width: calcColWidth(60),
     type: "text",
     config: { sort: true, name: "sector" }
   },
   focusPoint: {
     label: "Punto Focal",
-    width: calcColWidth(50),
+    width: calcColWidth(55),
     type: "text",
     config: { sort: true, name: "focusPoint" }
   },

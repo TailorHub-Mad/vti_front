@@ -64,7 +64,7 @@ export const SupportModal = ({
       right={["0", null, null, "calc(50vw - 620px)"]}
       left={["0", null, null, "auto"]}
       bgColor="transparent"
-      zIndex="3000"
+      zIndex="10008"
       mb={["0", null, null, "200px"]}
       pb={["0", null, null, "200px"]}
       {...props}
