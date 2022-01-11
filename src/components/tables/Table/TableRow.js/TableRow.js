@@ -46,7 +46,7 @@ export const TableRow = ({
         // TEXT
         if (head[name]?.type === "text") {
           return React.cloneElement(components[head[name]?.type], {
-            children: element.label || element?.toString(),
+            children: element?.label || element?.toString(),
             // textOverflow: "ellipsis",
             // whiteSpace: "nowrap",
             // overflow: "hidden",
