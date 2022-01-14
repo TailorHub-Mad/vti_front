@@ -37,7 +37,7 @@ export const TagCard = ({ tag, onEdit, onDelete, isProjectTag }) => {
       <TagCardTags items={handleItemTags()} relatedTags={tag?.relatedTags} />
       <Flex justify="space-between">
         <Text variant="d_xs_regular" color="grey">
-          ID
+          {tag?.ref || "ID"}
         </Text>
         <Text variant="d_xs_regular" color="grey">{`últ. actualización ${new Date(
           tag?.updatedAt
