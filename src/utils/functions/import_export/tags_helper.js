@@ -22,9 +22,10 @@ export const tagDataTransform = (data) => {
 export const transformTagsToExport = (data) => {
   const _data = data.map((tag) => {
     //Pendientes de la REF de apuntes y proyectos del back
-    const { id, name, parent, notes, projects, relatedTags } = tag
+    const { id, name, ref, parent, notes, projects, relatedTags } = tag
     const obj = {
       "ID DB": id,
+      "ID VTI": ref,
       Nombre: name,
       Padre: parent && parent?.name,
       "Tags relacionados": relatedTags.map((rt) => rt.name).join(", ")
