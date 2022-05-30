@@ -30,7 +30,7 @@ import { generateFilterQuery } from "../../utils/functions/filter"
 import { TagsFilterModal } from "../../views/tags/TagsFilter/TagsFilterModal"
 import { TAGS_FILTER_KEYS } from "../../utils/constants/filter"
 import { fetchOption, fetchType } from "../../utils/constants/swr"
-import { ViewNotFoundState } from "../../views/common/ViewNotFoundState"
+import { ViewEmptyState } from "../../views/common/ViewEmptyState"
 
 const infoByType = {
   proyecto: {
@@ -39,7 +39,8 @@ const infoByType = {
     editSuccessMsg: "Editado correctamente",
     editTitle: "Editar tag e proyecto",
     addSuccessMsg: "¡Has añadido nuevo/s tag de proyecto/s!",
-    fetchKey: "projects"
+    fetchKey: "projects",
+    empty: "Añade tags de proyecto a la plataforma"
   },
   apunte: {
     title: "Tags de apunte",
@@ -47,7 +48,8 @@ const infoByType = {
     editSuccessMsg: "Editado correctamente",
     editTitle: "Editar tag de apunte",
     addSuccessMsg: "¡Has añadido nuevo/s tag de apunte/s!",
-    fetchKey: "notes"
+    fetchKey: "notes",
+    empty: "Añade tags de apunte a la plataforma"
   }
 }
 
@@ -272,7 +274,13 @@ const tags = () => {
       {isLoading ? (
         <LoadingView mt="-200px" />
       ) : isEmptyData && !isValidating ? (
-        <ViewNotFoundState text="No hya tags creados" />
+        <ViewEmptyState
+          message={infoByType[router?.query?.type].empty}
+          importButtonText="Importar"
+          addButtonText={infoByType[router?.query?.type].addTitle}
+          onImport={() => setShowImportModal(true)}
+          onAdd={() => setIsTagModalOpen(true)}
+        />
       ) : (
         <PageBody
           p={["16px", null, null, "32px"]}
