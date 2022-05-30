@@ -24,16 +24,19 @@ export const testSystemDataTransform = (data) => {
 
 export const transformTestSystemsToExport = (data) => {
   const _data = data.map((testSystem) => {
-    const { _id, ref, alias, clientAlias, vtiCode, date, projects, notes } = testSystem
+    const { _id, ref, alias, clientAlias, vtiCode, date, projects, notes } =
+      testSystem
     return {
       "ID DB": _id,
       "ID VTI": ref,
-      "Alias": alias,
-      "Cliente": clientAlias,
+      Alias: alias,
+      Cliente: clientAlias,
       "Código VTI": vtiCode,
-      "Año": date?.year,
+      Año: date?.year,
       "Proyectos asociados al sistema": projects.map((pr) => pr.alias).join(", "),
-      "Apuntes asociados al sistema": notes?.map((note) => note.ref ? note.ref : "").join(", ")
+      "Apuntes asociados al sistema": notes
+        ?.map((note) => (note.ref ? note.ref : ""))
+        .join(", ")
     }
   })
   return _data

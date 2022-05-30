@@ -222,7 +222,6 @@ export const MainFilter = ({
               criteria={criteria}
               filterComplexValues={filterComplexValues}
               onChange={(v) => {
-                console.log("ONCHANGE", v)
                 onFilterComplexChange(v)
               }}
               errorComplexFilter={errorComplexFilter}

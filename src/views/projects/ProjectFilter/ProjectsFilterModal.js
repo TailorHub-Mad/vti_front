@@ -149,7 +149,6 @@ export const ProjectsFilterModal = ({
               onEdit={handleEditFilter}
               filterComplexValues={filterComplexValues}
               onFilterComplexChange={(val) => {
-                console.log("onfiltercomplexchange", val)
                 if (errorComplexFilter) {
                   setErrorComplexFilter(null)
                 }

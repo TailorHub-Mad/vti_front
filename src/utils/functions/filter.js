@@ -129,12 +129,10 @@ export const parseComplexQuery = (expression, object) => {
   const queryConditionsCheck = ["(", ")", "&", "||", SENTENCE_REGEX]
 
   const error = queryConditionsCheck.reduce((str, condition) => {
-    console.log(str)
     return str.replaceAll(condition, "")
   }, expression)
 
   if (error) {
-    console.log(error)
     return { error: `Revisa esta sentencia: ${error}` }
   }
 
@@ -212,7 +210,6 @@ export const parseComplexQuery = (expression, object) => {
       parseQuery = parseQuery.replaceAll("Vticode", "testSystems.vtiCode")
       parseQuery = parseQuery.replaceAll("AliasCl", "testSystems.clientAlias")
     }
-    console.log("parse", parseQuery)
     return parseQuery
   } catch (error) {
     return {

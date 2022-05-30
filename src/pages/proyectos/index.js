@@ -130,7 +130,9 @@ const proyectos = () => {
       const project = await createProject(data[index])
       if (project.error) {
         showToast({
-          message: `Ha habido un error en la fila ${index + 2}. La importación se ha cancelado a partir de esta fila.`,
+          message: `Ha habido un error en la fila ${
+            index + 2
+          }. La importación se ha cancelado a partir de esta fila.`,
           time: 5000
         })
         return
@@ -414,7 +416,6 @@ const proyectos = () => {
   }
 
   const handleOnFilter = (values, type) => {
-    console.log("hola", values, type)
     if (!values) {
       setQueryFilter(null)
 

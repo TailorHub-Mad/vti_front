@@ -1,4 +1,3 @@
-
 export const noteChecker = () => {}
 
 export const noteDataTransform = (data) => {
@@ -65,7 +64,9 @@ export const transformNotesToExport = (data) => {
       Abierto: isClosed ? "Si" : "No",
       Formalizado: formalized ? "Si" : "No",
       Mensajes: messages.map(
-        (msg) => msg.message && `
+        (msg) =>
+          msg.message &&
+          `
       Autor: ${msg.owner[0]?.name} 
       Mensaje: ${msg.message}
       ${

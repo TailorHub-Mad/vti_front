@@ -32,7 +32,8 @@ const user = () => {
   const projectsData = data && !isEmptyData ? data[0].projects : null
 
   // const user = projectsData && projectsData[0].users?.find((t) => t._id === userId)
-  const user = projectsData && projectsData[0].users?.find((t) => t.alias === userAlias)
+  const user =
+    projectsData && projectsData[0].users?.find((t) => t.alias === userAlias)
 
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
