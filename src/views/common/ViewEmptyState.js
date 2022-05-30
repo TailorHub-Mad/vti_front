@@ -29,11 +29,13 @@ export const ViewEmptyState = ({
           <Button
             display="flex"
             justifyContent="flex-start"
+            alignItems={"center"}
             leftIcon={<UploadCloudIcon />}
             variant="secondary"
             mb="16px"
             onClick={onImport}
-            w="auto"
+            w="100%"
+            maxWidth={"248px"}
             p="20px"
           >
             {importButtonText || "Importar"}
@@ -46,6 +48,7 @@ export const ViewEmptyState = ({
           leftIcon={<AddNoteIcon />}
           onClick={onAdd}
           w="auto"
+          maxWidth={"248px"}
           p="20px"
         >
           {addButtonText || "Añadir"}
