@@ -26,11 +26,11 @@ export const transformUsersToExport = (data) => {
     return {
       "ID DB": _id,
       "ID VTI": ref,
-      "Alias":alias,
-      "Departamento": department && department.name,
-      "Nombre":name,
-      "Email": email,
-      "Proyectos donde es punto focal": focusPoint.join(", "),
+      Alias: alias,
+      Departamento: department && department.name,
+      Nombre: name,
+      Email: email,
+      "Proyectos donde es punto focal": focusPoint.join(", ")
     }
   })
   return _data

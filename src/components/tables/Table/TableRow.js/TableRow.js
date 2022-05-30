@@ -86,7 +86,7 @@ export const TableRow = ({
             React.cloneElement(components[head[name]?.type], {
               isChecked: isSelected,
               onChange: onRowSelect,
-              key: `${name}-${idx}`,
+              key: `${name}-${idx}`
             })
           ) : (
             <TableIcon

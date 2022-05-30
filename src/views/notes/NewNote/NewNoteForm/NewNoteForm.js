@@ -60,7 +60,7 @@ export const NewNoteForm = ({
         label: "Selecciona el proyecto*",
         options: projectOptions,
         isDisabled: Boolean(noteToUpdate) || Boolean(noteFromProject),
-        helper: "Abrir ventana de apoyo" ,
+        helper: "Abrir ventana de apoyo",
         onHelperClick: () => openProjectSearchModal()
       }
     },

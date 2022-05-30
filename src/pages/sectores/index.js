@@ -68,21 +68,21 @@ const sectores = () => {
   }
 
   const handleImportSectors = async (data) => {
-      for (let index = 0; index < data.length; index++) {
-        const sector = await createSector([data[index]])
-        if (sector.error) {
-          showToast({
-            message: `Ha habido un error en la fila ${
-              index + 2
-            }. La importación se ha cancelado a partir de esta fila.`,
-            time: 5000
-          })
-          return
-        }
+    for (let index = 0; index < data.length; index++) {
+      const sector = await createSector([data[index]])
+      if (sector.error) {
+        showToast({
+          message: `Ha habido un error en la fila ${
+            index + 2
+          }. La importación se ha cancelado a partir de esta fila.`,
+          time: 5000
+        })
+        return
       }
+    }
 
-      setShowImportModal(false)
-      showToast({ message: "Sectores importados correctamente" })
+    setShowImportModal(false)
+    showToast({ message: "Sectores importados correctamente" })
   }
 
   const handleExportSectors = () => {

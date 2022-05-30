@@ -7,8 +7,7 @@ export const Checkbox = {
         border: "2px solid #C4C4C4"
       }
     },
-    label: {
-    },
+    label: {},
     outline: "none",
     _disabled: {
       borderRadius: "50% !important",
@@ -23,7 +22,7 @@ export const Checkbox = {
       },
       label: {
         fontSize: "14px",
-        lineHeight: "normal",
+        lineHeight: "normal"
       }
     },
     multi: {

@@ -55,7 +55,11 @@ export const ProjectListModal = ({
       pb="200px"
       {...props}
     >
-      <Box bgColor="white" padding={["16px", "16px", "32px", "32px"]} h={["100vh","100vh","auto","auto"]}>
+      <Box
+        bgColor="white"
+        padding={["16px", "16px", "32px", "32px"]}
+        h={["100vh", "100vh", "auto", "auto"]}
+      >
         <CustomModalHeader title="Proyectos" {...headerConfig} />
         <Flex direction="column" mt="24px">
           <Flex mb="24px" justify="space-between" align="center" w="100%">

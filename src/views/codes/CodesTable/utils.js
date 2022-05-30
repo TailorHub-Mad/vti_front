@@ -24,7 +24,7 @@ export const TABLE_CODES_HEAD = {
     label: "ID",
     width: calcColWidth(80),
     type: "text",
-    config: { sort: true, name: "ref"}
+    config: { sort: true, name: "ref" }
   },
   name: {
     label: "Nombre",
