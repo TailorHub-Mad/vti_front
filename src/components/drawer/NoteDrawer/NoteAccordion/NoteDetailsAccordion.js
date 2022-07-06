@@ -1,7 +1,6 @@
 import { Accordion, Button, Text } from "@chakra-ui/react"
 import { useRouter } from "next/router"
 import React from "react"
-import useNoteApi from "../../../../hooks/api/useNoteApi"
 import { PATHS } from "../../../../utils/constants/global"
 import { formatTags, variantGeneralTag } from "../../../../utils/constants/tabs"
 import { downloadFile } from "../../../../utils/functions/files"
@@ -28,13 +27,9 @@ export const NoteDetailsAccordion = ({
   ...props
 }) => {
   const router = useRouter()
-  const { downloadDocument, downloadMessageDocument } = useNoteApi()
 
   const handleOnClick = async (id, name) => {
-    const response = isMessage
-      ? await downloadMessageDocument(id)
-      : await downloadDocument(id)
-    downloadFile(response, name)
+    await downloadFile(name, id)
   }
 
   const getActiveIndex = () => {

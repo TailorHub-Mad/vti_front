@@ -45,7 +45,6 @@ export const NewNoteForm = ({
   const handleFormChange = (input, _value) => {
     if (input === "project" && !noteToUpdate) setIsReset(true)
     else if (isReset) setIsReset(false)
-
     onChange({
       ...value,
       [input]: _value
@@ -149,10 +148,11 @@ export const NewNoteForm = ({
   useEffect(() => {
     if (!noteToUpdate || systemOptions.length === 0) return
     const _systemsFormat = noteToUpdate?.testSystems.map((s) => s.alias)
-    const systems = systemOptions.filter((_system) =>
+    let systems = systemOptions.filter((_system) =>
       _systemsFormat.includes(_system.label)
     )
-    if (systems.length === 0) return
+
+    if (systems.length === 0) systems = [{ label: "NINGUNO", value: [] }]
     handleFormChange("testSystems", systems)
   }, [noteToUpdate, systemOptions])
 
