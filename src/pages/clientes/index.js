@@ -118,7 +118,9 @@ const clientes = () => {
   const handleDeleteFunction = async () => {
     const f = deleteType === DeleteType.ONE ? deleteOne : deleteMany
     const updated = await f(clientsToDelete, clientsData)
-    updated.length > 0 ? await mutate(updated, false) : await mutate()
+    if (updated) {
+      updated.length > 0 ? await mutate(updated, false) : await mutate()
+    }
     setDeleteType(null)
     setClientsToDelete(null)
   }
@@ -129,6 +131,10 @@ const clientes = () => {
       showToast({ message: "Cliente borrado correctamente" })
       return clients.filter((client) => client._id !== id)
     } catch (error) {
+      showToast({
+        message:
+          "El cliente no puede ser borrado. Tiene sistemas de ensayo asociacos."
+      })
       errorHandler(error)
     }
   }
@@ -136,8 +142,25 @@ const clientes = () => {
   const deleteMany = async (clientsId, clients) => {
     try {
       const clientsQueue = clientsId.map((id) => deleteClient(id))
-      await Promise.all(clientsQueue)
-      showToast({ message: "Clientes borrados correctamente" })
+      const errors = []
+      const results = await Promise.allSettled(clientsQueue)
+      results.forEach((result) => {
+        if (result.status === "rejected") {
+          errors.push(result.reason)
+        }
+      })
+      if (errors.length > 0) {
+        const clientsNotDelete = errors.map((error) => {
+          return error.config.url.split("/clients/")[1]
+        })
+        clientsId = clientsId.filter((id) => !clientsNotDelete.includes(id))
+        showToast({
+          message:
+            "Alguno de los clientos tiene sistema de ensayo y no se han eliminado."
+        })
+      } else {
+        showToast({ message: "Clientes borrados correctamente" })
+      }
       return clients.filter((client) => !clientsId.includes(client._id))
     } catch (error) {
       errorHandler(error)
