@@ -85,6 +85,7 @@ export const NewTagModal = ({
       setIsSubmitting(false)
       onClose()
     } catch (error) {
+      console.error(error)
       showToast({
         message: "Ha ocorrido un error. No puede haber dos tags con el mismo nombre."
       })
@@ -109,10 +110,11 @@ export const NewTagModal = ({
     const [data] = formatTags(values)
     const func = isProjectTag ? updateProjectTag : updateNoteTag
     const response = await func(_id, data)
-
-    response.forEach(({ error }) => {
-      if (error) throw error
-    })
+    if (Array.isArray(response)) {
+      response.forEach(({ error }) => {
+        if (error) throw error
+      })
+    }
   }
 
   const handleOnClose = () => {
