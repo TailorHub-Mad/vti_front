@@ -8,7 +8,7 @@ export const DeleteType = {
   MANY: "deleteMany"
 }
 
-export const TOAST_DEFAULT_TIME = 2000
+export const TOAST_DEFAULT_TIME = 5000
 
 export const PATHS = {
   root: "/",
