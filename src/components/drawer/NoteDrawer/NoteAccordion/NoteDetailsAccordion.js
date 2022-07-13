@@ -29,7 +29,7 @@ export const NoteDetailsAccordion = ({
   const router = useRouter()
 
   const handleOnClick = async (id, name) => {
-    await downloadFile(name, id)
+    await downloadFile(name, id, isMessage)
   }
 
   const getActiveIndex = () => {
