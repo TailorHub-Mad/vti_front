@@ -1,13 +1,16 @@
 import axios from "axios"
 import { getSessioncookie } from "./cookies"
 
-export const downloadFile = (name, id) => {
+export const downloadFile = (name, id, isMessage) => {
+  const downloadRoute = isMessage
+    ? `/notes/message/download/${id}`
+    : `/notes/download/${id}`
   const { vti } = getSessioncookie()
   const config = {
     headers: { Authorization: `Bearer ${vti}` }
   }
   return axios({
-    url: `http://localhost:3001/api/notes/download/${id}`,
+    url: `${process.env.NEXT_PUBLIC_API_URL}${downloadRoute}`,
     method: "GET",
     responseType: "blob",
     ...config
