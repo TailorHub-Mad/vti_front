@@ -133,7 +133,7 @@ const clientes = () => {
     } catch (error) {
       showToast({
         message:
-          "El cliente no puede ser borrado. Tiene sistemas de ensayo asociacos."
+          "El cliente no puede ser borrado. Tiene sistemas de ensayo asociados."
       })
       errorHandler(error)
     }
