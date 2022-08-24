@@ -80,7 +80,7 @@ export const MessageCard = ({
         onFavorite={handleFavorite}
         onSubscribe={handleSubscribe}
         notesFromSubscription={notesFromSubscription}
-        isMyNote={isMyNote}
+        isMyNote={editAllowed || role === 'admin'}
       />
       <MessageCardInfo
         id={note?.ref}
