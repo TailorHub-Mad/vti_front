@@ -46,12 +46,15 @@ export const NoteMainInfo = ({
   const isMyMessage = ownerMessage === userId
   const isMyNote = ownerNote === userId
 
-  const updateLimitDate = isMyMessage ? item?.updateLimitDate : null
+  const updateLimitDate = isMyMessage ? new Date(item?.updateLimitDate) : null
+
+  // debugger;
+  // if (updateLimitDate) updateLimitDate.setHours(updateLimitDate.getHours() + 2)
 
   const editAllowed =
-    (isMyMessage && updateLimitDate
-      ? new Date() < new Date(updateLimitDate)
-      : null) || isAdmin
+    (isMyMessage && updateLimitDate ? new Date() < updateLimitDate : null) || isAdmin
+
+  console.log(editAllowed)
 
   const handleUpdateNote = async (action) => {
     switch (action) {
@@ -92,7 +95,6 @@ export const NoteMainInfo = ({
   useEffect(() => {
     setUserId(user?._id)
   }, [user])
-
   return (
     <>
       <Flex justify="space-between" h="16px">
@@ -180,14 +182,10 @@ export const NoteMainInfo = ({
             />
           ) : null}
 
-          {role === RoleType.ADMIN ? (
-            <ActionLink
-              onClick={onDelete}
-              color="error"
-              icon={<DeleteIcon />}
-              label="Eliminar"
-            />
-          ) : !isMessage && isMyNote && role === RoleType.USER && editAllowed ? (
+          {role === RoleType.ADMIN ||
+          (((!isMessage && isMyNote) || (isMessage && isMyMessage)) &&
+            role === RoleType.USER &&
+            editAllowed) ? (
             <ActionLink
               onClick={onDelete}
               color="error"
