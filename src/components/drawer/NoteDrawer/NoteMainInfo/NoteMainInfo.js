@@ -48,13 +48,9 @@ export const NoteMainInfo = ({
 
   const updateLimitDate = isMyMessage ? new Date(item?.updateLimitDate) : null
 
-  // debugger;
-  // if (updateLimitDate) updateLimitDate.setHours(updateLimitDate.getHours() + 2)
-
   const editAllowed =
     (isMyMessage && updateLimitDate ? new Date() < updateLimitDate : null) || isAdmin
 
-  console.log(editAllowed)
 
   const handleUpdateNote = async (action) => {
     switch (action) {
