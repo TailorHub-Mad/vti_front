@@ -17,7 +17,7 @@ import useProjectApi from "../../../hooks/api/useProjectApi"
 import useUserApi from "../../../hooks/api/useUserApi"
 import { ApiAuthContext } from "../../../provider/ApiAuthProvider"
 import { ToastContext } from "../../../provider/ToastProvider"
-import { DeleteType } from "../../../utils/constants/global"
+import { DeleteType, RoleType } from "../../../utils/constants/global"
 import { fetchOption, fetchType } from "../../../utils/constants/swr"
 import { SWR_CACHE_KEYS } from "../../../utils/constants/swr"
 import { errorHandler } from "../../../utils/errors"
@@ -62,7 +62,8 @@ export const ProjectsByObject = ({
   // Hooks
   const [isScreen] = useMediaQuery("(min-width: 475px)")
 
-  const { user } = useContext(ApiAuthContext)
+  const { user, role } = useContext(ApiAuthContext)
+  const isAdmin = role === RoleType.ADMIN
 
   const { deleteProject, createProject } = useProjectApi()
   const { showToast } = useContext(ToastContext)
@@ -353,7 +354,8 @@ export const ProjectsByObject = ({
             searchPlaceholder="Busqueda por ID, Alias"
             groupOptions={PROJECTS_GROUP_OPTIONS}
             icon={<AddProjectIcon />}
-            noImport
+            noAdd={!isAdmin}
+            noImport={!isAdmin}
           />
         ) : null}
       </PageHeader>
