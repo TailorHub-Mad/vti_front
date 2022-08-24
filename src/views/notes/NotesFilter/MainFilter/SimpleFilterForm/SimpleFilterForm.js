@@ -148,9 +148,9 @@ export const SimpleFilterForm = ({
     users: {
       type: "add_select",
       config: {
-        placeholder: "Usuario",
+        placeholder: "Autor",
         options: usersOpt,
-        label: "Usuarios",
+        label: "Autores",
         additemlabel: "Añadir ",
         removeitemlabel: "Eliminar "
       }
