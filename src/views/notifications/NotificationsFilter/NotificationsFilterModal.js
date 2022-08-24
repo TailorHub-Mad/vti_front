@@ -28,11 +28,11 @@ const options = [
   },
   {
     label: "Mensajes modificados",
-    value: "Mensajes modificados"
+    value: "Mensaje modificado"
   },
   {
     label: "Nuevo proyecto",
-    value: "Nuevo proyecto"
+    value: "Nuevo Proyecto"
   },
   {
     label: "Nuevo sistema de ensayo",
@@ -56,7 +56,7 @@ const options = [
   },
   {
     label: "Nueva suscripción",
-    value: "Nueva suscripción"
+    value: "Nueva subscripción"
   }
 ]
 
