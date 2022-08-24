@@ -93,17 +93,26 @@ const tags = () => {
   const isEmptyData = checkDataIsEmpty(data)
   const tagData = data && !isEmptyData ? data : []
 
-  const tagsByParent =
+  let tagsByParent =
     tagData &&
     tagData
-      .filter((tag) => tag?.relatedTags?.length === 0)
+      .filter((tag) => tag?.relatedTags?.length > 0)
       .reduce((ac, tag) => {
-        const parentName = tag?.parent?.name
+        const parentName = tag?.name
         if (parentName) {
-          ac[parentName] = ac[parentName] ? [...ac[parentName], tag] : [tag]
-        } else ac["zulu"] = ac["zulu"] ? [...ac["zulu"], tag] : [tag]
+          ac[parentName] = tag.relatedTags
+        }
         return ac
       }, {})
+  tagsByParent = {
+    ...tagData
+      .filter((tag) => !tag?.parent && tag.relatedTags?.length === 0)
+      .reduce((ac, tag) => {
+        ac["zulu"] = ac["zulu"] ? [...ac["zulu"], tag] : [tag]
+        return ac;
+      }, {}),
+    ...tagsByParent
+  }
 
   // Handlers views
   const isToolbarHidden = () => {
@@ -307,6 +316,7 @@ const tags = () => {
               >
                 {tagData
                   .filter((tag) => tag?.relatedTags?.length > 0)
+                  .sort((a, b) => a.name.localeCompare(b.name))
                   .map((tag) => (
                     <TagCard
                       onEdit={() => handleUpdate(tag)}
@@ -336,7 +346,7 @@ const tags = () => {
                     key={groupName}
                   >
                     {tags
-                      .sort((a, b) => a.name.localeCompare(b.name))
+                      // .sort((a, b) => a.name.localeCompare(b.name))
                       .map((tag) => (
                         <TagCard
                           onEdit={() => handleUpdate(tag)}
