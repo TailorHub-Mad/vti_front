@@ -54,7 +54,7 @@ export const MessageCardHeader = ({
           {title}
         </Text>
       </Flex>
-      {notesFromSubscription ? null : (
+      {(
         <Box position="relative" ref={ref}>
           <OptionsIcon
             cursor="pointer"
@@ -64,12 +64,14 @@ export const MessageCardHeader = ({
             onClick={() => setShowOptions(true)}
           />
           <OptionsMenu isOpen={showOptions} onClose={() => setShowOptions(false)}>
-            <OptionsMenuItem onClick={handleOnFavorite}>
-              <HeartIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
-              <Text variant="d_xs_regular" marginRight="2px">
-                {isFavorite ? "Eliminar favorito" : "Favorito"}
-              </Text>
-            </OptionsMenuItem>
+            {notesFromSubscription ? null : (
+              <OptionsMenuItem onClick={handleOnFavorite}>
+                <HeartIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
+                <Text variant="d_xs_regular" marginRight="2px">
+                  {isFavorite ? "Eliminar favorito" : "Favorito"}
+                </Text>
+              </OptionsMenuItem>
+            )}
 
             <OptionsMenuItem onClick={handleOnSubscribe} isLast={!isMyNote}>
               <SubscribeIcon

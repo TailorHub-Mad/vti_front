@@ -248,6 +248,33 @@ const suscripcion = () => {
     })
   }
 
+  const checkIsFavorite = (id) => user?.favorites?.notes?.includes(id)
+  const checkIsSubscribe = (id) => user?.subscribed?.notes?.includes(id)
+
+  const formatUpdateUsersSubscribed = (user, subscribed) => {
+    return {
+      alias: user.alias,
+      name: user.name,
+      subscribed,
+      department: user.department
+    }
+  }
+  const handleSubscribe = async (id, state) => {
+    const { subscribed, _id } = user
+    const { notes: subscribedNotes } = subscribed
+
+    if (state) {
+      remove(subscribedNotes, (e) => e === id)
+      subscribed.notes = subscribedNotes
+    } else {
+      subscribed.notes.push(id)
+    }
+
+    const formatUser = formatUpdateUsersSubscribed(user, subscribed)
+    await updateUser(_id, formatUser)
+    await mutate()
+  }
+
   if (!isLoggedIn) return null
   if (error) return errorHandler(error)
   return (
@@ -308,11 +335,13 @@ const suscripcion = () => {
           <NotesGrid
             notes={subscription?.subscribed.notes}
             onSeeDetails={(note) => router.push(`${PATHS.notes}?note=${note._id}`)}
-            checkIsSubscribe={() => {}}
-            checkIsFavorite={() => {}}
+            checkIsFavorite={(note) => {
+              checkIsFavorite(note)
+            }}
+            checkIsSubscribe={(note) => checkIsSubscribe(note)}
             onDelete={() => {}}
             handleFavorite={() => {}}
-            handleSubscribe={() => {}}
+            handleSubscribe={handleSubscribe}
             notesFromSubscription
           />
         ) : (

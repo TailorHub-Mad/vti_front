@@ -48,7 +48,6 @@ export const SubscriptionsMenu = ({
         return "Tags"
     }
   }
-
   return isScreen ? (
     <>
       <Flex alignItems="center" gridGap="16px">
