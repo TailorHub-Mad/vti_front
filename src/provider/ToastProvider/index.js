@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { TOAST_DEFAULT_TIME } from "../../utils/constants/global"
 
 export const ToastContext = React.createContext()
@@ -8,23 +8,49 @@ const ToastProvider = ({ children }) => {
   const [secondaryMessage, setSecondaryMessage] = useState(null)
   const [isToastOpen, setIsToastOpen] = useState(false)
   const [toastType, setToastType] = useState(false)
+  const setTimeOut = []
+
+  function eventListener(e) {
+    if (e.key === "Enter") {
+      setIsToastOpen(false)
+      setMessage("")
+      setSecondaryMessage("")
+      setTimeOut.forEach(clearTimeout)
+      window.removeEventListener('keypress', eventListener);
+    }
+  }
 
   const showToast = ({
     message,
+    // eslint-disable-next-line no-unused-vars
     time = TOAST_DEFAULT_TIME,
     type,
     secondaryMessage
   }) => {
+    
     setMessage(message)
     setIsToastOpen(true)
     secondaryMessage && setSecondaryMessage(secondaryMessage)
-    setTimeout(() => {
+    const timeOut = setTimeout(() => {
       setIsToastOpen(false)
       setMessage("")
       setSecondaryMessage("")
-    }, time)
+    }, 8000)
+    if (window) {
+      window.addEventListener("keypress", eventListener);
+    }
+    setTimeOut.push(timeOut)
     setToastType(type)
   }
+
+  useEffect(() => {
+    return () => {
+      setIsToastOpen(false)
+      setMessage("")
+      setSecondaryMessage("")
+      setTimeOut.forEach(clearTimeout)
+    }
+  }, [])
 
   const contextValue = {
     message,
