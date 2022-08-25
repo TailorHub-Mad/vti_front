@@ -77,13 +77,20 @@ const nuevo = () => {
   }
 
   const formatCreateNote = (note) => {
+    const formatSystems =
+      note.testSystems[0].label === "TODOS"
+        ? [...note.testSystems[0].value]
+        : note.testSystems[0].label === "NINGUNO"
+        ? null
+        : note.testSystems.map((s) => s.value)
     const formatData = {
       project: note.project.value,
-      testSystems: note.testSystems.map((s) => s.value),
       title: note.title,
       description: note.description,
       tags: note.tags.map((t) => t.value)
     }
+
+    if (formatSystems) formatData["testSystems"] = formatSystems
 
     if (note?.link) formatData["link"] = note.link
     if (note?.documents) formatData["file"] = note.documents
