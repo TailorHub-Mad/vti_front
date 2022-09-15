@@ -63,7 +63,7 @@ const tags = () => {
 
   const router = useRouter()
   const { type } = router.query
-  const { isLoggedIn } = useContext(ApiAuthContext)
+  const { isLoggedIn, role } = useContext(ApiAuthContext)
   const { showToast } = useContext(ToastContext)
   const { deleteProjectTag, deleteNoteTag, createNoteTag, createProjectTag } =
     useTagApi()
@@ -319,6 +319,7 @@ const tags = () => {
                   .sort((a, b) => a.name.localeCompare(b.name))
                   .map((tag) => (
                     <TagCard
+                      role={role}
                       onEdit={() => handleUpdate(tag)}
                       onDelete={() => setTagToDelete(tag._id)}
                       key={tag.name}
@@ -349,6 +350,7 @@ const tags = () => {
                       // .sort((a, b) => a.name.localeCompare(b.name))
                       .map((tag) => (
                         <TagCard
+                          role={role}
                           onEdit={() => handleUpdate(tag)}
                           onDelete={() => setTagToDelete(tag._id)}
                           key={tag.name}
@@ -371,6 +373,7 @@ const tags = () => {
             >
               {sortTags(tagData).map((tag) => (
                 <TagCard
+                  role={role}
                   onEdit={() => handleUpdate(tag)}
                   onDelete={() => setTagToDelete(tag._id)}
                   key={tag.name}

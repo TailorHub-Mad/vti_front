@@ -5,7 +5,7 @@ import { PATHS } from "../../../utils/constants/global"
 import { TagCardHeader } from "./TagCardHeader/TagCardHeader"
 import { TagCardTags } from "./TagCardTags/TagCardTags"
 
-export const TagCard = ({ tag, onEdit, onDelete, isProjectTag }) => {
+export const TagCard = ({ tag, onEdit, onDelete, isProjectTag, role }) => {
   const router = useRouter()
 
   const handleItemTags = () => {
@@ -23,6 +23,7 @@ export const TagCard = ({ tag, onEdit, onDelete, isProjectTag }) => {
       p="16px"
     >
       <TagCardHeader
+        role={role}
         title={tag?.name}
         parent={tag?.parent?.name}
         onEdit={onEdit}

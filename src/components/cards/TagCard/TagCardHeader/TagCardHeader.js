@@ -12,10 +12,10 @@ export const TagCardHeader = ({
   onEdit,
   onDelete,
   parent,
+  role,
   ...props
 }) => {
   const [showOptions, setShowOptions] = useState(false)
-
   return (
     <Flex height="32px" justify="space-between" {...props}>
       <Box maxWidth="80%" height="32px" onClick={onClick} cursor={"pointer"}>
@@ -27,25 +27,29 @@ export const TagCardHeader = ({
         </Text>
       </Box>
       <Box position="relative">
-        <OptionsIcon
-          {...ICONS_PROPS_16}
-          color="grey"
-          onClick={() => setShowOptions(true)}
-        />
-        <OptionsMenu isOpen={showOptions} onClose={() => setShowOptions(false)}>
-          <OptionsMenuItem onClick={onEdit}>
-            <EditIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
-            <Text variant="d_xs_regular" marginRight="2px">
-              Editar
-            </Text>
-          </OptionsMenuItem>
-          <OptionsMenuItem onClick={onDelete} isLast>
-            <DeleteIcon {...ICONS_PROPS_16} marginRight="4px" color="error" />
-            <Text variant="d_xs_regular" color="error" marginRight="2px">
-              Eliminar
-            </Text>
-          </OptionsMenuItem>
-        </OptionsMenu>
+        {role === "admin" ? (
+          <>
+            <OptionsIcon
+              {...ICONS_PROPS_16}
+              color="grey"
+              onClick={() => setShowOptions(true)}
+            />
+            <OptionsMenu isOpen={showOptions} onClose={() => setShowOptions(false)}>
+              <OptionsMenuItem onClick={onEdit}>
+                <EditIcon {...ICONS_PROPS_16} marginRight="4px" color="blue.500" />
+                <Text variant="d_xs_regular" marginRight="2px">
+                  Editar
+                </Text>
+              </OptionsMenuItem>
+              <OptionsMenuItem onClick={onDelete} isLast>
+                <DeleteIcon {...ICONS_PROPS_16} marginRight="4px" color="error" />
+                <Text variant="d_xs_regular" color="error" marginRight="2px">
+                  Eliminar
+                </Text>
+              </OptionsMenuItem>
+            </OptionsMenu>
+          </>
+        ) : null}
       </Box>
     </Flex>
   )
